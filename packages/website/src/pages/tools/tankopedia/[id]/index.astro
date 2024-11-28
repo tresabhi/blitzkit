@@ -1,5 +1,9 @@
 ---
-import { fetchTankDefinitions, TIER_ROMAN_NUMERALS } from '@blitzkit/core';
+import {
+  asset,
+  fetchTankDefinitions,
+  TIER_ROMAN_NUMERALS,
+} from '@blitzkit/core';
 import strings from '@blitzkit/core/lang/en-US.json';
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
@@ -17,17 +21,23 @@ const { id } = Astro.params;
 
 const tankDefinitions = await fetchTankDefinitions();
 const tank = tankDefinitions.tanks[id];
+const name = tank.name_full ?? tank.name;
+const title = `${name} - Tier ${TIER_ROMAN_NUMERALS[tank.tier]} ${
+  strings.common.nations_adjectives[
+    tank.nation as keyof typeof strings.common.nations_adjectives
+  ]
+} ${strings.common.tank_class_short[tank.class]}`;
+const url = import.meta.env.SITE + Astro.url.pathname;
+const description = `${name} armor, statistics, equipment, provisions, and more.`;
+const icon = asset(`icons/tanks/big/${id}.webp`);
 ---
 
-<title>
-  {tank.name} - Tier {TIER_ROMAN_NUMERALS[tank.tier]}
-  {
-    strings.common.nations_adjectives[
-      tank.nation as keyof typeof strings.common.nations_adjectives
-    ]
-  }
-  {strings.common.tank_class_short[tank.class]}
-</title>
+<title>{title}</title>
+<meta property="og:title" content={title} />
+<meta name="description" content={description} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={icon} />
+<meta property="og:url" content={url} />
 
 <BaseLayout>
   <Page id={id} client:only="react">
