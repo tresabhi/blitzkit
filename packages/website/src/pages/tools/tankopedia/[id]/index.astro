@@ -35,7 +35,7 @@ const tankModelDefinitions = await fetchModelDefinitions();
 const tank = tankDefinitions.tanks[id];
 const tankModelDefinition = tankModelDefinitions.models[tank.id];
 const name = tank.name_full ?? tank.name;
-const title = `${name}, Tier ${TIER_ROMAN_NUMERALS[tank.tier]} ${
+const title = `${name} - Tier ${TIER_ROMAN_NUMERALS[tank.tier]} ${
   strings.common.nations_adjectives[
     tank.nation as keyof typeof strings.common.nations_adjectives
   ]
@@ -71,7 +71,9 @@ const description = `${
   name
 } armor, statistics, equipment, provisions, and more. ${Math.round(
   characteristics.dpm,
-).toLocaleString()} DPM, ${characteristics.damage}hp damage, ${
+).toLocaleString()} DPM, ${characteristics.damage}hp alpha, ${
+  characteristics.penetration
+}mm penetration, ${
   characteristics.speedForwards
 }kph top speed, ${characteristics.health}hp health.`;
 ---
@@ -84,7 +86,7 @@ const description = `${
 <meta property="og:url" content={url} />
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
-<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:card" content="summary" />
 <meta name="twitter:image:src" content={icon} />
 
 <BaseLayout>
