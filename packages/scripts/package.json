@@ -9,7 +9,8 @@
     "setup:patches": "bun src/applyPatches.ts",
     "build:reviews": "bun src/reviews.ts",
     "build:ids": "bun src/discoverIds.ts",
-    "build:bot": "bun src/buildBot.ts"
+    "build:bot": "bun src/buildBot.ts",
+    "build:ratingleaderboard": "bun src/buildRatingLeaderboard.ts"
   },
   "dependencies": {
     "esbuild": "^0.19.12",

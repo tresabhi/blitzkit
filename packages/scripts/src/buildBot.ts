@@ -23,6 +23,7 @@ build({
   loader: {
     '.ttf': 'file',
     '.node': 'empty',
+    '.json': 'json',
   },
   minifyIdentifiers: false, // causes goofy ahh issues
   minifySyntax: !dev,

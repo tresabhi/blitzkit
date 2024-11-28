@@ -23,4 +23,4 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: bun scripts/buildRatingLeaderboard.ts --region=na --target=midnight --production
+        run: bun build:ratingleaderboard --region=com
