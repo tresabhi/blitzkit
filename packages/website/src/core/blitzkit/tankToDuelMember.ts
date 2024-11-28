@@ -1,20 +1,10 @@
 import {
-  availableProvisions,
+  createDefaultProvisions,
   type ProvisionDefinitions,
   type TankDefinition,
 } from '@blitzkit/core';
 import type { DuelMember } from '../../stores/duel';
 import { genericDefaultEquipmentMatrix } from '../../stores/duel/constants';
-
-const PROVISION_PREFERENCES = [
-  19, // improved fuel
-  18, // standard fuel
-  22, // protective kit
-];
-
-function infinityFallback(value: number) {
-  return value === -1 ? Infinity : value;
-}
 
 export function tankToDuelMember(
   tank: TankDefinition,
@@ -22,22 +12,13 @@ export function tankToDuelMember(
 ) {
   const turret = tank.turrets.at(-1)!;
   const gun = turret.guns.at(-1)!;
-  const provisionsList = availableProvisions(tank, gun, provisionDefinitions);
 
   return {
     camouflage: true,
     consumables: [],
     equipmentMatrix: genericDefaultEquipmentMatrix,
     cooldownBooster: 0,
-    provisions: provisionsList
-      .sort(
-        (a, b) =>
-          infinityFallback(PROVISION_PREFERENCES.indexOf(a.id)) -
-          infinityFallback(PROVISION_PREFERENCES.indexOf(b.id)),
-      )
-      .sort((a, b) => (b.crew ?? 0) - (a.crew ?? 0))
-      .slice(0, tank.max_provisions)
-      .map(({ id }) => id),
+    provisions: createDefaultProvisions(tank, gun, provisionDefinitions),
     engine: tank.engines.at(-1)!,
     gun,
     shell: tank.turrets.at(-1)!.guns.at(-1)!.gun_type!.value.base.shells[0],
