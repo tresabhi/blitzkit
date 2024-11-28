@@ -1,10 +1,12 @@
 import { build } from 'esbuild';
 import { cp, readdir, rm } from 'fs/promises';
+import { argv } from 'process';
 
 const srcRoot = '../bot';
 const distRoot = '../../dist/bot';
 const modulesRoot = '../../node_modules';
 const workers = await readdir(`${srcRoot}/src/workers`);
+const dev = argv.includes('--dev');
 
 await rm(distRoot, { recursive: true, force: true });
 
@@ -21,8 +23,10 @@ build({
     '.ttf': 'file',
     '.node': 'empty',
   },
-  minify: true,
-  sourcemap: true,
+  minifyIdentifiers: false, // causes goofy ahh issues
+  minifySyntax: !dev,
+  minifyWhitespace: !dev,
+  sourcemap: !dev,
 });
 
 await Promise.all(

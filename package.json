@@ -17,7 +17,7 @@
     "build:sitemap": "bun scripts/sitemap.ts",
     "build:docs": "vitepress build docs",
     "build:ratingleaderboard": "bun --script scripts/buildRatingLeaderboard.ts",
-    "dev:bot": "bun run build:bot && bun start:bot",
+    "dev:bot": "bun run build:bot --dev && bun start:bot",
     "start:bot": "bun dist/bot/main.js",
     "dev:docs": "vitepress dev docs",
     "dev:website": "cd packages/website && bun run dev",
