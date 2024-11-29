@@ -178,7 +178,10 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                         }
                         secondaryDiscriminator={
                           <Text style={{ fontSize: '0.75em' }}>
-                            {gun.gun_type!.value.base.shells[0].caliber}mm
+                            {Math.round(
+                              gun.gun_type!.value.base.shells[0].caliber,
+                            )}
+                            mm
                           </Text>
                         }
                       />
