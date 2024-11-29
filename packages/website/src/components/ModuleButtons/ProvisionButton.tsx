@@ -1,4 +1,5 @@
-import { asset, fetchProvisionDefinitions } from '@blitzkit/core';
+import { asset } from '@blitzkit/core';
+import { awaitableProvisionDefinitions } from '../../core/awaitables/provisionDefinitions';
 import { GenericTankComponentButton } from './GenericTankComponentButton';
 import type { TankComponentButtonProps } from './TankComponentButton';
 
@@ -6,7 +7,7 @@ interface ProvisionButtonProps extends TankComponentButtonProps {
   provision: number;
 }
 
-const provisionDefinitions = await fetchProvisionDefinitions();
+const provisionDefinitions = await awaitableProvisionDefinitions;
 
 export function ProvisionButton({ provision, ...props }: ProvisionButtonProps) {
   return (

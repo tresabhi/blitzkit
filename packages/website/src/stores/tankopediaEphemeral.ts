@@ -1,6 +1,5 @@
 import {
   createDefaultSkills,
-  fetchSkillDefinitions,
   ShellDefinition,
   type ModelDefinition,
 } from '@blitzkit/core';
@@ -10,6 +9,7 @@ import { subscribeWithSelector } from 'zustand/middleware';
 import type { ArmorType } from '../components/Armor/components/SpacedArmorScene';
 import type { ExternalModuleVariant } from '../components/Armor/components/SpacedArmorSceneComponent';
 import type { XP_MULTIPLIERS } from '../components/Tankopedia/TechTreeSection';
+import { awaitableSkillDefinitions } from '../core/awaitables/skillDefinitions';
 import { createContextualStore } from '../core/zustand/createContextualStore';
 
 export interface ShotLayerBase {
@@ -102,7 +102,7 @@ interface TankopediaEphemeral {
   customShell?: ShellDefinition;
 }
 
-const skillDefinitions = await fetchSkillDefinitions();
+const skillDefinitions = await awaitableSkillDefinitions;
 
 export const TankopediaEphemeral = createContextualStore(
   (model: ModelDefinition) => {

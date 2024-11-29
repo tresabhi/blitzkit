@@ -1,14 +1,11 @@
-import {
-  fetchAverageDefinitions,
-  fetchDiscoveredIdsDefinitions,
-} from '@blitzkit/core';
+import { awaitableAverageDefinitions } from '../core/awaitables/averageDefinitions';
+import { awaitableDiscoveredIdsDefinitions } from '../core/awaitables/discoveredIdsDefinitions';
 
-const awaitedDiscoveredIdsDefinitions = await fetchDiscoveredIdsDefinitions();
-const awaitedAverageDefinitions = await fetchAverageDefinitions();
+const [discoveredIdsDefinitions, averageDefinitions] = await Promise.all([
+  awaitableDiscoveredIdsDefinitions,
+  awaitableAverageDefinitions,
+]);
 
 export function useAveragesExclusionRatio() {
-  return (
-    awaitedDiscoveredIdsDefinitions.count /
-    awaitedAverageDefinitions.samples.total
-  );
+  return discoveredIdsDefinitions.count / averageDefinitions.samples.total;
 }

@@ -1,7 +1,7 @@
-import { fetchProvisionDefinitions } from '@blitzkit/core';
 import { ExternalLinkIcon, LoopIcon, TrashIcon } from '@radix-ui/react-icons';
 import { Dialog, Flex, IconButton, Link } from '@radix-ui/themes';
 import { useState } from 'react';
+import { awaitableProvisionDefinitions } from '../../core/awaitables/provisionDefinitions';
 import { tankToCompareMember } from '../../core/blitzkit/tankToCompareMember';
 import { CompareEphemeral } from '../../stores/compareEphemeral';
 import { TankSearch } from '../TankSearch';
@@ -11,7 +11,7 @@ interface TankControlProps {
   id: number;
 }
 
-const provisionDefinitions = await fetchProvisionDefinitions();
+const provisionDefinitions = await awaitableProvisionDefinitions;
 
 export function TankControl({ index, id }: TankControlProps) {
   const [switchTankDialogOpen, setSwitchTankDialogOpen] = useState(false);

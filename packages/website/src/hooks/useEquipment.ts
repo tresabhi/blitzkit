@@ -1,8 +1,8 @@
-import { fetchEquipmentDefinitions } from '@blitzkit/core';
 import { useMemo } from 'react';
+import { awaitableEquipmentDefinitions } from '../core/awaitables/equipmentDefinitions';
 import { Duel } from '../stores/duel';
 
-const equipmentDefinitions = await fetchEquipmentDefinitions();
+const equipmentDefinitions = await awaitableEquipmentDefinitions;
 
 export function useEquipment(id: number, antagonist = false) {
   const member = Duel.use(

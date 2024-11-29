@@ -1,15 +1,15 @@
-import {
-  fetchAverageDefinitions,
-  fetchDiscoveredIdsDefinitions,
-  formatCompact,
-} from '@blitzkit/core';
+import { formatCompact } from '@blitzkit/core';
 import { InfoCircledIcon } from '@radix-ui/react-icons';
 import { Callout, Flex } from '@radix-ui/themes';
+import { awaitableAverageDefinitions } from '../../core/awaitables/averageDefinitions';
+import { awaitableDiscoveredIdsDefinitions } from '../../core/awaitables/discoveredIdsDefinitions';
 import type { MaybeSkeletonComponentProps } from '../../types/maybeSkeletonComponentProps';
 import { InlineSkeleton } from '../InlineSkeleton';
 
-const discoveredIdsDefinitions = await fetchDiscoveredIdsDefinitions();
-const averageDefinitions = await fetchAverageDefinitions();
+const [discoveredIdsDefinitions, averageDefinitions] = await Promise.all([
+  awaitableDiscoveredIdsDefinitions,
+  awaitableAverageDefinitions,
+]);
 
 export function PerformanceInfo({ skeleton }: MaybeSkeletonComponentProps) {
   const samples = formatCompact(Math.round(discoveredIdsDefinitions.count));

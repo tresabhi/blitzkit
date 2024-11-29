@@ -2,8 +2,6 @@ import {
   compositeStats,
   compositeStatsKeys,
   deltaTankStats,
-  fetchAverageDefinitions,
-  fetchTankDefinitions,
   formatCompositeStat,
   getAccountInfo,
   getTankStats,
@@ -39,10 +37,14 @@ import { PageWrapper } from '../../../components/PageWrapper';
 import { StickyRowHeaderCell } from '../../../components/StickyRowHeaderCell';
 import { StickyTableRoot } from '../../../components/StickyTableRoot';
 import { TankRowHeaderCell } from '../../../components/TankRowHeaderCell';
+import { awaitableAverageDefinitions } from '../../../core/awaitables/averageDefinitions';
+import { awaitableTankDefinitions } from '../../../core/awaitables/tankDefinitions';
 import { Session, type SessionTracking } from '../../../stores/session';
 
-const tankDefinitions = await fetchTankDefinitions();
-const tankAverages = await fetchAverageDefinitions();
+const [tankDefinitions, averageDefinitions] = await Promise.all([
+  awaitableTankDefinitions,
+  awaitableAverageDefinitions,
+]);
 
 export function Page() {
   return (
@@ -85,7 +87,7 @@ function Content() {
             .sort((a, b) => b.last_battle_time - a.last_battle_time)
             .map((entry) => {
               const tank = tankDefinitions.tanks[entry.tank_id];
-              const average = tankAverages.averages[tank.id];
+              const average = averageDefinitions.averages[tank.id];
               const composite = compositeStats(
                 { ...entry.all, battle_life_time: entry.battle_life_time },
                 average?.mu,

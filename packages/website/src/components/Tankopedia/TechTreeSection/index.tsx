@@ -1,7 +1,8 @@
-import { asset, fetchTankDefinitions, imgur, TankType } from '@blitzkit/core';
+import { asset, imgur, TankType } from '@blitzkit/core';
 import { CaretLeftIcon, CaretRightIcon, PlusIcon } from '@radix-ui/react-icons';
 import { Flex, Heading, IconButton, ScrollArea, Text } from '@radix-ui/themes';
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
+import { awaitableTankDefinitions } from '../../../core/awaitables/tankDefinitions';
 import { Duel } from '../../../stores/duel';
 import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
 import type { MaybeSkeletonComponentProps } from '../../../types/maybeSkeletonComponentProps';
@@ -10,7 +11,7 @@ import { Node } from './components/Node';
 
 type Line = number[];
 
-const tankDefinitions = await fetchTankDefinitions();
+const tankDefinitions = await awaitableTankDefinitions;
 
 export const XP_MULTIPLIERS = [1, 2, 3, 4, 5, 10];
 

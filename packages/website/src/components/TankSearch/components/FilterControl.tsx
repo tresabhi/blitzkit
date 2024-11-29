@@ -1,6 +1,5 @@
 import {
   asset,
-  fetchGameDefinitions,
   TANK_CLASSES,
   TankType,
   TIER_ROMAN_NUMERALS,
@@ -9,6 +8,7 @@ import { useStore } from '@nanostores/react';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { Box, Flex, IconButton, Text } from '@radix-ui/themes';
 import { times } from 'lodash-es';
+import { awaitableGameDefinitions } from '../../../core/awaitables/gameDefinitions';
 import { $tankFilters, initialTankFilters } from '../../../stores/tankFilters';
 import {
   $tankopediaSort,
@@ -27,7 +27,7 @@ interface FilterControlProps {
   compact?: boolean;
 }
 
-const gameDefinitions = await fetchGameDefinitions();
+const gameDefinitions = await awaitableGameDefinitions;
 
 export function FilterControl({ compact }: FilterControlProps) {
   const tankFilters = useStore($tankFilters);

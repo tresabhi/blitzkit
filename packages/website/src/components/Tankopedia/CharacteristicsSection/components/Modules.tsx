@@ -1,7 +1,6 @@
 import {
   asset,
   EngineDefinition,
-  fetchTankDefinitions,
   formatCompact,
   GunDefinition,
   ModuleType,
@@ -21,6 +20,7 @@ import {
   Link,
   Text,
 } from '@radix-ui/themes';
+import { awaitableTankDefinitions } from '../../../../core/awaitables/tankDefinitions';
 import { Duel } from '../../../../stores/duel';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
@@ -138,7 +138,7 @@ function ModuleButton({
   );
 }
 
-const tankDefinitions = await fetchTankDefinitions();
+const tankDefinitions = await awaitableTankDefinitions;
 
 export function Modules() {
   const mutateDuel = Duel.useMutation();

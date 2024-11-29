@@ -1,12 +1,13 @@
-import { fetchReviews, youtubers } from '@blitzkit/core';
+import { youtubers } from '@blitzkit/core';
 import { Box, Flex, Heading, Link, Skeleton, Text } from '@radix-ui/themes';
+import { awaitableReviews } from '../../core/awaitables/reviews';
 import { Var } from '../../core/radix/var';
 import { Duel } from '../../stores/duel';
 import type { MaybeSkeletonComponentProps } from '../../types/maybeSkeletonComponentProps';
 import { PageWrapper } from '../PageWrapper';
 import { VerifiedIcon } from '../VerifiedIcon';
 
-const reviews = await fetchReviews();
+const reviews = await awaitableReviews;
 
 export function VideoSection({ skeleton }: MaybeSkeletonComponentProps) {
   const tank = Duel.use((state) => state.protagonist.tank);

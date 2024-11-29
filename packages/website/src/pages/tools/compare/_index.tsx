@@ -1,11 +1,4 @@
-import {
-  createDefaultSkills,
-  fetchEquipmentDefinitions,
-  fetchModelDefinitions,
-  fetchProvisionDefinitions,
-  fetchSkillDefinitions,
-  fetchTankDefinitions,
-} from '@blitzkit/core';
+import { createDefaultSkills } from '@blitzkit/core';
 import { PlusIcon } from '@radix-ui/react-icons';
 import { Flex, Heading, Text } from '@radix-ui/themes';
 import { useEffect, useMemo, useState } from 'react';
@@ -13,6 +6,11 @@ import { CompareTable } from '../../../components/Compare/CompareTable';
 import { Controls } from '../../../components/Compare/Controls';
 import { DamageWarning } from '../../../components/DamageWarning';
 import { PageWrapper } from '../../../components/PageWrapper';
+import { awaitableEquipmentDefinitions } from '../../../core/awaitables/equipmentDefinitions';
+import { awaitableModelDefinitions } from '../../../core/awaitables/modelDefinitions';
+import { awaitableProvisionDefinitions } from '../../../core/awaitables/provisionDefinitions';
+import { awaitableSkillDefinitions } from '../../../core/awaitables/skillDefinitions';
+import { awaitableTankDefinitions } from '../../../core/awaitables/tankDefinitions';
 import { tankCharacteristics } from '../../../core/blitzkit/tankCharacteristics';
 import { tankToCompareMember } from '../../../core/blitzkit/tankToCompareMember';
 import { App } from '../../../stores/app';
@@ -20,11 +18,19 @@ import { CompareEphemeral } from '../../../stores/compareEphemeral';
 import { ComparePersistent } from '../../../stores/comparePersistent';
 import { TankopediaPersistent } from '../../../stores/tankopediaPersistent';
 
-const modelDefinitions = await fetchModelDefinitions();
-const equipmentDefinitions = await fetchEquipmentDefinitions();
-const provisionDefinitions = await fetchProvisionDefinitions();
-const skillDefinitions = await fetchSkillDefinitions();
-const tankDefinitions = await fetchTankDefinitions();
+const [
+  modelDefinitions,
+  equipmentDefinitions,
+  provisionDefinitions,
+  skillDefinitions,
+  tankDefinitions,
+] = await Promise.all([
+  awaitableModelDefinitions,
+  awaitableEquipmentDefinitions,
+  awaitableProvisionDefinitions,
+  awaitableSkillDefinitions,
+  awaitableTankDefinitions,
+]);
 
 export function Page() {
   return (

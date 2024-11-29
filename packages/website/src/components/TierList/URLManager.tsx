@@ -1,9 +1,9 @@
-import { fetchTankDefinitions } from '@blitzkit/core';
 import { useEffect } from 'react';
+import { awaitableTankDefinitions } from '../../core/awaitables/tankDefinitions';
 import { generateTierListParams } from '../../core/blitzkit/generateTierListParams';
 import { TierList } from '../../stores/tierList';
 
-const tankDefinitions = await fetchTankDefinitions();
+const tankDefinitions = await awaitableTankDefinitions;
 
 export function URLManager() {
   const rows = TierList.use((state) => state.rows);

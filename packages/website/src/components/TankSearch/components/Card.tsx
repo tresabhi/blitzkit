@@ -1,5 +1,4 @@
 import {
-  fetchModelDefinitions,
   normalizeBoundingBox,
   resolveDpm,
   unionBoundingBox,
@@ -7,6 +6,7 @@ import {
 } from '@blitzkit/core';
 import { useStore } from '@nanostores/react';
 import { useMemo } from 'react';
+import { awaitableModelDefinitions } from '../../../core/awaitables/modelDefinitions';
 import { resolveReload } from '../../../core/blitzkit/resolveReload';
 import { $tankopediaSort } from '../../../stores/tankopediaSort';
 import { TankCard } from '../../TankCard';
@@ -16,7 +16,7 @@ interface TankSearchCardProps {
   onSelect?: (tank: TankDefinition) => void;
 }
 
-const modelDefinitions = await fetchModelDefinitions();
+const modelDefinitions = await awaitableModelDefinitions;
 
 export function TankSearchCard({ tank, onSelect }: TankSearchCardProps) {
   const tankopediaSort = useStore($tankopediaSort);

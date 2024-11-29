@@ -1,8 +1,9 @@
-import { fetchAverageDefinitions, fetchTankDefinitions } from '@blitzkit/core';
 import { useStore } from '@nanostores/react';
 import { Table } from '@radix-ui/themes';
 import { times } from 'lodash-es';
 import { Fragment, Suspense, useEffect, useMemo, useState } from 'react';
+import { awaitableAverageDefinitions } from '../../core/awaitables/averageDefinitions';
+import { awaitableTankDefinitions } from '../../core/awaitables/tankDefinitions';
 import { filterTank } from '../../core/blitzkit/filterTank';
 import { $tankFilters } from '../../stores/tankFilters';
 import { TankPerformanceEphemeral } from '../../stores/tankPerformanceEphemeral';
@@ -15,13 +16,16 @@ import { Total } from './Total';
 const PREVIEW_COUNT = 10;
 const DEFAULT_LOADED_ROWS = 25;
 
-const tankDefinitions = await fetchTankDefinitions();
-const averageDefinitionsArray = await fetchAverageDefinitions().then(
-  ({ averages }) =>
-    Object.entries(averages).map(([id, average]) => ({
-      id: Number(id),
-      ...average,
-    })),
+const [tankDefinitions, averageDefinitions] = await Promise.all([
+  awaitableTankDefinitions,
+  awaitableAverageDefinitions,
+]);
+
+const averageDefinitionsArray = Object.entries(averageDefinitions.averages).map(
+  ([id, average]) => ({
+    id: Number(id),
+    ...average,
+  }),
 );
 
 export function Tanks({ skeleton }: MaybeSkeletonComponentProps) {

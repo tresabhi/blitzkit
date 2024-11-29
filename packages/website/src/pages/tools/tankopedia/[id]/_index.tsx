@@ -1,8 +1,3 @@
-import {
-  fetchModelDefinitions,
-  fetchProvisionDefinitions,
-  fetchTankDefinitions,
-} from '@blitzkit/core';
 import { PageWrapper } from '../../../../components/PageWrapper';
 import { CalloutsSection } from '../../../../components/Tankopedia/CalloutsSection';
 import { CharacteristicsSection } from '../../../../components/Tankopedia/CharacteristicsSection';
@@ -12,6 +7,9 @@ import { HistorySection } from '../../../../components/Tankopedia/HistorySection
 import { MetaSection } from '../../../../components/Tankopedia/MetaSection';
 import { TechTreeSection } from '../../../../components/Tankopedia/TechTreeSection';
 import { VideoSection } from '../../../../components/Tankopedia/VideoSection';
+import { awaitableModelDefinitions } from '../../../../core/awaitables/modelDefinitions';
+import { awaitableProvisionDefinitions } from '../../../../core/awaitables/provisionDefinitions';
+import { awaitableTankDefinitions } from '../../../../core/awaitables/tankDefinitions';
 import { App } from '../../../../stores/app';
 import { Duel } from '../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../stores/tankopediaEphemeral';
@@ -22,9 +20,12 @@ type PageProps = MaybeSkeletonComponentProps & {
   id: number;
 };
 
-const tankDefinitions = await fetchTankDefinitions();
-const provisionDefinitions = await fetchProvisionDefinitions();
-const modelDefinitions = await fetchModelDefinitions();
+const [tankDefinitions, provisionDefinitions, modelDefinitions] =
+  await Promise.all([
+    awaitableTankDefinitions,
+    awaitableProvisionDefinitions,
+    awaitableModelDefinitions,
+  ]);
 
 export function Page({ id, skeleton }: PageProps) {
   const tank = tankDefinitions.tanks[id];

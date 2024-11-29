@@ -1,6 +1,6 @@
-import { fetchProvisionDefinitions } from '@blitzkit/core';
 import { PlusIcon, TrashIcon } from '@radix-ui/react-icons';
 import { Button, Dialog, Flex, SegmentedControl } from '@radix-ui/themes';
+import { awaitableProvisionDefinitions } from '../../core/awaitables/provisionDefinitions';
 import { tankToCompareMember } from '../../core/blitzkit/tankToCompareMember';
 import { CompareEphemeral } from '../../stores/compareEphemeral';
 import {
@@ -14,7 +14,7 @@ interface ControlsProps {
   onAddTankDialogOpenChange: (open: boolean) => void;
 }
 
-const provisionDefinitions = await fetchProvisionDefinitions();
+const provisionDefinitions = await awaitableProvisionDefinitions;
 
 export function Controls({
   addTankDialogOpen,

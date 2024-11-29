@@ -1,11 +1,7 @@
-import {
-  asset,
-  fetchAverageDefinitions,
-  fetchTankDefinitions,
-  formatCompact,
-  TIER_ROMAN_NUMERALS,
-} from '@blitzkit/core';
+import { asset, formatCompact, TIER_ROMAN_NUMERALS } from '@blitzkit/core';
 import { Box, Flex, Link, Skeleton, Text } from '@radix-ui/themes';
+import { awaitableAverageDefinitions } from '../../../../core/awaitables/averageDefinitions';
+import { awaitableTankDefinitions } from '../../../../core/awaitables/tankDefinitions';
 import { TankopediaEphemeral } from '../../../../stores/tankopediaEphemeral';
 import type { MaybeSkeletonComponentProps } from '../../../../types/maybeSkeletonComponentProps';
 
@@ -15,8 +11,10 @@ type NodeProps = MaybeSkeletonComponentProps & {
   highlight?: boolean;
 };
 
-const tankDefinitions = await fetchTankDefinitions();
-const averageDefinitions = await fetchAverageDefinitions();
+const [tankDefinitions, averageDefinitions] = await Promise.all([
+  awaitableTankDefinitions,
+  awaitableAverageDefinitions,
+]);
 
 export function Node({ id, highlight, nextIds, skeleton }: NodeProps) {
   const xpMultiplier = TankopediaEphemeral.use((state) => state.xpMultiplier);

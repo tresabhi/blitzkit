@@ -1,11 +1,9 @@
-import {
-  fetchGameDefinitions,
-  fetchTankDefinitions,
-  metaSortTank,
-} from '@blitzkit/core';
+import { metaSortTank } from '@blitzkit/core';
 import { useStore } from '@nanostores/react';
 import { times } from 'lodash-es';
 import { useMemo, useState } from 'react';
+import { awaitableGameDefinitions } from '../../core/awaitables/gameDefinitions';
+import { awaitableTankDefinitions } from '../../core/awaitables/tankDefinitions';
 import { filterTank } from '../../core/blitzkit/filterTank';
 import { $tankFilters } from '../../stores/tankFilters';
 import { TierList } from '../../stores/tierList';
@@ -13,8 +11,11 @@ import { SkeletonTankCard } from '../TankSearch/components/SkeletonTankCard';
 import { TankCardWrapper } from '../TankSearch/components/TankCardWrapper';
 import { TierListTile } from './Tile';
 
-const tankDefinitions = await fetchTankDefinitions();
-const gameDefinitions = await fetchGameDefinitions();
+const [tankDefinitions, gameDefinitions] = await Promise.all([
+  awaitableTankDefinitions,
+  awaitableGameDefinitions,
+]);
+
 const tanks = Object.values(tankDefinitions.tanks);
 
 const PREVIEW_COUNT = 32;

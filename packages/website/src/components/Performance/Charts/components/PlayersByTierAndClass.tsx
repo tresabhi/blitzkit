@@ -1,6 +1,4 @@
 import {
-  fetchAverageDefinitions,
-  fetchTankDefinitions,
   formatCompact,
   TANK_CLASSES,
   TankClass,
@@ -10,14 +8,19 @@ import {
 import strings from '@blitzkit/core/lang/en-US.json';
 import { useStore } from '@nanostores/react';
 import { Box, Flex, Heading } from '@radix-ui/themes';
+import { awaitableAverageDefinitions } from '../../../../core/awaitables/averageDefinitions';
+import { awaitableTankDefinitions } from '../../../../core/awaitables/tankDefinitions';
 import { filterTank } from '../../../../core/blitzkit/filterTank';
 import { useAveragesExclusionRatio } from '../../../../hooks/useAveragesExclusionRatio';
 import { $tankFilters } from '../../../../stores/tankFilters';
 import { TankPerformanceEphemeral } from '../../../../stores/tankPerformanceEphemeral';
 import { ThemedBar } from '../../../Nivo/ThemedBar';
 
-const averageDefinitions = await fetchAverageDefinitions();
-const tankDefinitions = await fetchTankDefinitions();
+const [tankDefinitions, averageDefinitions] = await Promise.all([
+  awaitableTankDefinitions,
+  awaitableAverageDefinitions,
+]);
+
 const averageDefinitionsArray = Object.entries(averageDefinitions.averages);
 
 export function PlayersByTierAndClass() {

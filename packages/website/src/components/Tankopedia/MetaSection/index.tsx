@@ -1,8 +1,6 @@
 import {
   assertSecret,
   asset,
-  fetchModelDefinitions,
-  fetchProvisionDefinitions,
   TankPriceType,
   TankType,
   TIER_ROMAN_NUMERALS,
@@ -11,6 +9,8 @@ import strings from '@blitzkit/core/lang/en-US.json';
 import { ChevronLeftIcon, MixIcon, UpdateIcon } from '@radix-ui/react-icons';
 import { Button, Code, Dialog, Flex, Link } from '@radix-ui/themes';
 import { useState } from 'react';
+import { awaitableModelDefinitions } from '../../../core/awaitables/modelDefinitions';
+import { awaitableProvisionDefinitions } from '../../../core/awaitables/provisionDefinitions';
 import { tankToDuelMember } from '../../../core/blitzkit/tankToDuelMember';
 import { App } from '../../../stores/app';
 import { Duel } from '../../../stores/duel';
@@ -20,8 +20,10 @@ import { ScienceIcon } from '../../ScienceIcon';
 import { TankSearch } from '../../TankSearch';
 import { Listing } from './components/Listing';
 
-const provisionDefinitions = await fetchProvisionDefinitions();
-const modelDefinitions = await fetchModelDefinitions();
+const [provisionDefinitions, modelDefinitions] = await Promise.all([
+  awaitableProvisionDefinitions,
+  awaitableModelDefinitions,
+]);
 
 export function MetaSection() {
   const developerMode = App.useDeferred((state) => state.developerMode, false);

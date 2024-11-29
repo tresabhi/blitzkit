@@ -1,16 +1,12 @@
-import {
-  asset,
-  availableProvisions,
-  fetchConsumableDefinitions,
-  fetchEquipmentDefinitions,
-  fetchProvisionDefinitions,
-  fetchSkillDefinitions,
-  permanentSkills,
-} from '@blitzkit/core';
+import { asset, availableProvisions, permanentSkills } from '@blitzkit/core';
 import { checkConsumableProvisionInclusivity } from '@blitzkit/core/src/blitzkit/checkConsumableProvisionInclusivity';
 import { ComponentPlaceholderIcon } from '@radix-ui/react-icons';
 import { Button, Flex, IconButton, Popover, Table } from '@radix-ui/themes';
 import { times } from 'lodash-es';
+import { awaitableConsumableDefinitions } from '../../core/awaitables/consumableDefinitions';
+import { awaitableEquipmentDefinitions } from '../../core/awaitables/equipmentDefinitions';
+import { awaitableProvisionDefinitions } from '../../core/awaitables/provisionDefinitions';
+import { awaitableSkillDefinitions } from '../../core/awaitables/skillDefinitions';
 import type { TankCharacteristics } from '../../core/blitzkit/tankCharacteristics';
 import { Var } from '../../core/radix/var';
 import { CompareEphemeral } from '../../stores/compareEphemeral';
@@ -31,10 +27,17 @@ interface CompareTableProps {
   stats: TankCharacteristics[];
 }
 
-const skillDefinitions = await fetchSkillDefinitions();
-const equipmentDefinitions = await fetchEquipmentDefinitions();
-const consumableDefinitions = await fetchConsumableDefinitions();
-const provisionDefinitions = await fetchProvisionDefinitions();
+const [
+  skillDefinitions,
+  equipmentDefinitions,
+  consumableDefinitions,
+  provisionDefinitions,
+] = await Promise.all([
+  awaitableSkillDefinitions,
+  awaitableEquipmentDefinitions,
+  awaitableConsumableDefinitions,
+  awaitableProvisionDefinitions,
+]);
 
 export function CompareTable({ stats }: CompareTableProps) {
   const crewSkills = CompareEphemeral.use((state) => state.crewSkills);

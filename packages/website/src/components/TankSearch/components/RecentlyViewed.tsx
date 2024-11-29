@@ -1,15 +1,15 @@
-import { fetchTankDefinitions } from '@blitzkit/core';
 import { useStore } from '@nanostores/react';
 import { Flex, Separator, Text } from '@radix-ui/themes';
 import { isEqual } from 'lodash-es';
 import { useMemo } from 'react';
+import { awaitableTankDefinitions } from '../../../core/awaitables/tankDefinitions';
 import { $tankFilters, initialTankFilters } from '../../../stores/tankFilters';
 import { TankopediaPersistent } from '../../../stores/tankopediaPersistent';
 import { $tankopediaSort } from '../../../stores/tankopediaSort';
 import { TankCard } from '../../TankCard';
 import { TankCardWrapper } from './TankCardWrapper';
 
-const tankDefinitions = await fetchTankDefinitions();
+const tankDefinitions = await awaitableTankDefinitions;
 
 export function RecentlyViewed() {
   const tankopediaPersistentStore = TankopediaPersistent.useStore();

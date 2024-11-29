@@ -1,13 +1,11 @@
-import {
-  createDefaultSkills,
-  fetchEquipmentDefinitions,
-  fetchModelDefinitions,
-  fetchProvisionDefinitions,
-  fetchSkillDefinitions,
-  fetchTankDefinitions,
-} from '@blitzkit/core';
+import { createDefaultSkills } from '@blitzkit/core';
 import { Flex, Progress, Text } from '@radix-ui/themes';
 import { useMemo, type ComponentProps } from 'react';
+import { awaitableEquipmentDefinitions } from '../../../../../../core/awaitables/equipmentDefinitions';
+import { awaitableModelDefinitions } from '../../../../../../core/awaitables/modelDefinitions';
+import { awaitableProvisionDefinitions } from '../../../../../../core/awaitables/provisionDefinitions';
+import { awaitableSkillDefinitions } from '../../../../../../core/awaitables/skillDefinitions';
+import { awaitableTankDefinitions } from '../../../../../../core/awaitables/tankDefinitions';
 import {
   tankCharacteristics,
   type TankCharacteristics,
@@ -29,11 +27,19 @@ interface InfoWithDeltaProps extends InfoProps {
   noRanking?: boolean;
 }
 
-const tankDefinitions = await fetchTankDefinitions();
-const provisionDefinitions = await fetchProvisionDefinitions();
-const equipmentDefinitions = await fetchEquipmentDefinitions();
-const tankModelDefinitions = await fetchModelDefinitions();
-const skillDefinitions = await fetchSkillDefinitions();
+const [
+  tankDefinitions,
+  provisionDefinitions,
+  equipmentDefinitions,
+  modelDefinitions,
+  skillDefinitions,
+] = await Promise.all([
+  awaitableTankDefinitions,
+  awaitableProvisionDefinitions,
+  awaitableEquipmentDefinitions,
+  awaitableModelDefinitions,
+  awaitableSkillDefinitions,
+]);
 
 export function InfoWithDelta({
   value,
@@ -90,7 +96,7 @@ export function InfoWithDelta({
           {
             equipmentDefinitions,
             provisionDefinitions,
-            tankModelDefinition: tankModelDefinitions.models[tank.id],
+            tankModelDefinition: modelDefinitions.models[tank.id],
           },
         );
       })

@@ -1,10 +1,10 @@
-import { fetchEquipmentDefinitions } from '@blitzkit/core';
 import { Button, Flex, Heading } from '@radix-ui/themes';
+import { awaitableEquipmentDefinitions } from '../../../../core/awaitables/equipmentDefinitions';
 import { Duel } from '../../../../stores/duel';
 import { EquipmentManager } from '../../../EquipmentManager';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
-const equipmentDefinitions = await fetchEquipmentDefinitions();
+const equipmentDefinitions = await awaitableEquipmentDefinitions;
 
 export function Equipment() {
   const mutateDuel = Duel.useMutation();

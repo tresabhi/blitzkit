@@ -1,8 +1,9 @@
-import { fetchTankDefinitions, TankType } from '@blitzkit/core';
+import { TankType } from '@blitzkit/core';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import { times } from 'lodash-es';
 import { Suspense, useEffect, useMemo, useRef } from 'react';
 import { NAVBAR_HEIGHT } from '../../../constants/navbar';
+import { awaitableTankDefinitions } from '../../../core/awaitables/tankDefinitions';
 import { Var } from '../../../core/radix/var';
 import { useFullScreen } from '../../../hooks/useFullScreen';
 import { Duel } from '../../../stores/duel';
@@ -14,7 +15,7 @@ import { Options } from './components/Options';
 import { TankSandbox } from './components/TankSandbox';
 import { TankSandboxLoader } from './components/TankSandboxLoader';
 
-const tankDefinitions = await fetchTankDefinitions();
+const tankDefinitions = await awaitableTankDefinitions;
 
 export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
   const canvas = useRef<HTMLCanvasElement>(null);

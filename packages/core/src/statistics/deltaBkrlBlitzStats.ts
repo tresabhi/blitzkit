@@ -1,8 +1,8 @@
 import { RatingStats } from '../blitz/getAccountInfo';
-import { BkrlSuperset1Entry } from '../streams/bkrl';
+import { RatingLeaderboardEntryV2 } from '../protos';
 
 export function deltaBkrlBlitzStats(
-  a: BkrlSuperset1Entry,
+  a: RatingLeaderboardEntryV2,
   b1: RatingStats,
   b2: RatingPlayer,
 ) {
@@ -13,7 +13,7 @@ export function deltaBkrlBlitzStats(
     survived: b1.survived_battles - a.survived,
     wins: b1.wins - a.wins,
     score: b2.score - a.score,
-  } satisfies Omit<BkrlSuperset1Entry, 'id'>;
+  } satisfies Omit<RatingLeaderboardEntryV2, 'id'>;
 }
 export interface RatingPlayer {
   spa_id: number;

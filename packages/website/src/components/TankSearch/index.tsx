@@ -1,8 +1,4 @@
 import {
-  fetchGameDefinitions,
-  fetchModelDefinitions,
-  fetchTankDefinitions,
-  fetchTankNames,
   metaSortTank,
   normalizeBoundingBox,
   resolveDpm,
@@ -14,6 +10,10 @@ import { Callout, Flex, Link, Text, type FlexProps } from '@radix-ui/themes';
 import fuzzysort from 'fuzzysort';
 import { times, uniq } from 'lodash-es';
 import { memo, useEffect, useMemo, useState } from 'react';
+import { awaitableGameDefinitions } from '../../core/awaitables/gameDefinitions';
+import { awaitableModelDefinitions } from '../../core/awaitables/modelDefinitions';
+import { awaitableTankDefinitions } from '../../core/awaitables/tankDefinitions';
+import { awaitableTankNames } from '../../core/awaitables/tankNames';
 import { filterTank } from '../../core/blitzkit/filterTank';
 import { resolveReload } from '../../core/blitzkit/resolveReload';
 import { $tankFilters } from '../../stores/tankFilters';
@@ -42,10 +42,13 @@ type TankSearchProps = Omit<FlexProps, 'onSelect'> & {
 const PREVIEW_COUNT = 25;
 const DEFAULT_LOADED_CARDS = 75;
 
-const gameDefinitions = await fetchGameDefinitions();
-const modelDefinitions = await fetchModelDefinitions();
-const tankDefinitions = await fetchTankDefinitions();
-const tankNames = await fetchTankNames();
+const [gameDefinitions, modelDefinitions, tankDefinitions, tankNames] =
+  await Promise.all([
+    awaitableGameDefinitions,
+    awaitableModelDefinitions,
+    awaitableTankDefinitions,
+    awaitableTankNames,
+  ]);
 
 export const TankSearch = memo<TankSearchProps>(
   ({ compact, onSelect, onSelectAll, ...props }) => {

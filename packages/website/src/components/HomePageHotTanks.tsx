@@ -1,10 +1,13 @@
-import { fetchAverageDefinitions, fetchTankDefinitions } from '@blitzkit/core';
 import { Box, Flex, Heading } from '@radix-ui/themes';
+import { awaitableAverageDefinitions } from '../core/awaitables/averageDefinitions';
+import { awaitableTankDefinitions } from '../core/awaitables/tankDefinitions';
 import { TankopediaPersistent } from '../stores/tankopediaPersistent';
 import { TankCard } from './TankCard';
 
-const tankDefinitions = await fetchTankDefinitions();
-const averageDefinitions = await fetchAverageDefinitions();
+const [tankDefinitions, averageDefinitions] = await Promise.all([
+  awaitableTankDefinitions,
+  awaitableAverageDefinitions,
+]);
 const tanks = Object.values(tankDefinitions.tanks);
 const tankAverages = Object.entries(averageDefinitions.averages).map(
   ([id, average]) => ({

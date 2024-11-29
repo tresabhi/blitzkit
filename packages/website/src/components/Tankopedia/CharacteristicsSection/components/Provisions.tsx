@@ -1,10 +1,11 @@
-import { availableProvisions, fetchProvisionDefinitions } from '@blitzkit/core';
+import { availableProvisions } from '@blitzkit/core';
 import { Button, Flex, Heading } from '@radix-ui/themes';
+import { awaitableProvisionDefinitions } from '../../../../core/awaitables/provisionDefinitions';
 import { Duel } from '../../../../stores/duel';
 import { ProvisionsManager } from '../../../ProvisionsManager';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
-const provisionDefinitions = await fetchProvisionDefinitions();
+const provisionDefinitions = await awaitableProvisionDefinitions;
 
 export function Provisions() {
   const mutateDuel = Duel.useMutation();

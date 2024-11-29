@@ -3,8 +3,6 @@ import {
   compositeStats,
   compositeStatsKeys,
   deltaTankStats,
-  fetchAverageDefinitions,
-  fetchTankDefinitions,
   getTankStats,
   idToRegion,
   sumCompositeStats,
@@ -15,6 +13,8 @@ import { ReloadIcon } from '@radix-ui/react-icons';
 import { ContextMenu } from '@radix-ui/themes';
 import { useEffect, useMemo, useState } from 'react';
 import { breakdownConfig } from '../../constants/embeds';
+import { awaitableAverageDefinitions } from '../../core/awaitables/averageDefinitions';
+import { awaitableTankDefinitions } from '../../core/awaitables/tankDefinitions';
 import { EmbedBreakdownPersistent } from '../../stores/embedBreakdownPersistent';
 import { useEmbedStateCurry } from '../../stores/embedState/utilities';
 import { BreakdownEmbedCard, BreakdownEmbedWrapper } from '../TanksEmbed';
@@ -24,8 +24,10 @@ export const compositeStatsKeysOptions = compositeStatsKeys.map((value) => ({
   value,
 }));
 
-const tankDefinitions = await fetchTankDefinitions();
-const averageDefinitions = await fetchAverageDefinitions();
+const [tankDefinitions, averageDefinitions] = await Promise.all([
+  awaitableTankDefinitions,
+  awaitableAverageDefinitions,
+]);
 
 export const fakeCompositeStats = compositeStats(
   {

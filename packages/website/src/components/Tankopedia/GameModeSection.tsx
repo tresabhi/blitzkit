@@ -1,15 +1,16 @@
-import {
-  asset,
-  fetchConsumableDefinitions,
-  fetchGameDefinitions,
-  fetchProvisionDefinitions,
-} from '@blitzkit/core';
+import { asset } from '@blitzkit/core';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
+import { awaitableConsumableDefinitions } from '../../core/awaitables/consumableDefinitions';
+import { awaitableGameDefinitions } from '../../core/awaitables/gameDefinitions';
+import { awaitableProvisionDefinitions } from '../../core/awaitables/provisionDefinitions';
 import { Duel } from '../../stores/duel';
 
-const gameDefinitions = await fetchGameDefinitions();
-const consumableDefinitions = await fetchConsumableDefinitions();
-const provisionDefinitions = await fetchProvisionDefinitions();
+const [gameDefinitions, consumableDefinitions, provisionDefinitions] =
+  await Promise.all([
+    awaitableGameDefinitions,
+    awaitableConsumableDefinitions,
+    awaitableProvisionDefinitions,
+  ]);
 
 export function GameModeSection() {
   const tank = Duel.use((state) => state.protagonist.tank);

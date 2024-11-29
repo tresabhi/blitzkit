@@ -1,9 +1,9 @@
-import { fetchModelDefinitions } from '@blitzkit/core';
 import { OrbitControls } from '@react-three/drei';
 import { invalidate, useThree } from '@react-three/fiber';
 import { useEffect, useRef, useState } from 'react';
 import { Vector3 } from 'three';
 import { OrbitControls as OrbitControlsClass } from 'three-stdlib';
+import { awaitableModelDefinitions } from '../../../../../../core/awaitables/modelDefinitions';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { hasEquipment } from '../../../../../../core/blitzkit/hasEquipment';
 import { Pose, poseEvent } from '../../../../../../core/blitzkit/pose';
@@ -17,7 +17,7 @@ const poseDistances: Record<Pose, number> = {
   [Pose.Default]: -1,
 };
 
-const modelDefinitions = await fetchModelDefinitions();
+const modelDefinitions = await awaitableModelDefinitions;
 
 export function Controls() {
   const duelStore = Duel.useStore();

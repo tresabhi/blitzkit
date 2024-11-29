@@ -1,4 +1,3 @@
-import { fetchConsumableDefinitions } from '@blitzkit/core';
 import { checkConsumableProvisionInclusivity } from '@blitzkit/core/src/blitzkit/checkConsumableProvisionInclusivity';
 import { InfoCircledIcon } from '@radix-ui/react-icons';
 import {
@@ -9,12 +8,13 @@ import {
   Popover,
   Text,
 } from '@radix-ui/themes';
+import { awaitableConsumableDefinitions } from '../../../../core/awaitables/consumableDefinitions';
 import { useEquipment } from '../../../../hooks/useEquipment';
 import { Duel } from '../../../../stores/duel';
 import { ConsumablesManager } from '../../../ConsumablesManager';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
-const consumableDefinitions = await fetchConsumableDefinitions();
+const consumableDefinitions = await awaitableConsumableDefinitions;
 
 export function Consumables() {
   const mutateDuel = Duel.useMutation();

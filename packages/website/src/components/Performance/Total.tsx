@@ -1,11 +1,11 @@
 import {
   AverageDefinitionsEntry,
-  fetchAverageDefinitions,
   formatCompact,
   type BlitzkitStats,
 } from '@blitzkit/core';
 import { Table } from '@radix-ui/themes';
 import { memo, useCallback } from 'react';
+import { awaitableAverageDefinitions } from '../../core/awaitables/averageDefinitions';
 import { useAveragesExclusionRatio } from '../../hooks/useAveragesExclusionRatio';
 import { TankPerformanceEphemeral } from '../../stores/tankPerformanceEphemeral';
 import { StickyRowHeaderCell } from '../StickyRowHeaderCell';
@@ -18,7 +18,7 @@ interface TotalProps {
   tanks: AverageDefinitionsEntryWithId[];
 }
 
-const averageDefinitions = await fetchAverageDefinitions();
+const averageDefinitions = await awaitableAverageDefinitions;
 
 export const Total = memo<TotalProps>(
   ({ tanks }) => {

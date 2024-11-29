@@ -1,4 +1,5 @@
-import { asset, fetchEquipmentDefinitions } from '@blitzkit/core';
+import { asset } from '@blitzkit/core';
+import { awaitableEquipmentDefinitions } from '../../core/awaitables/equipmentDefinitions';
 import { GenericTankComponentButton } from './GenericTankComponentButton';
 import type { TankComponentButtonProps } from './TankComponentButton';
 
@@ -6,7 +7,7 @@ interface EquipmentButtonProps extends TankComponentButtonProps {
   equipment: number;
 }
 
-const equipmentDefinitions = await fetchEquipmentDefinitions();
+const equipmentDefinitions = await awaitableEquipmentDefinitions;
 
 export function EquipmentButton({ equipment, ...props }: EquipmentButtonProps) {
   return (

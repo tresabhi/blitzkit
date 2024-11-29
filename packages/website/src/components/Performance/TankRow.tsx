@@ -1,10 +1,7 @@
-import {
-  TankDefinition,
-  fetchAverageDefinitions,
-  formatCompact,
-} from '@blitzkit/core';
+import { TankDefinition, formatCompact } from '@blitzkit/core';
 import { Table } from '@radix-ui/themes';
 import { memo } from 'react';
+import { awaitableAverageDefinitions } from '../../core/awaitables/averageDefinitions';
 import { useAveragesExclusionRatio } from '../../hooks/useAveragesExclusionRatio';
 import { TankPerformanceEphemeral } from '../../stores/tankPerformanceEphemeral';
 import { TankRowHeaderCell } from '../TankRowHeaderCell';
@@ -13,7 +10,7 @@ interface TankRowProps {
   tank: TankDefinition;
 }
 
-const averageDefinitions = await fetchAverageDefinitions();
+const averageDefinitions = await awaitableAverageDefinitions;
 
 export const TankRow = memo<TankRowProps>(
   ({ tank }) => {

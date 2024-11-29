@@ -3,8 +3,6 @@ import {
   coefficient,
   CREW_MEMBER_NAMES,
   CrewType,
-  fetchEquipmentDefinitions,
-  fetchProvisionDefinitions,
   GUN_TYPE_NAMES,
   isExplosive,
   resolvePenetrationCoefficient,
@@ -24,6 +22,8 @@ import { debounce } from 'lodash-es';
 import { useEffect, useRef, useState } from 'react';
 import { Fragment } from 'react/jsx-runtime';
 import { lerp } from 'three/src/math/MathUtils.js';
+import { awaitableEquipmentDefinitions } from '../../../../../core/awaitables/equipmentDefinitions';
+import { awaitableProvisionDefinitions } from '../../../../../core/awaitables/provisionDefinitions';
 import { applyPitchYawLimits } from '../../../../../core/blitz/applyPitchYawLimits';
 import { tankCharacteristics } from '../../../../../core/blitzkit/tankCharacteristics';
 import { useEquipment } from '../../../../../hooks/useEquipment';
@@ -33,8 +33,10 @@ import { TankopediaEphemeral } from '../../../../../stores/tankopediaEphemeral';
 import { Info } from './components/Info';
 import { InfoWithDelta } from './components/InfoWithDelta';
 
-const equipmentDefinitions = await fetchEquipmentDefinitions();
-const provisionDefinitions = await fetchProvisionDefinitions();
+const [equipmentDefinitions, provisionDefinitions] = await Promise.all([
+  awaitableEquipmentDefinitions,
+  awaitableProvisionDefinitions,
+]);
 
 export function Characteristics() {
   const mutateDuel = Duel.useMutation();

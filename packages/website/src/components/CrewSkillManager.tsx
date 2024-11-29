@@ -1,10 +1,6 @@
-import {
-  asset,
-  fetchSkillDefinitions,
-  permanentSkills,
-  romanize,
-} from '@blitzkit/core';
+import { asset, permanentSkills, romanize } from '@blitzkit/core';
 import { Flex } from '@radix-ui/themes';
+import { awaitableSkillDefinitions } from '../core/awaitables/skillDefinitions';
 import { GenericTankComponentButton } from './ModuleButtons/GenericTankComponentButton';
 
 interface CrewSkillManagerProps {
@@ -12,7 +8,7 @@ interface CrewSkillManagerProps {
   onChange?: (skillLevels: Record<string, number>) => void;
 }
 
-const skillDefinitions = await fetchSkillDefinitions();
+const skillDefinitions = await awaitableSkillDefinitions;
 
 export function CrewSkillManager({
   skillLevels,
