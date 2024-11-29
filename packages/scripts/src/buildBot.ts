@@ -25,6 +25,7 @@ build({
     '.node': 'empty',
     '.json': 'json',
   },
+  external: ['sharp'],
   minifyIdentifiers: false, // causes goofy ahh issues
   minifySyntax: !dev,
   minifyWhitespace: !dev,
