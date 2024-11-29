@@ -323,9 +323,9 @@
             "$": "zonas-horarias",
             "description": "Cómo Blitzkrieg infiere y utiliza tu zona horaria"
           },
-          "creators": {
-            "$": "creadores",
-            "description": "Personas que han trabajado en el bot"
+          "credits": {
+            "$": "credits",
+            "description": "People who have helped BlitzKit"
           }
         }
       },

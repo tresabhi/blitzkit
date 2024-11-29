@@ -323,9 +323,9 @@
             "$": "vremenske zone",
             "description": "Kako \"Blitzkrieg\" koristi podatke o tvojoj vremenskoj zoni"
           },
-          "creators": {
-            "$": "stvarači",
-            "description": "Ljudi koji su radili na robotu"
+          "credits": {
+            "$": "credits",
+            "description": "People who have helped BlitzKit"
           }
         }
       },
