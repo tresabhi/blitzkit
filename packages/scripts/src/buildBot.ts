@@ -30,7 +30,8 @@ build({
   minifySyntax: !dev,
   minifyWhitespace: !dev,
   sourcemap: !dev,
-  jsx: 'preserve',
+  jsxImportSource: 'react',
+  jsx: 'automatic',
 });
 
 for (const module of await readdir(`${modulesRoot}/@resvg`)) {
