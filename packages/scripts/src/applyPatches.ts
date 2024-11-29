@@ -1,3 +1,4 @@
+import { assertSecret } from '@blitzkit/core';
 import { mkdir, writeFile } from 'fs/promises';
 import { parse as parsePath } from 'path';
 import ProgressBar from 'progress';
@@ -6,7 +7,6 @@ import { dvp } from '../../../submodules/blitzkit-closed/src/dvp';
 import { readStringDVPL } from '../src/core/blitz/readStringDVPL';
 import { DATA } from './buildAssets/constants';
 import { readYAMLDVPL } from './core/blitz/readYAMLDVPL';
-import { assertSecret } from '@blitzkit/core';
 import { writeDVPL } from './core/blitz/writeDVPL';
 
 const versionTextFile = await readStringDVPL(`${DATA}/version.txt.dvpl`);
@@ -22,7 +22,7 @@ let patchIndex = 1;
 while (true) {
   const response = await fetch(
     `${assertSecret(
-      process.env.WOTB_DLC_CDN,
+      import.meta.env.WOTB_DLC_CDN,
     )}/dlc/s${currentVersion}_${patchIndex}.yaml`,
   );
 
@@ -31,10 +31,10 @@ while (true) {
 
     const data = parseYaml(await response.text());
     const dvpm = await fetch(
-      `${assertSecret(process.env.WOTB_DLC_CDN)}/dlc/${data.dx11}`,
+      `${assertSecret(import.meta.env.WOTB_DLC_CDN)}/dlc/${data.dx11}`,
     ).then((response) => response.arrayBuffer());
     const dvpd = await fetch(
-      `${assertSecret(process.env.WOTB_DLC_CDN)}/dlc/${data.dx11.replace(
+      `${assertSecret(import.meta.env.WOTB_DLC_CDN)}/dlc/${data.dx11.replace(
         '.dvpm',
         '.dvpd',
       )}`,
@@ -63,7 +63,7 @@ while (true) {
       console.log('Found dynamic content localizations; patching...');
 
       const localizationsResponse = await fetch(
-        `${assertSecret(process.env.WOTB_DLC_CDN)}/dlc/${
+        `${assertSecret(import.meta.env.WOTB_DLC_CDN)}/dlc/${
           data.dynamicContentLocalizationsDir
         }/en.yaml`,
       );

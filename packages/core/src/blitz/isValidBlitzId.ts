@@ -11,7 +11,7 @@ export async function isValidBlitzId(id: number, token?: string) {
 
   const json = await fetch(
     `https://api.wotblitz.${region}/wotb/account/info/?account_id=${id}&application_id=${assertSecret(
-      process.env.PUBLIC_WARGAMING_APPLICATION_ID,
+      import.meta.env.PUBLIC_WARGAMING_APPLICATION_ID,
     )}${
       token === undefined ? '' : `&access_token=${token}`
     }&fields=account_id%2C-account_id`,

@@ -514,7 +514,7 @@ export async function definitions() {
 
   const wargamingTankopedia = (await fetch(
     `https://api.wotblitz.com/wotb/encyclopedia/vehicles/?application_id=${assertSecret(
-      process.env.PUBLIC_WARGAMING_APPLICATION_ID,
+      import.meta.env.PUBLIC_WARGAMING_APPLICATION_ID,
     )}&fields=description`,
   ).then((response) => response.json())) as {
     data: { [key: number]: { description: null | string } };

@@ -115,7 +115,7 @@ export const commands = Promise.allSettled(COMMANDS_RAW).then((rawCommands) => {
   );
 });
 
-const rest = new REST().setToken(assertSecret(process.env.DISCORD_TOKEN));
+const rest = new REST().setToken(assertSecret(import.meta.env.DISCORD_TOKEN));
 
 commands.then((awaitedCommands) => {
   const body = Object.values(awaitedCommands).map((registry) =>
@@ -123,7 +123,7 @@ commands.then((awaitedCommands) => {
   );
 
   rest.put(
-    Routes.applicationCommands(assertSecret(process.env.DISCORD_CLIENT_ID)),
+    Routes.applicationCommands(assertSecret(import.meta.env.DISCORD_CLIENT_ID)),
     {
       body,
     },

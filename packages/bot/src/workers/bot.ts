@@ -6,4 +6,4 @@ console.log(`🟡 Launching bot ${client.shard?.ids[0]}`);
 
 registerProcesses();
 
-client.login(assertSecret(process.env.DISCORD_TOKEN));
+client.login(assertSecret(import.meta.env.DISCORD_TOKEN));

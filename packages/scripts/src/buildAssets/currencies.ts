@@ -35,9 +35,9 @@ export async function currencies() {
     }),
   );
 
-  const glossary = await fetch(assertSecret(process.env.WOTB_GLOSSARY)).then(
-    (response) => response.json() as Promise<BlitzGlossary>,
-  );
+  const glossary = await fetch(
+    assertSecret(import.meta.env.WOTB_GLOSSARY),
+  ).then((response) => response.json() as Promise<BlitzGlossary>);
 
   await Promise.all(
     Object.entries(glossary)
