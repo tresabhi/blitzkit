@@ -39,6 +39,9 @@ jobs:
           mkdir -p dist/bot
           unzip bot.zip -d dist/bot
 
+      - name: Install sharp
+        run: bun init -y && bun add sharp
+
       - name: Run bot
         run: |
           mv dist/bot/prisma .
