@@ -30,6 +30,7 @@ build({
   minifySyntax: !dev,
   minifyWhitespace: !dev,
   sourcemap: !dev,
+  jsx: 'preserve',
 });
 
 for (const module of await readdir(`${modulesRoot}/@resvg`)) {
