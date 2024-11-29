@@ -30,7 +30,12 @@ export async function commitMultipleFiles(
       } else if (response.status === 200) {
         const buffer = Buffer.from(await response.arrayBuffer());
 
-        if (!buffer.equals(change.content)) {
+        // we discard blob if they're the same size; it's unlikely their
+        // contents will be different; I love playing russian roulette!
+        if (
+          buffer.length !== change.content.length &&
+          !buffer.equals(change.content)
+        ) {
           const diff = change.content.length - buffer.length;
 
           console.log(
