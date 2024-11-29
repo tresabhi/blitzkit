@@ -106,7 +106,11 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
             maxWidth="40rem"
           >
             <Flex align="center" gap="2">
-              <Heading size={{ initial: '7', lg: '8' }}>
+              <Heading
+                color={treeColor}
+                trim="end"
+                size={{ initial: '7', lg: '8' }}
+              >
                 <Icon width="1em" height="1em" />
               </Heading>
 
