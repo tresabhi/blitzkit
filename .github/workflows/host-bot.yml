@@ -19,6 +19,7 @@ env:
   DATABASE_URL: ${{ secrets.DATABASE_URL }}
   DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
   PUBLIC_ASSET_REPO: ${{ secrets.PUBLIC_ASSET_REPO }}
+  PUBLIC_ASSET_BRANCH: ${{ secrets.PUBLIC_ASSET_BRANCH }}
 
 jobs:
   host:
