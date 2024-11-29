@@ -13,7 +13,7 @@ export const translations = SUPPORTED_LOCALES.reduce<
 >(
   (table, locale) => ({
     ...table,
-    [locale]: require(`@blitzkit/core/lang/${locale}.json`),
+    [locale]: require(`../../../../../core/lang/${locale}.json`),
   }),
   {},
 );
