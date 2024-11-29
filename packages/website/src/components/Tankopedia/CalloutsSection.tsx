@@ -27,7 +27,7 @@ export function CalloutsSection() {
   if (!tank.testing && !tank.deprecated && !promoteAeson) return null;
 
   return (
-    <Flex direction="column" align="center" gap="2" mb="4">
+    <Flex direction="column" align="center" gap="2" mb="4" px="4">
       {promoteAeson && <AesonPlug />}
 
       {tank.deprecated && (
@@ -36,7 +36,7 @@ export function CalloutsSection() {
             <MinusCircledIcon />
           </Callout.Icon>
           <Callout.Text>
-            This tank is deprecated and may display undefined behavior.
+            Deprecated tanks may display undefined behavior.
           </Callout.Text>
         </Callout.Root>
       )}
