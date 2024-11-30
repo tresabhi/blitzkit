@@ -47,4 +47,4 @@ jobs:
         run: mv dist/bot/prisma .
 
       - name: Run bot
-        run: bun dist/bot/main.js
+        run: bun run dist/bot/main.js
