@@ -43,7 +43,8 @@ jobs:
       - name: Install sharp
         run: bun init -y && bun add sharp
 
+      - name: Move directories
+        run: mv dist/bot/prisma .
+
       - name: Run bot
-        run: |
-          mv dist/bot/prisma .
-          bun dist/bot/main.js
+        run: bun dist/bot/main.js
