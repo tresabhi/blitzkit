@@ -30,7 +30,6 @@ import { useEquipment } from '../../../../../hooks/useEquipment';
 import { useTankModelDefinition } from '../../../../../hooks/useTankModelDefinition';
 import { Duel } from '../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../stores/tankopediaEphemeral';
-import { DispersionVisualizer } from './components/DispersionVisualizer';
 import { Info } from './components/Info';
 import { InfoWithDelta } from './components/InfoWithDelta';
 
@@ -398,7 +397,6 @@ export function Characteristics() {
             value="aimTime"
           />
           <Info name="Dispersion at 100m" />
-          <DispersionVisualizer stats={stats} />
           <InfoWithDelta
             stats={stats}
             decimals={3}
