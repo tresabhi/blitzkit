@@ -9,6 +9,7 @@ import {
   Vector2,
   Vector3,
 } from 'three';
+import { degToRad } from 'three/src/math/MathUtils.js';
 import { awaitableModelDefinitions } from '../../../../../../core/awaitables/modelDefinitions';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { modelTransformEvent } from '../../../../../../core/blitzkit/modelTransform';
@@ -26,6 +27,11 @@ export function SceneProps() {
     (state) => state.showGrid && !state.showEnvironment,
   );
   const texture = useLoader(TextureLoader, 'https://i.imgur.com/C28Z8nU.png');
+
+  texture.anisotropy = 2;
+
+  let lastPitch = Duel.use((state) => state.protagonist.pitch);
+  let lastYaw = Duel.use((state) => state.protagonist.yaw);
   const material = useRef<MeshStandardMaterial>(null);
   const display = TankopediaEphemeral.use((state) => state.display);
   const playground = useRef<Group>(null);
@@ -63,6 +69,10 @@ export function SceneProps() {
     protagonistTurretModelDefinition.gun_origin.y,
     0,
   );
+  const turretRotationSpeed = degToRad(protagonistTurret.traverse_speed);
+  const gunRotationSpeed = degToRad(
+    protagonistGun.gun_type!.value.base.rotation_speed,
+  );
   const shellOrigin = new Vector3()
     .add(protagonistHullOrigin)
     .add(protagonistTurretOrigin)
@@ -73,7 +83,7 @@ export function SceneProps() {
     material.current.opacity = clamp(0.5 * camera.position.y, 0, 1);
   });
 
-  texture.anisotropy = 2;
+  let lastTime = 0;
 
   useFrame(({ raycaster, camera, clock }) => {
     if (
@@ -108,13 +118,29 @@ export function SceneProps() {
     shellPathHelper.current.setDirection(direction);
     shellPathHelper.current.setLength(length);
 
+    const deltaT = clock.elapsedTime - lastTime;
+    lastTime = clock.elapsedTime;
+    const desiredPitch = Math.asin(direction.y);
+    const desiredYaw = Math.atan2(-direction.x, -direction.z);
+    const deltaPitch = desiredPitch - lastPitch;
+    const deltaYaw = desiredYaw - lastYaw;
+    const maxDeltaPitch =
+      Math.sign(deltaPitch) *
+      Math.min(gunRotationSpeed * deltaT, Math.abs(deltaPitch));
+    const maxDeltaYaw =
+      Math.sign(deltaYaw) *
+      Math.min(turretRotationSpeed * deltaT, Math.abs(deltaYaw));
+
     const [pitch, yaw] = applyPitchYawLimits(
-      Math.asin(direction.y),
-      Math.atan2(-direction.x, -direction.z),
+      lastPitch + maxDeltaPitch,
+      lastYaw + maxDeltaYaw,
       protagonistGunModelDefinition.pitch,
+      protagonistTurretModelDefinition.yaw,
     );
 
     modelTransformEvent.emit({ pitch, yaw });
+    lastPitch = pitch;
+    lastYaw = yaw;
   });
 
   return (

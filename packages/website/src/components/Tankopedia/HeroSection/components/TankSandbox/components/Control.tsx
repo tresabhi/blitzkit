@@ -1,7 +1,7 @@
 import { OrbitControls } from '@react-three/drei';
 import { invalidate, useThree } from '@react-three/fiber';
 import { useEffect, useRef, useState } from 'react';
-import { AxesHelper, PerspectiveCamera, Vector2, Vector3 } from 'three';
+import { PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls as OrbitControlsClass } from 'three-stdlib';
 import { degToRad } from 'three/src/math/MathUtils.js';
 import { awaitableModelDefinitions } from '../../../../../../core/awaitables/modelDefinitions';
@@ -20,11 +20,10 @@ const poseDistances: Record<Pose, number> = {
 
 const modelDefinitions = await awaitableModelDefinitions;
 
-const ARCADE_MODE_DISTANCE = 16;
+const ARCADE_MODE_DISTANCE = 12;
 const ARCADE_MODE_ANGLE = Math.PI / 8;
 export const ARCADE_MODE_FOV = 54;
 export const INSPECT_MODE_FOV = 25;
-
 
 export function Controls() {
   const display = TankopediaEphemeral.use((state) => state.display);
@@ -92,13 +91,13 @@ export function Controls() {
       );
       orbitControls.current.target.set(0, gunHeight + 3, 0);
       orbitControls.current.enablePan = false;
-      orbitControls.current.enableZoom = false;
+      // orbitControls.current.enableZoom = false;
     } else {
       (camera as PerspectiveCamera).fov = INSPECT_MODE_FOV;
       camera.position.set(...initialPosition);
       orbitControls.current.target.set(0, gunHeight / 2, 0);
       orbitControls.current.enablePan = true;
-      orbitControls.current.enableZoom = true;
+      // orbitControls.current.enableZoom = true;
     }
 
     camera.updateProjectionMatrix();
