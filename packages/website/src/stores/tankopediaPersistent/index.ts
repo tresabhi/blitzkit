@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
 import { ENVIRONMENTS } from '../../constants/lightingEnvironments';
 import { createContextualStore } from '../../core/zustand/createContextualStore';
-import { SORT_NAMES, TankopediaDisplay } from './constants';
+import { SORT_NAMES } from './constants';
 
 export type TankopediaSortBy = keyof typeof SORT_NAMES;
 export type TankopediaSortDirection = 'ascending' | 'descending';
@@ -25,8 +25,6 @@ export interface TankopediaPersistentStore {
     by: TankopediaSortBy;
     direction: TankopediaSortDirection;
   };
-
-  display: TankopediaDisplay;
 }
 
 export const TankopediaPersistent = createContextualStore(() =>
@@ -47,7 +45,6 @@ export const TankopediaPersistent = createContextualStore(() =>
           by: 'meta.none',
           direction: 'ascending',
         },
-        display: TankopediaDisplay.Model,
       })),
       { name: 'tankopedia', merge: (a, b) => lodash.merge(b, a) },
     ),

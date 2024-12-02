@@ -24,7 +24,7 @@ import {
   type ThicknessRange,
 } from '../../../../Armor/components/StaticArmor';
 import { AutoClear } from './components/AutoClear';
-import { Controls } from './components/Control';
+import { Controls, INSPECT_MODE_FOV } from './components/Control';
 import { Lighting } from './components/Lighting';
 import { ModelLoader } from './components/ModelLoader';
 import { SceneProps } from './components/SceneProps';
@@ -46,10 +46,8 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
       tankModelDefinition.turrets[protagonist.turret.id];
     const gunModelDefinition =
       turretModelDefinition.guns[protagonist.gun.gun_type!.value.base.id];
-    const display = TankopediaPersistent.useDeferred(
-      (state) => state.display,
-      TankopediaDisplay.Model,
-    );
+    const display = TankopediaEphemeral.use((state) => state.display);
+    const tankopediaPersistentStore = TankopediaPersistent.useStore();
     const onScreen = useOnScreen(canvas);
 
     useImperativeHandle(ref, () => canvas.current!, []);
@@ -177,7 +175,10 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
           });
         }}
         style={{ userSelect: 'none' }}
-        camera={{ fov: 25, far: 32 }}
+        camera={{
+          fov: INSPECT_MODE_FOV,
+          far: 32,
+        }}
       >
         <Controls />
         <SceneProps />

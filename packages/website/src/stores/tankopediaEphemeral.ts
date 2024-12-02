@@ -11,6 +11,7 @@ import type { ExternalModuleVariant } from '../components/Armor/components/Space
 import type { XP_MULTIPLIERS } from '../components/Tankopedia/TechTreeSection';
 import { awaitableSkillDefinitions } from '../core/awaitables/skillDefinitions';
 import { createContextualStore } from '../core/zustand/createContextualStore';
+import { TankopediaDisplay } from './tankopediaPersistent/constants';
 
 export interface ShotLayerBase {
   index: number;
@@ -100,6 +101,7 @@ interface TankopediaEphemeral {
   );
   xpMultiplier: (typeof XP_MULTIPLIERS)[number];
   customShell?: ShellDefinition;
+  display: TankopediaDisplay;
 }
 
 const skillDefinitions = await awaitableSkillDefinitions;
@@ -114,6 +116,7 @@ export const TankopediaEphemeral = createContextualStore(
         model,
         controlsEnabled: true,
         xpMultiplier: 1,
+        display: TankopediaDisplay.Model,
       })),
     );
   },

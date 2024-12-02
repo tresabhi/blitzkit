@@ -1,7 +1,7 @@
 import { OrbitControls } from '@react-three/drei';
 import { invalidate, useThree } from '@react-three/fiber';
 import { useEffect, useRef, useState } from 'react';
-import { Vector3 } from 'three';
+import { PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls as OrbitControlsClass } from 'three-stdlib';
 import { awaitableModelDefinitions } from '../../../../../../core/awaitables/modelDefinitions';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
@@ -9,6 +9,7 @@ import { hasEquipment } from '../../../../../../core/blitzkit/hasEquipment';
 import { Pose, poseEvent } from '../../../../../../core/blitzkit/pose';
 import { Duel } from '../../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
+import { TankopediaDisplay } from '../../../../../../stores/tankopediaPersistent/constants';
 
 const poseDistances: Record<Pose, number> = {
   [Pose.HullDown]: 15,
@@ -18,7 +19,14 @@ const poseDistances: Record<Pose, number> = {
 
 const modelDefinitions = await awaitableModelDefinitions;
 
+const ARCADE_MODE_DISTANCE = 19;
+const ARCADE_MODE_ANGLE = Math.PI / 4;
+
+export const ARCADE_MODE_FOV = 54;
+export const INSPECT_MODE_FOV = 25;
+
 export function Controls() {
+  const display = TankopediaEphemeral.use((state) => state.display);
   const duelStore = Duel.useStore();
   const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
   const camera = useThree((state) => state.camera);
@@ -62,8 +70,10 @@ export function Controls() {
     protagonistTrackModelDefinition.origin.y +
     antagonistModelDefinition.turret_origin.y +
     antagonistTurretModelDefinition.gun_origin.y;
-  const [autoRotate, setAutoRotate] = useState(true);
-  const initialPosition = [
+  const [autoRotate, setAutoRotate] = useState(
+    display !== TankopediaDisplay.ShootingRange,
+  );
+  let initialPosition = [
     -8,
     protagonistHullOrigin.y +
       protagonistTurretOrigin.y +
@@ -72,9 +82,27 @@ export function Controls() {
   ] as const;
 
   useEffect(() => {
-    camera.position.set(...initialPosition);
-    orbitControls.current?.target.set(0, initialPosition[1] / 2, 0);
-  }, [camera, protagonistTrack, protagonistTank]);
+    if (display === TankopediaDisplay.ShootingRange) {
+      (camera as PerspectiveCamera).fov = ARCADE_MODE_FOV;
+      camera.position.set(
+        0,
+        initialPosition[1] + ARCADE_MODE_DISTANCE * Math.sin(ARCADE_MODE_ANGLE),
+        ARCADE_MODE_DISTANCE * Math.cos(ARCADE_MODE_ANGLE),
+      );
+      orbitControls.current?.target.set(0, initialPosition[1], 0);
+    } else {
+      (camera as PerspectiveCamera).fov = INSPECT_MODE_FOV;
+      camera.position.set(...initialPosition);
+      orbitControls.current?.target.set(0, initialPosition[1] / 2, 0);
+    }
+
+    camera.updateProjectionMatrix();
+  }, [
+    camera,
+    protagonistTrack,
+    protagonistTank,
+    display === TankopediaDisplay.ShootingRange,
+  ]);
 
   useEffect(() => {
     const unsubscribeTankopediaEphemeral = tankopediaEphemeralStore.subscribe(
@@ -187,12 +215,19 @@ export function Controls() {
 
     poseEvent.on(handleDisturbance);
     canvas.addEventListener('pointerdown', handleDisturbance);
+    const unsubscribeTankopediaPersistent = tankopediaEphemeralStore.subscribe(
+      (state) => state.display,
+      handleDisturbance,
+    );
 
     return () => {
       canvas.removeEventListener('pointerdown', handleDisturbance);
       poseEvent.off(handleDisturbance);
+      unsubscribeTankopediaPersistent();
     };
   }, []);
+
+  useEffect(() => {}, [display]);
 
   return (
     <OrbitControls

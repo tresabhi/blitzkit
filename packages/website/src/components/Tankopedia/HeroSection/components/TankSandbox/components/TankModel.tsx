@@ -11,7 +11,6 @@ import { useTankModelDefinition } from '../../../../../../hooks/useTankModelDefi
 import { useTankTransform } from '../../../../../../hooks/useTankTransform';
 import { Duel } from '../../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
-import { TankopediaPersistent } from '../../../../../../stores/tankopediaPersistent';
 import { TankopediaDisplay } from '../../../../../../stores/tankopediaPersistent/constants';
 import { ModelTankWrapper } from '../../../../../Armor/components/ModelTankWrapper';
 
@@ -19,7 +18,7 @@ export const TankModel = memo(() => {
   const mutateDuel = Duel.useMutation();
   const duelStore = Duel.useStore();
   const protagonist = Duel.use((draft) => draft.protagonist);
-  const tankopediaPersistentStore = TankopediaPersistent.useStore();
+  const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
   const track = Duel.use((state) => state.protagonist.track);
   const turret = Duel.use((state) => state.protagonist.turret);
   const canvas = useThree((state) => state.gl.domElement);
@@ -67,7 +66,7 @@ export const TankModel = memo(() => {
         function onPointerDown(event: ThreeEvent<PointerEvent>) {
           if (
             isTrack &&
-            tankopediaPersistentStore.getState().display ===
+            tankopediaEphemeralStore.getState().display ===
               TankopediaDisplay.Model
           ) {
             position.set(event.clientX, event.clientY);

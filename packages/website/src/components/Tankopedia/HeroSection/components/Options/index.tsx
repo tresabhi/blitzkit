@@ -55,10 +55,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
   const hasCustomShell = TankopediaEphemeral.use(
     (state) => state.customShell !== undefined,
   );
-  const display = TankopediaPersistent.useDeferred(
-    (state) => state.display,
-    TankopediaDisplay.Model,
-  );
+  const display = TankopediaEphemeral.use((state) => state.display);
   const isFullScreen = useFullScreen();
   const showGrid = TankopediaPersistent.use((state) => state.showGrid);
   const showEnvironment = TankopediaPersistent.use(
@@ -356,7 +353,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
           <SegmentedControl.Root
             value={`${display}`}
             onValueChange={(value) => {
-              mutateTankopediaPersistent((draft) => {
+              mutateTankopediaEphemeral((draft) => {
                 draft.display = Number(value);
               });
             }}
