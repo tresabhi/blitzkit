@@ -1,4 +1,6 @@
 import { I_HAT, J_HAT } from '@blitzkit/core';
+import { Box } from '@radix-ui/themes';
+import { Html } from '@react-three/drei';
 import { useFrame, useLoader } from '@react-three/fiber';
 import { clamp } from 'lodash-es';
 import { useRef } from 'react';
@@ -14,6 +16,7 @@ import { degToRad } from 'three/src/math/MathUtils.js';
 import { awaitableModelDefinitions } from '../../../../../../core/awaitables/modelDefinitions';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { modelTransformEvent } from '../../../../../../core/blitzkit/modelTransform';
+import { Var } from '../../../../../../core/radix/var';
 import { Duel } from '../../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
 import { TankopediaPersistent } from '../../../../../../stores/tankopediaPersistent';
@@ -189,22 +192,25 @@ export function SceneProps() {
           <arrowHelper ref={shellPathHelper} position={shellOrigin} />
 
           <group ref={targetCircle}>
-            <mesh renderOrder={1}>
-              <sphereGeometry args={[0.1, 32, 32]} />
+            <mesh>
+              {/* <sphereGeometry args={[0.1, 32, 32]} />
               <meshStandardMaterial
                 depthTest={false}
                 depthWrite={false}
                 color="red"
-              />
-            </mesh>
+              /> */}
 
-            {/* <Html center occlude={false}>
+              <Html center occlude={false}>
                 <Box
                   width="10em"
                   height="10em"
-                  style={{ backgroundColor: 'red' }}
+                  style={{
+                    borderRadius: '50%',
+                    border: `0.25rem dotted ${Var('gray-12')}`,
+                  }}
                 />
-              </Html> */}
+              </Html>
+            </mesh>
           </group>
 
           <group ref={playground}>
