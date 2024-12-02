@@ -3,7 +3,6 @@ import { clamp } from 'lodash-es';
 import { useRef } from 'react';
 import {
   ArrowHelper,
-  AxesHelper,
   Group,
   MeshStandardMaterial,
   TextureLoader,
@@ -22,7 +21,6 @@ const emptyVector = new Vector2();
 const modelDefinitions = await awaitableModelDefinitions;
 
 export function SceneProps() {
-  const shellTargetHelper = useRef<AxesHelper>(null);
   const shellPathHelper = useRef<ArrowHelper>(null);
   const show = TankopediaPersistent.use(
     (state) => state.showGrid && !state.showEnvironment,
@@ -81,7 +79,6 @@ export function SceneProps() {
     if (
       display !== TankopediaDisplay.ShootingRange ||
       !playground.current ||
-      !shellTargetHelper.current ||
       !shellPathHelper.current
     ) {
       return;
@@ -94,15 +91,22 @@ export function SceneProps() {
       true,
     );
 
-    if (intersections.length === 0) return;
+    let length: number;
+    let direction: Vector3;
 
-    const target = intersections[0].point;
-    const path = target.clone().sub(shellOrigin);
-    const direction = path.clone().normalize();
+    if (intersections.length === 0) {
+      length = 1000;
+      direction = new Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
+    } else {
+      const target = intersections[0].point;
+      const path = target.clone().sub(shellOrigin);
 
-    shellTargetHelper.current.position.copy(intersections[0].point);
+      length = path.length();
+      direction = path.clone().normalize();
+    }
+
     shellPathHelper.current.setDirection(direction);
-    shellPathHelper.current.setLength(path.length());
+    shellPathHelper.current.setLength(length);
 
     const [pitch, yaw] = applyPitchYawLimits(
       Math.asin(direction.y),
@@ -124,7 +128,6 @@ export function SceneProps() {
 
       {display === TankopediaDisplay.ShootingRange && (
         <>
-          <axesHelper ref={shellTargetHelper} />
           <arrowHelper ref={shellPathHelper} position={shellOrigin} />
 
           <group ref={playground}>
