@@ -32,6 +32,7 @@ export function SceneProps() {
     (state) => state.showGrid && !state.showEnvironment,
   );
   const targetCircle = useRef<Group>(null);
+  const targetCircleDots = useRef<HTMLDivElement>(null);
   const texture = useLoader(TextureLoader, 'https://i.imgur.com/C28Z8nU.png');
 
   texture.anisotropy = 2;
@@ -93,7 +94,8 @@ export function SceneProps() {
       !playground.current ||
       !shellPathHelper.current ||
       !targetCircle.current ||
-      DEBUG_disable
+      DEBUG_disable ||
+      !targetCircleDots.current
     ) {
       return;
     }
@@ -171,6 +173,10 @@ export function SceneProps() {
 
     targetCircle.current.position.copy(gunTarget);
 
+    const targetCircleDotsSize = `${gunTarget.distanceTo(shellOrigin)}px`;
+    targetCircleDots.current.style.width = targetCircleDotsSize;
+    targetCircleDots.current.style.height = targetCircleDotsSize;
+
     // window.addEventListener('keydown', (event) => {
     //   if (event.key === 'Enter') {
     //     DEBUG_disable = true;
@@ -192,25 +198,24 @@ export function SceneProps() {
           <arrowHelper ref={shellPathHelper} position={shellOrigin} />
 
           <group ref={targetCircle}>
-            <mesh>
-              {/* <sphereGeometry args={[0.1, 32, 32]} />
+            {/* <sphereGeometry args={[0.1, 32, 32]} />
               <meshStandardMaterial
                 depthTest={false}
                 depthWrite={false}
                 color="red"
               /> */}
 
-              <Html center occlude={false}>
-                <Box
-                  width="10em"
-                  height="10em"
-                  style={{
-                    borderRadius: '50%',
-                    border: `0.25rem dotted ${Var('gray-12')}`,
-                  }}
-                />
-              </Html>
-            </mesh>
+            <Html center occlude={false}>
+              <Box
+                ref={targetCircleDots}
+                width="10em"
+                height="10em"
+                style={{
+                  borderRadius: '50%',
+                  border: `0.25rem dotted ${Var('gray-12')}`,
+                }}
+              />
+            </Html>
           </group>
 
           <group ref={playground}>
