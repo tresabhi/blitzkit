@@ -25,10 +25,8 @@ const ARCADE_MODE_ANGLE = Math.PI / 8;
 export const ARCADE_MODE_FOV = 54;
 export const INSPECT_MODE_FOV = 25;
 
-const emptyVector = new Vector2();
 
 export function Controls() {
-  const helper = useRef<AxesHelper>(null);
   const display = TankopediaEphemeral.use((state) => state.display);
   const duelStore = Duel.useStore();
   const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
@@ -81,8 +79,6 @@ export function Controls() {
     protagonistTurretOrigin.y +
     protagonistGunOrigin.y;
   const initialPosition = [-8, gunHeight + 4, -13] as const;
-  const raycaster = useThree((state) => state.raycaster);
-  const scene = useThree((state) => state.scene);
 
   useEffect(() => {
     if (!orbitControls.current) return;
@@ -237,38 +233,16 @@ export function Controls() {
   }, []);
 
   return (
-    <>
-      <axesHelper ref={helper} />
-      <OrbitControls
-        maxDistance={20}
-        minDistance={5}
-        ref={orbitControls}
-        enabled={tankopediaEphemeralStore.getState().controlsEnabled}
-        rotateSpeed={0.25}
-        enableDamping={false}
-        maxPolarAngle={degToRad(100)}
-        autoRotate={autoRotate}
-        autoRotateSpeed={1 / 4}
-        onChange={() => {
-          if (display !== TankopediaDisplay.ShootingRange || !helper.current) {
-            return;
-          }
-
-          raycaster.setFromCamera(emptyVector, camera);
-
-          const intersections = raycaster.intersectObjects(
-            scene.children,
-            true,
-          );
-          const first = intersections.find(
-            (intersection) => intersection.object !== helper.current,
-          );
-
-          if (first === undefined) return;
-
-          helper.current.position.copy(first.point);
-        }}
-      />
-    </>
+    <OrbitControls
+      maxDistance={20}
+      minDistance={5}
+      ref={orbitControls}
+      enabled={tankopediaEphemeralStore.getState().controlsEnabled}
+      rotateSpeed={0.25}
+      enableDamping={false}
+      maxPolarAngle={degToRad(100)}
+      autoRotate={autoRotate}
+      autoRotateSpeed={1 / 4}
+    />
   );
 }

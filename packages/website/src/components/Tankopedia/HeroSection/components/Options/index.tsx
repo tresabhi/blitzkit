@@ -97,7 +97,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
           style={{
             backgroundImage: `url(${imgur('27Gwth4')})`,
             backgroundSize: 'contain',
-            transform: 'translate(-50%, -50%)',
+            transform: 'translateX(-50%)',
             borderRadius: '50%',
           }}
         />
