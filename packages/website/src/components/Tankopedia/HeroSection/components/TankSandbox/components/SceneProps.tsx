@@ -31,11 +31,11 @@ export function SceneProps() {
       )}
       {display === TankopediaDisplay.ShootingRange && (
         <>
-          {/* <TransformControls>
-            <mesh rotation={[-Math.PI / 2, 0, 0]}>
-              <boxGeometry args={[1, 1, 1]} />
-            </mesh>
-          </TransformControls> */}
+          {/* <fog color="black" /> */}
+          <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+            <planeGeometry args={[100, 100]} />
+            <meshStandardMaterial color={0x404040} />
+          </mesh>
         </>
       )}
     </>

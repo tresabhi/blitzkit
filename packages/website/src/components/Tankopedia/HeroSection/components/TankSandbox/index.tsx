@@ -177,7 +177,6 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
         style={{ userSelect: 'none' }}
         camera={{
           fov: INSPECT_MODE_FOV,
-          far: 32,
         }}
       >
         <Controls />

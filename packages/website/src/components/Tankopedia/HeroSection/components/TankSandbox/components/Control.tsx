@@ -3,6 +3,7 @@ import { invalidate, useThree } from '@react-three/fiber';
 import { useEffect, useRef, useState } from 'react';
 import { PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls as OrbitControlsClass } from 'three-stdlib';
+import { degToRad } from 'three/src/math/MathUtils.js';
 import { awaitableModelDefinitions } from '../../../../../../core/awaitables/modelDefinitions';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { hasEquipment } from '../../../../../../core/blitzkit/hasEquipment';
@@ -19,7 +20,7 @@ const poseDistances: Record<Pose, number> = {
 
 const modelDefinitions = await awaitableModelDefinitions;
 
-const ARCADE_MODE_DISTANCE = 19;
+const ARCADE_MODE_DISTANCE = 16;
 const ARCADE_MODE_ANGLE = Math.PI / 8;
 
 export const ARCADE_MODE_FOV = 54;
@@ -73,13 +74,11 @@ export function Controls() {
   const [autoRotate, setAutoRotate] = useState(
     display !== TankopediaDisplay.ShootingRange,
   );
-  let initialPosition = [
-    -8,
+  const gunHeight =
     protagonistHullOrigin.y +
-      protagonistTurretOrigin.y +
-      protagonistGunOrigin.y,
-    -13,
-  ] as const;
+    protagonistTurretOrigin.y +
+    protagonistGunOrigin.y;
+  const initialPosition = [-8, gunHeight + 4, -13] as const;
 
   useEffect(() => {
     if (!orbitControls.current) return;
@@ -88,16 +87,16 @@ export function Controls() {
       (camera as PerspectiveCamera).fov = ARCADE_MODE_FOV;
       camera.position.set(
         0,
-        initialPosition[1] + ARCADE_MODE_DISTANCE * Math.sin(ARCADE_MODE_ANGLE),
+        gunHeight + ARCADE_MODE_DISTANCE * Math.sin(ARCADE_MODE_ANGLE),
         ARCADE_MODE_DISTANCE * Math.cos(ARCADE_MODE_ANGLE),
       );
-      orbitControls.current.target.set(0, initialPosition[1] + 3, 0);
+      orbitControls.current.target.set(0, gunHeight + 3, 0);
       orbitControls.current.enablePan = false;
       orbitControls.current.enableZoom = false;
     } else {
       (camera as PerspectiveCamera).fov = INSPECT_MODE_FOV;
       camera.position.set(...initialPosition);
-      orbitControls.current.target.set(0, initialPosition[1] / 2, 0);
+      orbitControls.current.target.set(0, gunHeight / 2, 0);
       orbitControls.current.enablePan = true;
       orbitControls.current.enableZoom = true;
     }
@@ -243,6 +242,7 @@ export function Controls() {
       enabled={tankopediaEphemeralStore.getState().controlsEnabled}
       rotateSpeed={0.25}
       enableDamping={false}
+      maxPolarAngle={degToRad(100)}
       autoRotate={autoRotate}
       autoRotateSpeed={1 / 4}
     />
