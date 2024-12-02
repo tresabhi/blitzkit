@@ -15,6 +15,7 @@ import {
   GearIcon,
 } from '@radix-ui/react-icons';
 import {
+  Box,
   Button,
   Dialog,
   DropdownMenu,
@@ -85,6 +86,22 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
   return (
     <>
       <QuickInputs />
+
+      {display === TankopediaDisplay.ShootingRange && (
+        <Box
+          width="1rem"
+          height="1rem"
+          position="absolute"
+          top="50%"
+          left="50%"
+          style={{
+            backgroundImage: `url(${imgur('27Gwth4')})`,
+            backgroundSize: 'contain',
+            transform: 'translate(-50%, -50%)',
+            borderRadius: '50%',
+          }}
+        />
+      )}
 
       {display === TankopediaDisplay.StaticArmor && (
         <Thicknesses thicknessRange={thicknessRange} />

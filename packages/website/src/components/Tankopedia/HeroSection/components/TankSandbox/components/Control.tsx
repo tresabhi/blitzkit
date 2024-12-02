@@ -20,7 +20,7 @@ const poseDistances: Record<Pose, number> = {
 const modelDefinitions = await awaitableModelDefinitions;
 
 const ARCADE_MODE_DISTANCE = 19;
-const ARCADE_MODE_ANGLE = Math.PI / 4;
+const ARCADE_MODE_ANGLE = Math.PI / 8;
 
 export const ARCADE_MODE_FOV = 54;
 export const INSPECT_MODE_FOV = 25;
@@ -82,6 +82,8 @@ export function Controls() {
   ] as const;
 
   useEffect(() => {
+    if (!orbitControls.current) return;
+
     if (display === TankopediaDisplay.ShootingRange) {
       (camera as PerspectiveCamera).fov = ARCADE_MODE_FOV;
       camera.position.set(
@@ -89,11 +91,15 @@ export function Controls() {
         initialPosition[1] + ARCADE_MODE_DISTANCE * Math.sin(ARCADE_MODE_ANGLE),
         ARCADE_MODE_DISTANCE * Math.cos(ARCADE_MODE_ANGLE),
       );
-      orbitControls.current?.target.set(0, initialPosition[1], 0);
+      orbitControls.current.target.set(0, initialPosition[1] + 3, 0);
+      orbitControls.current.enablePan = false;
+      orbitControls.current.enableZoom = false;
     } else {
       (camera as PerspectiveCamera).fov = INSPECT_MODE_FOV;
       camera.position.set(...initialPosition);
-      orbitControls.current?.target.set(0, initialPosition[1] / 2, 0);
+      orbitControls.current.target.set(0, initialPosition[1] / 2, 0);
+      orbitControls.current.enablePan = true;
+      orbitControls.current.enableZoom = true;
     }
 
     camera.updateProjectionMatrix();
