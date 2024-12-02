@@ -34,6 +34,7 @@ export function Lighting() {
 
           {times(LIGHTS_COUNT, (index) => (
             <directionalLight
+              key={index}
               castShadow
               position={[
                 Math.sin(2 * Math.PI * (index / LIGHTS_COUNT)),

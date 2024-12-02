@@ -1,7 +1,7 @@
 import { OrbitControls } from '@react-three/drei';
 import { invalidate, useThree } from '@react-three/fiber';
 import { useEffect, useRef, useState } from 'react';
-import { PerspectiveCamera, Vector3 } from 'three';
+import { AxesHelper, PerspectiveCamera, Vector2, Vector3 } from 'three';
 import { OrbitControls as OrbitControlsClass } from 'three-stdlib';
 import { degToRad } from 'three/src/math/MathUtils.js';
 import { awaitableModelDefinitions } from '../../../../../../core/awaitables/modelDefinitions';
@@ -22,11 +22,13 @@ const modelDefinitions = await awaitableModelDefinitions;
 
 const ARCADE_MODE_DISTANCE = 16;
 const ARCADE_MODE_ANGLE = Math.PI / 8;
-
 export const ARCADE_MODE_FOV = 54;
 export const INSPECT_MODE_FOV = 25;
 
+const emptyVector = new Vector2();
+
 export function Controls() {
+  const helper = useRef<AxesHelper>(null);
   const display = TankopediaEphemeral.use((state) => state.display);
   const duelStore = Duel.useStore();
   const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
@@ -79,6 +81,8 @@ export function Controls() {
     protagonistTurretOrigin.y +
     protagonistGunOrigin.y;
   const initialPosition = [-8, gunHeight + 4, -13] as const;
+  const raycaster = useThree((state) => state.raycaster);
+  const scene = useThree((state) => state.scene);
 
   useEffect(() => {
     if (!orbitControls.current) return;
@@ -232,19 +236,39 @@ export function Controls() {
     };
   }, []);
 
-  useEffect(() => {}, [display]);
-
   return (
-    <OrbitControls
-      maxDistance={20}
-      minDistance={5}
-      ref={orbitControls}
-      enabled={tankopediaEphemeralStore.getState().controlsEnabled}
-      rotateSpeed={0.25}
-      enableDamping={false}
-      maxPolarAngle={degToRad(100)}
-      autoRotate={autoRotate}
-      autoRotateSpeed={1 / 4}
-    />
+    <>
+      <axesHelper ref={helper} />
+      <OrbitControls
+        maxDistance={20}
+        minDistance={5}
+        ref={orbitControls}
+        enabled={tankopediaEphemeralStore.getState().controlsEnabled}
+        rotateSpeed={0.25}
+        enableDamping={false}
+        maxPolarAngle={degToRad(100)}
+        autoRotate={autoRotate}
+        autoRotateSpeed={1 / 4}
+        onChange={() => {
+          if (display !== TankopediaDisplay.ShootingRange || !helper.current) {
+            return;
+          }
+
+          raycaster.setFromCamera(emptyVector, camera);
+
+          const intersections = raycaster.intersectObjects(
+            scene.children,
+            true,
+          );
+          const first = intersections.find(
+            (intersection) => intersection.object !== helper.current,
+          );
+
+          if (first === undefined) return;
+
+          helper.current.position.copy(first.point);
+        }}
+      />
+    </>
   );
 }

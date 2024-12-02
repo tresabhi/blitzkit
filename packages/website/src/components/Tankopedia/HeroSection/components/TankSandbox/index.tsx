@@ -14,7 +14,6 @@ import { useOnScreen } from '../../../../../hooks/useOnScreen';
 import { useTankModelDefinition } from '../../../../../hooks/useTankModelDefinition';
 import { Duel } from '../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../stores/tankopediaEphemeral';
-import { TankopediaPersistent } from '../../../../../stores/tankopediaPersistent';
 import { TankopediaDisplay } from '../../../../../stores/tankopediaPersistent/constants';
 import { Armor } from '../../../../Armor';
 import { ArmorPlateDisplay } from '../../../../Armor/components/ArmorPlateDisplay';
@@ -39,15 +38,15 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
     const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
     const canvas = useRef<HTMLCanvasElement>(null);
     const hasImprovedVerticalStabilizer = useEquipment(122);
-    const protagonist = Duel.use((state) => state.protagonist);
+    const protagonistGun = Duel.use((state) => state.protagonist.gun);
+    const protagonistTurret = Duel.use((state) => state.protagonist.turret);
     const mutateDuel = Duel.useMutation();
     const tankModelDefinition = useTankModelDefinition();
     const turretModelDefinition =
-      tankModelDefinition.turrets[protagonist.turret.id];
+      tankModelDefinition.turrets[protagonistTurret.id];
     const gunModelDefinition =
-      turretModelDefinition.guns[protagonist.gun.gun_type!.value.base.id];
+      turretModelDefinition.guns[protagonistGun.gun_type!.value.base.id];
     const display = TankopediaEphemeral.use((state) => state.display);
-    const tankopediaPersistentStore = TankopediaPersistent.useStore();
     const onScreen = useOnScreen(canvas);
 
     useImperativeHandle(ref, () => canvas.current!, []);
@@ -141,7 +140,7 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
           hasImprovedVerticalStabilizer,
         );
       });
-    }, [protagonist.gun, protagonist.turret]);
+    }, [protagonistGun, protagonistTurret]);
 
     useEffect(() => {
       if (display !== TankopediaDisplay.DynamicArmor) {
