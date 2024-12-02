@@ -1,3 +1,4 @@
+import { I_HAT, J_HAT } from '@blitzkit/core';
 import { useFrame, useLoader } from '@react-three/fiber';
 import { clamp } from 'lodash-es';
 import { useRef } from 'react';
@@ -20,12 +21,14 @@ import { TankopediaDisplay } from '../../../../../../stores/tankopediaPersistent
 
 const emptyVector = new Vector2();
 const modelDefinitions = await awaitableModelDefinitions;
+const FAR_DISTANCE = 1000;
 
 export function SceneProps() {
   const shellPathHelper = useRef<ArrowHelper>(null);
   const show = TankopediaPersistent.use(
     (state) => state.showGrid && !state.showEnvironment,
   );
+  const targetCircle = useRef<Group>(null);
   const texture = useLoader(TextureLoader, 'https://i.imgur.com/C28Z8nU.png');
 
   texture.anisotropy = 2;
@@ -59,11 +62,6 @@ export function SceneProps() {
     protagonistModelDefinition.turret_origin.y,
     -protagonistModelDefinition.turret_origin.z,
   );
-  const protagonistGunOrigin = new Vector3(
-    protagonistTurretModelDefinition.gun_origin.x,
-    protagonistTurretModelDefinition.gun_origin.y,
-    -protagonistTurretModelDefinition.gun_origin.z,
-  );
   const protagonistGunOriginOnlyY = new Vector3(
     0,
     protagonistTurretModelDefinition.gun_origin.y,
@@ -84,19 +82,22 @@ export function SceneProps() {
   });
 
   let lastTime = 0;
+  let DEBUG_disable = false;
 
   useFrame(({ raycaster, camera, clock }) => {
     if (
       display !== TankopediaDisplay.ShootingRange ||
       !playground.current ||
-      !shellPathHelper.current
+      !shellPathHelper.current ||
+      !targetCircle.current ||
+      DEBUG_disable
     ) {
       return;
     }
 
     raycaster.setFromCamera(emptyVector, camera);
 
-    const intersections = raycaster.intersectObjects(
+    const cameraIntersections = raycaster.intersectObjects(
       playground.current.children,
       true,
     );
@@ -104,19 +105,18 @@ export function SceneProps() {
     let length: number;
     let direction: Vector3;
 
-    if (intersections.length === 0) {
-      length = 1000;
+    if (cameraIntersections.length === 0) {
+      length = FAR_DISTANCE;
       direction = new Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
     } else {
-      const target = intersections[0].point;
+      const target = cameraIntersections[0].point;
       const path = target.clone().sub(shellOrigin);
-
       length = path.length();
       direction = path.clone().normalize();
     }
 
-    shellPathHelper.current.setDirection(direction);
-    shellPathHelper.current.setLength(length);
+    // shellPathHelper.current.setDirection(direction);
+    // shellPathHelper.current.setLength(length);
 
     const deltaT = clock.elapsedTime - lastTime;
     lastTime = clock.elapsedTime;
@@ -141,6 +141,38 @@ export function SceneProps() {
     modelTransformEvent.emit({ pitch, yaw });
     lastPitch = pitch;
     lastYaw = yaw;
+
+    const gunDirection = new Vector3(0, 0, -1)
+      .applyAxisAngle(I_HAT, pitch)
+      .applyAxisAngle(J_HAT, yaw);
+
+    shellPathHelper.current.setLength(FAR_DISTANCE);
+    shellPathHelper.current.setDirection(gunDirection);
+
+    raycaster.set(shellOrigin, gunDirection);
+
+    const gunIntersections = raycaster.intersectObjects(
+      playground.current.children,
+      true,
+    );
+
+    let gunTarget: Vector3;
+
+    if (gunIntersections.length === 0) {
+      gunTarget = shellOrigin
+        .clone()
+        .add(gunDirection.multiplyScalar(FAR_DISTANCE));
+    } else {
+      gunTarget = gunIntersections[0].point;
+    }
+
+    targetCircle.current.position.copy(gunTarget);
+
+    // window.addEventListener('keydown', (event) => {
+    //   if (event.key === 'Enter') {
+    //     DEBUG_disable = true;
+    //   }
+    // });
   });
 
   return (
@@ -155,6 +187,25 @@ export function SceneProps() {
       {display === TankopediaDisplay.ShootingRange && (
         <>
           <arrowHelper ref={shellPathHelper} position={shellOrigin} />
+
+          <group ref={targetCircle}>
+            <mesh renderOrder={1}>
+              <sphereGeometry args={[0.1, 32, 32]} />
+              <meshStandardMaterial
+                depthTest={false}
+                depthWrite={false}
+                color="red"
+              />
+            </mesh>
+
+            {/* <Html center occlude={false}>
+                <Box
+                  width="10em"
+                  height="10em"
+                  style={{ backgroundColor: 'red' }}
+                />
+              </Html> */}
+          </group>
 
           <group ref={playground}>
             <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
