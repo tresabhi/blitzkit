@@ -382,6 +382,13 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                 </Flex>
               </Tooltip>
             </SegmentedControl.Item>
+            <SegmentedControl.Item value={`${TankopediaDisplay.ShootingRange}`}>
+              <Tooltip content="Shooting range">
+                <Flex height="100%" align="center">
+                  <img src={imgur('q8ZPfzG')} style={{ height: '1.25em' }} />
+                </Flex>
+              </Tooltip>
+            </SegmentedControl.Item>
           </SegmentedControl.Root>
 
           <DropdownMenu.Root>
