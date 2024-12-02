@@ -10,7 +10,6 @@ import { Pose, poseEvent } from '../../../../../../core/blitzkit/pose';
 import { Duel } from '../../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
 
-const initialPosition = [0, 4, -18] as const;
 const poseDistances: Record<Pose, number> = {
   [Pose.HullDown]: 15,
   [Pose.FaceHug]: 5,
@@ -25,20 +24,24 @@ export function Controls() {
   const camera = useThree((state) => state.camera);
   const canvas = useThree((state) => state.gl.domElement);
   const orbitControls = useRef<OrbitControlsClass>(null);
-  const protagonist = Duel.use((state) => state.protagonist);
-  const antagonist = Duel.use((state) => state.antagonist);
+  const protagonistTurret = Duel.use((state) => state.protagonist.turret);
+  const antagonistTurret = Duel.use((state) => state.antagonist.turret);
+  const protagonistTrack = Duel.use((state) => state.protagonist.track);
+  const protagonistTank = Duel.use((state) => state.protagonist.tank);
+  const antagonistTank = Duel.use((state) => state.antagonist.tank);
+  const protagonistGun = Duel.use((state) => state.protagonist.gun);
   const protagonistModelDefinition =
-    modelDefinitions.models[protagonist.tank.id];
+    modelDefinitions.models[protagonistTank.id];
   const protagonistTrackModelDefinition =
-    modelDefinitions.models[protagonist.tank.id].tracks[protagonist.track.id];
-  const antagonistModelDefinition = modelDefinitions.models[antagonist.tank.id];
+    modelDefinitions.models[protagonistTank.id].tracks[protagonistTrack.id];
+  const antagonistModelDefinition = modelDefinitions.models[antagonistTank.id];
   const protagonistTurretModelDefinition =
-    protagonistModelDefinition.turrets[protagonist.turret.id];
+    protagonistModelDefinition.turrets[protagonistTurret.id];
   const antagonistTurretModelDefinition =
-    antagonistModelDefinition.turrets[antagonist.turret.id];
+    antagonistModelDefinition.turrets[antagonistTurret.id];
   const protagonistGunModelDefinition =
     protagonistTurretModelDefinition.guns[
-      protagonist.gun.gun_type!.value.base.id
+      protagonistGun.gun_type!.value.base.id
     ];
   const protagonistHullOrigin = new Vector3(
     protagonistTrackModelDefinition.origin.x,
@@ -60,11 +63,18 @@ export function Controls() {
     antagonistModelDefinition.turret_origin.y +
     antagonistTurretModelDefinition.gun_origin.y;
   const [autoRotate, setAutoRotate] = useState(true);
+  const initialPosition = [
+    -8,
+    protagonistHullOrigin.y +
+      protagonistTurretOrigin.y +
+      protagonistGunOrigin.y,
+    -13,
+  ] as const;
 
   useEffect(() => {
     camera.position.set(...initialPosition);
-    orbitControls.current?.target.set(0, 1.25, 0);
-  }, [camera]);
+    orbitControls.current?.target.set(0, initialPosition[1] / 2, 0);
+  }, [camera, protagonistTrack, protagonistTank]);
 
   useEffect(() => {
     const unsubscribeTankopediaEphemeral = tankopediaEphemeralStore.subscribe(
@@ -168,7 +178,7 @@ export function Controls() {
       unsubscribeTankopediaEphemeral();
       poseEvent.off(handlePoseEvent);
     };
-  }, [camera, protagonist.tank.id, antagonist.tank.id]);
+  }, [camera, protagonistTank.id, antagonistTank.id]);
 
   useEffect(() => {
     function handleDisturbance() {
