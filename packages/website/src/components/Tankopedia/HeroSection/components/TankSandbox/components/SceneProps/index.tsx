@@ -208,7 +208,7 @@ export function SceneProps() {
       2 * Math.tan(degToRad((camera as PerspectiveCamera).fov) / 2);
     const screenSpaceSize =
       gl.domElement.clientHeight * (angularSize / verticalScreenSize);
-    const targetCircleDotsSize = `${Math.max(38, screenSpaceSize)}px`;
+    const targetCircleDotsSize = `${screenSpaceSize}px`;
 
     targetCircle.current.style.width = targetCircleDotsSize;
     targetCircle.current.style.height = targetCircleDotsSize;
