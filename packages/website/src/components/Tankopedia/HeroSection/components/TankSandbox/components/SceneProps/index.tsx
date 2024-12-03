@@ -1,5 +1,4 @@
 import { asset, I_HAT, imgur, J_HAT } from '@blitzkit/core';
-import { Box } from '@radix-ui/themes';
 import { Html } from '@react-three/drei';
 import { useFrame, useLoader } from '@react-three/fiber';
 import { clamp } from 'lodash-es';
@@ -14,17 +13,17 @@ import {
 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { degToRad } from 'three/src/math/MathUtils.js';
-import { awaitableEquipmentDefinitions } from '../../../../../../core/awaitables/equipmentDefinitions';
-import { awaitableModelDefinitions } from '../../../../../../core/awaitables/modelDefinitions';
-import { awaitableProvisionDefinitions } from '../../../../../../core/awaitables/provisionDefinitions';
-import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
-import { modelTransformEvent } from '../../../../../../core/blitzkit/modelTransform';
-import { tankCharacteristics } from '../../../../../../core/blitzkit/tankCharacteristics';
-import { Var } from '../../../../../../core/radix/var';
-import { Duel } from '../../../../../../stores/duel';
-import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
-import { TankopediaPersistent } from '../../../../../../stores/tankopediaPersistent';
-import { TankopediaDisplay } from '../../../../../../stores/tankopediaPersistent/constants';
+import { awaitableEquipmentDefinitions } from '../../../../../../../core/awaitables/equipmentDefinitions';
+import { awaitableModelDefinitions } from '../../../../../../../core/awaitables/modelDefinitions';
+import { awaitableProvisionDefinitions } from '../../../../../../../core/awaitables/provisionDefinitions';
+import { applyPitchYawLimits } from '../../../../../../../core/blitz/applyPitchYawLimits';
+import { modelTransformEvent } from '../../../../../../../core/blitzkit/modelTransform';
+import { tankCharacteristics } from '../../../../../../../core/blitzkit/tankCharacteristics';
+import { Duel } from '../../../../../../../stores/duel';
+import { TankopediaEphemeral } from '../../../../../../../stores/tankopediaEphemeral';
+import { TankopediaPersistent } from '../../../../../../../stores/tankopediaPersistent';
+import { TankopediaDisplay } from '../../../../../../../stores/tankopediaPersistent/constants';
+import { TargetCircle } from './components/TargetCircle';
 
 const [modelDefinitions, equipmentDefinitions, provisionDefinitions] =
   await Promise.all([
@@ -40,17 +39,14 @@ export function SceneProps() {
   const show = TankopediaPersistent.use(
     (state) => state.showGrid && !state.showEnvironment,
   );
-  const targetCircle = useRef<Group>(null);
-  const targetCircleDots = useRef<HTMLDivElement>(null);
-  const texture = useLoader(TextureLoader, imgur('C28Z8nU'));
-
-  texture.anisotropy = 2;
+  const targetCircleWrapper = useRef<Group>(null);
+  const targetCircle = useRef<HTMLDivElement>(null);
+  const material = useRef<MeshStandardMaterial>(null);
+  const playground = useRef<Group>(null);
 
   let lastPitch = Duel.use((state) => state.protagonist.pitch);
   let lastYaw = Duel.use((state) => state.protagonist.yaw);
-  const material = useRef<MeshStandardMaterial>(null);
   const display = TankopediaEphemeral.use((state) => state.display);
-  const playground = useRef<Group>(null);
   const turret = Duel.use((state) => state.protagonist.turret);
   const track = Duel.use((state) => state.protagonist.track);
   const tank = Duel.use((state) => state.protagonist.tank);
@@ -110,7 +106,10 @@ export function SceneProps() {
     },
     { equipmentDefinitions, provisionDefinitions, tankModelDefinition },
   );
+
   const mockTank = useLoader(GLTFLoader, asset(`3d/tanks/models/12305.glb`));
+  const texture = useLoader(TextureLoader, imgur('C28Z8nU'));
+  texture.anisotropy = 2;
 
   useFrame(({ camera }) => {
     if (!material.current) return;
@@ -124,9 +123,9 @@ export function SceneProps() {
     if (
       display !== TankopediaDisplay.ShootingRange ||
       !playground.current ||
-      !targetCircle.current ||
+      !targetCircleWrapper.current ||
       DEBUG_disable ||
-      !targetCircleDots.current
+      !targetCircle.current
     ) {
       return;
     }
@@ -196,14 +195,13 @@ export function SceneProps() {
       gunTarget = gunIntersections[0].point;
     }
 
-    targetCircle.current.position.copy(gunTarget);
+    targetCircleWrapper.current.position.copy(gunTarget);
 
     const distanceToTarget = gunTarget.distanceTo(shellOrigin);
     const dispersionRadius =
       characteristics.dispersion * (distanceToTarget / 100);
     const dispersionSize = 2 * dispersionRadius;
     const targetDistanceFromCamera = gunTarget.distanceTo(camera.position);
-    document.title = `${targetDistanceFromCamera}`;
     const angularSize =
       2 * Math.atan(dispersionSize / (2 * targetDistanceFromCamera));
     const verticalScreenSize =
@@ -212,8 +210,8 @@ export function SceneProps() {
       gl.domElement.clientHeight * (angularSize / verticalScreenSize);
     const targetCircleDotsSize = `${Math.max(38, screenSpaceSize)}px`;
 
-    targetCircleDots.current.style.width = targetCircleDotsSize;
-    targetCircleDots.current.style.height = targetCircleDotsSize;
+    targetCircle.current.style.width = targetCircleDotsSize;
+    targetCircle.current.style.height = targetCircleDotsSize;
   });
 
   return (
@@ -227,32 +225,9 @@ export function SceneProps() {
 
       {display === TankopediaDisplay.ShootingRange && (
         <>
-          <group ref={targetCircle}>
+          <group ref={targetCircleWrapper}>
             <Html center occlude={false} zIndexRange={[0, 0]}>
-              <Box
-                ref={targetCircleDots}
-                width="10em"
-                height="10em"
-                style={{
-                  borderRadius: '50%',
-                  border: `0.125rem solid ${Var('green-9')}`,
-                }}
-                position="relative"
-              >
-                <Box
-                  width="1rem"
-                  height="1rem"
-                  position="absolute"
-                  top="50%"
-                  left="50%"
-                  style={{
-                    backgroundImage: `url(${imgur('kU9Xejd')})`,
-                    backgroundSize: 'contain',
-                    transform: 'translateX(-50%) scale(90%)',
-                    borderRadius: '50%',
-                  }}
-                />
-              </Box>
+              <TargetCircle ref={targetCircle} />
             </Html>
           </group>
 
