@@ -1,39 +1,48 @@
-import { I_HAT, J_HAT } from '@blitzkit/core';
+import { asset, I_HAT, imgur, J_HAT } from '@blitzkit/core';
 import { Box } from '@radix-ui/themes';
 import { Html } from '@react-three/drei';
 import { useFrame, useLoader } from '@react-three/fiber';
 import { clamp } from 'lodash-es';
 import { useRef } from 'react';
 import {
-  ArrowHelper,
   Group,
   MeshStandardMaterial,
+  PerspectiveCamera,
   TextureLoader,
   Vector2,
   Vector3,
 } from 'three';
+import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 import { degToRad } from 'three/src/math/MathUtils.js';
+import { awaitableEquipmentDefinitions } from '../../../../../../core/awaitables/equipmentDefinitions';
 import { awaitableModelDefinitions } from '../../../../../../core/awaitables/modelDefinitions';
+import { awaitableProvisionDefinitions } from '../../../../../../core/awaitables/provisionDefinitions';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { modelTransformEvent } from '../../../../../../core/blitzkit/modelTransform';
+import { tankCharacteristics } from '../../../../../../core/blitzkit/tankCharacteristics';
 import { Var } from '../../../../../../core/radix/var';
 import { Duel } from '../../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
 import { TankopediaPersistent } from '../../../../../../stores/tankopediaPersistent';
 import { TankopediaDisplay } from '../../../../../../stores/tankopediaPersistent/constants';
 
+const [modelDefinitions, equipmentDefinitions, provisionDefinitions] =
+  await Promise.all([
+    awaitableModelDefinitions,
+    awaitableEquipmentDefinitions,
+    awaitableProvisionDefinitions,
+  ]);
+
 const emptyVector = new Vector2();
-const modelDefinitions = await awaitableModelDefinitions;
 const FAR_DISTANCE = 1000;
 
 export function SceneProps() {
-  const shellPathHelper = useRef<ArrowHelper>(null);
   const show = TankopediaPersistent.use(
     (state) => state.showGrid && !state.showEnvironment,
   );
   const targetCircle = useRef<Group>(null);
   const targetCircleDots = useRef<HTMLDivElement>(null);
-  const texture = useLoader(TextureLoader, 'https://i.imgur.com/C28Z8nU.png');
+  const texture = useLoader(TextureLoader, imgur('C28Z8nU'));
 
   texture.anisotropy = 2;
 
@@ -42,43 +51,66 @@ export function SceneProps() {
   const material = useRef<MeshStandardMaterial>(null);
   const display = TankopediaEphemeral.use((state) => state.display);
   const playground = useRef<Group>(null);
-  const protagonistTurret = Duel.use((state) => state.protagonist.turret);
-  const protagonistTrack = Duel.use((state) => state.protagonist.track);
-  const protagonistTank = Duel.use((state) => state.protagonist.tank);
-  const protagonistGun = Duel.use((state) => state.protagonist.gun);
-  const protagonistModelDefinition =
-    modelDefinitions.models[protagonistTank.id];
-  const protagonistTrackModelDefinition =
-    modelDefinitions.models[protagonistTank.id].tracks[protagonistTrack.id];
-  const protagonistGunModelDefinition =
-    protagonistModelDefinition.turrets[protagonistTurret.id].guns[
-      protagonistGun.gun_type!.value.base.id
-    ];
-  const protagonistTurretModelDefinition =
-    protagonistModelDefinition.turrets[protagonistTurret.id];
-  const protagonistHullOrigin = new Vector3(
-    protagonistTrackModelDefinition.origin.x,
-    protagonistTrackModelDefinition.origin.y,
-    -protagonistTrackModelDefinition.origin.z,
+  const turret = Duel.use((state) => state.protagonist.turret);
+  const track = Duel.use((state) => state.protagonist.track);
+  const tank = Duel.use((state) => state.protagonist.tank);
+  const gun = Duel.use((state) => state.protagonist.gun);
+  const shell = Duel.use((state) => state.protagonist.shell);
+  const engine = Duel.use((state) => state.protagonist.engine);
+  const tankModelDefinition = modelDefinitions.models[tank.id];
+  const trackModelDefinition =
+    modelDefinitions.models[tank.id].tracks[track.id];
+  const gunModelDefinition =
+    tankModelDefinition.turrets[turret.id].guns[gun.gun_type!.value.base.id];
+  const turretModelDefinition = tankModelDefinition.turrets[turret.id];
+  const hullOrigin = new Vector3(
+    trackModelDefinition.origin.x,
+    trackModelDefinition.origin.y,
+    -trackModelDefinition.origin.z,
   );
-  const protagonistTurretOrigin = new Vector3(
-    protagonistModelDefinition.turret_origin.x,
-    protagonistModelDefinition.turret_origin.y,
-    -protagonistModelDefinition.turret_origin.z,
+  const turretOrigin = new Vector3(
+    tankModelDefinition.turret_origin.x,
+    tankModelDefinition.turret_origin.y,
+    -tankModelDefinition.turret_origin.z,
   );
-  const protagonistGunOriginOnlyY = new Vector3(
-    0,
-    protagonistTurretModelDefinition.gun_origin.y,
-    0,
-  );
-  const turretRotationSpeed = degToRad(protagonistTurret.traverse_speed);
-  const gunRotationSpeed = degToRad(
-    protagonistGun.gun_type!.value.base.rotation_speed,
-  );
+  const gunOriginOnlyY = new Vector3(0, turretModelDefinition.gun_origin.y, 0);
+  const turretRotationSpeed = degToRad(turret.traverse_speed);
+  const gunRotationSpeed = degToRad(gun.gun_type!.value.base.rotation_speed);
   const shellOrigin = new Vector3()
-    .add(protagonistHullOrigin)
-    .add(protagonistTurretOrigin)
-    .add(protagonistGunOriginOnlyY);
+    .add(hullOrigin)
+    .add(turretOrigin)
+    .add(gunOriginOnlyY);
+  const camouflage = Duel.use((state) => state.protagonist.camouflage);
+  const crewSkills = TankopediaEphemeral.use((state) => state.skills);
+  const consumables = Duel.use((state) => state.protagonist.consumables);
+  const provisions = Duel.use((state) => state.protagonist.provisions);
+  const equipmentMatrix = Duel.use(
+    (state) => state.protagonist.equipmentMatrix,
+  );
+  const characteristics = tankCharacteristics(
+    {
+      tank,
+      turret,
+      gun,
+      shell,
+      consumables,
+      applyDynamicArmor: false,
+      applyReactiveArmor: false,
+      applySpallLiner: false,
+      camouflage,
+      crewSkills,
+      engine,
+      equipmentMatrix,
+      provisions,
+      stockEngine: tank.engines[0],
+      stockGun: tank.turrets[0].guns[0],
+      stockTurret: tank.turrets[0],
+      stockTrack: tank.tracks[0],
+      track,
+    },
+    { equipmentDefinitions, provisionDefinitions, tankModelDefinition },
+  );
+  const mockTank = useLoader(GLTFLoader, asset(`3d/tanks/models/12305.glb`));
 
   useFrame(({ camera }) => {
     if (!material.current) return;
@@ -88,11 +120,10 @@ export function SceneProps() {
   let lastTime = 0;
   let DEBUG_disable = false;
 
-  useFrame(({ raycaster, camera, clock }) => {
+  useFrame(({ raycaster, camera, clock, gl }) => {
     if (
       display !== TankopediaDisplay.ShootingRange ||
       !playground.current ||
-      !shellPathHelper.current ||
       !targetCircle.current ||
       DEBUG_disable ||
       !targetCircleDots.current
@@ -120,9 +151,6 @@ export function SceneProps() {
       direction = path.clone().normalize();
     }
 
-    // shellPathHelper.current.setDirection(direction);
-    // shellPathHelper.current.setLength(length);
-
     const deltaT = clock.elapsedTime - lastTime;
     lastTime = clock.elapsedTime;
     const desiredPitch = Math.asin(direction.y);
@@ -139,8 +167,8 @@ export function SceneProps() {
     const [pitch, yaw] = applyPitchYawLimits(
       lastPitch + maxDeltaPitch,
       lastYaw + maxDeltaYaw,
-      protagonistGunModelDefinition.pitch,
-      protagonistTurretModelDefinition.yaw,
+      gunModelDefinition.pitch,
+      turretModelDefinition.yaw,
     );
 
     modelTransformEvent.emit({ pitch, yaw });
@@ -150,9 +178,6 @@ export function SceneProps() {
     const gunDirection = new Vector3(0, 0, -1)
       .applyAxisAngle(I_HAT, pitch)
       .applyAxisAngle(J_HAT, yaw);
-
-    shellPathHelper.current.setLength(FAR_DISTANCE);
-    shellPathHelper.current.setDirection(gunDirection);
 
     raycaster.set(shellOrigin, gunDirection);
 
@@ -173,15 +198,22 @@ export function SceneProps() {
 
     targetCircle.current.position.copy(gunTarget);
 
-    const targetCircleDotsSize = `${gunTarget.distanceTo(shellOrigin)}px`;
+    const distanceToTarget = gunTarget.distanceTo(shellOrigin);
+    const dispersionRadius =
+      characteristics.dispersion * (distanceToTarget / 100);
+    const dispersionSize = 2 * dispersionRadius;
+    const targetDistanceFromCamera = gunTarget.distanceTo(camera.position);
+    document.title = `${targetDistanceFromCamera}`;
+    const angularSize =
+      2 * Math.atan(dispersionSize / (2 * targetDistanceFromCamera));
+    const verticalScreenSize =
+      2 * Math.tan(degToRad((camera as PerspectiveCamera).fov) / 2);
+    const screenSpaceSize =
+      gl.domElement.clientHeight * (angularSize / verticalScreenSize);
+    const targetCircleDotsSize = `${Math.max(38, screenSpaceSize)}px`;
+
     targetCircleDots.current.style.width = targetCircleDotsSize;
     targetCircleDots.current.style.height = targetCircleDotsSize;
-
-    // window.addEventListener('keydown', (event) => {
-    //   if (event.key === 'Enter') {
-    //     DEBUG_disable = true;
-    //   }
-    // });
   });
 
   return (
@@ -195,26 +227,32 @@ export function SceneProps() {
 
       {display === TankopediaDisplay.ShootingRange && (
         <>
-          <arrowHelper ref={shellPathHelper} position={shellOrigin} />
-
           <group ref={targetCircle}>
-            {/* <sphereGeometry args={[0.1, 32, 32]} />
-              <meshStandardMaterial
-                depthTest={false}
-                depthWrite={false}
-                color="red"
-              /> */}
-
-            <Html center occlude={false}>
+            <Html center occlude={false} zIndexRange={[0, 0]}>
               <Box
                 ref={targetCircleDots}
                 width="10em"
                 height="10em"
                 style={{
                   borderRadius: '50%',
-                  border: `0.25rem dotted ${Var('gray-12')}`,
+                  border: `0.125rem solid ${Var('green-9')}`,
                 }}
-              />
+                position="relative"
+              >
+                <Box
+                  width="1rem"
+                  height="1rem"
+                  position="absolute"
+                  top="50%"
+                  left="50%"
+                  style={{
+                    backgroundImage: `url(${imgur('kU9Xejd')})`,
+                    backgroundSize: 'contain',
+                    transform: 'translateX(-50%) scale(90%)',
+                    borderRadius: '50%',
+                  }}
+                />
+              </Box>
             </Html>
           </group>
 
@@ -238,6 +276,13 @@ export function SceneProps() {
               <sphereGeometry args={[0.1, 32, 32]} />
               <meshStandardMaterial depthTest={false} />
             </mesh>
+
+            <group
+              position={[0, 0, -182]}
+              rotation={[-Math.PI / 2, 0, Math.PI]}
+            >
+              <primitive object={mockTank.scene} />
+            </group>
           </group>
         </>
       )}

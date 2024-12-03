@@ -95,6 +95,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
           top="50%"
           left="50%"
           style={{
+            zIndex: 2,
             backgroundImage: `url(${imgur('27Gwth4')})`,
             backgroundSize: 'contain',
             transform: 'translateX(-50%)',
