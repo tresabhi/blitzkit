@@ -461,6 +461,8 @@ export function tankCharacteristics(
     resolvedEnginePower / weightTons / softTerrainCoefficientRaw;
   const weight = weightTons;
   const turretTraverseSpeed = turret.traverse_speed * turretTraverseCoefficient;
+  const gunTraverseSpeed =
+    gun.gun_type!.value.base.rotation_speed * turretTraverseCoefficient;
   const hullTraverseHardTerrain =
     (resolvedEnginePower / stockEngine.power) *
     track.traverse_speed *
@@ -555,6 +557,7 @@ export function tankCharacteristics(
     powerToWeightRatioSoftTerrain,
     weight,
     turretTraverseSpeed,
+    gunTraverseSpeed, // TODO: display this
     hullTraverseHardTerrain,
     hullTraverseMediumTerrain,
     hullTraverseSoftTerrain,

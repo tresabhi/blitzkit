@@ -20,7 +20,7 @@ const poseDistances: Record<Pose, number> = {
 
 const modelDefinitions = await awaitableModelDefinitions;
 
-const ARCADE_MODE_DISTANCE = 12;
+const ARCADE_MODE_DISTANCE = 19;
 const ARCADE_MODE_ANGLE = Math.PI / 8;
 export const ARCADE_MODE_FOV = 54;
 export const INSPECT_MODE_FOV = 25;

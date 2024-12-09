@@ -12,7 +12,7 @@ import {
   Vector3,
 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/Addons.js';
-import { degToRad } from 'three/src/math/MathUtils.js';
+import { degToRad, radToDeg } from 'three/src/math/MathUtils.js';
 import { awaitableEquipmentDefinitions } from '../../../../../../../core/awaitables/equipmentDefinitions';
 import { awaitableModelDefinitions } from '../../../../../../../core/awaitables/modelDefinitions';
 import { awaitableProvisionDefinitions } from '../../../../../../../core/awaitables/provisionDefinitions';
@@ -40,7 +40,8 @@ export function SceneProps() {
     (state) => state.showGrid && !state.showEnvironment,
   );
   const targetCircleWrapper = useRef<Group>(null);
-  const targetCircle = useRef<HTMLDivElement>(null);
+  const clientTargetCircle = useRef<HTMLDivElement>(null);
+  const serverTargetCircle = useRef<HTMLDivElement>(null);
   const material = useRef<MeshStandardMaterial>(null);
   const playground = useRef<Group>(null);
 
@@ -70,8 +71,6 @@ export function SceneProps() {
     -tankModelDefinition.turret_origin.z,
   );
   const gunOriginOnlyY = new Vector3(0, turretModelDefinition.gun_origin.y, 0);
-  const turretRotationSpeed = degToRad(turret.traverse_speed);
-  const gunRotationSpeed = degToRad(gun.gun_type!.value.base.rotation_speed);
   const shellOrigin = new Vector3()
     .add(hullOrigin)
     .add(turretOrigin)
@@ -106,6 +105,9 @@ export function SceneProps() {
     },
     { equipmentDefinitions, provisionDefinitions, tankModelDefinition },
   );
+  let { dispersion } = characteristics;
+  const turretRotationSpeed = degToRad(characteristics.turretTraverseSpeed);
+  const gunRotationSpeed = degToRad(characteristics.gunTraverseSpeed);
 
   const mockTank = useLoader(GLTFLoader, asset(`3d/tanks/models/12305.glb`));
   const texture = useLoader(TextureLoader, imgur('C28Z8nU'));
@@ -125,7 +127,8 @@ export function SceneProps() {
       !playground.current ||
       !targetCircleWrapper.current ||
       DEBUG_disable ||
-      !targetCircle.current
+      !clientTargetCircle.current ||
+      !serverTargetCircle.current
     ) {
       return;
     }
@@ -152,6 +155,7 @@ export function SceneProps() {
 
     const deltaT = clock.elapsedTime - lastTime;
     lastTime = clock.elapsedTime;
+
     const desiredPitch = Math.asin(direction.y);
     const desiredYaw = Math.atan2(-direction.x, -direction.z);
     const deltaPitch = desiredPitch - lastPitch;
@@ -169,6 +173,22 @@ export function SceneProps() {
       gunModelDefinition.pitch,
       turretModelDefinition.yaw,
     );
+
+    const deltaRotation = Math.abs(maxDeltaPitch) + Math.abs(maxDeltaYaw);
+    const rotationSpeed = deltaRotation;
+    const turretTraversePenalty =
+      characteristics.dispersionTurretTraversing * radToDeg(rotationSpeed);
+
+    const penalty = turretTraversePenalty;
+
+    const dispersionMod = dispersion - characteristics.dispersion;
+    const dispersionModDischarged =
+      dispersionMod * Math.exp(-deltaT / characteristics.aimTime) -
+      dispersionMod;
+
+    dispersion += penalty + dispersionModDischarged;
+
+    document.title = `${dispersion.toFixed(3)} (${penalty.toFixed(3)})`;
 
     modelTransformEvent.emit({ pitch, yaw });
     lastPitch = pitch;
@@ -198,8 +218,7 @@ export function SceneProps() {
     targetCircleWrapper.current.position.copy(gunTarget);
 
     const distanceToTarget = gunTarget.distanceTo(shellOrigin);
-    const dispersionRadius =
-      characteristics.dispersion * (distanceToTarget / 100);
+    const dispersionRadius = dispersion * (distanceToTarget / 100);
     const dispersionSize = 2 * dispersionRadius;
     const targetDistanceFromCamera = gunTarget.distanceTo(camera.position);
     const angularSize =
@@ -210,8 +229,10 @@ export function SceneProps() {
       gl.domElement.clientHeight * (angularSize / verticalScreenSize);
     const targetCircleDotsSize = `${screenSpaceSize}px`;
 
-    targetCircle.current.style.width = targetCircleDotsSize;
-    targetCircle.current.style.height = targetCircleDotsSize;
+    clientTargetCircle.current.style.width = targetCircleDotsSize;
+    clientTargetCircle.current.style.height = targetCircleDotsSize;
+    serverTargetCircle.current.style.width = targetCircleDotsSize;
+    serverTargetCircle.current.style.height = targetCircleDotsSize;
   });
 
   return (
@@ -227,7 +248,8 @@ export function SceneProps() {
         <>
           <group ref={targetCircleWrapper}>
             <Html center occlude={false} zIndexRange={[0, 0]}>
-              <TargetCircle ref={targetCircle} />
+              <TargetCircle variant="client" ref={clientTargetCircle} />
+              <TargetCircle variant="server" ref={serverTargetCircle} />
             </Html>
           </group>
 
