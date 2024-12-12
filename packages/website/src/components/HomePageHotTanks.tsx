@@ -1,30 +1,67 @@
-import { Box, Flex, Heading } from '@radix-ui/themes';
-import { awaitableAverageDefinitions } from '../core/awaitables/averageDefinitions';
+import { assertSecret } from '@blitzkit/core';
+import { EyeOpenIcon } from '@radix-ui/react-icons';
+import { Box, Flex, Heading, Text } from '@radix-ui/themes';
+import { google } from 'googleapis';
 import { awaitableTankDefinitions } from '../core/awaitables/tankDefinitions';
 import { TankopediaPersistent } from '../stores/tankopediaPersistent';
 import { TankCard } from './TankCard';
 
-const [tankDefinitions, averageDefinitions] = await Promise.all([
-  awaitableTankDefinitions,
-  awaitableAverageDefinitions,
-]);
-const tanks = Object.values(tankDefinitions.tanks);
-const tankAverages = Object.entries(averageDefinitions.averages).map(
-  ([id, average]) => ({
-    id: Number(id),
-    ...average,
-  }),
-);
+const [tankDefinitions] = await Promise.all([awaitableTankDefinitions, ,]);
 
-// lol don't ask questions
-const testTanks = tanks
-  .filter((tank) => tank.testing)
-  .sort((a, b) => b.tier - a.tier);
-const mostPlayedTanks = tankAverages
-  .sort((a, b) => b.samples.d_1 - a.samples.d_1)
-  .map(({ id }) => tankDefinitions.tanks[id])
-  .filter((tank) => tank !== undefined && !tank.testing);
-const popularTanks = [...testTanks, ...mostPlayedTanks].slice(0, 8);
+const auth = await google.auth.getClient({
+  keyFile: import.meta.env.GOOGLE_APPLICATION_CREDENTIALS,
+  scopes: ['https://www.googleapis.com/auth/analytics.readonly'],
+});
+const analytics = google.analyticsdata({ version: 'v1beta', auth });
+const report = await analytics.properties.runReport({
+  property: `properties/${assertSecret(import.meta.env.PUBLIC_GOOGLE_ANALYTICS_PROPERTY_ID)}`,
+  requestBody: {
+    dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
+    dimensions: [{ name: 'pagePath' }],
+    metrics: [{ name: 'screenPageViews' }],
+    orderBys: [{ metric: { metricName: 'screenPageViews' }, desc: true }],
+    dimensionFilter: {
+      filter: {
+        fieldName: 'pagePath',
+        stringFilter: { matchType: 'BEGINS_WITH', value: '/tools/tankopedia/' },
+      },
+    },
+  },
+});
+
+if (!report.data.rows) {
+  throw new Error('No rows in report');
+}
+
+const hotTanks = report.data.rows
+  .filter(
+    (row) =>
+      row.dimensionValues &&
+      row.dimensionValues[0].value &&
+      row.dimensionValues[0].value !== '/tools/tankopedia/' &&
+      row.metricValues &&
+      row.metricValues[0].value,
+  )
+  .map((row) => ({
+    id: Number(
+      row.dimensionValues![0].value!.match(
+        /\/tools\/tankopedia\/(\d+)\/?/,
+      )?.[1],
+    ),
+    views: Number(row.metricValues![0].value!),
+  }))
+  .filter((row) => {
+    if (!(row.id in tankDefinitions.tanks)) {
+      // console.log('Unknown tank', row.id);
+    }
+
+    return row.id in tankDefinitions.tanks;
+  })
+  .slice(0, 16)
+  .map(({ id, views }) => ({
+    tank: tankDefinitions.tanks[id],
+    views,
+  }));
 
 export function HomePageHotTanks() {
   return (
@@ -36,15 +73,26 @@ export function HomePageHotTanks() {
 
 function Content() {
   return (
-    <Flex direction="column" gap="5" pt="4" pb="8">
+    <Flex direction="column" pt="4" pb="8">
       <Heading align="center" size="5">
         Popular tanks
       </Heading>
+      <Text color="gray" align="center" mb="5" size="2">
+        Last 7 days
+      </Text>
 
       <Flex justify="center" gap="4" wrap="wrap">
-        {popularTanks.map((tank) => (
-          <Box width="7rem" key={tank.id}>
-            <TankCard tank={tank} />
+        {hotTanks.map((row) => (
+          <Box width="7rem" key={row.tank.id}>
+            <TankCard
+              tank={row.tank}
+              discriminator={
+                <Flex align="center" gap="1" justify="center">
+                  <EyeOpenIcon />
+                  {Math.round(row.views * (30 / 7)).toLocaleString('en-US')}
+                </Flex>
+              }
+            />
           </Box>
         ))}
       </Flex>

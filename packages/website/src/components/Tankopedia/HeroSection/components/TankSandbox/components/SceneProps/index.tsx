@@ -108,7 +108,6 @@ export function SceneProps() {
   let { dispersion } = characteristics;
   const turretRotationSpeed = degToRad(characteristics.turretTraverseSpeed);
   const gunRotationSpeed = degToRad(characteristics.gunTraverseSpeed);
-
   const mockTank = useLoader(GLTFLoader, asset(`3d/tanks/models/12305.glb`));
   const texture = useLoader(TextureLoader, imgur('C28Z8nU'));
   texture.anisotropy = 2;
@@ -119,6 +118,7 @@ export function SceneProps() {
   });
 
   let lastTime = 0;
+  let lastPenalty = 0;
   let DEBUG_disable = false;
 
   useFrame(({ raycaster, camera, clock, gl }) => {
@@ -160,22 +160,22 @@ export function SceneProps() {
     const desiredYaw = Math.atan2(-direction.x, -direction.z);
     const deltaPitch = desiredPitch - lastPitch;
     const deltaYaw = desiredYaw - lastYaw;
-    const maxDeltaPitch =
-      Math.sign(deltaPitch) *
-      Math.min(gunRotationSpeed * deltaT, Math.abs(deltaPitch));
-    const maxDeltaYaw =
-      Math.sign(deltaYaw) *
-      Math.min(turretRotationSpeed * deltaT, Math.abs(deltaYaw));
+    const deltaAngle = Math.sqrt(deltaPitch ** 2 + deltaYaw ** 2);
+    const clampedDeltaAngle = Math.min(gunRotationSpeed * deltaT, deltaAngle);
+    const clampedDeltaPitch = deltaPitch * (deltaAngle / clampedDeltaAngle);
+    const clampedDeltaYaw = deltaYaw * (deltaAngle / clampedDeltaAngle);
 
     const [pitch, yaw] = applyPitchYawLimits(
-      lastPitch + maxDeltaPitch,
-      lastYaw + maxDeltaYaw,
+      lastPitch + clampedDeltaPitch,
+      lastYaw + clampedDeltaYaw,
       gunModelDefinition.pitch,
       turretModelDefinition.yaw,
     );
 
-    const deltaRotation = Math.abs(maxDeltaPitch) + Math.abs(maxDeltaYaw);
-    const rotationSpeed = deltaRotation;
+    const actualDeltaPitch = pitch - lastPitch;
+    const actualDeltaYaw = yaw - lastYaw;
+    const deltaRotation = Math.abs(actualDeltaPitch) + Math.abs(actualDeltaYaw);
+    const rotationSpeed = deltaRotation / deltaT;
     const turretTraversePenalty =
       characteristics.dispersionTurretTraversing * radToDeg(rotationSpeed);
 
@@ -186,9 +186,8 @@ export function SceneProps() {
       dispersionMod * Math.exp(-deltaT / characteristics.aimTime) -
       dispersionMod;
 
-    dispersion += penalty + dispersionModDischarged;
-
-    document.title = `${dispersion.toFixed(3)} (${penalty.toFixed(3)})`;
+    dispersion += penalty - lastPenalty + dispersionModDischarged;
+    lastPenalty = penalty;
 
     modelTransformEvent.emit({ pitch, yaw });
     lastPitch = pitch;

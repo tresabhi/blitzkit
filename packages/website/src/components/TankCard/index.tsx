@@ -1,7 +1,7 @@
 import { asset, tankIcon, TankType, type TankDefinition } from '@blitzkit/core';
 import { Flex, Link, Text, type TextProps } from '@radix-ui/themes';
 import { uniq } from 'lodash-es';
-import { forwardRef } from 'react';
+import { forwardRef, type ReactNode } from 'react';
 import { TankopediaPersistent } from '../../stores/tankopediaPersistent';
 import { classIcons } from '../ClassIcon';
 import { MAX_RECENTLY_VIEWED } from '../TankSearch/constants';
@@ -10,7 +10,7 @@ import './index.css';
 type TankCardProps = TextProps & {
   tank: TankDefinition;
   onTankSelect?: (tank: TankDefinition) => void;
-  discriminator?: string;
+  discriminator: ReactNode;
   noLink?: boolean;
 };
 

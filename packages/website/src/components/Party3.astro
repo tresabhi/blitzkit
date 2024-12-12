@@ -1,8 +1,14 @@
+---
+import { assertSecret } from '@blitzkit/core';
+---
+
 {/* google analytics */}
 <script
   is:inline
   async
-  src="https://www.googletagmanager.com/gtag/js?id=G-GL2JVHCGPQ"></script>
+  src={`https://www.googletagmanager.com/gtag/js?id=${assertSecret(
+    import.meta.env.PUBLIC_GOOGLE_TAG_MANAGER_ID,
+  )}`}></script>
 <script is:inline>
   window.dataLayer = window.dataLayer || [];
 
@@ -10,7 +16,7 @@
     dataLayer.push(arguments);
   }
   gtag('js', new Date());
-  gtag('config', 'G-GL2JVHCGPQ');
+  gtag('config', assertSecret(import.meta.env.PUBLIC_GOOGLE_TAG_MANAGER_ID));
 </script>
 
 {/* nitro ads */}
