@@ -53,13 +53,13 @@ const branch = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
       </Flex>
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+        <ToolCard tool={discordTool} />
         <ToolCard tool={tierListTool} />
-        <ToolCard tool={embedTool} />
       </Flex>
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+        <ToolCard tool={embedTool} />
         <ToolCard tool={moreTool} />
-        <ToolCard tool={discordTool} />
       </Flex>
 
       <Heading align="center" mt="6">Other cool projects</Heading>
