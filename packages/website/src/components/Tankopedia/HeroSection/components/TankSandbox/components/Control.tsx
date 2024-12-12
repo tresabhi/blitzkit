@@ -1,5 +1,6 @@
 import { OrbitControls } from '@react-three/drei';
 import { invalidate, useThree } from '@react-three/fiber';
+import { clamp } from 'lodash-es';
 import { useEffect, useRef, useState } from 'react';
 import { PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls as OrbitControlsClass } from 'three-stdlib';
@@ -9,7 +10,11 @@ import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawL
 import { hasEquipment } from '../../../../../../core/blitzkit/hasEquipment';
 import { Pose, poseEvent } from '../../../../../../core/blitzkit/pose';
 import { Duel } from '../../../../../../stores/duel';
-import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
+import {
+  SHOOTING_RANGE_ZOOM_COEFFICIENTS,
+  ShootingRangeZoom,
+  TankopediaEphemeral,
+} from '../../../../../../stores/tankopediaEphemeral';
 import { TankopediaDisplay } from '../../../../../../stores/tankopediaPersistent/constants';
 
 const poseDistances: Record<Pose, number> = {
@@ -21,11 +26,16 @@ const poseDistances: Record<Pose, number> = {
 const modelDefinitions = await awaitableModelDefinitions;
 
 const ARCADE_MODE_DISTANCE = 19;
-const ARCADE_MODE_ANGLE = Math.PI / 8;
+// const ARCADE_MODE_ANGLE = Math.PI / 8;
+const ARCADE_MODE_ANGLE = degToRad(10);
 export const ARCADE_MODE_FOV = 54;
 export const INSPECT_MODE_FOV = 25;
 
 export function Controls() {
+  const shootingRangeZoom = TankopediaEphemeral.use(
+    (state) => state.shootingRangeZoom,
+  );
+  const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const display = TankopediaEphemeral.use((state) => state.display);
   const duelStore = Duel.useStore();
   const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
@@ -78,35 +88,53 @@ export function Controls() {
     protagonistTurretOrigin.y +
     protagonistGunOrigin.y;
   const initialPosition = [-8, gunHeight + 4, -13] as const;
+  const protagonistGunOriginOnlyY = new Vector3(
+    0,
+    protagonistTurretModelDefinition.gun_origin.y,
+    0,
+  );
+  const shellOrigin = protagonistHullOrigin
+    .clone()
+    .add(protagonistTurretOrigin)
+    .add(protagonistGunOriginOnlyY);
 
-  useEffect(() => {
-    if (!orbitControls.current) return;
+  const cameraPosition = new Vector3();
+  let fov: number;
+  const target = new Vector3();
+  let enablePan: boolean;
+  let enableZoom: boolean;
+  let rotationSpeed = 0.25;
 
-    if (display === TankopediaDisplay.ShootingRange) {
-      (camera as PerspectiveCamera).fov = ARCADE_MODE_FOV;
-      camera.position.set(
-        0,
-        gunHeight + ARCADE_MODE_DISTANCE * Math.sin(ARCADE_MODE_ANGLE),
-        ARCADE_MODE_DISTANCE * Math.cos(ARCADE_MODE_ANGLE),
-      );
-      orbitControls.current.target.set(0, gunHeight + 3, 0);
-      orbitControls.current.enablePan = false;
-      // orbitControls.current.enableZoom = false;
+  if (display === TankopediaDisplay.ShootingRange) {
+    cameraPosition.set(
+      0,
+      gunHeight + ARCADE_MODE_DISTANCE * Math.sin(ARCADE_MODE_ANGLE),
+      ARCADE_MODE_DISTANCE * Math.cos(ARCADE_MODE_ANGLE),
+    );
+    enablePan = false;
+    enableZoom = false;
+
+    if (shootingRangeZoom === ShootingRangeZoom.Arcade) {
+      target.set(0, gunHeight + 3, 0);
+      fov = ARCADE_MODE_FOV;
     } else {
-      (camera as PerspectiveCamera).fov = INSPECT_MODE_FOV;
-      camera.position.set(...initialPosition);
-      orbitControls.current.target.set(0, gunHeight / 2, 0);
-      orbitControls.current.enablePan = true;
-      // orbitControls.current.enableZoom = true;
+      target.copy(shellOrigin);
+      cameraPosition.copy(shellOrigin.add(new Vector3(0, 0, Number.EPSILON)));
+      fov =
+        ARCADE_MODE_FOV * SHOOTING_RANGE_ZOOM_COEFFICIENTS[shootingRangeZoom];
+      rotationSpeed *= SHOOTING_RANGE_ZOOM_COEFFICIENTS[shootingRangeZoom];
     }
+  } else {
+    cameraPosition.set(...initialPosition);
+    target.set(0, gunHeight / 2, 0);
+    enablePan = true;
+    enableZoom = true;
+    fov = INSPECT_MODE_FOV;
+  }
 
-    camera.updateProjectionMatrix();
-  }, [
-    camera,
-    protagonistTrack,
-    protagonistTank,
-    display === TankopediaDisplay.ShootingRange,
-  ]);
+  camera.position.copy(cameraPosition);
+  (camera as PerspectiveCamera).fov = fov;
+  camera.updateProjectionMatrix();
 
   useEffect(() => {
     const unsubscribeTankopediaEphemeral = tankopediaEphemeralStore.subscribe(
@@ -217,8 +245,47 @@ export function Controls() {
       setAutoRotate(false);
     }
 
+    function handleKeyDown(event: KeyboardEvent) {
+      if (display !== TankopediaDisplay.ShootingRange || event.repeat) return;
+
+      if (event.key === 'Shift') {
+        mutateTankopediaEphemeral((draft) => {
+          draft.shootingRangeZoom =
+            draft.shootingRangeZoom === ShootingRangeZoom.Arcade
+              ? ShootingRangeZoom.Zoom0
+              : ShootingRangeZoom.Arcade;
+        });
+      }
+    }
+
+    function handleWheel(event: WheelEvent) {
+      if (display !== TankopediaDisplay.ShootingRange) return;
+
+      event.preventDefault();
+
+      mutateTankopediaEphemeral((draft) => {
+        draft.shootingRangeZoom = clamp(
+          draft.shootingRangeZoom + Math.sign(event.deltaY),
+          ShootingRangeZoom.Arcade,
+          ShootingRangeZoom.Zoom2,
+        );
+
+        console.log(draft.shootingRangeZoom);
+      });
+    }
+
+    function handleScroll(event: Event) {
+      if (display !== TankopediaDisplay.ShootingRange) return;
+
+      event.preventDefault();
+    }
+
     poseEvent.on(handleDisturbance);
     canvas.addEventListener('pointerdown', handleDisturbance);
+    window.addEventListener('keydown', handleKeyDown);
+    canvas.addEventListener('wheel', handleWheel);
+    document.body.addEventListener('scroll', handleScroll);
+
     const unsubscribeTankopediaPersistent = tankopediaEphemeralStore.subscribe(
       (state) => state.display,
       handleDisturbance,
@@ -228,16 +295,22 @@ export function Controls() {
       canvas.removeEventListener('pointerdown', handleDisturbance);
       poseEvent.off(handleDisturbance);
       unsubscribeTankopediaPersistent();
+      window.removeEventListener('keydown', handleKeyDown);
+      canvas.removeEventListener('wheel', handleWheel);
+      document.body.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
   return (
     <OrbitControls
+      target={target}
+      enablePan={enablePan}
+      enableZoom={enableZoom}
       maxDistance={20}
       minDistance={5}
       ref={orbitControls}
       enabled={tankopediaEphemeralStore.getState().controlsEnabled}
-      rotateSpeed={0.25}
+      rotateSpeed={rotationSpeed}
       enableDamping={false}
       maxPolarAngle={degToRad(100)}
       autoRotate={autoRotate}

@@ -71,10 +71,7 @@ export function SceneProps() {
     -tankModelDefinition.turret_origin.z,
   );
   const gunOriginOnlyY = new Vector3(0, turretModelDefinition.gun_origin.y, 0);
-  const shellOrigin = new Vector3()
-    .add(hullOrigin)
-    .add(turretOrigin)
-    .add(gunOriginOnlyY);
+  const shellOrigin = hullOrigin.clone().add(turretOrigin).add(gunOriginOnlyY);
   const camouflage = Duel.use((state) => state.protagonist.camouflage);
   const crewSkills = TankopediaEphemeral.use((state) => state.skills);
   const consumables = Duel.use((state) => state.protagonist.consumables);
@@ -272,11 +269,6 @@ export function SceneProps() {
             >
               <boxGeometry args={[1, 3, 1]} />
               <meshStandardMaterial color={0xff8040} />
-            </mesh>
-
-            <mesh position={shellOrigin}>
-              <sphereGeometry args={[0.1, 32, 32]} />
-              <meshStandardMaterial depthTest={false} />
             </mesh>
 
             <group
