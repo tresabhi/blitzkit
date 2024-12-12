@@ -161,9 +161,12 @@ export function SceneProps() {
     const deltaPitch = desiredPitch - lastPitch;
     const deltaYaw = desiredYaw - lastYaw;
     const deltaAngle = Math.sqrt(deltaPitch ** 2 + deltaYaw ** 2);
-    const clampedDeltaAngle = Math.min(gunRotationSpeed * deltaT, deltaAngle);
-    const clampedDeltaPitch = deltaPitch * (deltaAngle / clampedDeltaAngle);
-    const clampedDeltaYaw = deltaYaw * (deltaAngle / clampedDeltaAngle);
+    const maxPossibleRotationInTime = gunRotationSpeed * deltaT;
+    const clampedDeltaAngle = Math.min(maxPossibleRotationInTime, deltaAngle);
+    const clampedDeltaPitch =
+      deltaAngle === 0 ? 0 : deltaPitch * (clampedDeltaAngle / deltaAngle);
+    const clampedDeltaYaw =
+      deltaAngle === 0 ? 0 : deltaYaw * (clampedDeltaAngle / deltaAngle);
 
     const [pitch, yaw] = applyPitchYawLimits(
       lastPitch + clampedDeltaPitch,
@@ -179,15 +182,18 @@ export function SceneProps() {
     const turretTraversePenalty =
       characteristics.dispersionTurretTraversing * radToDeg(rotationSpeed);
 
-    const penalty = turretTraversePenalty;
+    const penalty = Math.sqrt(1 + turretTraversePenalty ** 2);
 
-    const dispersionMod = dispersion - characteristics.dispersion;
-    const dispersionModDischarged =
-      dispersionMod * Math.exp(-deltaT / characteristics.aimTime) -
-      dispersionMod;
+    if (penalty === 1) {
+      const dispersionMod = dispersion - characteristics.dispersion;
+      const dispersionModDischarged =
+        dispersionMod * Math.exp(-deltaT / characteristics.aimTime) -
+        dispersionMod;
 
-    dispersion += penalty - lastPenalty + dispersionModDischarged;
-    lastPenalty = penalty;
+      dispersion += dispersionModDischarged;
+    } else {
+      dispersion = characteristics.dispersion * penalty;
+    }
 
     modelTransformEvent.emit({ pitch, yaw });
     lastPitch = pitch;
