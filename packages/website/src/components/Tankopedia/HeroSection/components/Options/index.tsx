@@ -27,7 +27,7 @@ import {
   Text,
   Tooltip,
 } from '@radix-ui/themes';
-import { useState, type RefObject } from 'react';
+import { Suspense, useState, type RefObject } from 'react';
 import { ENVIRONMENTS } from '../../../../../constants/lightingEnvironments';
 import { Pose, poseEvent } from '../../../../../core/blitzkit/pose';
 import { useEquipment } from '../../../../../hooks/useEquipment';
@@ -310,7 +310,9 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
             </IconButton>
           </Flex>
 
-          <DynamicArmorSwitcher />
+          <Suspense>
+            <DynamicArmorSwitcher />
+          </Suspense>
         </Flex>
       )}
 
