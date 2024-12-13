@@ -24,6 +24,7 @@ import { TankopediaEphemeral } from '../../../../../../../stores/tankopediaEphem
 import { TankopediaPersistent } from '../../../../../../../stores/tankopediaPersistent';
 import { TankopediaDisplay } from '../../../../../../../stores/tankopediaPersistent/constants';
 import { TargetCircle } from './components/TargetCircle';
+import { aimTarget } from './constants';
 
 const [modelDefinitions, equipmentDefinitions, provisionDefinitions] =
   await Promise.all([
@@ -106,6 +107,8 @@ export function SceneProps() {
   const gunRotationSpeed = degToRad(characteristics.gunTraverseSpeed);
   const mockTank = useLoader(GLTFLoader, asset(`3d/tanks/models/12305.glb`));
   const texture = useLoader(TextureLoader, imgur('C28Z8nU'));
+  const path = new Vector3();
+  const direction = new Vector3();
   texture.anisotropy = 2;
 
   useFrame(({ camera }) => {
@@ -136,16 +139,16 @@ export function SceneProps() {
     );
 
     let length: number;
-    let direction: Vector3;
 
     if (cameraIntersections.length === 0) {
       length = FAR_DISTANCE;
-      direction = new Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
+      direction.set(0, 0, -1).applyQuaternion(camera.quaternion);
+      aimTarget.copy(shellOrigin).addScaledVector(direction, length);
     } else {
-      const target = cameraIntersections[0].point;
-      const path = target.clone().sub(shellOrigin);
+      aimTarget.copy(cameraIntersections[0].point);
+      path.copy(aimTarget).sub(shellOrigin);
       length = path.length();
-      direction = path.clone().normalize();
+      direction.copy(path).normalize();
     }
 
     const deltaT = clock.elapsedTime - lastTime;

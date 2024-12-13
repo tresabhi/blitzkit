@@ -8,6 +8,10 @@ import { degToRad } from 'three/src/math/MathUtils.js';
 import { awaitableModelDefinitions } from '../../../../../../core/awaitables/modelDefinitions';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { hasEquipment } from '../../../../../../core/blitzkit/hasEquipment';
+import {
+  modelTransformEvent,
+  type ModelTransformEventData,
+} from '../../../../../../core/blitzkit/modelTransform';
 import { Pose, poseEvent } from '../../../../../../core/blitzkit/pose';
 import { Duel } from '../../../../../../stores/duel';
 import {
@@ -16,6 +20,7 @@ import {
   TankopediaEphemeral,
 } from '../../../../../../stores/tankopediaEphemeral';
 import { TankopediaDisplay } from '../../../../../../stores/tankopediaPersistent/constants';
+import { aimTarget } from './SceneProps/constants';
 
 const poseDistances: Record<Pose, number> = {
   [Pose.HullDown]: 15,
@@ -199,6 +204,8 @@ export function Controls() {
   }, [camera, protagonistTank.id, antagonistTank.id]);
 
   useEffect(() => {
+    let isInitialIteration = true;
+
     function handleDisturbance() {
       setAutoRotate(false);
     }
@@ -243,6 +250,8 @@ export function Controls() {
     document.body.addEventListener('scroll', handleScroll);
 
     const sniperModeCameraOffset = new Vector3();
+    let pitch = 0;
+    let yaw = 0;
 
     function updateCamera() {
       if (!orbitControls.current) return;
@@ -261,19 +270,32 @@ export function Controls() {
 
         if (shootingRangeZoom === ShootingRangeZoom.Arcade) {
           orbitControls.current.target.set(0, gunHeight + 3, 0);
-          camera.position.set(
-            0,
-            gunHeight + ARCADE_MODE_DISTANCE * Math.sin(ARCADE_MODE_ANGLE),
-            ARCADE_MODE_DISTANCE * Math.cos(ARCADE_MODE_ANGLE),
-          );
+
+          if (isInitialIteration) {
+            isInitialIteration = false;
+            camera.position.set(
+              0,
+              gunHeight + ARCADE_MODE_DISTANCE * Math.sin(ARCADE_MODE_ANGLE),
+              ARCADE_MODE_DISTANCE * Math.cos(ARCADE_MODE_ANGLE),
+            );
+          } else {
+            camera.position
+              .copy(aimTarget)
+              .sub(orbitControls.current.target)
+              .normalize()
+              .multiplyScalar(-ARCADE_MODE_DISTANCE)
+              .add(orbitControls.current.target);
+          }
         } else {
           orbitControls.current.target.copy(shellOrigin);
-          camera.position.copy(
-            sniperModeCameraOffset.set(0, 0, 1e-4).add(shellOrigin),
-          );
-        }
 
-        console.log(ShootingRangeZoom[shootingRangeZoom], camera.zoom);
+          camera.position
+            .copy(aimTarget)
+            .sub(shellOrigin)
+            .normalize()
+            .multiplyScalar(-1e-4)
+            .add(shellOrigin);
+        }
       } else {
         camera.position.set(...inspectModeInitialPosition);
         orbitControls.current.target.set(0, gunHeight / 2, 0);
@@ -284,6 +306,13 @@ export function Controls() {
 
       camera.updateProjectionMatrix();
     }
+
+    function handleModelTransform(event: ModelTransformEventData) {
+      pitch = event.pitch;
+      yaw = event.yaw ?? yaw;
+    }
+
+    modelTransformEvent.on(handleModelTransform);
 
     updateCamera();
 
@@ -308,6 +337,7 @@ export function Controls() {
       window.removeEventListener('keydown', handleKeyDown);
       canvas.removeEventListener('wheel', handleWheel);
       document.body.removeEventListener('scroll', handleScroll);
+      modelTransformEvent.off(handleModelTransform);
     };
   }, [display === TankopediaDisplay.ShootingRange]);
 
