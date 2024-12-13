@@ -265,7 +265,7 @@ export function Controls() {
 
       mutateTankopediaEphemeral((draft) => {
         draft.shootingRangeZoom = clamp(
-          draft.shootingRangeZoom + Math.sign(event.deltaY),
+          draft.shootingRangeZoom - Math.sign(event.deltaY),
           ShootingRangeZoom.Arcade,
           ShootingRangeZoom.Zoom2,
         );
