@@ -291,6 +291,27 @@
     },
 
     "commands": {
+      "auction": {
+        "$": "auction",
+        "description": "Tanks available in the auction",
+
+        "subcommands": {
+          "available": {
+            "$": "available",
+            "description": "Tanks available right now in the auction",
+            "body": {
+              "title": "Blitz Auction",
+              "available": "%s available",
+              "next": "Next price: %s"
+            }
+          },
+          "setup": {
+            "$": "setup",
+            "description": "Set up a channel to receive auction updates"
+          }
+        }
+      },
+
       "replay": {
         "$": "replay",
         "description": "Display replay results"

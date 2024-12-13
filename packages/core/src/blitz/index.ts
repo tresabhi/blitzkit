@@ -1,5 +1,6 @@
 export * from './canSplash';
 export * from './clans';
+export * from './classes';
 export * from './constants';
 export * from './equipmentPrice';
 export * from './fetchBlitz';
