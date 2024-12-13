@@ -269,8 +269,6 @@ export function Controls() {
           ShootingRangeZoom.Arcade,
           ShootingRangeZoom.Zoom2,
         );
-
-        console.log(draft.shootingRangeZoom);
       });
     }
 

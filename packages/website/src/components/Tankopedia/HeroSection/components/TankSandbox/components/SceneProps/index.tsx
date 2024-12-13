@@ -103,7 +103,6 @@ export function SceneProps() {
     { equipmentDefinitions, provisionDefinitions, tankModelDefinition },
   );
   let { dispersion } = characteristics;
-  const turretRotationSpeed = degToRad(characteristics.turretTraverseSpeed);
   const gunRotationSpeed = degToRad(characteristics.gunTraverseSpeed);
   const mockTank = useLoader(GLTFLoader, asset(`3d/tanks/models/12305.glb`));
   const texture = useLoader(TextureLoader, imgur('C28Z8nU'));
@@ -115,7 +114,6 @@ export function SceneProps() {
   });
 
   let lastTime = 0;
-  let lastPenalty = 0;
   let DEBUG_disable = false;
 
   useFrame(({ raycaster, camera, clock, gl }) => {
