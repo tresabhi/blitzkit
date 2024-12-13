@@ -28,18 +28,14 @@ const modelDefinitions = await awaitableModelDefinitions;
 const ARCADE_MODE_DISTANCE = 19;
 // const ARCADE_MODE_ANGLE = Math.PI / 8;
 const ARCADE_MODE_ANGLE = degToRad(10);
-export const ARCADE_MODE_FOV = 54;
-export const INSPECT_MODE_FOV = 25;
+const ARCADE_MODE_FOV = 54;
 
 export function Controls() {
-  const shootingRangeZoom = TankopediaEphemeral.use(
-    (state) => state.shootingRangeZoom,
-  );
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const display = TankopediaEphemeral.use((state) => state.display);
   const duelStore = Duel.useStore();
   const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
-  const camera = useThree((state) => state.camera);
+  const camera = useThree((state) => state.camera as PerspectiveCamera);
   const canvas = useThree((state) => state.gl.domElement);
   const orbitControls = useRef<OrbitControlsClass>(null);
   const protagonistTurret = Duel.use((state) => state.protagonist.turret);
@@ -87,7 +83,7 @@ export function Controls() {
     protagonistHullOrigin.y +
     protagonistTurretOrigin.y +
     protagonistGunOrigin.y;
-  const initialPosition = [-8, gunHeight + 4, -13] as const;
+  const inspectModeInitialPosition = [-8, gunHeight + 4, -13] as const;
   const protagonistGunOriginOnlyY = new Vector3(
     0,
     protagonistTurretModelDefinition.gun_origin.y,
@@ -97,44 +93,6 @@ export function Controls() {
     .clone()
     .add(protagonistTurretOrigin)
     .add(protagonistGunOriginOnlyY);
-
-  const cameraPosition = new Vector3();
-  let fov: number;
-  const target = new Vector3();
-  let enablePan: boolean;
-  let enableZoom: boolean;
-  let rotationSpeed = 0.25;
-
-  if (display === TankopediaDisplay.ShootingRange) {
-    cameraPosition.set(
-      0,
-      gunHeight + ARCADE_MODE_DISTANCE * Math.sin(ARCADE_MODE_ANGLE),
-      ARCADE_MODE_DISTANCE * Math.cos(ARCADE_MODE_ANGLE),
-    );
-    enablePan = false;
-    enableZoom = false;
-
-    if (shootingRangeZoom === ShootingRangeZoom.Arcade) {
-      target.set(0, gunHeight + 3, 0);
-      fov = ARCADE_MODE_FOV;
-    } else {
-      target.copy(shellOrigin);
-      cameraPosition.copy(shellOrigin.add(new Vector3(0, 0, Number.EPSILON)));
-      fov =
-        ARCADE_MODE_FOV * SHOOTING_RANGE_ZOOM_COEFFICIENTS[shootingRangeZoom];
-      rotationSpeed *= SHOOTING_RANGE_ZOOM_COEFFICIENTS[shootingRangeZoom];
-    }
-  } else {
-    cameraPosition.set(...initialPosition);
-    target.set(0, gunHeight / 2, 0);
-    enablePan = true;
-    enableZoom = true;
-    fov = INSPECT_MODE_FOV;
-  }
-
-  camera.position.copy(cameraPosition);
-  (camera as PerspectiveCamera).fov = fov;
-  camera.updateProjectionMatrix();
 
   useEffect(() => {
     const unsubscribeTankopediaEphemeral = tankopediaEphemeralStore.subscribe(
@@ -223,7 +181,7 @@ export function Controls() {
         }
 
         case Pose.Default: {
-          camera.position.set(...initialPosition);
+          camera.position.set(...inspectModeInitialPosition);
           orbitControls.current?.target.set(0, 1.25, 0);
           break;
         }
@@ -284,31 +242,81 @@ export function Controls() {
     canvas.addEventListener('wheel', handleWheel);
     document.body.addEventListener('scroll', handleScroll);
 
-    const unsubscribeTankopediaPersistent = tankopediaEphemeralStore.subscribe(
+    const sniperModeCameraOffset = new Vector3();
+
+    function updateCamera() {
+      if (!orbitControls.current) return;
+
+      orbitControls.current.rotateSpeed = 0.25;
+
+      if (display === TankopediaDisplay.ShootingRange) {
+        const { shootingRangeZoom } = tankopediaEphemeralStore.getState();
+
+        orbitControls.current.enablePan = false;
+        orbitControls.current.enableZoom = false;
+        orbitControls.current.rotateSpeed *=
+          SHOOTING_RANGE_ZOOM_COEFFICIENTS[shootingRangeZoom];
+        camera.fov =
+          ARCADE_MODE_FOV * SHOOTING_RANGE_ZOOM_COEFFICIENTS[shootingRangeZoom];
+
+        if (shootingRangeZoom === ShootingRangeZoom.Arcade) {
+          orbitControls.current.target.set(0, gunHeight + 3, 0);
+          camera.position.set(
+            0,
+            gunHeight + ARCADE_MODE_DISTANCE * Math.sin(ARCADE_MODE_ANGLE),
+            ARCADE_MODE_DISTANCE * Math.cos(ARCADE_MODE_ANGLE),
+          );
+        } else {
+          orbitControls.current.target.copy(shellOrigin);
+          camera.position.copy(
+            sniperModeCameraOffset.set(0, 0, 1e-4).add(shellOrigin),
+          );
+        }
+
+        console.log(ShootingRangeZoom[shootingRangeZoom], camera.zoom);
+      } else {
+        camera.position.set(...inspectModeInitialPosition);
+        orbitControls.current.target.set(0, gunHeight / 2, 0);
+        orbitControls.current.enablePan = true;
+        orbitControls.current.enableZoom = true;
+        camera.fov = 25;
+      }
+
+      camera.updateProjectionMatrix();
+    }
+
+    updateCamera();
+
+    const unsubscribeDisplay = tankopediaEphemeralStore.subscribe(
       (state) => state.display,
-      handleDisturbance,
+      () => {
+        handleDisturbance();
+        updateCamera();
+      },
+    );
+
+    const unsubscribeShootingRangeZoom = tankopediaEphemeralStore.subscribe(
+      (state) => state.shootingRangeZoom,
+      updateCamera,
     );
 
     return () => {
       canvas.removeEventListener('pointerdown', handleDisturbance);
       poseEvent.off(handleDisturbance);
-      unsubscribeTankopediaPersistent();
+      unsubscribeDisplay();
+      unsubscribeShootingRangeZoom();
       window.removeEventListener('keydown', handleKeyDown);
       canvas.removeEventListener('wheel', handleWheel);
       document.body.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [display === TankopediaDisplay.ShootingRange]);
 
   return (
     <OrbitControls
-      target={target}
-      enablePan={enablePan}
-      enableZoom={enableZoom}
       maxDistance={20}
       minDistance={5}
       ref={orbitControls}
       enabled={tankopediaEphemeralStore.getState().controlsEnabled}
-      rotateSpeed={rotationSpeed}
       enableDamping={false}
       maxPolarAngle={degToRad(100)}
       autoRotate={autoRotate}

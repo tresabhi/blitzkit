@@ -35,7 +35,10 @@ import { useFullScreen } from '../../../../../hooks/useFullScreen';
 import { useFullscreenAvailability } from '../../../../../hooks/useFullscreenAvailability';
 import { App } from '../../../../../stores/app';
 import { Duel } from '../../../../../stores/duel';
-import { TankopediaEphemeral } from '../../../../../stores/tankopediaEphemeral';
+import {
+  ShootingRangeZoom,
+  TankopediaEphemeral,
+} from '../../../../../stores/tankopediaEphemeral';
 import { TankopediaPersistent } from '../../../../../stores/tankopediaPersistent';
 import { TankopediaDisplay } from '../../../../../stores/tankopediaPersistent/constants';
 import type { ThicknessRange } from '../../../../Armor/components/StaticArmor';
@@ -373,6 +376,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
             onValueChange={(value) => {
               mutateTankopediaEphemeral((draft) => {
                 draft.display = Number(value);
+                draft.shootingRangeZoom = ShootingRangeZoom.Arcade;
               });
             }}
           >

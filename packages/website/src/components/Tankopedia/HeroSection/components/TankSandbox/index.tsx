@@ -23,7 +23,7 @@ import {
   type ThicknessRange,
 } from '../../../../Armor/components/StaticArmor';
 import { AutoClear } from './components/AutoClear';
-import { Controls, INSPECT_MODE_FOV } from './components/Control';
+import { Controls } from './components/Control';
 import { Lighting } from './components/Lighting';
 import { ModelLoader } from './components/ModelLoader';
 import { SceneProps } from './components/SceneProps';
@@ -156,8 +156,6 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
       }
     }, [display]);
 
-    console.log('rendering tank sandbox');
-
     return (
       <Canvas
         frameloop={
@@ -182,9 +180,6 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
           });
         }}
         style={{ userSelect: 'none' }}
-        camera={{
-          fov: INSPECT_MODE_FOV,
-        }}
       >
         <Controls />
         <SceneProps />
