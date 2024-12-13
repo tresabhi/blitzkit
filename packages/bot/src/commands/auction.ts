@@ -20,8 +20,8 @@ type Result =
       type: 'vehicle';
       countable?: boolean;
       entity?: Entity;
-      initial_count?: number;
-      current_count?: number;
+      initial_count: number;
+      current_count: number;
       saleable?: boolean;
       available_from?: Date;
       available_before?: Date;
@@ -112,12 +112,16 @@ export const auctionCommand = new Promise<CommandRegistry>((resolve) => {
               interaction.locale,
             )}`,
           ]);
+          const available = translate('bot.commands.auction.body.available', [
+            data.current_count.toLocaleString(interaction.locale),
+            data.initial_count.toLocaleString(interaction.locale),
+          ]);
 
           return `${
             index + 1
           }. ${name} <:gold:1317173197082333244> ${data.price!.value.toLocaleString(
             interaction.locale,
-          )}\n-# ${next}`;
+          )}\n-# ${available}\n-# ${next}`;
         })
         .join('\n\n');
       const content = `${title}\n${subtitle}\n\n${body}`;
