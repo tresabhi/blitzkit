@@ -135,7 +135,7 @@ export const TankopediaEphemeral = createContextualStore(
         model,
         controlsEnabled: true,
         xpMultiplier: 1,
-        display: TankopediaDisplay.ShootingRange,
+        display: TankopediaDisplay.Model,
       })),
     );
   },
