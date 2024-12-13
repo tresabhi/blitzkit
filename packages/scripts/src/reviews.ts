@@ -10,7 +10,7 @@ import { google } from 'googleapis';
 import { cloneDeep, uniqBy } from 'lodash-es';
 import { commitAssets } from './core/github/commitAssets';
 
-const MAX_QUERIES = 128;
+const MAX_QUERIES = 64;
 
 console.log('Finding reviews...');
 
