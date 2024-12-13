@@ -7,3 +7,5 @@ parentPort?.on('message', async (svg: string) => {
   const png = svgToPng(svg);
   parentPort?.postMessage(png);
 });
+
+console.log(`post render thread parent port on thread ${threadId}`);

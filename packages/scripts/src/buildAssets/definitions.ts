@@ -1,6 +1,7 @@
 import {
   Armor,
   assertSecret,
+  BlitzTankClass,
   CamouflageDefinitions,
   Consumable,
   ConsumableDefinitions,
@@ -70,7 +71,6 @@ const blitzTankFilterDefinitionCategoryToBlitzkit: Record<
 function vector3TupleToBlitzkit(tuple: Vector3Tuple) {
   return { x: tuple[0], y: tuple[1], z: tuple[2] } satisfies Vector3;
 }
-type BlitzTankClass = 'lightTank' | 'mediumTank' | 'heavyTank' | 'AT-SPG';
 const blitzTankClassToBlitzkit: Record<BlitzTankClass, TankClass> = {
   lightTank: TankClass.LIGHT,
   'AT-SPG': TankClass.TANK_DESTROYER,
