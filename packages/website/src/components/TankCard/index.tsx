@@ -10,7 +10,7 @@ import './index.css';
 type TankCardProps = TextProps & {
   tank: TankDefinition;
   onTankSelect?: (tank: TankDefinition) => void;
-  discriminator: ReactNode;
+  discriminator?: ReactNode;
   noLink?: boolean;
 };
 
