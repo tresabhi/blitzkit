@@ -29,8 +29,8 @@ type Result =
       next_price?: Price | null;
       available: true;
       display?: boolean;
-      next_price_datetime?: Date | null;
-      next_price_timestamp?: number | null;
+      next_price_datetime: Date;
+      next_price_timestamp: number;
     }
   | {
       available: false;
@@ -69,12 +69,10 @@ interface Currency {
 
 export const auctionCommand = new Promise<CommandRegistry>((resolve) => {
   resolve({
-    command: createLocalizedCommand('auction', [
-      { subcommand: 'available' },
-      { subcommand: 'setup' },
-    ]),
+    command: createLocalizedCommand('auction'),
 
     async handler(interaction) {
+      const { t, translate } = translator(interaction.locale);
       const awaitedTankDefinitions = await tankDefinitions;
       const region: Region = 'com';
       const pageSize = 80;
@@ -86,15 +84,21 @@ export const auctionCommand = new Promise<CommandRegistry>((resolve) => {
           pageSize
         }&type[]=vehicle&saleable=${saleable}`,
       ).then((response) => response.json() as Promise<Auction>);
-      const seeableTanks = data.results.filter((result) => result.available);
-      const { t, translate } = translator(interaction.locale);
+      const saleableTanks = data.results.filter((result) => result.available);
 
-      const title = `# ${t`bot.commands.auction.subcommands.available.body.title`}`;
-      const subtitle = `-# ${translate(
-        'bot.commands.auction.subcommands.available.body.available',
-        [`${seeableTanks.length} / ${data.results.length}`],
-      )}`;
-      const body = seeableTanks
+      if (saleableTanks.length === 0) {
+        return t`bot.commands.auction.errors.no_auction`;
+      }
+
+      const nextPricesTimestamp = saleableTanks[0].next_price_timestamp;
+
+      const title = `# ${t`bot.commands.auction.body.title`}`;
+      const subtitle = `${translate('bot.commands.auction.body.subtitle', [
+        `${saleableTanks.length} / ${data.results.length}`,
+        `<t:${nextPricesTimestamp}:R>`,
+        '<https://wotblitz.com/auction/>',
+      ])}`;
+      const body = saleableTanks
         .map((data, index) => {
           const tank = awaitedTankDefinitions.tanks[data.entity!.id];
 
@@ -103,14 +107,11 @@ export const auctionCommand = new Promise<CommandRegistry>((resolve) => {
           const name = `[${tank.name}](<https://blitzkit.app/tools/tankopedia/${
             tank.id
           }>)`;
-          const next = translate(
-            'bot.commands.auction.subcommands.available.body.next',
-            [
-              `<:gold:1317173197082333244> ${data.next_price!.value.toLocaleString(
-                interaction.locale,
-              )}`,
-            ],
-          );
+          const next = translate('bot.commands.auction.body.next', [
+            `<:gold:1317173197082333244> ${data.next_price!.value.toLocaleString(
+              interaction.locale,
+            )}`,
+          ]);
 
           return `${
             index + 1
@@ -119,8 +120,9 @@ export const auctionCommand = new Promise<CommandRegistry>((resolve) => {
           )}\n-# ${next}`;
         })
         .join('\n\n');
+      const content = `${title}\n${subtitle}\n\n${body}`;
 
-      return `${title}\n${subtitle}\n\n${body}`;
+      return content;
     },
   });
 });
