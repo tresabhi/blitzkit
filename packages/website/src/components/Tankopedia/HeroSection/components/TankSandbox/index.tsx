@@ -13,10 +13,7 @@ import { useEquipment } from '../../../../../hooks/useEquipment';
 import { useOnScreen } from '../../../../../hooks/useOnScreen';
 import { useTankModelDefinition } from '../../../../../hooks/useTankModelDefinition';
 import { Duel } from '../../../../../stores/duel';
-import {
-  ShootingRangeZoom,
-  TankopediaEphemeral,
-} from '../../../../../stores/tankopediaEphemeral';
+import { TankopediaEphemeral } from '../../../../../stores/tankopediaEphemeral';
 import { TankopediaDisplay } from '../../../../../stores/tankopediaPersistent/constants';
 import { Armor } from '../../../../Armor';
 import { ArmorPlateDisplay } from '../../../../Armor/components/ArmorPlateDisplay';
@@ -51,9 +48,6 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
       turretModelDefinition.guns[protagonistGun.gun_type!.value.base.id];
     const display = TankopediaEphemeral.use((state) => state.display);
     const onScreen = useOnScreen(canvas);
-    const shootingRangeZoom = TankopediaEphemeral.use(
-      (state) => state.shootingRangeZoom,
-    );
 
     useImperativeHandle(ref, () => canvas.current!, []);
 
@@ -162,6 +156,8 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
       }
     }, [display]);
 
+    console.log('rendering tank sandbox');
+
     return (
       <Canvas
         frameloop={
@@ -192,8 +188,7 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
       >
         <Controls />
         <SceneProps />
-        {display !== TankopediaDisplay.StaticArmor &&
-          shootingRangeZoom === ShootingRangeZoom.Arcade && <TankModel />}
+        {display !== TankopediaDisplay.StaticArmor && <TankModel />}
         <ShotDisplay />
         <ArmorPlateDisplay />
         <AutoClear />
