@@ -1,13 +1,8 @@
 import { DdsReadStream, PvrReadStream } from '@blitzkit/core';
 import { existsSync } from 'fs';
-import sharp, { JpegOptions } from 'sharp';
+import sharp from 'sharp';
 import { readDVPLFile } from '../readDVPLFile';
 import { TextureMutation } from './constants';
-
-const jpegOptions: JpegOptions = {
-  quality: 20,
-  mozjpeg: true,
-};
 
 export async function readTexture(path: string, mutation?: TextureMutation) {
   const ddsTexturePath = path.replace('.tex', '.dx11.dds.dvpl');
@@ -40,7 +35,7 @@ export async function readTexture(path: string, mutation?: TextureMutation) {
         raw.data[index + 3] = 255;
       }
 
-      return await sharp(raw.data, { raw }).jpeg(jpegOptions).toBuffer();
+      return await sharp(raw.data, { raw }).jpeg().toBuffer();
     }
 
     case TextureMutation.RoughnessMetallicness: {
@@ -49,16 +44,16 @@ export async function readTexture(path: string, mutation?: TextureMutation) {
       });
       const metallicness = sharp(raw.data, { raw })
         .extractChannel('green')
-        .jpeg(jpegOptions)
+        .jpeg()
         .toBuffer();
       const roughness = sharp(raw.data, { raw })
         .extractChannel('alpha')
-        .jpeg(jpegOptions)
+        .jpeg()
         .toBuffer();
 
       return await newImage
         .joinChannel(await Promise.all([roughness, metallicness]))
-        .jpeg(jpegOptions)
+        .jpeg()
         .toBuffer();
     }
 
@@ -69,18 +64,15 @@ export async function readTexture(path: string, mutation?: TextureMutation) {
        */
       return await sharp(raw.data, { raw })
         .extractChannel('alpha')
-        .jpeg(jpegOptions)
+        .jpeg()
         .toBuffer();
     }
 
     case TextureMutation.Albedo: {
-      return await sharp(raw.data, { raw })
-        .removeAlpha()
-        .jpeg(jpegOptions)
-        .toBuffer();
+      return await sharp(raw.data, { raw }).removeAlpha().jpeg().toBuffer();
     }
 
     default:
-      return await sharp(raw.data, { raw }).jpeg(jpegOptions).toBuffer();
+      return await sharp(raw.data, { raw }).jpeg().toBuffer();
   }
 }
