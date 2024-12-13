@@ -34,7 +34,6 @@ const [modelDefinitions, equipmentDefinitions, provisionDefinitions] =
   ]);
 
 const emptyVector = new Vector2();
-const FAR_DISTANCE = 1000;
 
 export function SceneProps() {
   const show = TankopediaPersistent.use(
@@ -105,7 +104,7 @@ export function SceneProps() {
   );
   let { dispersion } = characteristics;
   const gunRotationSpeed = degToRad(characteristics.gunTraverseSpeed);
-  const mockTank = useLoader(GLTFLoader, asset(`3d/tanks/models/12305.glb`));
+  const mockTank = useLoader(GLTFLoader, asset(`3d/tanks/models/6929.glb`));
   const texture = useLoader(TextureLoader, imgur('C28Z8nU'));
   const path = new Vector3();
   const direction = new Vector3();
@@ -141,7 +140,7 @@ export function SceneProps() {
     let length: number;
 
     if (cameraIntersections.length === 0) {
-      length = FAR_DISTANCE;
+      length = characteristics.shellRange;
       direction.set(0, 0, -1).applyQuaternion(camera.quaternion);
       aimTarget.copy(shellOrigin).addScaledVector(direction, length);
     } else {
@@ -190,7 +189,7 @@ export function SceneProps() {
 
       dispersion += dispersionModDischarged;
     } else {
-      dispersion = characteristics.dispersion * penalty;
+      dispersion = Math.max(characteristics.dispersion * penalty, dispersion);
     }
 
     modelTransformEvent.emit({ pitch, yaw });
@@ -213,7 +212,7 @@ export function SceneProps() {
     if (gunIntersections.length === 0) {
       gunTarget = shellOrigin
         .clone()
-        .add(gunDirection.multiplyScalar(FAR_DISTANCE));
+        .add(gunDirection.multiplyScalar(characteristics.shellRange));
     } else {
       gunTarget = gunIntersections[0].point;
     }
@@ -272,10 +271,7 @@ export function SceneProps() {
               <meshStandardMaterial color={0xff8040} />
             </mesh>
 
-            <group
-              position={[0, 0, -182]}
-              rotation={[-Math.PI / 2, 0, Math.PI]}
-            >
+            <group position={[0, 0, -25]} rotation={[-Math.PI / 2, 0, Math.PI]}>
               <primitive object={mockTank.scene} />
             </group>
           </group>
