@@ -21,13 +21,11 @@ export function Lighting() {
 
   return (
     <>
-      {display !== TankopediaDisplay.ShootingRange && (
-        <Environment
-          preset={environment}
-          background={showEnvironment}
-          environmentIntensity={isBrighterLighting ? 3 : 1}
-        />
-      )}
+      <Environment
+        preset={environment}
+        background={showEnvironment}
+        environmentIntensity={isBrighterLighting ? 3 : 1}
+      />
       {display === TankopediaDisplay.ShootingRange && (
         <>
           <directionalLight position={[0, -1, 0]} />
@@ -36,6 +34,7 @@ export function Lighting() {
             <directionalLight
               key={index}
               castShadow
+              intensity={3 / LIGHTS_COUNT}
               position={[
                 Math.sin(2 * Math.PI * (index / LIGHTS_COUNT)),
                 1,
