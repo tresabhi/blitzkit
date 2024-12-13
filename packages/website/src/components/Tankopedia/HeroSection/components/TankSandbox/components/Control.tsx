@@ -293,7 +293,7 @@ export function Controls() {
             .copy(aimTarget)
             .sub(shellOrigin)
             .normalize()
-            .multiplyScalar(-1e-4)
+            .multiplyScalar(-Number.EPSILON)
             .add(shellOrigin);
         }
       } else {
