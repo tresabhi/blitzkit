@@ -1,6 +1,7 @@
-import { idToRegion, Region, searchPlayersAcrossRegions } from '@blitzkit/core';
+import { idToRegion, Region } from '@blitzkit/core';
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import markdownEscape from 'markdown-escape';
+import { searchPlayersAcrossRegionsBotWrapper } from '../../blitz/searchPlayersAcrossRegionsBotWrapper';
 import { getBlitzFromDiscord } from '../../blitzkit/getBlitzFromDiscord';
 import { UserError } from '../../blitzkit/userError';
 import { translator } from '../../localization/translator';
@@ -23,7 +24,10 @@ export async function resolvePlayerFromCommand(
       const region = idToRegion(id);
       return { region, id } satisfies ResolvedPlayer;
     } else {
-      const accounts = await searchPlayersAcrossRegions(commandUsername);
+      const accounts = await searchPlayersAcrossRegionsBotWrapper(
+        commandUsername,
+        interaction.locale,
+      );
 
       if (accounts[0]) {
         return {

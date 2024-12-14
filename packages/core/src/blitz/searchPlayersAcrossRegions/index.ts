@@ -11,10 +11,11 @@ export type AccountListWithServer = (AccountListItem & {
 })[];
 
 export async function searchPlayersAcrossRegions(search: string, limit = 25) {
-  const trimmedSearch = search.trim();
+  const trimmed = search.trim();
+  if (trimmed.length < 3 && trimmed.length > 100) return [];
   const normalizedLimit = Math.floor(limit / 3);
 
-  if (usernamePattern.test(trimmedSearch)) {
+  if (usernamePattern.test(trimmed)) {
     return (
       await Promise.all([
         fetchBlitz<AccountList>('com', 'account/list', {

@@ -1,6 +1,7 @@
-import { Region, searchClansAcrossRegions } from '@blitzkit/core';
+import { Region } from '@blitzkit/core';
 import { ChatInputCommandInteraction } from 'discord.js';
 import markdownEscape from 'markdown-escape';
+import { searchClansAcrossRegionsBotWrapper } from '../blitz/searchClansAcrossRegionsBotWrapper';
 import { UserError } from '../blitzkit/userError';
 import { translator } from '../localization/translator';
 
@@ -16,7 +17,10 @@ export async function resolveClanFromCommand(
     const [server, accountId] = clan.split('/');
     return { region: server as Region, id: Number(accountId) };
   } else {
-    const accounts = await searchClansAcrossRegions(clan);
+    const accounts = await searchClansAcrossRegionsBotWrapper(
+      clan,
+      interaction.locale,
+    );
 
     if (accounts[0]) {
       return { region: accounts[0].region, id: accounts[0].clan_id };
