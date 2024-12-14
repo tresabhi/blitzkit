@@ -263,6 +263,22 @@
       }
     },
     "commands": {
+      "auction": {
+        "$": "auction",
+        "description": "Tanks available right now in the auction",
+        "body": {
+          "title": "Blitz Auction",
+          "subtitle": "%s available • next prices %s\nBid now: %s",
+          "next": "Next price: %s",
+          "available": "Available: %s / %s"
+        },
+        "errors": {
+          "no_auction": "# No ongoing auction\n\nCurrently, there are no tanks available for purchase in the auction. If you think this is an error, please report this discrepancy in [the official Discord Server](https://discord.gg/nDt7AjGJQH)."
+        },
+        "actions": {
+          "bid": "Bid now"
+        }
+      },
       "replay": {
         "$": "replay",
         "description": "Display replay results"

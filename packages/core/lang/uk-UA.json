@@ -1,16 +1,16 @@
 {
   "common": {
     "wn8_percentile": {
-      "0": "Jako loše",
-      "1": "Loše",
-      "2": "Ispod prosečnog",
-      "3": "Prosečno",
-      "4": "Nad prosečno",
-      "5": "Dobro",
-      "6": "Jako dobro",
-      "7": "Super",
-      "8": "Legendarno",
-      "9": "Super Legendarno"
+      "0": "Very bad",
+      "1": "Bad",
+      "2": "Below average",
+      "3": "Average",
+      "4": "Above average",
+      "5": "Good",
+      "6": "Very good",
+      "7": "Great",
+      "8": "Unicum",
+      "9": "Super unicum"
     },
     "bkni_percentile": {
       "0": "Super malum",
@@ -26,15 +26,15 @@
       "10": "Super unicum"
     },
     "nations": {
-      "ussr": "S.S.S.R.",
-      "germany": "Nemačka",
-      "usa": "S.A.D.",
-      "china": "Kina",
-      "uk": "Vel. Brit.",
-      "france": "Francuska",
+      "ussr": "U.S.S.R.",
+      "germany": "Germany",
+      "usa": "U.S.A.",
+      "china": "China",
+      "uk": "U.K.",
+      "france": "France",
       "japan": "Japan",
-      "european": "Evropska Unija",
-      "other": "Hibridna nacija"
+      "european": "European Nation",
+      "other": "Hybrid Nation"
     },
     "nations_adjectives": {
       "ussr": "U.S.S.R.",
@@ -75,9 +75,9 @@
     },
     "regions": {
       "normal": {
-        "com": "Severna Amerika",
-        "eu": "Evropa",
-        "asia": "Azija-Pasifik"
+        "com": "North America",
+        "eu": "Europe",
+        "asia": "Asia-Pacific"
       },
       "short": {
         "com": "NA",
@@ -86,11 +86,11 @@
       }
     },
     "leagues": {
-      "diamond": "Dijamant",
-      "platinum": "Platina",
-      "gold": "Zlato",
-      "silver": "Srebro",
-      "bronze": "Bronza"
+      "diamond": "Diamond",
+      "platinum": "Platinum",
+      "gold": "Gold",
+      "silver": "Silver",
+      "bronze": "Bronze"
     },
     "composite_stats": {
       "normalized_damage_dealt": "Damage",
@@ -136,58 +136,58 @@
       "errors": {
         "clan_not_found": "# Could not find clan\nCouldn't find \"%s\". Try selecting a clan from the search result.",
         "player_not_found": "# Could not find user\nI couldn't find user \"%s\". Try picking an user from the search result, typing in a valid username, or using the `/link` command.",
-        "player_not_linked": "# I don't know who you are\nUse the `/link` command to get started.",
+        "player_not_linked": "# Use `/link` to get started\nI don't know who you are but you can tell me today!",
         "tank_name_not_found": "# Tank not found\nCould not find tank by the name \"%s\".",
         "tank_id_not_found": "# Tank not found\nCould not find tank by the ID \"%s\". Try typing the name of the tank instead of a number.",
         "no_tank_stats": "# No tank stats available\nThis player doesn't have any stats available. This may not be the player you are looking for.",
         "get_help": "Help Discord server",
-        "uncaught_error": "# Blitzkrieg ran into an error!\nWe're so sorry about this. Feel free to [join the official Discord server](https://discord.gg/nDt7AjGJQH) to get help.",
+        "uncaught_error": "# BlitzKit ran into an error!\nWe're so sorry about this. Feel free to [join the official Discord server](https://discord.gg/nDt7AjGJQH) to get help.",
         "preview": "# This command is in preview\n\nYou can only access this command in [the official Discord server](https://discord.gg/nDt7AjGJQH). The command will be generally available soon."
       },
       "wn8": {
         "$": "WN8",
-        "very_bad": "Jako loše",
-        "bad": "Loše",
-        "below_average": "Ispod prosečnog",
-        "average": "Prosečno",
-        "above_average": "Nad prosečno",
-        "good": "Dobro",
-        "very_good": "Jako dobro",
-        "great": "Super",
-        "unicum": "Legendarno",
-        "super_unicum": "Super Legendarno"
+        "very_bad": "Very bad",
+        "bad": "Bad",
+        "below_average": "Below average",
+        "average": "Average",
+        "above_average": "Above average",
+        "good": "Good",
+        "very_good": "Very good",
+        "great": "Great",
+        "unicum": "Unicum",
+        "super_unicum": "Super unicum"
       },
       "subcommands": {
         "today": {
-          "$": "danas",
-          "description": "Danas"
+          "$": "today",
+          "description": "Today"
         },
         "30": {
           "$": "30",
-          "description": "30 dana"
+          "description": "30 days"
         },
         "60": {
           "$": "60",
-          "description": "60 dana"
+          "description": "60 days"
         },
         "90": {
           "$": "90",
-          "description": "90 dana"
+          "description": "90 days"
         },
         "career": {
-          "$": "karijera",
-          "description": "Karijera"
+          "$": "career",
+          "description": "Career"
         },
         "custom": {
-          "$": "proizvoljno",
-          "description": "Proizvoljna daljina",
+          "$": "custom",
+          "description": "Custom range",
           "options": {
             "start": {
-              "$": "kreni",
+              "$": "start",
               "description": "Start in number of days ago from today"
             },
             "end": {
-              "$": "kraj",
+              "$": "end",
               "description": "End in number of days ago from today"
             }
           }
@@ -195,7 +195,7 @@
       },
       "options": {
         "clan": {
-          "$": "klan",
+          "$": "clan",
           "description": "The clan name or tag"
         },
         "tank": {
@@ -321,23 +321,23 @@
           "commands": {
             "$": "commands",
             "description": "List of all commands and their descriptions",
-            "body": "# Commands\n\nBlitzkrieg offers the following commands:\n\n"
+            "body": "# Commands\n\nBlitzKit offers the following commands:\n\n"
           },
           "embeds": {
             "$": "embeds",
-            "description": "Kako embed radi"
+            "description": "How embeds work"
           },
           "introduction": {
-            "$": "uvod",
-            "description": "O bot-u"
+            "$": "introduction",
+            "description": "About the bot"
           },
           "invite": {
-            "$": "pozovi",
-            "description": "Kako pozvati robota"
+            "$": "invite",
+            "description": "How to invite the bot"
           },
           "timezones": {
-            "$": "vremenske zone",
-            "description": "Kako \"Blitzkrieg\" koristi podatke o tvojoj vremenskoj zoni"
+            "$": "timezones",
+            "description": "How BlitzKit infers and uses your timezone"
           },
           "credits": {
             "$": "credits",
@@ -346,19 +346,19 @@
         }
       },
       "breakdown": {
-        "$": "analiza",
+        "$": "breakdown",
         "description": "A period's breakdown by tanks played",
         "body": {
           "total": "Total",
-          "battles": "Borbe",
+          "battles": "Battles",
           "wn8": "WN8",
-          "winrate": "Procenat pobede",
-          "damage": "Šteta",
-          "unknown_tank": "Ne poznat tenk %s"
+          "winrate": "Winrate",
+          "damage": "Damage",
+          "unknown_tank": "Unknown tank %s"
         }
       },
       "debug": {
-        "$": "odklanjanje-grešaka",
+        "$": "debug",
         "description": "Debug information about the bot",
         "body": {
           "title": "# Debug\n\n",
@@ -572,7 +572,7 @@
         }
       },
       "rating": {
-        "$": "rating-session",
+        "$": "rating",
         "description": "Rating player's statistics",
         "subcommands": {
           "today": {
