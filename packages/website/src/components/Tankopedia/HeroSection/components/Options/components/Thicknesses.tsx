@@ -1,5 +1,6 @@
 import { EyeClosedIcon, EyeOpenIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { Box, Button, Checkbox, Flex, Text } from '@radix-ui/themes';
+import { Suspense } from 'react';
 import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
 import { TankopediaPersistent } from '../../../../../../stores/tankopediaPersistent';
 import type { ThicknessRange } from '../../../../../Armor/components/StaticArmor';
@@ -168,7 +169,9 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
         </Flex>
       </Flex>
 
-      <DynamicArmorSwitcher />
+      <Suspense>
+        <DynamicArmorSwitcher />
+      </Suspense>
     </Flex>
   );
 }
