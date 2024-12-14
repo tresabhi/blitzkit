@@ -57,7 +57,7 @@ const hotTanks = report.data.rows
 
     return row.id in tankDefinitions.tanks;
   })
-  .slice(0, 16)
+  .slice(0, 8)
   .map(({ id, views }) => ({
     tank: tankDefinitions.tanks[id],
     views,
