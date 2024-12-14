@@ -156,7 +156,10 @@ export function PrimaryArmorSceneComponent({
         (state) => state.greenPenetration,
         handleGreenPenetrationChange,
       ),
-
+      tankopediaPersistentStore.subscribe(
+        (state) => state.opaque,
+        handleOpaqueChange,
+      ),
       duelStore.subscribe(
         (state) => state.protagonist.equipmentMatrix,
         (equipment) => handleProtagonistEquipmentChange(equipment),
