@@ -50,17 +50,15 @@ export function addFilterOptions<
       .addStringOption((option) => addTierChoices(option).setRequired(false))
       .addStringOption((option) =>
         option
-          .setName(translate('bot.common.options.filters.tank_class'))
+          .setName(translate('bot.common.options.filters.class'))
           .setNameLocalizations(
-            localizationObject('bot.common.options.filters.tank_class'),
+            localizationObject('bot.common.options.filters.class'),
           )
           .setDescription(
-            translate('bot.common.options.filters.tank_class.description'),
+            translate('bot.common.options.filters.class.description'),
           )
           .setDescriptionLocalizations(
-            localizationObject(
-              'bot.common.options.filters.tank_class.description',
-            ),
+            localizationObject('bot.common.options.filters.class.description'),
           )
           .addChoices(
             ...TANK_CLASSES.map(
@@ -78,17 +76,15 @@ export function addFilterOptions<
       )
       .addStringOption((option) =>
         option
-          .setName(translate('bot.common.options.filters.tree_type'))
+          .setName(translate('bot.common.options.filters.type'))
           .setNameLocalizations(
-            localizationObject('bot.common.options.filters.tree_type'),
+            localizationObject('bot.common.options.filters.type'),
           )
           .setDescription(
-            translate('bot.common.options.filters.tree_type.description'),
+            translate('bot.common.options.filters.type.description'),
           )
           .setDescriptionLocalizations(
-            localizationObject(
-              'bot.common.options.filters.tree_type.description',
-            ),
+            localizationObject('bot.common.options.filters.type.description'),
           )
           .addChoices(
             ...TANK_TYPES.map(

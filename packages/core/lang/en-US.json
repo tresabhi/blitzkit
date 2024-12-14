@@ -232,13 +232,13 @@
             "$": "nation",
             "description": "Nation"
           },
-          "tank_class": {
-            "$": "tank-class",
-            "description": "Tank class"
+          "class": {
+            "$": "class",
+            "description": "Class"
           },
-          "tree_type": {
-            "$": "tree-type",
-            "description": "Tree type"
+          "type": {
+            "$": "type",
+            "description": "Type"
           }
         },
 
