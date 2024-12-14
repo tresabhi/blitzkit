@@ -544,23 +544,25 @@ export function CompareTable({ stats }: CompareTableProps) {
                       </Popover.Root>
                     </Flex>
 
-                    <IconButton
-                      onClick={() => {
-                        mutateCompareEphemeral((draft) => {
-                          draft.members[index].camouflage = !camouflage;
-                        });
-                      }}
-                      variant={camouflage ? 'solid' : 'outline'}
-                    >
-                      <img
-                        src={asset('icons/camo.webp')}
-                        style={{
-                          width: '1em',
-                          height: '1em',
-                          transform: 'scale(2) translate(15%, 15%)',
+                    {!tank.fixed_camouflage && (
+                      <IconButton
+                        onClick={() => {
+                          mutateCompareEphemeral((draft) => {
+                            draft.members[index].camouflage = !camouflage;
+                          });
                         }}
-                      />
-                    </IconButton>
+                        variant={camouflage ? 'solid' : 'outline'}
+                      >
+                        <img
+                          src={asset('icons/camo.webp')}
+                          style={{
+                            width: '1em',
+                            height: '1em',
+                            transform: 'scale(2) translate(15%, 15%)',
+                          }}
+                        />
+                      </IconButton>
+                    )}
                   </Flex>
                 </Table.Cell>
               );
