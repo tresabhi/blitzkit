@@ -1,3 +1,4 @@
+import { TankType } from '@blitzkit/core';
 import { PageWrapper } from '../../../../components/PageWrapper';
 import { CalloutsSection } from '../../../../components/Tankopedia/CalloutsSection';
 import { CharacteristicsSection } from '../../../../components/Tankopedia/CharacteristicsSection';
@@ -42,7 +43,9 @@ export function Page({ id, skeleton }: PageProps) {
               <HeroSection skeleton={skeleton} />
               <CalloutsSection />
               <MetaSection />
-              <TechTreeSection skeleton={skeleton} />
+              {tank.type === TankType.RESEARCHABLE && !tank.deprecated && (
+                <TechTreeSection skeleton={skeleton} />
+              )}
               <CharacteristicsSection />
               <GameModeSection />
               <VideoSection skeleton={skeleton} />

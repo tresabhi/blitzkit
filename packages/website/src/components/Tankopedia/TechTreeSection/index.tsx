@@ -17,9 +17,6 @@ export const XP_MULTIPLIERS = [1, 2, 3, 4, 5, 10];
 
 export function TechTreeSection({ skeleton }: MaybeSkeletonComponentProps) {
   const master = Duel.use((state) => state.protagonist.tank);
-
-  if (master.type !== TankType.RESEARCHABLE || master.deprecated) return null;
-
   const xpMultiplier = TankopediaEphemeral.use((state) => state.xpMultiplier);
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const container = useRef<HTMLDivElement>(null);
