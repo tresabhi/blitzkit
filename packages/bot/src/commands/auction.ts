@@ -4,6 +4,7 @@ import {
   regionToRegionSubdomain,
 } from '@blitzkit/core';
 import { tankDefinitions } from '../core/blitzkit/nonBlockingPromises';
+import { chunkLines } from '../core/discord/chunkLines';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { translator } from '../core/localization/translator';
 import { CommandRegistry } from '../events/interactionCreate';
@@ -98,35 +99,34 @@ export const auctionCommand = new Promise<CommandRegistry>((resolve) => {
         `<t:${nextPricesTimestamp}:R>`,
         '<https://wotblitz.com/auction/>',
       ])}`;
-      const body = saleableTanks
-        .map((data, index) => {
-          const tank = awaitedTankDefinitions.tanks[data.entity!.id];
+      const body = saleableTanks.map((data, index) => {
+        const tank = awaitedTankDefinitions.tanks[data.entity!.id];
 
-          if (!tank) return '';
+        if (!tank) return '';
 
-          const name = `[${tank.name}](<https://blitzkit.app/tools/tankopedia/${
-            tank.id
-          }>)`;
-          const next = translate('bot.commands.auction.body.next', [
-            `<:gold:1317173197082333244> ${data.next_price!.value.toLocaleString(
-              interaction.locale,
-            )}`,
-          ]);
-          const available = translate('bot.commands.auction.body.available', [
-            data.current_count.toLocaleString(interaction.locale),
-            data.initial_count.toLocaleString(interaction.locale),
-          ]);
-
-          return `${
-            index + 1
-          }. ${name} <:gold:1317173197082333244> ${data.price!.value.toLocaleString(
+        const name = `[${tank.name}](<https://blitzkit.app/tools/tankopedia/${
+          tank.id
+        }>)`;
+        const next = translate('bot.commands.auction.body.next', [
+          `<:gold:1317173197082333244> ${data.next_price!.value.toLocaleString(
             interaction.locale,
-          )}\n-# ${available}\n-# ${next}`;
-        })
-        .join('\n\n');
-      const content = `${title}\n${subtitle}\n\n${body}`;
+          )}`,
+        ]);
+        const available = translate('bot.commands.auction.body.available', [
+          data.current_count.toLocaleString(interaction.locale),
+          data.initial_count.toLocaleString(interaction.locale),
+        ]);
 
-      return content;
+        return `${
+          index + 1
+        }. ${name} <:gold:1317173197082333244> ${data.price!.value.toLocaleString(
+          interaction.locale,
+        )}\n-# ${available}\n-# ${next}`;
+      });
+      const header = `${title}\n${subtitle}`;
+      const lines = [header, ...body];
+
+      return chunkLines(lines, '\n\n');
     },
   });
 });
