@@ -6,7 +6,6 @@ import {
   getAccountInfo,
   getTankStats,
 } from '@blitzkit/core';
-import { chunk } from 'lodash-es';
 import markdownEscape from 'markdown-escape';
 import {
   gameDefinitions,
@@ -15,12 +14,11 @@ import {
 import { addTierChoices } from '../core/discord/addTierChoices';
 import { addUsernameChoices } from '../core/discord/addUsernameChoices';
 import { autocompleteUsername } from '../core/discord/autocompleteUsername';
+import { chunkLines } from '../core/discord/chunkLines';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { resolvePlayerFromCommand } from '../core/discord/resolvePlayerFromCommand';
 import { translator } from '../core/localization/translator';
 import { CommandRegistry } from '../events/interactionCreate';
-
-const TANKS_PER_MESSAGE = 64;
 
 export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
   resolve({
@@ -61,7 +59,11 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
 
       const awaitedTankDefinitions = await tankDefinitions;
       const awaitedGameDefinitions = await gameDefinitions;
-      const lines = tankStats
+      const title = translate('bot.commands.owned_tanks.body.title', [
+        markdownEscape(accountInfo.nickname),
+        TIER_ROMAN_NUMERALS[tier],
+      ]);
+      const tankList = tankStats
         .map(({ tank_id }) => awaitedTankDefinitions.tanks[tank_id])
         .filter((tank) => tank.tier === tier)
         .sort(
@@ -73,16 +75,13 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
             awaitedGameDefinitions.nations.indexOf(a.nation) -
             awaitedGameDefinitions.nations.indexOf(b.nation),
         )
-        .map((tank) => `${flags[tank.nation]} ${markdownEscape(tank.name)}`);
+        .map(
+          (tank) =>
+            `[${flags[tank.nation]} ${markdownEscape(tank.name)}](<https://blitzkit.app/tools/tankopedia/${tank.id}>)`,
+        );
+      const lines = [title, ...tankList];
 
-      return chunk(lines, TANKS_PER_MESSAGE).map((lines, index) =>
-        index === 0
-          ? `${translate('bot.commands.owned_tanks.body.title', [
-              markdownEscape(accountInfo.nickname),
-              TIER_ROMAN_NUMERALS[tier],
-            ])}${lines.join('\n')}`
-          : lines.join('\n'),
-      );
+      return chunkLines(lines);
     },
 
     autocomplete: autocompleteUsername,
