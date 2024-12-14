@@ -63,7 +63,10 @@ export const TankCard = forwardRef<HTMLSpanElement, TankCardProps>(
         <Link
           className="link"
           underline="hover"
-          href={provideLink ? `/tools/tankopedia/${tank.id}` : undefined}
+          href={provideLink ? `/tools/tankopedia/${tank.id}` : '#'}
+          onClick={(event) => {
+            if (!provideLink) event.preventDefault();
+          }}
         >
           <img
             alt={tank.name}
