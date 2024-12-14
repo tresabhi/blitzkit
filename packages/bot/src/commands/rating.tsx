@@ -7,6 +7,7 @@ import {
   getLeagueFromScore,
   getRatingInfo,
   getRatingNeighbors,
+  imgur,
 } from '@blitzkit/core';
 import { SlashCommandSubcommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
@@ -119,6 +120,19 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
         statsB2,
       );
       const leagueTheme = LEAGUE_ACCENT[league.index];
+      let rewardImage = reward
+        ? reward.type === 'vehicle'
+          ? reward.vehicle.preview_image_url
+          : reward.stuff.image_url
+        : undefined;
+
+      if (rewardImage) {
+        const { ok } = await fetch(rewardImage);
+
+        if (!ok) {
+          rewardImage = imgur('kP88vqr');
+        }
+      }
 
       return (
         <CommandWrapper>
@@ -325,11 +339,7 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
                       height: 64,
                       objectFit: 'cover',
                     }}
-                    src={await iconPng(
-                      reward.type === 'vehicle'
-                        ? reward.vehicle.preview_image_url
-                        : reward.stuff.image_url,
-                    )}
+                    src={await iconPng(rewardImage!)}
                   />
                 </div>
               )}
