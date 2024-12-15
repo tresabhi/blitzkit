@@ -35,7 +35,11 @@ const ARCADE_MODE_DISTANCE = 19;
 const ARCADE_MODE_ANGLE = degToRad(10);
 const ARCADE_MODE_FOV = 54;
 
-export function Controls() {
+interface ControlsProps {
+  naked?: boolean;
+}
+
+export function Controls({ naked }: ControlsProps) {
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const display = TankopediaEphemeral.use((state) => state.display);
   const duelStore = Duel.useStore();
@@ -82,7 +86,7 @@ export function Controls() {
     antagonistModelDefinition.turret_origin.y +
     antagonistTurretModelDefinition.gun_origin.y;
   const [autoRotate, setAutoRotate] = useState(
-    display !== TankopediaDisplay.ShootingRange,
+    display !== TankopediaDisplay.ShootingRange && !naked,
   );
   const gunHeight =
     protagonistHullOrigin.y +
