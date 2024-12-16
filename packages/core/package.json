@@ -13,7 +13,6 @@
     "lz4js": "^0.2.0",
     "pickleparser": "^0.2.1",
     "protobufjs": "^7.4.0",
-    "sharp": "^0.33.5",
     "ts-proto": "^2.2.2",
     "yaml": "^2.5.0"
   },

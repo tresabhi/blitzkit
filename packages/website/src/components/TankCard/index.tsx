@@ -1,4 +1,4 @@
-import { asset, tankIcon, TankType, type TankDefinition } from '@blitzkit/core';
+import { asset, TankType, type TankDefinition } from '@blitzkit/core';
 import { Flex, Link, Text, type TextProps } from '@radix-ui/themes';
 import { uniq } from 'lodash-es';
 import { forwardRef, type ReactNode } from 'react';
@@ -70,7 +70,7 @@ export const TankCard = forwardRef<HTMLSpanElement, TankCardProps>(
         >
           <img
             alt={tank.name}
-            src={tankIcon(tank.id)}
+            src={asset(`icons/tanks/blitzkit/${tank.id}.webp`)}
             className="image"
             draggable={false}
           />

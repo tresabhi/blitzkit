@@ -13,15 +13,16 @@
     "build:ratingleaderboard": "bun src/buildRatingLeaderboard.ts"
   },
   "dependencies": {
-    "esbuild": "^0.19.12",
     "@blitzkit/core": "workspace:*",
     "@gltf-transform/core": "^4.0.10",
     "@gltf-transform/extensions": "^4.0.10",
     "@gltf-transform/functions": "^4.0.10",
     "csv-parse": "^5.5.6",
     "decompress": "^4.2.1",
+    "esbuild": "^0.19.12",
     "fast-xml-parser": "^4.4.1",
-    "progress": "^2.0.3"
+    "progress": "^2.0.3",
+    "puppeteer": "^23.10.4"
   },
   "devDependencies": {
     "@types/decompress": "^4.2.7",

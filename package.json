@@ -39,6 +39,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "sharp": "^0.33.5",
     "lodash-es": "^4.17.21"
   },
   "devDependencies": {
