@@ -26,3 +26,4 @@ target
 # !packages/core/src/protos/*.proto
 /.vercel
 /.astro
+.vercel

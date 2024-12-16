@@ -72,16 +72,17 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: Preview
-      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - uses: oven-sh/setup-bun@v1
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          path: ./dist/website
 
-      - name: Install Vercel CLI
-        run: bun install --global vercel@latest
-
-      - name: Pull Vercel environment information
-        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Deploy project artifacts to vercel
-        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+      - uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: ./dist/website
