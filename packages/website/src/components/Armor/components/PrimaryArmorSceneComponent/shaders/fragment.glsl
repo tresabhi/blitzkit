@@ -19,6 +19,11 @@ uniform mat4 inverseProjectionMatrix;
 uniform highp sampler2D spacedArmorBuffer;
 uniform highp sampler2D spacedArmorDepth;
 
+const float HALF = 0.5;
+const float EXPLOSION_DAMAGE_FACTOR = 1.1;
+const float RANDOMIZATION_FACTOR = 0.05;
+const float GREEN_VALUE = 0.392;
+
 float depthToDistance(float depth) {
   vec4 clipPosition = vec4(gl_FragCoord.xy / resolution * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
   vec4 eyePosition = inverseProjectionMatrix * clipPosition;
@@ -53,7 +58,7 @@ void main() {
 
     if (canSplash && isUnderSpacedArmor) {
       float spacedArmorThickness = spacedArmorBufferFragment.r * penetration;
-      float finalDamage = 0.5 * damage * (1.0 - distanceFromSpacedArmor / explosionRadius) - 1.1 * (finalThickness + spacedArmorThickness);
+      float finalDamage = HALF * damage * (1.0 - distanceFromSpacedArmor / explosionRadius) - EXPLOSION_DAMAGE_FACTOR * (finalThickness + spacedArmorThickness);
 
       penetrationChance = 0.0;
       splashChance = finalDamage > 0.0 ? 1.0 : 0.0;
@@ -65,17 +70,17 @@ void main() {
         remainingPenetration -= spacedArmorThickness;
 
         if (isExplosive && remainingPenetration > 0.0) {
-          remainingPenetration -= 0.5 * remainingPenetration * distanceFromSpacedArmor;
+          remainingPenetration -= HALF * remainingPenetration * distanceFromSpacedArmor;
         }
       }
 
       remainingPenetration = max(0.0, remainingPenetration);
       float delta = finalThickness - remainingPenetration;
-      float randomization = remainingPenetration * 0.05;
+      float randomization = remainingPenetration * RANDOMIZATION_FACTOR;
       penetrationChance = clamp(1.0 - (delta + randomization) / (2.0 * randomization), 0.0, 1.0);
 
       if (canSplash) {
-        float splashDamage = 0.5 * damage - 1.1 * finalThickness;
+        float splashDamage = HALF * damage - EXPLOSION_DAMAGE_FACTOR * finalThickness;
         splashChance = splashDamage > 0.0 ? 1.0 : 0.0;
       } else {
         splashChance = 0.0;
@@ -83,8 +88,8 @@ void main() {
     }
   }
 
-  float alpha = opaque ? 1.0 : 0.5;
-  vec3 color = vec3(1.0, splashChance * 0.392, 0.0);
+  float alpha = opaque ? 1.0 : HALF;
+  vec3 color = vec3(1.0, splashChance * GREEN_VALUE, 0.0);
 
   if (advancedHighlighting && didRicochet) {
     color = vec3(1.0, color.g, 1.0);
