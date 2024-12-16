@@ -3,7 +3,7 @@ import { Box, type BoxProps } from '@radix-ui/themes';
 import { forwardRef } from 'react';
 import { Var } from '../../../../../../../../core/radix/var';
 
-const DOTS = 32;
+// const DOTS = 32;
 
 type TargetCircleProps = BoxProps & {
   variant: 'client' | 'server';

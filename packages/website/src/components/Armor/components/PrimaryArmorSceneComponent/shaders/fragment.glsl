@@ -12,82 +12,102 @@ uniform bool canSplash;
 uniform float damage;
 uniform float explosionRadius;
 uniform bool greenPenetration;
+uniform bool advancedHighlighting;
 uniform bool opaque;
 uniform mat4 inverseProjectionMatrix;
 
 uniform highp sampler2D spacedArmorBuffer;
 uniform highp sampler2D spacedArmorDepth;
 
-float depthToDistance(float depth) {
-  vec4 clipPosition = vec4(gl_FragCoord.xy / resolution * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
-  vec4 eyePosition = inverseProjectionMatrix * clipPosition;
-  return length(eyePosition.xyz / eyePosition.w);
+const float HALF = 0.5;
+const float EXPLOSION_DAMAGE_FACTOR = 1.1;
+const float RANDOMIZATION_FACTOR = 0.05;
+const float GREEN_VALUE = 0.392;
+
+float getDistance(vec2 coord, float depth) {
+  vec4 clipPos = vec4(coord * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
+  vec4 eyePos = inverseProjectionMatrix * clipPos;
+  return length(eyePos.xyz / eyePos.w);
+}
+
+vec3 getPenetrationColor(bool isThreeCalibersRule) {
+  if (advancedHighlighting) {
+    return vec3(0.0, 1.0, isThreeCalibersRule ? 1.0 : 0.0);
+  }
+
+  return vec3(0.0, 1.0, 0.0);
 }
 
 void main() {
-  float penetrationChance = -1.0;
-  float splashChance = -1.0;
+  vec2 screenCoord = gl_FragCoord.xy / resolution;
+  vec4 spacedArmorData = texture2D(spacedArmorBuffer, screenCoord);
+  bool isUnderSpacedArmor = spacedArmorData.a != 0.0;
 
-  vec2 screenCoordinates = gl_FragCoord.xy / resolution;
-  float angle = acos(dot(vNormal, -vViewPosition) / length(vViewPosition));
-
-  vec4 spacedArmorBufferFragment = texture2D(spacedArmorBuffer, screenCoordinates);
-  bool isUnderSpacedArmor = spacedArmorBufferFragment.a != 0.0;
+  float viewDistance = length(vViewPosition);
+  float angle = acos(dot(vNormal, -vViewPosition) / viewDistance);
 
   bool threeCalibersRule = caliber > thickness * 3.0 || isUnderSpacedArmor;
+  float penetrationChance = -1.0;
+  float splashChance = 0.0;
+  bool didRicochet = false;
+
   if (!threeCalibersRule && angle >= ricochet) {
     penetrationChance = 0.0;
+    didRicochet = true;
   } else {
-    bool twoCalibersRule = caliber > thickness * 2.0 && thickness > 0.0;
-    float finalNormalization = twoCalibersRule ? ((1.4 * normalization * caliber) / (2.0 * thickness)) : normalization;
-    float finalThickness = thickness / cos(max(0.0, angle - finalNormalization));
+    float thicknessRatio = thickness > 0.0 ? caliber / thickness : 0.0;
+    bool twoCalibersRule = thicknessRatio > 2.0;
+    float finalNorm = twoCalibersRule ? ((1.4 * normalization * caliber) / (2.0 * thickness)) : normalization;
+    float finalThickness = thickness / cos(max(0.0, angle - finalNorm));
 
-    // world space in meters
-    vec4 spacedArmorDepthFragment = texture2D(spacedArmorDepth, screenCoordinates);
-    float spacedArmorDistance = depthToDistance(spacedArmorDepthFragment.r);
-    float primaryArmorDistance = depthToDistance(gl_FragCoord.z);
-    float distanceFromSpacedArmor = primaryArmorDistance - spacedArmorDistance;
+    float remainingPen = penetration;
 
-    if (canSplash && isUnderSpacedArmor) {
-      float spacedArmorThickness = spacedArmorBufferFragment.r * penetration;
-      float finalDamage = 0.5 * damage * (1.0 - distanceFromSpacedArmor / explosionRadius) - 1.1 * (finalThickness + spacedArmorThickness);
+    if (isUnderSpacedArmor) {
+      float spacedArmorThickness = spacedArmorData.r * penetration;
+      remainingPen -= spacedArmorThickness;
 
-      penetrationChance = 0.0;
-      splashChance = finalDamage > 0.0 ? 1.0 : 0.0;
-    } else {
-      float remainingPenetration = penetration;
+      if (isExplosive && remainingPen > 0.0) {
+        float spacedDist = getDistance(screenCoord, texture2D(spacedArmorDepth, screenCoord).r);
+        float primaryDist = getDistance(screenCoord, gl_FragCoord.z);
+        float distFromArmor = primaryDist - spacedDist;
 
-      if (isUnderSpacedArmor) {
-        float spacedArmorThickness = spacedArmorBufferFragment.r * penetration;
-        remainingPenetration -= spacedArmorThickness;
+        if (canSplash) {
+          float finalDamage = HALF * damage * (1.0 - distFromArmor / explosionRadius) - EXPLOSION_DAMAGE_FACTOR * (finalThickness + spacedArmorThickness);
+          splashChance = step(0.0, finalDamage);
+          penetrationChance = 0.0;
 
-        if (isExplosive && remainingPenetration > 0.0) {
-          remainingPenetration -= 0.5 * remainingPenetration * distanceFromSpacedArmor;
+        } else {
+          remainingPen -= HALF * remainingPen * distFromArmor;
         }
       }
+    }
 
-      remainingPenetration = max(0.0, remainingPenetration);
-      float delta = finalThickness - remainingPenetration;
-      float randomization = remainingPenetration * 0.05;
+    if (penetrationChance < 0.0) {
+      remainingPen = max(0.0, remainingPen);
+      float delta = finalThickness - remainingPen;
+      float randomization = remainingPen * RANDOMIZATION_FACTOR;
       penetrationChance = clamp(1.0 - (delta + randomization) / (2.0 * randomization), 0.0, 1.0);
 
       if (canSplash) {
-        float splashDamage = 0.5 * damage - 1.1 * finalThickness;
-        splashChance = splashDamage > 0.0 ? 1.0 : 0.0;
-      } else {
-        splashChance = 0.0;
+        float splashDamage = HALF * damage - EXPLOSION_DAMAGE_FACTOR * finalThickness;
+        splashChance = step(0.0, splashDamage);
       }
     }
   }
 
-  float alpha = opaque ? 1.0 : 0.5;
-  vec3 color = vec3(1.0, splashChance * 0.392, 0.0);
-  if (greenPenetration) {
-    // non-trigonometric red-green mixing: https://www.desmos.com/calculator/ceo1oq7l67
-    float falling = -pow(penetrationChance, 2.0) + 1.0;
-    float gaining = -pow(penetrationChance - 1.0, 2.0) + 1.0;
-    gl_FragColor = vec4(falling * color + gaining * vec3(0.0, 1.0, 0.0), alpha);
+  float alpha = opaque ? 1.0 : HALF;
+  vec3 baseColor = vec3(1.0, splashChance * GREEN_VALUE, 0.0);
+
+  if (advancedHighlighting && didRicochet) {
+    baseColor = vec3(1.0, baseColor.g, 1.0);
+  }
+
+  if (greenPenetration || advancedHighlighting) {
+    float falling = -penetrationChance * penetrationChance + 1.0;
+    float gaining = -(penetrationChance - 1.0) * (penetrationChance - 1.0) + 1.0;
+    vec3 penColor = getPenetrationColor(threeCalibersRule);
+    gl_FragColor = vec4(falling * baseColor + gaining * penColor, alpha);
   } else {
-    gl_FragColor = vec4(color, (1.0 - penetrationChance) * alpha);
+    gl_FragColor = vec4(baseColor, (1.0 - penetrationChance) * alpha);
   }
 }

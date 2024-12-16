@@ -31,10 +31,11 @@ import { TankModel } from './components/TankModel';
 
 interface TankSandboxProps {
   thicknessRange: ThicknessRange;
+  naked?: boolean;
 }
 
 export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
-  ({ thicknessRange }, ref) => {
+  ({ thicknessRange, naked }, ref) => {
     const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
     const canvas = useRef<HTMLCanvasElement>(null);
     const hasImprovedVerticalStabilizer = useEquipment(122);
@@ -179,10 +180,15 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
             draft.highlightArmor = undefined;
           });
         }}
-        style={{ userSelect: 'none' }}
+        style={{
+          userSelect: 'none',
+          width: naked ? 640 : '100%',
+          height: naked ? 480 : '100%',
+          outline: naked ? '1rem red solid' : undefined,
+        }}
       >
-        <Controls />
-        <SceneProps />
+        <Controls naked={naked} />
+        {!naked && <SceneProps />}
         {display !== TankopediaDisplay.StaticArmor && <TankModel />}
         <ShotDisplay />
         <ArmorPlateDisplay />

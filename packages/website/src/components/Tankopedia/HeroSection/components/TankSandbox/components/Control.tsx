@@ -8,10 +8,6 @@ import { degToRad } from 'three/src/math/MathUtils.js';
 import { awaitableModelDefinitions } from '../../../../../../core/awaitables/modelDefinitions';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { hasEquipment } from '../../../../../../core/blitzkit/hasEquipment';
-import {
-  modelTransformEvent,
-  type ModelTransformEventData,
-} from '../../../../../../core/blitzkit/modelTransform';
 import { Pose, poseEvent } from '../../../../../../core/blitzkit/pose';
 import { Duel } from '../../../../../../stores/duel';
 import {
@@ -35,7 +31,11 @@ const ARCADE_MODE_DISTANCE = 19;
 const ARCADE_MODE_ANGLE = degToRad(10);
 const ARCADE_MODE_FOV = 54;
 
-export function Controls() {
+interface ControlsProps {
+  naked?: boolean;
+}
+
+export function Controls({ naked }: ControlsProps) {
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const display = TankopediaEphemeral.use((state) => state.display);
   const duelStore = Duel.useStore();
@@ -82,7 +82,7 @@ export function Controls() {
     antagonistModelDefinition.turret_origin.y +
     antagonistTurretModelDefinition.gun_origin.y;
   const [autoRotate, setAutoRotate] = useState(
-    display !== TankopediaDisplay.ShootingRange,
+    display !== TankopediaDisplay.ShootingRange && !naked,
   );
   const gunHeight =
     protagonistHullOrigin.y +
@@ -249,10 +249,6 @@ export function Controls() {
     canvas.addEventListener('wheel', handleWheel);
     document.body.addEventListener('scroll', handleScroll);
 
-    const sniperModeCameraOffset = new Vector3();
-    let pitch = 0;
-    let yaw = 0;
-
     function updateCamera() {
       if (!orbitControls.current) return;
 
@@ -307,13 +303,6 @@ export function Controls() {
       camera.updateProjectionMatrix();
     }
 
-    function handleModelTransform(event: ModelTransformEventData) {
-      pitch = event.pitch;
-      yaw = event.yaw ?? yaw;
-    }
-
-    modelTransformEvent.on(handleModelTransform);
-
     updateCamera();
 
     const unsubscribeDisplay = tankopediaEphemeralStore.subscribe(
@@ -337,7 +326,6 @@ export function Controls() {
       window.removeEventListener('keydown', handleKeyDown);
       canvas.removeEventListener('wheel', handleWheel);
       document.body.removeEventListener('scroll', handleScroll);
-      modelTransformEvent.off(handleModelTransform);
     };
   }, [display === TankopediaDisplay.ShootingRange]);
 
@@ -348,7 +336,6 @@ export function Controls() {
       ref={orbitControls}
       enabled={tankopediaEphemeralStore.getState().controlsEnabled}
       enableDamping={false}
-      maxPolarAngle={degToRad(100)}
       autoRotate={autoRotate}
       autoRotateSpeed={1 / 4}
     />

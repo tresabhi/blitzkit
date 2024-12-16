@@ -27,7 +27,7 @@ type Result =
       available_from?: Date;
       available_before?: Date;
       price?: Price;
-      next_price?: Price | null;
+      next_price: Price | null;
       available: true;
       display?: boolean;
       next_price_datetime: Date;
@@ -68,6 +68,8 @@ interface Currency {
   type: 'currency';
 }
 
+const WARNING_COUNT = 500;
+
 export const auctionCommand = new Promise<CommandRegistry>((resolve) => {
   resolve({
     command: createLocalizedCommand('auction'),
@@ -107,21 +109,27 @@ export const auctionCommand = new Promise<CommandRegistry>((resolve) => {
         const name = `[${tank.name}](<https://blitzkit.app/tools/tankopedia/${
           tank.id
         }>)`;
-        const next = translate('bot.commands.auction.body.next', [
-          `<:gold:1317173197082333244> ${data.next_price!.value.toLocaleString(
-            interaction.locale,
-          )}`,
-        ]);
+        const next =
+          data.next_price === null
+            ? ''
+            : `\n-# ${translate('bot.commands.auction.body.next', [
+                `<:gold:1317173197082333244> ${data.next_price.value.toLocaleString(
+                  interaction.locale,
+                )}`,
+              ])}`;
         const available = translate('bot.commands.auction.body.available', [
           data.current_count.toLocaleString(interaction.locale),
           data.initial_count.toLocaleString(interaction.locale),
         ]);
+        const isOut = data.current_count === 0;
+        const outString = isOut ? '~~' : '';
+        const isLow = data.current_count <= WARNING_COUNT;
 
-        return `${
-          index + 1
-        }. ${name} <:gold:1317173197082333244> ${data.price!.value.toLocaleString(
+        return `${index + 1}. ${
+          outString
+        }${name} <:gold:1317173197082333244> ${data.price!.value.toLocaleString(
           interaction.locale,
-        )}\n-# ${available}\n-# ${next}`;
+        )}${outString}\n-#${isLow ? ' ‼️ ' : ' '}${available}${isOut ? '' : next}`;
       });
       const header = `${title}\n${subtitle}`;
       const lines = [header, ...body];

@@ -1,8 +1,7 @@
-name: Build Website
+name: Website
 
 on:
   push:
-    branches: main
   workflow_dispatch:
 
   schedule:
@@ -15,7 +14,7 @@ permissions:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref == 'refs/heads/main' }}
 
 env:
   PUBLIC_WARGAMING_APPLICATION_ID: ${{ secrets.PUBLIC_WARGAMING_APPLICATION_ID }}
@@ -52,14 +51,41 @@ jobs:
         with:
           path: dist/website
 
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
+  deploy-github-pages:
+    if: github.ref == 'refs/heads/main'
+
+    name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
-    name: Deploy
+    needs: build
+    environment:
+      name: Production
+      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  deploy-vercel:
+    name: Deploy to Vercel
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: Preview
+
+    steps:
+      # vercel begs for the .git dir so here it is my guy
+      - uses: actions/checkout@v4
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          path: ./dist/website
+
+      - uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID}}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          working-directory: ./dist/website

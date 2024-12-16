@@ -68,7 +68,7 @@ export function TierListTile(props: TierListTileProps) {
 
     lastPosition.current = { x: event.clientX, y: event.clientY };
   }, []);
-  const handlePointerUp = useCallback((event: PointerEvent) => {
+  const handlePointerUp = useCallback(() => {
     if (!card.current) return;
 
     const cardRect = card.current.getBoundingClientRect();
