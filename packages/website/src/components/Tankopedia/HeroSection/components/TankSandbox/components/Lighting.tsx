@@ -1,9 +1,9 @@
 import { Environment } from '@react-three/drei';
 import { times } from 'lodash-es';
+import { Euler } from 'three';
 import { useModel } from '../../../../../../hooks/useModel';
 import { Duel } from '../../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
-import { TankopediaPersistent } from '../../../../../../stores/tankopediaPersistent';
 import { TankopediaDisplay } from '../../../../../../stores/tankopediaPersistent/constants';
 
 const LIGHTS_COUNT = 5;
@@ -14,17 +14,13 @@ export function Lighting() {
   const { hasPbr } = useModel(protagonist.tank.id);
   const isBrighterLighting =
     !hasPbr && display !== TankopediaDisplay.StaticArmor;
-  const showEnvironment = TankopediaPersistent.use(
-    (state) => state.showEnvironment,
-  );
-  const environment = TankopediaPersistent.use((state) => state.environment);
 
   return (
     <>
       <Environment
-        preset={environment}
-        background={showEnvironment}
-        environmentIntensity={isBrighterLighting ? 3 : 1}
+        files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/winter_river_1k.hdr"
+        environmentIntensity={isBrighterLighting ? 2 : 1}
+        environmentRotation={new Euler(0, Math.PI, 0)}
       />
       {display === TankopediaDisplay.ShootingRange && (
         <>
