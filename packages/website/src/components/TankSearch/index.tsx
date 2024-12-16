@@ -39,8 +39,8 @@ type TankSearchProps = Omit<FlexProps, 'onSelect'> & {
   onSelectAll?: (tanks: TankDefinition[]) => void;
 };
 
-const PREVIEW_COUNT = 25;
-const DEFAULT_LOADED_CARDS = 75;
+const PREVIEW_COUNT = 20;
+const DEFAULT_LOADED_CARDS = 64;
 
 const [gameDefinitions, modelDefinitions, tankDefinitions, tankNames] =
   await Promise.all([

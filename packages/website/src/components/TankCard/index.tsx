@@ -34,7 +34,7 @@ export const TankCard = forwardRef<HTMLSpanElement, TankCardProps>(
       <Text
         ref={ref}
         tabIndex={onSelect ? 0 : undefined}
-        size="1"
+        size="2"
         color={
           tank.type === TankType.COLLECTOR
             ? 'blue'
@@ -56,6 +56,7 @@ export const TankCard = forwardRef<HTMLSpanElement, TankCardProps>(
         data-provide-link={provideLink}
         style={{
           backgroundImage: `url(${asset(`flags/scratched/${tank.nation}.webp`)})`,
+          backgroundSize: '75%',
           ...style,
         }}
         {...props}
@@ -81,6 +82,7 @@ export const TankCard = forwardRef<HTMLSpanElement, TankCardProps>(
             align="center"
             overflow="hidden"
             width="100%"
+            mt="1"
           >
             <Icon className="class-icon" />
             <Text align="center" className="name">

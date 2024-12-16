@@ -4,7 +4,10 @@ export function TankCardWrapper(props: GridProps) {
   return (
     <Grid
       py="4"
-      columns="repeat(auto-fill, minmax(100px, 1fr))"
+      columns={{
+        initial: 'repeat(auto-fill, minmax(6rem, 1fr))',
+        sm: 'repeat(auto-fill, minmax(7rem, 1fr))',
+      }}
       flow="dense"
       gap="2"
       gapY="6"

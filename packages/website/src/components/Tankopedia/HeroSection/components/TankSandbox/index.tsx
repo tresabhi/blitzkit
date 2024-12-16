@@ -1,3 +1,4 @@
+import { BLITZKIT_TANK_ICON_SIZE } from '@blitzkit/core';
 import { Canvas } from '@react-three/fiber';
 import {
   forwardRef,
@@ -182,8 +183,8 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
         }}
         style={{
           userSelect: 'none',
-          width: naked ? 640 : '100%',
-          height: naked ? 480 : '100%',
+          width: naked ? BLITZKIT_TANK_ICON_SIZE.width : '100%',
+          height: naked ? BLITZKIT_TANK_ICON_SIZE.height : '100%',
           outline: naked ? '1rem red solid' : undefined,
         }}
       >

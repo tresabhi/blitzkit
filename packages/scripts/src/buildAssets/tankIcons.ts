@@ -1,4 +1,4 @@
-import { fetchTankDefinitions } from '@blitzkit/core';
+import { BLITZKIT_TANK_ICON_SIZE, fetchTankDefinitions } from '@blitzkit/core';
 import { exec } from 'child_process';
 import { launch } from 'puppeteer';
 import sharp from 'sharp';
@@ -17,7 +17,10 @@ export async function tankIcons() {
 
   let index = 0;
   for (const { id, name } of tanks) {
-    await page.setViewport({ width: 640 - 1, height: 480 });
+    await page.setViewport({
+      width: BLITZKIT_TANK_ICON_SIZE.width - 1,
+      height: BLITZKIT_TANK_ICON_SIZE.height,
+    });
     await page.goto(`http://localhost:4321/api/tankopedia/tank-icon/${id}/`, {
       waitUntil: 'networkidle0',
     });
