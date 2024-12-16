@@ -54,7 +54,7 @@ jobs:
   deploy-github-pages:
     if: github.ref == 'refs/heads/main'
 
-    name: Deploy
+    name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
     needs: build
     environment:
@@ -67,7 +67,7 @@ jobs:
         uses: actions/deploy-pages@v4
 
   deploy-vercel:
-    name: Deploy
+    name: Deploy to Vercel
     needs: build
     runs-on: ubuntu-latest
     environment:
