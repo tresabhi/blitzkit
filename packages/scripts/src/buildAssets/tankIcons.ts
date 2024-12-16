@@ -8,11 +8,10 @@ import { FileChange } from '../core/github/commitMultipleFiles';
 export async function tankIcons() {
   console.log('Building tank icons...');
 
-  const websiteProcess = exec('cd ../.. && bun dev:website');
+  const child = exec('cd ../.. && bun dev:website');
   const browser = await launch();
   const page = await browser.newPage();
-  const tankDefinitions = await fetchTankDefinitions();
-  const tanks = Object.values(tankDefinitions.tanks);
+  const tanks = Object.values(await fetchTankDefinitions());
   const files: FileChange[] = [];
 
   let index = 0;
@@ -38,7 +37,7 @@ export async function tankIcons() {
     files.push({ path: `icons/tanks/blitzkit/${id}.webp`, content });
   }
 
-  websiteProcess.kill('SIGHUP');
+  child.kill('SIGHUP');
   await browser.close();
 
   await commitAssets('tank icons', files);
