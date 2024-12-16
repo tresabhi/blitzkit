@@ -93,6 +93,7 @@ export function PrimaryArmorSceneComponent({
     }
     function handleAdvancedHighlightingChange(advancedHighlighting: boolean) {
       material.uniforms.advancedHighlighting.value = advancedHighlighting;
+      invalidate();
     }
     function handleOpaqueChange(opaque: boolean) {
       material.uniforms.opaque.value = opaque;
