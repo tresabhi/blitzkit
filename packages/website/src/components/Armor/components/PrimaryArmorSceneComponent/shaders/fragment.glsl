@@ -30,6 +30,12 @@ float depthToDistance(float depth) {
   return length(eyePosition.xyz / eyePosition.w);
 }
 
+float getDistance(vec2 coord, float depth) {
+  vec4 clipPos = vec4(coord * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
+  vec4 eyePos = inverseProjectionMatrix * clipPos;
+  return length(eyePos.xyz / eyePos.w);
+}
+
 void main() {
   float penetrationChance = -1.0;
   float splashChance = -1.0;
@@ -51,9 +57,8 @@ void main() {
     float finalThickness = thickness / cos(max(0.0, angle - finalNormalization));
 
     // world space in meters
-    vec4 spacedArmorDepthFragment = texture2D(spacedArmorDepth, screenCoordinates);
-    float spacedArmorDistance = depthToDistance(spacedArmorDepthFragment.r);
-    float primaryArmorDistance = depthToDistance(gl_FragCoord.z);
+    float spacedArmorDistance = getDistance(screenCoordinates, texture2D(spacedArmorDepth, screenCoordinates).r);
+    float primaryArmorDistance = getDistance(screenCoordinates, gl_FragCoord.z);
     float distanceFromSpacedArmor = primaryArmorDistance - spacedArmorDistance;
 
     if (canSplash && isUnderSpacedArmor) {
