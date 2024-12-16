@@ -8,10 +8,6 @@ import { degToRad } from 'three/src/math/MathUtils.js';
 import { awaitableModelDefinitions } from '../../../../../../core/awaitables/modelDefinitions';
 import { applyPitchYawLimits } from '../../../../../../core/blitz/applyPitchYawLimits';
 import { hasEquipment } from '../../../../../../core/blitzkit/hasEquipment';
-import {
-  modelTransformEvent,
-  type ModelTransformEventData,
-} from '../../../../../../core/blitzkit/modelTransform';
 import { Pose, poseEvent } from '../../../../../../core/blitzkit/pose';
 import { Duel } from '../../../../../../stores/duel';
 import {
@@ -253,10 +249,6 @@ export function Controls({ naked }: ControlsProps) {
     canvas.addEventListener('wheel', handleWheel);
     document.body.addEventListener('scroll', handleScroll);
 
-    const sniperModeCameraOffset = new Vector3();
-    let pitch = 0;
-    let yaw = 0;
-
     function updateCamera() {
       if (!orbitControls.current) return;
 
@@ -311,13 +303,6 @@ export function Controls({ naked }: ControlsProps) {
       camera.updateProjectionMatrix();
     }
 
-    function handleModelTransform(event: ModelTransformEventData) {
-      pitch = event.pitch;
-      yaw = event.yaw ?? yaw;
-    }
-
-    modelTransformEvent.on(handleModelTransform);
-
     updateCamera();
 
     const unsubscribeDisplay = tankopediaEphemeralStore.subscribe(
@@ -341,7 +326,6 @@ export function Controls({ naked }: ControlsProps) {
       window.removeEventListener('keydown', handleKeyDown);
       canvas.removeEventListener('wheel', handleWheel);
       document.body.removeEventListener('scroll', handleScroll);
-      modelTransformEvent.off(handleModelTransform);
     };
   }, [display === TankopediaDisplay.ShootingRange]);
 
