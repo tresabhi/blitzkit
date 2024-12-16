@@ -68,6 +68,8 @@ interface Currency {
   type: 'currency';
 }
 
+const WARNING_COUNT = 500;
+
 export const auctionCommand = new Promise<CommandRegistry>((resolve) => {
   resolve({
     command: createLocalizedCommand('auction'),
@@ -116,12 +118,16 @@ export const auctionCommand = new Promise<CommandRegistry>((resolve) => {
           data.current_count.toLocaleString(interaction.locale),
           data.initial_count.toLocaleString(interaction.locale),
         ]);
+        const nextLine = `\n-# ${next}`;
+        const isOut = data.current_count === 0;
+        const outString = isOut ? '~~' : '';
+        const isLow = data.current_count <= WARNING_COUNT;
 
-        return `${
-          index + 1
-        }. ${name} <:gold:1317173197082333244> ${data.price!.value.toLocaleString(
+        return `${index + 1}. ${
+          outString
+        }${name} <:gold:1317173197082333244> ${data.price!.value.toLocaleString(
           interaction.locale,
-        )}\n-# ${available}\n-# ${next}`;
+        )}${outString}\n-# ${available}${isLow ? ' ⚠️' : ''}${isOut ? '' : nextLine}`;
       });
       const header = `${title}\n${subtitle}`;
       const lines = [header, ...body];
