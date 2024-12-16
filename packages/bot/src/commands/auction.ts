@@ -127,7 +127,7 @@ export const auctionCommand = new Promise<CommandRegistry>((resolve) => {
           outString
         }${name} <:gold:1317173197082333244> ${data.price!.value.toLocaleString(
           interaction.locale,
-        )}${outString}\n-# ${available}${isLow ? ' ⚠️' : ''}${isOut ? '' : nextLine}`;
+        )}${outString}\n-#${isLow ? ' ‼️ ' : ' '}${available}${isOut ? '' : nextLine}`;
       });
       const header = `${title}\n${subtitle}`;
       const lines = [header, ...body];
