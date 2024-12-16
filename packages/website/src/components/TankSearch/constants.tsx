@@ -1,1 +1,1 @@
-export const MAX_RECENTLY_VIEWED = 9;
+export const MAX_RECENTLY_VIEWED = 14;
