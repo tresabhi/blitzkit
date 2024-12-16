@@ -1,8 +1,7 @@
-name: Build Website
+name: Website
 
 on:
   push:
-    branches: main
   workflow_dispatch:
 
   schedule:
@@ -52,14 +51,37 @@ jobs:
         with:
           path: dist/website
 
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
-    runs-on: ubuntu-latest
+  deploy-github-pages:
+    if: github.ref == 'refs/heads/main'
+
     name: Deploy
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: Production
+      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  deploy-vercel:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: Preview
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: oven-sh/setup-bun@v1
+
+      - name: Install Vercel CLI
+        run: bun install --global vercel@latest
+
+      - name: Pull Vercel environment information
+        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy project artifacts to vercel
+        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
