@@ -12,6 +12,7 @@ export type TankopediaTestTankDisplay = 'include' | 'exclude' | 'only';
 export interface TankopediaPersistentStore {
   wireframe: boolean;
   opaque: boolean;
+  advancedHighlighting: boolean;
   environment: (typeof ENVIRONMENTS)[number];
   showGrid: boolean;
   greenPenetration: boolean;
@@ -33,6 +34,7 @@ export const TankopediaPersistent = createContextualStore(() =>
       subscribeWithSelector<TankopediaPersistentStore>(() => ({
         wireframe: false,
         opaque: false,
+        advancedHighlighting: false,
         environment: ENVIRONMENTS[0],
         showGrid: true,
         greenPenetration: false,

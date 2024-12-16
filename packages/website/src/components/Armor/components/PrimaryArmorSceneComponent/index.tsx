@@ -49,6 +49,7 @@ export function PrimaryArmorSceneComponent({
       damage: { value: null },
       explosionRadius: { value: null },
       greenPenetration: { value: null },
+      advancedHighlighting: { value: null },
       opaque: { value: null },
 
       inverseProjectionMatrix: { value: null },
@@ -89,6 +90,9 @@ export function PrimaryArmorSceneComponent({
     }
     function handleGreenPenetrationChange(greenPenetration: boolean) {
       material.uniforms.greenPenetration.value = greenPenetration;
+    }
+    function handleAdvancedHighlightingChange(advancedHighlighting: boolean) {
+      material.uniforms.advancedHighlighting.value = advancedHighlighting;
     }
     function handleOpaqueChange(opaque: boolean) {
       material.uniforms.opaque.value = opaque;
@@ -133,12 +137,13 @@ export function PrimaryArmorSceneComponent({
       if (!noInvalidate) invalidate();
     }
 
+    const initialState = tankopediaPersistentStore.getState();
+
     handleShellChange();
-    handleGreenPenetrationChange(
-      tankopediaPersistentStore.getState().greenPenetration,
-    );
-    handleOpaqueChange(tankopediaPersistentStore.getState().opaque);
-    handleWireframeChange(tankopediaPersistentStore.getState().wireframe);
+    handleGreenPenetrationChange(initialState.greenPenetration);
+    handleAdvancedHighlightingChange(initialState.advancedHighlighting);
+    handleOpaqueChange(initialState.opaque);
+    handleWireframeChange(initialState.wireframe);
     handleProtagonistEquipmentChange(
       duelStore.getState().protagonist.equipmentMatrix,
     );
@@ -155,6 +160,10 @@ export function PrimaryArmorSceneComponent({
       tankopediaPersistentStore.subscribe(
         (state) => state.greenPenetration,
         handleGreenPenetrationChange,
+      ),
+      tankopediaPersistentStore.subscribe(
+        (state) => state.advancedHighlighting,
+        handleAdvancedHighlightingChange,
       ),
       tankopediaPersistentStore.subscribe(
         (state) => state.opaque,

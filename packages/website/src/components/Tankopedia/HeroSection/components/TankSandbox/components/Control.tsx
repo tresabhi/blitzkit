@@ -352,7 +352,6 @@ export function Controls({ naked }: ControlsProps) {
       ref={orbitControls}
       enabled={tankopediaEphemeralStore.getState().controlsEnabled}
       enableDamping={false}
-      maxPolarAngle={degToRad(100)}
       autoRotate={autoRotate}
       autoRotateSpeed={1 / 4}
     />

@@ -17,6 +17,7 @@ import {
 import {
   Box,
   Button,
+  Checkbox,
   Dialog,
   DropdownMenu,
   Flex,
@@ -67,6 +68,9 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
   );
   const greenPenetration = TankopediaPersistent.use(
     (state) => state.greenPenetration,
+  );
+  const advancedHighlighting = TankopediaPersistent.use(
+    (state) => state.advancedHighlighting,
   );
   const wireframe = TankopediaPersistent.use((state) => state.wireframe);
   const opaque = TankopediaPersistent.use((state) => state.opaque);
@@ -325,53 +329,71 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
         style={{ transform: 'translateX(-50%)' }}
       >
         {display === TankopediaDisplay.DynamicArmor && (
-          <Flex align="center" gap="2">
-            <Text color="gray" size="2">
-              Shooter:
-            </Text>
-            <Dialog.Root
-              open={antagonistSelectorOpen}
-              onOpenChange={setAntagonistSelectorOpen}
+          <>
+            <Flex
+              align="center"
+              gap="2"
+              mb="1"
+              style={{ cursor: 'pointer' }}
+              onClick={() => {
+                mutateTankopediaPersistent((draft) => {
+                  draft.advancedHighlighting = !draft.advancedHighlighting;
+                });
+              }}
             >
-              <Dialog.Trigger>
-                <Button variant="ghost">
-                  <Flex gap="2" align="center">
-                    <SmallTankIcon id={antagonistTank.id} size={16} />
-                    {antagonistTank.name}
-                  </Flex>
-                </Button>
-              </Dialog.Trigger>
+              <Checkbox checked={advancedHighlighting} />
+              <Text color="gray" size="2">
+                Advanced highlighting
+              </Text>
+            </Flex>
 
-              <Dialog.Content>
-                <Dialog.Title align="center">Select tank</Dialog.Title>
+            <Flex align="center" gap="2">
+              <Text color="gray" size="2">
+                Shooter:
+              </Text>
+              <Dialog.Root
+                open={antagonistSelectorOpen}
+                onOpenChange={setAntagonistSelectorOpen}
+              >
+                <Dialog.Trigger>
+                  <Button variant="ghost">
+                    <Flex gap="2" align="center">
+                      <SmallTankIcon id={antagonistTank.id} size={16} />
+                      {antagonistTank.name}
+                    </Flex>
+                  </Button>
+                </Dialog.Trigger>
 
-                <Tabs.Root
-                  value={tab}
-                  onValueChange={setTab}
-                  style={{ position: 'relative' }}
-                >
-                  <TankSearch
-                    compact
-                    onSelect={(tank) => {
-                      mutateDuel((draft) => {
-                        draft.antagonist.tank = tank;
-                        draft.antagonist.engine = tank.engines.at(-1)!;
-                        draft.antagonist.track = tank.tracks.at(-1)!;
-                        draft.antagonist.turret = tank.turrets.at(-1)!;
-                        draft.antagonist.gun =
-                          draft.antagonist.turret.guns.at(-1)!;
-                        draft.antagonist.shell =
-                          draft.antagonist.gun.gun_type!.value.base.shells[0];
-                      });
-                      setAntagonistSelectorOpen(false);
-                    }}
-                  />
-                </Tabs.Root>
-              </Dialog.Content>
-            </Dialog.Root>
-          </Flex>
+                <Dialog.Content>
+                  <Dialog.Title align="center">Select tank</Dialog.Title>
+
+                  <Tabs.Root
+                    value={tab}
+                    onValueChange={setTab}
+                    style={{ position: 'relative' }}
+                  >
+                    <TankSearch
+                      compact
+                      onSelect={(tank) => {
+                        mutateDuel((draft) => {
+                          draft.antagonist.tank = tank;
+                          draft.antagonist.engine = tank.engines.at(-1)!;
+                          draft.antagonist.track = tank.tracks.at(-1)!;
+                          draft.antagonist.turret = tank.turrets.at(-1)!;
+                          draft.antagonist.gun =
+                            draft.antagonist.turret.guns.at(-1)!;
+                          draft.antagonist.shell =
+                            draft.antagonist.gun.gun_type!.value.base.shells[0];
+                        });
+                        setAntagonistSelectorOpen(false);
+                      }}
+                    />
+                  </Tabs.Root>
+                </Dialog.Content>
+              </Dialog.Root>
+            </Flex>
+          </>
         )}
-
         <Flex gap="3" align="center" mt="2">
           <SegmentedControl.Root
             value={`${display}`}

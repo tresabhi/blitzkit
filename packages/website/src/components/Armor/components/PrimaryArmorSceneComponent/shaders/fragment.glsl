@@ -12,6 +12,7 @@ uniform bool canSplash;
 uniform float damage;
 uniform float explosionRadius;
 uniform bool greenPenetration;
+uniform bool advancedHighlighting;
 uniform bool opaque;
 uniform mat4 inverseProjectionMatrix;
 
@@ -27,16 +28,18 @@ float depthToDistance(float depth) {
 void main() {
   float penetrationChance = -1.0;
   float splashChance = -1.0;
+  bool didRicochet = false;
 
   vec2 screenCoordinates = gl_FragCoord.xy / resolution;
   float angle = acos(dot(vNormal, -vViewPosition) / length(vViewPosition));
 
   vec4 spacedArmorBufferFragment = texture2D(spacedArmorBuffer, screenCoordinates);
   bool isUnderSpacedArmor = spacedArmorBufferFragment.a != 0.0;
-
   bool threeCalibersRule = caliber > thickness * 3.0 || isUnderSpacedArmor;
+
   if (!threeCalibersRule && angle >= ricochet) {
     penetrationChance = 0.0;
+    didRicochet = true;
   } else {
     bool twoCalibersRule = caliber > thickness * 2.0 && thickness > 0.0;
     float finalNormalization = twoCalibersRule ? ((1.4 * normalization * caliber) / (2.0 * thickness)) : normalization;
@@ -82,11 +85,22 @@ void main() {
 
   float alpha = opaque ? 1.0 : 0.5;
   vec3 color = vec3(1.0, splashChance * 0.392, 0.0);
-  if (greenPenetration) {
+
+  if (advancedHighlighting && didRicochet) {
+    color = vec3(1.0, color.g, 1.0);
+  }
+
+  if (greenPenetration || advancedHighlighting) {
     // non-trigonometric red-green mixing: https://www.desmos.com/calculator/ceo1oq7l67
     float falling = -pow(penetrationChance, 2.0) + 1.0;
     float gaining = -pow(penetrationChance - 1.0, 2.0) + 1.0;
-    gl_FragColor = vec4(falling * color + gaining * vec3(0.0, 1.0, 0.0), alpha);
+    vec3 penetrationColor = vec3(0.0, 1.0, 0.0);
+
+    if (advancedHighlighting && threeCalibersRule) {
+      penetrationColor = vec3(0.0, 1.0, 1.0);
+    }
+
+    gl_FragColor = vec4(falling * color + gaining * penetrationColor, alpha);
   } else {
     gl_FragColor = vec4(color, (1.0 - penetrationChance) * alpha);
   }
