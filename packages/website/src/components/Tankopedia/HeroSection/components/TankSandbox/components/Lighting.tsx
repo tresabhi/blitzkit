@@ -20,7 +20,7 @@ export function Lighting() {
     <>
       <Environment
         files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/winter_river_1k.hdr"
-        environmentIntensity={isBrighterLighting ? 2 : 1}
+        environmentIntensity={isBrighterLighting ? 1.5 : 1}
         environmentRotation={new Euler(0, degToRad(180), 0)}
       />
       {display === TankopediaDisplay.ShootingRange && (

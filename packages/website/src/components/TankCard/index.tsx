@@ -56,7 +56,6 @@ export const TankCard = forwardRef<HTMLSpanElement, TankCardProps>(
         data-provide-link={provideLink}
         style={{
           backgroundImage: `url(${asset(`flags/scratched/${tank.nation}.webp`)})`,
-          backgroundSize: '75%',
           ...style,
         }}
         {...props}

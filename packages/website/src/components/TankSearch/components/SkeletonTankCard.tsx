@@ -16,7 +16,7 @@ export const SkeletonTankCard = memo(
 
     return (
       <Flex direction="column" gap="2" ref={card}>
-        <Skeleton height="64px" />
+        <Skeleton height="5rem" />
         <Skeleton height="1em" />
       </Flex>
     );
