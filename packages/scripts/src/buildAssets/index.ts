@@ -9,6 +9,7 @@ const targets = argv
   ?.split('=')[1]
   .split(',');
 
+import { blitzkitTankIcons } from './blitzkitTankIcons';
 import { boosterIcons } from './boosterIcons';
 import { camouflageIcons } from './camouflageIcons';
 import { consumableProvisionIcons } from './consumableProvisionIcons';
@@ -28,7 +29,6 @@ if (!targets && !allTargets) throw new Error('No target(s) specified');
 
 const methods = [
   definitions,
-  tankIcons,
   tankModels,
   tankArmors,
   gameModeBanners,
@@ -41,6 +41,8 @@ const methods = [
   consumableProvisionIcons,
   camouflageIcons,
   boosterIcons,
+  tankIcons,
+  blitzkitTankIcons,
 ];
 
 for (const method of methods) {

@@ -7,9 +7,9 @@ import { readXMLDVPL } from '../core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../core/blitz/readYAMLDVPL';
 import { commitAssets } from '../core/github/commitAssets';
 import { FileChange } from '../core/github/commitMultipleFiles';
+import { TankParameters } from './blitzkitTankIcons';
 import { DATA } from './constants';
 import { VehicleDefinitionList } from './definitions';
-import { TankParameters } from './tankIcons';
 
 export async function tankModels() {
   console.log('Building tank models...');

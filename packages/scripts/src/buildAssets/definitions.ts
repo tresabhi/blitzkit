@@ -39,9 +39,9 @@ import { readStringDVPL } from '../core/blitz/readStringDVPL';
 import { readXMLDVPL } from '../core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../core/blitz/readYAMLDVPL';
 import { commitAssets } from '../core/github/commitAssets';
+import { TankParameters } from './blitzkitTankIcons';
 import { DATA } from './constants';
 import { Avatar } from './skillIcons';
-import { TankParameters } from './tankIcons';
 
 function parseResearchCost(raw: number | string) {
   if (typeof raw === 'number') {
