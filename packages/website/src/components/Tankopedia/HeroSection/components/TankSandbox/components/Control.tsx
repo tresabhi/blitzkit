@@ -88,7 +88,11 @@ export function Controls({ naked }: ControlsProps) {
     protagonistHullOrigin.y +
     protagonistTurretOrigin.y +
     protagonistGunOrigin.y;
-  const inspectModeInitialPosition = [-8, gunHeight + 4, -13] as const;
+  const inspectModeInitialPosition = [
+    -8,
+    gunHeight + (naked ? 10 : 4),
+    -13,
+  ] as const;
   const protagonistGunOriginOnlyY = new Vector3(
     0,
     protagonistTurretModelDefinition.gun_origin.y,

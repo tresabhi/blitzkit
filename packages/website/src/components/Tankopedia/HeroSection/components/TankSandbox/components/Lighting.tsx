@@ -1,6 +1,7 @@
 import { Environment } from '@react-three/drei';
 import { times } from 'lodash-es';
 import { Euler } from 'three';
+import { degToRad } from 'three/src/math/MathUtils.js';
 import { useModel } from '../../../../../../hooks/useModel';
 import { Duel } from '../../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
@@ -20,7 +21,7 @@ export function Lighting() {
       <Environment
         files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/winter_river_1k.hdr"
         environmentIntensity={isBrighterLighting ? 2 : 1}
-        environmentRotation={new Euler(0, Math.PI, 0)}
+        environmentRotation={new Euler(0, degToRad(180), 0)}
       />
       {display === TankopediaDisplay.ShootingRange && (
         <>
