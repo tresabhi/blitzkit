@@ -9,7 +9,11 @@ import { TankopediaDisplay } from '../../../../../../stores/tankopediaPersistent
 
 const LIGHTS_COUNT = 5;
 
-export function Lighting() {
+interface LightingProps {
+  naked?: boolean;
+}
+
+export function Lighting({ naked }: LightingProps) {
   const protagonist = Duel.use((state) => state.protagonist);
   const display = TankopediaEphemeral.use((state) => state.display);
   const { hasPbr } = useModel(protagonist.tank.id);
@@ -21,7 +25,9 @@ export function Lighting() {
       <Environment
         files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/winter_river_1k.hdr"
         environmentIntensity={isBrighterLighting ? 1.5 : 1}
-        environmentRotation={new Euler(0, degToRad(180), 0)}
+        environmentRotation={
+          new Euler(0, degToRad(180), naked ? degToRad(-45) : 0)
+        }
       />
       {display === TankopediaDisplay.ShootingRange && (
         <>

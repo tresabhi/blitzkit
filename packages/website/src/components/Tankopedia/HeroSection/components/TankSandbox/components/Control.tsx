@@ -298,10 +298,10 @@ export function Controls({ naked }: ControlsProps) {
         }
       } else {
         camera.position.set(...inspectModeInitialPosition);
-        orbitControls.current.target.set(0, gunHeight / 2, 0);
+        orbitControls.current.target.set(0, gunHeight / (naked ? 4 : 2), 0);
         orbitControls.current.enablePan = true;
         orbitControls.current.enableZoom = true;
-        camera.fov = 25;
+        camera.fov = naked ? 20 : 25;
       }
 
       camera.updateProjectionMatrix();
