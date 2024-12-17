@@ -12,7 +12,7 @@ const PUBLIC_GOOGLE_TAG_MANAGER_ID = assertSecret(
   async
   src={`https://www.googletagmanager.com/gtag/js?id=${PUBLIC_GOOGLE_TAG_MANAGER_ID}`}
 ></script>
-<script is:inline>
+<script is:inline define:vars={{ PUBLIC_GOOGLE_TAG_MANAGER_ID }}>
   window.dataLayer = window.dataLayer || [];
 
   function gtag() {
