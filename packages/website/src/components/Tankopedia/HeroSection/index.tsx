@@ -84,7 +84,7 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
         height={
           isFullScreen ? '100vh' : `calc(100vh - ${NAVBAR_HEIGHT}px - 8rem)`
         }
-        maxHeight={isFullScreen ? undefined : '40rem'}
+        maxHeight={isFullScreen ? undefined : '60rem'}
         maxWidth={isFullScreen ? undefined : '120rem'}
         flexGrow="1"
         width={isFullScreen ? '100vw' : undefined}
@@ -92,47 +92,44 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
         top={isFullScreen ? '0' : undefined}
         left={isFullScreen ? '0' : undefined}
       >
-        <Flex justify="center">
-          <Flex
-            display={isFullScreen ? 'none' : 'flex'}
-            style={{ userSelect: 'none' }}
-            direction="column"
-            align={{ initial: 'center', md: 'start' }}
-            justify="center"
-            pl={{ initial: '0', md: '9' }}
-            pt={{ initial: '5', md: '0' }}
-            overflow="hidden"
-            flexGrow="1"
-            maxWidth="40rem"
-          >
-            <Flex align="center" gap="2">
-              <Heading
-                color={treeColor}
-                trim="end"
-                size={{ initial: '7', lg: '8' }}
-              >
-                <Icon width="1em" height="1em" />
-              </Heading>
-
-              <Heading
-                weight="bold"
-                size={{ initial: '8', lg: '9' }}
-                wrap="nowrap"
-                color={treeColor}
-              >
-                {protagonist.name}
-              </Heading>
-            </Flex>
-
-            <Text
-              color="gray"
-              size="3"
-              weight="light"
-              ml={{ initial: '0', md: '7', lg: '8' }}
+        <Flex
+          justify="center"
+          position={{ initial: 'relative', md: 'absolute' }}
+          left={{ initial: '0', md: '5', lg: '9' }}
+          py="4"
+          top={{ initial: '8', md: '50%' }}
+          style={{ transform: 'translateY(-50%)' }}
+          direction="column"
+          gap={{ initial: '0', lg: '2' }}
+          align={{ initial: 'center', md: 'start' }}
+        >
+          <Flex align="center" gap="3">
+            <Heading
+              color={treeColor}
+              trim="end"
+              size={{ initial: '7', lg: '8' }}
             >
-              BlitzKit Tankopedia
-            </Text>
+              <Icon width="1em" height="1em" />
+            </Heading>
+
+            <Heading
+              weight="bold"
+              size={{ initial: '7', lg: '9' }}
+              wrap="nowrap"
+              color={treeColor}
+            >
+              {protagonist.name}
+            </Heading>
           </Flex>
+
+          <Text
+            color="gray"
+            size={{ initial: '3', lg: '4' }}
+            weight="light"
+            ml={{ initial: '0', md: '7', lg: '8' }}
+          >
+            BlitzKit Tankopedia
+          </Text>
         </Flex>
 
         <Box
