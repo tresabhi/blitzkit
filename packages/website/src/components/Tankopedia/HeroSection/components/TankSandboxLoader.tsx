@@ -13,12 +13,12 @@ export function TankSandboxLoader({ id, ...props }: TankSandboxLoaderProps) {
     <Flex width="100%" height="100%" align="center" justify="center" {...props}>
       <img
         src={asset(`icons/tanks/blitzkit/${id}.webp`)}
-        style={{ height: '60%', filter: 'grayscale(1)' }}
+        style={{ height: '100%', filter: 'blur(1rem)' }}
       />
       <Progress
         size="3"
         value={data.progress}
-        style={{ position: 'absolute', width: 128 }}
+        style={{ position: 'absolute', width: '16rem', maxWidth: '50vw' }}
       />
     </Flex>
   );
