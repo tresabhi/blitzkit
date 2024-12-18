@@ -23,10 +23,10 @@
 
 .tank-search-card .image {
   width: 100%;
-  height: 5rem;
+  height: 6rem;
   object-position: center right;
   object-fit: contain;
-  filter: brightness(1) drop-shadow(-1px -1px 4px black);
+  filter: brightness(1.25) drop-shadow(-1px -1px 4px black);
 }
 
 .tank-search-card .class-icon {

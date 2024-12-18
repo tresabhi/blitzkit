@@ -6,12 +6,16 @@ import { commitAssets } from '../core/github/commitAssets';
 import { FileChange } from '../core/github/commitMultipleFiles';
 
 export async function blitzkitTankIcons() {
-  console.log('Building tank icons...');
+  console.log('Building blitzkit tank icons...');
+
+  console.log('Starting website dev server...');
 
   const child = exec('cd ../.. && bun dev:website');
   const browser = await launch();
   const page = await browser.newPage();
-  const tanks = Object.values((await fetchTankDefinitions()).tanks);
+  const tanks = Object.values((await fetchTankDefinitions()).tanks).filter(
+    ({ id }) => id === 24657,
+  );
   const files: FileChange[] = [];
 
   let index = 0;
@@ -23,6 +27,11 @@ export async function blitzkitTankIcons() {
     await page.goto(`http://localhost:4321/api/tankopedia/tank-icon/${id}/`, {
       waitUntil: 'networkidle0',
     });
+
+    if (index === 0) {
+      console.log('Dev server started!');
+    }
+
     const screenshot = await page.screenshot({
       type: 'webp',
       omitBackground: true,
