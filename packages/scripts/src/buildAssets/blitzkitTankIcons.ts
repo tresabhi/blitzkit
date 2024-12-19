@@ -13,9 +13,7 @@ export async function blitzkitTankIcons() {
   const child = exec('cd ../.. && bun dev:website');
   const browser = await launch();
   const page = await browser.newPage();
-  const tanks = Object.values((await fetchTankDefinitions()).tanks).filter(
-    ({ id }) => id === 24657,
-  );
+  const tanks = Object.values((await fetchTankDefinitions()).tanks);
   const files: FileChange[] = [];
 
   let index = 0;
