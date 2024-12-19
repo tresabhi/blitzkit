@@ -27,7 +27,9 @@ export function createLocalizedCommand(
   const { translate } = translator(Locale.EnglishUS);
   const slashCommand = new SlashCommandBuilder()
     .setName(command)
-    .setNameLocalizations(localizationObject(`bot.commands.${commandPathItem}`))
+    .setNameLocalizations(
+      localizationObject(`bot.commands.${commandPathItem}`, undefined, true),
+    )
     .setDescription(translate(`bot.commands.${commandPathItem}.description`))
     .setDescriptionLocalizations(
       localizationObject(`bot.commands.${commandPathItem}.description`),
@@ -38,6 +40,8 @@ export function createLocalizedCommand(
       if ('subcommand' in subItem) {
         const subcommandNameLocalizations = localizationObject(
           `bot.commands.${commandPathItem}.subcommands.${subItem.subcommand}`,
+          undefined,
+          true,
         );
         const subcommandDescriptionLocalizations = localizationObject(
           `bot.commands.${commandPathItem}.subcommands.${subItem.subcommand}.description`,
@@ -59,6 +63,8 @@ export function createLocalizedCommand(
       } else {
         const subcommandNameLocalizations = localizationObject(
           `bot.commands.${commandPathItem}.groups.${subItem.group}`,
+          undefined,
+          true,
         );
         const subcommandDescriptionLocalizations = localizationObject(
           `bot.commands.${commandPathItem}.groups.${subItem.group}.description`,

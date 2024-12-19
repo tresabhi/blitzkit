@@ -7,7 +7,9 @@ export function addTankChoices(option: SlashCommandStringOption) {
 
   return option
     .setName(translate('bot.common.options.tank'))
-    .setNameLocalizations(localizationObject('bot.common.options.tank'))
+    .setNameLocalizations(
+      localizationObject('bot.common.options.tank', undefined, true),
+    )
     .setDescription(translate('bot.common.options.tank.description'))
     .setDescriptionLocalizations(
       localizationObject('bot.common.options.tank.description'),

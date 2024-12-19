@@ -13,7 +13,9 @@ export function addTierChoices(option: SlashCommandStringOption) {
 
   return option
     .setName(t`bot.common.options.tier`)
-    .setNameLocalizations(localizationObject('bot.common.options.tier'))
+    .setNameLocalizations(
+      localizationObject('bot.common.options.tier', undefined, true),
+    )
     .setDescription(t`bot.common.options.tier.description`)
     .setDescriptionLocalizations(
       localizationObject('bot.common.options.tier.description'),

@@ -63,6 +63,8 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
             .setNameLocalizations(
               localizationObject(
                 'bot.commands.rating_leaderboard.options.limit',
+                undefined,
+                true,
               ),
             )
             .setDescription(
@@ -87,6 +89,8 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
             .setNameLocalizations(
               localizationObject(
                 'bot.commands.rating_leaderboard.options.season',
+                undefined,
+                true,
               ),
             )
             .setDescription(
@@ -148,6 +152,8 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
                   .setNameLocalizations(
                     localizationObject(
                       'bot.commands.rating_leaderboard.options.league',
+                      undefined,
+                      true,
                     ),
                   )
                   .setDescription(

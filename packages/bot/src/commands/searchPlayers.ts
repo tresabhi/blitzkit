@@ -29,7 +29,11 @@ export const searchPlayersCommand = new Promise<CommandRegistry>((resolve) => {
         option
           .setName(t`bot.commands.search_players.options.limit`)
           .setNameLocalizations(
-            localizationObject('bot.commands.search_players.options.limit'),
+            localizationObject(
+              'bot.commands.search_players.options.limit',
+              undefined,
+              true,
+            ),
           )
           .setDescription(
             translate('bot.commands.search_players.options.limit.description', [

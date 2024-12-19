@@ -18,12 +18,20 @@ export function addPeriodSubCommands(
 ) {
   const { translate } = translator(Locale.EnglishUS);
   const subcommandNameLocalizations = {
-    today: localizationObject('bot.common.subcommands.today'),
-    30: localizationObject('bot.common.subcommands.30'),
-    60: localizationObject('bot.common.subcommands.60'),
-    90: localizationObject('bot.common.subcommands.90'),
-    career: localizationObject('bot.common.subcommands.career'),
-    custom: localizationObject('bot.common.subcommands.custom'),
+    today: localizationObject('bot.common.subcommands.today', undefined, true),
+    30: localizationObject('bot.common.subcommands.30', undefined, true),
+    60: localizationObject('bot.common.subcommands.60', undefined, true),
+    90: localizationObject('bot.common.subcommands.90', undefined, true),
+    career: localizationObject(
+      'bot.common.subcommands.career',
+      undefined,
+      true,
+    ),
+    custom: localizationObject(
+      'bot.common.subcommands.custom',
+      undefined,
+      true,
+    ),
   };
   const subcommandDescriptionLocalizations = {
     today: localizationObject('bot.common.subcommands.today.description'),

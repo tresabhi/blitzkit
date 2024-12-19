@@ -7,7 +7,9 @@ export function addUsernameChoices(option: SlashCommandStringOption) {
 
   return option
     .setName(t`bot.common.options.username`)
-    .setNameLocalizations(localizationObject('bot.common.options.username'))
+    .setNameLocalizations(
+      localizationObject('bot.common.options.username', undefined, true),
+    )
     .setDescription(t`bot.common.options.username.description`)
     .setDescriptionLocalizations(
       localizationObject('bot.common.options.username.description'),

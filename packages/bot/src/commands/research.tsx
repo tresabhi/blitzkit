@@ -36,7 +36,11 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
         option
           .setName(t`bot.commands.research.options.target_tank`)
           .setNameLocalizations(
-            localizationObject('bot.commands.research.options.target_tank'),
+            localizationObject(
+              'bot.commands.research.options.target_tank',
+              undefined,
+              true,
+            ),
           )
           .setDescription(
             t`bot.commands.research.options.target_tank.description`,
@@ -53,7 +57,11 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
         option
           .setName(t`bot.commands.research.options.starting_tank`)
           .setNameLocalizations(
-            localizationObject('bot.commands.research.options.starting_tank'),
+            localizationObject(
+              'bot.commands.research.options.starting_tank',
+              undefined,
+              true,
+            ),
           )
           .setDescription(
             t`bot.commands.research.options.starting_tank.description`,

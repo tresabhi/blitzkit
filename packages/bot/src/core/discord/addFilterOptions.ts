@@ -25,7 +25,11 @@ export function addFilterOptions<
         option
           .setName(translate('bot.common.options.filters.nation'))
           .setNameLocalizations(
-            localizationObject('bot.common.options.filters.nation'),
+            localizationObject(
+              'bot.common.options.filters.nation',
+              undefined,
+              true,
+            ),
           )
           .setDescription(
             translate('bot.common.options.filters.nation.description'),
@@ -52,7 +56,11 @@ export function addFilterOptions<
         option
           .setName(translate('bot.common.options.filters.class'))
           .setNameLocalizations(
-            localizationObject('bot.common.options.filters.class'),
+            localizationObject(
+              'bot.common.options.filters.class',
+              undefined,
+              true,
+            ),
           )
           .setDescription(
             translate('bot.common.options.filters.class.description'),
@@ -78,7 +86,11 @@ export function addFilterOptions<
         option
           .setName(translate('bot.common.options.filters.type'))
           .setNameLocalizations(
-            localizationObject('bot.common.options.filters.type'),
+            localizationObject(
+              'bot.common.options.filters.type',
+              undefined,
+              true,
+            ),
           )
           .setDescription(
             translate('bot.common.options.filters.type.description'),

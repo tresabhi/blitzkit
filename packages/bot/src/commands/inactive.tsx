@@ -24,7 +24,11 @@ export const inactiveCommand = new Promise<CommandRegistry>((resolve) => {
         return option
           .setName('threshold')
           .setNameLocalizations(
-            localizationObject('bot.commands.inactive.options.threshold'),
+            localizationObject(
+              'bot.commands.inactive.options.threshold',
+              undefined,
+              true,
+            ),
           )
           .setDescription(
             translate('bot.commands.inactive.options.threshold.description'),

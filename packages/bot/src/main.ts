@@ -7,19 +7,8 @@ import { manager } from './core/discord/manager';
 
 console.log('pre manager event listeners and spawn');
 
-let isFirst = true;
-const interval = setInterval(() => {
-  if (!isFirst) {
-    console.warn('respawning all shards because manager died');
-    manager.respawnAll();
-  }
-
-  isFirst = false;
-}, 5000);
-
 const shards = await manager
   .on('shardCreate', (shard) => {
-    clearInterval(interval);
     console.log(`🟡 Launching shard ${shard.id}`);
     shard.on('ready', () => console.log(`🟢 Launched shard ${shard.id}`));
   })

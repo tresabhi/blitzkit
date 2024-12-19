@@ -126,9 +126,7 @@ commands.then((awaitedCommands) => {
 
   rest.put(
     Routes.applicationCommands(assertSecret(import.meta.env.DISCORD_CLIENT_ID)),
-    {
-      body,
-    },
+    { body },
   );
 });
 

@@ -24,7 +24,11 @@ export const searchClansCommand = new Promise<CommandRegistry>((resolve) => {
         return option
           .setName(t`bot.commands.search_clans.options.limit`)
           .setNameLocalizations(
-            localizationObject('bot.commands.search_clans.options.limit'),
+            localizationObject(
+              'bot.commands.search_clans.options.limit',
+              undefined,
+              true,
+            ),
           )
           .setDescription(
             translate('bot.commands.search_clans.options.limit.description', [
