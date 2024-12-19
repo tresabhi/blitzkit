@@ -1,7 +1,5 @@
 import { PageWrapper } from '../../../components/PageWrapper';
 import { Charts } from '../../../components/Performance/Charts';
-import { ModeSwitcher } from '../../../components/Performance/ModeSwitcher';
-import { PerformanceInfo } from '../../../components/Performance/PerformanceInfo';
 import { PlayerCountControl } from '../../../components/Performance/PlayerCountControl';
 import { TankTable } from '../../../components/Performance/Table';
 import { FilterControl } from '../../../components/TankSearch/components/FilterControl';
@@ -26,10 +24,10 @@ function Content({ skeleton }: MaybeSkeletonComponentProps) {
   const mode = TankPerformanceEphemeral.use((state) => state.mode);
 
   return (
-    <PageWrapper color="jade" maxWidth="unset">
-      <ModeSwitcher />
+    <PageWrapper color="jade" maxWidth="100%">
+      {/* <ModeSwitcher /> */}
 
-      <PerformanceInfo skeleton={skeleton} />
+      {/* <PerformanceInfo skeleton={skeleton} /> */}
       <FilterControl />
       <PlayerCountControl />
 

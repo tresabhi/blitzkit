@@ -6,11 +6,16 @@ import { Tanks } from './Tanks';
 
 export function TankTable({ skeleton }: MaybeSkeletonComponentProps) {
   return (
-    <Flex justify="center">
+    <Flex justify="center" maxWidth="100%" flexGrow="1" position="relative">
       <StickyTableRoot
         size={{ initial: '1', sm: '2' }}
         variant="surface"
-        style={{ maxWidth: '100%' }}
+        style={{
+          position: 'absolute',
+          maxWidth: '100%',
+          maxHeight: '100%',
+          height: '100%',
+        }}
       >
         <Header />
         <Tanks skeleton={skeleton} />
