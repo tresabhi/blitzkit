@@ -142,7 +142,9 @@
         "no_tank_stats": "# No hay estadísticas de tanque disponibles\nEste jugador no tiene estadísticas disponibles. Este podría no ser el jugador que estás buscando.",
         "get_help": "Servidor de ayuda de Discord",
         "uncaught_error": "# ¡Blitzkrieg sufrió un error!\nLo sentimos mucho. Siéntete libre de [unirte al servidor oficial de Discord](https://discord.gg/nDt7AjGJQH) para obtener ayuda.",
-        "preview": "# Este comando es una vista previa\n\nSolo puedes acceder a este comando en [el servidor oficial de Discord](https://discord.gg/nDt7AjGJQH). Generalmente este comando estará disponible pronto."
+        "preview": "# Este comando es una vista previa\n\nSolo puedes acceder a este comando en [el servidor oficial de Discord](https://discord.gg/nDt7AjGJQH). Generalmente este comando estará disponible pronto.",
+        "query_too_small": "# Your search is too short\nYour search must be at least 3 characters long.",
+        "query_too_long": "# Your search is too long\nYour search must be at most 100 characters long."
       },
       "wn8": {
         "$": "WN8",
@@ -211,13 +213,13 @@
             "$": "nación",
             "description": "Nación"
           },
-          "tank_class": {
-            "$": "clase-de-tanque",
-            "description": "Clase de tanque"
+          "class": {
+            "$": "class",
+            "description": "Class"
           },
-          "tree_type": {
-            "$": "tipo-de-árbol",
-            "description": "Tipo de árbol"
+          "type": {
+            "$": "type",
+            "description": "Type"
           }
         },
         "region": {
