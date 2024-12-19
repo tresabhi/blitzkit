@@ -8,15 +8,13 @@ import { manager } from './core/discord/manager';
 async function setupShardManager() {
   console.log('Pre-manager setup starting...');
 
-  // Set up a promise that resolves when all shards are ready
   const readyShards = new Set();
   const totalShards = manager.totalShards;
 
-  // Create a promise that resolves when all shards are ready
   const allShardsReady = new Promise((resolve, reject) => {
     const timeout = setTimeout(() => {
       reject(new Error('Shard initialization timed out after 60 seconds'));
-    }, 60000); // 60 second timeout
+    }, 60000);
 
     manager.on('shardCreate', (shard) => {
       console.log(`🟡 Launching shard ${shard.id}`);
@@ -46,11 +44,9 @@ async function setupShardManager() {
     const shards = await manager.spawn();
     console.log('Shards spawned, waiting for ready state...');
 
-    // Wait for all shards to be ready
     await allShardsReady;
     console.log('All shards ready, setting up presence...');
 
-    // Fetch statistics
     let servers = 0;
     let channels = 0;
     let users = 0;
