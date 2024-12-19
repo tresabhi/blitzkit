@@ -1,11 +1,11 @@
 ---
 import ToolOpenGraph from '../../../components/ToolOpenGraph.astro';
-import { compareTool } from '../../../constants/tools';
+import { performanceTool } from '../../../constants/tools';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { Page } from './_index';
 ---
 
-<ToolOpenGraph tool={compareTool} />
+<ToolOpenGraph tool={performanceTool} />
 
 <BaseLayout noFooter>
   <Page client:only="react">
