@@ -21,7 +21,6 @@ import { modelTransformEvent } from '../../../../../../../core/blitzkit/modelTra
 import { tankCharacteristics } from '../../../../../../../core/blitzkit/tankCharacteristics';
 import { Duel } from '../../../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../../../stores/tankopediaEphemeral';
-import { TankopediaPersistent } from '../../../../../../../stores/tankopediaPersistent';
 import { TankopediaDisplay } from '../../../../../../../stores/tankopediaPersistent/constants';
 import { TargetCircle } from './components/TargetCircle';
 import { aimTarget } from './constants';
@@ -36,9 +35,6 @@ const [modelDefinitions, equipmentDefinitions, provisionDefinitions] =
 const emptyVector = new Vector2();
 
 export function SceneProps() {
-  const show = TankopediaPersistent.use(
-    (state) => state.showGrid && !state.showEnvironment,
-  );
   const targetCircleWrapper = useRef<Group>(null);
   const clientTargetCircle = useRef<HTMLDivElement>(null);
   const serverTargetCircle = useRef<HTMLDivElement>(null);
@@ -239,7 +235,7 @@ export function SceneProps() {
 
   return (
     <>
-      {show && display !== TankopediaDisplay.ShootingRange && (
+      {display !== TankopediaDisplay.ShootingRange && (
         <mesh rotation={[-Math.PI / 2, 0, 0]}>
           <planeGeometry args={[10, 10]} />
           <meshStandardMaterial ref={material} map={texture} transparent />

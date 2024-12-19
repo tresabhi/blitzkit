@@ -29,7 +29,6 @@ import {
   Tooltip,
 } from '@radix-ui/themes';
 import { Suspense, useState, type RefObject } from 'react';
-import { ENVIRONMENTS } from '../../../../../constants/lightingEnvironments';
 import { Pose, poseEvent } from '../../../../../core/blitzkit/pose';
 import { useEquipment } from '../../../../../hooks/useEquipment';
 import { useFullScreen } from '../../../../../hooks/useFullScreen';
@@ -63,9 +62,6 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
   const display = TankopediaEphemeral.use((state) => state.display);
   const isFullScreen = useFullScreen();
   const showGrid = TankopediaPersistent.use((state) => state.showGrid);
-  const showEnvironment = TankopediaPersistent.use(
-    (state) => state.showEnvironment,
-  );
   const greenPenetration = TankopediaPersistent.use(
     (state) => state.greenPenetration,
   );
@@ -75,7 +71,6 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
   const wireframe = TankopediaPersistent.use((state) => state.wireframe);
   const opaque = TankopediaPersistent.use((state) => state.opaque);
   const fullScreenAvailable = useFullscreenAvailability();
-  const environment = TankopediaPersistent.use((state) => state.environment);
   const developerMode = App.use((state) => state.developerMode);
   const protagonistTank = Duel.use((state) => state.protagonist.tank);
   const antagonistGun = Duel.use((state) => state.antagonist.gun);
@@ -517,39 +512,6 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
               >
                 Show grid
               </DropdownMenu.CheckboxItem>
-
-              <DropdownMenu.CheckboxItem
-                checked={showEnvironment}
-                onCheckedChange={(checked) => {
-                  mutateTankopediaPersistent((draft) => {
-                    draft.showEnvironment = checked;
-                  });
-                }}
-              >
-                View environment
-              </DropdownMenu.CheckboxItem>
-
-              <DropdownMenu.Sub>
-                <DropdownMenu.SubTrigger>Lighting</DropdownMenu.SubTrigger>
-
-                <DropdownMenu.SubContent>
-                  <DropdownMenu.RadioGroup value={environment}>
-                    {ENVIRONMENTS.map((environment) => (
-                      <DropdownMenu.RadioItem
-                        key={environment}
-                        value={environment}
-                        onClick={() => {
-                          mutateTankopediaPersistent((draft) => {
-                            draft.environment = environment;
-                          });
-                        }}
-                      >
-                        {environment[0].toUpperCase() + environment.slice(1)}
-                      </DropdownMenu.RadioItem>
-                    ))}
-                  </DropdownMenu.RadioGroup>
-                </DropdownMenu.SubContent>
-              </DropdownMenu.Sub>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
 
