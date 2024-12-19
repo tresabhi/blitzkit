@@ -119,5 +119,8 @@ jobs:
           name: depots
           path: depots
 
+      - name: AppArmor hack
+        run: echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
+
       - name: Build assets
         run: bun run build:assets --all-targets --depot --production
