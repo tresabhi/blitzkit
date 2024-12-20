@@ -1,5 +1,4 @@
 import { BLITZKIT_TANK_ICON_SIZE, fetchTankDefinitions } from '@blitzkit/core';
-import { exec } from 'child_process';
 import { launch } from 'puppeteer';
 import sharp from 'sharp';
 import { commitAssets } from '../core/github/commitAssets';
@@ -9,8 +8,6 @@ export async function blitzkitTankIcons() {
   console.log('Building blitzkit tank icons...');
 
   console.log('Starting website dev server...');
-
-  const child = exec('cd ../.. && bun dev:website');
   const browser = await launch();
   const page = await browser.newPage();
   const tanks = Object.values((await fetchTankDefinitions()).tanks);
@@ -44,7 +41,7 @@ export async function blitzkitTankIcons() {
     files.push({ path: `icons/tanks/blitzkit/${id}.webp`, content });
   }
 
-  child.kill('SIGHUP');
+  await page.close();
   await browser.close();
 
   await commitAssets('tank icons', files);
