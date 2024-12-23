@@ -18,6 +18,7 @@ export interface TankopediaPersistentStore {
   showExternalModules: boolean;
   showPrimaryArmor: boolean;
   recentlyViewed: number[];
+  hideTankModelUnderArmor: boolean;
 
   sort: {
     by: TankopediaSortBy;
@@ -29,6 +30,7 @@ export const TankopediaPersistent = createContextualStore(() =>
   create<TankopediaPersistentStore>()(
     persist(
       subscribeWithSelector<TankopediaPersistentStore>(() => ({
+        hideTankModelUnderArmor: false,
         wireframe: false,
         opaque: false,
         advancedHighlighting: false,

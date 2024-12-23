@@ -15,6 +15,7 @@ import { useOnScreen } from '../../../../../hooks/useOnScreen';
 import { useTankModelDefinition } from '../../../../../hooks/useTankModelDefinition';
 import { Duel } from '../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../stores/tankopediaEphemeral';
+import { TankopediaPersistent } from '../../../../../stores/tankopediaPersistent';
 import { TankopediaDisplay } from '../../../../../stores/tankopediaPersistent/constants';
 import { Armor } from '../../../../Armor';
 import { ArmorPlateDisplay } from '../../../../Armor/components/ArmorPlateDisplay';
@@ -49,6 +50,9 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
     const gunModelDefinition =
       turretModelDefinition.guns[protagonistGun.gun_type!.value.base.id];
     const display = TankopediaEphemeral.use((state) => state.display);
+    const hideTankModelUnderArmor = TankopediaPersistent.use(
+      (state) => state.hideTankModelUnderArmor,
+    );
     const onScreen = useOnScreen(canvas);
 
     useImperativeHandle(ref, () => canvas.current!, []);
@@ -190,7 +194,9 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
       >
         <Controls naked={naked} />
         {!naked && <SceneProps />}
-        {display !== TankopediaDisplay.StaticArmor && <TankModel />}
+        {(display === TankopediaDisplay.Model ||
+          (display === TankopediaDisplay.DynamicArmor &&
+            !hideTankModelUnderArmor)) && <TankModel />}
         <ShotDisplay />
         <ArmorPlateDisplay />
         <AutoClear />

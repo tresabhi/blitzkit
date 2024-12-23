@@ -65,6 +65,9 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
   const greenPenetration = TankopediaPersistent.use(
     (state) => state.greenPenetration,
   );
+  const hideTankModelUnderArmor = TankopediaPersistent.use(
+    (state) => state.hideTankModelUnderArmor,
+  );
   const advancedHighlighting = TankopediaPersistent.use(
     (state) => state.advancedHighlighting,
   );
@@ -472,6 +475,17 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                     }}
                   >
                     Green penetration
+                  </DropdownMenu.CheckboxItem>
+
+                  <DropdownMenu.CheckboxItem
+                    checked={hideTankModelUnderArmor}
+                    onCheckedChange={(checked) => {
+                      mutateTankopediaPersistent((draft) => {
+                        draft.hideTankModelUnderArmor = checked;
+                      });
+                    }}
+                  >
+                    Hide tank model under armor
                   </DropdownMenu.CheckboxItem>
 
                   <DropdownMenu.CheckboxItem
