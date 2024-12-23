@@ -71,11 +71,11 @@ const description = `${
   name
 } armor, statistics, equipment, provisions, and more. ${Math.round(
   characteristics.dpm,
-).toLocaleString()} DPM, ${characteristics.damage}hp alpha, ${
-  characteristics.penetration
-}mm penetration, ${
-  characteristics.speedForwards
-}kph top speed, ${characteristics.health}hp health.`;
+).toLocaleString()} DPM, ${characteristics.damage.toFixed(0)}hp alpha, ${characteristics.penetration.toFixed(
+  0,
+)}mm penetration, ${characteristics.speedForwards.toFixed(
+  0,
+)}kph top speed, ${characteristics.health}hp health.`;
 ---
 
 <title>{title}</title>
