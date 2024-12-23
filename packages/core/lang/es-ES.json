@@ -65,7 +65,7 @@
       "0": "Ligero",
       "1": "Medio",
       "2": "Pesado",
-      "3": "Destructor de tanques"
+      "3": "Cazacarro"
     },
     "tree_type": {
       "-1": "no reconocido",
@@ -120,15 +120,15 @@
       "cumulative_inaccuracy": "Imprecisión",
       "cumulative_kills_to_death_ratio": "Relación bajas-muertes",
       "cumulative_losses": "Derrotas",
-      "cumulative_misses": "Total misses",
-      "cumulative_shots": "Total shots",
+      "cumulative_misses": "Fallos totales",
+      "cumulative_shots": "Disparos totales",
       "cumulative_spotted": "Total spots",
-      "cumulative_survived_battles": "Survived battles",
-      "cumulative_win_and_survived": "Won and survived battles",
-      "cumulative_wins": "Wins",
-      "cumulative_xp": "Total XP",
+      "cumulative_survived_battles": "Batallas sobrevividas",
+      "cumulative_win_and_survived": "Batallas ganadas y sobrevividas",
+      "cumulative_wins": "Victorias",
+      "cumulative_xp": "EXP total",
       "cumulative_wn8": "WN8",
-      "cumulative_battle_life_time": "Total battle time"
+      "cumulative_battle_life_time": "Tiempo total de batalla"
     }
   },
   "bot": {
@@ -136,15 +136,15 @@
       "errors": {
         "clan_not_found": "# No se pudo encontrar el clan\nNo se pudo encontrar \"%s\". Prueba seleccionando un clan de los resultados de búsqueda.",
         "player_not_found": "# No se pudo encontrar el usuario\nNo pude encontrar al usuario \"%s\". Prueba eligiendo un usuario de los resultados de búsqueda, escribiendo un nombre de usuario aceptable o usando el comando `/vincular`.",
-        "player_not_linked": "# No sé quién eres\nUsa el comando `/vincular` para comenzar.",
+        "player_not_linked": "# Usa `/vincular` para empezar\n¡No sé quién eres, pero puedes decírmelo hoy!",
         "tank_name_not_found": "# No se pudo encontrar el tanque\nNo se pudo encontrar el tanque con el nombre \"%s\".",
         "tank_id_not_found": "# Tanque no encontrado\nNo se pudo encontrar al tanque del ID \"%s\". Prueba escribiendo el nombre del tanque en vez de un número.",
         "no_tank_stats": "# No hay estadísticas de tanque disponibles\nEste jugador no tiene estadísticas disponibles. Este podría no ser el jugador que estás buscando.",
         "get_help": "Servidor de ayuda de Discord",
         "uncaught_error": "# ¡Blitzkrieg sufrió un error!\nLo sentimos mucho. Siéntete libre de [unirte al servidor oficial de Discord](https://discord.gg/nDt7AjGJQH) para obtener ayuda.",
         "preview": "# Este comando es una vista previa\n\nSolo puedes acceder a este comando en [el servidor oficial de Discord](https://discord.gg/nDt7AjGJQH). Generalmente este comando estará disponible pronto.",
-        "query_too_small": "# Your search is too short\nYour search must be at least 3 characters long.",
-        "query_too_long": "# Your search is too long\nYour search must be at most 100 characters long."
+        "query_too_small": "# Tu búsqueda es demasiado corta\nDebe ser por lo menos de 3 caracteres de largo.",
+        "query_too_long": "# Tu búsqueda es demasiado larga\nDebe ser como mucho de 100 caracteres de largo."
       },
       "wn8": {
         "$": "WN8",
@@ -157,7 +157,7 @@
         "very_good": "Muy bueno",
         "great": "Genial",
         "unicum": "Unicum",
-        "super_unicum": "Super unicum"
+        "super_unicum": "Súper unicum"
       },
       "subcommands": {
         "today": {
@@ -214,12 +214,12 @@
             "description": "Nación"
           },
           "class": {
-            "$": "class",
-            "description": "Class"
+            "$": "clase",
+            "description": "Clase"
           },
           "type": {
-            "$": "type",
-            "description": "Type"
+            "$": "tipo",
+            "description": "Tipo"
           }
         },
         "region": {
@@ -266,19 +266,19 @@
     },
     "commands": {
       "auction": {
-        "$": "auction",
-        "description": "Tanks available right now in the auction",
+        "$": "subasta",
+        "description": "Tanques disponibles ahora mismo en la subasta",
         "body": {
-          "title": "Blitz Auction",
-          "subtitle": "%s available • next prices %s\nBid now: %s",
-          "next": "Next price: %s",
-          "available": "Available: %s / %s"
+          "title": "Subasta Blitz",
+          "subtitle": "%s disponible • siguientes precios %s\nPujar ahora: %s",
+          "next": "Siguiente precio: %s",
+          "available": "Disponible: %s / %s"
         },
         "errors": {
-          "no_auction": "# No ongoing auction\n\nCurrently, there are no tanks available for purchase in the auction. If you think this is an error, please report this discrepancy in [the official Discord Server](https://discord.gg/nDt7AjGJQH)."
+          "no_auction": "# No hay ninguna subasta\nActualmente no hay tanques disponibles para comprar en la subasta. Si crees que esto es un error, por favor, reporta esta discrepancia en [el servidor oficial de Discord](https://discord.gg/nDt7AjGJQH)."
         },
         "actions": {
-          "bid": "Bid now"
+          "bid": "Pujar ahora"
         }
       },
       "replay": {
@@ -342,8 +342,8 @@
             "description": "Cómo Blitzkrieg infiere y utiliza tu zona horaria"
           },
           "credits": {
-            "$": "credits",
-            "description": "People who have helped BlitzKit"
+            "$": "créditos",
+            "description": "Personas que han ayudado a BlitzKit"
           }
         }
       },
@@ -478,12 +478,12 @@
         }
       },
       "rating_leaderboard": {
-        "$": "rating-leaderboard",
-        "description": "Rating battles statistics",
+        "$": "clasificatoria-tabla",
+        "description": "Estadísticas de batallas de clasificatoria",
         "subcommands": {
           "neighbors": {
             "$": "vecinos",
-            "description": "Neighboring players on the leaderboard"
+            "description": "Jugadores vecinos en la tabla de posiciones"
           },
           "league": {
             "$": "liga",
@@ -509,10 +509,10 @@
         },
         "body": {
           "top_players": "Mejores %s jugadores",
-          "no_participation": "# %s didn't play rating in season %s\n\nThis player did not participate in this season or did not get past calibration.",
-          "no_ongoing_season": "# No ongoing season\n\nThere isn't a currently running rating season.",
+          "no_participation": "# %s no jugó clasificatoria en la temporada %s\n\nEste jugador no participó en esta temporada o no pasó de la calibración.",
+          "no_ongoing_season": "# No hay temporada en curso\n\nActualmente no hay ninguna temporada de clasificatoria.",
           "deleted_player": "%s eliminado",
-          "neighbors": "Rating neighbors",
+          "neighbors": "Vecinos de clasificatoria",
           "more": "+ %s más"
         }
       },
@@ -552,7 +552,7 @@
         "subcommands": {
           "blitzkit": {
             "$": "blitzkit",
-            "description": "Ping BlitzKit"
+            "description": "Hacerle ping a BlitzKit"
           },
           "wotb": {
             "$": "wotb",
@@ -574,26 +574,26 @@
         }
       },
       "rating": {
-        "$": "rating-session",
-        "description": "Rating player's statistics",
+        "$": "clasificatoria",
+        "description": "Estadísticas de clasificatoria del jugador",
         "subcommands": {
           "today": {
-            "$": "today",
-            "description": "Today's rating statistics"
+            "$": "hoy",
+            "description": "Estadísticas de clasificatoria de hoy"
           },
           "season": {
-            "$": "season",
-            "description": "This season's rating statistics"
+            "$": "temporada",
+            "description": "Estadísticas de clasificatoria de esta temporada"
           }
         },
         "body": {
           "subtitle": {
-            "today": "Today's rating statistics",
-            "season": "This season's rating statistics"
+            "today": "Estadísticas de clasificatoria de hoy",
+            "season": "Estadísticas de clasificatoria de esta temporada"
           }
         },
         "errors": {
-          "no_participation": "# %s hasn't played rating\n\nThis player hasn't participated in the rating gamemode this season.",
+          "no_participation": "# %s no ha jugado clasificatoria\n\nEste jugador no ha participado en el modo clasificatoria esta temporada.",
           "unrecorded_stats": "# Estadísticas no disponibles actualmente\n\nWargaming podría estar sufriendo una caída del servidor. Si hay alguna temporada en curso, las estadísticas deberían estar disponibles en 24 horas."
         }
       }
