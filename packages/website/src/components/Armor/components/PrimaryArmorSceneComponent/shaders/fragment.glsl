@@ -30,8 +30,8 @@ float getDistance(vec2 coord, float depth) {
   return length(eyePos.xyz / eyePos.w);
 }
 
-vec3 getPenetrationColor(bool isThreeCalibersRule) {
-  if (advancedHighlighting) {
+vec3 getPenetrationColor(bool isThreeCalibersRule, bool couldHaveRicochet) {
+  if (advancedHighlighting && couldHaveRicochet) {
     return vec3(0.0, 1.0, isThreeCalibersRule ? 1.0 : 0.0);
   }
 
@@ -47,11 +47,12 @@ void main() {
   float angle = acos(dot(vNormal, -vViewPosition) / viewDistance);
 
   bool threeCalibersRule = caliber > thickness * 3.0 || isUnderSpacedArmor;
+  bool couldHaveRicochet = angle >= ricochet;
   float penetrationChance = -1.0;
   float splashChance = 0.0;
   bool didRicochet = false;
 
-  if (!threeCalibersRule && angle >= ricochet) {
+  if (!threeCalibersRule && couldHaveRicochet) {
     penetrationChance = 0.0;
     didRicochet = true;
   } else {
@@ -105,7 +106,7 @@ void main() {
   if (greenPenetration || advancedHighlighting) {
     float falling = -penetrationChance * penetrationChance + 1.0;
     float gaining = -(penetrationChance - 1.0) * (penetrationChance - 1.0) + 1.0;
-    vec3 penColor = getPenetrationColor(threeCalibersRule);
+    vec3 penColor = getPenetrationColor(threeCalibersRule, couldHaveRicochet);
     gl_FragColor = vec4(falling * baseColor + gaining * penColor, alpha);
   } else {
     gl_FragColor = vec4(baseColor, (1.0 - penetrationChance) * alpha);
