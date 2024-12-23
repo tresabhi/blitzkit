@@ -1,12 +1,9 @@
 import { PageWrapper } from '../../../components/PageWrapper';
-import { Charts } from '../../../components/Performance/Charts';
+import { PerformanceInfo } from '../../../components/Performance/PerformanceInfo';
 import { PlayerCountControl } from '../../../components/Performance/PlayerCountControl';
 import { TankTable } from '../../../components/Performance/Table';
 import { FilterControl } from '../../../components/TankSearch/components/FilterControl';
-import {
-  TankPerformanceEphemeral,
-  TankPerformanceMode,
-} from '../../../stores/tankPerformanceEphemeral';
+import { TankPerformanceEphemeral } from '../../../stores/tankPerformanceEphemeral';
 import { TankPerformanceSort } from '../../../stores/tankPerformanceSort';
 import type { MaybeSkeletonComponentProps } from '../../../types/maybeSkeletonComponentProps';
 
@@ -21,18 +18,13 @@ export function Page({ skeleton }: MaybeSkeletonComponentProps) {
 }
 
 function Content({ skeleton }: MaybeSkeletonComponentProps) {
-  const mode = TankPerformanceEphemeral.use((state) => state.mode);
-
   return (
     <PageWrapper color="jade" maxWidth="100%">
-      {/* <ModeSwitcher /> */}
-
-      {/* <PerformanceInfo skeleton={skeleton} /> */}
+      <PerformanceInfo skeleton={skeleton} />
       <FilterControl />
       <PlayerCountControl />
 
-      {mode === TankPerformanceMode.Table && <TankTable skeleton={skeleton} />}
-      {mode === TankPerformanceMode.Charts && <Charts />}
+      <TankTable skeleton={skeleton} />
     </PageWrapper>
   );
 }

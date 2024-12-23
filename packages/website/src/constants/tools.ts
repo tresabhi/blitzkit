@@ -179,14 +179,14 @@ export const tierListTool: Tool = {
 export const chartsTool: Tool = {
   id: 'charts',
   title: 'Charts',
-  description: 'Lots of Blitz charts',
+  description: 'Lots of graphs',
   pageDescription:
     'Charts and graphs on anything and everything about tanks, players, and events in World of Tanks Blitz',
   button: {
     text: 'Nerd out',
-    color: 'yellow',
+    color: 'bronze',
   },
-  image: '9s68NwR',
+  image: '6fhkljA',
   branches: ['main', 'dev', 'opentest', 'preview'],
 };
 
@@ -194,6 +194,7 @@ export const TOOLS: Tool[] = [
   tankopediaTool,
   compareTool,
   performanceTool,
+  chartsTool,
   galleryTool,
   sessionTool,
   tierListTool,
