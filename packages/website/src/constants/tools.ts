@@ -176,6 +176,20 @@ export const tierListTool: Tool = {
   branches: ['main', 'dev', 'opentest', 'preview'],
 };
 
+export const chartsTool: Tool = {
+  id: 'charts',
+  title: 'Charts',
+  description: 'Lots of Blitz charts',
+  pageDescription:
+    'Charts and graphs on anything and everything about tanks, players, and events in World of Tanks Blitz',
+  button: {
+    text: 'Nerd out',
+    color: 'yellow',
+  },
+  image: '9s68NwR',
+  branches: ['main', 'dev', 'opentest', 'preview'],
+};
+
 export const TOOLS: Tool[] = [
   tankopediaTool,
   compareTool,
