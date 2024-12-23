@@ -18,11 +18,16 @@ export function Lighting() {
 
   return (
     <>
-      <Environment
-        files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/winter_river_1k.hdr"
-        environmentIntensity={isBrighterLighting ? 1.5 : 1}
-        environmentRotation={new Euler(0, degToRad(180), 0)}
-      />
+      {display !== TankopediaDisplay.StaticArmor && (
+        <Environment
+          files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/winter_river_1k.hdr"
+          environmentIntensity={isBrighterLighting ? 1.5 : 1}
+          environmentRotation={new Euler(0, degToRad(180), 0)}
+        />
+      )}
+      {display === TankopediaDisplay.StaticArmor && (
+        <Environment preset="lobby" />
+      )}
       {display === TankopediaDisplay.ShootingRange && (
         <>
           <directionalLight position={[0, -1, 0]} />
