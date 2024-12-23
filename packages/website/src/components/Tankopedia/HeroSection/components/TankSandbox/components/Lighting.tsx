@@ -21,7 +21,7 @@ export function Lighting() {
       {display !== TankopediaDisplay.StaticArmor && (
         <Environment
           files="https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/winter_river_1k.hdr"
-          environmentIntensity={isBrighterLighting ? 1.5 : 1}
+          environmentIntensity={isBrighterLighting ? 1.5 : 1.25}
           environmentRotation={new Euler(0, degToRad(180), 0)}
         />
       )}

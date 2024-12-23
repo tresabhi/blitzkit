@@ -26,7 +26,7 @@
   height: 6rem;
   object-position: center right;
   object-fit: contain;
-  filter: brightness(1.25) drop-shadow(-1px -1px 4px black);
+  filter: drop-shadow(-1px -1px 4px black);
 }
 
 .tank-search-card .class-icon {
