@@ -100,21 +100,20 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
           top={{ initial: '8', md: '50%' }}
           style={{ transform: 'translateY(-50%)' }}
           direction="column"
-          gap={{ initial: '0', lg: '2' }}
           align={{ initial: 'center', md: 'start' }}
         >
           <Flex align="center" gap="3">
             <Heading
               color={treeColor}
               trim="end"
-              size={{ initial: '7', lg: '8' }}
+              size={{ initial: '7', lg: '6' }}
             >
               <Icon width="1em" height="1em" />
             </Heading>
 
             <Heading
               weight="bold"
-              size={{ initial: '7', lg: '9' }}
+              size={{ initial: '7', lg: '8' }}
               wrap="nowrap"
               color={treeColor}
             >
@@ -126,7 +125,7 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
             color="gray"
             size={{ initial: '3', lg: '4' }}
             weight="light"
-            ml={{ initial: '0', md: '7', lg: '8' }}
+            ml={{ initial: '0', md: '7', lg: '7' }}
           >
             BlitzKit Tankopedia
           </Text>
