@@ -24,6 +24,7 @@ import { coefficient } from '@blitzkit/core/src/blitzkit/coefficient';
 import type { EquipmentMatrix } from '../../stores/duel';
 
 export type TankCharacteristics = ReturnType<typeof tankCharacteristics>;
+export type TankCharacteristicsKey = keyof TankCharacteristics;
 
 export function tankCharacteristics(
   {
@@ -513,6 +514,8 @@ export function tankCharacteristics(
   const crewCount = tank.crew.length;
   const shellRange = shell.range;
   const shellCapacity = gun.gun_type!.value.base.shell_capacity;
+  const gunType = gun.gun_type!.$case;
+  const penetrationAt250m = shell.penetration.far;
 
   return {
     crewCount,
@@ -579,5 +582,70 @@ export function tankCharacteristics(
     volume,
     shellRange,
     shellCapacity,
+    gunType,
+    penetrationAt250m,
   };
 }
+
+export enum TankCharacteristicsCondition {
+  Regular,
+  AutoLoader,
+  AutoReloader,
+}
+
+export const characteristicsOrder: {
+  name: string;
+  items: TankCharacteristicsKey[];
+}[] = [
+  {
+    name: 'Firepower',
+    items: [
+      'gunType',
+      'dpm',
+      'shells',
+      'shellReload',
+      'shellReloads',
+      'intraClip',
+      'penetration',
+      'penetrationAt250m',
+      'damage',
+      'clipDamage',
+      'moduleDamage',
+      'caliber',
+      'shellNormalization',
+      'shellRicochet',
+      'shellVelocity',
+      'shellRange',
+      'shellCapacity',
+      'aimTime',
+      'dispersion',
+      'dispersionMoving',
+      'dispersionHullTraversing',
+      'dispersionTurretTraversing',
+      'dispersionShooting',
+      'dispersionGunDamaged',
+      'gunDepression',
+      'gunElevation',
+      'gunFrontalDepression',
+      'gunFrontalElevation',
+      'gunRearDepression',
+      'gunRearElevation',
+      'azimuthLeft',
+      'azimuthRight',
+    ],
+  },
+  {
+    name: 'Crew',
+    items: ['crewCount'],
+  },
+];
+
+// export const characteristicsStyling: Record<
+//   TankCharacteristicsKey,
+//   {
+//     name: string;
+//     indent?: boolean;
+//     condition?: TankCharacteristicsCondition[];
+//   }
+// > = {
+// };
