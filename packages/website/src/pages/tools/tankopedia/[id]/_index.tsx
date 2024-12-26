@@ -6,6 +6,7 @@ import { GameModeSection } from '../../../../components/Tankopedia/GameModeSecti
 import { HeroSection } from '../../../../components/Tankopedia/HeroSection';
 import { HistorySection } from '../../../../components/Tankopedia/HistorySection';
 import { MetaSection } from '../../../../components/Tankopedia/MetaSection';
+import { TankopediaCharts } from '../../../../components/Tankopedia/TankopediaCharts';
 import { TechTreeSection } from '../../../../components/Tankopedia/TechTreeSection';
 import { VideoSection } from '../../../../components/Tankopedia/VideoSection';
 import { awaitableModelDefinitions } from '../../../../core/awaitables/modelDefinitions';
@@ -48,6 +49,7 @@ export function Page({ id, skeleton }: PageProps) {
               )}
               <CharacteristicsSection />
               <GameModeSection />
+              <TankopediaCharts />
               <VideoSection skeleton={skeleton} />
               <HistorySection />
             </PageWrapper>
