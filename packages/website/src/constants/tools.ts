@@ -194,7 +194,7 @@ export const TOOLS: Tool[] = [
   tankopediaTool,
   compareTool,
   performanceTool,
-  chartsTool,
+  // chartsTool,
   galleryTool,
   sessionTool,
   tierListTool,

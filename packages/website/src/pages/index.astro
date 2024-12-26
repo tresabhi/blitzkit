@@ -7,7 +7,6 @@ import { HomePageHotTanks } from '../components/HomePageHotTanks';
 import { Plugs } from '../components/Plugs.tsx';
 import ToolCard from '../components/ToolCard.astro';
 import {
-  chartsTool,
   compareTool,
   discordTool,
   embedTool,
@@ -49,22 +48,22 @@ const branch = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
       </Flex>
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
-        <ToolCard tool={chartsTool} />
+        <!-- <ToolCard tool={chartsTool} /> -->
         <ToolCard tool={galleryTool} />
-      </Flex>
-
-      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         <ToolCard tool={sessionTool} />
+      </Flex>
+
+      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         <ToolCard tool={discordTool} />
-      </Flex>
-
-      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         <ToolCard tool={tierListTool} />
-        <ToolCard tool={embedTool} />
       </Flex>
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+        <ToolCard tool={embedTool} />
         <ToolCard tool={moreTool} />
+      </Flex>
+
+      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         <Box flexGrow="1" />
       </Flex>
 
