@@ -463,6 +463,10 @@ export function tankCharacteristics(
   const turretTraverseSpeed = turret.traverse_speed * turretTraverseCoefficient;
   const gunTraverseSpeed =
     gun.gun_type!.value.base.rotation_speed * turretTraverseCoefficient;
+  /**
+   * resistance_hard is used in all cases as this is the coefficient between
+   * the absolute best coefficient and the current
+   */
   const hullTraverseHardTerrain =
     (resolvedEnginePower / stockEngine.power) *
     track.traverse_speed *
