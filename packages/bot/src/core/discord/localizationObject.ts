@@ -1,5 +1,5 @@
 import { Locale } from 'discord.js';
-import { SUPPORTED_LOCALES } from '../localization/strings/constants';
+import { SUPPORTED_DISCORD_LOCALES } from '../localization/strings/constants';
 import { translator } from '../localization/translator';
 
 const validNameRegex = /^[-_\p{L}\p{N}\p{sc=Deva}\p{sc=Thai}]{1,32}$/u;
@@ -9,7 +9,7 @@ export function localizationObject(
   literals?: string[],
   strict = false,
 ) {
-  return SUPPORTED_LOCALES.reduce<Partial<Record<Locale, string>>>(
+  return SUPPORTED_DISCORD_LOCALES.reduce<Partial<Record<Locale, string>>>(
     (localizations, locale) => {
       const { translate } = translator(locale);
       const translation = translate(path, literals);

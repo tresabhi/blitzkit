@@ -1,10 +1,11 @@
 import { Locale } from 'discord.js';
 import { translations } from './strings';
-import { SUPPORTED_LOCALES } from './strings/constants';
+import { SUPPORTED_DISCORD_LOCALES } from './strings/constants';
 
 export function translator(localeRaw: Locale) {
   const locale =
-    localeRaw !== Locale.EnglishUS && SUPPORTED_LOCALES.includes(localeRaw)
+    localeRaw !== Locale.EnglishUS &&
+    SUPPORTED_DISCORD_LOCALES.includes(localeRaw)
       ? localeRaw
       : Locale.EnglishUS;
   const strings = translations[locale]!;

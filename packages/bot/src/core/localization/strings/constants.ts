@@ -1,10 +1,6 @@
+import { LOCALE_FILES } from '@blitzkit/core';
 import { Locale } from 'discord.js';
 
-export const SUPPORTED_LOCALES: Locale[] = [
-  Locale.EnglishUS,
-  Locale.SpanishES,
-  Locale.Croatian,
-  Locale.Russian,
-  Locale.Ukrainian,
-  Locale.ChineseCN,
-];
+export const SUPPORTED_DISCORD_LOCALES = Object.values(
+  LOCALE_FILES,
+) as Locale[];
