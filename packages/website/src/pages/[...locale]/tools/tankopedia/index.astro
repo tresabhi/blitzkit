@@ -4,10 +4,12 @@ import ToolLayout from '../../../../layouts/ToolLayout.astro';
 import { Page } from './_index';
 
 export { getStaticPaths } from '../../index.astro';
+
+const { locale } = Astro.params;
 ---
 
 <ToolLayout tool={tankopediaTool}>
-  <Page client:only="react">
-    <Page slot="fallback" />
+  <Page {locale} client:only="react">
+    <Page {locale} slot="fallback" />
   </Page>
 </ToolLayout>
