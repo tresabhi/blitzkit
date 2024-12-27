@@ -36,6 +36,21 @@ const isRoot = pathname === '/';
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <Party3 />
+
+    <script>
+      import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from '@blitzkit/core';
+
+      const isI18nPath = SUPPORTED_LOCALES.some((locale) =>
+        window.location.pathname.startsWith(`/${locale}`),
+      );
+      const desiredLocale = navigator.language.split('-')[0];
+      const isSupported = SUPPORTED_LOCALES.includes(desiredLocale);
+      const isDefault = desiredLocale === DEFAULT_LOCALE;
+
+      if (!isI18nPath && isSupported && !isDefault) {
+        window.location.pathname = `/${desiredLocale}${window.location.pathname}`;
+      }
+    </script>
   </head>
 
   <body>
