@@ -1,0 +1,14 @@
+---
+import { performanceTool } from '../../../../constants/tools';
+import ToolOpenGraph from '../../../components/ToolOpenGraph.astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { Page } from './_index';
+---
+
+<ToolOpenGraph tool={performanceTool} />
+
+<BaseLayout noFooter>
+  <Page client:only="react">
+    <Page skeleton slot="fallback" />
+  </Page>
+</BaseLayout>

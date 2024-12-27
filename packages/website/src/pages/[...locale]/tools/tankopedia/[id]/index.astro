@@ -1,0 +1,96 @@
+---
+import {
+  asset,
+  createDefaultProvisions,
+  createDefaultSkills,
+  fetchEquipmentDefinitions,
+  fetchModelDefinitions,
+  fetchProvisionDefinitions,
+  fetchSkillDefinitions,
+  fetchTankDefinitions,
+  TIER_ROMAN_NUMERALS,
+} from '@blitzkit/core';
+import strings from '@blitzkit/core/lang/en-US.json';
+import type { GetStaticPaths } from 'astro';
+import { tankCharacteristics } from '../../../../../core/blitzkit/tankCharacteristics';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { genericDefaultEquipmentMatrix } from '../../../../../stores/duel/constants';
+import { Page } from './_index';
+
+export const getStaticPaths = (async () => {
+  const tankDefinitions = await fetchTankDefinitions();
+
+  return Object.values(tankDefinitions.tanks).map((tank) => ({
+    params: { id: tank.id },
+  }));
+}) satisfies GetStaticPaths;
+
+const { id } = Astro.params;
+
+const tankDefinitions = await fetchTankDefinitions();
+const skillDefinitions = await fetchSkillDefinitions();
+const provisionDefinitions = await fetchProvisionDefinitions();
+const equipmentDefinitions = await fetchEquipmentDefinitions();
+const tankModelDefinitions = await fetchModelDefinitions();
+const tank = tankDefinitions.tanks[id];
+const tankModelDefinition = tankModelDefinitions.models[tank.id];
+const name = tank.name_full ?? tank.name;
+const title = `${name} - Tier ${TIER_ROMAN_NUMERALS[tank.tier]} ${
+  strings.common.nations_adjectives[
+    tank.nation as keyof typeof strings.common.nations_adjectives
+  ]
+} ${strings.common.tank_class_short[tank.class]} | BlitzKit Tankopedia | World of Tanks Blitz (WoTB)`;
+const url = import.meta.env.SITE + Astro.url.pathname;
+const icon = asset(`icons/tanks/big/${id}.webp`);
+const turret = tank.turrets.at(-1)!;
+const gun = turret.guns.at(-1)!;
+const characteristics = tankCharacteristics(
+  {
+    tank,
+    applyDynamicArmor: false,
+    applyReactiveArmor: false,
+    applySpallLiner: false,
+    camouflage: true,
+    consumables: [],
+    crewSkills: createDefaultSkills(skillDefinitions),
+    engine: tank.engines.at(-1)!,
+    equipmentMatrix: genericDefaultEquipmentMatrix,
+    turret,
+    gun,
+    provisions: createDefaultProvisions(tank, gun, provisionDefinitions),
+    shell: gun.gun_type!.value.base.shells[0],
+    stockEngine: tank.engines[0],
+    stockGun: tank.turrets[0].guns[0],
+    stockTurret: tank.turrets[0],
+    stockTrack: tank.tracks[0],
+    track: tank.tracks.at(-1)!,
+  },
+  { equipmentDefinitions, provisionDefinitions, tankModelDefinition },
+);
+const description = `${
+  name
+} armor, statistics, equipment, provisions, and more. ${Math.round(
+  characteristics.dpm,
+).toLocaleString()} DPM, ${characteristics.damage.toFixed(0)}hp alpha, ${characteristics.penetration.toFixed(
+  0,
+)}mm penetration, ${characteristics.speedForwards.toFixed(
+  0,
+)}kph top speed, ${characteristics.health}hp health.`;
+---
+
+<title>{title}</title>
+<meta property="og:title" content={title} />
+<meta name="description" content={description} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={icon} />
+<meta property="og:url" content={url} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image:src" content={icon} />
+
+<BaseLayout>
+  <Page id={id} client:only="react">
+    <Page id={id} skeleton slot="fallback" />
+  </Page>
+</BaseLayout>

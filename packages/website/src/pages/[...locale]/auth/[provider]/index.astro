@@ -1,0 +1,32 @@
+---
+import { Flex, Heading, Text } from '@radix-ui/themes';
+import type { GetStaticPaths } from 'astro';
+import { PageWrapper } from '../../../../components/PageWrapper';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { AUTH_PROVIDERS, AUTH_PROVIDER_NAMES, Authorize } from './_index';
+
+export const getStaticPaths = (() => {
+  return AUTH_PROVIDERS.map((provider) => ({ params: { provider } }));
+}) satisfies GetStaticPaths;
+
+const { provider } = Astro.params;
+---
+
+<BaseLayout>
+  <PageWrapper>
+    <Flex
+      style={{ flex: 1 }}
+      align="center"
+      justify="center"
+      direction="column"
+      gap="2"
+    >
+      <Heading align="center"
+        >Authorizing you with {AUTH_PROVIDER_NAMES[provider]}...</Heading
+      >
+      <Text color="gray" align="center">You'll be on your way shortly.</Text>
+    </Flex>
+  </PageWrapper>
+
+  <Authorize client:only="react" {provider} />
+</BaseLayout>

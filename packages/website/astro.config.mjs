@@ -9,6 +9,9 @@ export default defineConfig({
   i18n: {
     defaultLocale: 'en',
     locales: SUPPORTED_LOCALES,
+    routing: {
+      prefixDefaultLocale: false,
+    },
   },
 
   devToolbar: { enabled: false },
