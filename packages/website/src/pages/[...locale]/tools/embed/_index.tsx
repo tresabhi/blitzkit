@@ -2,12 +2,14 @@ import { imgur, ImgurSize } from '@blitzkit/core';
 import { Box, Flex, Link, Text } from '@radix-ui/themes';
 import { capitalize } from 'lodash-es';
 import { PreviewWrapper } from '../../../../components/Embeds/PreviewWrapper';
+import { LinkI18n } from '../../../../components/LinkI18n';
 import { PageWrapper } from '../../../../components/PageWrapper';
 import {
   embedConfigurations,
   extractEmbedConfigDefaults,
 } from '../../../../constants/embeds';
 import { Var } from '../../../../core/radix/var';
+import { useLocale } from '../../../../hooks/useLocale';
 import { App } from '../../../../stores/app';
 import { EmbedState } from '../../../../stores/embedState';
 
@@ -25,6 +27,8 @@ function Content() {
   //   id: 0,
   //   expires: 0,
   // });
+
+  const { locale } = useLocale();
 
   return (
     <PageWrapper color="red">
@@ -61,7 +65,8 @@ function Content() {
             key={embed}
             data={extractEmbedConfigDefaults(config)}
           >
-            <Link
+            <LinkI18n
+              locale={locale}
               href={`/tools/embed/${embed}`}
               color="gray"
               highContrast
@@ -101,7 +106,7 @@ function Content() {
                   />
                 </Box>
               </Flex>
-            </Link>
+            </LinkI18n>
           </EmbedState.Provider>
         ))}
       </Flex>

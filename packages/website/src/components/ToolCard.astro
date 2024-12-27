@@ -1,8 +1,9 @@
 ---
 import { assertSecret, imgur, ImgurSize } from '@blitzkit/core';
 import { CaretRightIcon } from '@radix-ui/react-icons';
-import { Box, Button, Code, Flex, Heading, Link, Text } from '@radix-ui/themes';
+import { Box, Button, Code, Flex, Heading, Text } from '@radix-ui/themes';
 import type { Tool } from '../constants/tools';
+import { LinkI18n } from './LinkI18n';
 
 interface Props {
   tool: Tool;
@@ -12,6 +13,7 @@ const { tool } = Astro.props;
 const disabled = tool.branches?.every(
   (branch) => branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
 );
+const { locale } = Astro.params;
 ---
 
 <style>
@@ -54,7 +56,8 @@ const disabled = tool.branches?.every(
   flexGrow={tool.significant ? undefined : '1'}
   flexBasis={tool.significant ? undefined : { initial: undefined, sm: '0' }}
 >
-  <Link
+  <LinkI18n
+    {locale}
     className="link"
     underline="none"
     href={disabled ? '#' : (tool.href ?? `/tools/${tool.id}`)}
@@ -135,5 +138,5 @@ const disabled = tool.branches?.every(
         )
       }
     </Flex>
-  </Link>
+  </LinkI18n>
 </Flex>

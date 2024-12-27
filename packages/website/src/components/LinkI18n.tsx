@@ -11,9 +11,6 @@ export function LinkI18n({ locale, href, ...props }: LinkI18nProps) {
   const prefix = resolvedLocale === undefined ? '' : `/${resolvedLocale}`;
 
   return (
-    <Link
-      href={href === undefined ? undefined : `${prefix}${href}`}
-      {...props}
-    />
+    <Link href={href?.startsWith('/') ? `${prefix}${href}` : href} {...props} />
   );
 }

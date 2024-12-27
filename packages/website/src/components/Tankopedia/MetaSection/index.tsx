@@ -12,10 +12,12 @@ import { useState } from 'react';
 import { awaitableModelDefinitions } from '../../../core/awaitables/modelDefinitions';
 import { awaitableProvisionDefinitions } from '../../../core/awaitables/provisionDefinitions';
 import { tankToDuelMember } from '../../../core/blitzkit/tankToDuelMember';
+import { useLocale } from '../../../hooks/useLocale';
 import { App } from '../../../stores/app';
 import { Duel } from '../../../stores/duel';
 import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
 import { classIcons } from '../../ClassIcon';
+import { LinkI18n } from '../../LinkI18n';
 import { ScienceIcon } from '../../ScienceIcon';
 import { TankSearch } from '../../TankSearch';
 import { Listing } from './components/Listing';
@@ -37,24 +39,28 @@ export function MetaSection() {
   const mutateDuel = Duel.useMutation();
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const [showSwapDialog, setShowSwapDialog] = useState(false);
+  const { locale } = useLocale();
 
   return (
     <Flex justify="center" align="center">
       <Flex direction="column" align="center" gap="6">
         <Flex gap="2" wrap="wrap" justify="center" align="center">
-          <Link href="/tools/tankopedia">
+          <LinkI18n locale={locale} href="/tools/tankopedia">
             <Button variant="outline">
               <ChevronLeftIcon />
               Back
             </Button>
-          </Link>
+          </LinkI18n>
 
-          <Link href={`/tools/compare?tanks=${compareTanks.join('%2C')}`}>
+          <LinkI18n
+            locale={locale}
+            href={`/tools/compare?tanks=${compareTanks.join('%2C')}`}
+          >
             <Button variant="outline">
               <MixIcon />
               Compare
             </Button>
-          </Link>
+          </LinkI18n>
 
           {assertSecret(import.meta.env.PUBLIC_PROMOTE_OPENTEST) === 'true' && (
             <Link

@@ -1,9 +1,11 @@
 import { ExternalLinkIcon, LoopIcon, TrashIcon } from '@radix-ui/react-icons';
-import { Dialog, Flex, IconButton, Link } from '@radix-ui/themes';
+import { Dialog, Flex, IconButton } from '@radix-ui/themes';
 import { useState } from 'react';
 import { awaitableProvisionDefinitions } from '../../core/awaitables/provisionDefinitions';
 import { tankToCompareMember } from '../../core/blitzkit/tankToCompareMember';
+import { useLocale } from '../../hooks/useLocale';
 import { CompareEphemeral } from '../../stores/compareEphemeral';
+import { LinkI18n } from '../LinkI18n';
 import { TankSearch } from '../TankSearch';
 
 interface TankControlProps {
@@ -14,6 +16,7 @@ interface TankControlProps {
 const provisionDefinitions = await awaitableProvisionDefinitions;
 
 export function TankControl({ index, id }: TankControlProps) {
+  const { locale } = useLocale();
   const [switchTankDialogOpen, setSwitchTankDialogOpen] = useState(false);
   const mutateCompareEphemeral = CompareEphemeral.useMutation();
 
@@ -69,11 +72,15 @@ export function TankControl({ index, id }: TankControlProps) {
         </Dialog.Content>
       </Dialog.Root>
 
-      <Link href={`/tools/tankopedia/${id}`} target="_blank">
+      <LinkI18n
+        locale={locale}
+        href={`/tools/tankopedia/${id}`}
+        target="_blank"
+      >
         <IconButton variant="ghost">
           <ExternalLinkIcon />
         </IconButton>
-      </Link>
+      </LinkI18n>
     </Flex>
   );
 }

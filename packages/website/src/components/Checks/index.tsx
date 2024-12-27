@@ -1,8 +1,10 @@
 import { assertSecret, idToRegion } from '@blitzkit/core';
-import { Button, Flex, Heading, Link, Text } from '@radix-ui/themes';
+import { Button, Flex, Heading, Text } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
+import { useLocale } from '../../hooks/useLocale';
 import { App } from '../../stores/app';
 import { CURRENT_POLICIES_AGREEMENT_INDEX } from '../../stores/app/constants';
+import { LinkI18n } from '../LinkI18n';
 import './index.css';
 
 type Extension =
@@ -30,6 +32,7 @@ export function Checks() {
  * Wargaming: 14 (refresh: 7)
  */
 function Content() {
+  const { locale } = useLocale();
   const logins = App.use((state) => state.logins);
   const mutateApp = App.useMutation();
   const appStore = App.useStore();
@@ -118,9 +121,14 @@ function Content() {
             <Text>
               This website utilizes cookies to perform analytics and personalize
               your experience. You can learn more through{' '}
-              <Link href="/docs/legal/privacy-policy">our privacy policy</Link>.
-              By using BlitzKit, you also agree to our{' '}
-              <Link href="/docs/legal/terms-of-service">terms of service</Link>.
+              <LinkI18n locale={locale} href="/docs/legal/privacy-policy">
+                our privacy policy
+              </LinkI18n>
+              . By using BlitzKit, you also agree to our{' '}
+              <LinkI18n locale={locale} href="/docs/legal/terms-of-service">
+                terms of service
+              </LinkI18n>
+              .
             </Text>
           </Flex>
 

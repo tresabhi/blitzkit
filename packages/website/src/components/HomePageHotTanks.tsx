@@ -3,6 +3,7 @@ import { EyeOpenIcon } from '@radix-ui/react-icons';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import { google } from 'googleapis';
 import { awaitableTankDefinitions } from '../core/awaitables/tankDefinitions';
+import { LocaleProvider } from '../hooks/useLocale';
 import { TankopediaPersistent } from '../stores/tankopediaPersistent';
 import { TankCard } from './TankCard';
 
@@ -63,11 +64,17 @@ const hotTanks = report.data.rows
     views,
   }));
 
-export function HomePageHotTanks() {
+interface HomePageHotTanksProps {
+  locale: string | undefined;
+}
+
+export function HomePageHotTanks({ locale }: HomePageHotTanksProps) {
   return (
-    <TankopediaPersistent.Provider>
-      <Content />
-    </TankopediaPersistent.Provider>
+    <LocaleProvider locale={locale}>
+      <TankopediaPersistent.Provider>
+        <Content />
+      </TankopediaPersistent.Provider>
+    </LocaleProvider>
   );
 }
 

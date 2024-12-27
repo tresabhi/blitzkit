@@ -21,6 +21,7 @@ import {
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const branch = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
+const { locale } = Astro.params;
 
 export const getStaticPaths = (() => {
   return [
@@ -47,7 +48,7 @@ export const getStaticPaths = (() => {
     <Flex maxWidth="64rem" flexGrow="1" gap="4" direction="column">
       <ToolCard tool={tankopediaTool} />
 
-      <HomePageHotTanks />
+      <HomePageHotTanks {locale} />
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         {/* <ToolCard tool={playerStatsTool} /> */}

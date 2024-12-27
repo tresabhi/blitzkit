@@ -31,7 +31,7 @@ export const getStaticPaths = (async () => {
     .flat();
 }) satisfies GetStaticPaths;
 
-const { id } = Astro.params;
+const { id, locale } = Astro.params;
 
 const tankDefinitions = await fetchTankDefinitions();
 const skillDefinitions = await fetchSkillDefinitions();
@@ -96,7 +96,7 @@ const description = `${
 <meta name="twitter:image:src" content={icon} />
 
 <BaseLayout>
-  <Page id={id} client:only="react">
-    <Page id={id} skeleton slot="fallback" />
+  <Page {locale} id={id} client:only="react">
+    <Page {locale} id={id} skeleton slot="fallback" />
   </Page>
 </BaseLayout>

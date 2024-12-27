@@ -1,9 +1,11 @@
 import { asset, TankType, type TankDefinition } from '@blitzkit/core';
-import { Flex, Link, Text, type TextProps } from '@radix-ui/themes';
+import { Flex, Text, type TextProps } from '@radix-ui/themes';
 import { uniq } from 'lodash-es';
 import { forwardRef, type ReactNode } from 'react';
+import { useLocale } from '../../hooks/useLocale';
 import { TankopediaPersistent } from '../../stores/tankopediaPersistent';
 import { classIcons } from '../ClassIcon';
+import { LinkI18n } from '../LinkI18n';
 import { MAX_RECENTLY_VIEWED } from '../TankSearch/constants';
 import './index.css';
 
@@ -26,6 +28,7 @@ export const TankCard = forwardRef<HTMLSpanElement, TankCardProps>(
     }: TankCardProps,
     ref,
   ) => {
+    const { locale } = useLocale();
     const provideLink = !noLink && onSelect === undefined;
     const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
     const Icon = classIcons[tank.class];
@@ -60,7 +63,8 @@ export const TankCard = forwardRef<HTMLSpanElement, TankCardProps>(
         }}
         {...props}
       >
-        <Link
+        <LinkI18n
+          locale={locale}
           className="link"
           underline="hover"
           href={provideLink ? `/tools/tankopedia/${tank.id}` : '#'}
@@ -102,7 +106,7 @@ export const TankCard = forwardRef<HTMLSpanElement, TankCardProps>(
               {discriminator}
             </Text>
           )}
-        </Link>
+        </LinkI18n>
       </Text>
     );
   },

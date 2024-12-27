@@ -1,9 +1,11 @@
 import { asset, formatCompact, TIER_ROMAN_NUMERALS } from '@blitzkit/core';
-import { Box, Flex, Link, Skeleton, Text } from '@radix-ui/themes';
+import { Box, Flex, Skeleton, Text } from '@radix-ui/themes';
 import { awaitableAverageDefinitions } from '../../../../core/awaitables/averageDefinitions';
 import { awaitableTankDefinitions } from '../../../../core/awaitables/tankDefinitions';
+import { useLocale } from '../../../../hooks/useLocale';
 import { TankopediaEphemeral } from '../../../../stores/tankopediaEphemeral';
 import type { MaybeSkeletonComponentProps } from '../../../../types/maybeSkeletonComponentProps';
+import { LinkI18n } from '../../../LinkI18n';
 
 type NodeProps = MaybeSkeletonComponentProps & {
   id: number;
@@ -17,6 +19,7 @@ const [tankDefinitions, averageDefinitions] = await Promise.all([
 ]);
 
 export function Node({ id, highlight, nextIds, skeleton }: NodeProps) {
+  const { locale } = useLocale();
   const xpMultiplier = TankopediaEphemeral.use((state) => state.xpMultiplier);
   const tank = tankDefinitions.tanks[id];
   const nextTanks = nextIds?.map((id) => tankDefinitions.tanks[id]);
@@ -40,7 +43,8 @@ export function Node({ id, highlight, nextIds, skeleton }: NodeProps) {
     averages && nextTanks ? Math.round(nextTanksXp! / averageXp!) : undefined;
 
   return (
-    <Link
+    <LinkI18n
+      locale={locale}
       href={`/tools/tankopedia/${id}`}
       key={id}
       style={{
@@ -135,6 +139,6 @@ export function Node({ id, highlight, nextIds, skeleton }: NodeProps) {
           </Flex>
         </Flex>
       </Box>
-    </Link>
+    </LinkI18n>
   );
 }

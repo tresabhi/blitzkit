@@ -17,11 +17,12 @@ import {
   Flex,
   Heading,
   IconButton,
-  Link,
   Text,
 } from '@radix-ui/themes';
 import { awaitableTankDefinitions } from '../../../../core/awaitables/tankDefinitions';
+import { useLocale } from '../../../../hooks/useLocale';
 import { Duel } from '../../../../stores/duel';
+import { LinkI18n } from '../../../LinkI18n';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 type ModuleDefinition =
@@ -63,6 +64,8 @@ function ModuleButton({
   onClick: () => void;
 }) {
   const isTank = unlock.type === ModuleType.VEHICLE;
+  const { locale } = useLocale();
+
   const button = (
     <IconButton
       size="4"
@@ -132,7 +135,9 @@ function ModuleButton({
   );
 
   return isTank ? (
-    <Link href={`/tools/tankopedia/${unlock.id}`}>{button}</Link>
+    <LinkI18n locale={locale} href={`/tools/tankopedia/${unlock.id}`}>
+      {button}
+    </LinkI18n>
   ) : (
     button
   );

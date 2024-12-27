@@ -1,7 +1,8 @@
 import { type TankDefinition, tankIcon, TankType } from '@blitzkit/core';
-import { Link } from '@radix-ui/themes';
+import { useLocale } from '../hooks/useLocale';
 import { classIcons } from './ClassIcon';
 import { ExperimentIcon } from './ExperimentIcon';
+import { LinkI18n } from './LinkI18n';
 import { StickyRowHeaderCell } from './StickyRowHeaderCell';
 
 interface TankRowHeaderCellProps {
@@ -9,6 +10,7 @@ interface TankRowHeaderCellProps {
 }
 
 export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
+  const { locale } = useLocale();
   const Icon = classIcons[tank.class];
 
   return (
@@ -16,7 +18,11 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
       width={{ initial: '144px', sm: '240px' }}
       style={{ overflow: 'hidden' }}
     >
-      <Link href={`/tools/tankopedia/${tank.id}`} tabIndex={-1}>
+      <LinkI18n
+        locale={locale}
+        href={`/tools/tankopedia/${tank.id}`}
+        tabIndex={-1}
+      >
         <img
           alt={tank.name}
           draggable={false}
@@ -28,9 +34,10 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
             objectFit: 'cover',
           }}
         />
-      </Link>
+      </LinkI18n>
 
-      <Link
+      <LinkI18n
+        locale={locale}
         color={
           tank.type === TankType.COLLECTOR
             ? 'blue'
@@ -64,7 +71,7 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
         )}
 
         {tank.name}
-      </Link>
+      </LinkI18n>
     </StickyRowHeaderCell>
   );
 }

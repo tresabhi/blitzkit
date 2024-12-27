@@ -1,7 +1,8 @@
 ---
 import { MagicWandIcon, StarFilledIcon } from '@radix-ui/react-icons';
-import { Flex, Heading, Link } from '@radix-ui/themes';
+import { Flex, Heading } from '@radix-ui/themes';
 import { compareVersions } from 'compare-versions';
+import { LinkI18n } from '../../../../components/LinkI18n';
 import { PageWrapper } from '../../../../components/PageWrapper';
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 
@@ -16,6 +17,7 @@ const versions = Object.keys(
   .map((file) => file.replace(ROOT, '').replace('.md', ''))
   .sort(compareVersions)
   .reverse();
+const { locale } = Astro.params;
 ---
 
 <title>BlitzKit Patches</title>
@@ -31,7 +33,8 @@ const versions = Object.keys(
           const isMajor = split[2] === 0;
 
           return (
-            <Link
+            <LinkI18n
+              {locale}
               size="5"
               href={`/docs/changelogs/${version}`}
               mb={isMajor ? '6' : '0'}
@@ -41,7 +44,7 @@ const versions = Object.keys(
                 {isMajor && <StarFilledIcon />}
                 {version}
               </Flex>
-            </Link>
+            </LinkI18n>
           );
         })
       }

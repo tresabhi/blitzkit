@@ -1,8 +1,11 @@
 ---
 import { DiscordLogoIcon, HomeIcon } from '@radix-ui/react-icons';
 import { Button, Flex, Heading, Link, Text } from '@radix-ui/themes';
+import { LinkI18n } from '../components/LinkI18n';
 import { PageWrapper } from '../components/PageWrapper';
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const { locale } = Astro.params;
 ---
 
 <BaseLayout>
@@ -12,11 +15,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <Text color="gray">Where would you like to go?</Text>
 
       <Flex mt="4" gap="2">
-        <Link href="/">
+        <LinkI18n {locale} href="/">
           <Button>
             <HomeIcon /> Home
           </Button>
-        </Link>
+        </LinkI18n>
         <Link href="https://discord.gg/nDt7AjGJQH">
           <Button variant="outline">
             <DiscordLogoIcon /> Discord
