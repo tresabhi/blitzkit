@@ -3,10 +3,15 @@ import { Flex, Heading, Text } from '@radix-ui/themes';
 import type { GetStaticPaths } from 'astro';
 import { PageWrapper } from '../../../../components/PageWrapper';
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { getStaticPaths as parentGetStaticPaths } from '../../index.astro';
 import { AUTH_PROVIDERS, AUTH_PROVIDER_NAMES, Authorize } from './_index';
 
 export const getStaticPaths = (() => {
-  return AUTH_PROVIDERS.map((provider) => ({ params: { provider } }));
+  const parentPaths = parentGetStaticPaths();
+
+  return AUTH_PROVIDERS.map((provider) =>
+    parentPaths.map((parent) => ({ params: { ...parent.params, provider } })),
+  ).flat();
 }) satisfies GetStaticPaths;
 
 const { provider } = Astro.params;

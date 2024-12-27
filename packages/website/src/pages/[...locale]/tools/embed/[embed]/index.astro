@@ -3,12 +3,22 @@ import type { GetStaticPaths } from 'astro';
 import { capitalize } from 'lodash-es';
 import { embedConfigurations } from '../../../../../constants/embeds';
 import BaseLayout from '../../../../../layouts/BaseLayout.astro';
+import { getStaticPaths as parentGetStaticPaths } from '../index.astro';
 import { Page } from './_index';
 
 export const getStaticPaths = (() => {
-  return Object.keys(embedConfigurations).map((embed) => ({
-    params: { embed: embed as keyof typeof embedConfigurations },
-  }));
+  const parentPaths = parentGetStaticPaths();
+
+  return Object.keys(embedConfigurations)
+    .map((embed) =>
+      parentPaths.map((parent) => ({
+        params: {
+          ...parent.params,
+          embed: embed as keyof typeof embedConfigurations,
+        },
+      })),
+    )
+    .flat();
 }) satisfies GetStaticPaths;
 ---
 

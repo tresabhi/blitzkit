@@ -15,14 +15,20 @@ import type { GetStaticPaths } from 'astro';
 import { tankCharacteristics } from '../../../../../core/blitzkit/tankCharacteristics';
 import BaseLayout from '../../../../../layouts/BaseLayout.astro';
 import { genericDefaultEquipmentMatrix } from '../../../../../stores/duel/constants';
+import { getStaticPaths as parentGetStaticPaths } from '../index.astro';
 import { Page } from './_index';
 
 export const getStaticPaths = (async () => {
   const tankDefinitions = await fetchTankDefinitions();
+  const parentPaths = parentGetStaticPaths();
 
-  return Object.values(tankDefinitions.tanks).map((tank) => ({
-    params: { id: tank.id },
-  }));
+  return Object.values(tankDefinitions.tanks)
+    .map((tank) =>
+      parentPaths.map((parent) => ({
+        params: { ...parent.params, id: tank.id },
+      })),
+    )
+    .flat();
 }) satisfies GetStaticPaths;
 
 const { id } = Astro.params;

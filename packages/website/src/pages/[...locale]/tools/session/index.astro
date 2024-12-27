@@ -2,6 +2,8 @@
 import { sessionTool } from '../../../../constants/tools';
 import ToolLayout from '../../../../layouts/ToolLayout.astro';
 import { Page } from './_index';
+
+export { getStaticPaths } from '../../index.astro';
 ---
 
 <ToolLayout tool={sessionTool}>

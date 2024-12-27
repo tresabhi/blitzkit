@@ -5,6 +5,8 @@ import { fetchGlossary } from '../../../../core/blitz/fetchGlossary';
 import ToolLayout from '../../../../layouts/ToolLayout.astro';
 import { Page } from './_index';
 
+export { getStaticPaths } from '../../index.astro';
+
 const glossary = await fetchGlossary();
 const avatars = Object.entries(glossary)
   .filter(

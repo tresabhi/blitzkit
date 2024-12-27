@@ -3,6 +3,8 @@ import ToolOpenGraph from '../../../../components/ToolOpenGraph.astro';
 import { performanceTool } from '../../../../constants/tools';
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import { Page } from './_index';
+
+export { getStaticPaths } from '../../index.astro';
 ---
 
 <ToolOpenGraph tool={performanceTool} />
