@@ -2,8 +2,10 @@
 import { assertSecret, fetchGameDefinitions } from '@blitzkit/core';
 import { Code, Flex, Heading, Link, Text } from '@radix-ui/themes';
 import packageJson from '../../../../package.json';
+import { LinkI18n } from './LinkI18n';
 
 const gameDefinitions = await fetchGameDefinitions();
+const { locale } = Astro.params;
 ---
 
 <style>
@@ -13,6 +15,7 @@ const gameDefinitions = await fetchGameDefinitions();
 </style>
 
 <Flex className="footer" gap="6" p="6" direction="column" align="center">
+  {locale}
   <Flex
     align="center"
     justify="between"
@@ -68,7 +71,9 @@ const gameDefinitions = await fetchGameDefinitions();
             sm: 'start',
           }}
         >
-          <Link href="/docs/about/credits" color="gray"> Credits </Link>
+          <LinkI18n {locale} href="/docs/about/credits" color="gray"
+            >Credits</LinkI18n
+          >
           <Link
             href="https://discord.gg/nDt7AjGJQH"
             target="_blank"
@@ -83,7 +88,8 @@ const gameDefinitions = await fetchGameDefinitions();
           >
             GitHub
           </Link>
-          <Link href="/docs/patches" color="gray"> Patches </Link>
+          <LinkI18n {locale} href="/docs/patches" color="gray">Patches</LinkI18n
+          >
         </Flex>
       </Flex>
 
@@ -101,12 +107,12 @@ const gameDefinitions = await fetchGameDefinitions();
       >
         <Heading size="3">Legal</Heading>
         <Flex direction="column">
-          <Link href="/docs/legal/privacy-policy" color="gray">
+          <LinkI18n {locale} href="/docs/legal/privacy-policy" color="gray">
             Privacy policy
-          </Link>
-          <Link href="/docs/legal/terms-of-service" color="gray">
+          </LinkI18n>
+          <LinkI18n {locale} href="/docs/legal/terms-of-service" color="gray">
             Terms of service
-          </Link>
+          </LinkI18n>
         </Flex>
       </Flex>
     </Flex>
