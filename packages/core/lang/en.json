@@ -1,5 +1,15 @@
 {
   "common": {
+    "locales": {
+      "en": "English",
+      "es": "Spanish",
+      "hr": "Croatian",
+      "pt": "Portuguese",
+      "ru": "Russian",
+      "uk": "Ukrainian",
+      "zh": "Chinese"
+    },
+
     "wn8_percentile": {
       "0": "Very bad",
       "1": "Bad",

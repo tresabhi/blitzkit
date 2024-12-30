@@ -1,6 +1,11 @@
 ---
-import { assertSecret, SUPPORTED_LOCALES } from '@blitzkit/core';
-import { Box, Flex, Heading } from '@radix-ui/themes';
+import {
+  assertSecret,
+  DEFAULT_LOCALE,
+  SUPPORTED_LOCALES,
+} from '@blitzkit/core';
+import strings from '@blitzkit/core/lang/en.json';
+import { Box, Flex, Heading, Link, Text } from '@radix-ui/themes';
 import type { GetStaticPaths } from 'astro';
 import { AesonPlug } from '../../components/AesonPlug';
 import HomeHero from '../../components/HomeHero.astro';
@@ -33,6 +38,30 @@ export const getStaticPaths = (() => {
 
 <BaseLayout>
   <HomeHero />
+
+  <Flex justify="center" gap="2" pt="6" pb="4">
+    {
+      SUPPORTED_LOCALES.map((thisLocale, index) => {
+        const selected =
+          thisLocale === locale ||
+          (locale === undefined && thisLocale === DEFAULT_LOCALE);
+
+        return (
+          <>
+            {index > 0 && <Text color="gray">|</Text>}
+
+            <Link
+              color="gray"
+              highContrast={selected}
+              href={`/${thisLocale === DEFAULT_LOCALE ? '' : thisLocale}`}
+            >
+              {strings.common.locales[thisLocale]}
+            </Link>
+          </>
+        );
+      })
+    }
+  </Flex>
 
   <Plugs client:idle />
 
