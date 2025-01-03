@@ -1,12 +1,16 @@
 import { Locale } from 'discord.js';
 import { translations } from './strings';
-import { SUPPORTED_LOCALES } from './strings/constants';
+import {
+  DEFAULT_LOCALE_DISCORD,
+  SUPPORTED_LOCALES_DISCORD,
+} from './strings/constants';
 
 export function translator(localeRaw: Locale) {
   const locale =
-    localeRaw !== Locale.EnglishUS && SUPPORTED_LOCALES.includes(localeRaw)
+    localeRaw !== DEFAULT_LOCALE_DISCORD &&
+    SUPPORTED_LOCALES_DISCORD.includes(localeRaw)
       ? localeRaw
-      : Locale.EnglishUS;
+      : DEFAULT_LOCALE_DISCORD;
   const strings = translations[locale]!;
 
   function translate(path: string, literals?: string[]): string {
@@ -25,11 +29,11 @@ export function translator(localeRaw: Locale) {
         if (typeof fragment === 'undefined') {
           const message = `Undefined translation at "${pathItem}" in "${path}" for locale "${locale}"`;
 
-          if (locale === Locale.EnglishUS) {
+          if (locale === DEFAULT_LOCALE_DISCORD) {
             throw new Error(message);
           } else {
             console.warn(`${message} falling back to en-US`);
-            return translator(Locale.EnglishUS).translate(path, literals);
+            return translator(DEFAULT_LOCALE_DISCORD).translate(path, literals);
           }
         }
       }
