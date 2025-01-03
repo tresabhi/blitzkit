@@ -1,27 +1,30 @@
-import { assertSecret, EventManager } from '@blitzkit/core';
+// import { assertSecret, EventManager } from '@blitzkit/core';
+// import { ActivityType, ShardingManager } from 'discord.js';
+// import {
+//   discoveredIdsDefinitions,
+//   tankDefinitions,
+// } from './core/blitzkit/nonBlockingPromises';
+
+import { assertSecret } from '@blitzkit/core';
 import { ActivityType, ShardingManager } from 'discord.js';
 import {
   discoveredIdsDefinitions,
   tankDefinitions,
 } from './core/blitzkit/nonBlockingPromises';
 
-const somethingEvent = new EventManager();
+let iteration = 0;
+const interval = setInterval(async () => {
+  iteration++;
 
-somethingEvent.on(async () => {
+  console.log(`Attempting launch on iteration ${iteration}`);
+
   const manager = new ShardingManager('dist/bot/workers/bot.js', {
     token: assertSecret(import.meta.env.DISCORD_TOKEN),
   });
 
-  const timeout = setTimeout(() => {
-    console.warn(`Shards didn't launch in 5 seconds; trying again...`);
-    somethingEvent.emit(undefined);
-
-    shards.forEach((shard) => shard.kill());
-  }, 5000);
-
   const shards = await manager
     .on('shardCreate', (shard) => {
-      clearTimeout(timeout);
+      clearInterval(interval);
       console.log(`🟡 Launching shard ${shard.id}`);
       shard.on('ready', () => console.log(`🟢 Launched shard ${shard.id}`));
     })
@@ -76,6 +79,4 @@ somethingEvent.on(async () => {
       error,
     );
   }
-});
-
-somethingEvent.emit(undefined);
+}, 5000);
