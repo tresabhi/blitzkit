@@ -1,37 +1,34 @@
 import en from '@blitzkit/core/lang/en.json';
 import ru from '@blitzkit/core/lang/ru.json';
 
-type Translation = string | TranslationTree;
 type TranslationTree = { [key: string]: Translation };
 
-// type Options<DefaultLocale extends string> = {
-//   defaultLocale: DefaultLocale;
-// };
+type Translation = string | TranslationTree;
 
-// export function prate<
-//   Locale extends string,
-//   DefaultLocale extends Locale,
-// >(
-//   strings: Record<Locale, Translation>,
-//   options: Partial<Options<DefaultLocale>>,
-// ) {
-//   function
-// }
+type NestedKeys<Type> = Type extends object
+  ? {
+      [Key in keyof Type]: Key extends string
+        ? Type[Key] extends object
+          ? '$' extends keyof Type[Key]
+            ? `${Key}` | `${Key}.${NestedKeys<Type[Key]>}`
+            : `${Key}.${NestedKeys<Type[Key]>}`
+          : Key
+        : never;
+    }[keyof Type]
+  : never;
 
-// const {prate }= prate({ en, ru }, { defaultLocale: 'en' });
-
-class Prate<Locale extends string, DefaultLocale extends Locale> {
-  private readonly strings = new Map<Locale, TranslationTree>();
+class Prate<
+  Locale extends string,
+  DefaultLocale extends Locale,
+  Strings extends TranslationTree,
+  Path extends NestedKeys<Strings>,
+> {
   private readonly defaultStrings: Map<string, string>;
 
   constructor(
-    strings: Record<Locale, TranslationTree>,
+    public strings: Record<Locale, Strings>,
     public defaultLocale: DefaultLocale,
   ) {
-    for (const locale in strings) {
-      this.strings.set(locale, strings[locale]);
-    }
-
     this.defaultStrings = this.flatten(strings[defaultLocale]);
   }
 
@@ -56,17 +53,17 @@ class Prate<Locale extends string, DefaultLocale extends Locale> {
   }
 
   locale(locale: Locale) {
-    const strings = this.strings.get(locale);
+    if (this.strings[locale] === undefined) {
+      throw new TypeError(`Locale "${locale}" is not defined`);
+    }
+
+    const strings = this.strings[locale];
     const defaultStrings = this.defaultStrings;
     const defaultLocale = this.defaultLocale;
 
-    if (strings === undefined) {
-      throw new TypeError(`Locale "${locale}" is not undefined`);
-    }
-
     const translations = this.flatten(strings);
 
-    function translate(path: string, literals?: string[]) {
+    function translate(path: Path, literals?: string[]) {
       let translation = translations.get(path) ?? translations.get(`${path}.$`);
 
       if (translation === undefined) {
@@ -91,12 +88,8 @@ class Prate<Locale extends string, DefaultLocale extends Locale> {
       return translation;
     }
 
-    return { translate };
+    return { translate, t: translate };
   }
 }
 
 const prate = new Prate({ en, ru }, 'en');
-
-const { translate } = prate.locale('ru');
-
-console.log(translate('bot.common.wn8'));
