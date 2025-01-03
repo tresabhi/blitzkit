@@ -1,7 +1,7 @@
-import { SupportedLocale } from '@blitzkit/core';
+import { DEFAULT_LOCALE, SupportedLocale } from '@blitzkit/core';
 import { Locale } from 'discord.js';
 
-const DISCORD_SUPPORTED_LOCALES: Record<SupportedLocale, Locale> = {
+const SUPPORTED_LOCALES_DISCORD_MAP: Record<SupportedLocale, Locale> = {
   en: Locale.EnglishUS,
   es: Locale.SpanishES,
   hr: Locale.Croatian,
@@ -11,6 +11,13 @@ const DISCORD_SUPPORTED_LOCALES: Record<SupportedLocale, Locale> = {
   zh: Locale.ChineseCN,
 };
 
-export const SUPPORTED_DISCORD_LOCALES = Object.values(
-  DISCORD_SUPPORTED_LOCALES,
+export const SUPPORTED_LOCALES_DISCORD_MAP_INVERSE = Object.fromEntries(
+  Object.entries(SUPPORTED_LOCALES_DISCORD_MAP).map(([k, v]) => [v, k]),
+) as Record<Locale, SupportedLocale>;
+
+export const SUPPORTED_LOCALES_DISCORD = Object.values(
+  SUPPORTED_LOCALES_DISCORD_MAP,
 );
+
+export const DEFAULT_LOCALE_DISCORD =
+  SUPPORTED_LOCALES_DISCORD_MAP[DEFAULT_LOCALE];

@@ -1,5 +1,8 @@
 import { Locale } from 'discord.js';
-import { SUPPORTED_DISCORD_LOCALES } from './constants';
+import {
+  SUPPORTED_LOCALES_DISCORD,
+  SUPPORTED_LOCALES_DISCORD_MAP_INVERSE,
+} from './constants';
 
 export type TranslationFragmentTree = {
   [key: string]: TranslationFragment;
@@ -8,12 +11,14 @@ export type TranslationFragmentTree = {
 };
 export type TranslationFragment = string | TranslationFragmentTree;
 
-export const translations = SUPPORTED_DISCORD_LOCALES.reduce<
+export const translations = SUPPORTED_LOCALES_DISCORD.reduce<
   Partial<Record<Locale, TranslationFragment>>
 >(
   (table, locale) => ({
     ...table,
-    [locale]: require(`../../../../../core/lang/${locale}.json`),
+    [locale]: require(
+      `../../../../../core/lang/${SUPPORTED_LOCALES_DISCORD_MAP_INVERSE[locale]}.json`,
+    ),
   }),
   {},
 );
