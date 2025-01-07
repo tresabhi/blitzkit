@@ -5,7 +5,7 @@ import {
   localizedStrings,
   SUPPORTED_LOCALES,
 } from '@blitzkit/core';
-import { Box, Flex, Heading, Link, Text } from '@radix-ui/themes';
+import { Box, Flex, Heading, Link, Separator } from '@radix-ui/themes';
 import type { GetStaticPaths } from 'astro';
 import { AesonPlug } from '../../components/AesonPlug';
 import HomeHero from '../../components/HomeHero.astro';
@@ -41,7 +41,7 @@ export const getStaticPaths = (() => {
 <BaseLayout>
   <HomeHero />
 
-  <Flex justify="center" gap="2" pt="6" pb="4">
+  <Flex justify="center" gap="3" pt="6" pb="4" align="center">
     {
       SUPPORTED_LOCALES.map((thisLocale, index) => {
         const selected =
@@ -51,7 +51,7 @@ export const getStaticPaths = (() => {
 
         return (
           <>
-            {index > 0 && <Text color="gray">|</Text>}
+            {index > 0 && <Separator orientation="vertical" size="1" />}
 
             <Link
               color="gray"
