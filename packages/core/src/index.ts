@@ -1,6 +1,7 @@
 export * from './blitz';
 export * from './blitzkit';
 export * from './databases';
+export * from './i18n';
 export * from './imgur';
 export * from './math';
 export * from './patreon';

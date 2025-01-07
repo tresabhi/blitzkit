@@ -1,9 +1,6 @@
-import en from '@blitzkit/core/lang/en.json';
-import ru from '@blitzkit/core/lang/ru.json';
+export type TranslationTree = { [key: string]: TranslationNode };
 
-type TranslationTree = { [key: string]: Translation };
-
-type Translation = string | TranslationTree;
+export type TranslationNode = string | TranslationTree;
 
 type NestedKeys<Type> = Type extends object
   ? {
@@ -17,7 +14,7 @@ type NestedKeys<Type> = Type extends object
     }[keyof Type]
   : never;
 
-class Prate<
+export class Translator<
   Locale extends string,
   DefaultLocale extends Locale,
   Strings extends TranslationTree,
@@ -26,8 +23,8 @@ class Prate<
   private readonly defaultStrings: Map<string, string>;
 
   constructor(
-    public strings: Record<Locale, Strings>,
-    public defaultLocale: DefaultLocale,
+    private strings: Record<Locale, Strings>,
+    private defaultLocale: DefaultLocale,
   ) {
     this.defaultStrings = this.flatten(strings[defaultLocale]);
   }
@@ -35,7 +32,7 @@ class Prate<
   private flatten(strings: TranslationTree) {
     const translations = new Map<string, string>();
 
-    function traverse(parent: string, tree: Record<string, Translation>) {
+    function traverse(parent: string, tree: Record<string, TranslationNode>) {
       for (const key in tree) {
         const path = `${parent}${key}`;
 
@@ -91,5 +88,3 @@ class Prate<
     return { translate, t: translate };
   }
 }
-
-const prate = new Prate({ en, ru }, 'en');

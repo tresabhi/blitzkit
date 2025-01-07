@@ -3,6 +3,7 @@ import { assertSecret, imgur, ImgurSize } from '@blitzkit/core';
 import { CaretRightIcon } from '@radix-ui/react-icons';
 import { Box, Button, Code, Flex, Heading, Text } from '@radix-ui/themes';
 import type { Tool } from '../constants/tools';
+import { getStrings } from '../core/i18n/getStrings';
 import { LinkI18n } from './LinkI18n';
 
 interface Props {
@@ -14,6 +15,11 @@ const disabled = tool.branches?.every(
   (branch) => branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
 );
 const { locale } = Astro.params;
+const strings = getStrings(locale);
+const toolStrings =
+  strings.website.tools[
+    (tool.stringsId??tool.id ) as keyof typeof strings.website.tools
+  ];
 ---
 
 <style>
@@ -101,7 +107,7 @@ const { locale } = Astro.params;
           size={{ initial: '6', sm: tool.significant ? '7' : '5' }}
           weight="medium"
         >
-          {tool.title}
+          {toolStrings.name}
         </Heading>
         <Text
           align={{ initial: 'center', sm: 'left' }}
@@ -115,7 +121,7 @@ const { locale } = Astro.params;
                 <Code>{assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH)}</Code>
               </>
             ) : (
-              tool.description
+              toolStrings.description
             )
           }
         </Text>
@@ -132,7 +138,7 @@ const { locale } = Astro.params;
             color={tool.button.color}
             style={{ cursor: 'inherit' }}
           >
-            {tool.button.text}
+            {toolStrings.button}
             <CaretRightIcon />
           </Button>
         )

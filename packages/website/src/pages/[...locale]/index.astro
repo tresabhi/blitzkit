@@ -2,9 +2,9 @@
 import {
   assertSecret,
   DEFAULT_LOCALE,
+  localizedStrings,
   SUPPORTED_LOCALES,
 } from '@blitzkit/core';
-import strings from '@blitzkit/core/lang/en.json';
 import { Box, Flex, Heading, Link, Text } from '@radix-ui/themes';
 import type { GetStaticPaths } from 'astro';
 import { AesonPlug } from '../../components/AesonPlug';
@@ -23,10 +23,12 @@ import {
   tankopediaTool,
   tierListTool,
 } from '../../constants/tools';
+import { getStrings } from '../../core/i18n/getStrings';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const branch = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
-const { locale } = Astro.params;
+const locale = Astro.params.locale ?? DEFAULT_LOCALE;
+const strings = getStrings(Astro.params.locale);
 
 export const getStaticPaths = (() => {
   return [
@@ -45,6 +47,7 @@ export const getStaticPaths = (() => {
         const selected =
           thisLocale === locale ||
           (locale === undefined && thisLocale === DEFAULT_LOCALE);
+        const localeNames = localizedStrings[thisLocale].common.locales;
 
         return (
           <>
@@ -55,7 +58,7 @@ export const getStaticPaths = (() => {
               highContrast={selected}
               href={`/${thisLocale === DEFAULT_LOCALE ? '' : thisLocale}`}
             >
-              {strings.common.locales[thisLocale]}
+              {localeNames[thisLocale as keyof typeof localeNames]}
             </Link>
           </>
         );
@@ -105,33 +108,24 @@ export const getStaticPaths = (() => {
         <Box flexGrow="1" />
       </Flex>
 
-      <Heading align="center" mt="6">Other cool projects</Heading>
+      <Heading align="center" mt="6"
+        >{strings.website.home.other_projects.title}</Heading
+      >
 
       <Flex gap="4" mb="6" direction={{ initial: 'column', sm: 'row' }}>
         <ToolCard
           tool={{
-            button: {
-              text: 'Analyze',
-              color: 'blue',
-            },
-            description: 'Rich historic average stats',
-            id: 'blitz-analysis',
+            button: { color: 'blue' },
+            id: 'blitz_analysis',
             image: 'j76YXGl',
-            title: 'BlitzAnalysis[]',
             href: 'https://blitzanalysiz.com/',
           }}
         />
         <ToolCard
           tool={{
-            button: {
-              color: 'purple',
-              text: 'Install',
-              highContrast: true,
-            },
+            button: { color: 'purple', highContrast: true },
             image: 'zYrrYbR',
-            description: 'In-game session stats',
-            id: 'blitz-insider',
-            title: 'Blitz Insider',
+            id: 'blitz_insider',
             href: 'https://discord.gg/UjWf9eGgtR',
           }}
         />

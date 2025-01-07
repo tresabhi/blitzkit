@@ -19,14 +19,15 @@ import {
 } from '@radix-ui/themes';
 import { resolveBranchName } from '../core/blitzkit/branches';
 import { homeTool, TOOLS } from '../constants/tools';
-import { NavbarAccount } from './NavbarAccount';
 import { LinkI18n } from './LinkI18n';
+import { getStrings } from '../core/i18n/getStrings';
 
 const toolsFiltered = TOOLS.filter((tool) => !('href' in tool));
 const tools = [homeTool, ...toolsFiltered];
-const branchName = resolveBranchName();
-const isBranchNamed = branchName !== undefined;
 const { locale } = Astro.params;
+const branchName = resolveBranchName(locale);
+const isBranchNamed = branchName !== undefined;
+const strings = getStrings(locale);
 ---
 
 <style>
@@ -139,14 +140,17 @@ const { locale } = Astro.params;
                 (branch) =>
                   branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
               );
-              const selected = Astro.url.pathname.startsWith(
-                `/tools/${tool.id}`,
-              );
+              const selected = Astro.url.pathname.includes(`/tools/${tool.id}`);
+              const toolStrings =
+                strings.website.tools[
+                  (tool.stringsId ??
+                    tool.id) as keyof typeof strings.website.tools
+                ];
 
               if (unavailableOnBranch) return null;
 
               return (
-                <Fragment key={tool.title}>
+                <Fragment key={tool.id}>
                   {index > 0 && <Separator orientation="vertical" size="1" />}
                   <LinkI18n
                     {locale}
@@ -156,7 +160,7 @@ const { locale } = Astro.params;
                     href={`/tools/${tool.id}`}
                     underline={selected ? 'always' : 'hover'}
                   >
-                    {tool.title}
+                    {toolStrings.name}
                   </LinkI18n>
                 </Fragment>
               );
@@ -212,6 +216,11 @@ const { locale } = Astro.params;
               (branch) =>
                 branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
             );
+            const toolStrings =
+              strings.website.tools[
+                (tool.stringsId ??
+                  tool.id) as keyof typeof strings.website.tools
+              ];
 
             if (unavailableOnBranch) return null;
 
@@ -265,7 +274,7 @@ const { locale } = Astro.params;
                       WebkitBackdropFilter: 'blur(4rem)',
                     }}
                   >
-                    <Text>{tool.title}</Text>
+                    <Text>{toolStrings.name}</Text>
                   </Flex>
                 </LinkI18n>
               </Flex>

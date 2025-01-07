@@ -1,9 +1,14 @@
 ---
 import { Code, Flex, Heading, Text } from '@radix-ui/themes';
 import { resolveBranchName } from '../core/blitzkit/branches';
+import { DEFAULT_LOCALE } from '@blitzkit/core';
+import { getStrings } from '../core/i18n/getStrings';
+import { literals } from '../core/i18n/literals';
 
-const branchName = resolveBranchName();
+const { locale } = Astro.params;
+const branchName = resolveBranchName(locale);
 const isBranchNamed = branchName !== undefined;
+const strings = getStrings(locale);
 ---
 
 <style>
@@ -141,7 +146,9 @@ const isBranchNamed = branchName !== undefined;
         </Flex>
       </Heading>
 
-      <Text color="gray" align="center" size="4">By TrèsAbhi ❤️</Text>
+      <Text color="gray" align="center" size="4"
+        >{literals(strings.website.home.hero.credit, ['TrèsAbhi'])}</Text
+      >
     </Flex>
   </Flex>
 </Flex>
