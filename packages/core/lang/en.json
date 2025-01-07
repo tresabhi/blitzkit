@@ -713,6 +713,12 @@
   },
 
   "website": {
+    "common": {
+      "copy_button": {
+        "copied": "Copied!"
+      }
+    },
+
     "home": {
       "hero": {
         "credit": "By %s1 ❤️"
@@ -795,7 +801,11 @@
         "name": "Tier list",
         "button": "Rank tanks",
         "description": "Rank Blitz tanks",
-        "seo_description": "Explore tier lists ranking tanks from best to worst, based on player ratings and statistical performance in World of Tanks Blitz"
+        "seo_description": "Explore tier lists ranking tanks from best to worst, based on player ratings and statistical performance in World of Tanks Blitz",
+        "buttons": {
+          "reset": "Reset",
+          "share": "Share"
+        }
       },
       "embed": {
         "name": "Embed",
