@@ -2,6 +2,7 @@ import { Flex, Text } from '@radix-ui/themes';
 import fuzzysort from 'fuzzysort';
 import { times } from 'lodash-es';
 import { useMemo, useState } from 'react';
+import { useLocale } from '../../hooks/useLocale';
 import { GalleryEphemeral } from '../../stores/galleryEphemeral';
 import { GalleryCard } from './Card';
 
@@ -20,6 +21,7 @@ const PREVIEW_COUNT = 28;
 export function GalleryList({ avatars }: GalleryListProps) {
   const search = GalleryEphemeral.use((state) => state.search);
   const [loadedCards, setLoadedCards] = useState(DEFAULT_LOADED);
+  const { locale } = useLocale();
   const filtered = useMemo(() => {
     setLoadedCards(DEFAULT_LOADED);
 
@@ -35,7 +37,7 @@ export function GalleryList({ avatars }: GalleryListProps) {
   return (
     <>
       <Text align="center" color="gray">
-        {filtered.length.toLocaleString()} avatars
+        {filtered.length.toLocaleString(locale)} avatars
       </Text>
 
       <Flex wrap="wrap" gap="4" justify="center">

@@ -187,7 +187,7 @@ export function MetaSection() {
               } price`}
             >
               <Flex align="center" gap="1">
-                {protagonist.price.value.toLocaleString()}
+                {protagonist.price.value.toLocaleString(locale)}
                 <img
                   style={{ width: '1em', height: '1em' }}
                   alt={TankPriceType[protagonist.price.type]}
@@ -203,7 +203,7 @@ export function MetaSection() {
             </Listing>
             <Listing label="Sale price">
               <Flex align="center" gap="1">
-                {(protagonist.price.value / 2).toLocaleString()}
+                {(protagonist.price.value / 2).toLocaleString(locale)}
                 <img
                   style={{ width: '1em', height: '1em' }}
                   alt={TankPriceType[protagonist.price.type]}
@@ -223,7 +223,7 @@ export function MetaSection() {
                   {(
                     protagonist.research_cost.research_cost_type!
                       .value as number
-                  ).toLocaleString()}
+                  ).toLocaleString(locale)}
                   <img
                     style={{ width: '1em', height: '1em' }}
                     alt="xp"

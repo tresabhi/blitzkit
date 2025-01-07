@@ -3,6 +3,7 @@ import { CaretLeftIcon, CaretRightIcon, PlusIcon } from '@radix-ui/react-icons';
 import { Flex, Heading, IconButton, ScrollArea, Text } from '@radix-ui/themes';
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { awaitableTankDefinitions } from '../../../core/awaitables/tankDefinitions';
+import { useLocale } from '../../../hooks/useLocale';
 import { Duel } from '../../../stores/duel';
 import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
 import type { MaybeSkeletonComponentProps } from '../../../types/maybeSkeletonComponentProps';
@@ -16,6 +17,7 @@ const tankDefinitions = await awaitableTankDefinitions;
 export const XP_MULTIPLIERS = [1, 2, 3, 4, 5, 10];
 
 export function TechTreeSection({ skeleton }: MaybeSkeletonComponentProps) {
+  const { locale } = useLocale();
   const master = Duel.use((state) => state.protagonist.tank);
   const xpMultiplier = TankopediaEphemeral.use((state) => state.xpMultiplier);
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
@@ -105,7 +107,7 @@ export function TechTreeSection({ skeleton }: MaybeSkeletonComponentProps) {
                     objectPosition: 'center',
                   }}
                 />
-                {Math.round(totalXp / xpMultiplier).toLocaleString()}
+                {Math.round(totalXp / xpMultiplier).toLocaleString(locale)}
               </Flex>
             </Text>
 
@@ -121,7 +123,7 @@ export function TechTreeSection({ skeleton }: MaybeSkeletonComponentProps) {
                     objectPosition: 'center',
                   }}
                 />
-                {totalCredits.toLocaleString()}
+                {totalCredits.toLocaleString(locale)}
               </Flex>
             </Text>
           </Flex>

@@ -6,6 +6,16 @@
   },
 
   "common": {
+    "player_count_period": {
+      "total": "Total",
+      "d_120": "Past 120 days",
+      "d_90": "Past 90 days",
+      "d_60": "Past 60 days",
+      "d_30": "Past month",
+      "d_7": "Past week",
+      "d_1": "Yesterday"
+    },
+
     "branches": {
       "local": "dev",
       "dev": "beta",
@@ -738,6 +748,30 @@
           "body": "Estimated stats based on %s1 players. Updated %s2 ago.",
           "hours": "%s1 hours",
           "minutes": "%s1 minutes"
+        },
+        "player_count": {
+          "label": "Player count"
+        },
+        "table": {
+          "tanks": {
+            "header": "Tank",
+            "total": "Total"
+          },
+          "stats": {
+            "winrate": "Winrate",
+            "players": "Players",
+            "damage": "Damage",
+            "survival": "Survival",
+            "xp": "XP",
+            "kills": "Kills",
+            "spots": "Spots",
+            "accuracy": "Accuracy",
+            "shots": "Shots",
+            "hits": "Hits",
+            "damage_ratio": "Dmg. ratio",
+            "damage_taken": "Dmg. taken",
+            "capture_points": "Cap points"
+          }
         }
       },
       "gallery": {

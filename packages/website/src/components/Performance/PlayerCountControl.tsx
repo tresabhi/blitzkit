@@ -1,4 +1,5 @@
 import { Flex, Select, Text } from '@radix-ui/themes';
+import { useLocale } from '../../hooks/useLocale';
 import {
   TankPerformanceEphemeral,
   type PlayerCountPeriod,
@@ -9,10 +10,11 @@ export function PlayerCountControl() {
     (state) => state.playerCountPeriod,
   );
   const mutateTankPerformanceSort = TankPerformanceEphemeral.useMutation();
+  const { strings } = useLocale();
 
   return (
     <Flex justify="center" align="center" gap="2">
-      <Text>Player count</Text>
+      <Text>{strings.website.tools.performance.player_count.label}</Text>
       <Select.Root
         value={playerCountPeriod}
         onValueChange={(period) => {
@@ -23,13 +25,27 @@ export function PlayerCountControl() {
       >
         <Select.Trigger />
         <Select.Content>
-          <Select.Item value="total">Total</Select.Item>
-          <Select.Item value="d_120">Past 120 days</Select.Item>
-          <Select.Item value="d_90">Past 90 days</Select.Item>
-          <Select.Item value="d_60">Past 60 days</Select.Item>
-          <Select.Item value="d_30">This month</Select.Item>
-          <Select.Item value="d_7">This week</Select.Item>
-          <Select.Item value="d_1">Yesterday</Select.Item>
+          <Select.Item value="total">
+            {strings.common.player_count_period.total}
+          </Select.Item>
+          <Select.Item value="d_120">
+            {strings.common.player_count_period.d_120}
+          </Select.Item>
+          <Select.Item value="d_90">
+            {strings.common.player_count_period.d_90}
+          </Select.Item>
+          <Select.Item value="d_60">
+            {strings.common.player_count_period.d_60}
+          </Select.Item>
+          <Select.Item value="d_30">
+            {strings.common.player_count_period.d_30}
+          </Select.Item>
+          <Select.Item value="d_7">
+            {strings.common.player_count_period.d_7}
+          </Select.Item>
+          <Select.Item value="d_1">
+            {strings.common.player_count_period.d_1}
+          </Select.Item>
         </Select.Content>
       </Select.Root>
     </Flex>

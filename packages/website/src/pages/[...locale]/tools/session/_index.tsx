@@ -39,6 +39,7 @@ import { StickyTableRoot } from '../../../../components/StickyTableRoot';
 import { TankRowHeaderCell } from '../../../../components/TankRowHeaderCell';
 import { awaitableAverageDefinitions } from '../../../../core/awaitables/averageDefinitions';
 import { awaitableTankDefinitions } from '../../../../core/awaitables/tankDefinitions';
+import { useLocale } from '../../../../hooks/useLocale';
 import { Session, type SessionTracking } from '../../../../stores/session';
 
 const [tankDefinitions, averageDefinitions] = await Promise.all([
@@ -55,6 +56,7 @@ export function Page() {
 }
 
 function Content() {
+  const { locale } = useLocale();
   const [showSearch, setShowSearch] = useState(false);
   const [searching, setSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<AccountListWithServer>([]);
@@ -265,7 +267,7 @@ function Content() {
           <Flex mt="2" mb="2" direction="column" gap="2">
             <Heading size="5">Tracking {accountInfo?.nickname}</Heading>
             <Text color="gray">
-              Since {new Date(session.player.since).toLocaleString()}
+              Since {new Date(session.player.since).toLocaleString(locale)}
             </Text>
           </Flex>
 

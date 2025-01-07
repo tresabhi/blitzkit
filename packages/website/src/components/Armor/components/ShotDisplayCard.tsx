@@ -8,6 +8,7 @@ import {
 } from '@radix-ui/themes';
 import type { ComponentProps } from 'react';
 import { radToDeg } from 'three/src/math/MathUtils.js';
+import { useLocale } from '../../../hooks/useLocale';
 import type {
   Shot,
   ShotLayer,
@@ -49,6 +50,8 @@ function LayerEntry({
   layer: ShotLayer;
   angle?: number;
 }) {
+  const { locale } = useLocale();
+
   return (
     <Flex align="center" gap="2">
       <Text size="1" color="gray" style={{ width: 12 }}>
@@ -61,7 +64,7 @@ function LayerEntry({
       {layer.type === null && (
         <>
           <Text size="2" color={shotStatusColor} style={{ width: 64 }}>
-            {Math.round(layer.distance * 1000).toLocaleString()}
+            {Math.round(layer.distance * 1000).toLocaleString(locale)}
             <Text size="1">mm</Text>
           </Text>
 
@@ -73,7 +76,7 @@ function LayerEntry({
 
       {layer.type === ArmorType.External && (
         <Text size="2" color={shotStatusColor} style={{ width: 64 }}>
-          {Math.round(layer.thickness).toLocaleString()}
+          {Math.round(layer.thickness).toLocaleString(locale)}
           <Text size="1">mm</Text>
         </Text>
       )}
@@ -82,14 +85,14 @@ function LayerEntry({
         layer.type === ArmorType.Spaced) && (
         <>
           <Text size="2" color={shotStatusColor} style={{ width: 80 }}>
-            {Math.round(layer.thicknessAngled).toLocaleString()}
+            {Math.round(layer.thicknessAngled).toLocaleString(locale)}
             <Text size="1">{`mm${
               angle === undefined ? '' : ` ${Math.round(radToDeg(angle))}°`
             }`}</Text>
           </Text>
 
           <Text size="2" color="gray">
-            {Math.round(layer.thickness).toLocaleString()}
+            {Math.round(layer.thickness).toLocaleString(locale)}
             <Text size="1">mm</Text> nominal
           </Text>
         </>
@@ -103,6 +106,8 @@ interface ShotDisplayCardProps extends CardProps {
 }
 
 export function ShotDisplayCard({ shot, ...props }: ShotDisplayCardProps) {
+  const { locale } = useLocale();
+
   if (!shot) return null;
 
   const outTitleColor = shot.out
@@ -117,7 +122,7 @@ export function ShotDisplayCard({ shot, ...props }: ShotDisplayCardProps) {
           <Text color={inTitleColor} weight="bold">
             {shot.in.status !== 'blocked' && shot.in.status !== 'ricochet' && (
               <>
-                {Math.round(shot.damage).toLocaleString()}
+                {Math.round(shot.damage).toLocaleString(locale)}
                 <Text size="1">hp</Text>
               </>
             )}
@@ -182,7 +187,7 @@ export function ShotDisplayCard({ shot, ...props }: ShotDisplayCardProps) {
               {shot.out.status !== 'blocked' &&
                 shot.out.status !== 'ricochet' && (
                   <>
-                    {Math.round(shot.damage).toLocaleString()}
+                    {Math.round(shot.damage).toLocaleString(locale)}
                     <Text size="1">hp</Text>
                   </>
                 )}

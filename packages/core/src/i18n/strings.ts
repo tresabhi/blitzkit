@@ -1,11 +1,8 @@
 import { merge } from 'lodash-es';
 import type en from '../../lang/en.json';
-import { assertSecret, DEFAULT_LOCALE, SUPPORTED_LOCALES } from '../blitzkit';
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from '../blitzkit';
 import { TranslationTree } from './translator';
 
-const PUBLIC_DEBUG_MISSING_I18N = assertSecret(
-  import.meta.env.PUBLIC_DEBUG_MISSING_I18N,
-);
 const files = import.meta.glob('../../lang/*.json', { eager: true });
 export const localizedStrings: Record<string, typeof en> = {};
 
@@ -25,7 +22,11 @@ SUPPORTED_LOCALES.forEach((locale) => {
   const strings = files[`../../lang/${locale}.json`];
   const mergedStrings = merge({}, defaultStrings, strings);
 
-  if (PUBLIC_DEBUG_MISSING_I18N === 'true') nuke(mergedStrings);
+  /**
+   * For some reason, this won't load on the server on the first render so I am
+   * not asserting this one lol
+   */
+  if (import.meta.env.PUBLIC_DEBUG_MISSING_I18N === 'true') nuke(mergedStrings);
 
   localizedStrings[locale] = mergedStrings as typeof en;
 });

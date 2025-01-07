@@ -3,6 +3,7 @@ import { Table } from '@radix-ui/themes';
 import { memo } from 'react';
 import { awaitableAverageDefinitions } from '../../core/awaitables/averageDefinitions';
 import { useAveragesExclusionRatio } from '../../hooks/useAveragesExclusionRatio';
+import { useLocale } from '../../hooks/useLocale';
 import { TankPerformanceEphemeral } from '../../stores/tankPerformanceEphemeral';
 import { TankRowHeaderCell } from '../TankRowHeaderCell';
 
@@ -19,6 +20,7 @@ export const TankRow = memo<TankRowProps>(
     const playerCountPeriod = TankPerformanceEphemeral.use(
       (state) => state.playerCountPeriod,
     );
+    const { locale } = useLocale();
 
     return (
       <Table.Row>
@@ -29,13 +31,14 @@ export const TankRow = memo<TankRowProps>(
         </Table.Cell>
         <Table.Cell align="center">
           {formatCompact(
+            locale,
             Math.round(ratio * averages.samples[playerCountPeriod]),
           )}
         </Table.Cell>
         <Table.Cell align="center">
           {Math.round(
             averages.mu.damage_dealt / averages.mu.battles,
-          ).toLocaleString()}
+          ).toLocaleString(locale)}
         </Table.Cell>
         <Table.Cell align="center">
           {Math.round(
@@ -44,7 +47,9 @@ export const TankRow = memo<TankRowProps>(
           %
         </Table.Cell>
         <Table.Cell align="center">
-          {Math.round(averages.mu.xp / averages.mu.battles).toLocaleString()}
+          {Math.round(averages.mu.xp / averages.mu.battles).toLocaleString(
+            locale,
+          )}
         </Table.Cell>
         <Table.Cell align="center">
           {(averages.mu.frags / averages.mu.battles).toFixed(2)}
@@ -67,7 +72,7 @@ export const TankRow = memo<TankRowProps>(
         <Table.Cell align="center">
           {Math.round(
             averages.mu.damage_received / averages.mu.battles,
-          ).toLocaleString()}
+          ).toLocaleString(locale)}
         </Table.Cell>
         <Table.Cell align="center">
           {(averages.mu.capture_points / averages.mu.battles).toFixed(2)}

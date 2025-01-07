@@ -16,6 +16,7 @@ import {
 } from '@radix-ui/themes';
 import { times } from 'lodash-es';
 import { useState } from 'react';
+import { useLocale } from '../../hooks/useLocale';
 import './index.css';
 
 const DAY_TITLES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -37,6 +38,7 @@ export function DatePicker({
   const [yearOffset, setYearOffset] = useState(0);
   const [monthOffset, setMonthOffset] = useState(0);
   const date = new Date(year + yearOffset, month + monthOffset, day);
+  const { locale } = useLocale();
 
   const daysInLastMonth = new Date(
     year + yearOffset,
@@ -94,11 +96,7 @@ export function DatePicker({
           </IconButton>
 
           <Flex gap="1">
-            <Text>
-              {date.toLocaleString(undefined, {
-                month: 'long',
-              })}
-            </Text>
+            <Text>{date.toLocaleString(locale, { month: 'long' })}</Text>
 
             <Popover.Root onOpenChange={() => setYearScroll(0)}>
               <Popover.Trigger>
