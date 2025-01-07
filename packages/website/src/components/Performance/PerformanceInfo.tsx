@@ -6,6 +6,7 @@ import { awaitableDiscoveredIdsDefinitions } from '../../core/awaitables/discove
 import { literals } from '../../core/i18n/literals';
 import { useLocale } from '../../hooks/useLocale';
 import type { MaybeSkeletonComponentProps } from '../../types/maybeSkeletonComponentProps';
+import { InlineSkeleton } from '../InlineSkeleton';
 
 const [discoveredIdsDefinitions, averageDefinitions] = await Promise.all([
   awaitableDiscoveredIdsDefinitions,
@@ -36,14 +37,13 @@ export function PerformanceInfo({ skeleton }: MaybeSkeletonComponentProps) {
           <InfoCircledIcon />
         </Callout.Icon>
         <Callout.Text>
-          {/* Estimated stats based on{' '}
-          {skeleton ? <InlineSkeleton width="2rem" /> : samples} players.
-          Updated {skeleton ? <InlineSkeleton width="3rem" /> : timeAgo} ago. */}
+          {skeleton && <InlineSkeleton width="9rem" />}
 
-          {literals(strings.website.tools.performance.estimation.body, [
-            samples,
-            timeAgo,
-          ])}
+          {!skeleton &&
+            literals(strings.website.tools.performance.estimation.body, [
+              samples,
+              timeAgo,
+            ])}
         </Callout.Text>
       </Callout.Root>
     </Flex>
