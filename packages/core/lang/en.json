@@ -733,7 +733,12 @@
         "name": "Performance",
         "button": "View tanks",
         "description": "Tank performance statistics",
-        "seo_description": "Best tanks and their performances in World of Tanks Blitz"
+        "seo_description": "Best tanks and their performances in World of Tanks Blitz",
+        "estimation": {
+          "body": "Estimated stats based on %s1 players. Updated %s2 ago.",
+          "hours": "%s1 hours",
+          "minutes": "%s1 minutes"
+        }
       },
       "gallery": {
         "name": "Gallery",

@@ -1,7 +1,11 @@
 import { assertSecret, idToRegion } from '@blitzkit/core';
 import { Button, Flex, Heading, Text } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
-import { useLocale } from '../../hooks/useLocale';
+import {
+  LocaleProvider,
+  useLocale,
+  type LocaleAcceptorProps,
+} from '../../hooks/useLocale';
 import { App } from '../../stores/app';
 import { CURRENT_POLICIES_AGREEMENT_INDEX } from '../../stores/app/constants';
 import { LinkI18n } from '../LinkI18n';
@@ -20,11 +24,13 @@ type Extension =
       status: 'error';
     };
 
-export function Checks() {
+export function Checks({ locale }: LocaleAcceptorProps) {
   return (
-    <App.Provider>
-      <Content />
-    </App.Provider>
+    <LocaleProvider locale={locale}>
+      <App.Provider>
+        <Content />
+      </App.Provider>
+    </LocaleProvider>
   );
 }
 

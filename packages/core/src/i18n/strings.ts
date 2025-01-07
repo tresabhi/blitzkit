@@ -1,9 +1,11 @@
 import { merge } from 'lodash-es';
 import type en from '../../lang/en.json';
-import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from '../blitzkit';
+import { assertSecret, DEFAULT_LOCALE, SUPPORTED_LOCALES } from '../blitzkit';
 import { TranslationTree } from './translator';
 
-const DEBUG_MISSING_I18N = import.meta.env.DEBUG_MISSING_I18N;
+const PUBLIC_DEBUG_MISSING_I18N = assertSecret(
+  import.meta.env.PUBLIC_DEBUG_MISSING_I18N,
+);
 const files = import.meta.glob('../../lang/*.json', { eager: true });
 export const localizedStrings: Record<string, typeof en> = {};
 
@@ -23,7 +25,7 @@ SUPPORTED_LOCALES.forEach((locale) => {
   const strings = files[`../../lang/${locale}.json`];
   const mergedStrings = merge({}, defaultStrings, strings);
 
-  if (DEBUG_MISSING_I18N === 'true') nuke(mergedStrings);
+  if (PUBLIC_DEBUG_MISSING_I18N === 'true') nuke(mergedStrings);
 
   localizedStrings[locale] = mergedStrings as typeof en;
 });

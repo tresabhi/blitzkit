@@ -4,7 +4,11 @@ import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import { google } from 'googleapis';
 import { awaitableTankDefinitions } from '../core/awaitables/tankDefinitions';
 import { literals } from '../core/i18n/literals';
-import { LocaleProvider, useLocale } from '../hooks/useLocale';
+import {
+  LocaleProvider,
+  useLocale,
+  type LocaleAcceptorProps,
+} from '../hooks/useLocale';
 import { TankopediaPersistent } from '../stores/tankopediaPersistent';
 import { TankCard } from './TankCard';
 
@@ -65,11 +69,7 @@ const hotTanks = report.data.rows
     views,
   }));
 
-interface HomePageHotTanksProps {
-  locale: string | undefined;
-}
-
-export function HomePageHotTanks({ locale }: HomePageHotTanksProps) {
+export function HomePageHotTanks({ locale }: LocaleAcceptorProps) {
   return (
     <LocaleProvider locale={locale}>
       <TankopediaPersistent.Provider>

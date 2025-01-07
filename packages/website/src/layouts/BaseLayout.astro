@@ -12,6 +12,7 @@ export interface Props {
 }
 
 const { noFooter } = Astro.props;
+const { locale } = Astro.params;
 const { pathname } = Astro.url;
 const isRoot = pathname === '/';
 ---
@@ -57,7 +58,7 @@ const isRoot = pathname === '/';
       <Flex direction="column" minHeight="100vh">
         <Navbar />
 
-        <Checks client:only="react" />
+        <Checks {locale} client:only="react" />
 
         <slot />
 

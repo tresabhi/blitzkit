@@ -12,17 +12,20 @@ import { VideoSection } from '../../../../../components/Tankopedia/VideoSection'
 import { awaitableModelDefinitions } from '../../../../../core/awaitables/modelDefinitions';
 import { awaitableProvisionDefinitions } from '../../../../../core/awaitables/provisionDefinitions';
 import { awaitableTankDefinitions } from '../../../../../core/awaitables/tankDefinitions';
-import { LocaleProvider } from '../../../../../hooks/useLocale';
+import {
+  LocaleProvider,
+  type LocaleAcceptorProps,
+} from '../../../../../hooks/useLocale';
 import { App } from '../../../../../stores/app';
 import { Duel } from '../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../stores/tankopediaEphemeral';
 import { TankopediaPersistent } from '../../../../../stores/tankopediaPersistent';
 import type { MaybeSkeletonComponentProps } from '../../../../../types/maybeSkeletonComponentProps';
 
-type PageProps = MaybeSkeletonComponentProps & {
-  id: number;
-  locale: string | undefined;
-};
+type PageProps = MaybeSkeletonComponentProps &
+  LocaleAcceptorProps & {
+    id: number;
+  };
 
 const [tankDefinitions, provisionDefinitions, modelDefinitions] =
   await Promise.all([

@@ -3,17 +3,25 @@ import { PerformanceInfo } from '../../../../components/Performance/PerformanceI
 import { PlayerCountControl } from '../../../../components/Performance/PlayerCountControl';
 import { TankTable } from '../../../../components/Performance/Table';
 import { FilterControl } from '../../../../components/TankSearch/components/FilterControl';
+import {
+  LocaleProvider,
+  type LocaleAcceptorProps,
+} from '../../../../hooks/useLocale';
 import { TankPerformanceEphemeral } from '../../../../stores/tankPerformanceEphemeral';
 import { TankPerformanceSort } from '../../../../stores/tankPerformanceSort';
 import type { MaybeSkeletonComponentProps } from '../../../../types/maybeSkeletonComponentProps';
 
-export function Page({ skeleton }: MaybeSkeletonComponentProps) {
+type PageProps = MaybeSkeletonComponentProps & LocaleAcceptorProps;
+
+export function Page({ skeleton, locale }: PageProps) {
   return (
-    <TankPerformanceSort.Provider>
-      <TankPerformanceEphemeral.Provider>
-        <Content skeleton={skeleton} />
-      </TankPerformanceEphemeral.Provider>
-    </TankPerformanceSort.Provider>
+    <LocaleProvider locale={locale}>
+      <TankPerformanceSort.Provider>
+        <TankPerformanceEphemeral.Provider>
+          <Content skeleton={skeleton} />
+        </TankPerformanceEphemeral.Provider>
+      </TankPerformanceSort.Provider>
+    </LocaleProvider>
   );
 }
 

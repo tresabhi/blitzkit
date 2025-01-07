@@ -7,8 +7,7 @@ const LocaleContext = createContext<{
   localeRaw: string | undefined;
 } | null>(null);
 
-interface LocaleProviderProps {
-  locale: string | undefined;
+interface LocaleProviderProps extends LocaleAcceptorProps {
   children: ReactNode;
 }
 
@@ -32,4 +31,8 @@ export function useLocale() {
   const strings = getStrings(context.locale);
 
   return { locale: context.locale, strings };
+}
+
+export interface LocaleAcceptorProps {
+  locale: string | undefined;
 }
