@@ -5,7 +5,6 @@ import {
   TankType,
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
-import strings from '@blitzkit/core/lang/en-US.json';
 import { ChevronLeftIcon, MixIcon, UpdateIcon } from '@radix-ui/react-icons';
 import { Button, Code, Dialog, Flex, Link } from '@radix-ui/themes';
 import { useState } from 'react';
@@ -39,7 +38,7 @@ export function MetaSection() {
   const mutateDuel = Duel.useMutation();
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const [showSwapDialog, setShowSwapDialog] = useState(false);
-  const { locale } = useLocale();
+  const { locale, strings } = useLocale();
 
   return (
     <Flex justify="center" align="center">

@@ -799,7 +799,9 @@
         "name": "Tankopedia",
         "button": "Find tanks",
         "description": "Blitz tank encyclopedia",
-        "seo_description": "Statistics, armor, and more for all tanks in World of Tanks Blitz"
+        "seo_description": "Statistics, armor, and more for all tanks in World of Tanks Blitz",
+        "tank_seo_title": "%s1 - Tier %s2 %s3 %s4 | %s5 Tankopedia | World of Tanks Blitz (WoTB)",
+        "tank_seo_description": "%s1 armor, statistics, equipment, provisions, and more. %s2 DPM, %s3hp alpha, %s4mm penetration, %s5kph top speed, %s6hp health."
       },
       "compare": {
         "name": "Compare",

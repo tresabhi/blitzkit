@@ -1,18 +1,20 @@
 ---
 import {
-asset,
-createDefaultProvisions,
-createDefaultSkills,
-fetchEquipmentDefinitions,
-fetchModelDefinitions,
-fetchProvisionDefinitions,
-fetchSkillDefinitions,
-fetchTankDefinitions,
-TIER_ROMAN_NUMERALS,
+  asset,
+  createDefaultProvisions,
+  createDefaultSkills,
+  DEFAULT_LOCALE,
+  fetchEquipmentDefinitions,
+  fetchModelDefinitions,
+  fetchProvisionDefinitions,
+  fetchSkillDefinitions,
+  fetchTankDefinitions,
+  TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
-import strings from '@blitzkit/core/lang/en-US.json';
 import type { GetStaticPaths } from 'astro';
 import { tankCharacteristics } from '../../../../../core/blitzkit/tankCharacteristics';
+import { getStrings } from '../../../../../core/i18n/getStrings';
+import { literals } from '../../../../../core/i18n/literals';
 import BaseLayout from '../../../../../layouts/BaseLayout.astro';
 import { genericDefaultEquipmentMatrix } from '../../../../../stores/duel/constants';
 import { getStaticPaths as parentGetStaticPaths } from '../index.astro';
@@ -31,8 +33,9 @@ export const getStaticPaths = (async () => {
     .flat();
 }) satisfies GetStaticPaths;
 
-const {id} = Astro.params;
+const { id } = Astro.params;
 const locale = Astro.params.locale ?? DEFAULT_LOCALE;
+const strings = getStrings(locale);
 const tankDefinitions = await fetchTankDefinitions();
 const skillDefinitions = await fetchSkillDefinitions();
 const provisionDefinitions = await fetchProvisionDefinitions();
@@ -41,11 +44,16 @@ const tankModelDefinitions = await fetchModelDefinitions();
 const tank = tankDefinitions.tanks[id];
 const tankModelDefinition = tankModelDefinitions.models[tank.id];
 const name = tank.name_full ?? tank.name;
-const title = `${name} - Tier ${TIER_ROMAN_NUMERALS[tank.tier]} ${
+const title = literals(strings.website.tools.tankopedia.tank_seo_title, [
+  name,
+  TIER_ROMAN_NUMERALS[tank.tier],
   strings.common.nations_adjectives[
     tank.nation as keyof typeof strings.common.nations_adjectives
-  ]
-} ${strings.common.tank_class_short[tank.class]} | BlitzKit Tankopedia | World of Tanks Blitz (WoTB)`;
+  ],
+  strings.common.tank_class_short[tank.class],
+  'BlitzKit',
+  strings.common.nations[tank.nation as keyof typeof strings.common.nations],
+]);
 const url = import.meta.env.SITE + Astro.url.pathname;
 const icon = asset(`icons/tanks/big/${id}.webp`);
 const turret = tank.turrets.at(-1)!;
@@ -73,15 +81,17 @@ const characteristics = tankCharacteristics(
   },
   { equipmentDefinitions, provisionDefinitions, tankModelDefinition },
 );
-const description = `${
-  name
-} armor, statistics, equipment, provisions, and more. ${Math.round(
-  characteristics.dpm,
-).toLocaleString(locale)} DPM, ${characteristics.damage.toFixed(0)}hp alpha, ${characteristics.penetration.toFixed(
-  0,
-)}mm penetration, ${characteristics.speedForwards.toFixed(
-  0,
-)}kph top speed, ${characteristics.health}hp health.`;
+const description = literals(
+  strings.website.tools.tankopedia.tank_seo_description,
+  [
+    name,
+    Math.round(characteristics.dpm).toLocaleString(locale),
+    Math.round(characteristics.damage).toLocaleString(locale),
+    Math.round(characteristics.penetration).toLocaleString(locale),
+    Math.round(characteristics.speedForwards).toLocaleString(locale),
+    Math.round(characteristics.health).toLocaleString(locale),
+  ],
+);
 ---
 
 <title>{title}</title>

@@ -1,6 +1,6 @@
 import { TIER_ROMAN_NUMERALS } from '@blitzkit/core';
-import strings from '@blitzkit/core/lang/en-US.json';
 import { Flex, Heading, SegmentedControl, Text } from '@radix-ui/themes';
+import { useLocale } from '../../../../../../hooks/useLocale';
 import { Duel } from '../../../../../../stores/duel';
 import {
   TankopediaEphemeral,
@@ -13,6 +13,7 @@ export function CharacteristicsHeading() {
   );
   const tank = Duel.use((state) => state.protagonist.tank);
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
+  const { strings } = useLocale();
 
   return (
     <Flex
