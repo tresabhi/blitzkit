@@ -3,7 +3,6 @@ import { assertSecret, fetchGameDefinitions } from '@blitzkit/core';
 import { Code, Flex, Heading, Link, Text } from '@radix-ui/themes';
 import packageJson from '../../../../package.json';
 import { getStrings } from '../core/i18n/getStrings';
-import { LinkI18n } from './LinkI18n';
 
 const gameDefinitions = await fetchGameDefinitions();
 const { locale } = Astro.params;
@@ -72,9 +71,9 @@ const strings = getStrings(locale);
             sm: 'start',
           }}
         >
-          <LinkI18n {locale} href="/docs/about/credits" color="gray">
+          <Link href="/docs/about/credits" color="gray">
             {strings.website.footer.about.credits}
-          </LinkI18n>
+          </Link>
           <Link
             href="https://discord.gg/nDt7AjGJQH"
             target="_blank"
@@ -89,9 +88,9 @@ const strings = getStrings(locale);
           >
             {strings.website.footer.about.github}
           </Link>
-          <LinkI18n {locale} href="/docs/patches" color="gray">
+          <Link href="/docs/patches" color="gray">
             {strings.website.footer.about.patches}
-          </LinkI18n>
+          </Link>
         </Flex>
       </Flex>
 
@@ -109,12 +108,12 @@ const strings = getStrings(locale);
       >
         <Heading size="3">{strings.website.footer.legal.title}</Heading>
         <Flex direction="column">
-          <LinkI18n {locale} href="/docs/legal/privacy-policy" color="gray">
+          <Link href="/docs/legal/privacy-policy" color="gray">
             {strings.website.footer.legal.privacy}
-          </LinkI18n>
-          <LinkI18n {locale} href="/docs/legal/terms-of-service" color="gray">
+          </Link>
+          <Link href="/docs/legal/terms-of-service" color="gray">
             {strings.website.footer.legal.terms}
-          </LinkI18n>
+          </Link>
         </Flex>
       </Flex>
     </Flex>
