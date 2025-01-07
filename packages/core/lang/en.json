@@ -716,6 +716,68 @@
     "common": {
       "copy_button": {
         "copied": "Copied!"
+      },
+
+      "tank_search": {
+        "search_bar_hint": "Search tanks...",
+        "recent": "Recently viewed",
+        "select_all": "Select all",
+        "count_singular": "1 tank",
+        "count_plural": "%s1 tanks",
+        "sorting_by": "Sorting by %s1",
+        "sort": {
+          "meta.none": "none",
+          "survivability.health": "health",
+          "survivability.viewRange": "view range",
+          "survivability.camouflageStill": "camouflage still",
+          "survivability.camouflageMoving": "camouflage moving",
+          "survivability.camouflageShooting": "camouflage shooting",
+          "survivability.volume": "volume",
+          "survivability.length": "length",
+          "fire.dpm": "standard DPM",
+          "fire.dpmPremium": "premium DPM",
+          "fire.reload": "reload",
+          "fire.caliber": "caliber",
+          "fire.standardPenetration": "standard penetration",
+          "fire.premiumPenetration": "premium penetration",
+          "fire.damage": "damage",
+          "fire.moduleDamage": "module damage",
+          "fire.shellVelocity": "shell velocity",
+          "fire.shellRange": "shell range",
+          "fire.shellCapacity": "shell capacity",
+          "fire.aimTime": "aim time",
+          "fire.dispersionStill": "dispersion still",
+          "fire.dispersionMoving": "dispersion moving",
+          "fire.gunDepression": "gun depression",
+          "fire.gunElevation": "gun elevation",
+          "maneuverability.forwardsSpeed": "forwards speed",
+          "maneuverability.backwardsSpeed": "backwards speed",
+          "maneuverability.power": "power",
+          "maneuverability.powerToWeight": "power to weight",
+          "maneuverability.weight": "weight",
+          "maneuverability.traverseSpeed": "traverse speed"
+        },
+        "sort_dropdown": {
+          "label": "Sort",
+          "groups": {
+            "sort": {
+              "no_sort": "No sort",
+              "label": "Sort by",
+              "fire": "Fire",
+              "maneuverability": "Maneuverability",
+              "survivability": "Survivability"
+            },
+            "direction": {
+              "label": "Direction",
+              "ascending": "Ascending",
+              "descending": "Descending"
+            }
+          }
+        }
+      },
+
+      "warnings": {
+        "test": "Tanks in testing are subject to change and may not represent the final product."
       }
     },
 
@@ -743,7 +805,24 @@
         "name": "Compare",
         "button": "Compare tanks",
         "description": "Compare tank statistics",
-        "seo_description": "Compare tanks statistics and loadouts in World of Tanks Blitz"
+        "seo_description": "Compare tanks statistics and loadouts in World of Tanks Blitz",
+        "actions": {
+          "add": {
+            "button": "Add",
+            "title": "Add tanks",
+            "description": "Select tanks to add to comparison"
+          },
+          "clear": "Clear",
+          "deltas": {
+            "none": "No deltas",
+            "percentage": "Percentage",
+            "absolute": "Absolute"
+          }
+        },
+        "no_tanks": {
+          "title": "No tanks selected",
+          "body": "Press the Add button to get started"
+        }
       },
       "performance": {
         "name": "Performance",

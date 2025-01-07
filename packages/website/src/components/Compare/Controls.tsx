@@ -2,6 +2,7 @@ import { PlusIcon, TrashIcon } from '@radix-ui/react-icons';
 import { Button, Dialog, Flex, SegmentedControl } from '@radix-ui/themes';
 import { awaitableProvisionDefinitions } from '../../core/awaitables/provisionDefinitions';
 import { tankToCompareMember } from '../../core/blitzkit/tankToCompareMember';
+import { useLocale } from '../../hooks/useLocale';
 import { CompareEphemeral } from '../../stores/compareEphemeral';
 import {
   ComparePersistent,
@@ -23,6 +24,7 @@ export function Controls({
   const deltaMode = ComparePersistent.use((state) => state.deltaMode);
   const mutateCompareEphemeral = CompareEphemeral.useMutation();
   const mutateComparePersistent = ComparePersistent.useMutation();
+  const { strings } = useLocale();
 
   return (
     <Flex gap="2" wrap="wrap" justify="center">
@@ -32,14 +34,16 @@ export function Controls({
       >
         <Dialog.Trigger>
           <Button variant="soft">
-            <PlusIcon /> Add
+            <PlusIcon /> {strings.website.tools.compare.actions.add.button}
           </Button>
         </Dialog.Trigger>
 
         <Dialog.Content>
-          <Dialog.Title align="center">Add tanks</Dialog.Title>
+          <Dialog.Title align="center">
+            {strings.website.tools.compare.actions.add.title}
+          </Dialog.Title>
           <Dialog.Description align="center">
-            Select tanks to add to comparison
+            {strings.website.tools.compare.actions.add.description}
           </Dialog.Description>
 
           <Flex gap="4" direction="column">
@@ -87,7 +91,7 @@ export function Controls({
           });
         }}
       >
-        <TrashIcon /> Clear
+        <TrashIcon /> {strings.website.tools.compare.actions.clear}
       </Button>
 
       <SegmentedControl.Root
@@ -99,13 +103,13 @@ export function Controls({
         }}
       >
         <SegmentedControl.Item value={'none' satisfies DeltaMode}>
-          No deltas
+          {strings.website.tools.compare.actions.deltas.none}
         </SegmentedControl.Item>
         <SegmentedControl.Item value={'percentage' satisfies DeltaMode}>
-          Percentage
+          {strings.website.tools.compare.actions.deltas.percentage}
         </SegmentedControl.Item>
         <SegmentedControl.Item value={'absolute' satisfies DeltaMode}>
-          Absolute
+          {strings.website.tools.compare.actions.deltas.absolute}
         </SegmentedControl.Item>
       </SegmentedControl.Root>
     </Flex>

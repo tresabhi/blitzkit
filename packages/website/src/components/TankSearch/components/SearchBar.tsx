@@ -4,6 +4,7 @@ import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { Flex, Spinner, TextField } from '@radix-ui/themes';
 import { debounce } from 'lodash-es';
 import { type KeyboardEventHandler, useCallback, useRef } from 'react';
+import { useLocale } from '../../../hooks/useLocale';
 import { $tankFilters } from '../../../stores/tankFilters';
 import { QuickLink } from './QuickLink';
 import { Sort } from './Sort';
@@ -14,6 +15,7 @@ interface SearchBarProps {
 }
 
 export function SearchBar({ topResult, onSelect }: SearchBarProps) {
+  const { strings } = useLocale();
   const tankFilters = useStore($tankFilters);
   const input = useRef<HTMLInputElement>(null);
   const performSearch = useCallback(
@@ -67,7 +69,7 @@ export function SearchBar({ topResult, onSelect }: SearchBarProps) {
           defaultValue={tankFilters.search}
           style={{ flex: 1 }}
           ref={input}
-          placeholder="Search tanks..."
+          placeholder={strings.website.common.tank_search.search_bar_hint}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
         >
