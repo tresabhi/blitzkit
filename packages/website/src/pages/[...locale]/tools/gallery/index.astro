@@ -7,7 +7,8 @@ import { Page } from './_index';
 
 export { getStaticPaths } from '../../index.astro';
 
-const glossary = await fetchGlossary();
+const { locale } = Astro.params;
+const glossary = await fetchGlossary(locale);
 const avatars = Object.entries(glossary)
   .filter(
     ([key, value]) =>
@@ -20,9 +21,9 @@ const avatars = Object.entries(glossary)
       ({ id: key.replace('avatar_', ''), name: value.title }) satisfies Avatar,
   )
   .sort((a, b) => a.name.localeCompare(b.name));
-const lastUpdated = new Date().toLocaleDateString();
+const lastUpdated = new Date().toLocaleDateString(locale);
 ---
 
 <ToolLayout tool={galleryTool}>
-  <Page {avatars} {lastUpdated} client:load />
+  <Page {locale} {avatars} {lastUpdated} client:load />
 </ToolLayout>

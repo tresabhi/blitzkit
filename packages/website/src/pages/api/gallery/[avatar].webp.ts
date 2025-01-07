@@ -1,8 +1,9 @@
+import { DEFAULT_LOCALE } from '@blitzkit/core';
 import type { APIRoute, GetStaticPaths } from 'astro';
 import { fetchGlossary } from '../../../core/blitz/fetchGlossary';
 
 export const getStaticPaths = (async () => {
-  const glossary = await fetchGlossary();
+  const glossary = await fetchGlossary(DEFAULT_LOCALE);
   const avatarKeys = Object.keys(glossary)
     .filter((key) => key.startsWith('avatar_'))
     .map((key) => key.replace('avatar_', ''));
@@ -10,7 +11,7 @@ export const getStaticPaths = (async () => {
   return avatarKeys.map((avatar) => ({ params: { avatar } }));
 }) satisfies GetStaticPaths;
 
-const glossary = await fetchGlossary();
+const glossary = await fetchGlossary(DEFAULT_LOCALE);
 
 export const GET: APIRoute<{}, { avatar: string }> = async ({ params }) => {
   const image =

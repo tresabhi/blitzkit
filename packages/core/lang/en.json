@@ -778,7 +778,12 @@
         "name": "Gallery",
         "button": "Browse all",
         "description": "Blitz player avatars",
-        "seo_description": "All World of Tanks Blitz player avatars"
+        "seo_description": "All World of Tanks Blitz player avatars",
+        "last_updated": "Last updated on %s1",
+        "search": {
+          "hint": "Search avatars...",
+          "results": "%s1 avatars"
+        }
       },
       "session": {
         "name": "Session",
