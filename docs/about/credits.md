@@ -5,6 +5,7 @@ BlitzKit is a one man band **TrèsAbhi** but I am far from solo.
 | Role                           | People                         |
 | ------------------------------ | ------------------------------ |
 | Bot verification               | S0AP                           |
+| General testing | Prince_NA |
 | Bot advertisement platform     | S0AP                           |
 | Bot rendering pipeline         | Vovko                          |
 | Game asset decompression       | Maddox                         |
