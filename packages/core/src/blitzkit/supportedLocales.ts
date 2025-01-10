@@ -23,3 +23,14 @@ export const SUPPORTED_LOCALE_BLITZ_MAP: Record<SupportedLocale, string> = {
   uk: 'uk',
   zh: 'zh-Hans',
 };
+
+export const SUPPORTED_LOCALE_FLAGS: Record<SupportedLocale, string> = {
+  en: '🇺🇸',
+  es: '🇪🇸',
+  fr: '🇫🇷',
+  ja: '🇯🇵',
+  pt: '🇵🇹',
+  ru: '🇷🇺',
+  uk: '🇺🇦',
+  zh: '🇨🇳',
+};

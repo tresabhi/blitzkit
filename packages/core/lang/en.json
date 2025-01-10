@@ -26,11 +26,12 @@
     "locales": {
       "en": "English",
       "es": "Spanish",
-      "hr": "Croatian",
       "pt": "Portuguese",
       "ru": "Russian",
       "uk": "Ukrainian",
-      "zh": "Chinese"
+      "zh": "Chinese",
+      "ja": "Japanese",
+      "fr": "French"
     },
 
     "wn8_percentile": {

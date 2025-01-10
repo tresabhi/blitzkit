@@ -2,14 +2,14 @@
 import {
   assertSecret,
   DEFAULT_LOCALE,
-  localizedStrings,
   SUPPORTED_LOCALES,
 } from '@blitzkit/core';
-import { Box, Flex, Heading, Link, Separator } from '@radix-ui/themes';
+import { Box, Flex, Heading } from '@radix-ui/themes';
 import type { GetStaticPaths } from 'astro';
 import { AesonPlug } from '../../components/AesonPlug';
 import HomeHero from '../../components/HomeHero.astro';
 import { HomePageHotTanks } from '../../components/HomePageHotTanks';
+import { LocaleSwitcher } from '../../components/LocaleSwitcher';
 import { Plugs } from '../../components/Plugs';
 import ToolCard from '../../components/ToolCard.astro';
 import {
@@ -42,30 +42,7 @@ export const getStaticPaths = (() => {
 <BaseLayout>
   <HomeHero />
 
-  <Flex justify="center" gap="3" pt="6" pb="4" align="center">
-    {
-      SUPPORTED_LOCALES.map((thisLocale, index) => {
-        const selected =
-          thisLocale === locale ||
-          (locale === undefined && thisLocale === DEFAULT_LOCALE);
-        const localeNames = localizedStrings[thisLocale].common.locales;
-
-        return (
-          <>
-            {index > 0 && <Separator orientation="vertical" size="1" />}
-
-            <Link
-              color="gray"
-              highContrast={selected}
-              href={`/${thisLocale === DEFAULT_LOCALE ? '' : thisLocale}`}
-            >
-              {localeNames[thisLocale as keyof typeof localeNames]}
-            </Link>
-          </>
-        );
-      })
-    }
-  </Flex>
+  <LocaleSwitcher {locale} client:load />
 
   <Plugs client:idle />
 
