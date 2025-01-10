@@ -5,6 +5,7 @@ import packageJson from '../../../../package.json';
 import { getStrings } from '../core/i18n/getStrings';
 
 const gameDefinitions = await fetchGameDefinitions();
+const PUBLIC_ASSET_BRANCH = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
 const { locale } = Astro.params;
 const strings = getStrings(locale);
 ---
@@ -122,7 +123,15 @@ const strings = getStrings(locale);
   <Flex gap="5" display={{ initial: 'flex', sm: 'none' }}>
     <Flex direction="column" justify="between" align="end">
       <Text size="2" color="gray">BlitzKit</Text>
-      <Text size="2" color="gray">WoT Blitz</Text>
+
+      {
+        PUBLIC_ASSET_BRANCH !== 'opentest' && (
+          <Text size="2" color="gray">
+            WoT Blitz
+          </Text>
+        )
+      }
+
       <Text size="2" color="gray">CDN</Text>
     </Flex>
 
@@ -130,11 +139,17 @@ const strings = getStrings(locale);
       <Code size="2" color="gray">
         {packageJson.version}
       </Code>
+
+      {
+        PUBLIC_ASSET_BRANCH !== 'opentest' && (
+          <Code size="2" color="gray">
+            {gameDefinitions.version}
+          </Code>
+        )
+      }
+
       <Code size="2" color="gray">
-        {gameDefinitions.version}
-      </Code>
-      <Code size="2" color="gray">
-        {assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH)}
+        {PUBLIC_ASSET_BRANCH}
       </Code>
     </Flex>
   </Flex>
@@ -144,13 +159,23 @@ const strings = getStrings(locale);
     <Code size="2" color="gray">
       {packageJson.version}
     </Code>
-    <Text size="2" color="gray">WoT Blitz</Text>
-    <Code size="2" color="gray">
-      {gameDefinitions.version}
-    </Code>
+
+    {
+      PUBLIC_ASSET_BRANCH !== 'opentest' && (
+        <>
+          <Text size="2" color="gray">
+            WoT Blitz
+          </Text>
+          <Code size="2" color="gray">
+            {gameDefinitions.version}
+          </Code>
+        </>
+      )
+    }
+
     <Text size="2" color="gray">CDN</Text>
     <Code size="2" color="gray">
-      {assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH)}
+      {PUBLIC_ASSET_BRANCH}
     </Code>
   </Flex>
 </Flex>

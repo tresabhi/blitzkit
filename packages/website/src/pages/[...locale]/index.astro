@@ -26,7 +26,8 @@ import {
 import { getStrings } from '../../core/i18n/getStrings';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
-const branch = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
+const PUBLIC_ASSET_BRANCH = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
+const MODE = assertSecret(import.meta.env.MODE);
 const locale = Astro.params.locale ?? DEFAULT_LOCALE;
 const strings = getStrings(Astro.params.locale);
 
@@ -69,7 +70,7 @@ export const getStaticPaths = (() => {
   <Plugs client:idle />
 
   {
-    branch === 'preview' && (
+    PUBLIC_ASSET_BRANCH === 'preview' && (
       <Flex justify="center" my="8" px="4">
         <AesonPlug />
       </Flex>
@@ -80,7 +81,11 @@ export const getStaticPaths = (() => {
     <Flex maxWidth="64rem" flexGrow="1" gap="4" direction="column">
       <ToolCard tool={tankopediaTool} />
 
-      <HomePageHotTanks {locale} />
+      {
+        (PUBLIC_ASSET_BRANCH === 'main' || MODE === 'development') && (
+          <HomePageHotTanks {locale} />
+        )
+      }
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         {/* <ToolCard tool={playerStatsTool} /> */}
