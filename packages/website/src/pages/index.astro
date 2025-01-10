@@ -3,7 +3,6 @@ import { assertSecret } from '@blitzkit/core';
 import { Box, Flex, Heading } from '@radix-ui/themes';
 import { AesonPlug } from '../components/AesonPlug';
 import HomeHero from '../components/HomeHero.astro';
-import { HomePageHotTanks } from '../components/HomePageHotTanks';
 import { Plugs } from '../components/Plugs.tsx';
 import ToolCard from '../components/ToolCard.astro';
 import {
@@ -38,12 +37,6 @@ const branch = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
   <Flex p="4" justify="center" gap="4" mt="3">
     <Flex maxWidth="64rem" flexGrow="1" gap="4" direction="column">
       <ToolCard tool={tankopediaTool} />
-
-      {
-        (branch === 'main' || import.meta.env.MODE === 'development') && (
-          <HomePageHotTanks />
-        )
-      }
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         {/* <ToolCard tool={playerStatsTool} /> */}
