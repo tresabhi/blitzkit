@@ -39,7 +39,11 @@ const branch = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
     <Flex maxWidth="64rem" flexGrow="1" gap="4" direction="column">
       <ToolCard tool={tankopediaTool} />
 
-      <HomePageHotTanks />
+      {
+        (branch === 'main' || import.meta.env.MODE === 'development') && (
+          <HomePageHotTanks />
+        )
+      }
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         {/* <ToolCard tool={playerStatsTool} /> */}
