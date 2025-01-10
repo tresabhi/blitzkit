@@ -24,7 +24,9 @@ export function AesonPlug() {
 
         <Flex py="3" px="5" direction="column" justify="center">
           <Heading size="5">Preview brought to you by WoT Blitz News</Heading>
-          <Text color="gray">What the hell do I put here haha</Text>
+          <Text color="gray">
+            Join the Discord for the absolute latest news
+          </Text>
         </Flex>
       </Flex>
     </Link>
