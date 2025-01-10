@@ -1,7 +1,6 @@
 ---
 import { assertSecret, fetchGameDefinitions } from '@blitzkit/core';
 import { Code, Flex, Heading, Link, Text } from '@radix-ui/themes';
-import packageJson from '../../../../package.json';
 
 const gameDefinitions = await fetchGameDefinitions();
 ---
@@ -120,9 +119,9 @@ const gameDefinitions = await fetchGameDefinitions();
     </Flex>
 
     <Flex direction="column" justify="between" align="start">
-      <Code size="2" color="gray">
+      <!-- <Code size="2" color="gray">
         {packageJson.version}
-      </Code>
+      </Code> -->
       <Code size="2" color="gray">
         {gameDefinitions.version}
       </Code>
@@ -134,9 +133,9 @@ const gameDefinitions = await fetchGameDefinitions();
 
   <Flex gap="2" align="center" display={{ initial: 'none', sm: 'flex' }}>
     <Text size="2" color="gray"> BlitzKit </Text>
-    <Code size="2" color="gray">
+    <!-- <Code size="2" color="gray">
       {packageJson.version}
-    </Code>
+    </Code> -->
     <Text size="2" color="gray"> WoT Blitz </Text>
     <Code size="2" color="gray">
       {gameDefinitions.version}
