@@ -1,5 +1,5 @@
 import { TIER_ROMAN_NUMERALS } from '@blitzkit/core';
-import strings from '@blitzkit/core/lang/en-US.json';
+import strings from '@blitzkit/core/lang/en.json';
 import { Flex, Heading, SegmentedControl, Text } from '@radix-ui/themes';
 import { Duel } from '../../../../../../stores/duel';
 import {

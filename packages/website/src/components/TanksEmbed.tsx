@@ -6,7 +6,7 @@ import {
   type CompositeStats,
   type CompositeStatsKey,
 } from '@blitzkit/core';
-import strings from '@blitzkit/core/lang/en-US.json';
+import strings from '@blitzkit/core/lang/en.json';
 import { amberDark, blueDark } from '@radix-ui/colors';
 import { Flex, Text, type FlexProps } from '@radix-ui/themes';
 import { times } from 'lodash-es';

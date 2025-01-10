@@ -3,7 +3,7 @@ import {
   type AccountListItem,
   type AccountListWithServer,
 } from '@blitzkit/core';
-import strings from '@blitzkit/core/lang/en-US.json';
+import strings from '@blitzkit/core/lang/en.json';
 import { CaretLeftIcon, Link2Icon, PersonIcon } from '@radix-ui/react-icons';
 import {
   Badge,

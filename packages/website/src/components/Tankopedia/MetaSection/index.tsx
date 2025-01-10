@@ -5,7 +5,7 @@ import {
   TankType,
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
-import strings from '@blitzkit/core/lang/en-US.json';
+import strings from '@blitzkit/core/lang/en.json';
 import { ChevronLeftIcon, MixIcon, UpdateIcon } from '@radix-ui/react-icons';
 import { Button, Code, Dialog, Flex, Link } from '@radix-ui/themes';
 import { useState } from 'react';

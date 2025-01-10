@@ -5,7 +5,7 @@ import {
   TankClass,
   formatCompact,
 } from '@blitzkit/core';
-import strings from '@blitzkit/core/lang/en-US.json';
+import strings from '@blitzkit/core/lang/en.json';
 import { useStore } from '@nanostores/react';
 import { Box, Flex, Heading } from '@radix-ui/themes';
 import { awaitableAverageDefinitions } from '../../core/awaitables/averageDefinitions';
