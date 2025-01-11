@@ -11,7 +11,9 @@ const { tool } = Astro.props;
 const { locale } = Astro.params;
 const strings = getStrings(locale);
 const toolStrings =
-  strings.website.tools[tool.id as keyof typeof strings.website.tools];
+  strings.website.tools[
+    (tool.stringsId ?? tool.id) as keyof typeof strings.website.tools
+  ];
 ---
 
 <title>{toolStrings.name}</title>
