@@ -1,34 +1,45 @@
-import { Flex, Heading, Switch, Text } from '@radix-ui/themes';
+import { DEFAULT_LOCALE } from '@blitzkit/core';
+import { Flex, Switch, Text } from '@radix-ui/themes';
+import { LocaleSwitcher } from '../../../components/LocaleSwitcher';
 import { PageWrapper } from '../../../components/PageWrapper';
+import {
+  LocaleProvider,
+  useLocale,
+  type LocaleAcceptorProps,
+} from '../../../hooks/useLocale';
 import { App } from '../../../stores/app';
 
-export function Page() {
+export function Page({ locale = DEFAULT_LOCALE }: LocaleAcceptorProps) {
   return (
-    <App.Provider>
-      <Content />
-    </App.Provider>
+    <LocaleProvider locale={locale}>
+      <App.Provider>
+        <Content locale={locale} />
+      </App.Provider>
+    </LocaleProvider>
   );
 }
 
-function Content() {
+function Content({ locale }: LocaleAcceptorProps) {
   const developerMode = App.useDeferred((state) => state.developerMode, false);
   const appStore = App.useStore();
+  const { strings } = useLocale();
 
   return (
     <PageWrapper justify="center" align="center">
-      <Flex direction="column" gap="4">
-        <Flex gap="3" direction="column">
-          <Heading size="5">Advanced</Heading>
+      <Flex gap="3" direction="column" width="100%" maxWidth="20rem">
+        <Flex align="center" gap="2" justify="between">
+          <Text>{strings.website.settings.dev_mode}</Text>
+          <Switch
+            checked={developerMode}
+            onCheckedChange={(checked) =>
+              appStore.setState({ developerMode: checked })
+            }
+          />
+        </Flex>
 
-          <Flex align="center" gap="2">
-            <Text>Developer mode</Text>
-            <Switch
-              checked={developerMode}
-              onCheckedChange={(checked) =>
-                appStore.setState({ developerMode: checked })
-              }
-            />
-          </Flex>
+        <Flex align="center" gap="2" justify="between">
+          <Text>{strings.website.settings.language}</Text>
+          <LocaleSwitcher locale={locale} />
         </Flex>
       </Flex>
     </PageWrapper>

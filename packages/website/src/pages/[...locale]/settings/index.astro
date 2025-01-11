@@ -1,8 +1,12 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { Page } from './_index';
+
+export { getStaticPaths } from '../index.astro';
+
+const { locale } = Astro.params;
 ---
 
 <BaseLayout>
-  <Page client:load />
+  <Page {locale} client:load />
 </BaseLayout>

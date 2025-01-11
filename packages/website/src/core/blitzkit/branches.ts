@@ -1,6 +1,6 @@
 import { assertSecret, DEFAULT_LOCALE, localizedStrings } from '@blitzkit/core';
 
-export function resolveBranchName(locale = DEFAULT_LOCALE) {
+export function resolveBranchName(locale: string = DEFAULT_LOCALE) {
   const strings = localizedStrings[locale];
   const secret = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
 

@@ -7,9 +7,9 @@ import {
 import { Box, Flex, Heading } from '@radix-ui/themes';
 import type { GetStaticPaths } from 'astro';
 import { AesonPlug } from '../../components/AesonPlug';
+import { HomeLocaleSwitcher } from '../../components/Home/HomeLocaleSwitcher';
 import HomeHero from '../../components/HomeHero.astro';
 import { HomePageHotTanks } from '../../components/HomePageHotTanks';
-import { LocaleSwitcher } from '../../components/LocaleSwitcher';
 import { Plugs } from '../../components/Plugs';
 import ToolCard from '../../components/ToolCard.astro';
 import {
@@ -44,7 +44,7 @@ export const getStaticPaths = (() => {
 <BaseLayout>
   <HomeHero />
 
-  <LocaleSwitcher {locale} client:load />
+  <HomeLocaleSwitcher {locale} client:load />
 
   <Plugs client:idle />
 

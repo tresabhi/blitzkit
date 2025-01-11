@@ -714,6 +714,11 @@
   },
 
   "website": {
+    "settings": {
+      "dev_mode": "Development mode",
+      "language": "Language"
+    },
+
     "common": {
       "copy_button": {
         "copied": "Copied!"
