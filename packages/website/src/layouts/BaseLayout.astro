@@ -46,9 +46,19 @@ const isRoot = pathname === '/';
         window.location.pathname.startsWith(`/${locale}`),
       );
       const bestLocale = getBestLocale();
+      const currentPathLocale = SUPPORTED_LOCALES.find((locale) =>
+        window.location.pathname.startsWith(`/${locale}`),
+      );
 
-      if (!isI18nPath && bestLocale !== undefined) {
-        window.location.pathname = `/${bestLocale}${window.location.pathname}`;
+      console.log(bestLocale);
+
+      if (bestLocale !== currentPathLocale) {
+        window.location.pathname = isI18nPath
+          ? window.location.pathname.replace(
+              `/${currentPathLocale}`,
+              bestLocale === undefined ? '' : `/${bestLocale}`,
+            )
+          : `/${bestLocale}${window.location.pathname}`;
       }
     </script>
   </head>

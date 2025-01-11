@@ -33,7 +33,9 @@ const strings = getStrings(Astro.params.locale);
 
 export const getStaticPaths = (() => {
   return [
-    ...SUPPORTED_LOCALES.map((locale) => ({ params: { locale } })),
+    ...SUPPORTED_LOCALES.filter((locale) => locale !== DEFAULT_LOCALE).map(
+      (locale) => ({ params: { locale } }),
+    ),
     { params: { locale: undefined } },
   ];
 }) satisfies GetStaticPaths;
