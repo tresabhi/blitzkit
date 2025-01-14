@@ -4,6 +4,7 @@ export * from './camouflage_definitions.ts';
 export * from './consumable_definitions.ts';
 export * from './equipment_definitions.ts';
 export * from './game_definitions.ts';
+export * from './i18n.ts';
 export * from './map_definitions.ts';
 export * from './model_definitions.ts';
 export * from './provision_definitions.ts';

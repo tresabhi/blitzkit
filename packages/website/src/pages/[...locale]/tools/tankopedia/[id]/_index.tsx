@@ -55,7 +55,6 @@ export function Page({ id, skeleton, locale }: PageProps) {
                 <CharacteristicsSection />
                 <GameModeSection />
                 <VideoSection skeleton={skeleton} />
-                <HistorySection />
               </PageWrapper>
             </Duel.Provider>
           </TankopediaPersistent.Provider>

@@ -6,6 +6,7 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
+import { I18nString } from "./i18n";
 
 export const protobufPackage = "blitzkit";
 
@@ -20,9 +21,9 @@ export interface CamouflageDefinitions_CamouflagesEntry {
 
 export interface Camouflage {
   id: number;
-  name: string;
-  tank_name?: string | undefined;
-  tank_name_full?: string | undefined;
+  name: I18nString;
+  tank_name?: I18nString | undefined;
+  tank_name_full?: I18nString | undefined;
 }
 
 function createBaseCamouflageDefinitions(): CamouflageDefinitions {
@@ -184,13 +185,13 @@ export const CamouflageDefinitions_CamouflagesEntry: MessageFns<CamouflageDefini
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? Camouflage.fromPartial(object.value)
-      : createBaseCamouflage();
+      : undefined;
     return message;
   },
 };
 
 function createBaseCamouflage(): Camouflage {
-  return { id: 0, name: "", tank_name: undefined, tank_name_full: undefined };
+  return { id: 0, name: createBaseI18nString(), tank_name: undefined, tank_name_full: undefined };
 }
 
 export const Camouflage: MessageFns<Camouflage> = {
@@ -198,14 +199,14 @@ export const Camouflage: MessageFns<Camouflage> = {
     if (message.id !== 0) {
       writer.uint32(8).uint32(message.id);
     }
-    if (message.name !== "") {
-      writer.uint32(18).string(message.name);
+    if (message.name !== undefined) {
+      I18nString.encode(message.name, writer.uint32(18).fork()).join();
     }
-    if (message.tank_name !== undefined && message.tank_name !== undefined) {
-      writer.uint32(26).string(message.tank_name);
+    if (message.tank_name !== undefined) {
+      I18nString.encode(message.tank_name, writer.uint32(26).fork()).join();
     }
-    if (message.tank_name_full !== undefined && message.tank_name_full !== undefined) {
-      writer.uint32(34).string(message.tank_name_full);
+    if (message.tank_name_full !== undefined) {
+      I18nString.encode(message.tank_name_full, writer.uint32(34).fork()).join();
     }
     return writer;
   },
@@ -230,7 +231,7 @@ export const Camouflage: MessageFns<Camouflage> = {
             break;
           }
 
-          message.name = reader.string();
+          message.name = I18nString.decode(reader, reader.uint32());
           continue;
         }
         case 3: {
@@ -238,7 +239,7 @@ export const Camouflage: MessageFns<Camouflage> = {
             break;
           }
 
-          message.tank_name = reader.string();
+          message.tank_name = I18nString.decode(reader, reader.uint32());
           continue;
         }
         case 4: {
@@ -246,7 +247,7 @@ export const Camouflage: MessageFns<Camouflage> = {
             break;
           }
 
-          message.tank_name_full = reader.string();
+          message.tank_name_full = I18nString.decode(reader, reader.uint32());
           continue;
         }
       }
@@ -261,9 +262,9 @@ export const Camouflage: MessageFns<Camouflage> = {
   fromJSON(object: any): Camouflage {
     return {
       id: globalThis.Number(assertSet("Camouflage.id", object.id)),
-      name: globalThis.String(assertSet("Camouflage.name", object.name)),
-      tank_name: isSet(object.tank_name) ? globalThis.String(object.tank_name) : undefined,
-      tank_name_full: isSet(object.tank_name_full) ? globalThis.String(object.tank_name_full) : undefined,
+      name: I18nString.fromJSON(assertSet("Camouflage.name", object.name)),
+      tank_name: isSet(object.tank_name) ? I18nString.fromJSON(object.tank_name) : undefined,
+      tank_name_full: isSet(object.tank_name_full) ? I18nString.fromJSON(object.tank_name_full) : undefined,
     };
   },
 
@@ -272,14 +273,14 @@ export const Camouflage: MessageFns<Camouflage> = {
     if (message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.name !== "") {
-      obj.name = message.name;
+    if (message.name !== undefined) {
+      obj.name = I18nString.toJSON(message.name);
     }
-    if (message.tank_name !== undefined && message.tank_name !== undefined) {
-      obj.tank_name = message.tank_name;
+    if (message.tank_name !== undefined) {
+      obj.tank_name = I18nString.toJSON(message.tank_name);
     }
-    if (message.tank_name_full !== undefined && message.tank_name_full !== undefined) {
-      obj.tank_name_full = message.tank_name_full;
+    if (message.tank_name_full !== undefined) {
+      obj.tank_name_full = I18nString.toJSON(message.tank_name_full);
     }
     return obj;
   },
@@ -290,9 +291,15 @@ export const Camouflage: MessageFns<Camouflage> = {
   fromPartial<I extends Exact<DeepPartial<Camouflage>, I>>(object: I): Camouflage {
     const message = createBaseCamouflage();
     message.id = object.id ?? 0;
-    message.name = object.name ?? "";
-    message.tank_name = object.tank_name ?? undefined;
-    message.tank_name_full = object.tank_name_full ?? undefined;
+    message.name = (object.name !== undefined && object.name !== null)
+      ? I18nString.fromPartial(object.name)
+      : createBaseI18nString();
+    message.tank_name = (object.tank_name !== undefined && object.tank_name !== null)
+      ? I18nString.fromPartial(object.tank_name)
+      : undefined;
+    message.tank_name_full = (object.tank_name_full !== undefined && object.tank_name_full !== null)
+      ? I18nString.fromPartial(object.tank_name_full)
+      : undefined;
     return message;
   },
 };

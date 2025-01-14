@@ -1,7 +1,10 @@
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from '@blitzkit/core/src/blitzkit';
 import { merge } from 'lodash-es';
-import type en from '../../lang/en.json';
-import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from '../blitzkit';
-import { TranslationTree } from './translator';
+import type en from '../strings/en.json';
+
+export type TranslationTree = { [key: string]: TranslationNode };
+
+export type TranslationNode = string | TranslationTree;
 
 const files = import.meta.glob('../../lang/*.json', { eager: true });
 export const localizedStrings: Record<string, typeof en> = {};

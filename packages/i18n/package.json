@@ -1,0 +1,12 @@
+{
+  "name": "@blitzkit/i18n",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "dependencies": {
+   },
+  "devDependencies": {
+    "@types/adm-zip": "^0.5.5",
+    "@types/lz4js": "^0.2.1"
+  }
+}

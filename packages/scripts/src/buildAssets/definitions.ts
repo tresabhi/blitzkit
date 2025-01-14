@@ -1,6 +1,5 @@
 import {
   Armor,
-  assertSecret,
   BlitzTankClass,
   CamouflageDefinitions,
   Consumable,
@@ -8,12 +7,14 @@ import {
   ConsumableTankCategoryFilterCategory,
   Crew,
   CrewType,
+  DEFAULT_LOCALE,
   encodePBBuffer,
   EquipmentDefinitions,
   EquipmentSlot,
   GameDefinitions,
   GunDefinition,
   GunDefinitionBase,
+  I18nString,
   MapDefinitions,
   ModelDefinitions,
   ModuleType,
@@ -22,6 +23,8 @@ import {
   ResearchCost,
   ShellType,
   SkillDefinitions,
+  SUPPORTED_LOCALE_BLITZ_MAP,
+  SUPPORTED_LOCALES,
   TankClass,
   TankDefinitions,
   TankPrice,
@@ -212,7 +215,7 @@ interface VehicleDefinitions {
       circularVisionRadius: number;
       maxHealth: number;
       armor: VehicleDefinitionArmor;
-      userString: number;
+      userString: string;
       level: number;
       yawLimits: string | string[];
       gunPosition: string | string[];
@@ -497,9 +500,6 @@ const blitzShellKindToBlitzkit: Record<ShellKind, ShellType> = {
   HIGH_EXPLOSIVE: ShellType.HE,
   HOLLOW_CHARGE: ShellType.HEAT,
 };
-const missingStrings: Record<string, string> = {
-  '#artefacts:tungstentip/name': 'Tungsten Shells',
-};
 export const botPattern = /^.+((tutorial_bot(\d+)?)|(TU(R?)))$/;
 const blitzModuleTypeToBlitzkit: Record<keyof BlitzModuleType, ModuleType> = {
   chassis: ModuleType.TRACKS,
@@ -511,14 +511,6 @@ const blitzModuleTypeToBlitzkit: Record<keyof BlitzModuleType, ModuleType> = {
 
 export async function definitions() {
   console.log('Building definitions...');
-
-  const wargamingTankopedia = (await fetch(
-    `https://api.wotblitz.com/wotb/encyclopedia/vehicles/?application_id=${assertSecret(
-      import.meta.env.PUBLIC_WARGAMING_APPLICATION_ID,
-    )}&fields=description`,
-  ).then((response) => response.json())) as {
-    data: { [key: number]: { description: null | string } };
-  };
 
   const gameDefinitions: GameDefinitions = {
     version: (await readStringDVPL(`${DATA}/version.txt.dvpl`)).split(' ')[0],
@@ -552,9 +544,6 @@ export async function definitions() {
     (nations) => nations.filter((nation) => nation !== 'common'),
   );
   const tankStringIdMap: Record<string, number> = {};
-  const stringsPreInstalled = await readYAMLDVPL<BlitzStrings>(
-    `${DATA}/Strings/en.yaml.dvpl`,
-  );
   const stringsCache = await fetch(
     'https://stufficons.wgcdn.co/localizations/en.yaml',
   )
@@ -563,10 +552,46 @@ export async function definitions() {
   const optionalDevices = await readXMLDVPL<{ root: OptionalDevices }>(
     `${DATA}/XML/item_defs/vehicles/common/optional_devices.xml.dvpl`,
   );
-  const strings = {
-    ...stringsPreInstalled,
-    ...stringsCache,
-  };
+  const stringsI18n: Record<string, Record<string, string>> = {};
+
+  for (const locale of SUPPORTED_LOCALES) {
+    const blitzLocale = SUPPORTED_LOCALE_BLITZ_MAP[locale];
+    const cache = await fetch(
+      `https://stufficons.wgcdn.co/localizations/${blitzLocale}.yaml`,
+    )
+      .then((response) => response.text())
+      .then((string) => parseYaml(string) as BlitzStrings);
+    const preInstalled = await readYAMLDVPL<BlitzStrings>(
+      `${DATA}/Strings/${blitzLocale}.yaml.dvpl`,
+    );
+
+    stringsI18n[locale] = {
+      ...cache,
+      ...preInstalled,
+    };
+  }
+
+  function getString(name: string) {
+    const locales: Record<string, string> = {
+      [DEFAULT_LOCALE]: stringsI18n[DEFAULT_LOCALE][name],
+    };
+
+    for (const locale of SUPPORTED_LOCALES) {
+      const localizedString = stringsI18n[locale][name];
+
+      if (
+        localizedString === undefined ||
+        localizedString === locales[DEFAULT_LOCALE]
+      ) {
+        continue;
+      }
+
+      locales[locale] = localizedString;
+    }
+
+    return { locales } satisfies I18nString;
+  }
+
   const optionalDeviceSlots = await readXMLDVPL<{
     root: OptionalDeviceSlots;
   }>(`${DATA}/XML/item_defs/vehicles/common/optional_device_slots.xml.dvpl`);
@@ -636,7 +661,7 @@ export async function definitions() {
     /"(\d+)" -> "(battleType\/([a-zA-Z]+))"/g,
   )) {
     const id = Number(match[1]);
-    const name = strings[match[2]];
+    const name = getString(match[2]);
 
     gameModeNativeNames[match[3]] = id;
     gameDefinitions.gameModes[id] = {
@@ -657,10 +682,10 @@ export async function definitions() {
   camouflagesXmlEntries.forEach(([camoKey, camo]) => {
     const yamlEntry = camouflagesYaml[camoKey];
     const fullName = yamlEntry.userString
-      ? strings[yamlEntry.userString]
+      ? getString(yamlEntry.userString)
       : undefined;
     const shortName = yamlEntry.shortUserString
-      ? strings[yamlEntry.shortUserString]
+      ? getString(yamlEntry.shortUserString)
       : undefined;
     const resolvedTankName = shortName ?? fullName;
     const resolvedTankNameFull =
@@ -668,7 +693,7 @@ export async function definitions() {
 
     camouflageDefinitions.camouflages[camo.id] = {
       id: camo.id,
-      name: strings[camo.userString],
+      name: getString(camo.userString),
       tank_name: resolvedTankName,
       tank_name_full: resolvedTankNameFull,
     };
@@ -866,8 +891,6 @@ export async function definitions() {
           id: tankId,
           roles: {},
           camouflages: camouflages,
-          description:
-            wargamingTankopedia.data[tankId]?.description ?? undefined,
           fixed_camouflage: fixedCamouflage,
           crew,
           weight: tankDefinition.root.hull.weight,
@@ -880,9 +903,9 @@ export async function definitions() {
           max_provisions: tankDefinition.root.provisionSlots,
           name:
             (tank.shortUserString
-              ? strings[tank.shortUserString]
-              : undefined) ?? strings[tank.userString],
-          name_full: strings[tank.userString],
+              ? getString(tank.shortUserString)
+              : undefined) ?? getString(tank.userString),
+          name_full: getString(tank.userString),
           nation,
           type: tankTags.includes('collectible')
             ? TankType.COLLECTOR
@@ -959,7 +982,7 @@ export async function definitions() {
           tankDefinitions.tanks[tankId].tracks.push({
             id: trackId,
             weight: track.weight,
-            name: strings[track.userString],
+            name: getString(track.userString),
             traverse_speed: track.rotationSpeed,
             dispersion_move: track.shotDispersionFactors.vehicleMovement,
             dispersion_traverse: track.shotDispersionFactors.vehicleRotation,
@@ -987,7 +1010,7 @@ export async function definitions() {
           totalUnlocks.push(engine.unlocks);
           tankDefinitions.tanks[tankId].engines.push({
             id: engineId,
-            name: strings[engineListEntry.userString],
+            name: getString(engineListEntry.userString),
             fire_chance: engineListEntry.fireStartingChance,
             tier: engineListEntry.level,
             weight: engineListEntry.weight,
@@ -1041,14 +1064,12 @@ export async function definitions() {
                 }
               });
 
+            turret.userString;
+
             tankDefinitions.tanks[tankId].turrets.push({
               id: turretId,
               traverse_speed: turret.rotationSpeed,
-              name:
-                strings[turret.userString] ??
-                turretKey
-                  .replaceAll('_', ' ')
-                  .replace(/^(Turret ([0-9] )?)+/, ''),
+              name: getString(turret.userString),
               tier: turret.level,
               guns: [],
               health: turret.maxHealth,
@@ -1100,8 +1121,7 @@ export async function definitions() {
               const gunModel = Number(
                 parsePath(gun.models.undamaged).name.split('_')[1],
               );
-              const gunName =
-                strings[gunListEntry.userString] ?? gunKey.replaceAll('_', ' ');
+              const gunName = getString(gunListEntry.userString);
               const gunType =
                 'clip' in gun
                   ? gun.pumpGunMode
@@ -1250,8 +1270,7 @@ export async function definitions() {
                 const gunShellEntry = gunListEntry.shots[shellKey];
                 const shell = shellList.root[shellKey];
                 const shellId = toUniqueId(nation, shell.id);
-                const shellName =
-                  strings[shell.userString] ?? shellKey.replaceAll('_', ' ');
+                const shellName = getString(shell.userString);
                 const penetrationRaw = gunShellEntry.piercingPower
                   .split(' ')
                   .filter((penetrationString) => penetrationString !== '')
@@ -1385,8 +1404,8 @@ export async function definitions() {
       if (optionalDeviceKey === 'nextAvailableId') return;
 
       equipmentDefinitions.equipments[optionalDeviceEntry.id] = {
-        name: strings[optionalDeviceEntry.userString],
-        description: strings[optionalDeviceEntry.description],
+        name: getString(optionalDeviceEntry.userString),
+        description: getString(optionalDeviceEntry.description),
       };
     },
   );
@@ -1418,10 +1437,7 @@ export async function definitions() {
       game_mode_exclusive: 'gameModeFilter' in consumable,
       cooldown: consumable.script.cooldown,
       duration: consumable.script.duration,
-      name:
-        strings[consumable.userString] ??
-        missingStrings[consumable.userString] ??
-        `Unknown ${consumable.id}`,
+      name: getString(consumable.userString),
       exclude: [],
       include: [],
     };
@@ -1523,10 +1539,7 @@ export async function definitions() {
       exclude: [],
       include: [],
       game_mode_exclusive: 'gameModeFilter' in provision,
-      name:
-        strings[provision.userString] ??
-        missingStrings[provision.userString] ??
-        `Unknown ${provision.id}`,
+      name: getString(provision.userString),
     };
     provisionDefinitions.provisions[provision.id] = entry;
 
@@ -1650,9 +1663,11 @@ export async function definitions() {
   Object.entries(maps.maps).forEach(([key, map]) => {
     mapDefinitions.maps[map.id] = {
       id: map.id,
-      name: strings[`#maps:${key}:${map.localName}`],
+      name: getString(`#maps:${key}:${map.localName}`),
     };
   });
+
+  return;
 
   await commitAssets('definitions', [
     {

@@ -2,13 +2,15 @@ syntax = "proto2";
 
 package blitzkit;
 
+import "packages/core/src/protos/i18n.proto";
+
 message ConsumableDefinitions {
   map<uint32, Consumable> consumables = 1;
 }
 
 message Consumable {
   required uint32 id = 1;
-  required string name = 2;
+  required I18nString name = 2;
   required uint32 cooldown = 3;
   optional float duration = 4;
   required bool game_mode_exclusive = 5;

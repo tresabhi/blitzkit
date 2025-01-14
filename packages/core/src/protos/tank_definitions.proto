@@ -2,6 +2,8 @@ syntax = "proto2";
 
 package blitzkit;
 
+import "packages/core/src/protos/i18n.proto";
+
 message TankDefinitions {
   map<uint32, TankDefinition> tanks = 1;
 }
@@ -9,7 +11,6 @@ message TankDefinitions {
 message TankDefinition {
   required uint32 id = 1;
   map<uint32, uint32> roles = 2;
-  optional string description = 3;
   required bool fixed_camouflage = 4;
   repeated int32 camouflages = 5;
   repeated int32 ancestors = 6;
@@ -17,8 +18,8 @@ message TankDefinition {
   repeated Crew crew = 8;
   required uint32 health = 9;
   required string nation = 10;
-  required string name = 11;
-  optional string name_full = 12;
+  required I18nString name = 11;
+  optional I18nString name_full = 12;
   required TankType type = 13;
   required uint32 max_consumables = 14;
   required uint32 max_provisions = 15;
@@ -65,7 +66,7 @@ message TankPrice {
 message TrackDefinition {
   required uint32 id = 1;
   required uint32 tier = 2;
-  required string name = 3;
+  required I18nString name = 3;
   required uint32 weight = 4;
   required float traverse_speed = 5;
   optional ResearchCost research_cost = 6;
@@ -79,7 +80,7 @@ message TrackDefinition {
 
 message EngineDefinition {
   required uint32 id = 1;
-  required string name = 2;
+  required I18nString name = 2;
   optional ResearchCost research_cost = 3;
   required uint32 tier = 4;
   required float fire_chance = 5;
@@ -94,7 +95,7 @@ message TurretDefinition {
   required uint32 view_range = 3;
   required float traverse_speed = 4;
   optional ResearchCost research_cost = 5;
-  required string name = 6;
+  required I18nString name = 6;
   required uint32 tier = 7;
   required uint32 weight = 8;
   repeated GunDefinition guns = 9;
@@ -145,7 +146,7 @@ message GunDefinitionBase {
   required float rotation_speed = 2;
   optional ResearchCost research_cost = 3;
   required uint32 weight = 4;
-  required string name = 5;
+  required I18nString name = 5;
   required uint32 tier = 6;
   repeated ShellDefinition shells = 7;
   required float camouflage_loss = 8;
@@ -160,7 +161,7 @@ message GunDefinitionBase {
 
 message ShellDefinition {
   required uint32 id = 1;
-  required string name = 2;
+  required I18nString name = 2;
   required uint32 velocity = 3;
   required uint32 armor_damage = 4;
   required uint32 module_damage = 5;

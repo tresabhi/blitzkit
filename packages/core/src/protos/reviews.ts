@@ -180,7 +180,7 @@ export const Reviews_ReviewsEntry: MessageFns<Reviews_ReviewsEntry> = {
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? Review.fromPartial(object.value)
-      : createBaseReview();
+      : undefined;
     return message;
   },
 };

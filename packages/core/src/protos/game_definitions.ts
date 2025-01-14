@@ -6,6 +6,7 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
+import { I18nString } from "./i18n";
 
 export const protobufPackage = "blitzkit";
 
@@ -27,7 +28,7 @@ export interface GameDefinitions_RolesEntry {
 }
 
 export interface GameMode {
-  name: string;
+  name: I18nString;
 }
 
 export interface GameModeRole {
@@ -259,7 +260,7 @@ export const GameDefinitions_GameModesEntry: MessageFns<GameDefinitions_GameMode
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? GameMode.fromPartial(object.value)
-      : createBaseGameMode();
+      : undefined;
     return message;
   },
 };
@@ -337,19 +338,19 @@ export const GameDefinitions_RolesEntry: MessageFns<GameDefinitions_RolesEntry> 
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? GameModeRole.fromPartial(object.value)
-      : createBaseGameModeRole();
+      : undefined;
     return message;
   },
 };
 
 function createBaseGameMode(): GameMode {
-  return { name: "" };
+  return { name: createBaseI18nString() };
 }
 
 export const GameMode: MessageFns<GameMode> = {
   encode(message: GameMode, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.name !== "") {
-      writer.uint32(10).string(message.name);
+    if (message.name !== undefined) {
+      I18nString.encode(message.name, writer.uint32(10).fork()).join();
     }
     return writer;
   },
@@ -366,7 +367,7 @@ export const GameMode: MessageFns<GameMode> = {
             break;
           }
 
-          message.name = reader.string();
+          message.name = I18nString.decode(reader, reader.uint32());
           continue;
         }
       }
@@ -379,13 +380,13 @@ export const GameMode: MessageFns<GameMode> = {
   },
 
   fromJSON(object: any): GameMode {
-    return { name: globalThis.String(assertSet("GameMode.name", object.name)) };
+    return { name: I18nString.fromJSON(assertSet("GameMode.name", object.name)) };
   },
 
   toJSON(message: GameMode): unknown {
     const obj: any = {};
-    if (message.name !== "") {
-      obj.name = message.name;
+    if (message.name !== undefined) {
+      obj.name = I18nString.toJSON(message.name);
     }
     return obj;
   },
@@ -395,7 +396,9 @@ export const GameMode: MessageFns<GameMode> = {
   },
   fromPartial<I extends Exact<DeepPartial<GameMode>, I>>(object: I): GameMode {
     const message = createBaseGameMode();
-    message.name = object.name ?? "";
+    message.name = (object.name !== undefined && object.name !== null)
+      ? I18nString.fromPartial(object.name)
+      : createBaseI18nString();
     return message;
   },
 };

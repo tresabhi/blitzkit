@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@blitzkit/core": "workspace:*",
-    "prate": "workspace:*",
+    "@blitzkit/i18n": "workspace:*",
     "@nanostores/persistent": "^0.10.2",
     "@nanostores/react": "^0.7.3",
     "@nivo/bar": "^0.87.0",
