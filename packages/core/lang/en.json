@@ -6,6 +6,20 @@
   },
 
   "common": {
+    "units_suffix": {
+      "m": "%s1m",
+      "mm": "%s1mm",
+      "deg": "%s1°",
+      "hp": "%s1hp"
+    },
+
+    "shells": {
+      "ap": "AP",
+      "apcr": "APCR",
+      "heat": "HEAT",
+      "he": "HE"
+    },
+
     "player_count_period": {
       "total": "Total",
       "d_120": "Past 120 days",
@@ -812,7 +826,82 @@
         "description": "Blitz tank encyclopedia",
         "seo_description": "Statistics, armor, and more for all tanks in World of Tanks Blitz",
         "tank_seo_title": "%s1 - Tier %s2 %s3 %s4 | %s5 Tankopedia | World of Tanks Blitz (WoTB)",
-        "tank_seo_description": "%s1 armor, statistics, equipment, provisions, and more. %s2 DPM, %s3hp alpha, %s4mm penetration, %s5kph top speed, %s6hp health."
+        "tank_seo_description": "%s1 armor, statistics, equipment, provisions, and more. %s2 DPM, %s3hp alpha, %s4mm penetration, %s5kph top speed, %s6hp health.",
+        "sandbox": {
+          "poses": {
+            "hull_down": "Hull down",
+            "face_hug": "Face hug",
+            "default": "Default"
+          },
+
+          "settings": {
+            "armor": "Armor",
+            "green_penetration": "Green penetration",
+            "hide_model_under_armor": "Hide model under armor",
+            "opaque": "Opaque",
+            "dev_wireframe": "DEV: wireframe",
+            "environment": "Environment",
+            "show_grid": "Show grid"
+          },
+
+          "screenshot": {
+            "download": "Download",
+            "copy": "Copy"
+          },
+
+          "model": {
+            "name": "Model"
+          },
+          "dynamic": {
+            "name": "Dynamic armor",
+
+            "custom_shell": {
+              "type": "Type",
+              "caliber": "Caliber",
+              "penetration": "Penetration",
+              "normalization": "Normalization",
+              "ricochet": "Ricochet",
+              "explosion_radius": "Explosion radius",
+              "exit": "Exit",
+              "reset": "Reset"
+            },
+
+            "advanced": "Advanced highlighting",
+            "shooter": "Shooter:",
+
+            "shot_card": {
+              "element": {
+                "primary": "Primary",
+                "spaced": "Spaced",
+                "external": "External",
+                "gap": "Gap",
+                "gun": "Gun",
+                "track": "Tracks"
+              },
+              "status": {
+                "penetration": "%s1hp penetration",
+                "blocked": "Blocked",
+                "ricochet": "Ricochet",
+                "splash": "%s1hp splash"
+              },
+              "stats": {
+                "thickness_and_angle": "%s1mm %s2°",
+                "nominal": "%s1mm nominal",
+                "ricochet_loss": "%s1% penetration"
+              }
+            }
+          },
+          "static": {
+            "name": "Static armor",
+            "primary": "Primary",
+            "spaced": "Spaced",
+            "external": "External",
+            "edit": {
+              "label": "Edit",
+              "reset": "Reset"
+            }
+          }
+        }
       },
       "compare": {
         "name": "Compare",

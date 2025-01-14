@@ -16,6 +16,7 @@ import {
   Path,
   Quaternion,
 } from 'three';
+import { LocaleProvider, useLocale } from '../../../hooks/useLocale';
 import {
   TankopediaEphemeral,
   type ShotLayerNonExternal,
@@ -45,6 +46,7 @@ export function ShotDisplay() {
   const splashRadiusWrapper = useRef<Group>(null);
   const splashRadiusMaterial = useRef<MeshBasicMaterial>(null);
   let animationStartTime: number | null = null;
+  const { locale } = useLocale();
 
   useEffect(() => {
     if (shot?.splashRadius !== undefined) {
@@ -180,7 +182,9 @@ export function ShotDisplay() {
           mt={tracerGoingUp ? '9' : '0'}
           pt={tracerGoingUp ? '4' : '0'}
         >
-          <ShotDisplayCard shot={shot} />
+          <LocaleProvider locale={locale}>
+            <ShotDisplayCard shot={shot} />
+          </LocaleProvider>
         </Box>
       </Html>
 

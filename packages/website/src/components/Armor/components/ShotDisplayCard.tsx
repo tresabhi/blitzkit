@@ -8,34 +8,18 @@ import {
 } from '@radix-ui/themes';
 import type { ComponentProps } from 'react';
 import { radToDeg } from 'three/src/math/MathUtils.js';
+import { literals } from '../../../core/i18n/literals';
 import { useLocale } from '../../../hooks/useLocale';
-import type {
-  Shot,
-  ShotLayer,
-  ShotStatus,
-} from '../../../stores/tankopediaEphemeral';
+import type { Shot, ShotLayer } from '../../../stores/tankopediaEphemeral';
 import { shotStatusColors } from './ShotDisplay';
 import { ArmorType } from './SpacedArmorScene';
-import type { ExternalModuleVariant } from './SpacedArmorSceneComponent';
 
-export const layerTypeNames: Record<ArmorType | 'null', string> = {
-  [ArmorType.Primary]: 'Primary',
-  [ArmorType.Spaced]: 'Spaced',
-  [ArmorType.External]: 'External',
-  null: 'Gap',
-};
-
-const externalLayerNames: Record<ExternalModuleVariant, string> = {
-  gun: 'Gun',
-  track: 'Tracks',
-};
-
-const shotStatusNames: Record<ShotStatus, string> = {
-  blocked: 'Blocked',
-  ricochet: 'Ricochet',
-  penetration: 'penetration',
-  splash: 'splash',
-};
+export const layerTypeNames = {
+  [ArmorType.Primary]: 'primary',
+  [ArmorType.Spaced]: 'spaced',
+  [ArmorType.External]: 'external',
+  null: 'gap',
+} as const;
 
 function LayerEntry({
   layerIndex,
@@ -50,7 +34,7 @@ function LayerEntry({
   layer: ShotLayer;
   angle?: number;
 }) {
-  const { locale } = useLocale();
+  const { locale, strings } = useLocale();
 
   return (
     <Flex align="center" gap="2">
@@ -64,20 +48,26 @@ function LayerEntry({
       {layer.type === null && (
         <>
           <Text size="2" color={shotStatusColor} style={{ width: 64 }}>
-            {Math.round(layer.distance * 1000).toLocaleString(locale)}
-            <Text size="1">mm</Text>
+            {literals(strings.common.units_suffix.mm, [
+              Math.round(layer.distance * 1000).toLocaleString(locale),
+            ])}
           </Text>
 
           <Text size="2" color="gray">
-            {Math.max(-100, Math.round(-50 * layer.distance))}% penetration
+            {literals(
+              strings.website.tools.tankopedia.sandbox.dynamic.shot_card.stats
+                .ricochet_loss,
+              [Math.max(-100, -50 * layer.distance).toFixed(0)],
+            )}
           </Text>
         </>
       )}
 
       {layer.type === ArmorType.External && (
         <Text size="2" color={shotStatusColor} style={{ width: 64 }}>
-          {Math.round(layer.thickness).toLocaleString(locale)}
-          <Text size="1">mm</Text>
+          {literals(strings.common.units_suffix.mm, [
+            Math.round(layer.thickness).toLocaleString(locale),
+          ])}
         </Text>
       )}
 
@@ -85,15 +75,24 @@ function LayerEntry({
         layer.type === ArmorType.Spaced) && (
         <>
           <Text size="2" color={shotStatusColor} style={{ width: 80 }}>
-            {Math.round(layer.thicknessAngled).toLocaleString(locale)}
-            <Text size="1">{`mm${
-              angle === undefined ? '' : ` ${Math.round(radToDeg(angle))}°`
-            }`}</Text>
+            {literals(
+              angle === undefined
+                ? strings.common.units_suffix.mm
+                : strings.website.tools.tankopedia.sandbox.dynamic.shot_card
+                    .stats.thickness_and_angle,
+              [
+                Math.round(layer.thicknessAngled).toLocaleString(locale),
+                radToDeg(angle ?? 0).toFixed(0),
+              ],
+            )}
           </Text>
 
           <Text size="2" color="gray">
-            {Math.round(layer.thickness).toLocaleString(locale)}
-            <Text size="1">mm</Text> nominal
+            {literals(
+              strings.website.tools.tankopedia.sandbox.dynamic.shot_card.stats
+                .nominal,
+              [Math.round(layer.thickness).toLocaleString(locale)],
+            )}
           </Text>
         </>
       )}
@@ -106,7 +105,7 @@ interface ShotDisplayCardProps extends CardProps {
 }
 
 export function ShotDisplayCard({ shot, ...props }: ShotDisplayCardProps) {
-  const { locale } = useLocale();
+  const { locale, strings } = useLocale();
 
   if (!shot) return null;
 
@@ -120,21 +119,23 @@ export function ShotDisplayCard({ shot, ...props }: ShotDisplayCardProps) {
       <Flex direction="column" gap="2">
         <Flex direction="column" gap="1">
           <Text color={inTitleColor} weight="bold">
-            {shot.in.status !== 'blocked' && shot.in.status !== 'ricochet' && (
-              <>
-                {Math.round(shot.damage).toLocaleString(locale)}
-                <Text size="1">hp</Text>
-              </>
+            {literals(
+              strings.website.tools.tankopedia.sandbox.dynamic.shot_card.status[
+                shot.in.status
+              ],
+              [Math.round(shot.damage).toLocaleString(locale)],
             )}
-            {` ${shotStatusNames[shot.in.status]} `}
           </Text>
 
           <Flex direction="column">
             {shot.in.layers.map((layer, index) => {
               const layerName =
-                layer.type === ArmorType.External
-                  ? externalLayerNames[layer.variant]
-                  : layerTypeNames[`${layer.type}`];
+                strings.website.tools.tankopedia.sandbox.dynamic.shot_card
+                  .element[
+                  layer.type === ArmorType.External
+                    ? layer.variant
+                    : layerTypeNames[`${layer.type}`]
+                ];
               const layerIndex =
                 layer.type === null
                   ? undefined
@@ -184,22 +185,22 @@ export function ShotDisplayCard({ shot, ...props }: ShotDisplayCardProps) {
             </Inset>
 
             <Text color={outTitleColor} weight="bold">
-              {shot.out.status !== 'blocked' &&
-                shot.out.status !== 'ricochet' && (
-                  <>
-                    {Math.round(shot.damage).toLocaleString(locale)}
-                    <Text size="1">hp</Text>
-                  </>
-                )}
-              {` ${shotStatusNames[shot.out.status]} `}
+              {literals(
+                strings.website.tools.tankopedia.sandbox.dynamic.shot_card
+                  .status[shot.out.status],
+                [Math.round(shot.damage).toLocaleString(locale)],
+              )}
             </Text>
 
             <Flex direction="column">
               {shot.out.layers.map((layer, index) => {
                 const layerName =
-                  layer.type === ArmorType.External
-                    ? externalLayerNames[layer.variant]
-                    : layerTypeNames[`${layer.type}`];
+                  strings.website.tools.tankopedia.sandbox.dynamic.shot_card
+                    .element[
+                    layer.type === ArmorType.External
+                      ? layer.variant
+                      : layerTypeNames[`${layer.type}`]
+                  ];
                 const shiftedIndex = index + shot.out!.layers.length;
                 const layerIndex =
                   layer.type === null
