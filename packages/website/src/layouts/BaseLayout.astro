@@ -6,18 +6,19 @@ import Footer from '../components/Footer.astro';
 import Navbar from '../components/Navbar.astro';
 import Party3 from '../components/Party3.astro';
 import './base.css';
+import { DEFAULT_LOCALE } from '@blitzkit/core';
 
 export interface Props {
   noFooter?: boolean;
 }
 
 const { noFooter } = Astro.props;
-const { locale } = Astro.params;
+const locale = Astro.params.locale ?? DEFAULT_LOCALE;
 const { pathname } = Astro.url;
 const isRoot = pathname === '/';
 ---
 
-<html lang="en">
+<html lang={locale}>
   <head>
     {
       isRoot && (

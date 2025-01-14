@@ -731,6 +731,11 @@
         "count_singular": "1 tank",
         "count_plural": "%s1 tanks",
         "sorting_by": "Sorting by %s1",
+        "no_tanks_found": {
+          "body": "No tanks found.",
+          "search_again": "Try searching again.",
+          "clear_filters": "Try clearing filters."
+        },
         "sort": {
           "meta.none": "none",
           "survivability.health": "health",
