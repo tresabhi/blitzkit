@@ -827,6 +827,7 @@
         "seo_description": "Statistics, armor, and more for all tanks in World of Tanks Blitz",
         "tank_seo_title": "%s1 - Tier %s2 %s3 %s4 | %s5 Tankopedia | World of Tanks Blitz (WoTB)",
         "tank_seo_description": "%s1 armor, statistics, equipment, provisions, and more. %s2 DPM, %s3hp alpha, %s4mm penetration, %s5kph top speed, %s6hp health.",
+
         "sandbox": {
           "poses": {
             "hull_down": "Hull down",
@@ -901,6 +902,27 @@
               "reset": "Reset"
             }
           }
+        },
+
+        "meta": {
+          "back": "Back",
+          "compare": "Compare",
+          "swap": {
+            "button": "Swap",
+            "title": "Swap tanks"
+          },
+          "vanilla": "Vanilla",
+          "opentest": "OpenTest",
+          "full_name": "Full name",
+          "nation": "Nation",
+          "class": "Class",
+          "tier": "Tier",
+          "type": "Type",
+          "dev_id": "DEV: ID",
+          "purchase": "Purchase price",
+          "restoration": "Restoration price",
+          "sale": "Sale price",
+          "research": "Research XP"
         }
       },
       "compare": {
