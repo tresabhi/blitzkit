@@ -127,7 +127,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
         >
           {!hasCustomShell && (
             <Text color="gray" size={{ initial: '1', sm: '2' }}>
-              {literals(strings.common.units_suffix.mm, [
+              {literals(strings.common.units.mm, [
                 (
                   resolvePenetrationCoefficient(
                     hasCalibratedShells,
@@ -202,7 +202,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                         }
                         secondaryDiscriminator={
                           <Text style={{ fontSize: '0.75em' }}>
-                            {literals(strings.common.units_suffix.mm, [
+                            {literals(strings.common.units.mm, [
                               gun.gun_type!.value.base.shells[0].caliber.toFixed(
                                 0,
                               ),

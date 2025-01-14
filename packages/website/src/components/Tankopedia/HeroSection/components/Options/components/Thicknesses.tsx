@@ -55,7 +55,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
         >
           <Flex direction="column" align="end" justify="between">
             <Text color="gray" size="1">
-              {literals(strings.common.units_suffix.mm, [
+              {literals(strings.common.units.mm, [
                 (thicknessRange.value * 1.5).toFixed(0),
               ])}
             </Text>
@@ -63,7 +63,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
               {strings.website.tools.tankopedia.sandbox.static.primary}
             </Text>
             <Text color="gray" size="1">
-              {literals(strings.common.units_suffix.mm, ['0'])}
+              {literals(strings.common.units.mm, ['0'])}
             </Text>
           </Flex>
 
@@ -96,7 +96,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
         >
           <Flex direction="column" align="end" justify="between">
             <Text color="gray" size="1">
-              {literals(strings.common.units_suffix.mm, [
+              {literals(strings.common.units.mm, [
                 thicknessRange.value.toFixed(0),
               ])}
             </Text>
@@ -104,7 +104,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
               {strings.website.tools.tankopedia.sandbox.static.spaced}
             </Text>
             <Text color="gray" size="1">
-              {literals(strings.common.units_suffix.mm, ['0'])}
+              {literals(strings.common.units.mm, ['0'])}
             </Text>
           </Flex>
 

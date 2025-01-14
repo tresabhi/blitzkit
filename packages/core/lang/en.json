@@ -6,11 +6,12 @@
   },
 
   "common": {
-    "units_suffix": {
+    "units": {
       "m": "%s1m",
       "mm": "%s1mm",
       "deg": "%s1°",
-      "hp": "%s1hp"
+      "hp": "%s1hp",
+      "x": "x%s1"
     },
 
     "shells": {
@@ -923,6 +924,13 @@
           "restoration": "Restoration price",
           "sale": "Sale price",
           "research": "Research XP"
+        },
+
+        "tech_tree": {
+          "title": "Tech tree",
+          "battle": "1 battle",
+          "battles": "%s1 battles",
+          "route": "Route %s1 of %s2"
         }
       },
       "compare": {

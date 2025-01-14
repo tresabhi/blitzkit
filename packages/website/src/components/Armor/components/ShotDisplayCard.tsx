@@ -48,7 +48,7 @@ function LayerEntry({
       {layer.type === null && (
         <>
           <Text size="2" color={shotStatusColor} style={{ width: 64 }}>
-            {literals(strings.common.units_suffix.mm, [
+            {literals(strings.common.units.mm, [
               Math.round(layer.distance * 1000).toLocaleString(locale),
             ])}
           </Text>
@@ -65,7 +65,7 @@ function LayerEntry({
 
       {layer.type === ArmorType.External && (
         <Text size="2" color={shotStatusColor} style={{ width: 64 }}>
-          {literals(strings.common.units_suffix.mm, [
+          {literals(strings.common.units.mm, [
             Math.round(layer.thickness).toLocaleString(locale),
           ])}
         </Text>
@@ -77,7 +77,7 @@ function LayerEntry({
           <Text size="2" color={shotStatusColor} style={{ width: 80 }}>
             {literals(
               angle === undefined
-                ? strings.common.units_suffix.mm
+                ? strings.common.units.mm
                 : strings.website.tools.tankopedia.sandbox.dynamic.shot_card
                     .stats.thickness_and_angle,
               [

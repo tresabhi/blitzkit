@@ -2,6 +2,7 @@ import { asset, formatCompact, TIER_ROMAN_NUMERALS } from '@blitzkit/core';
 import { Box, Flex, Skeleton, Text } from '@radix-ui/themes';
 import { awaitableAverageDefinitions } from '../../../../core/awaitables/averageDefinitions';
 import { awaitableTankDefinitions } from '../../../../core/awaitables/tankDefinitions';
+import { literals } from '../../../../core/i18n/literals';
 import { useLocale } from '../../../../hooks/useLocale';
 import { TankopediaEphemeral } from '../../../../stores/tankopediaEphemeral';
 import type { MaybeSkeletonComponentProps } from '../../../../types/maybeSkeletonComponentProps';
@@ -19,7 +20,7 @@ const [tankDefinitions, averageDefinitions] = await Promise.all([
 ]);
 
 export function Node({ id, highlight, nextIds, skeleton }: NodeProps) {
-  const { locale } = useLocale();
+  const { locale, strings } = useLocale();
   const xpMultiplier = TankopediaEphemeral.use((state) => state.xpMultiplier);
   const tank = tankDefinitions.tanks[id];
   const nextTanks = nextIds?.map((id) => tankDefinitions.tanks[id]);
@@ -106,7 +107,7 @@ export function Node({ id, highlight, nextIds, skeleton }: NodeProps) {
                       objectPosition: 'center',
                     }}
                   />
-                  {formatCompact(thisTankXp)}
+                  {formatCompact(locale, thisTankXp)}
                 </Flex>
               </Text>
               <Text color="gray" size="1" wrap="nowrap">
@@ -121,7 +122,7 @@ export function Node({ id, highlight, nextIds, skeleton }: NodeProps) {
                       objectPosition: 'center',
                     }}
                   />
-                  {formatCompact(tank.price.value)}
+                  {formatCompact(locale, tank.price.value)}
                 </Flex>
               </Text>
             </Flex>
@@ -129,11 +130,13 @@ export function Node({ id, highlight, nextIds, skeleton }: NodeProps) {
             {averages && nextTanks && tank.tier !== 10 && (
               <Text color="gray" size="1" mt="2">
                 {skeleton && <Skeleton height="1em" width="4em" />}
-                {!skeleton && (
-                  <>
-                    {games!} {games === 1 ? 'battle' : 'battles'}
-                  </>
-                )}
+                {!skeleton &&
+                  (games === 1
+                    ? strings.website.tools.tankopedia.tech_tree.battle
+                    : literals(
+                        strings.website.tools.tankopedia.tech_tree.battles,
+                        [`${games}`],
+                      ))}
               </Text>
             )}
           </Flex>
