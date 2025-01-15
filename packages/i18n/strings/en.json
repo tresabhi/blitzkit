@@ -973,6 +973,119 @@
           "miscellaneous": {
             "title": "Miscellaneous"
           }
+        },
+
+        "characteristics": {
+          "title": "Characteristics",
+          "compare": {
+            "label": "Compare against",
+            "class": "Tier %s1 %s2",
+            "tier": "All of tier %s1",
+            "all": "All tanks"
+          },
+          "values": {
+            "shell_index": "Shell %s1",
+            "at_distance": "At %s1m",
+            "at_distance_slider_label": "Distance",
+            "dispersion_at_distance": "Dispersion at %s1m",
+            "gun_flexibility": "Gun flexibility",
+            "speed": "Speed",
+            "terrain_coefficients": "Terrain coefficients",
+            "raw_terrain_coefficients": "Raw terrain coefficients",
+            "power_to_weight_ratio": "Power to weight ratio",
+            "hull_traverse_speed": "Hull traverse speed",
+            "camouflage": "Camouflage",
+
+            "crewCount": "Crew count",
+            "shellNormalization": "Normalization",
+            "shellRicochet": "Ricochet",
+            "dpm": "DPM",
+            "dpmEffective": "Effective at 60s",
+            "shells": "Shells",
+            "mostOptimalShellIndex": "Most optimal shell",
+            "shellReloads": "Shell reloads",
+            "shellReload": "Shell reload",
+            "intraClip": "Intra-clip",
+            "caliber": "Caliber",
+            "penetration": "Penetration",
+            "damage": "Damage",
+            "clipDamage": "Clipping potential",
+            "moduleDamage": "Module damage",
+            "explosionRadius": "Explosion radius",
+            "shellVelocity": "Shell velocity",
+            "aimTime": "Aim time",
+            "dispersion": "Still",
+            "dispersionMoving": "Moving",
+            "dispersionHullTraversing": "Hull traversing",
+            "dispersionTurretTraversing": "Turret traversing",
+            "dispersionShooting": "Shooting",
+            "dispersionGunDamaged": "Gun damaged",
+            "gunDepression": "Depression",
+            "gunElevation": "Elevation",
+            "gunFrontalDepression": "Frontal depression",
+            "gunFrontalElevation": "Frontal elevation",
+            "gunRearDepression": "Rear depression",
+            "gunRearElevation": "Rear elevation",
+            "azimuthLeft": "Azimuth left",
+            "azimuthRight": "Azimuth right",
+            "speedForwards": "Forwards",
+            "speedBackwards": "Backwards",
+            "hardTerrainCoefficient": "Hard",
+            "hardTerrainCoefficientRaw": "Hard",
+            "mediumTerrainCoefficient": "Medium",
+            "mediumTerrainCoefficientRaw": "Medium",
+            "softTerrainCoefficient": "Soft",
+            "softTerrainCoefficientRaw": "Soft",
+            "enginePower": "Engine power",
+            "powerToWeightRatioHardTerrain": "Hard",
+            "powerToWeightRatioMediumTerrain": "Medium",
+            "powerToWeightRatioSoftTerrain": "Soft",
+            "weight": "Weight",
+            "turretTraverseSpeed": "Turret traverse speed",
+            "gunTraverseSpeed": "Gun traverse speed",
+            "hullTraverseHardTerrain": "Hard",
+            "hullTraverseMediumTerrain": "Medium",
+            "hullTraverseSoftTerrain": "Soft",
+            "health": "Health",
+            "fireChance": "Fire chance",
+            "viewRange": "View range",
+            "camouflageStill": "Still",
+            "camouflageMoving": "Moving",
+            "camouflageShootingStill": "Still",
+            "camouflageShootingMoving": "Moving",
+            "camouflageCaughtOnFire": "Caught on fire",
+            "width": "Width",
+            "height": "Height",
+            "length": "Length",
+            "volume": "Volume",
+            "shellRange": "Shell range",
+            "shellCapacity": "Shell capacity",
+            "gunType": "Gun type",
+            "penetrationAt250m": "Penetration at 250m"
+          }
+        },
+
+        "firepower": {
+          "title": "Firepower"
+        },
+
+        "crew": {
+          "title": "Crew training",
+          "info": "represents the other roles a crew member can take.",
+          "count": "Crew count",
+          "commander": "Commander",
+          "gunner": "Gunner",
+          "driver": "Driver",
+          "radioman": "Radioman",
+          "loader": "Loader"
+        },
+
+        "maneuverability": {
+          "title": "Maneuverability"
+        },
+
+        "survivability": {
+          "title": "Survivability"
         }
       },
       "compare": {

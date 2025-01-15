@@ -13,13 +13,13 @@ export const SHELL_NAMES: Record<ShellType, string> = {
   [ShellType.HEAT]: 'HEAT',
   [ShellType.HE]: 'HE',
 };
-export const CREW_MEMBER_NAMES: Record<CrewType, string> = {
-  [CrewType.COMMANDER]: 'Commander',
-  [CrewType.DRIVER]: 'Driver',
-  [CrewType.GUNNER]: 'Gunner',
-  [CrewType.LOADER]: 'Loader',
-  [CrewType.RADIOMAN]: 'Radioman',
-};
+export const CREW_MEMBER_NAMES = {
+  [CrewType.COMMANDER]: 'commander',
+  [CrewType.DRIVER]: 'driver',
+  [CrewType.GUNNER]: 'gunner',
+  [CrewType.LOADER]: 'loader',
+  [CrewType.RADIOMAN]: 'radioman',
+} as const;
 export const GUN_TYPE_NAMES: Record<
   Exclude<GunDefinition['gun_type'], undefined>['$case'],
   string

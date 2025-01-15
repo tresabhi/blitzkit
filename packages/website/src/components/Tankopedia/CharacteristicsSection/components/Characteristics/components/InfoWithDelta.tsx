@@ -1,6 +1,6 @@
 import { createDefaultSkills } from '@blitzkit/core';
 import { Flex, Progress, Text } from '@radix-ui/themes';
-import { useMemo, type ComponentProps } from 'react';
+import { useMemo, type ComponentProps, type ReactNode } from 'react';
 import { awaitableEquipmentDefinitions } from '../../../../../../core/awaitables/equipmentDefinitions';
 import { awaitableModelDefinitions } from '../../../../../../core/awaitables/modelDefinitions';
 import { awaitableProvisionDefinitions } from '../../../../../../core/awaitables/provisionDefinitions';
@@ -12,6 +12,7 @@ import {
 } from '../../../../../../core/blitzkit/tankCharacteristics';
 import { tankToDuelMember } from '../../../../../../core/blitzkit/tankToDuelMember';
 import { useDelta } from '../../../../../../hooks/useDelta';
+import { useLocale } from '../../../../../../hooks/useLocale';
 import { Duel } from '../../../../../../stores/duel';
 import {
   TankopediaEphemeral,
@@ -19,13 +20,18 @@ import {
 } from '../../../../../../stores/tankopediaEphemeral';
 import { Info, type InfoProps } from './Info';
 
-interface InfoWithDeltaProps extends InfoProps {
+type InfoWithDeltaProps = Omit<InfoProps, 'name'> & {
   stats: TankCharacteristics;
-  value:
-    | keyof TankCharacteristics
-    | ((tank: TankCharacteristics) => number | undefined);
   noRanking?: boolean;
-}
+} & (
+    | {
+        value: keyof TankCharacteristics;
+      }
+    | {
+        value: (tank: TankCharacteristics) => number | undefined;
+        name: ReactNode;
+      }
+  );
 
 const [
   tankDefinitions,
@@ -42,18 +48,20 @@ const [
 ]);
 
 export function InfoWithDelta({
-  value,
   stats,
   indent,
   noRanking,
   deltaType,
   ...props
 }: InfoWithDeltaProps) {
+  const { strings } = useLocale();
   const relativeAgainst = TankopediaEphemeral.use(
     (state) => state.relativeAgainst,
   );
   const uhWhatDoICallThisVariable =
-    typeof value === 'function' ? value(stats)! : (stats[value] as number);
+    typeof props.value === 'function'
+      ? props.value(stats)!
+      : (stats[props.value] as number);
   const delta = useDelta(uhWhatDoICallThisVariable);
   const protagonistTank = Duel.use((state) => state.protagonist.tank);
   const others = useMemo(() => {
@@ -102,14 +110,18 @@ export function InfoWithDelta({
       })
       .filter((tank) => {
         const othersValue =
-          typeof value === 'function' ? value(tank)! : (tank[value] as number);
+          typeof props.value === 'function'
+            ? props.value(tank)!
+            : (tank[props.value] as number);
 
         return othersValue !== undefined;
       });
   }, [relativeAgainst]);
   const betterTanks = others.filter((tank) => {
     const othersValue =
-      typeof value === 'function' ? value(tank)! : (tank[value] as number);
+      typeof props.value === 'function'
+        ? props.value(tank)!
+        : (tank[props.value] as number);
 
     if (othersValue === undefined) return false;
     return deltaType === 'lowerIsBetter'
@@ -126,7 +138,19 @@ export function InfoWithDelta({
 
   return (
     <Flex direction="column">
-      <Info deltaType={deltaType} indent={indent} {...props} delta={delta}>
+      <Info
+        deltaType={deltaType}
+        indent={indent}
+        {...props}
+        name={
+          'name' in props
+            ? props.name
+            : strings.website.tools.tankopedia.characteristics.values[
+                props.value
+              ]
+        }
+        delta={delta}
+      >
         {uhWhatDoICallThisVariable}
       </Info>
 

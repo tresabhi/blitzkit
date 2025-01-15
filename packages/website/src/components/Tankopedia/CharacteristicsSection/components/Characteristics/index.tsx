@@ -26,6 +26,7 @@ import { awaitableEquipmentDefinitions } from '../../../../../core/awaitables/eq
 import { awaitableProvisionDefinitions } from '../../../../../core/awaitables/provisionDefinitions';
 import { applyPitchYawLimits } from '../../../../../core/blitz/applyPitchYawLimits';
 import { tankCharacteristics } from '../../../../../core/blitzkit/tankCharacteristics';
+import { literals } from '../../../../../core/i18n/literals';
 import { useEquipment } from '../../../../../hooks/useEquipment';
 import { useLocale } from '../../../../../hooks/useLocale';
 import { useTankModelDefinition } from '../../../../../hooks/useTankModelDefinition';
@@ -40,7 +41,7 @@ const [equipmentDefinitions, provisionDefinitions] = await Promise.all([
 ]);
 
 export function Characteristics() {
-  const { unwrap } = useLocale();
+  const { unwrap, strings } = useLocale();
   const mutateDuel = Duel.useMutation();
   const crewSkills = TankopediaEphemeral.use((state) => state.skills);
   const penetrationDistanceInput = useRef<HTMLInputElement>(null);
@@ -144,7 +145,9 @@ export function Characteristics() {
       <Flex direction="column" gap="8" style={{ flex: 1 }}>
         <Flex direction="column" gap="2">
           <Flex align="center" gap="4">
-            <Heading size="5">Firepower</Heading>
+            <Heading size="5">
+              {strings.website.tools.tankopedia.firepower.title}
+            </Heading>
 
             <Flex>
               {gun.gun_type!.value.base.shells.map((thisShell, shellIndex) => (
@@ -184,10 +187,15 @@ export function Characteristics() {
               ))}
             </Flex>
           </Flex>
-          <Info name="Gun type">{GUN_TYPE_NAMES[gun.gun_type!.$case]}</Info>
+          <Info
+            name={
+              strings.website.tools.tankopedia.characteristics.values.gunType
+            }
+          >
+            {GUN_TYPE_NAMES[gun.gun_type!.$case]}
+          </Info>
           <InfoWithDelta
             stats={stats}
-            name="DPM"
             decimals={0}
             unit="hp / min"
             value="dpm"
@@ -197,26 +205,41 @@ export function Characteristics() {
               stats={stats}
               decimals={0}
               indent
-              name="Effective at 60s"
               unit="hp / min"
               value="dpmEffective"
             />
           )}
           {gun.gun_type!.$case !== 'regular' && (
-            <InfoWithDelta stats={stats} name="Shells" value="shells" />
+            <InfoWithDelta stats={stats} value="shells" />
           )}
           {gun.gun_type!.$case === 'auto_reloader' ? (
             <>
-              <Info indent name="Most optimal shell index">
+              <Info
+                indent
+                name={
+                  strings.website.tools.tankopedia.characteristics.values
+                    .mostOptimalShellIndex
+                }
+              >
                 {stats.mostOptimalShellIndex! + 1}
               </Info>
-              <Info name="Shell reloads" unit="s" />
+              <Info
+                name={
+                  strings.website.tools.tankopedia.characteristics.values
+                    .shellReloads
+                }
+                unit="s"
+              />
               {stats.shellReloads!.map((reload, index) => (
                 <InfoWithDelta
                   stats={stats}
                   key={index}
                   indent
-                  name={`Shell ${index + 1}`}
+                  name={literals(
+                    strings.website.tools.tankopedia.characteristics.values
+                      .shell_index,
+                    [`${index + 1}`],
+                  )}
                   decimals={2}
                   deltaType="lowerIsBetter"
                   noRanking
@@ -228,7 +251,6 @@ export function Characteristics() {
             <InfoWithDelta
               stats={stats}
               decimals={2}
-              name="Reload"
               unit="s"
               deltaType="lowerIsBetter"
               value="shellReload"
@@ -240,7 +262,6 @@ export function Characteristics() {
               stats={stats}
               indent
               decimals={2}
-              name="Intra-clip"
               unit="s"
               deltaType="lowerIsBetter"
               value="intraClip"
@@ -249,7 +270,6 @@ export function Characteristics() {
           <InfoWithDelta
             stats={stats}
             decimals={0}
-            name="Penetration"
             unit="mm"
             value="penetration"
           />
@@ -259,7 +279,11 @@ export function Characteristics() {
                 stats={stats}
                 indent
                 decimals={0}
-                name={`At ${penetrationDistance}m`}
+                name={literals(
+                  strings.website.tools.tankopedia.characteristics.values
+                    .at_distance,
+                  [`${penetrationDistance}`],
+                )}
                 noRanking
                 value={() =>
                   lerp(
@@ -272,7 +296,12 @@ export function Characteristics() {
                 }
               />
               <Flex align="center" gap="2" style={{ paddingLeft: 24 }}>
-                <Text color="gray">Distance</Text>
+                <Text color="gray">
+                  {
+                    strings.website.tools.tankopedia.characteristics.values
+                      .at_distance_slider_label
+                  }
+                </Text>
                 <Slider
                   key={penetrationDistance}
                   min={0}
@@ -310,17 +339,10 @@ export function Characteristics() {
               </Flex>
             </>
           )}
-          <InfoWithDelta
-            stats={stats}
-            name="Damage"
-            unit="hp"
-            decimals={0}
-            value="damage"
-          />
+          <InfoWithDelta stats={stats} unit="hp" decimals={0} value="damage" />
           {gun.gun_type!.$case !== 'regular' && (
             <InfoWithDelta
               stats={stats}
-              name="Clipping potential"
               indent
               decimals={0}
               value="clipDamage"
@@ -328,7 +350,6 @@ export function Characteristics() {
           )}
           <InfoWithDelta
             stats={stats}
-            name="Module damage"
             unit="hp"
             decimals={0}
             value="moduleDamage"
@@ -336,23 +357,15 @@ export function Characteristics() {
           {isExplosive(shell.type) && (
             <InfoWithDelta
               stats={stats}
-              name="Splash radius"
               unit="m"
               noRanking
               decimals={0}
               value="explosionRadius"
             />
           )}
+          <InfoWithDelta stats={stats} decimals={0} unit="mm" value="caliber" />
           <InfoWithDelta
             stats={stats}
-            name="Caliber"
-            decimals={0}
-            unit="mm"
-            value="caliber"
-          />
-          <InfoWithDelta
-            stats={stats}
-            name="Normalization"
             decimals={0}
             unit="°"
             noRanking
@@ -361,7 +374,6 @@ export function Characteristics() {
           {!isExplosive(shell.type) && (
             <InfoWithDelta
               stats={stats}
-              name="Ricochet"
               noRanking
               decimals={0}
               deltaType="lowerIsBetter"
@@ -371,39 +383,35 @@ export function Characteristics() {
           )}
           <InfoWithDelta
             stats={stats}
-            name="Shell velocity"
             unit="m/s"
             decimals={0}
             value="shellVelocity"
           />
           <InfoWithDelta
             stats={stats}
-            name="Shell range"
             unit="m/s"
             decimals={0}
             value="shellRange"
           />
-          <InfoWithDelta
-            stats={stats}
-            name="Shell capacity"
-            unit="m/s"
-            decimals={0}
-            value="shellCapacity"
-          />
+          <InfoWithDelta stats={stats} decimals={0} value="shellCapacity" />
           <InfoWithDelta
             stats={stats}
             decimals={2}
-            name="Aim time"
             unit="s"
             deltaType="lowerIsBetter"
             value="aimTime"
           />
-          <Info name="Dispersion at 100m" />
+          <Info
+            name={literals(
+              strings.website.tools.tankopedia.characteristics.values
+                .dispersion_at_distance,
+              ['100'],
+            )}
+          />
           <InfoWithDelta
             stats={stats}
             decimals={3}
             indent
-            name="Still"
             unit="m"
             deltaType="lowerIsBetter"
             value="dispersion"
@@ -413,7 +421,6 @@ export function Characteristics() {
             prefix="+"
             decimals={3}
             indent
-            name="Moving"
             deltaType="lowerIsBetter"
             value="dispersionMoving"
           />
@@ -422,7 +429,6 @@ export function Characteristics() {
             decimals={3}
             prefix="+"
             indent
-            name="Hull traversing"
             deltaType="lowerIsBetter"
             value="dispersionHullTraversing"
           />
@@ -431,7 +437,6 @@ export function Characteristics() {
             decimals={3}
             prefix="+"
             indent
-            name="Turret traversing"
             deltaType="lowerIsBetter"
             value="dispersionTurretTraversing"
           />
@@ -440,7 +445,6 @@ export function Characteristics() {
             decimals={3}
             prefix="+"
             indent
-            name="After shooting"
             deltaType="lowerIsBetter"
             value="dispersionShooting"
           />
@@ -449,24 +453,26 @@ export function Characteristics() {
             decimals={1}
             prefix="x "
             indent
-            name="Gun damaged"
-            unit="scalar"
             deltaType="lowerIsBetter"
             value="dispersionGunDamaged"
           />
-          <Info name="Gun flexibility" unit="°" />
+          <Info
+            name={
+              strings.website.tools.tankopedia.characteristics.values
+                .gun_flexibility
+            }
+            unit="°"
+          />
           <InfoWithDelta
             value="gunDepression"
             stats={stats}
             decimals={1}
             indent
-            name="Depression"
           />
           <InfoWithDelta
             stats={stats}
             decimals={1}
             indent
-            name="Elevation"
             value="gunElevation"
           />
           {gunModelDefinition.pitch.front && (
@@ -475,14 +481,12 @@ export function Characteristics() {
                 stats={stats}
                 decimals={1}
                 indent
-                name="Frontal depression"
                 value="gunFrontalDepression"
               />
               <InfoWithDelta
                 stats={stats}
                 decimals={1}
                 indent
-                name="Frontal elevation"
                 value="gunFrontalElevation"
               />
             </>
@@ -493,14 +497,12 @@ export function Characteristics() {
                 stats={stats}
                 decimals={1}
                 indent
-                name="Rear depression"
                 value="gunRearDepression"
               />
               <InfoWithDelta
                 stats={stats}
                 decimals={1}
                 indent
-                name="Rear elevation"
                 value="gunRearElevation"
               />
             </>
@@ -511,14 +513,12 @@ export function Characteristics() {
                 stats={stats}
                 decimals={1}
                 indent
-                name="Azimuth left"
                 value="azimuthLeft"
               />
               <InfoWithDelta
                 stats={stats}
                 decimals={1}
                 indent
-                name="Azimuth right"
                 value="azimuthRight"
               />
             </>
@@ -527,7 +527,9 @@ export function Characteristics() {
 
         <Flex direction="column" gap="2">
           <Flex gap="2" align="center">
-            <Heading size="5">Crew training</Heading>
+            <Heading size="5">
+              {strings.website.tools.tankopedia.crew.title}
+            </Heading>
 
             <Popover.Root>
               <Popover.Trigger>
@@ -539,20 +541,13 @@ export function Characteristics() {
               <Popover.Content>
                 <Flex gap="1" align="center">
                   <AccessibilityIcon />
-                  <Text>
-                    represents the other roles a crew member can take.
-                  </Text>
+                  <Text>{strings.website.tools.tankopedia.crew.info}</Text>
                 </Flex>
               </Popover.Content>
             </Popover.Root>
           </Flex>
 
-          <InfoWithDelta
-            value="crewCount"
-            stats={stats}
-            name="Crew count"
-            decimals={0}
-          />
+          <InfoWithDelta value="crewCount" stats={stats} decimals={0} />
 
           {tank.crew.map((member) => {
             return (
@@ -560,8 +555,16 @@ export function Characteristics() {
                 <InfoWithDelta
                   stats={stats}
                   key={`${member.type}-root`}
-                  name={`${CREW_MEMBER_NAMES[member.type]}${
-                    member.count > 1 ? ` x ${member.count}` : ''
+                  name={`${
+                    strings.website.tools.tankopedia.crew[
+                      CREW_MEMBER_NAMES[member.type]
+                    ]
+                  }${
+                    member.count > 1
+                      ? ` ${literals(strings.common.units.x, [
+                          `${member.count}`,
+                        ])}`
+                      : ''
                   }`}
                   unit="%"
                   decimals={0}
@@ -586,7 +589,11 @@ export function Characteristics() {
                           <AccessibilityIcon />
                           {member.substitute
                             .map((sub, index) =>
-                              index === 0 ? CREW_MEMBER_NAMES[sub] : sub,
+                              index === 0
+                                ? strings.website.tools.tankopedia.crew[
+                                    CREW_MEMBER_NAMES[sub]
+                                  ]
+                                : sub,
                             )
                             .join(', ')}
                         </Flex>
@@ -604,52 +611,51 @@ export function Characteristics() {
 
       <Flex direction="column" gap="8" style={{ flex: 1 }}>
         <Flex direction="column" gap="2">
-          <Heading size="5">Maneuverability</Heading>
-          <Info name="Speed" unit="kph" />
+          <Heading size="5">
+            {strings.website.tools.tankopedia.maneuverability.title}
+          </Heading>
+          <Info
+            name={strings.website.tools.tankopedia.characteristics.values.speed}
+            unit="kph"
+          />
           <InfoWithDelta
             value="speedForwards"
             stats={stats}
             decimals={0}
             indent
-            name="Forwards"
           />
           <InfoWithDelta
             value="speedBackwards"
             stats={stats}
             decimals={0}
             indent
-            name="Backwards"
           />
-          <InfoWithDelta
-            stats={stats}
-            decimals={0}
-            name="Engine power"
-            unit="hp"
-            value="enginePower"
-          />
+          <InfoWithDelta stats={stats} decimals={0} value="enginePower" />
           <InfoWithDelta
             stats={stats}
             decimals={1}
-            name="Weight"
             unit="tn"
             deltaType="lowerIsBetter"
             value="weight"
           />
-          <Info name="Terrain coefficients" />
+          <Info
+            name={
+              strings.website.tools.tankopedia.characteristics.values
+                .terrain_coefficients
+            }
+          />
           <InfoWithDelta
             value="hardTerrainCoefficient"
             stats={stats}
             decimals={0}
             unit="%"
             indent
-            name="Hard"
           />
           <InfoWithDelta
             stats={stats}
             decimals={0}
             unit="%"
             indent
-            name="Medium"
             value="mediumTerrainCoefficient"
           />
           <InfoWithDelta
@@ -658,9 +664,14 @@ export function Characteristics() {
             decimals={0}
             unit="%"
             indent
-            name="Soft"
           />
-          <Info name="Raw terrain coefficients" deltaType="lowerIsBetter" />
+          <Info
+            name={
+              strings.website.tools.tankopedia.characteristics.values
+                .raw_terrain_coefficients
+            }
+            deltaType="lowerIsBetter"
+          />
           <InfoWithDelta
             value="hardTerrainCoefficientRaw"
             stats={stats}
@@ -668,14 +679,12 @@ export function Characteristics() {
             unit="%"
             indent
             deltaType="lowerIsBetter"
-            name="Hard"
           />
           <InfoWithDelta
             stats={stats}
             decimals={2}
             unit="%"
             indent
-            name="Medium"
             deltaType="lowerIsBetter"
             value="mediumTerrainCoefficientRaw"
           />
@@ -684,75 +693,77 @@ export function Characteristics() {
             decimals={2}
             unit="%"
             indent
-            name="Soft"
             deltaType="lowerIsBetter"
             value="softTerrainCoefficientRaw"
           />
-          <Info name="Power to weight ratio" unit="hp/tn" />
+          <Info
+            name={
+              strings.website.tools.tankopedia.characteristics.values
+                .power_to_weight_ratio
+            }
+            unit="hp/tn"
+          />
           <InfoWithDelta
             stats={stats}
             decimals={1}
             indent
-            name="On hard terrain"
             value="powerToWeightRatioHardTerrain"
           />
           <InfoWithDelta
             stats={stats}
             decimals={1}
             indent
-            name="On medium terrain"
             value="powerToWeightRatioMediumTerrain"
           />
           <InfoWithDelta
             stats={stats}
             decimals={1}
             indent
-            name="On soft terrain"
             value="powerToWeightRatioSoftTerrain"
           />
           <InfoWithDelta
             stats={stats}
-            name="Turret traverse speed"
             unit="°/s"
             decimals={1}
             value="turretTraverseSpeed"
           />
-          <Info name="Hull traverse speed" unit="°/s" />
+          <Info
+            name={
+              strings.website.tools.tankopedia.characteristics.values
+                .hull_traverse_speed
+            }
+            unit="°/s"
+          />
           <InfoWithDelta
             stats={stats}
             decimals={1}
             indent
-            name="On hard terrain"
             value="hullTraverseHardTerrain"
           />
           <InfoWithDelta
             stats={stats}
             decimals={1}
             indent
-            name="On medium terrain"
             value="hullTraverseMediumTerrain"
           />
           <InfoWithDelta
             stats={stats}
             decimals={1}
             indent
-            name="On soft terrain"
             value="hullTraverseSoftTerrain"
           />
         </Flex>
 
         <Flex direction="column" gap="2">
-          <Heading size="5">Survivability</Heading>
-          <InfoWithDelta
-            value="health"
-            stats={stats}
-            name="Health"
-            unit="hp"
-            decimals={0}
-          />
+          <Heading size="5">
+            {strings.website.tools.tankopedia.survivability.title}
+          </Heading>
+          <InfoWithDelta value="health" stats={stats} unit="hp" decimals={0} />
           <InfoWithDelta
             stats={stats}
-            name="Fire chance"
+            name={
+              strings.website.tools.tankopedia.characteristics.values.fireChance
+            }
             unit="%"
             deltaType="lowerIsBetter"
             decimals={0}
@@ -761,48 +772,66 @@ export function Characteristics() {
           <InfoWithDelta
             value="viewRange"
             stats={stats}
-            name="View range"
             unit="m"
             decimals={0}
           />
-          <Info name="Camouflage" unit="%" />
+          <Info
+            name={
+              strings.website.tools.tankopedia.characteristics.values.camouflage
+            }
+            unit="%"
+          />
           <InfoWithDelta
             value={(stats) => stats.camouflageStill * 100}
             stats={stats}
             indent
-            name="Still"
+            name={
+              strings.website.tools.tankopedia.characteristics.values
+                .camouflageStill
+            }
             decimals={2}
           />
           <InfoWithDelta
             value={(stats) => stats.camouflageMoving * 100}
             stats={stats}
             indent
-            name="Moving"
+            name={
+              strings.website.tools.tankopedia.characteristics.values
+                .camouflageMoving
+            }
             decimals={2}
           />
           <InfoWithDelta
             stats={stats}
             indent
-            name="Shooting still"
+            name={
+              strings.website.tools.tankopedia.characteristics.values
+                .camouflageShootingStill
+            }
             decimals={2}
             value={(stats) => stats.camouflageShootingStill * 100}
           />
           <InfoWithDelta
             stats={stats}
             indent
-            name="Shooting moving"
+            name={
+              strings.website.tools.tankopedia.characteristics.values
+                .camouflageShootingMoving
+            }
             decimals={2}
             value={(stats) => stats.camouflageShootingMoving * 100}
           />
           <InfoWithDelta
             stats={stats}
             indent
-            name="Caught on fire"
+            name={
+              strings.website.tools.tankopedia.characteristics.values
+                .camouflageCaughtOnFire
+            }
             decimals={2}
             value={(stats) => stats.camouflageCaughtOnFire * 100}
           />
           <InfoWithDelta
-            name="Width"
             unit="m"
             decimals={0}
             deltaType="lowerIsBetter"
@@ -810,7 +839,6 @@ export function Characteristics() {
             value="width"
           />
           <InfoWithDelta
-            name="Height"
             unit="m"
             decimals={0}
             deltaType="lowerIsBetter"
@@ -818,7 +846,6 @@ export function Characteristics() {
             value="height"
           />
           <InfoWithDelta
-            name="Length"
             unit="m"
             decimals={0}
             deltaType="lowerIsBetter"
@@ -826,7 +853,6 @@ export function Characteristics() {
             value="length"
           />
           <InfoWithDelta
-            name="Volume"
             unit="m"
             decimals={0}
             deltaType="lowerIsBetter"
