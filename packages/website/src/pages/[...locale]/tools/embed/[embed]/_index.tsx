@@ -8,7 +8,6 @@ import {
   WidthIcon,
 } from '@radix-ui/react-icons';
 import { Box, Button, Flex, Heading, ScrollArea, Text } from '@radix-ui/themes';
-import { capitalize, startCase } from 'lodash-es';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { CopyButton } from '../../../../../components/CopyButton';
 import { Boolean } from '../../../../../components/Embeds/Boolean';
@@ -29,6 +28,11 @@ import {
   extractEmbedConfigDefaults,
 } from '../../../../../constants/embeds';
 import { NAVBAR_HEIGHT } from '../../../../../constants/navbar';
+import {
+  LocaleProvider,
+  useLocale,
+  type LocaleAcceptorProps,
+} from '../../../../../hooks/useLocale';
 import { App } from '../../../../../stores/app';
 import { EmbedState, type EmbedConfig } from '../../../../../stores/embedState';
 import { EmbedItemType } from '../../../../../stores/embedState/constants';
@@ -41,15 +45,17 @@ interface PageProps {
   embed: keyof typeof embedConfigurations;
 }
 
-export function Page({ embed }: PageProps) {
+export function Page({ embed, locale }: PageProps & LocaleAcceptorProps) {
   const config = embedConfigurations[embed];
 
   return (
-    <App.Provider>
-      <EmbedState.Provider data={extractEmbedConfigDefaults(config)}>
-        <Content embed={embed} />
-      </EmbedState.Provider>
-    </App.Provider>
+    <LocaleProvider locale={locale}>
+      <App.Provider>
+        <EmbedState.Provider data={extractEmbedConfigDefaults(config)}>
+          <Content embed={embed} />
+        </EmbedState.Provider>
+      </App.Provider>
+    </LocaleProvider>
   );
 }
 
@@ -60,6 +66,7 @@ function Content({ embed }: PageProps) {
     imgur('SO13zur', { format: 'jpeg' }),
   );
   const fileInput = useRef<HTMLInputElement>();
+  const { strings } = useLocale();
 
   useEffect(() => {
     fileInput.current = document.createElement('input');
@@ -83,9 +90,11 @@ function Content({ embed }: PageProps) {
           <Flex direction="column" gap="2" p="4">
             <Import />
 
-            <Heading>Export</Heading>
+            <Heading>
+              {strings.website.tools.embed.configuration.export.title}
+            </Heading>
             <Text size="2" color="gray" mb="2">
-              Copy all properties for you streaming software
+              {strings.website.tools.embed.configuration.export.description}
             </Text>
 
             <Flex mb="6" gap="2" wrap="wrap">
@@ -98,30 +107,32 @@ function Content({ embed }: PageProps) {
                 }
               >
                 <CodeIcon />
-                Copy CSS
+                {strings.website.tools.embed.configuration.export.css}
               </CopyButton>
               <CopyButton
                 variant="outline"
                 copy={() => `${embedStateStore.getState().width}`}
               >
                 <WidthIcon />
-                Copy width
+                {strings.website.tools.embed.configuration.export.width}
               </CopyButton>
               <CopyButton
                 variant="outline"
                 copy={() => `${embedStateStore.getState().height}`}
               >
                 <HeightIcon />
-                Copy height
+                {strings.website.tools.embed.configuration.export.height}
               </CopyButton>
               <CopyButton variant="outline" copy={() => '1'}>
                 <TimerIcon />
-                Copy framerate
+                {strings.website.tools.embed.configuration.export.framerate}
               </CopyButton>
             </Flex>
 
             <Flex justify="between" align="center">
-              <Heading>Customize</Heading>
+              <Heading>
+                {strings.website.tools.embed.configuration.customize.title}
+              </Heading>
               <Button
                 color="red"
                 variant="ghost"
@@ -132,11 +143,12 @@ function Content({ embed }: PageProps) {
                   );
                 }}
               >
-                <ResetIcon /> Reset
+                <ResetIcon />{' '}
+                {strings.website.tools.embed.configuration.customize.reset}
               </Button>
             </Flex>
             <Text size="2" color="gray" mb="2">
-              Bells and whistles of your embed
+              {strings.website.tools.embed.configuration.customize.description}
             </Text>
 
             {Object.keys(config).map((configKey) => {
@@ -206,7 +218,14 @@ function Content({ embed }: PageProps) {
                   mb={oneLiner ? '2' : '4'}
                   pb={item.pad ? '6' : undefined}
                 >
-                  <Text>{capitalize(startCase(configKey as string))}</Text>
+                  <Text>
+                    {
+                      (
+                        strings.website.tools.embed.types[embed]
+                          .options as Record<string, string>
+                      )[configKey]
+                    }
+                  </Text>
                   <Flex
                     gap="2"
                     align="center"
@@ -246,14 +265,16 @@ function Content({ embed }: PageProps) {
                 backgroundColor: 'var(--color-panel-solid)',
               }}
             >
-              <Text color="gray">Example preview</Text>
+              <Text color="gray">
+                {strings.website.tools.embed.preview.title}
+              </Text>
 
               <Button
                 variant="outline"
                 color="gray"
                 onClick={() => fileInput.current?.click()}
               >
-                <ImageIcon /> Upload test background
+                <ImageIcon /> {strings.website.tools.embed.preview.upload}
               </Button>
             </Flex>
 

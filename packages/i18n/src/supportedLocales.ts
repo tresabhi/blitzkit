@@ -7,6 +7,7 @@ export const SUPPORTED_LOCALES = [
   'ru',
   'uk',
   'zh',
+  'pl',
 ] as const;
 
 export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
@@ -22,6 +23,7 @@ export const SUPPORTED_LOCALE_BLITZ_MAP: Record<SupportedLocale, string> = {
   ru: 'ru',
   uk: 'uk',
   zh: 'zh-Hans',
+  pl: 'pl',
 };
 
 export const SUPPORTED_LOCALE_FLAGS: Record<SupportedLocale, string> = {
@@ -33,4 +35,5 @@ export const SUPPORTED_LOCALE_FLAGS: Record<SupportedLocale, string> = {
   ru: '🇷🇺',
   uk: '🇺🇦',
   zh: '🇨🇳',
+  pl: '🇵🇱',
 };

@@ -20,6 +20,8 @@ export const getStaticPaths = (() => {
     )
     .flat();
 }) satisfies GetStaticPaths;
+
+const { locale } = Astro.params;
 ---
 
 <title>BlitzKit - {capitalize(Astro.params.embed)} embed</title>
@@ -44,5 +46,5 @@ export const getStaticPaths = (() => {
 </style>
 
 <BaseLayout>
-  <Page client:load embed={Astro.params.embed} />
+  <Page {locale} client:load embed={Astro.params.embed} />
 </BaseLayout>

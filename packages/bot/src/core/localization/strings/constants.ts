@@ -10,6 +10,7 @@ const SUPPORTED_LOCALES_DISCORD_MAP: Record<SupportedLocale, Locale> = {
   zh: Locale.ChineseCN,
   fr: Locale.French,
   ja: Locale.Japanese,
+  pl: Locale.Polish,
 };
 
 export const SUPPORTED_LOCALES_DISCORD_MAP_INVERSE = Object.fromEntries(

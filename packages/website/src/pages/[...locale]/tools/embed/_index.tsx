@@ -1,6 +1,5 @@
 import { imgur, ImgurSize } from '@blitzkit/core';
 import { Box, Flex, Link, Text } from '@radix-ui/themes';
-import { capitalize } from 'lodash-es';
 import { PreviewWrapper } from '../../../../components/Embeds/PreviewWrapper';
 import { LinkI18n } from '../../../../components/LinkI18n';
 import { PageWrapper } from '../../../../components/PageWrapper';
@@ -9,52 +8,37 @@ import {
   extractEmbedConfigDefaults,
 } from '../../../../constants/embeds';
 import { Var } from '../../../../core/radix/var';
-import { useLocale } from '../../../../hooks/useLocale';
+import {
+  LocaleProvider,
+  useLocale,
+  type LocaleAcceptorProps,
+} from '../../../../hooks/useLocale';
 import { App } from '../../../../stores/app';
 import { EmbedState } from '../../../../stores/embedState';
 
-export function Page() {
+export function Page({ locale }: LocaleAcceptorProps) {
   return (
-    <App.Provider>
-      <Content />
-    </App.Provider>
+    <LocaleProvider locale={locale}>
+      <App.Provider>
+        <Content />
+      </App.Provider>
+    </LocaleProvider>
   );
 }
 
 function Content() {
-  // const wargaming = App.useDeferred((state) => state.logins.wargaming, {
-  //   token: '',
-  //   id: 0,
-  //   expires: 0,
-  // });
-
-  const { locale } = useLocale();
+  const { locale, strings } = useLocale();
 
   return (
     <PageWrapper color="red">
-      {/* {!wargaming && (
-        <Flex direction="column" align="center" gap="2">
-          <Callout.Root>
-            <Callout.Icon>
-              <ExclamationTriangleIcon />
-            </Callout.Icon>
-            <Callout.Text>
-              <Flex align="center">You must log in to generate embeds.</Flex>
-            </Callout.Text>
-          </Callout.Root>
-
-          <WargamingLoginButton>Log in with Wargaming</WargamingLoginButton>
-        </Flex>
-      )} */}
-
       <Text align="center" mt="3">
-        More embeds coming soon.{' '}
+        {strings.website.tools.embed.coming_soon}{' '}
         <Link
           underline="always"
           href="https://discord.gg/nDt7AjGJQH"
           target="_blank"
         >
-          Suggest ideas
+          {strings.website.tools.embed.suggest}
         </Link>
         .
       </Text>
@@ -86,7 +70,13 @@ function Content() {
                 }}
               >
                 <Flex justify="center" p="2">
-                  <Text>{capitalize(embed)}</Text>
+                  <Text>
+                    {
+                      strings.website.tools.embed.types[
+                        embed as keyof typeof strings.website.tools.embed.types
+                      ].name
+                    }
+                  </Text>
                 </Flex>
 
                 <Box
