@@ -17,7 +17,7 @@ export const translations = SUPPORTED_LOCALES_DISCORD.reduce<
   (table, locale) => ({
     ...table,
     [locale]: require(
-      `../../../../../core/lang/${SUPPORTED_LOCALES_DISCORD_MAP_INVERSE[locale]}.json`,
+      `../../../../../i18n/strings/${SUPPORTED_LOCALES_DISCORD_MAP_INVERSE[locale]}.json`,
     ),
   }),
   {},
