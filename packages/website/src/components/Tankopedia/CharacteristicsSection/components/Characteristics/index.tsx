@@ -3,7 +3,6 @@ import {
   coefficient,
   CREW_MEMBER_NAMES,
   CrewType,
-  GUN_TYPE_NAMES,
   isExplosive,
   resolvePenetrationCoefficient,
 } from '@blitzkit/core';
@@ -192,7 +191,7 @@ export function Characteristics() {
               strings.website.tools.tankopedia.characteristics.values.gunType
             }
           >
-            {GUN_TYPE_NAMES[gun.gun_type!.$case]}
+            {strings.common.gun_types[gun.gun_type!.$case]}
           </Info>
           <InfoWithDelta
             stats={stats}

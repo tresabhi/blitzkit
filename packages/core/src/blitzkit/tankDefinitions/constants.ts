@@ -1,11 +1,5 @@
 import { times } from 'lodash-es';
-import {
-  CrewType,
-  GunDefinition,
-  ShellType,
-  TankClass,
-  TankType,
-} from '../../protos';
+import { CrewType, ShellType, TankClass, TankType } from '../../protos';
 
 export const SHELL_NAMES: Record<ShellType, string> = {
   [ShellType.AP]: 'AP',
@@ -20,14 +14,7 @@ export const CREW_MEMBER_NAMES = {
   [CrewType.LOADER]: 'loader',
   [CrewType.RADIOMAN]: 'radioman',
 } as const;
-export const GUN_TYPE_NAMES: Record<
-  Exclude<GunDefinition['gun_type'], undefined>['$case'],
-  string
-> = {
-  auto_loader: 'Auto loader',
-  auto_reloader: 'Auto reloader',
-  regular: 'Regular',
-};
+
 /**
  * @deprecated use svg
  */

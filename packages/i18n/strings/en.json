@@ -14,6 +14,12 @@
       "x": "x%s1"
     },
 
+    "gun_types": {
+      "auto_loader": "Auto loader",
+      "auto_reloader": "Auto reloader",
+      "regular": "Regular"
+    },
+
     "shells": {
       "ap": "AP",
       "apcr": "APCR",
@@ -817,7 +823,8 @@
       },
       "other_projects": {
         "title": "Other cool projects"
-      }
+      },
+      "help_translate": "Please help translate %s1 to %s2!"
     },
 
     "tools": {
