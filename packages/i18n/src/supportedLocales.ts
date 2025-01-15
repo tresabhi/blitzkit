@@ -3,11 +3,11 @@ export const SUPPORTED_LOCALES = [
   'es',
   'fr',
   'ja',
+  'pl',
   'pt',
   'ru',
   'uk',
   'zh',
-  'pl',
 ] as const;
 
 export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
