@@ -7,6 +7,15 @@ import {
 } from '@blitzkit/i18n';
 import { Select } from '@radix-ui/themes';
 import type { LocaleAcceptorProps } from '../hooks/useLocale';
+import { BlitzKitTheme } from './BlitzKitTheme';
+
+export function LocaleSwitcherThemeWrapper({ locale }: LocaleAcceptorProps) {
+  return (
+    <BlitzKitTheme style={{ background: 'transparent' }}>
+      <LocaleSwitcher locale={locale} />
+    </BlitzKitTheme>
+  );
+}
 
 export function LocaleSwitcher({ locale }: LocaleAcceptorProps) {
   return (
@@ -14,7 +23,19 @@ export function LocaleSwitcher({ locale }: LocaleAcceptorProps) {
       defaultValue={locale}
       onValueChange={(locale) => {
         localStorage.setItem('preferred-locale', locale);
-        window.location.pathname = `/${locale === DEFAULT_LOCALE ? '' : locale}`;
+
+        let rawPath = window.location.pathname;
+
+        for (const supportedLocale of SUPPORTED_LOCALES) {
+          if (window.location.pathname.startsWith(`/${supportedLocale}`)) {
+            rawPath = rawPath.replace(`/${supportedLocale}`, '');
+            break;
+          }
+        }
+
+        window.location.pathname = `${
+          locale === DEFAULT_LOCALE ? '' : `/${locale}`
+        }${rawPath}`;
       }}
     >
       <Select.Trigger />

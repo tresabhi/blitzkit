@@ -824,7 +824,8 @@
       "other_projects": {
         "title": "Other cool projects"
       },
-      "help_translate": "Please help translate %s1 to %s2!"
+      "help_translate": "Please help translate %s1 to %s2!",
+      "seo_description": "Tools for everything World of Tanks Blitz"
     },
 
     "tools": {

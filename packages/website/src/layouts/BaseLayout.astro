@@ -6,7 +6,7 @@ import Footer from '../components/Footer.astro';
 import Navbar from '../components/Navbar.astro';
 import Party3 from '../components/Party3.astro';
 import './base.css';
-import { DEFAULT_LOCALE } from '@blitzkit/i18n';
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from '@blitzkit/i18n';
 
 export interface Props {
   noFooter?: boolean;
@@ -14,23 +14,10 @@ export interface Props {
 
 const { noFooter } = Astro.props;
 const locale = Astro.params.locale ?? DEFAULT_LOCALE;
-const { pathname } = Astro.url;
-const isRoot = pathname === '/';
 ---
 
 <html lang={locale}>
   <head>
-    {
-      isRoot && (
-        <>
-          <title>BlitzKit</title>
-          <meta
-            name="description"
-            content="🎉 Tools for everything World of Tanks Blitz"
-          />
-        </>
-      )
-    }
     <meta property="og:site_name" content="BlitzKit" />
     <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="/favicon.png" />
@@ -41,7 +28,7 @@ const isRoot = pathname === '/';
 
     <script>
       import { SUPPORTED_LOCALES } from '@blitzkit/i18n';
-      import { getBestLocale } from '../core/i18n/getBestLocale';
+import { getBestLocale } from '../core/i18n/getBestLocale';
 
       const isI18nPath = SUPPORTED_LOCALES.some((locale) =>
         window.location.pathname.startsWith(`/${locale}`),
