@@ -1,10 +1,3 @@
-// import { assertSecret, EventManager } from '@blitzkit/core';
-// import { ActivityType, ShardingManager } from 'discord.js';
-// import {
-//   discoveredIdsDefinitions,
-//   tankDefinitions,
-// } from './core/blitzkit/nonBlockingPromises';
-
 import { assertSecret } from '@blitzkit/core';
 import { ActivityType, ShardingManager } from 'discord.js';
 import {
@@ -36,7 +29,6 @@ const interval = setInterval(async () => {
     let users = 0;
 
     for (const [, shard] of shards) {
-      // wtf is this typing bro???
       const guilds = (await shard.fetchClientValue('guilds.cache')) as any;
 
       servers += guilds.length;

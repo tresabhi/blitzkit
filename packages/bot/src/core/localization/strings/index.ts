@@ -17,7 +17,7 @@ export const translations = SUPPORTED_LOCALES_DISCORD.reduce<
   (table, locale) => ({
     ...table,
     [locale]: require(
-      `../../../../../i18n/strings/${SUPPORTED_LOCALES_DISCORD_MAP_INVERSE[locale]}.json`,
+      `@blitzkit/i18n/strings/${SUPPORTED_LOCALES_DISCORD_MAP_INVERSE[locale]}.json`,
     ),
   }),
   {},
