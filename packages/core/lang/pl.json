@@ -62,7 +62,7 @@
     },
     "tank_class_medium": {
       "-1": "unrecognized",
-      "0": "Light",
+      "0": "Lekki",
       "1": "Medium",
       "2": "Heavy",
       "3": "Tank destroyer"
@@ -122,11 +122,11 @@
       "cumulative_losses": "Losses",
       "cumulative_misses": "Total misses",
       "cumulative_shots": "Total shots",
-      "cumulative_spotted": "Total spots",
+      "cumulative_spotted": "Suma wykryć",
       "cumulative_survived_battles": "Survived battles",
       "cumulative_win_and_survived": "Won and survived battles",
       "cumulative_wins": "Wins",
-      "cumulative_xp": "Total XP",
+      "cumulative_xp": "Łączne PD",
       "cumulative_wn8": "WN8",
       "cumulative_battle_life_time": "Total battle time"
     }
@@ -136,12 +136,12 @@
       "errors": {
         "clan_not_found": "# Could not find clan\nCouldn't find \"%s\". Try selecting a clan from the search result.",
         "player_not_found": "# Could not find user\nI couldn't find user \"%s\". Try picking an user from the search result, typing in a valid username, or using the `/link` command.",
-        "player_not_linked": "# Use `/link` to get started\nI don't know who you are but you can tell me today!",
+        "player_not_linked": "# Użyj `/link` aby zacząć\nNie wiem, kim jesteś, ale możesz mi dziś powiedzieć!",
         "tank_name_not_found": "# Tank not found\nCould not find tank by the name \"%s\".",
         "tank_id_not_found": "# Tank not found\nCould not find tank by the ID \"%s\". Try typing the name of the tank instead of a number.",
         "no_tank_stats": "# No tank stats available\nThis player doesn't have any stats available. This may not be the player you are looking for.",
         "get_help": "Help Discord server",
-        "uncaught_error": "# BlitzKit ran into an error!\nWe're so sorry about this. Feel free to [join the official Discord server](https://discord.gg/nDt7AjGJQH) to get help.",
+        "uncaught_error": "# BlitzKit wpadł w błąd!\nPrzepraszamy za to. Możesz [dołączyć do oficjalnego serwera Discord](https://discord.gg/nDt7AjGJQH), aby uzyskać pomoc.",
         "preview": "# This command is in preview\n\nYou can only access this command in [the official Discord server](https://discord.gg/nDt7AjGJQH). The command will be generally available soon.",
         "query_too_small": "# Your search is too short\nYour search must be at least 3 characters long.",
         "query_too_long": "# Your search is too long\nYour search must be at most 100 characters long."
@@ -202,7 +202,7 @@
         },
         "tank": {
           "$": "tank",
-          "description": "The tank to get stats for"
+          "description": "Czołg do pobrania statystyk"
         },
         "username": {
           "$": "username",
@@ -227,7 +227,7 @@
           "description": "Region"
         },
         "tier": {
-          "$": "tier",
+          "$": "",
           "description": "Tier",
           "choices": {
             "tier": "Tier %s - %s"
@@ -241,7 +241,7 @@
         "custom": "%s - %s days"
       },
       "filters": {
-        "none": "No filters",
+        "none": "Brak filtrów",
         "tier": "Tier %s"
       },
       "no_data": {
@@ -275,7 +275,7 @@
           "available": "Available: %s / %s"
         },
         "errors": {
-          "no_auction": "# No ongoing auction\n\nCurrently, there are no tanks available for purchase in the auction. If you think this is an error, please report this discrepancy in [the official Discord Server](https://discord.gg/nDt7AjGJQH)."
+          "no_auction": "# Brak bieżącej aukcji\n\nObecnie nie ma dostępnych czołgów do zakupu na aukcji. Jeśli uważasz, że to błąd, zgłoś go na [oficjalnym serwerze Discord](https://discord.gg/nDt7AjGJQH)."
         },
         "actions": {
           "bid": "Bid now"
@@ -294,7 +294,7 @@
             "description": "The final tank to research in the line"
           },
           "starting_tank": {
-            "$": "starting-tank",
+            "$": "czołg rozpoczynający",
             "description": "The starting tank in the line (inferred automatically if not provided)"
           }
         },
@@ -312,7 +312,7 @@
           "tier_1": "# %s is a tier I\n\nTier I tanks are always unlocked for free for all players.",
           "already_researched": "# %s is already researched\n\nTry providing a `starting-tank` when using the command to view the totals for a line you have already researched.",
           "start_end_equal": "# %s was provided twice\n\nMake sure `starting-tank` and `target-tank` are different.",
-          "tanks_not_on_line": "# %s and %s are not on the same line\n\nMake sure `starting-tank` and `target-tank` are on the same tech-tree line.",
+          "tanks_not_on_line": "# %s i %s nie znajdują się w tej samej linii\n\nUpewnij się, że `starting-tank` i `target-tank` znajdują się na tej samej linii drzewa technicznego.",
           "unordered": "# %s higher tiered to %s\n\nMake sure to provide %s as the `starting-tank` instead as it is the lower tiered tank."
         }
       },
@@ -321,7 +321,7 @@
         "description": "All the info you need about the bot",
         "subcommands": {
           "commands": {
-            "$": "commands",
+            "$": "komendy",
             "description": "List of all commands and their descriptions",
             "body": "# Commands\n\nBlitzKit offers the following commands:\n\n"
           },
@@ -342,13 +342,13 @@
             "description": "How BlitzKit infers and uses your timezone"
           },
           "credits": {
-            "$": "credits",
+            "$": "uznania",
             "description": "People who have helped BlitzKit"
           }
         }
       },
       "breakdown": {
-        "$": "breakdown",
+        "$": "podział",
         "description": "A period's breakdown by tanks played",
         "body": {
           "total": "Total",
