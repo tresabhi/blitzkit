@@ -1,5 +1,6 @@
 import { asset } from '@blitzkit/core';
 import { Flex, Heading } from '@radix-ui/themes';
+import { useLocale } from '../../../../hooks/useLocale';
 import { Duel } from '../../../../stores/duel';
 import { GenericTankComponentButton } from '../../../ModuleButtons/GenericTankComponentButton';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
@@ -11,10 +12,13 @@ export function Miscellaneous() {
     (state) => state.protagonist.cooldownBooster,
   );
   const { tank } = Duel.use((state) => state.protagonist);
+  const { strings } = useLocale();
 
   return (
     <ConfigurationChildWrapper>
-      <Heading size="4">Miscellaneous</Heading>
+      <Heading size="4">
+        {strings.website.tools.tankopedia.configuration.miscellaneous.title}
+      </Heading>
 
       <Flex gap="2" align="center">
         {!tank.fixed_camouflage && (

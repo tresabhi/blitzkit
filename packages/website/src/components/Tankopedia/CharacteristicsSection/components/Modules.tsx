@@ -165,6 +165,7 @@ export function Modules() {
   const topGun = topTurret.guns.at(-1)!;
   const topEngine = tank.engines.at(-1)!;
   const topTrack = tank.tracks.at(-1)!;
+  const { strings } = useLocale();
 
   function setByUnlock(unlock: Unlock) {
     mutateDuel((draft) => {
@@ -354,7 +355,9 @@ export function Modules() {
   return (
     <ConfigurationChildWrapper>
       <Flex gap="4" align="center">
-        <Heading size="4">Modules</Heading>
+        <Heading size="4">
+          {strings.website.tools.tankopedia.configuration.modules.title}
+        </Heading>
 
         {hasUpgrades && (
           <>
@@ -372,7 +375,7 @@ export function Modules() {
                 });
               }}
             >
-              Stock
+              {strings.website.tools.tankopedia.configuration.modules.stock}
             </Button>
             <Button
               variant="ghost"
@@ -390,7 +393,7 @@ export function Modules() {
                 });
               }}
             >
-              Upgrade
+              {strings.website.tools.tankopedia.configuration.modules.upgrade}
             </Button>
           </>
         )}

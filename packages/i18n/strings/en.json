@@ -941,6 +941,38 @@
           "title": "Review videos",
           "disclaimer": "BlitzKit does not endorse any review videos.",
           "join": "Apply to %s1 YouTuber program"
+        },
+
+        "configuration": {
+          "title": "Configuration",
+
+          "modules": {
+            "title": "Modules",
+            "stock": "Stock",
+            "upgrade": "Upgrade"
+          },
+          "equipment": {
+            "title": "Equipment",
+            "clear": "Clear"
+          },
+          "provisions": {
+            "title": "Provisions",
+            "clear": "Clear"
+          },
+          "consumables": {
+            "title": "Consumables",
+            "clear": "Clear",
+            "info": "Yellow consumables do not affect the statistics."
+          },
+          "skills": {
+            "title": "Crew skills",
+            "clear": "Clear",
+            "maximize": "Maximize",
+            "info": "Yellow skills only apply under special circumstances. Hold Space to quickly toggle between level 0 and 7."
+          },
+          "miscellaneous": {
+            "title": "Miscellaneous"
+          }
         }
       },
       "compare": {

@@ -1,5 +1,6 @@
 import { Button, Flex, Heading } from '@radix-ui/themes';
 import { awaitableEquipmentDefinitions } from '../../../../core/awaitables/equipmentDefinitions';
+import { useLocale } from '../../../../hooks/useLocale';
 import { Duel } from '../../../../stores/duel';
 import { EquipmentManager } from '../../../EquipmentManager';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
@@ -14,11 +15,14 @@ export function Equipment() {
   const equipmentMatrix = Duel.use(
     (state) => state.protagonist.equipmentMatrix,
   );
+  const { strings } = useLocale();
 
   return (
     <ConfigurationChildWrapper>
       <Flex gap="4" align="center">
-        <Heading size="4">Equipment</Heading>
+        <Heading size="4">
+          {strings.website.tools.tankopedia.configuration.equipment.title}
+        </Heading>
         <Button
           variant="ghost"
           color="red"
@@ -32,7 +36,7 @@ export function Equipment() {
             });
           }}
         >
-          Clear
+          {strings.website.tools.tankopedia.configuration.equipment.clear}
         </Button>
       </Flex>
 

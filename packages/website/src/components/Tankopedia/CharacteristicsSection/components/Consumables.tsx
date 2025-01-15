@@ -10,6 +10,7 @@ import {
 } from '@radix-ui/themes';
 import { awaitableConsumableDefinitions } from '../../../../core/awaitables/consumableDefinitions';
 import { useEquipment } from '../../../../hooks/useEquipment';
+import { useLocale } from '../../../../hooks/useLocale';
 import { Duel } from '../../../../stores/duel';
 import { ConsumablesManager } from '../../../ConsumablesManager';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
@@ -34,12 +35,15 @@ export function Consumables() {
   );
   const hasConsumableDeliverySystem = useEquipment(118);
   const hasHighEndConsumables = useEquipment(101);
+  const { strings } = useLocale();
 
   return (
     <ConfigurationChildWrapper>
       <Flex gap="4" align="center">
         <Flex gap="2" align="center">
-          <Heading size="4">Consumables</Heading>
+          <Heading size="4">
+            {strings.website.tools.tankopedia.configuration.consumables.title}
+          </Heading>
 
           <Popover.Root>
             <Popover.Trigger>
@@ -50,8 +54,10 @@ export function Consumables() {
 
             <Popover.Content>
               <Text>
-                <Text color="amber">Yellow consumables</Text> do not affect the
-                statistics.
+                {
+                  strings.website.tools.tankopedia.configuration.consumables
+                    .info
+                }
               </Text>
             </Popover.Content>
           </Popover.Root>
@@ -66,7 +72,7 @@ export function Consumables() {
             });
           }}
         >
-          Clear
+          {strings.website.tools.tankopedia.configuration.consumables.clear}
         </Button>
       </Flex>
 

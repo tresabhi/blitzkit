@@ -4,10 +4,10 @@ import {
   Flex,
   Heading,
   IconButton,
-  Kbd,
   Popover,
   Text,
 } from '@radix-ui/themes';
+import { useLocale } from '../../../../hooks/useLocale';
 import { TankopediaEphemeral } from '../../../../stores/tankopediaEphemeral';
 import { CrewSkillManager } from '../../../CrewSkillManager';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
@@ -15,12 +15,15 @@ import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 export function Skills() {
   const skillLevels = TankopediaEphemeral.use((state) => state.skills);
   const mutateTankopediaTemporary = TankopediaEphemeral.useMutation();
+  const { strings } = useLocale();
 
   return (
     <ConfigurationChildWrapper>
       <Flex gap="4" align="center">
         <Flex gap="2" align="center">
-          <Heading size="4">Crew skills</Heading>
+          <Heading size="4">
+            {strings.website.tools.tankopedia.configuration.skills.title}
+          </Heading>
 
           <Popover.Root>
             <Popover.Trigger>
@@ -32,12 +35,7 @@ export function Skills() {
             <Popover.Content>
               <Flex direction="column" gap="2">
                 <Text>
-                  <Text color="amber">Yellow skills</Text> only apply under
-                  special circumstances.
-                </Text>
-
-                <Text>
-                  Hold <Kbd>Shift</Kbd> to quickly toggle between level 0 and 7.
+                  {strings.website.tools.tankopedia.configuration.skills.info}
                 </Text>
               </Flex>
             </Popover.Content>
@@ -55,7 +53,7 @@ export function Skills() {
             });
           }}
         >
-          Clear
+          {strings.website.tools.tankopedia.configuration.skills.clear}
         </Button>
         <Button
           variant="ghost"
@@ -67,7 +65,7 @@ export function Skills() {
             });
           }}
         >
-          Maximize
+          {strings.website.tools.tankopedia.configuration.skills.maximize}
         </Button>
       </Flex>
 
