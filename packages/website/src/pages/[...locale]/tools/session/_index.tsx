@@ -13,7 +13,6 @@ import {
   type IndividualAccountInfo,
   type IndividualTankStats,
 } from '@blitzkit/core';
-import strings from '@blitzkit/i18n/strings/en.json';
 import {
   ArrowDownIcon,
   MagnifyingGlassIcon,
@@ -39,7 +38,12 @@ import { StickyTableRoot } from '../../../../components/StickyTableRoot';
 import { TankRowHeaderCell } from '../../../../components/TankRowHeaderCell';
 import { awaitableAverageDefinitions } from '../../../../core/awaitables/averageDefinitions';
 import { awaitableTankDefinitions } from '../../../../core/awaitables/tankDefinitions';
-import { useLocale } from '../../../../hooks/useLocale';
+import { literals } from '../../../../core/i18n/literals';
+import {
+  LocaleProvider,
+  useLocale,
+  type LocaleAcceptorProps,
+} from '../../../../hooks/useLocale';
 import { Session, type SessionTracking } from '../../../../stores/session';
 
 const [tankDefinitions, averageDefinitions] = await Promise.all([
@@ -47,16 +51,18 @@ const [tankDefinitions, averageDefinitions] = await Promise.all([
   awaitableAverageDefinitions,
 ]);
 
-export function Page() {
+export function Page({ locale }: LocaleAcceptorProps) {
   return (
-    <Session.Provider>
-      <Content />
-    </Session.Provider>
+    <LocaleProvider locale={locale}>
+      <Session.Provider>
+        <Content />
+      </Session.Provider>
+    </LocaleProvider>
   );
 }
 
 function Content() {
-  const { locale } = useLocale();
+  const { locale, strings } = useLocale();
   const [showSearch, setShowSearch] = useState(false);
   const [searching, setSearching] = useState(false);
   const [searchResults, setSearchResults] = useState<AccountListWithServer>([]);
@@ -165,17 +171,17 @@ function Content() {
       >
         <AlertDialog.Content>
           <AlertDialog.Title>
-            You're attempting to track a CC account
+            {strings.website.tools.session.no_cc.title}
           </AlertDialog.Title>
           <AlertDialog.Description>
-            CC (community contributor) accounts do not have public tank
-            statistics. We are in the process of adding embeds for CC accounts,
-            stay tuned.
+            {strings.website.tools.session.no_cc.body}
           </AlertDialog.Description>
 
           <Flex mt="4" justify="end">
             <AlertDialog.Action>
-              <Button variant="solid">Alright</Button>
+              <Button variant="solid">
+                {strings.website.tools.session.no_cc.alright}
+              </Button>
             </AlertDialog.Action>
           </Flex>
         </AlertDialog.Content>
@@ -190,7 +196,9 @@ function Content() {
           gap="3"
         >
           <Flex gap="2" align="center">
-            <Text color="gray">Look up a player to get started</Text>
+            <Text color="gray">
+              {strings.website.tools.session.search.lookup}
+            </Text>
             <ArrowDownIcon />
           </Flex>
 
@@ -202,7 +210,7 @@ function Content() {
               maxWidth: 480,
             }}
             ref={input}
-            placeholder="Search players..."
+            placeholder={strings.website.tools.session.search.hint}
             onChange={() => {
               if (!input.current) return;
 
@@ -226,13 +234,17 @@ function Content() {
             <Flex mt="2">
               {searching && (
                 <Flex justify="center">
-                  <Text color="gray">Searching...</Text>
+                  <Text color="gray">
+                    {strings.website.tools.session.search.searching}
+                  </Text>
                 </Flex>
               )}
 
               {!searching && searchResults.length === 0 && (
                 <Flex justify="center">
-                  <Text color="gray">No players found</Text>
+                  <Text color="gray">
+                    {strings.website.tools.session.search.no_results}
+                  </Text>
                 </Flex>
               )}
 
@@ -265,9 +277,15 @@ function Content() {
           gap="2"
         >
           <Flex mt="2" mb="2" direction="column" gap="2">
-            <Heading size="5">Tracking {accountInfo?.nickname}</Heading>
+            <Heading size="5">
+              {literals(strings.website.tools.session.controls.title, [
+                `${accountInfo?.nickname}`,
+              ])}
+            </Heading>
             <Text color="gray">
-              Since {new Date(session.player.since).toLocaleString(locale)}
+              {literals(strings.website.tools.session.controls.subtitle, [
+                new Date(session.player.since).toLocaleString(locale),
+              ])}
             </Text>
           </Flex>
 
@@ -290,7 +308,7 @@ function Content() {
                 });
               }}
             >
-              Reset
+              {strings.website.tools.session.controls.reset}
             </Button>
             <Button
               onClick={() => {
@@ -299,7 +317,7 @@ function Content() {
                 });
               }}
             >
-              Change
+              {strings.website.tools.session.controls.change}
             </Button>
           </Flex>
         </Flex>
@@ -310,7 +328,9 @@ function Content() {
           <StickyTableRoot variant="surface">
             <Table.Header>
               <Table.Row>
-                <Table.ColumnHeaderCell>Tank</Table.ColumnHeaderCell>
+                <Table.ColumnHeaderCell>
+                  {strings.website.tools.session.table.tank}
+                </Table.ColumnHeaderCell>
 
                 {session.columns.map((column, index) => (
                   <Table.ColumnHeaderCell
@@ -374,6 +394,12 @@ function Content() {
                       <Select.Trigger variant="ghost" />
 
                       <Select.Content>
+                        <Select.Item value="remove">
+                          {strings.website.tools.session.table.remove}
+                        </Select.Item>
+
+                        <Select.Separator />
+
                         {compositeStatsKeys
                           .filter(
                             (item) =>
@@ -385,10 +411,6 @@ function Content() {
                               {strings.common.composite_stats[key]}
                             </Select.Item>
                           ))}
-
-                        <Select.Separator />
-
-                        <Select.Item value="remove">Remove</Select.Item>
                       </Select.Content>
                     </Select.Root>
                   </Table.ColumnHeaderCell>
@@ -409,7 +431,7 @@ function Content() {
                     overflowY: 'hidden',
                   }}
                 >
-                  Total
+                  {strings.website.tools.session.table.total}
                 </StickyRowHeaderCell>
                 {session.columns.map((column) => (
                   <Table.Cell align="center" key={column}>
@@ -453,8 +475,12 @@ function Content() {
             flex: 1,
           }}
         >
-          <Heading color="gray">No battles</Heading>
-          <Text color="gray">Go ahead and play a game</Text>
+          <Heading color="gray">
+            {strings.website.tools.session.no_battles.title}
+          </Heading>
+          <Text color="gray">
+            {strings.website.tools.session.no_battles.hint}
+          </Text>
         </Flex>
       )}
     </PageWrapper>

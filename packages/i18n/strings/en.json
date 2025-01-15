@@ -1168,7 +1168,33 @@
         "name": "Session",
         "button": "Start tracking",
         "description": "Live session stats",
-        "seo_description": "Track your stats in real time as you play World of Tanks Blitz"
+        "seo_description": "Track your stats in real time as you play World of Tanks Blitz",
+        "search": {
+          "lookup": "Look up a player to get started",
+          "hint": "Search players...",
+          "searching": "Searching...",
+          "no_results": "No players found"
+        },
+        "controls": {
+          "title": "Tracking %s1",
+          "subtitle": "Since %s1",
+          "reset": "Reset",
+          "change": "Change"
+        },
+        "no_cc": {
+          "title": "You're attempting to track a CC account",
+          "body": "CC (community contributor) accounts do not have public tank statistics. We are in the process of adding embeds for CC accounts, stay tuned.",
+          "alright": "Alright"
+        },
+        "no_battles": {
+          "title": "No battles",
+          "hint": "Go ahead and play a game"
+        },
+        "table": {
+          "tank": "Tank",
+          "total": "Total",
+          "remove": "Remove"
+        }
       },
       "tier_list": {
         "name": "Tier list",
