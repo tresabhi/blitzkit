@@ -392,7 +392,7 @@
         "options": {
           "threshold": {
             "$": "threshold",
-            "description": "The number of days inactive (default: %s days)"
+            "description": "Liczba dni nieaktywnych (domyślnie: %s dni)"
           }
         },
         "body": {
@@ -409,7 +409,7 @@
               "$": "Games",
               "winrate": "Winrate",
               "battles": "Battles",
-              "wins_losses": "Wins / losses"
+              "wins_losses": "Zwycięstwa / porażki"
             },
             "efficiency": {
               "$": "Efficiency",
@@ -419,14 +419,14 @@
             },
             "lethality": {
               "$": "Lethality",
-              "average_damage": "Average damage",
+              "average_damage": "Średnie uszkodzenia",
               "damage_per_tier": "Damage per tier",
               "damage_ratio": "Damage ratio",
               "average_kills": "Average kills"
             },
             "miscellaneous": {
               "$": "Miscellaneous",
-              "average_tier": "Average tier",
+              "average_tier": "Średni poziom",
               "average_spots": "Average spots",
               "average_xp": "Average XP",
               "kills_to_death_ratio": "Kills to death ratio"
@@ -435,7 +435,7 @@
         }
       },
       "link": {
-        "$": "link",
+        "$": "połącz",
         "description": "Links your Blitz and Discord account",
         "body": {
           "accounts_linked": "Accounts linked",
@@ -469,7 +469,7 @@
         "options": {
           "limit": {
             "$": "limit",
-            "description": "The max number of player results (default: %s)"
+            "description": "Maksymalna liczba wyników gracza (domyślnie: %s)"
           }
         },
         "body": {
@@ -487,7 +487,7 @@
           },
           "league": {
             "$": "league",
-            "description": "Top players of a league"
+            "description": "Najlepsi gracze ligi"
           }
         },
         "options": {
@@ -544,7 +544,7 @@
       },
       "ping": {
         "$": "ping",
-        "description": "Check wether the bot is alive.",
+        "description": "Sprawdź, czy bot żyje.",
         "body": {
           "pong": "Pong 🏓",
           "pong_with_time": "Pong 🏓 - %sms"
