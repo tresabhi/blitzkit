@@ -2,13 +2,13 @@
 
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
-import { SUPPORTED_LOCALES } from '@blitzkit/core';
+import { SUPPORTED_LOCALES } from '@blitzkit/i18n';
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
   i18n: {
     defaultLocale: 'en',
-    locales: SUPPORTED_LOCALES,
+    locales: [...SUPPORTED_LOCALES],
     routing: {
       prefixDefaultLocale: false,
     },

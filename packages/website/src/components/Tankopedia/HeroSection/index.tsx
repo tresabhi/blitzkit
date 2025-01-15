@@ -6,6 +6,7 @@ import { NAVBAR_HEIGHT } from '../../../constants/navbar';
 import { awaitableTankDefinitions } from '../../../core/awaitables/tankDefinitions';
 import { Var } from '../../../core/radix/var';
 import { useFullScreen } from '../../../hooks/useFullScreen';
+import { useLocale } from '../../../hooks/useLocale';
 import { Duel } from '../../../stores/duel';
 import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
 import type { MaybeSkeletonComponentProps } from '../../../types/maybeSkeletonComponentProps';
@@ -18,6 +19,7 @@ import { TankSandboxLoader } from './components/TankSandboxLoader';
 const tankDefinitions = await awaitableTankDefinitions;
 
 export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
+  const { unwrap } = useLocale();
   const canvas = useRef<HTMLCanvasElement>(null);
   const isFullScreen = useFullScreen();
   const protagonist = Duel.use((state) => state.protagonist.tank);
@@ -117,7 +119,7 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
               wrap="nowrap"
               color={treeColor}
             >
-              {protagonist.name}
+              {unwrap(protagonist.name)}
             </Heading>
           </Flex>
 

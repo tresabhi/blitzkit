@@ -8,7 +8,7 @@ import {
   sumCompositeStats,
   type IndividualTankStats,
 } from '@blitzkit/core';
-import strings from '@blitzkit/core/lang/en.json';
+import strings from '@blitzkit/i18n/strings/en.json';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { ContextMenu } from '@radix-ui/themes';
 import { useEffect, useMemo, useState } from 'react';

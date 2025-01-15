@@ -11,15 +11,15 @@ export async function shellIcons() {
 
   const image = sharp(
     await readDVPLFile(
-      `${DATA}/Gfx/Shared/tank-supply/ammunition/big/texture0.packed.webp.dvpl`,
+      `${DATA}/Gfx/Shared/tank-supply/ammunition/big/texture0.packed.webp`,
     ),
   );
 
   const changes = await Promise.all(
     (await readdir(`${DATA}/Gfx/Shared/tank-supply/ammunition/big`))
-      .filter((file) => file.endsWith('_l.txt.dvpl'))
+      .filter((file) => file.endsWith('_l.txt'))
       .map(async (file) => {
-        const name = file.match(/(.+)_l\.txt\.dvpl/)![1];
+        const name = file.match(/(.+)_l\.txt/)![1];
         const sizes = (
           await readStringDVPL(
             `${DATA}/Gfx/Shared/tank-supply/ammunition/big/${file}`,

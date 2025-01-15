@@ -38,7 +38,7 @@ export function MetaSection() {
   const mutateDuel = Duel.useMutation();
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const [showSwapDialog, setShowSwapDialog] = useState(false);
-  const { locale, strings } = useLocale();
+  const { locale, strings, unwrap } = useLocale();
 
   return (
     <Flex justify="center" align="center">
@@ -124,7 +124,7 @@ export function MetaSection() {
           <Flex direction="column" width="100%">
             {protagonist.name_full && (
               <Listing label={strings.website.tools.tankopedia.meta.full_name}>
-                {protagonist.name_full}
+                {unwrap(protagonist.name_full)}
               </Listing>
             )}
             <Listing label={strings.website.tools.tankopedia.meta.nation}>

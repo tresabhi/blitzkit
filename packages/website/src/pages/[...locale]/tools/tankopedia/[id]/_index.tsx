@@ -4,7 +4,6 @@ import { CalloutsSection } from '../../../../../components/Tankopedia/CalloutsSe
 import { CharacteristicsSection } from '../../../../../components/Tankopedia/CharacteristicsSection';
 import { GameModeSection } from '../../../../../components/Tankopedia/GameModeSection';
 import { HeroSection } from '../../../../../components/Tankopedia/HeroSection';
-import { HistorySection } from '../../../../../components/Tankopedia/HistorySection';
 import { MetaSection } from '../../../../../components/Tankopedia/MetaSection';
 import { TechTreeSection } from '../../../../../components/Tankopedia/TechTreeSection';
 import { VideoSection } from '../../../../../components/Tankopedia/VideoSection';

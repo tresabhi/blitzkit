@@ -9,6 +9,7 @@ import {
 } from '@blitzkit/core';
 import { DropdownMenu, Flex } from '@radix-ui/themes';
 import { useState } from 'react';
+import { useLocale } from '../hooks/useLocale';
 import { ModuleButton } from './ModuleButtons/ModuleButton';
 
 interface ModuleManagerProps {
@@ -35,6 +36,7 @@ export function ModuleManager({
   const [gunMenuOpen, setGunMenuOpen] = useState(false);
   const [engineMenuOpen, setEngineMenuOpen] = useState(false);
   const [trackMenuOpen, setTrackMenuOpen] = useState(false);
+  const { unwrap } = useLocale();
 
   return (
     <Flex gap="1" wrap="wrap">
@@ -71,7 +73,7 @@ export function ModuleManager({
                     module="turret"
                     discriminator={TIER_ROMAN_NUMERALS[turret.tier]}
                   />{' '}
-                  {turret.name}
+                  {unwrap(turret.name)}
                 </DropdownMenu.RadioItem>
               );
             })}
@@ -117,7 +119,7 @@ export function ModuleManager({
                       TIER_ROMAN_NUMERALS[gun.gun_type!.value.base.tier]
                     }
                   />{' '}
-                  {gun.gun_type!.value.base.name}
+                  {unwrap(gun.gun_type!.value.base.name)}
                 </DropdownMenu.RadioItem>
               );
             })}
@@ -156,7 +158,7 @@ export function ModuleManager({
                     module="engine"
                     discriminator={TIER_ROMAN_NUMERALS[engine.tier]}
                   />{' '}
-                  {engine.name}
+                  {unwrap(engine.name)}
                 </DropdownMenu.RadioItem>
               );
             })}
@@ -195,7 +197,7 @@ export function ModuleManager({
                     module="chassis"
                     discriminator={TIER_ROMAN_NUMERALS[track.tier]}
                   />{' '}
-                  {track.name}
+                  {unwrap(track.name)}
                 </DropdownMenu.RadioItem>
               );
             })}

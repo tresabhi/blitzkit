@@ -23,7 +23,7 @@ export async function tankModels() {
     const nation = nations[nationIndex];
     const changes: FileChange[] = [];
     const tanks = await readXMLDVPL<{ root: VehicleDefinitionList }>(
-      `${DATA}/XML/item_defs/vehicles/${nation}/list.xml.dvpl`,
+      `${DATA}/XML/item_defs/vehicles/${nation}/list.xml`,
     );
 
     console.log(`Building models for ${nation}`);
@@ -35,7 +35,7 @@ export async function tankModels() {
         const id = toUniqueId(nation, tank.id);
 
         const parameters = await readYAMLDVPL<TankParameters>(
-          `${DATA}/3d/Tanks/Parameters/${nation}/${tankKey}.yaml.dvpl`,
+          `${DATA}/3d/Tanks/Parameters/${nation}/${tankKey}.yaml`,
         );
         const model = await extractModel(
           DATA,

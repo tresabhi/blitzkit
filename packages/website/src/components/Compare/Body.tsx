@@ -1,6 +1,7 @@
 import { asset } from '@blitzkit/core';
 import { Flex, Heading, IconButton, Table } from '@radix-ui/themes';
 import type { TankCharacteristics } from '../../core/blitzkit/tankCharacteristics';
+import { useLocale } from '../../hooks/useLocale';
 import { CompareEphemeral } from '../../stores/compareEphemeral';
 import { StickyColumnHeaderCell } from '../StickyColumnHeaderCell';
 import { CompareRow } from './CompareRow';
@@ -15,6 +16,7 @@ export function Body({ stats }: BodyProps) {
   const hasNonRegularGun = members.some(
     ({ gun }) => gun.gun_type!.$case !== 'regular',
   );
+  const { unwrap } = useLocale();
   const mutateCompareEphemeral = CompareEphemeral.useMutation();
 
   return (
@@ -60,7 +62,7 @@ export function Body({ stats }: BodyProps) {
                         }}
                       >
                         <img
-                          alt={thisShell.name}
+                          alt={unwrap(thisShell.name)}
                           width={16}
                           height={16}
                           src={asset(`icons/shells/${thisShell.icon}.webp`)}

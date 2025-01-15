@@ -1,4 +1,4 @@
-import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from '@blitzkit/core';
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from '@blitzkit/i18n';
 
 export function getBestLocale() {
   const desiredLocale =

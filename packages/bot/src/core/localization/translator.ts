@@ -1,8 +1,10 @@
+import { unwrapper } from '@blitzkit/i18n';
 import { Locale } from 'discord.js';
 import { translations } from './strings';
 import {
   DEFAULT_LOCALE_DISCORD,
   SUPPORTED_LOCALES_DISCORD,
+  SUPPORTED_LOCALES_DISCORD_MAP_INVERSE,
 } from './strings/constants';
 
 export function translator(localeRaw: Locale) {
@@ -74,5 +76,7 @@ export function translator(localeRaw: Locale) {
       .join('');
   }
 
-  return { locale, translate, t };
+  const unwrap = unwrapper(SUPPORTED_LOCALES_DISCORD_MAP_INVERSE[locale]);
+
+  return { locale, translate, t, unwrap };
 }

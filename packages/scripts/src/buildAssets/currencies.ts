@@ -23,7 +23,7 @@ export async function currencies() {
   await Promise.all(
     ICONS.map(async ([file, name]) => {
       const content = await sharp(
-        await readDVPLFile(`${DATA}/Gfx/Lobby/currency/${file}.dvpl`),
+        await readDVPLFile(`${DATA}/Gfx/Lobby/currency/${file}`),
       )
         .trim()
         .toBuffer();

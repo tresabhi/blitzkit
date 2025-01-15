@@ -4,7 +4,12 @@ import type { GetStaticPaths } from 'astro';
 import { PageWrapper } from '../../../../components/PageWrapper';
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import { getStaticPaths as parentGetStaticPaths } from '../../index.astro';
-import { AUTH_PROVIDERS, AUTH_PROVIDER_NAMES, Authorize } from './_index';
+import {
+  AUTH_PROVIDER_NAMES,
+  AUTH_PROVIDERS,
+  Authorize,
+  type AuthProvider,
+} from './_index';
 
 export const getStaticPaths = (() => {
   const parentPaths = parentGetStaticPaths();
@@ -14,7 +19,7 @@ export const getStaticPaths = (() => {
   ).flat();
 }) satisfies GetStaticPaths;
 
-const { provider } = Astro.params;
+const provider = Astro.params.provider as AuthProvider;
 ---
 
 <BaseLayout>

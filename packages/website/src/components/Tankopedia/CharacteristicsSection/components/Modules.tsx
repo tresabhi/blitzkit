@@ -103,7 +103,7 @@ function ModuleButton({
           gap={isTank ? '1' : undefined}
         >
           <Text size="1" color="gray">
-            {formatCompact(unlock.cost.value)}
+            {formatCompact(locale, unlock.cost.value)}
           </Text>
 
           <img

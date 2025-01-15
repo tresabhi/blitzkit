@@ -10,7 +10,7 @@ interface TankRowHeaderCellProps {
 }
 
 export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
-  const { locale } = useLocale();
+  const { locale, unwrap } = useLocale();
   const Icon = classIcons[tank.class];
 
   return (
@@ -24,7 +24,7 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
         tabIndex={-1}
       >
         <img
-          alt={tank.name}
+          alt={unwrap(tank.name)}
           draggable={false}
           src={tankIcon(tank.id)}
           style={{
@@ -70,7 +70,7 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
           <ExperimentIcon style={{ width: '1em', height: '1em' }} />
         )}
 
-        {tank.name}
+        {unwrap(tank.name)}
       </LinkI18n>
     </StickyRowHeaderCell>
   );

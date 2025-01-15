@@ -1,4 +1,4 @@
-import { DEFAULT_LOCALE, SupportedLocale } from '@blitzkit/core';
+import { DEFAULT_LOCALE, SupportedLocale } from '@blitzkit/i18n';
 import { Locale } from 'discord.js';
 
 const SUPPORTED_LOCALES_DISCORD_MAP: Record<SupportedLocale, Locale> = {

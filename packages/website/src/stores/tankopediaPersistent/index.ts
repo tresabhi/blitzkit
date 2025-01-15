@@ -1,4 +1,4 @@
-import type en from '@blitzkit/core/lang/en.json';
+import type en from '@blitzkit/i18n/strings/en.json';
 import * as lodash from 'lodash-es';
 import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';

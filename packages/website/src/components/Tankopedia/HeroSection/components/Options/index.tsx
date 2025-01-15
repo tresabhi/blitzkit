@@ -89,7 +89,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
   const antagonistUniqueGuns = uniqueGuns(antagonistTank.turrets);
   const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
-  const { strings } = useLocale();
+  const { strings, unwrap } = useLocale();
 
   return (
     <>
@@ -244,7 +244,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                 }}
               >
                 <img
-                  alt={thisShell.name}
+                  alt={unwrap(thisShell.name)}
                   src={asset(`icons/shells/${thisShell.icon}.webp`)}
                   style={{
                     width: '50%',
@@ -362,7 +362,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                   <Button variant="ghost">
                     <Flex gap="2" align="center">
                       <SmallTankIcon id={antagonistTank.id} size={16} />
-                      {antagonistTank.name}
+                      {unwrap(antagonistTank.name)}
                     </Flex>
                   </Button>
                 </Dialog.Trigger>

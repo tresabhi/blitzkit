@@ -32,7 +32,7 @@ export async function renderBreakdown(
   filters: StatFilters,
   locale: Locale,
 ) {
-  const { t, translate } = translator(locale);
+  const { t, translate, unwrap } = translator(locale);
   const awaitedTankDefinitions = await tankDefinitions;
   const awaitedTankAverages = await blitzStarsTankAverages;
   const statsInPeriod = await getStatsInPeriod(region, id, start, end, locale);
@@ -190,8 +190,9 @@ export async function renderBreakdown(
           class={tankDefinition?.class}
           type={tankDefinition?.type}
           title={
-            tankDefinition?.name ??
-            translate('bot.commands.breakdown.body.unknown_tank', [`${id}`])
+            tankDefinition
+              ? unwrap(tankDefinition.name)
+              : translate('bot.commands.breakdown.body.unknown_tank', [`${id}`])
           }
           stats={[
             {

@@ -1,9 +1,10 @@
+import {} from '@blitzkit/core';
 import {
   DEFAULT_LOCALE,
-  localizedStrings,
-  SUPPORTED_LOCALE_FLAGS,
   SUPPORTED_LOCALES,
-} from '@blitzkit/core';
+  SUPPORTED_LOCALE_FLAGS,
+  localizedStrings,
+} from '@blitzkit/i18n';
 import { Select } from '@radix-ui/themes';
 import type { LocaleAcceptorProps } from '../hooks/useLocale';
 

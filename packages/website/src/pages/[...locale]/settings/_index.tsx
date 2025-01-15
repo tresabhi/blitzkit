@@ -1,4 +1,4 @@
-import { DEFAULT_LOCALE } from '@blitzkit/core';
+import { DEFAULT_LOCALE } from '@blitzkit/i18n';
 import { Flex, Switch, Text } from '@radix-ui/themes';
 import { LocaleSwitcher } from '../../../components/LocaleSwitcher';
 import { PageWrapper } from '../../../components/PageWrapper';

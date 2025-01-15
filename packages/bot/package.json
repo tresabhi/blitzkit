@@ -5,6 +5,7 @@
   "types": "src/types.d.ts",
   "dependencies": {
     "@blitzkit/core": "workspace:*",
+    "@blitzkit/i18n": "workspace:*",
     "satori": "^0.10.14",
     "@resvg/resvg-js": "^2.6.2",
     "discord.js": "^14.16.3",

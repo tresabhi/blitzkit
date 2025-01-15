@@ -26,8 +26,8 @@ const omitMeshNames = {
 };
 
 export async function extractModel(data: string, path: string) {
-  const sc2Path = `${data}/3d/${path}.sc2.dvpl`;
-  const scgPath = `${data}/3d/${path}.scg.dvpl`;
+  const sc2Path = `${data}/3d/${path}.sc2`;
+  const scgPath = `${data}/3d/${path}.scg`;
   const sc2 = new Sc2ReadStream(
     (await readDVPLFile(sc2Path)).buffer as ArrayBuffer,
   ).sc2();

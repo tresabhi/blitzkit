@@ -9,6 +9,7 @@ import { awaitableProvisionDefinitions } from '../../core/awaitables/provisionDe
 import { awaitableSkillDefinitions } from '../../core/awaitables/skillDefinitions';
 import type { TankCharacteristics } from '../../core/blitzkit/tankCharacteristics';
 import { Var } from '../../core/radix/var';
+import { useLocale } from '../../hooks/useLocale';
 import { CompareEphemeral } from '../../stores/compareEphemeral';
 import type { EquipmentMatrix } from '../../stores/duel';
 import { BlitzkitButtonGrayIcon } from '../BlitzkitButtonGrayIcon';
@@ -43,6 +44,7 @@ export function CompareTable({ stats }: CompareTableProps) {
   const crewSkills = CompareEphemeral.use((state) => state.crewSkills);
   const members = CompareEphemeral.use((state) => state.members);
   const mutateCompareEphemeral = CompareEphemeral.useMutation();
+  const { unwrap } = useLocale();
 
   return (
     <StickyTableRoot
@@ -293,10 +295,10 @@ export function CompareTable({ stats }: CompareTableProps) {
                             <Flex direction="column" justify="center">
                               {provisions.map((provision, index) => (
                                 <img
-                                  alt={
+                                  alt={unwrap(
                                     provisionDefinitions.provisions[provision]
-                                      .name
-                                  }
+                                      .name,
+                                  )}
                                   key={provision}
                                   src={asset(
                                     `/icons/provisions/${provision}.webp`,
@@ -473,11 +475,11 @@ export function CompareTable({ stats }: CompareTableProps) {
                             <Flex direction="column" justify="center">
                               {consumables.map((consumable, index) => (
                                 <img
-                                  alt={
+                                  alt={unwrap(
                                     consumableDefinitions.consumables[
                                       consumable
-                                    ].name
-                                  }
+                                    ].name,
+                                  )}
                                   key={consumable}
                                   src={asset(
                                     `/icons/consumables/${consumable}.webp`,

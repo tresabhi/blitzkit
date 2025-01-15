@@ -1,4 +1,4 @@
-import { DEFAULT_LOCALE } from '@blitzkit/core';
+import { DEFAULT_LOCALE, unwrapper } from '@blitzkit/i18n';
 import { createContext, useContext, type ReactNode } from 'react';
 import { getStrings } from '../core/i18n/getStrings';
 
@@ -29,8 +29,9 @@ export function useLocale() {
   }
 
   const strings = getStrings(context.locale);
+  const unwrap = unwrapper(context.locale);
 
-  return { locale: context.locale, strings };
+  return { locale: context.locale, strings, unwrap };
 }
 
 export interface LocaleAcceptorProps {

@@ -13,7 +13,7 @@ import {
   type IndividualAccountInfo,
   type IndividualTankStats,
 } from '@blitzkit/core';
-import strings from '@blitzkit/core/lang/en.json';
+import strings from '@blitzkit/i18n/strings/en.json';
 import {
   ArrowDownIcon,
   MagnifyingGlassIcon,

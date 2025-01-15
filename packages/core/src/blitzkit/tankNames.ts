@@ -1,4 +1,5 @@
 import { deburr } from 'lodash-es';
+import { I18nString } from '../protos';
 import { fetchCamouflageDefinitions } from './camouflageDefinitions';
 import { fetchTankDefinitions } from './tankDefinitions';
 
@@ -11,12 +12,18 @@ export async function fetchTankNames() {
 
   return await Promise.all(
     tankDefinitionsArray.map(async (tank) => {
+      const searchableNameDeburr: I18nString = { locales: {} };
+
+      Object.entries(tank.name_full ?? tank.name).forEach(([key, value]) => {
+        searchableNameDeburr.locales[key] = deburr(value);
+      });
+
       return {
         id: tank.id,
         name: tank.name,
         nameFull: tank.name_full,
         searchableName: tank.name_full ?? tank.name,
-        searchableNameDeburr: deburr(tank.name_full ?? tank.name),
+        searchableNameDeburr,
         camouflages: tank.camouflages
           ?.map((id) => camouflageDefinitions.camouflages[id]?.name)
           .filter(Boolean)

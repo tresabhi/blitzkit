@@ -7,7 +7,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { ConsumableTankFilter } from "./consumable_definitions";
-import { I18nString } from "./i18n";
+import { I18nString, createBaseI18nString } from "./i18n";
 
 export const protobufPackage = "blitzkit";
 

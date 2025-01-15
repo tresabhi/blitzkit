@@ -14,7 +14,7 @@ export async function flags() {
         .filter(
           (flag) =>
             flag.startsWith('flag_profile-stat_') &&
-            !flag.endsWith('@2x.packed.webp.dvpl'),
+            !flag.endsWith('@2x.packed.webp'),
         )
         .map(async (flag) => {
           const image = sharp(
@@ -34,7 +34,7 @@ export async function flags() {
         .filter(
           (flag) =>
             flag.startsWith('flag_tutor-tank_') &&
-            !flag.endsWith('@2x.packed.webp.dvpl'),
+            !flag.endsWith('@2x.packed.webp'),
         )
         .map(async (flag) => {
           const content = await readDVPLFile(`${DATA}/Gfx/Lobby/flags/${flag}`);
@@ -50,8 +50,7 @@ export async function flags() {
       (await readdir(`${DATA}/Gfx/Lobby/flags`))
         .filter(
           (flag) =>
-            flag.startsWith('flag_filter_') &&
-            flag.endsWith('@2x.packed.webp.dvpl'),
+            flag.startsWith('flag_filter_') && flag.endsWith('@2x.packed.webp'),
         )
         .map(async (flag) => {
           const content = await sharp(

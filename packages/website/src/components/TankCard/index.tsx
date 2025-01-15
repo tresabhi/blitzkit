@@ -28,7 +28,7 @@ export const TankCard = forwardRef<HTMLSpanElement, TankCardProps>(
     }: TankCardProps,
     ref,
   ) => {
-    const { locale } = useLocale();
+    const { unwrap, locale } = useLocale();
     const provideLink = !noLink && onSelect === undefined;
     const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
     const Icon = classIcons[tank.class];
@@ -73,7 +73,7 @@ export const TankCard = forwardRef<HTMLSpanElement, TankCardProps>(
           }}
         >
           <img
-            alt={tank.name}
+            alt={unwrap(tank.name)}
             src={asset(`icons/tanks/blitzkit/${tank.id}.webp`)}
             className="image"
             draggable={false}
@@ -89,7 +89,7 @@ export const TankCard = forwardRef<HTMLSpanElement, TankCardProps>(
           >
             <Icon className="class-icon" />
             <Text align="center" className="name">
-              {tank.name}
+              {unwrap(tank.name)}
             </Text>
           </Flex>
 

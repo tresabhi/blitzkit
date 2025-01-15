@@ -6,7 +6,7 @@ import { DATA } from './constants';
 export async function camouflageIcons() {
   console.log('Building camouflage icons...');
   const content = await readDVPLFile(
-    `${DATA}/Gfx/UI/Hangar/IconCamouflage.packed.webp.dvpl`,
+    `${DATA}/Gfx/UI/Hangar/IconCamouflage.packed.webp`,
   );
   const changes: FileChange[] = [
     {

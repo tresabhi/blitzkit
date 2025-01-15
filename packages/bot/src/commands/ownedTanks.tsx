@@ -27,7 +27,7 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
       .addStringOption(addUsernameChoices),
 
     async handler(interaction) {
-      const { t, translate } = translator(interaction.locale);
+      const { t, translate, unwrap } = translator(interaction.locale);
       const tier = Number(interaction.options.getString('tier'));
       const { id, region } = await resolvePlayerFromCommand(interaction);
       const accountInfo = await getAccountInfo(region, id);
@@ -77,7 +77,7 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
         )
         .map(
           (tank) =>
-            `[${flags[tank.nation]} ${markdownEscape(tank.name)}](<https://blitzkit.app/tools/tankopedia/${tank.id}>)`,
+            `[${flags[tank.nation]} ${markdownEscape(unwrap(tank.name))}](<https://blitzkit.app/tools/tankopedia/${tank.id}>)`,
         );
       const lines = [title, ...tankList];
 

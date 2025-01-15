@@ -1,9 +1,0 @@
-{
-  "name": "prate",
-  "private": true,
-  "type": "module",
-  "main": "src/index.ts",
-  "devDependencies": {
-    "@blitzkit/core": "workspace:*"
-  }
-}

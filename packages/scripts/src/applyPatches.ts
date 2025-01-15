@@ -9,7 +9,7 @@ import { DATA } from './buildAssets/constants';
 import { readYAMLDVPL } from './core/blitz/readYAMLDVPL';
 import { writeDVPL } from './core/blitz/writeDVPL';
 
-const versionTextFile = await readStringDVPL(`${DATA}/version.txt.dvpl`);
+const versionTextFile = await readStringDVPL(`${DATA}/version.txt`);
 const currentVersion = versionTextFile
   .split(' ')[0]
   .split('.')
@@ -51,7 +51,7 @@ while (true) {
 
         await mkdir(`${DATA}/${dir}`, { recursive: true });
         await writeFile(
-          `${DATA}/${path}.dvpl`,
+          `${DATA}/${path}`,
           new Uint8Array(writeDVPL(Buffer.from(data))),
         );
 
@@ -69,13 +69,13 @@ while (true) {
       );
       const newStrings = parseYaml(await localizationsResponse.text());
       const oldStrings = await readYAMLDVPL<Record<string, string>>(
-        `${DATA}/Strings/en.yaml.dvpl`,
+        `${DATA}/Strings/en.yaml`,
       );
       const patchedStrings = { ...oldStrings, ...newStrings };
       const patchedContent = stringifyYaml(patchedStrings);
 
       await writeFile(
-        `${DATA}/Strings/en.yaml.dvpl`,
+        `${DATA}/Strings/en.yaml`,
         new Uint8Array(writeDVPL(Buffer.from(patchedContent))),
       );
     }

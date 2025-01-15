@@ -2,6 +2,7 @@ import { type TankDefinition, tankIcon } from '@blitzkit/core';
 import { Flex, Text } from '@radix-ui/themes';
 import { useEffect, useRef } from 'react';
 import { Vector2 } from 'three';
+import { useLocale } from '../../hooks/useLocale';
 import { CompareEphemeral } from '../../stores/compareEphemeral';
 import { StickyColumnHeaderCell } from '../StickyColumnHeaderCell';
 import { InsertionMarker } from './IntersectionMarker';
@@ -16,6 +17,7 @@ interface TankCardProps {
 export function TankCard({ index, tank }: TankCardProps) {
   const draggable = useRef<HTMLDivElement>(null);
   const mutateCompareEphemeral = CompareEphemeral.useMutation();
+  const { unwrap } = useLocale();
 
   useEffect(() => {
     const initial = new Vector2();
@@ -118,7 +120,7 @@ export function TankCard({ index, tank }: TankCardProps) {
           }}
         >
           <img
-            alt={tank.name}
+            alt={unwrap(tank.name)}
             src={tankIcon(tank.id)}
             width={64}
             height={64}
@@ -136,7 +138,7 @@ export function TankCard({ index, tank }: TankCardProps) {
               textOverflow: 'ellipsis',
             }}
           >
-            {tank.name}
+            {unwrap(tank.name)}
           </Text>
         </Flex>
       </Flex>

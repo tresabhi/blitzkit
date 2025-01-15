@@ -1,4 +1,4 @@
-import { DEFAULT_LOCALE } from '@blitzkit/core';
+import { DEFAULT_LOCALE } from '@blitzkit/i18n';
 import type { APIRoute, GetStaticPaths } from 'astro';
 import { fetchGlossary } from '../../../core/blitz/fetchGlossary';
 

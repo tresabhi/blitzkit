@@ -22,14 +22,14 @@ export async function equipmentIcons() {
 
   const changes: FileChange[] = [];
   const optionalDevices = await readXMLDVPL<{ root: OptionalDevices }>(
-    `${DATA}/XML/item_defs/vehicles/common/optional_devices.xml.dvpl`,
+    `${DATA}/XML/item_defs/vehicles/common/optional_devices.xml`,
   );
   const mappings = await readYAMLDVPL<Mappings>(
-    `${DATA}/UI/Screens3/Lobby/Inventory/OptionalDevices/OptionalDevicesItemImage.style.yaml.dvpl`,
+    `${DATA}/UI/Screens3/Lobby/Inventory/OptionalDevices/OptionalDevicesItemImage.style.yaml`,
   );
   const image = sharp(
     await readDVPLFile(
-      `${DATA}/Gfx/UI/InventoryIcons/Big/OptionalDevices/texture0.packed.webp.dvpl`,
+      `${DATA}/Gfx/UI/InventoryIcons/Big/OptionalDevices/texture0.packed.webp`,
     ),
   );
 
@@ -57,7 +57,7 @@ export async function equipmentIcons() {
         if (configPath.startsWith('Gfx/Lobby')) {
           const configPathWebp = configPath.replace('.txt', '');
           const image = sharp(
-            await readDVPLFile(`${DATA}/${configPathWebp}.packed.webp.dvpl`),
+            await readDVPLFile(`${DATA}/${configPathWebp}.packed.webp`),
           );
           const content = await image.trim().toBuffer();
 
@@ -66,7 +66,7 @@ export async function equipmentIcons() {
             content,
           });
         } else {
-          const config = await readStringDVPL(`${DATA}/${configPath}.dvpl`);
+          const config = await readStringDVPL(`${DATA}/${configPath}`);
           const sizes = config.split('\n')[4].split(' ').map(Number);
           const content = await image
             .clone()

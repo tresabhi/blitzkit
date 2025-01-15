@@ -29,13 +29,13 @@ export async function skillIcons() {
   console.log('Building skill icons...');
 
   const avatar = await readXMLDVPL<{ root: Avatar }>(
-    `${DATA}/XML/item_defs/tankmen/avatar.xml.dvpl`,
+    `${DATA}/XML/item_defs/tankmen/avatar.xml`,
   );
   const changes = await Promise.all(
     Object.values(avatar.root.skills).map(async (skill) => {
       const icon = Array.isArray(skill.icon) ? skill.icon[0] : skill.icon;
       const name = icon.name.split('/').at(-1)!.replace(/_\d$/, '');
-      const path = `${DATA}${icon.name.replace('~res:', '')}.packed.webp.dvpl`;
+      const path = `${DATA}${icon.name.replace('~res:', '')}.packed.webp`;
       const image = sharp(await readDVPLFile(path)).trim();
       const content = await image.toBuffer();
 

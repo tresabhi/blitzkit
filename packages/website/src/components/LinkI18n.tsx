@@ -1,4 +1,4 @@
-import { DEFAULT_LOCALE } from '@blitzkit/core';
+import { DEFAULT_LOCALE } from '@blitzkit/i18n';
 import { Link, type LinkProps } from '@radix-ui/themes';
 import type { LocaleAcceptorProps } from '../hooks/useLocale';
 

@@ -1,4 +1,4 @@
-import { DEFAULT_LOCALE } from '@blitzkit/core';
+import { DEFAULT_LOCALE } from '@blitzkit/i18n';
 import { GlobeIcon } from '@radix-ui/react-icons';
 import { Flex, Text } from '@radix-ui/themes';
 import type { LocaleAcceptorProps } from '../../hooks/useLocale';

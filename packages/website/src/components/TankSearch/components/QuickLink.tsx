@@ -12,7 +12,7 @@ interface QuickLinkProps {
 
 export function QuickLink({ topResult }: QuickLinkProps) {
   const tankFilters = useStore($tankFilters);
-  const { locale } = useLocale();
+  const { locale, unwrap } = useLocale();
 
   if (!tankFilters.search || !topResult || tankFilters.searching) return null;
 
@@ -20,7 +20,7 @@ export function QuickLink({ topResult }: QuickLinkProps) {
     <TextField.Slot>
       <LinkI18n locale={locale} href={`/tools/tankopedia/${topResult.id}`}>
         <Button variant="ghost">
-          {topResult.name} <CaretRightIcon />
+          {unwrap(topResult.name)} <CaretRightIcon />
         </Button>
       </LinkI18n>
     </TextField.Slot>

@@ -27,6 +27,7 @@ import { awaitableProvisionDefinitions } from '../../../../../core/awaitables/pr
 import { applyPitchYawLimits } from '../../../../../core/blitz/applyPitchYawLimits';
 import { tankCharacteristics } from '../../../../../core/blitzkit/tankCharacteristics';
 import { useEquipment } from '../../../../../hooks/useEquipment';
+import { useLocale } from '../../../../../hooks/useLocale';
 import { useTankModelDefinition } from '../../../../../hooks/useTankModelDefinition';
 import { Duel } from '../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../stores/tankopediaEphemeral';
@@ -39,6 +40,7 @@ const [equipmentDefinitions, provisionDefinitions] = await Promise.all([
 ]);
 
 export function Characteristics() {
+  const { unwrap } = useLocale();
   const mutateDuel = Duel.useMutation();
   const crewSkills = TankopediaEphemeral.use((state) => state.skills);
   const penetrationDistanceInput = useRef<HTMLInputElement>(null);
@@ -146,7 +148,7 @@ export function Characteristics() {
 
             <Flex>
               {gun.gun_type!.value.base.shells.map((thisShell, shellIndex) => (
-                <Tooltip content={thisShell.name} key={thisShell.id}>
+                <Tooltip content={unwrap(thisShell.name)} key={thisShell.id}>
                   <IconButton
                     color={thisShell.id === shell.id ? undefined : 'gray'}
                     variant="soft"
@@ -172,7 +174,7 @@ export function Characteristics() {
                     }}
                   >
                     <img
-                      alt={thisShell.name}
+                      alt={unwrap(thisShell.name)}
                       width={16}
                       height={16}
                       src={asset(`icons/shells/${thisShell.icon}.webp`)}

@@ -3,7 +3,7 @@ import { App } from '../../../../stores/app';
 
 export const AUTH_PROVIDERS = ['wargaming'] as const;
 
-type AuthProvider = (typeof AUTH_PROVIDERS)[number];
+export type AuthProvider = (typeof AUTH_PROVIDERS)[number];
 
 export const AUTH_PROVIDER_NAMES: Record<AuthProvider, string> = {
   wargaming: 'Wargaming',

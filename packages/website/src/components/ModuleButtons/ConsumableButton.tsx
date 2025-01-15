@@ -3,6 +3,7 @@ import { ClockIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { Flex, Text } from '@radix-ui/themes';
 import { awaitableConsumableDefinitions } from '../../core/awaitables/consumableDefinitions';
 import { useDelta } from '../../hooks/useDelta';
+import { useLocale } from '../../hooks/useLocale';
 import { GenericTankComponentButton } from './GenericTankComponentButton';
 import type { TankComponentButtonProps } from './TankComponentButton';
 
@@ -22,11 +23,12 @@ export function ConsumableButton({
 }: ConsumableButtonProps) {
   const cooldownDelta = useDelta(cooldown ?? 0);
   const durationDelta = useDelta(duration ?? 0);
+  const { unwrap } = useLocale();
 
   return (
     <GenericTankComponentButton
       style={{ width: '6rem' }}
-      tooltip={consumableDefinitions.consumables[consumable].name}
+      tooltip={unwrap(consumableDefinitions.consumables[consumable].name)}
       icon={asset(`icons/consumables/${consumable}.webp`)}
       {...props}
     >

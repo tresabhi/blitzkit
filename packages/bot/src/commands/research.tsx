@@ -77,7 +77,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
       .addStringOption(addUsernameChoices),
 
     async handler(interaction) {
-      const { t, translate } = translator(interaction.locale);
+      const { t, translate, unwrap } = translator(interaction.locale);
       const awaitedTankDefinitions = await tankDefinitions;
       const targetTankId = await resolveTankId(
         interaction.options.getString('target-tank', true),
@@ -99,7 +99,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
 
         if (targetTankId === startingTankId) {
           return translate('bot.commands.research.errors.start_end_equal', [
-            escapeMarkdown(targetTank.name),
+            escapeMarkdown(unwrap(targetTank.name)),
           ]);
         }
 
@@ -107,28 +107,28 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
 
         if (startingTank.tier > targetTank.tier) {
           return translate('bot.commands.research.errors.unordered', [
-            escapeMarkdown(startingTank.name),
-            escapeMarkdown(targetTank.name),
-            escapeMarkdown(targetTank.name),
+            escapeMarkdown(unwrap(startingTank.name)),
+            escapeMarkdown(unwrap(targetTank.name)),
+            escapeMarkdown(unwrap(targetTank.name)),
           ]);
         }
 
         if (!targetTankAncestry.includes(startingTankId)) {
           return translate('bot.commands.research.errors.tanks_not_on_line', [
-            escapeMarkdown(targetTank.name),
-            escapeMarkdown(startingTank.name),
+            escapeMarkdown(unwrap(targetTank.name)),
+            escapeMarkdown(unwrap(startingTank.name)),
           ]);
         }
       } else {
         if (targetTank.type !== TankType.RESEARCHABLE) {
           return translate('bot.commands.research.errors.non_tech_tree', [
-            escapeMarkdown(targetTank.name),
+            escapeMarkdown(unwrap(targetTank.name)),
           ]);
         }
 
         if (targetTank.tier === 1) {
           return translate('bot.commands.research.errors.tier_1', [
-            escapeMarkdown(targetTank.name),
+            escapeMarkdown(unwrap(targetTank.name)),
           ]);
         }
 
@@ -140,7 +140,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
 
         if (tankStats.some(({ tank_id }) => tank_id === targetTankId)) {
           return translate('bot.commands.research.errors.already_researched', [
-            escapeMarkdown(targetTank.name),
+            escapeMarkdown(unwrap(targetTank.name)),
           ]);
         }
 
@@ -452,7 +452,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                         }}
                       >
                         <img
-                          alt={tank.name}
+                          alt={unwrap(tank.name)}
                           src={TANK_ICONS[tank.class]}
                           width={16}
                           height={16}
@@ -463,7 +463,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                             color: theme.colors.textHighContrast,
                           }}
                         >
-                          {tank.name}
+                          {unwrap(tank.name)}
                         </span>
                       </div>
                     </div>

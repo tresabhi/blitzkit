@@ -20,7 +20,7 @@ const [tankDefinitions, averageDefinitions] = await Promise.all([
 ]);
 
 export function Node({ id, highlight, nextIds, skeleton }: NodeProps) {
-  const { locale, strings } = useLocale();
+  const { locale, strings, unwrap } = useLocale();
   const xpMultiplier = TankopediaEphemeral.use((state) => state.xpMultiplier);
   const tank = tankDefinitions.tanks[id];
   const nextTanks = nextIds?.map((id) => tankDefinitions.tanks[id]);
@@ -78,7 +78,7 @@ export function Node({ id, highlight, nextIds, skeleton }: NodeProps) {
           }}
         >
           <img
-            alt={tank.name}
+            alt={unwrap(tank.name)}
             src={asset(`icons/tanks/big/${id}.webp`)}
             width={64}
             height={64}
@@ -92,7 +92,7 @@ export function Node({ id, highlight, nextIds, skeleton }: NodeProps) {
               <Text color="gray" size="1">
                 {TIER_ROMAN_NUMERALS[tank.tier]}
               </Text>
-              <Text wrap="nowrap">{tank.name}</Text>
+              <Text wrap="nowrap">{unwrap(tank.name)}</Text>
             </Flex>
             <Flex gap="2" align="center">
               <Text color="gray" size="1" wrap="nowrap">

@@ -1,12 +1,12 @@
-import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from '@blitzkit/core/src/blitzkit';
 import { merge } from 'lodash-es';
 import type en from '../strings/en.json';
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from './supportedLocales';
 
 export type TranslationTree = { [key: string]: TranslationNode };
 
 export type TranslationNode = string | TranslationTree;
 
-const files = import.meta.glob('../../lang/*.json', { eager: true });
+const files = import.meta.glob('../strings/*.json', { eager: true });
 export const localizedStrings: Record<string, typeof en> = {};
 
 function nuke(object: TranslationTree) {
@@ -21,8 +21,8 @@ function nuke(object: TranslationTree) {
 }
 
 SUPPORTED_LOCALES.forEach((locale) => {
-  const defaultStrings = files[`../../lang/${DEFAULT_LOCALE}.json`];
-  const strings = files[`../../lang/${locale}.json`];
+  const defaultStrings = files[`../strings/${DEFAULT_LOCALE}.json`];
+  const strings = files[`../strings/${locale}.json`];
   const mergedStrings = merge({}, defaultStrings, strings);
 
   /**
