@@ -14,7 +14,7 @@ const [gameDefinitions, consumableDefinitions, provisionDefinitions] =
   ]);
 
 export function GameModeSection() {
-  const { unwrap } = useLocale();
+  const { unwrap, strings } = useLocale();
   const tank = Duel.use((state) => state.protagonist.tank);
   const roles = Object.entries(tank.roles);
 
@@ -22,7 +22,9 @@ export function GameModeSection() {
 
   return (
     <Flex direction="column" gap="4" align="center">
-      <Heading size="6">Game mode abilities</Heading>
+      <Heading size="6">
+        {strings.website.tools.tankopedia.game_modes.title}
+      </Heading>
 
       <Flex justify="center" gap="4" wrap="wrap" px="4">
         {roles.map(([key, value]) => {

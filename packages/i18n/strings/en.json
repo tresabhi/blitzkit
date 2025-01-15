@@ -931,6 +931,16 @@
           "battle": "1 battle",
           "battles": "%s1 battles",
           "route": "Route %s1 of %s2"
+        },
+
+        "game_modes": {
+          "title": "Game mode abilities"
+        },
+
+        "review": {
+          "title": "Review videos",
+          "disclaimer": "BlitzKit does not endorse any review videos.",
+          "join": "Apply to %s1 YouTuber program"
         }
       },
       "compare": {

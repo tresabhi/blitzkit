@@ -1,7 +1,9 @@
 import { youtubers } from '@blitzkit/core';
 import { Box, Flex, Heading, Link, Skeleton, Text } from '@radix-ui/themes';
 import { awaitableReviews } from '../../core/awaitables/reviews';
+import { literals } from '../../core/i18n/literals';
 import { Var } from '../../core/radix/var';
+import { useLocale } from '../../hooks/useLocale';
 import { Duel } from '../../stores/duel';
 import type { MaybeSkeletonComponentProps } from '../../types/maybeSkeletonComponentProps';
 import { PageWrapper } from '../PageWrapper';
@@ -12,6 +14,7 @@ const reviews = await awaitableReviews;
 export function VideoSection({ skeleton }: MaybeSkeletonComponentProps) {
   const tank = Duel.use((state) => state.protagonist.tank);
   const videos = reviews.reviews[tank.id]?.videos;
+  const { strings } = useLocale();
 
   if (!videos) return null;
 
@@ -19,9 +22,13 @@ export function VideoSection({ skeleton }: MaybeSkeletonComponentProps) {
     <PageWrapper noFlex1 noMinHeight>
       <Flex direction="column" gap="6" align="center">
         <Flex direction="column" align="center">
-          <Heading size="6">Review videos</Heading>
+          <Heading size="6">
+            {strings.website.tools.tankopedia.review.title}
+          </Heading>
 
-          <Text color="gray">BlitzKit does not endorse any review videos.</Text>
+          <Text color="gray">
+            {strings.website.tools.tankopedia.review.disclaimer}
+          </Text>
         </Flex>
 
         <Flex gap="3" wrap="wrap" justify="center">
@@ -110,7 +117,9 @@ export function VideoSection({ skeleton }: MaybeSkeletonComponentProps) {
                   width: '9rem',
                 }}
               >
-                Apply to BlitzKit YouTuber program
+                {literals(strings.website.tools.tankopedia.review.join, [
+                  'BlitzKit',
+                ])}
               </Text>
             </Flex>
           </Link>
