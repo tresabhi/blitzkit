@@ -6,6 +6,7 @@ import {
   getAccountInfo,
   getTankStats,
 } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n';
 import markdownEscape from 'markdown-escape';
 import {
   gameDefinitions,
@@ -27,14 +28,14 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
       .addStringOption(addUsernameChoices),
 
     async handler(interaction) {
-      const { t, translate, unwrap } = translator(interaction.locale);
+      const { strings, unwrap } = translator(interaction.locale);
       const tier = Number(interaction.options.getString('tier'));
       const { id, region } = await resolvePlayerFromCommand(interaction);
       const accountInfo = await getAccountInfo(region, id);
       const tankStats = await getTankStats(region, id);
 
       if (tankStats === null) {
-        return t`bot.common.errors.no_tank_stats`;
+        return strings.bot.common.errors.no_tank_stats;
       }
 
       const filteredTanks = (
@@ -59,7 +60,7 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
 
       const awaitedTankDefinitions = await tankDefinitions;
       const awaitedGameDefinitions = await gameDefinitions;
-      const title = translate('bot.commands.owned_tanks.body.title', [
+      const title = literals(strings.bot.commands.owned_tanks.body.title, [
         markdownEscape(accountInfo.nickname),
         TIER_ROMAN_NUMERALS[tier],
       ]);

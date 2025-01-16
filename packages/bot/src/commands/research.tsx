@@ -9,6 +9,7 @@ import {
   TankType,
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n';
 import { escapeMarkdown, Locale } from 'discord.js';
 import { CommandWrapper } from '../components/CommandWrapper';
 import { TitleBar } from '../components/TitleBar';
@@ -28,26 +29,27 @@ import { CommandRegistry } from '../events/interactionCreate';
 import { theme } from '../stitches.config';
 
 export const researchCommand = new Promise<CommandRegistry>((resolve) => {
-  const { t } = translator(Locale.EnglishUS);
+  const { strings } = translator(Locale.EnglishUS);
 
   resolve({
     command: createLocalizedCommand('research')
       .addStringOption((option) =>
         option
-          .setName(t`bot.commands.research.options.target_tank`)
+          .setName(strings.bot.commands.research.options.target_tank.$)
           .setNameLocalizations(
             localizationObject(
-              'bot.commands.research.options.target_tank',
+              (strings) => strings.bot.commands.research.options.target_tank.$,
               undefined,
               true,
             ),
           )
           .setDescription(
-            t`bot.commands.research.options.target_tank.description`,
+            strings.bot.commands.research.options.target_tank.description,
           )
           .setDescriptionLocalizations(
             localizationObject(
-              'bot.commands.research.options.target_tank.description',
+              (strings) =>
+                strings.bot.commands.research.options.target_tank.description,
             ),
           )
           .setAutocomplete(true)
@@ -55,20 +57,22 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
       )
       .addStringOption((option) =>
         option
-          .setName(t`bot.commands.research.options.starting_tank`)
+          .setName(strings.bot.commands.research.options.starting_tank.$)
           .setNameLocalizations(
             localizationObject(
-              'bot.commands.research.options.starting_tank',
+              (strings) =>
+                strings.bot.commands.research.options.starting_tank.$,
               undefined,
               true,
             ),
           )
           .setDescription(
-            t`bot.commands.research.options.starting_tank.description`,
+            strings.bot.commands.research.options.starting_tank.description,
           )
           .setDescriptionLocalizations(
             localizationObject(
-              'bot.commands.research.options.starting_tank.description',
+              (strings) =>
+                strings.bot.commands.research.options.starting_tank.description,
             ),
           )
           .setAutocomplete(true)
@@ -77,7 +81,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
       .addStringOption(addUsernameChoices),
 
     async handler(interaction) {
-      const { t, translate, unwrap } = translator(interaction.locale);
+      const { strings, unwrap } = translator(interaction.locale);
       const awaitedTankDefinitions = await tankDefinitions;
       const targetTankId = await resolveTankId(
         interaction.options.getString('target-tank', true),
@@ -98,15 +102,16 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
         );
 
         if (targetTankId === startingTankId) {
-          return translate('bot.commands.research.errors.start_end_equal', [
-            escapeMarkdown(unwrap(targetTank.name)),
-          ]);
+          return literals(
+            strings.bot.commands.research.errors.start_end_equal,
+            [escapeMarkdown(unwrap(targetTank.name))],
+          );
         }
 
         const startingTank = awaitedTankDefinitions.tanks[startingTankId];
 
         if (startingTank.tier > targetTank.tier) {
-          return translate('bot.commands.research.errors.unordered', [
+          return literals(strings.bot.commands.research.errors.unordered, [
             escapeMarkdown(unwrap(startingTank.name)),
             escapeMarkdown(unwrap(targetTank.name)),
             escapeMarkdown(unwrap(targetTank.name)),
@@ -114,20 +119,23 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
         }
 
         if (!targetTankAncestry.includes(startingTankId)) {
-          return translate('bot.commands.research.errors.tanks_not_on_line', [
-            escapeMarkdown(unwrap(targetTank.name)),
-            escapeMarkdown(unwrap(startingTank.name)),
-          ]);
+          return literals(
+            strings.bot.commands.research.errors.tanks_not_on_line,
+            [
+              escapeMarkdown(unwrap(targetTank.name)),
+              escapeMarkdown(unwrap(startingTank.name)),
+            ],
+          );
         }
       } else {
         if (targetTank.type !== TankType.RESEARCHABLE) {
-          return translate('bot.commands.research.errors.non_tech_tree', [
+          return literals(strings.bot.commands.research.errors.non_tech_tree, [
             escapeMarkdown(unwrap(targetTank.name)),
           ]);
         }
 
         if (targetTank.tier === 1) {
-          return translate('bot.commands.research.errors.tier_1', [
+          return literals(strings.bot.commands.research.errors.tier_1, [
             escapeMarkdown(unwrap(targetTank.name)),
           ]);
         }
@@ -135,13 +143,14 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
         const tankStats = await getTankStats(region, id);
 
         if (tankStats === null) {
-          return t`bot.common.errors.no_tank_stats`;
+          return strings.bot.common.errors.no_tank_stats;
         }
 
         if (tankStats.some(({ tank_id }) => tank_id === targetTankId)) {
-          return translate('bot.commands.research.errors.already_researched', [
-            escapeMarkdown(unwrap(targetTank.name)),
-          ]);
+          return literals(
+            strings.bot.commands.research.errors.already_researched,
+            [escapeMarkdown(unwrap(targetTank.name))],
+          );
         }
 
         const foundAncestor = targetTankAncestry.find(
@@ -255,7 +264,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
           <TitleBar
             title={nickname}
             image={clanImage}
-            description={`${t`bot.commands.research.body.subtitle`} • ${
+            description={`${strings.bot.commands.research.body.subtitle} • ${
               targetTank.name
             }`}
           />
@@ -292,7 +301,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                     color: theme.colors.textHighContrast,
                   }}
                 >
-                  {t`bot.commands.research.body.total`}
+                  {strings.bot.commands.research.body.total}
                 </span>
               </div>
 
@@ -497,11 +506,14 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                             color: theme.colors.textHighContrast,
                           }}
                         >
-                          {translate('bot.commands.research.body.research', [
-                            `${costs[index].research?.toLocaleString(
-                              interaction.locale,
-                            )}`,
-                          ])}
+                          {literals(
+                            strings.bot.commands.research.body.research,
+                            [
+                              `${costs[index].research?.toLocaleString(
+                                interaction.locale,
+                              )}`,
+                            ],
+                          )}
                         </span>
                       </div>
 
@@ -527,9 +539,10 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                               color: theme.colors.textHighContrast,
                             }}
                           >
-                            {translate('bot.commands.research.body.upgrades', [
-                              costs[index].upgrades.toLocaleString(),
-                            ])}
+                            {literals(
+                              strings.bot.commands.research.body.upgrades,
+                              [costs[index].upgrades.toLocaleString()],
+                            )}
                           </span>
                         </div>
                       )}
@@ -555,11 +568,14 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                             color: theme.colors.textHighContrast,
                           }}
                         >
-                          {translate('bot.commands.research.body.purchase', [
-                            costs[index].purchase.toLocaleString(
-                              interaction.locale,
-                            ),
-                          ])}
+                          {literals(
+                            strings.bot.commands.research.body.purchase,
+                            [
+                              costs[index].purchase.toLocaleString(
+                                interaction.locale,
+                              ),
+                            ],
+                          )}
                         </span>
                       </div>
 
@@ -584,11 +600,14 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
                             color: theme.colors.textHighContrast,
                           }}
                         >
-                          {translate('bot.commands.research.body.equipment', [
-                            costs[index].equipment.toLocaleString(
-                              interaction.locale,
-                            ),
-                          ])}
+                          {literals(
+                            strings.bot.commands.research.body.equipment,
+                            [
+                              costs[index].equipment.toLocaleString(
+                                interaction.locale,
+                              ),
+                            ],
+                          )}
                         </span>
                       </div>
                     </div>
@@ -602,7 +621,7 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
 
       return startingTankRaw
         ? image
-        : [t`bot.commands.research.body.estimation`, image];
+        : [strings.bot.commands.research.body.estimation, image];
     },
 
     autocomplete(interaction) {

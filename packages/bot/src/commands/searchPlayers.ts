@@ -4,6 +4,7 @@ import {
   Region,
   usernamePattern,
 } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n';
 import { Locale } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { addRegionChoices } from '../core/discord/addRegionChoices';
@@ -17,7 +18,7 @@ import { CommandRegistry } from '../events/interactionCreate';
 const DEFAULT_LIMIT = 25;
 
 export const searchPlayersCommand = new Promise<CommandRegistry>((resolve) => {
-  const { t, translate } = translator(Locale.EnglishUS);
+  const { strings } = translator(Locale.EnglishUS);
 
   resolve({
     command: createLocalizedCommand('search-players')
@@ -27,22 +28,24 @@ export const searchPlayersCommand = new Promise<CommandRegistry>((resolve) => {
       )
       .addIntegerOption((option) =>
         option
-          .setName(t`bot.commands.search_players.options.limit`)
+          .setName(strings.bot.commands.search_players.options.limit.$)
           .setNameLocalizations(
             localizationObject(
-              'bot.commands.search_players.options.limit',
+              (strings) => strings.bot.commands.search_players.options.limit.$,
               undefined,
               true,
             ),
           )
           .setDescription(
-            translate('bot.commands.search_players.options.limit.description', [
-              `${DEFAULT_LIMIT}`,
-            ]),
+            literals(
+              strings.bot.commands.search_players.options.limit.description,
+              [`${DEFAULT_LIMIT}`],
+            ),
           )
           .setDescriptionLocalizations(
             localizationObject(
-              'bot.commands.search_players.options.limit.description',
+              (strings) =>
+                strings.bot.commands.search_players.options.limit.description,
               [`${DEFAULT_LIMIT}`],
             ),
           )
@@ -51,7 +54,7 @@ export const searchPlayersCommand = new Promise<CommandRegistry>((resolve) => {
       ),
 
     async handler(interaction) {
-      const { translate } = translator(interaction.locale);
+      const { strings } = translator(interaction.locale);
       const region = interaction.options.getString('region') as Region;
       const name = interaction.options.getString('username')!;
       const limit = interaction.options.getInteger('limit') ?? 25;
@@ -64,13 +67,13 @@ export const searchPlayersCommand = new Promise<CommandRegistry>((resolve) => {
         : [];
 
       return embedInfo(
-        translate('bot.commands.search_players.body.title', [
+        literals(strings.bot.commands.search_players.body.title, [
           markdownEscape(trimmedSearch),
-          translate(`common.regions.normal.${region}`),
+          strings.common.regions.normal[region],
         ]),
         `\`\`\`${
           players.length === 0
-            ? translate('bot.commands.search_players.body.no_results')
+            ? strings.bot.commands.search_players.body.no_results
             : players.map((player) => player.nickname).join('\n')
         }\`\`\``,
       );

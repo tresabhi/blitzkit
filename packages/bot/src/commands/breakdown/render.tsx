@@ -7,6 +7,7 @@ import {
   getWN8Percentile,
   TankDefinition,
 } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n';
 import { Locale } from 'discord.js';
 import { chunk } from 'lodash-es';
 import * as Breakdown from '../../components/Breakdown';
@@ -32,7 +33,7 @@ export async function renderBreakdown(
   filters: StatFilters,
   locale: Locale,
 ) {
-  const { t, translate, unwrap } = translator(locale);
+  const { strings, unwrap } = translator(locale);
   const awaitedTankDefinitions = await tankDefinitions;
   const awaitedTankAverages = await blitzStarsTankAverages;
   const statsInPeriod = await getStatsInPeriod(region, id, start, end, locale);
@@ -48,7 +49,7 @@ export async function renderBreakdown(
   const orderedCareerWN8Full: (number | undefined)[] = [];
 
   if (tankStats === null) {
-    throw new UserError(t`bot.common.errors.no_tank_stats`);
+    throw new UserError(strings.bot.common.errors.no_tank_stats);
   }
 
   filteredOrder.forEach((id) => {
@@ -136,21 +137,21 @@ export async function renderBreakdown(
       <Breakdown.Row
         key={id}
         displayType="summary"
-        title={t`bot.commands.breakdown.body.total`}
+        title={strings.bot.commands.breakdown.body.total}
         stats={[
           {
-            title: t`bot.commands.breakdown.body.battles`,
+            title: strings.bot.commands.breakdown.body.battles,
             current: currentBattles,
             career: careerBattles,
           },
           {
-            title: t`bot.commands.breakdown.body.winrate`,
+            title: strings.bot.commands.breakdown.body.winrate,
             current: `${(100 * currentWinrate).toFixed(2)}%`,
             career: `${(100 * careerWinrate).toFixed(2)}%`,
             delta: currentWinrate - careerWinrate,
           },
           {
-            title: t`bot.commands.breakdown.body.wn8`,
+            title: strings.bot.commands.breakdown.body.wn8,
             current:
               currentWN8 === undefined
                 ? undefined
@@ -165,7 +166,7 @@ export async function renderBreakdown(
                 : getWN8Percentile(currentWN8),
           },
           {
-            title: t`bot.commands.breakdown.body.damage`,
+            title: strings.bot.commands.breakdown.body.damage,
             current: Math.round(currentDamage).toLocaleString(),
             career: Math.round(careerDamage).toLocaleString(),
             delta: currentDamage - careerDamage,
@@ -192,16 +193,18 @@ export async function renderBreakdown(
           title={
             tankDefinition
               ? unwrap(tankDefinition.name)
-              : translate('bot.commands.breakdown.body.unknown_tank', [`${id}`])
+              : literals(strings.bot.commands.breakdown.body.unknown_tank, [
+                  `${id}`,
+                ])
           }
           stats={[
             {
-              title: t`bot.commands.breakdown.body.battles`,
+              title: strings.bot.commands.breakdown.body.battles,
               current: current.battles.toLocaleString(),
               career: career.battles.toLocaleString(),
             },
             {
-              title: t`bot.commands.breakdown.body.winrate`,
+              title: strings.bot.commands.breakdown.body.winrate,
               current: `${(100 * (current.wins / current.battles)).toFixed(
                 2,
               )}%`,
@@ -210,7 +213,7 @@ export async function renderBreakdown(
                 current.wins / current.battles - career.wins / career.battles,
             },
             {
-              title: t`bot.commands.breakdown.body.wn8`,
+              title: strings.bot.commands.breakdown.body.wn8,
               current:
                 currentWN8 === undefined
                   ? undefined
@@ -225,7 +228,7 @@ export async function renderBreakdown(
                   : getWN8Percentile(currentWN8),
             },
             {
-              title: t`bot.commands.breakdown.body.damage`,
+              title: strings.bot.commands.breakdown.body.damage,
               current: Math.round(
                 current.damage_dealt / current.battles,
               ).toLocaleString(),

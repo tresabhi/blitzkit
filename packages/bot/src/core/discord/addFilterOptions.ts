@@ -17,34 +17,40 @@ import { localizationObject } from './localizationObject';
 export function addFilterOptions<
   Option extends SlashCommandBuilder | SlashCommandSubcommandBuilder,
 >(option: Option, nations: string[]) {
-  const { translate } = translator(Locale.EnglishUS);
+  const { strings } = translator(Locale.EnglishUS);
 
   return (
     option
       .addStringOption((option) =>
         option
-          .setName(translate('bot.common.options.filters.nation'))
+          .setName(strings.bot.common.options.filters.nation.$)
           .setNameLocalizations(
             localizationObject(
-              'bot.common.options.filters.nation',
+              (strings) => strings.bot.common.options.filters.nation.$,
               undefined,
               true,
             ),
           )
-          .setDescription(
-            translate('bot.common.options.filters.nation.description'),
-          )
+          .setDescription(strings.bot.common.options.filters.nation.description)
           .setDescriptionLocalizations(
-            localizationObject('bot.common.options.filters.nation.description'),
+            localizationObject(
+              (strings) =>
+                strings.bot.common.options.filters.nation.description,
+            ),
           )
           .addChoices(
             ...nations.map(
               (nation) =>
                 ({
                   value: nation,
-                  name: translate(`common.nations.${nation}`),
+                  name: (strings.common.nations as Record<string, string>)[
+                    nation
+                  ],
                   name_localizations: localizationObject(
-                    `common.nations.${nation}`,
+                    (strings) =>
+                      (strings.common.nations as Record<string, string>)[
+                        nation
+                      ],
                   ),
                 }) satisfies APIApplicationCommandOptionChoice,
             ),
@@ -54,28 +60,28 @@ export function addFilterOptions<
       .addStringOption((option) => addTierChoices(option).setRequired(false))
       .addStringOption((option) =>
         option
-          .setName(translate('bot.common.options.filters.class'))
+          .setName(strings.bot.common.options.filters.class.$)
           .setNameLocalizations(
             localizationObject(
-              'bot.common.options.filters.class',
+              (strings) => strings.bot.common.options.filters.class.$,
               undefined,
               true,
             ),
           )
-          .setDescription(
-            translate('bot.common.options.filters.class.description'),
-          )
+          .setDescription(strings.bot.common.options.filters.class.description)
           .setDescriptionLocalizations(
-            localizationObject('bot.common.options.filters.class.description'),
+            localizationObject(
+              (strings) => strings.bot.common.options.filters.class.description,
+            ),
           )
           .addChoices(
             ...TANK_CLASSES.map(
               (tankType) =>
                 ({
                   value: `${tankType}`,
-                  name: translate(`common.tank_class_short.${tankType}`),
+                  name: strings.common.tank_class_short[tankType],
                   name_localizations: localizationObject(
-                    `common.tank_class_short.${tankType}`,
+                    (strings) => strings.common.tank_class_short[tankType],
                   ),
                 }) satisfies APIApplicationCommandOptionChoice,
             ),
@@ -84,28 +90,28 @@ export function addFilterOptions<
       )
       .addStringOption((option) =>
         option
-          .setName(translate('bot.common.options.filters.type'))
+          .setName(strings.bot.common.options.filters.type.$)
           .setNameLocalizations(
             localizationObject(
-              'bot.common.options.filters.type',
+              (strings) => strings.bot.common.options.filters.type.$,
               undefined,
               true,
             ),
           )
-          .setDescription(
-            translate('bot.common.options.filters.type.description'),
-          )
+          .setDescription(strings.bot.common.options.filters.type.description)
           .setDescriptionLocalizations(
-            localizationObject('bot.common.options.filters.type.description'),
+            localizationObject(
+              (strings) => strings.bot.common.options.filters.type.description,
+            ),
           )
           .addChoices(
             ...TANK_TYPES.map(
               (treeType) =>
                 ({
                   value: TANK_TYPE_COMMAND_NAMES[treeType],
-                  name: translate(`common.tree_type.${treeType}`),
+                  name: strings.common.tree_type[treeType],
                   name_localizations: localizationObject(
-                    `common.tree_type.${treeType}`,
+                    (strings) => strings.common.tree_type[treeType],
                   ),
                 }) satisfies APIApplicationCommandOptionChoice,
             ),

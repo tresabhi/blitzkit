@@ -1,3 +1,4 @@
+import { literals } from '@blitzkit/i18n';
 import { Locale } from 'discord.js';
 import { go } from 'fuzzysort';
 import markdownEscape from 'markdown-escape';
@@ -11,7 +12,7 @@ export async function resolveTankId(
   locale: Locale,
   techTreeOnly = false,
 ) {
-  const { translate } = translator(locale);
+  const { strings } = translator(locale);
   const number = typeof tank === 'string' ? Number(tank) : tank;
 
   if (Number.isNaN(number)) {
@@ -26,7 +27,7 @@ export async function resolveTankId(
 
     if (searchResult.length === 0) {
       throw new UserError(
-        translate('bot.common.errors.tank_name_not_found', [
+        literals(strings.bot.common.errors.tank_name_not_found, [
           markdownEscape(`${tank}`),
         ]),
       );
@@ -40,7 +41,7 @@ export async function resolveTankId(
       return number;
     } else {
       throw new UserError(
-        translate('bot.common.errors.tank_id_not_found', [`${number}`]),
+        literals(strings.bot.common.errors.tank_id_not_found, [`${number}`]),
       );
     }
   }

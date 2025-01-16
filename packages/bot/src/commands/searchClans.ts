@@ -1,4 +1,5 @@
 import { ClanList, fetchBlitz, Region } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n';
 import { Locale } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { addClanChoices } from '../core/discord/addClanChoices';
@@ -19,25 +20,27 @@ export const searchClansCommand = new Promise<CommandRegistry>((resolve) => {
         addClanChoices(option).setAutocomplete(false),
       )
       .addIntegerOption((option) => {
-        const { t, translate } = translator(Locale.EnglishUS);
+        const { strings } = translator(Locale.EnglishUS);
 
         return option
-          .setName(t`bot.commands.search_clans.options.limit`)
+          .setName(strings.bot.commands.search_clans.options.limit.$)
           .setNameLocalizations(
             localizationObject(
-              'bot.commands.search_clans.options.limit',
+              (strings) => strings.bot.commands.search_clans.options.limit.$,
               undefined,
               true,
             ),
           )
           .setDescription(
-            translate('bot.commands.search_clans.options.limit.description', [
-              `${DEFAULT_LIMIT}`,
-            ]),
+            literals(
+              strings.bot.commands.search_clans.options.limit.description,
+              [`${DEFAULT_LIMIT}`],
+            ),
           )
           .setDescriptionLocalizations(
             localizationObject(
-              'bot.commands.search_clans.options.limit.description',
+              (strings) =>
+                strings.bot.commands.search_clans.options.limit.description,
               [`${DEFAULT_LIMIT}`],
             ),
           )
@@ -46,7 +49,7 @@ export const searchClansCommand = new Promise<CommandRegistry>((resolve) => {
       }),
 
     async handler(interaction) {
-      const { translate } = translator(interaction.locale);
+      const { strings } = translator(interaction.locale);
       const region = interaction.options.getString('region') as Region;
       const clan = interaction.options.getString('clan')!;
       const limit = interaction.options.getInteger('limit') ?? DEFAULT_LIMIT;
@@ -56,12 +59,12 @@ export const searchClansCommand = new Promise<CommandRegistry>((resolve) => {
       });
 
       return embedInfo(
-        translate('bot.commands.search_clans.body.title', [
+        literals(strings.bot.commands.search_clans.body.title, [
           markdownEscape(clan),
-          translate(`common.regions.normal.${region}`),
+          strings.common.regions.normal[region],
         ]),
         clanList.length === 0
-          ? translate('bot.commands.search_clans.body.no_results')
+          ? strings.bot.commands.search_clans.body.no_results
           : `\`\`\`\n${clanList
               .map((clan) => `${clan.name} [${clan.tag}]`)
               .join('\n')}\n\`\`\``,

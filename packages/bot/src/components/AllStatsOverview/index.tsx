@@ -32,7 +32,7 @@ export function AllStatsOverview({
   locale,
   supplementaryStats,
 }: AllStatsOverviewProps) {
-  const { t, translate } = translator(locale);
+  const { strings } = translator(locale);
   const percentile =
     typeof supplementaryStats.WN8 === 'number'
       ? getWN8Percentile(supplementaryStats.WN8)
@@ -63,18 +63,18 @@ export function AllStatsOverview({
         }}
       >
         <WN8SurroundingStat
-          label={t`bot.common.hero_stats.battles`}
+          label={strings.bot.common.hero_stats.battles}
           value={stats.battles.toLocaleString()}
           align={WN8SurroundingStatAlign.Right}
         />
         <WN8SurroundingStat
-          label={t`bot.common.hero_stats.winrate`}
+          label={strings.bot.common.hero_stats.winrate}
           value={`${(100 * (stats.wins / stats.battles)).toFixed(2)}%`}
           align={WN8SurroundingStatAlign.Right}
           padded
         />
         <WN8SurroundingStat
-          label={t`bot.common.hero_stats.damage`}
+          label={strings.bot.common.hero_stats.damage}
           value={Math.round(
             stats.damage_dealt / stats.battles,
           ).toLocaleString()}
@@ -82,7 +82,7 @@ export function AllStatsOverview({
           padded
         />
         <WN8SurroundingStat
-          label={t`bot.common.hero_stats.damage_ratio`}
+          label={strings.bot.common.hero_stats.damage_ratio}
           value={(stats.damage_dealt / stats.damage_received).toFixed(2)}
           align={WN8SurroundingStatAlign.Right}
         />
@@ -90,7 +90,7 @@ export function AllStatsOverview({
 
       <HeroStat
         value={heroStat}
-        subtitle={translate(`common.wn8_percentile.${percentile}`)}
+        subtitle={strings.common.wn8_percentile[percentile]}
         color={color}
       />
 
@@ -103,25 +103,25 @@ export function AllStatsOverview({
         }}
       >
         <WN8SurroundingStat
-          label={t`bot.common.hero_stats.tier`}
+          label={strings.bot.common.hero_stats.tier}
           value={
             supplementaryStats.tier ? supplementaryStats.tier.toFixed(2) : '--'
           }
         />
         <WN8SurroundingStat
-          label={t`bot.common.hero_stats.survival`}
+          label={strings.bot.common.hero_stats.survival}
           value={`${(100 * (stats.survived_battles / stats.battles)).toFixed(
             2,
           )}%`}
           padded
         />
         <WN8SurroundingStat
-          label={t`bot.common.hero_stats.accuracy`}
+          label={strings.bot.common.hero_stats.accuracy}
           value={`${(100 * (stats.hits / stats.shots)).toFixed(2)}%`}
           padded
         />
         <WN8SurroundingStat
-          label={t`bot.common.hero_stats.kills`}
+          label={strings.bot.common.hero_stats.kills}
           value={(stats.frags / stats.battles).toFixed(2)}
         />
       </div>

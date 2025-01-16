@@ -22,7 +22,7 @@ export const verifyCommand = new Promise<CommandRegistry>((resolve) => {
     ),
 
     async handler(interaction) {
-      const { t, translate } = translator(interaction.locale);
+      const { strings } = translator(interaction.locale);
       const { id, region } = await resolvePlayerFromCommand(interaction);
       const discordId = BigInt(interaction.user.id);
       const accountInfo = await getAccountInfo(region, id);
@@ -120,9 +120,9 @@ export const verifyCommand = new Promise<CommandRegistry>((resolve) => {
                     height: 16,
                   }}
                 />
-                <span
-                  style={{ fontSize: 16 }}
-                >{t`bot.commands.link.body.accounts_linked`}</span>
+                <span style={{ fontSize: 16 }}>
+                  {strings.bot.commands.link.body.accounts_linked}
+                </span>
               </div>
 
               <div
@@ -174,7 +174,7 @@ export const verifyCommand = new Promise<CommandRegistry>((resolve) => {
                     {clanAccountInfo?.clan
                       ? `[${clanAccountInfo?.clan?.tag}] • `
                       : ''}
-                    {translate(`common.regions.normal.${region}`)}
+                    {strings.common.regions.normal[region]}
                   </span>
                 </div>
               </div>
@@ -185,8 +185,8 @@ export const verifyCommand = new Promise<CommandRegistry>((resolve) => {
         </CommandWrapper>,
 
         embedInfo(
-          t`bot.commands.link.embed.title`,
-          t`bot.commands.link.embed.description`,
+          strings.bot.commands.link.embed.title,
+          strings.bot.commands.link.embed.description,
         ),
       ];
     },
