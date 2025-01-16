@@ -1,4 +1,5 @@
-import { merge } from 'lodash-es';
+import { writeFile } from 'fs/promises';
+import { merge } from 'ts-deepmerge';
 import en from '../strings/en.json';
 import es from '../strings/es.json';
 import fr from '../strings/fr.json';
@@ -54,9 +55,7 @@ for (const locale in stringsRaw) {
   }
 
   const localeStrings = stringsRaw[locale as SupportedLocale];
-
   stringsPartial[locale as SupportedLocale] = merge(
-    {},
     stringsRaw[DEFAULT_LOCALE],
     localeStrings,
   );
@@ -70,6 +69,8 @@ export const STRINGS = stringsPartial as Record<
   SupportedLocale,
   BlitzKitStrings
 >;
+
+writeFile('test.json', JSON.stringify(STRINGS, null, 2));
 
 export type SupportedLocale = keyof typeof stringsRaw;
 

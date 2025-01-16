@@ -1,5 +1,6 @@
-import { DEFAULT_LOCALE, localizedStrings } from '@blitzkit/i18n';
+import { DEFAULT_LOCALE, STRINGS, type SupportedLocale } from '@blitzkit/i18n';
 
 export function getStrings(locale: string = DEFAULT_LOCALE) {
-  return localizedStrings[locale];
+  if (locale in STRINGS) return STRINGS[locale as SupportedLocale];
+  throw new Error(`Unsupported locale: ${locale}`);
 }

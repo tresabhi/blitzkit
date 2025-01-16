@@ -3,6 +3,8 @@
   "private": true,
   "type": "module",
   "main": "src/index.ts",
-  "dependencies": {},
+  "dependencies": {
+    "ts-deepmerge": "^7.0.2"
+  },
   "devDependencies": {}
 }

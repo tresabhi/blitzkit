@@ -1,3 +1,4 @@
+import { assertSecret } from '@blitzkit/core';
 import {
   AttachmentBuilder,
   AutocompleteInteraction,
@@ -7,11 +8,36 @@ import {
   ChatInputCommandInteraction,
   EmbedBuilder,
   Interaction,
+  REST,
+  Routes,
   SlashCommandBuilder,
   SlashCommandOptionsOnlyBuilder,
   SlashCommandSubcommandsOnlyBuilder,
 } from 'discord.js';
+import { aboutCommand } from '../../commands/about';
+import { auctionCommand } from '../../commands/auction';
+import { breakdownCommand } from '../../commands/breakdown';
+import { debugCommand } from '../../commands/debug';
+import { evolutionCommand } from '../../commands/evolution';
+import { fullStatsCommand } from '../../commands/fullStats';
+import { inactiveCommand } from '../../commands/inactive';
+import { verifyCommand } from '../../commands/link';
+import { ownedTanksCommand } from '../../commands/ownedTanks';
+import { permissionsCommand } from '../../commands/permissions';
+import { pingCommand } from '../../commands/ping';
+import { playerInfoCommand } from '../../commands/playerInfo';
+import { ratingCommand } from '../../commands/rating';
+import { ratingLeaderboardCommand } from '../../commands/ratingLeaderboard';
+import { replayCommand } from '../../commands/replay';
+import { researchCommand } from '../../commands/research';
+import { searchClansCommand } from '../../commands/searchClans';
+import { searchPlayersCommand } from '../../commands/searchPlayers';
+import { statsCommand } from '../../commands/stats';
+import { todayCommand } from '../../commands/today';
 import { RenderConfiguration } from '../../core/blitzkit/renderConfiguration';
+import { handleAutocomplete } from './handlers/autocomplete';
+import { handleButton } from './handlers/button';
+import { handleChatInputCommand } from './handlers/chatInputCommand';
 
 export type InteractionRawReturnable =
   | string
@@ -54,63 +80,63 @@ interface CommandRegistryExplicit extends CommandRegistryBase {
 export type CommandRegistry = CommandRegistryImplicit | CommandRegistryExplicit;
 
 export const COMMANDS_RAW: Promise<CommandRegistry>[] = [
-  // auctionCommand,
-  // permissionsCommand,
-  // debugCommand,
-  // aboutCommand,
-  // inactiveCommand,
-  // ownedTanksCommand,
-  // playerInfoCommand,
-  // searchClansCommand,
-  // searchPlayersCommand,
-  // fullStatsCommand,
-  // breakdownCommand,
-  // verifyCommand,
-  // pingCommand,
-  // evolutionCommand,
-  // statsCommand,
-  // ratingLeaderboardCommand,
-  // todayCommand,
-  // researchCommand,
-  // ratingCommand,
-  // replayCommand,
+  auctionCommand,
+  permissionsCommand,
+  debugCommand,
+  aboutCommand,
+  inactiveCommand,
+  ownedTanksCommand,
+  playerInfoCommand,
+  searchClansCommand,
+  searchPlayersCommand,
+  fullStatsCommand,
+  breakdownCommand,
+  verifyCommand,
+  pingCommand,
+  evolutionCommand,
+  statsCommand,
+  ratingLeaderboardCommand,
+  todayCommand,
+  researchCommand,
+  ratingCommand,
+  replayCommand,
 ];
 
 export const commands = Promise.allSettled(COMMANDS_RAW).then((rawCommands) => {
-  // return rawCommands.reduce<Record<string, CommandRegistry>>(
-  //   (commands, registry, index) => {
-  //     if (registry.status === 'rejected') {
-  //       console.warn(
-  //         `Command ${index} failed to load; skipping...`,
-  //         registry.reason,
-  //       );
-  //       return commands;
-  //     }
-  //     return { ...commands, [registry.value.command.name]: registry.value };
-  //   },
-  //   {},
-  // );
+  return rawCommands.reduce<Record<string, CommandRegistry>>(
+    (commands, registry, index) => {
+      if (registry.status === 'rejected') {
+        console.warn(
+          `Command ${index} failed to load; skipping...`,
+          registry.reason,
+        );
+        return commands;
+      }
+      return { ...commands, [registry.value.command.name]: registry.value };
+    },
+    {},
+  );
 });
 
-// const rest = new REST().setToken(assertSecret(import.meta.env.DISCORD_TOKEN));
+const rest = new REST().setToken(assertSecret(import.meta.env.DISCORD_TOKEN));
 
-// commands.then((awaitedCommands) => {
-//   const body = Object.values(awaitedCommands).map((registry) =>
-//     registry.command.toJSON(),
-//   );
+commands.then((awaitedCommands) => {
+  const body = Object.values(awaitedCommands).map((registry) =>
+    registry.command.toJSON(),
+  );
 
-//   rest.put(
-//     Routes.applicationCommands(assertSecret(import.meta.env.DISCORD_CLIENT_ID)),
-//     { body },
-//   );
-// });
+  rest.put(
+    Routes.applicationCommands(assertSecret(import.meta.env.DISCORD_CLIENT_ID)),
+    { body },
+  );
+});
 
 export async function interactionCreate(interaction: Interaction<CacheType>) {
   if (interaction.isAutocomplete()) {
-    // handleAutocomplete(interaction);
+    handleAutocomplete(interaction);
   } else if (interaction.isChatInputCommand()) {
-    // handleChatInputCommand(interaction);
+    handleChatInputCommand(interaction);
   } else if (interaction.isButton()) {
-    // handleButton(interaction);
+    handleButton(interaction);
   }
 }

@@ -26,7 +26,7 @@ export const inactiveCommand = new Promise<CommandRegistry>((resolve) => {
           .setName('threshold')
           .setNameLocalizations(
             localizationObject(
-              'bot.commands.inactive.options.threshold',
+              (strings) => strings.bot.commands.inactive.options.threshold.$,
               undefined,
               true,
             ),
@@ -36,7 +36,8 @@ export const inactiveCommand = new Promise<CommandRegistry>((resolve) => {
           )
           .setDescriptionLocalizations(
             localizationObject(
-              'bot.commands.inactive.options.threshold.description',
+              (strings) =>
+                strings.bot.commands.inactive.options.threshold.description,
             ),
           )
           .setMinValue(0);

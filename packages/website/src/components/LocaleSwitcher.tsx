@@ -1,9 +1,9 @@
 import {} from '@blitzkit/core';
 import {
   DEFAULT_LOCALE,
+  STRINGS,
   SUPPORTED_LOCALES,
   SUPPORTED_LOCALE_FLAGS,
-  localizedStrings,
 } from '@blitzkit/i18n';
 import { Select } from '@radix-ui/themes';
 import type { LocaleAcceptorProps } from '../hooks/useLocale';
@@ -44,7 +44,7 @@ export function LocaleSwitcher({ locale }: LocaleAcceptorProps) {
         {SUPPORTED_LOCALES.map((locale) => (
           <Select.Item key={locale} value={locale}>
             {SUPPORTED_LOCALE_FLAGS[locale]}{' '}
-            {localizedStrings[locale].common.locales[locale]}
+            {STRINGS[locale].common.locales[locale]}
           </Select.Item>
         ))}
       </Select.Content>

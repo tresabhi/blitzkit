@@ -1,8 +1,10 @@
 import { assertSecret } from '@blitzkit/core';
-import { DEFAULT_LOCALE, localizedStrings } from '@blitzkit/i18n';
+import { DEFAULT_LOCALE, STRINGS, type SupportedLocale } from '@blitzkit/i18n';
 
 export function resolveBranchName(locale: string = DEFAULT_LOCALE) {
-  const strings = localizedStrings[locale];
+  if (!(locale in STRINGS)) throw new Error(`Unsupported locale: ${locale}`);
+
+  const strings = STRINGS[locale as SupportedLocale];
   const secret = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
 
   if (
