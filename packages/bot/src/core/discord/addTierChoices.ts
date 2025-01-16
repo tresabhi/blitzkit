@@ -13,10 +13,10 @@ export function addTierChoices(option: SlashCommandStringOption) {
   const { strings } = translator(Locale.EnglishUS);
 
   return option
-    .setName(strings.bot.common.options.tier.$)
+    .setName(strings.bot.common.options.tier.name)
     .setNameLocalizations(
       localizationObject(
-        (strings) => strings.bot.common.options.tier.$,
+        (strings) => strings.bot.common.options.tier.name,
         undefined,
         true,
       ),

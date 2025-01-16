@@ -60,11 +60,11 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
       return option
         .addIntegerOption((option) =>
           option
-            .setName(strings.bot.commands.rating_leaderboard.options.limit.$)
+            .setName(strings.bot.commands.rating_leaderboard.options.limit.name)
             .setNameLocalizations(
               localizationObject(
                 (strings) =>
-                  strings.bot.commands.rating_leaderboard.options.limit.$,
+                  strings.bot.commands.rating_leaderboard.options.limit.name,
                 undefined,
                 true,
               ),
@@ -90,11 +90,13 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
         )
         .addStringOption((option) =>
           option
-            .setName(strings.bot.commands.rating_leaderboard.options.season.$)
+            .setName(
+              strings.bot.commands.rating_leaderboard.options.season.name,
+            )
             .setNameLocalizations(
               localizationObject(
                 (strings) =>
-                  strings.bot.commands.rating_leaderboard.options.season.$,
+                  strings.bot.commands.rating_leaderboard.options.season.name,
                 undefined,
                 true,
               ),
@@ -159,13 +161,13 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
 
                 return option
                   .setName(
-                    strings.bot.commands.rating_leaderboard.options.league.$,
+                    strings.bot.commands.rating_leaderboard.options.league.name,
                   )
                   .setNameLocalizations(
                     localizationObject(
                       (strings) =>
                         strings.bot.commands.rating_leaderboard.options.league
-                          .$,
+                          .name,
                       undefined,
                       true,
                     ),

@@ -30,7 +30,7 @@ export function GenericAllStats({
     <Root>
       <Row>
         <Card
-          title={strings.bot.commands.full_stats.body.cards.games.$}
+          title={strings.bot.commands.full_stats.body.cards.games.title}
           items={[
             {
               label: strings.bot.commands.full_stats.body.cards.games.winrate,
@@ -48,7 +48,7 @@ export function GenericAllStats({
           ]}
         />
         <Card
-          title={strings.bot.commands.full_stats.body.cards.efficiency.$}
+          title={strings.bot.commands.full_stats.body.cards.efficiency.title}
           items={[
             {
               label: strings.bot.commands.full_stats.body.cards.efficiency.wn8,
@@ -78,7 +78,7 @@ export function GenericAllStats({
       </Row>
       <Row>
         <Card
-          title={strings.bot.commands.full_stats.body.cards.lethality.$}
+          title={strings.bot.commands.full_stats.body.cards.lethality.title}
           items={[
             {
               label:
@@ -113,7 +113,7 @@ export function GenericAllStats({
           ]}
         />
         <Card
-          title={strings.bot.commands.full_stats.body.cards.miscellaneous.$}
+          title={strings.bot.commands.full_stats.body.cards.miscellaneous.title}
           items={[
             {
               label:

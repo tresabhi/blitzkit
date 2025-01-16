@@ -23,10 +23,10 @@ export const searchClansCommand = new Promise<CommandRegistry>((resolve) => {
         const { strings } = translator(Locale.EnglishUS);
 
         return option
-          .setName(strings.bot.commands.search_clans.options.limit.$)
+          .setName(strings.bot.commands.search_clans.options.limit.name)
           .setNameLocalizations(
             localizationObject(
-              (strings) => strings.bot.commands.search_clans.options.limit.$,
+              (strings) => strings.bot.commands.search_clans.options.limit.name,
               undefined,
               true,
             ),

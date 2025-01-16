@@ -35,8 +35,8 @@ export async function autocompleteTanks(
             {
               keys: [
                 ...SUPPORTED_LOCALES.map((locale) => [
-                  `searchableName.${locale}`,
-                  `searchableNameDeburr.${locale}`,
+                  `searchableName.{locale}`,
+                  `searchableNameDeburr.{locale}`,
                 ]).flat(),
                 'camouflages',
               ],

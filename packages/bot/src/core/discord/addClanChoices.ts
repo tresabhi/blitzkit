@@ -9,7 +9,7 @@ export function addClanChoices(option: SlashCommandStringOption) {
     .setName('clan')
     .setNameLocalizations(
       localizationObject(
-        (strings) => strings.bot.common.options.clan.$,
+        (strings) => strings.bot.common.options.clan.name,
         undefined,
         true,
       ),

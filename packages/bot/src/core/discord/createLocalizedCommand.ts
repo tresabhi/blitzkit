@@ -33,7 +33,7 @@ export function createLocalizedCommand(
     .setName(command)
     .setNameLocalizations(
       localizationObject(
-        (strings) => strings.bot.commands[commandPathItem].$,
+        (strings) => strings.bot.commands[commandPathItem].name,
         undefined,
         true,
       ),
@@ -52,9 +52,9 @@ export function createLocalizedCommand(
           (strings) =>
             (
               strings.bot.commands[commandPathItem] as unknown as {
-                subcommands: Record<string, { $: string }>;
+                subcommands: Record<string, { name: string }>;
               }
-            ).subcommands[subItem.subcommand].$,
+            ).subcommands[subItem.subcommand].name,
           undefined,
           true,
         );
@@ -87,9 +87,9 @@ export function createLocalizedCommand(
           (strings) =>
             (
               strings.bot.commands[commandPathItem] as unknown as {
-                groups: Record<string, { $: string }>;
+                groups: Record<string, { name: string }>;
               }
-            ).groups[subItem.group].$,
+            ).groups[subItem.group].name,
           undefined,
           true,
         );

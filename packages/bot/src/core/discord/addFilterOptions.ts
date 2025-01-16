@@ -23,10 +23,10 @@ export function addFilterOptions<
     option
       .addStringOption((option) =>
         option
-          .setName(strings.bot.common.options.filters.nation.$)
+          .setName(strings.bot.common.options.filters.nation.name)
           .setNameLocalizations(
             localizationObject(
-              (strings) => strings.bot.common.options.filters.nation.$,
+              (strings) => strings.bot.common.options.filters.nation.name,
               undefined,
               true,
             ),
@@ -60,10 +60,10 @@ export function addFilterOptions<
       .addStringOption((option) => addTierChoices(option).setRequired(false))
       .addStringOption((option) =>
         option
-          .setName(strings.bot.common.options.filters.class.$)
+          .setName(strings.bot.common.options.filters.class.name)
           .setNameLocalizations(
             localizationObject(
-              (strings) => strings.bot.common.options.filters.class.$,
+              (strings) => strings.bot.common.options.filters.class.name,
               undefined,
               true,
             ),
@@ -90,10 +90,10 @@ export function addFilterOptions<
       )
       .addStringOption((option) =>
         option
-          .setName(strings.bot.common.options.filters.type.$)
+          .setName(strings.bot.common.options.filters.type.name)
           .setNameLocalizations(
             localizationObject(
-              (strings) => strings.bot.common.options.filters.type.$,
+              (strings) => strings.bot.common.options.filters.type.name,
               undefined,
               true,
             ),

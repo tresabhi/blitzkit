@@ -6,10 +6,10 @@ export function addTankChoices(option: SlashCommandStringOption) {
   const { strings } = translator(Locale.EnglishUS);
 
   return option
-    .setName(strings.bot.common.options.tank.$)
+    .setName(strings.bot.common.options.tank.name)
     .setNameLocalizations(
       localizationObject(
-        (strings) => strings.bot.common.options.tank.$,
+        (strings) => strings.bot.common.options.tank.name,
         undefined,
         true,
       ),

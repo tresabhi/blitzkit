@@ -10,11 +10,11 @@ import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { translator } from '../core/localization/translator';
 import { CommandRegistry } from '../events/interactionCreate';
 
-interface Auction {
+type Auction = null | {
   count: number;
   has_next: boolean;
   results: Result[];
-}
+};
 
 type Result =
   | {
@@ -88,12 +88,12 @@ export const auctionCommand = new Promise<CommandRegistry>((resolve) => {
           pageSize
         }&type[]=vehicle&saleable=${saleable}`,
       ).then((response) => response.json() as Promise<Auction>);
-      const saleableTanks = data.results.filter((result) => result.available);
 
-      if (saleableTanks.length === 0) {
+      if (data === null) {
         return strings.bot.commands.auction.errors.no_auction;
       }
 
+      const saleableTanks = data.results.filter((result) => result.available);
       const nextPricesTimestamp = saleableTanks[0].next_price_timestamp;
 
       const title = `# ${strings.bot.commands.auction.body.title}`;

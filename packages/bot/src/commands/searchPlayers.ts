@@ -28,10 +28,11 @@ export const searchPlayersCommand = new Promise<CommandRegistry>((resolve) => {
       )
       .addIntegerOption((option) =>
         option
-          .setName(strings.bot.commands.search_players.options.limit.$)
+          .setName(strings.bot.commands.search_players.options.limit.name)
           .setNameLocalizations(
             localizationObject(
-              (strings) => strings.bot.commands.search_players.options.limit.$,
+              (strings) =>
+                strings.bot.commands.search_players.options.limit.name,
               undefined,
               true,
             ),

@@ -19,32 +19,32 @@ export function addPeriodSubCommands(
   const { strings } = translator(Locale.EnglishUS);
   const subcommandNameLocalizations = {
     today: localizationObject(
-      (strings) => strings.bot.common.subcommands.today.$,
+      (strings) => strings.bot.common.subcommands.today.name,
       undefined,
       true,
     ),
     30: localizationObject(
-      (strings) => strings.bot.common.subcommands[30].$,
+      (strings) => strings.bot.common.subcommands[30].name,
       undefined,
       true,
     ),
     60: localizationObject(
-      (strings) => strings.bot.common.subcommands[60].$,
+      (strings) => strings.bot.common.subcommands[60].name,
       undefined,
       true,
     ),
     90: localizationObject(
-      (strings) => strings.bot.common.subcommands[90].$,
+      (strings) => strings.bot.common.subcommands[90].name,
       undefined,
       true,
     ),
     career: localizationObject(
-      (strings) => strings.bot.common.subcommands.career.$,
+      (strings) => strings.bot.common.subcommands.career.name,
       undefined,
       true,
     ),
     custom: localizationObject(
-      (strings) => strings.bot.common.subcommands.custom.$,
+      (strings) => strings.bot.common.subcommands.custom.name,
       undefined,
       true,
     ),
@@ -74,7 +74,7 @@ export function addPeriodSubCommands(
     .addSubcommand((option) =>
       extra(
         option
-          .setName(strings.bot.common.subcommands.today.$)
+          .setName(strings.bot.common.subcommands.today.name)
           .setNameLocalizations(subcommandNameLocalizations.today)
           .setDescription(strings.bot.common.subcommands.today.description)
           .setDescriptionLocalizations(
@@ -85,7 +85,7 @@ export function addPeriodSubCommands(
     .addSubcommand((option) =>
       extra(
         option
-          .setName(strings.bot.common.subcommands[30].$)
+          .setName(strings.bot.common.subcommands[30].name)
           .setNameLocalizations(subcommandNameLocalizations[30])
           .setDescription(strings.bot.common.subcommands[30].description)
           .setDescriptionLocalizations(subcommandDescriptionLocalizations[30]),
@@ -94,7 +94,7 @@ export function addPeriodSubCommands(
     .addSubcommand((option) =>
       extra(
         option
-          .setName(strings.bot.common.subcommands[60].$)
+          .setName(strings.bot.common.subcommands[60].name)
           .setNameLocalizations(subcommandNameLocalizations[60])
           .setDescription(strings.bot.common.subcommands[60].description)
           .setDescriptionLocalizations(subcommandDescriptionLocalizations[60]),
@@ -103,7 +103,7 @@ export function addPeriodSubCommands(
     .addSubcommand((option) =>
       extra(
         option
-          .setName(strings.bot.common.subcommands[90].$)
+          .setName(strings.bot.common.subcommands[90].name)
           .setNameLocalizations(subcommandNameLocalizations[90])
           .setDescription(strings.bot.common.subcommands[90].description)
           .setDescriptionLocalizations(subcommandDescriptionLocalizations[90]),
@@ -112,7 +112,7 @@ export function addPeriodSubCommands(
     .addSubcommand((option) =>
       extra(
         option
-          .setName(strings.bot.common.subcommands.career.$)
+          .setName(strings.bot.common.subcommands.career.name)
           .setNameLocalizations(subcommandNameLocalizations.career)
           .setDescription(strings.bot.common.subcommands.career.description)
           .setDescriptionLocalizations(
@@ -123,7 +123,7 @@ export function addPeriodSubCommands(
     .addSubcommand((option) =>
       extra(
         option
-          .setName(strings.bot.common.subcommands.custom.$)
+          .setName(strings.bot.common.subcommands.custom.name)
           .setNameLocalizations(subcommandNameLocalizations.custom)
           .setDescription(strings.bot.common.subcommands.custom.description)
           .setDescriptionLocalizations(
@@ -131,7 +131,7 @@ export function addPeriodSubCommands(
           )
           .addIntegerOption((option) =>
             option
-              .setName(strings.bot.common.subcommands.custom.options.start.$)
+              .setName(strings.bot.common.subcommands.custom.options.start.name)
               .setDescription(
                 strings.bot.common.subcommands.custom.options.start.description,
               )
@@ -139,7 +139,7 @@ export function addPeriodSubCommands(
           )
           .addIntegerOption((option) =>
             option
-              .setName(strings.bot.common.subcommands.custom.options.end.$)
+              .setName(strings.bot.common.subcommands.custom.options.end.name)
               .setDescription(
                 strings.bot.common.subcommands.custom.options.end.description,
               )

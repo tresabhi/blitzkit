@@ -6,10 +6,10 @@ export function addUsernameChoices(option: SlashCommandStringOption) {
   const { strings } = translator(Locale.EnglishUS);
 
   return option
-    .setName(strings.bot.common.options.username.$)
+    .setName(strings.bot.common.options.username.name)
     .setNameLocalizations(
       localizationObject(
-        (strings) => strings.bot.common.options.username.$,
+        (strings) => strings.bot.common.options.username.name,
         undefined,
         true,
       ),

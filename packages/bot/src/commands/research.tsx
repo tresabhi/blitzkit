@@ -35,10 +35,11 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
     command: createLocalizedCommand('research')
       .addStringOption((option) =>
         option
-          .setName(strings.bot.commands.research.options.target_tank.$)
+          .setName(strings.bot.commands.research.options.target_tank.name)
           .setNameLocalizations(
             localizationObject(
-              (strings) => strings.bot.commands.research.options.target_tank.$,
+              (strings) =>
+                strings.bot.commands.research.options.target_tank.name,
               undefined,
               true,
             ),
@@ -57,11 +58,11 @@ export const researchCommand = new Promise<CommandRegistry>((resolve) => {
       )
       .addStringOption((option) =>
         option
-          .setName(strings.bot.commands.research.options.starting_tank.$)
+          .setName(strings.bot.commands.research.options.starting_tank.name)
           .setNameLocalizations(
             localizationObject(
               (strings) =>
-                strings.bot.commands.research.options.starting_tank.$,
+                strings.bot.commands.research.options.starting_tank.name,
               undefined,
               true,
             ),
