@@ -28,10 +28,10 @@ export const aboutCommand = new Promise<CommandRegistry>(async (resolve) => {
 
     async handler(interaction) {
       const subcommand = interaction.options.getSubcommand();
-      const { t } = translator(interaction.locale);
+      const { strings } = translator(interaction.locale);
 
       if (subcommand === 'commands') {
-        return t`bot.commands.about.subcommands.commands.body${(
+        return `${strings.bot.commands.about.subcommands.commands.body}${(
           await Promise.all(COMMANDS_RAW)
         )
           .sort((a, b) =>

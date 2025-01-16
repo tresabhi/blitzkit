@@ -38,7 +38,7 @@ export async function getTankHistories(
   locale: Locale,
   options?: Partial<GetTankHistoriesOptions>,
 ) {
-  const { t } = translator(locale);
+  const { strings } = translator(locale);
   const mergedOptions = { ...getTankHistoriesDefaultOptions, ...options };
   const tankHistoriesResponse = await fetch(
     `https://www.blitzstars.com/api/tankhistories/for/${id}/`,
@@ -82,7 +82,7 @@ export async function getTankHistories(
     const tankStats = await getTankStats(server, id);
 
     if (tankStats === null) {
-      throw new UserError(t`bot.common.errors.no_tank_stats`);
+      throw new UserError(strings.bot.common.errors.no_tank_stats);
     }
 
     tankStats.forEach((tankHistory) => {

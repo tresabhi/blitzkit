@@ -6,13 +6,13 @@ export function buttonRefresh(
   interaction: ChatInputCommandInteraction,
   path: string,
 ) {
-  const { t } = translator(interaction.locale);
+  const { strings } = translator(interaction.locale);
 
   if (
     interaction.appPermissions?.has('ReadMessageHistory') &&
     interaction.appPermissions?.has('ViewChannel')
   ) {
-    return buttonPrimary(path, t`bot.common.buttons.refresh`);
+    return buttonPrimary(path, strings.bot.common.buttons.refresh);
   }
 
   return null;

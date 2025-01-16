@@ -12,8 +12,6 @@ import {
   SlashCommandSubcommandsOnlyBuilder,
 } from 'discord.js';
 import { RenderConfiguration } from '../../core/blitzkit/renderConfiguration';
-import { handleAutocomplete } from './handlers/autocomplete';
-import { handleChatInputCommand } from './handlers/chatInputCommand';
 
 export type InteractionRawReturnable =
   | string
@@ -109,9 +107,9 @@ export const commands = Promise.allSettled(COMMANDS_RAW).then((rawCommands) => {
 
 export async function interactionCreate(interaction: Interaction<CacheType>) {
   if (interaction.isAutocomplete()) {
-    handleAutocomplete(interaction);
+    // handleAutocomplete(interaction);
   } else if (interaction.isChatInputCommand()) {
-    handleChatInputCommand(interaction);
+    // handleChatInputCommand(interaction);
   } else if (interaction.isButton()) {
     // handleButton(interaction);
   }
