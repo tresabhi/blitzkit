@@ -1,21 +1,21 @@
 {
   "common": {
     "wn8_percentile": {
-      "0": "Very bad",
-      "1": "Bad",
-      "2": "Below average",
-      "3": "Average",
-      "4": "Above average",
-      "5": "Good",
-      "6": "Very good",
-      "7": "Great",
+      "0": "Muito ruim",
+      "1": "Ruim",
+      "2": "Abaixo da média",
+      "3": "Na média",
+      "4": "Acima da média",
+      "5": "Bom",
+      "6": "Muito bom\n",
+      "7": "Ótimo",
       "8": "Unicum",
       "9": "Super unicum"
     },
     "bkni_percentile": {
       "0": "Super malum",
       "1": "Malum",
-      "2": "Very bad",
+      "2": "Muito ruim",
       "3": "Bad",
       "4": "Below average",
       "5": "Average",
