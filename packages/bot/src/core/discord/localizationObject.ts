@@ -1,3 +1,4 @@
+import { BlitzKitStrings, literals as literalsFunc } from '@blitzkit/i18n';
 import { Locale } from 'discord.js';
 import { SUPPORTED_LOCALES_DISCORD } from '../localization/strings/constants';
 import { translator } from '../localization/translator';
@@ -5,14 +6,14 @@ import { translator } from '../localization/translator';
 const validNameRegex = /^[-_\p{L}\p{N}\p{sc=Deva}\p{sc=Thai}]{1,32}$/u;
 
 export function localizationObject(
-  path: string,
-  literals?: string[],
+  path: (strings: BlitzKitStrings) => string,
+  literals: string[] = [],
   strict = false,
 ) {
   return SUPPORTED_LOCALES_DISCORD.reduce<Partial<Record<Locale, string>>>(
     (localizations, locale) => {
-      const { translate } = translator(locale);
-      const translation = translate(path, literals);
+      const { strings } = translator(locale);
+      const translation = literalsFunc(path(strings), literals);
       const isValid = !strict || validNameRegex.test(translation);
 
       if (!isValid) {

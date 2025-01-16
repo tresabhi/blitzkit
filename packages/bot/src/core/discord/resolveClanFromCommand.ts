@@ -1,4 +1,5 @@
 import { Region } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n';
 import { ChatInputCommandInteraction } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { searchClansAcrossRegionsBotWrapper } from '../blitz/searchClansAcrossRegionsBotWrapper';
@@ -10,7 +11,7 @@ export const serverAndIdPattern = /(com|eu|asia)\/[0-9]+/;
 export async function resolveClanFromCommand(
   interaction: ChatInputCommandInteraction,
 ) {
-  const { translate } = translator(interaction.locale);
+  const { strings } = translator(interaction.locale);
   const clan = interaction.options.getString('clan', true);
 
   if (serverAndIdPattern.test(clan)) {
@@ -26,7 +27,9 @@ export async function resolveClanFromCommand(
       return { region: accounts[0].region, id: accounts[0].clan_id };
     } else {
       throw new UserError(
-        translate('bot.common.errors.clan_not_found', [markdownEscape(clan)]),
+        literals(strings.bot.common.errors.clan_not_found, [
+          markdownEscape(clan),
+        ]),
       );
     }
   }

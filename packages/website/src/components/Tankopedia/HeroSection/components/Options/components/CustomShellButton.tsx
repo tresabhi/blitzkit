@@ -1,4 +1,5 @@
 import { imgur, ShellType } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n/src/literals';
 import {
   Button,
   Flex,
@@ -11,7 +12,6 @@ import {
 } from '@radix-ui/themes';
 import { throttle } from 'lodash-es';
 import { type ChangeEvent } from 'react';
-import { literals } from '../../../../../../core/i18n/literals';
 import { useLocale } from '../../../../../../hooks/useLocale';
 import { Duel } from '../../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';

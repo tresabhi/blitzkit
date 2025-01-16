@@ -1,9 +1,9 @@
 import { asset, imgur, TankType } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n/src/literals';
 import { CaretLeftIcon, CaretRightIcon, PlusIcon } from '@radix-ui/react-icons';
 import { Flex, Heading, IconButton, ScrollArea, Text } from '@radix-ui/themes';
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { awaitableTankDefinitions } from '../../../core/awaitables/tankDefinitions';
-import { literals } from '../../../core/i18n/literals';
 import { useLocale } from '../../../hooks/useLocale';
 import { Duel } from '../../../stores/duel';
 import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';

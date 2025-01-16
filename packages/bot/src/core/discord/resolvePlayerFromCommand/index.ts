@@ -1,4 +1,5 @@
 import { idToRegion, Region } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n';
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { searchPlayersAcrossRegionsBotWrapper } from '../../blitz/searchPlayersAcrossRegionsBotWrapper';
@@ -14,7 +15,7 @@ export interface ResolvedPlayer {
 export async function resolvePlayerFromCommand(
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
-  const { t, translate } = translator(interaction.locale);
+  const { strings } = translator(interaction.locale);
   const commandUsername = interaction.options.getString('username');
 
   if (commandUsername !== null) {
@@ -36,7 +37,7 @@ export async function resolvePlayerFromCommand(
         } satisfies ResolvedPlayer;
       } else {
         throw new UserError(
-          translate('bot.common.errors.player_not_found', [
+          literals(strings.bot.common.errors.player_not_found, [
             markdownEscape(commandUsername),
           ]),
         );
@@ -47,6 +48,6 @@ export async function resolvePlayerFromCommand(
 
     if (account) return account;
 
-    throw new UserError(t`bot.common.errors.player_not_linked`);
+    throw new UserError(strings.bot.common.errors.player_not_linked);
   }
 }

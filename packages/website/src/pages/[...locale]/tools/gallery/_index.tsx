@@ -1,9 +1,9 @@
+import { literals } from '@blitzkit/i18n/src/literals';
 import { CalendarIcon } from '@radix-ui/react-icons';
 import { Callout, Flex } from '@radix-ui/themes';
 import { GalleryList, type Avatar } from '../../../../components/Gallery/List';
 import { GallerySearch } from '../../../../components/Gallery/Search';
 import { PageWrapper } from '../../../../components/PageWrapper';
-import { literals } from '../../../../core/i18n/literals';
 import {
   LocaleProvider,
   useLocale,

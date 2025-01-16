@@ -1,3 +1,4 @@
+import { literals } from '@blitzkit/i18n/src/literals';
 import {
   Card,
   Flex,
@@ -8,7 +9,6 @@ import {
 } from '@radix-ui/themes';
 import type { ComponentProps } from 'react';
 import { radToDeg } from 'three/src/math/MathUtils.js';
-import { literals } from '../../../core/i18n/literals';
 import { useLocale } from '../../../hooks/useLocale';
 import type { Shot, ShotLayer } from '../../../stores/tankopediaEphemeral';
 import { shotStatusColors } from './ShotDisplay';

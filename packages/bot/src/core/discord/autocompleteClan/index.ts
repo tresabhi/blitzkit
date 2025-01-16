@@ -10,7 +10,7 @@ import { DISCORD_CHOICES_MAX_NAME_SIZE, OVERFLOW_SUFFIX } from './constants';
 export async function autocompleteClan(
   interaction: AutocompleteInteraction<CacheType>,
 ) {
-  const { translate } = translator(interaction.locale);
+  const { strings } = translator(interaction.locale);
   const focusedOption = interaction.options.getFocused(true);
   if (focusedOption.name !== 'clan') return;
   if (focusedOption.value.length < 2) return interaction.respond([]);
@@ -19,9 +19,7 @@ export async function autocompleteClan(
   await interaction.respond(
     clans
       ? clans.map((clan) => {
-          let name = `${clan.name} (${translate(
-            `common.regions.short.${clan.region}`,
-          )})`;
+          let name = `${clan.name} (${strings.common.regions.short[clan.region]})`;
 
           if (name.length > DISCORD_CHOICES_MAX_NAME_SIZE) {
             const overSize = name.length - DISCORD_CHOICES_MAX_NAME_SIZE;
@@ -29,9 +27,7 @@ export async function autocompleteClan(
             name = `${clan.name.slice(
               0,
               clan.name.length - overSize - OVERFLOW_SUFFIX.length,
-            )}${OVERFLOW_SUFFIX} (${translate(
-              `common.regions.short.${clan.region}`,
-            )})`;
+            )}${OVERFLOW_SUFFIX} (${strings.common.regions.short[clan.region]})`;
           }
 
           return {

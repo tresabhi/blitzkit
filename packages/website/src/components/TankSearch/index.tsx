@@ -5,6 +5,7 @@ import {
   unionBoundingBox,
   type TankDefinition,
 } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n/src/literals';
 import { useStore } from '@nanostores/react';
 import { Callout, Flex, Link, Text, type FlexProps } from '@radix-ui/themes';
 import fuzzysort from 'fuzzysort';
@@ -16,7 +17,6 @@ import { awaitableTankDefinitions } from '../../core/awaitables/tankDefinitions'
 import { awaitableTankNames } from '../../core/awaitables/tankNames';
 import { filterTank } from '../../core/blitzkit/filterTank';
 import { resolveReload } from '../../core/blitzkit/resolveReload';
-import { literals } from '../../core/i18n/literals';
 import { useLocale } from '../../hooks/useLocale';
 import { $tankFilters } from '../../stores/tankFilters';
 import { TankopediaPersistent } from '../../stores/tankopediaPersistent';

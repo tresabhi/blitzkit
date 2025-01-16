@@ -1,9 +1,9 @@
 import { formatCompact } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n/src/literals';
 import { InfoCircledIcon } from '@radix-ui/react-icons';
 import { Callout, Flex } from '@radix-ui/themes';
 import { awaitableAverageDefinitions } from '../../core/awaitables/averageDefinitions';
 import { awaitableDiscoveredIdsDefinitions } from '../../core/awaitables/discoveredIdsDefinitions';
-import { literals } from '../../core/i18n/literals';
 import { useLocale } from '../../hooks/useLocale';
 import type { MaybeSkeletonComponentProps } from '../../types/maybeSkeletonComponentProps';
 import { InlineSkeleton } from '../InlineSkeleton';

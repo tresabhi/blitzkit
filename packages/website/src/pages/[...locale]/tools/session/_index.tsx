@@ -13,6 +13,7 @@ import {
   type IndividualAccountInfo,
   type IndividualTankStats,
 } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n/src/literals';
 import {
   ArrowDownIcon,
   MagnifyingGlassIcon,
@@ -38,7 +39,6 @@ import { StickyTableRoot } from '../../../../components/StickyTableRoot';
 import { TankRowHeaderCell } from '../../../../components/TankRowHeaderCell';
 import { awaitableAverageDefinitions } from '../../../../core/awaitables/averageDefinitions';
 import { awaitableTankDefinitions } from '../../../../core/awaitables/tankDefinitions';
-import { literals } from '../../../../core/i18n/literals';
 import {
   LocaleProvider,
   useLocale,

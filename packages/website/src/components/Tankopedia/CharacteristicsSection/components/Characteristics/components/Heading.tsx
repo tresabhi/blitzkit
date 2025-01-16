@@ -1,6 +1,6 @@
 import { TIER_ROMAN_NUMERALS } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n/src/literals';
 import { Flex, Heading, SegmentedControl, Text } from '@radix-ui/themes';
-import { literals } from '../../../../../../core/i18n/literals';
 import { useLocale } from '../../../../../../hooks/useLocale';
 import { Duel } from '../../../../../../stores/duel';
 import {

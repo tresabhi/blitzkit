@@ -1,8 +1,8 @@
 import { asset, formatCompact, TIER_ROMAN_NUMERALS } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n/src/literals';
 import { Box, Flex, Skeleton, Text } from '@radix-ui/themes';
 import { awaitableAverageDefinitions } from '../../../../core/awaitables/averageDefinitions';
 import { awaitableTankDefinitions } from '../../../../core/awaitables/tankDefinitions';
-import { literals } from '../../../../core/i18n/literals';
 import { useLocale } from '../../../../hooks/useLocale';
 import { TankopediaEphemeral } from '../../../../stores/tankopediaEphemeral';
 import type { MaybeSkeletonComponentProps } from '../../../../types/maybeSkeletonComponentProps';

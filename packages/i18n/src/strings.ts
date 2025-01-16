@@ -1,38 +1,21 @@
 import { merge } from 'lodash-es';
-import type en from '../strings/en.json';
-import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from './supportedLocales';
+import en from '../strings/en.json';
+import es from '../strings/es.json';
+import fr from '../strings/fr.json';
+import ja from '../strings/ja.json';
+import pl from '../strings/pl.json';
+import pt from '../strings/pt.json';
+import ru from '../strings/ru.json';
+import uk from '../strings/uk.json';
+import zh from '../strings/zh.json';
 
-export type TranslationTree = { [key: string]: TranslationNode };
+export type BlitzKitStrings = typeof en;
 
-export type TranslationNode = string | TranslationTree;
+const stringsRaw = { en, es, fr, ja, pl, pt, ru, uk, zh };
 
-const files = import.meta.glob('../strings/*.json', { eager: true });
-export const localizedStrings: Record<string, typeof en> = {};
+export const SUPPORTED_LOCALES = Object.keys(stringsRaw) as SupportedLocale[];
 
-function nuke(object: TranslationTree) {
-  for (const key in object) {
-    const typedKey = key as keyof typeof object;
-
-    if (typeof object[typedKey] === 'string') {
-      const value = object[typedKey];
-      object[typedKey] = redact(value as string);
-    } else nuke(object[typedKey] as TranslationTree);
-  }
-}
-
-SUPPORTED_LOCALES.forEach((locale) => {
-  const defaultStrings = files[`../strings/${DEFAULT_LOCALE}.json`];
-  const strings = files[`../strings/${locale}.json`];
-  const mergedStrings = merge({}, defaultStrings, strings);
-
-  /**
-   * For some reason, this won't load on the server on the first render so I am
-   * not asserting this one lol
-   */
-  if (import.meta.env.PUBLIC_DEBUG_MISSING_I18N === 'true') nuke(mergedStrings);
-
-  localizedStrings[locale] = mergedStrings as typeof en;
-});
+export const DEFAULT_LOCALE = SUPPORTED_LOCALES[0];
 
 function redact(string: string) {
   const matches = [...string.matchAll(/%s\d+/g)];
@@ -50,3 +33,70 @@ function redact(string: string) {
 
   return characters.join('');
 }
+
+function nuke(object: TranslationTree) {
+  for (const key in object) {
+    const typedKey = key as keyof typeof object;
+
+    if (typeof object[typedKey] === 'string') {
+      const value = object[typedKey];
+      object[typedKey] = redact(value as string);
+    } else nuke(object[typedKey] as TranslationTree);
+  }
+}
+
+const stringsPartial: Partial<Record<SupportedLocale, TranslationTree>> = {};
+
+for (const locale in stringsRaw) {
+  if (locale === DEFAULT_LOCALE) {
+    stringsPartial[DEFAULT_LOCALE] = stringsRaw[DEFAULT_LOCALE];
+    continue;
+  }
+
+  const localeStrings = stringsRaw[locale as SupportedLocale];
+
+  stringsPartial[locale as SupportedLocale] = merge(
+    {},
+    stringsRaw[DEFAULT_LOCALE],
+    localeStrings,
+  );
+
+  if (import.meta.env.PUBLIC_DEBUG_MISSING_I18N === 'true') {
+    nuke(stringsPartial[locale as SupportedLocale]!);
+  }
+}
+
+export const STRINGS = stringsPartial as Record<
+  SupportedLocale,
+  BlitzKitStrings
+>;
+
+export type SupportedLocale = keyof typeof stringsRaw;
+
+export const SUPPORTED_LOCALE_BLITZ_MAP: Record<SupportedLocale, string> = {
+  en: 'en',
+  es: 'es',
+  fr: 'fr',
+  ja: 'ja',
+  pt: 'pt',
+  ru: 'ru',
+  uk: 'uk',
+  zh: 'zh-Hans',
+  pl: 'pl',
+};
+
+export const SUPPORTED_LOCALE_FLAGS: Record<SupportedLocale, string> = {
+  en: '🇺🇸',
+  es: '🇪🇸',
+  fr: '🇫🇷',
+  ja: '🇯🇵',
+  pt: '🇵🇹',
+  ru: '🇷🇺',
+  uk: '🇺🇦',
+  zh: '🇨🇳',
+  pl: '🇵🇱',
+};
+
+export type TranslationTree = { [key: string]: TranslationNode };
+
+export type TranslationNode = string | TranslationTree;

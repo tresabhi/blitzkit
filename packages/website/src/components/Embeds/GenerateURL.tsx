@@ -3,6 +3,7 @@ import {
   type AccountListItem,
   type AccountListWithServer,
 } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n/src/literals';
 import { CaretLeftIcon, Link2Icon, PersonIcon } from '@radix-ui/react-icons';
 import {
   Badge,
@@ -18,7 +19,6 @@ import { debounce } from 'lodash-es';
 import { useCallback, useRef, useState } from 'react';
 import { stringify } from 'urlon';
 import type { embedConfigurations } from '../../constants/embeds';
-import { literals } from '../../core/i18n/literals';
 import { useLocale } from '../../hooks/useLocale';
 import { EmbedState, type EmbedStateStore } from '../../stores/embedState';
 import { CopyButton } from '../CopyButton';

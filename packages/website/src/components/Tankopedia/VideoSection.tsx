@@ -1,7 +1,7 @@
 import { youtubers } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n/src/literals';
 import { Box, Flex, Heading, Link, Skeleton, Text } from '@radix-ui/themes';
 import { awaitableReviews } from '../../core/awaitables/reviews';
-import { literals } from '../../core/i18n/literals';
 import { Var } from '../../core/radix/var';
 import { useLocale } from '../../hooks/useLocale';
 import { Duel } from '../../stores/duel';

@@ -5,6 +5,7 @@ import {
   TIER_ROMAN_NUMERALS,
   uniqueGuns,
 } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n/src/literals';
 import {
   CameraIcon,
   CopyIcon,
@@ -30,7 +31,6 @@ import {
 } from '@radix-ui/themes';
 import { Suspense, useState, type RefObject } from 'react';
 import { Pose, poseEvent } from '../../../../../core/blitzkit/pose';
-import { literals } from '../../../../../core/i18n/literals';
 import { useEquipment } from '../../../../../hooks/useEquipment';
 import { useFullScreen } from '../../../../../hooks/useFullScreen';
 import { useFullscreenAvailability } from '../../../../../hooks/useFullscreenAvailability';

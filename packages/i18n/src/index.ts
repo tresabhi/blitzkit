@@ -1,3 +1,3 @@
+export * from './literals';
 export * from './strings';
-export * from './supportedLocales';
 export * from './unwrapper';

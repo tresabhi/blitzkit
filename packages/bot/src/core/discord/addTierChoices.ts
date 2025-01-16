@@ -1,4 +1,5 @@
 import { numberToRomanNumeral } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n';
 import {
   APIApplicationCommandOptionChoice,
   Locale,
@@ -9,28 +10,34 @@ import { translator } from '../localization/translator';
 import { localizationObject } from './localizationObject';
 
 export function addTierChoices(option: SlashCommandStringOption) {
-  const { t, translate } = translator(Locale.EnglishUS);
+  const { strings } = translator(Locale.EnglishUS);
 
   return option
-    .setName(t`bot.common.options.tier`)
+    .setName(strings.bot.common.options.tier.$)
     .setNameLocalizations(
-      localizationObject('bot.common.options.tier', undefined, true),
+      localizationObject(
+        (strings) => strings.bot.common.options.tier.$,
+        undefined,
+        true,
+      ),
     )
-    .setDescription(t`bot.common.options.tier.description`)
+    .setDescription(strings.bot.common.options.tier.description)
     .setDescriptionLocalizations(
-      localizationObject('bot.common.options.tier.description'),
+      localizationObject(
+        (strings) => strings.bot.common.options.tier.description,
+      ),
     )
     .setChoices(
       ...range(10, 0).map(
         (tier) =>
           ({
-            name: translate('bot.common.options.tier.choices.tier', [
+            name: literals(strings.bot.common.options.tier.choices.tier, [
               `${tier}`,
               numberToRomanNumeral(tier),
             ]),
             value: `${tier}`,
             name_localizations: localizationObject(
-              'bot.common.options.tier.choices.tier',
+              (strings) => strings.bot.common.options.tier.choices.tier,
               [`${tier}`, numberToRomanNumeral(tier)],
             ),
           }) satisfies APIApplicationCommandOptionChoice,

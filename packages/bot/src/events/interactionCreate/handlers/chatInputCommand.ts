@@ -2,7 +2,6 @@ import {
   ActionRowBuilder,
   AttachmentBuilder,
   ButtonBuilder,
-  ButtonStyle,
   CacheType,
   ChatInputCommandInteraction,
   InteractionReplyOptions,
@@ -14,7 +13,6 @@ import { normalizeInteractionReturnable } from '../../../core/discord/normalizeI
 import { psa } from '../../../core/discord/psa';
 import { translator } from '../../../core/localization/translator';
 import { Writeable } from '../../../types/writable';
-import { UserError } from '../../../core/blitzkit/userError';
 
 export async function handleChatInputCommand(
   interaction: ChatInputCommandInteraction<CacheType>,
@@ -127,27 +125,25 @@ export async function handleChatInputCommand(
     }
   } catch (error) {
     const { t } = translator(interaction.locale);
-    const components = [
-      new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder()
-          .setLabel(t`bot.common.errors.get_help`)
-          .setURL('https://discord.gg/nDt7AjGJQH')
-          .setStyle(ButtonStyle.Link),
-      ),
-    ];
-
-    if (error instanceof UserError) {
-      interaction.editReply({
-        content: error.message,
-        components,
-      });
-    } else {
-      console.error(interaction.commandName, error);
-
-      interaction.editReply({
-        content: t`bot.common.errors.uncaught_error`,
-        components,
-      });
-    }
+    // const components = [
+    //   new ActionRowBuilder<ButtonBuilder>().addComponents(
+    //     new ButtonBuilder()
+    //       .setLabel(t`bot.common.errors.get_help`)
+    //       .setURL('https://discord.gg/nDt7AjGJQH')
+    //       .setStyle(ButtonStyle.Link),
+    //   ),
+    // ];
+    // if (error instanceof UserError) {
+    //   interaction.editReply({
+    //     content: error.message,
+    //     components,
+    //   });
+    // } else {
+    //   console.error(interaction.commandName, error);
+    //   interaction.editReply({
+    //     content: t`bot.common.errors.uncaught_error`,
+    //     components,
+    //   });
+    // }
   }
 }

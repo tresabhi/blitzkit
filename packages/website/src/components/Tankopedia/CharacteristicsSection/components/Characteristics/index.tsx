@@ -6,6 +6,7 @@ import {
   isExplosive,
   resolvePenetrationCoefficient,
 } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n/src/literals';
 import { AccessibilityIcon, InfoCircledIcon } from '@radix-ui/react-icons';
 import {
   Flex,
@@ -25,7 +26,6 @@ import { awaitableEquipmentDefinitions } from '../../../../../core/awaitables/eq
 import { awaitableProvisionDefinitions } from '../../../../../core/awaitables/provisionDefinitions';
 import { applyPitchYawLimits } from '../../../../../core/blitz/applyPitchYawLimits';
 import { tankCharacteristics } from '../../../../../core/blitzkit/tankCharacteristics';
-import { literals } from '../../../../../core/i18n/literals';
 import { useEquipment } from '../../../../../hooks/useEquipment';
 import { useLocale } from '../../../../../hooks/useLocale';
 import { useTankModelDefinition } from '../../../../../hooks/useTankModelDefinition';

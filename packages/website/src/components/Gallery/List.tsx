@@ -1,8 +1,8 @@
+import { literals } from '@blitzkit/i18n/src/literals';
 import { Flex, Text } from '@radix-ui/themes';
 import fuzzysort from 'fuzzysort';
 import { times } from 'lodash-es';
 import { useMemo, useState } from 'react';
-import { literals } from '../../core/i18n/literals';
 import { useLocale } from '../../hooks/useLocale';
 import { GalleryEphemeral } from '../../stores/galleryEphemeral';
 import { GalleryCard } from './Card';

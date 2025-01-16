@@ -1,9 +1,9 @@
 import { assertSecret } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n/src/literals';
 import { EyeOpenIcon } from '@radix-ui/react-icons';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import { google } from 'googleapis';
 import { awaitableTankDefinitions } from '../core/awaitables/tankDefinitions';
-import { literals } from '../core/i18n/literals';
 import {
   LocaleProvider,
   useLocale,

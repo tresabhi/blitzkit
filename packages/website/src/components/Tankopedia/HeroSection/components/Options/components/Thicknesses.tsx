@@ -1,7 +1,7 @@
+import { literals } from '@blitzkit/i18n/src/literals';
 import { EyeClosedIcon, EyeOpenIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { Button, Checkbox, Flex, Text } from '@radix-ui/themes';
 import { Suspense } from 'react';
-import { literals } from '../../../../../../core/i18n/literals';
 import { useLocale } from '../../../../../../hooks/useLocale';
 import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
 import { TankopediaPersistent } from '../../../../../../stores/tankopediaPersistent';

@@ -1,4 +1,5 @@
 import { getTimeDaysAgo, Region } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n';
 import { CacheType, ChatInputCommandInteraction } from 'discord.js';
 import { getPeriodNow } from '../blitzkit/getPeriodNow';
 import { getPeriodStart } from '../blitzkit/getPeriodStart';
@@ -17,7 +18,7 @@ export function resolvePeriodFromCommand(
   interaction: ChatInputCommandInteraction<CacheType>,
   forcedPeriod?: PeriodType,
 ) {
-  const { translate } = translator(interaction.locale);
+  const { strings } = translator(interaction.locale);
   let name: string;
   let start: number;
   let end: number;
@@ -31,7 +32,7 @@ export function resolvePeriodFromCommand(
     const startDaysAgoMin = Math.min(startOption, endOption);
     const endDaysAgoMax = Math.max(startOption, endOption);
 
-    name = translate('bot.common.periods.custom', [
+    name = literals(strings.bot.common.periods.custom, [
       `${startDaysAgoMin}`,
       `${endDaysAgoMax}`,
     ]);
