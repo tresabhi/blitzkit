@@ -4,17 +4,15 @@ import {
   CaretSortIcon,
 } from '@radix-ui/react-icons';
 import { Flex, IconButton, Table, Text } from '@radix-ui/themes';
+import { useRef } from 'react';
 import type { TankCharacteristics } from '../../core/blitzkit/tankCharacteristics';
 import { Var } from '../../core/radix/var';
+import { useLocale } from '../../hooks/useLocale';
 import { CompareEphemeral } from '../../stores/compareEphemeral';
 import { ComparePersistent } from '../../stores/comparePersistent';
 import { StickyRowHeaderCell } from '../StickyRowHeaderCell';
 
-interface CompareRowProps {
-  name: string;
-  value:
-    | keyof TankCharacteristics
-    | ((member: TankCharacteristics) => number | undefined);
+type CompareRowProps = {
   display?: (
     member: Awaited<TankCharacteristics>,
   ) => number | string | undefined;
@@ -23,24 +21,39 @@ interface CompareRowProps {
   deltaNominalDisplay?: (delta: number) => string | number;
   indent?: boolean;
   stats: TankCharacteristics[];
-}
+} & (
+  | {
+      name: string;
+      value: (member: TankCharacteristics) => number | undefined;
+    }
+  | {
+      value: keyof TankCharacteristics;
+    }
+);
 
 export function CompareRow({
-  value,
-  name,
   display,
   deltaType = 'higherIsBetter',
   decimals,
   deltaNominalDisplay,
   indent,
   stats,
+  ...props
 }: CompareRowProps) {
+  const { strings } = useLocale();
   const mutateCompareEphemeral = CompareEphemeral.useMutation();
   const sorting = CompareEphemeral.use((state) => state.sorting);
   const deltaMode = ComparePersistent.use((state) => state.deltaMode);
   const values = stats.map((stat) =>
-    typeof value === 'function' ? value(stat)! : (stat[value] as number),
+    typeof props.value === 'function'
+      ? props.value(stat)!
+      : (stat[props.value] as number),
   );
+  const id = useRef(Math.random());
+  const name =
+    typeof props.value === 'string'
+      ? strings.website.tools.tankopedia.characteristics.values[props.value]
+      : props.name;
 
   return (
     <Table.Row>
@@ -51,7 +64,7 @@ export function CompareRow({
           gap={indent ? { initial: '4', sm: '6' } : { initial: '1', sm: '2' }}
         >
           <IconButton
-            color={sorting?.by === name ? undefined : 'gray'}
+            color={sorting?.by === id.current ? undefined : 'gray'}
             variant="ghost"
             onClick={() => {
               mutateCompareEphemeral((draft) => {
@@ -62,26 +75,26 @@ export function CompareRow({
                   const valueB = values[indexB];
 
                   return draft.sorting?.direction === 'ascending' &&
-                    draft.sorting.by === name
+                    draft.sorting.by === id.current
                     ? valueA - valueB
                     : valueB - valueA;
                 });
 
                 draft.sorting = {
-                  by: name,
+                  by: id.current,
                   direction:
                     draft.sorting?.direction === 'ascending' &&
-                    draft.sorting.by === name
+                    draft.sorting.by === id.current
                       ? 'descending'
                       : 'ascending',
                 };
               });
             }}
           >
-            {(sorting === undefined || sorting.by !== name) && (
+            {(sorting === undefined || sorting.by !== id.current) && (
               <CaretSortIcon style={{ transform: 'rotate(90deg)' }} />
             )}
-            {sorting?.by === name && (
+            {sorting?.by === id.current && (
               <>
                 {sorting.direction === 'ascending' && <CaretRightIcon />}
                 {sorting.direction === 'descending' && <CaretLeftIcon />}

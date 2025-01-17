@@ -1013,6 +1013,7 @@
             "power_to_weight_ratio": "Power to weight ratio",
             "hull_traverse_speed": "Hull traverse speed",
             "camouflage": "Camouflage",
+            "reload": "Reload",
 
             "crewCount": "Crew count",
             "shellNormalization": "Normalization",
@@ -1111,6 +1112,7 @@
         "button": "Compare tanks",
         "description": "Compare tank statistics",
         "seo_description": "Compare tanks statistics and loadouts in World of Tanks Blitz",
+
         "actions": {
           "add": {
             "button": "Add",
@@ -1124,9 +1126,31 @@
             "absolute": "Absolute"
           }
         },
+
         "no_tanks": {
           "title": "No tanks selected",
           "body": "Press the Add button to get started"
+        },
+
+        "table": {
+          "equipment": {
+            "clear": "Clear",
+            "apply_to_all": "Apply to all"
+          },
+          "skills": {
+            "clear": "Clear",
+            "maximize": "Maximize"
+          },
+          "modules": {
+            "stock": "Stock",
+            "upgrade": "Upgrade"
+          },
+          "provisions": {
+            "clear": "Clear"
+          },
+          "consumables": {
+            "clear": "Clear"
+          }
         }
       },
       "performance": {

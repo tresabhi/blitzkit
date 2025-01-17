@@ -44,7 +44,7 @@ export function CompareTable({ stats }: CompareTableProps) {
   const crewSkills = CompareEphemeral.use((state) => state.crewSkills);
   const members = CompareEphemeral.use((state) => state.members);
   const mutateCompareEphemeral = CompareEphemeral.useMutation();
-  const { unwrap } = useLocale();
+  const { unwrap, strings } = useLocale();
 
   return (
     <StickyTableRoot
@@ -142,7 +142,7 @@ export function CompareTable({ stats }: CompareTableProps) {
                         });
                       }}
                     >
-                      Clear
+                      {strings.website.tools.compare.table.skills.clear}
                     </Button>
                     <Button
                       variant="ghost"
@@ -154,7 +154,7 @@ export function CompareTable({ stats }: CompareTableProps) {
                         });
                       }}
                     >
-                      Maximize
+                      {strings.website.tools.compare.table.skills.maximize}
                     </Button>
                   </Flex>
                 </Popover.Content>
@@ -257,7 +257,7 @@ export function CompareTable({ stats }: CompareTableProps) {
                               });
                             }}
                           >
-                            Stock
+                            {strings.website.tools.compare.table.modules.stock}
                           </Button>
                           <Button
                             variant="ghost"
@@ -274,7 +274,10 @@ export function CompareTable({ stats }: CompareTableProps) {
                               });
                             }}
                           >
-                            Upgrade
+                            {
+                              strings.website.tools.compare.table.modules
+                                .upgrade
+                            }
                           </Button>
                         </Flex>
                       </Popover.Content>
@@ -357,7 +360,10 @@ export function CompareTable({ stats }: CompareTableProps) {
                                 });
                               }}
                             >
-                              Clear
+                              {
+                                strings.website.tools.compare.table.provisions
+                                  .clear
+                              }
                             </Button>
                           </Flex>
                         </Popover.Content>
@@ -441,7 +447,10 @@ export function CompareTable({ stats }: CompareTableProps) {
                                 });
                               }}
                             >
-                              Clear
+                              {
+                                strings.website.tools.compare.table.equipment
+                                  .clear
+                              }
                             </Button>
                             <Button
                               variant="ghost"
@@ -455,7 +464,10 @@ export function CompareTable({ stats }: CompareTableProps) {
                                 });
                               }}
                             >
-                              Apply to all
+                              {
+                                strings.website.tools.compare.table.equipment
+                                  .apply_to_all
+                              }
                             </Button>
                           </Flex>
                         </Popover.Content>
@@ -539,7 +551,10 @@ export function CompareTable({ stats }: CompareTableProps) {
                                 });
                               }}
                             >
-                              Clear
+                              {
+                                strings.website.tools.compare.table.consumables
+                                  .clear
+                              }
                             </Button>
                           </Flex>
                         </Popover.Content>

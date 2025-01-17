@@ -16,7 +16,7 @@ export function Body({ stats }: BodyProps) {
   const hasNonRegularGun = members.some(
     ({ gun }) => gun.gun_type!.$case !== 'regular',
   );
-  const { unwrap } = useLocale();
+  const { unwrap, strings } = useLocale();
   const mutateCompareEphemeral = CompareEphemeral.useMutation();
 
   return (
@@ -78,10 +78,10 @@ export function Body({ stats }: BodyProps) {
       </Table.Header>
 
       <Table.Body>
-        <CompareRow stats={stats} name="DPM" value="dpm" decimals={0} />
+        <CompareRow stats={stats} value="dpm" decimals={0} />
         <CompareRow
           stats={stats}
-          name="Reload"
+          name={strings.website.tools.tankopedia.characteristics.values.reload}
           deltaType="lowerIsBetter"
           value={(stats) =>
             stats.shellReload ??
@@ -98,90 +98,44 @@ export function Body({ stats }: BodyProps) {
           <>
             <CompareRow
               stats={stats}
-              name="Intra-clip"
               deltaType="lowerIsBetter"
               value="intraClip"
               decimals={2}
             />
-            <CompareRow
-              stats={stats}
-              name="Shells"
-              value="shells"
-              decimals={0}
-            />
+            <CompareRow stats={stats} value="shells" decimals={0} />
           </>
         )}
-        <CompareRow
-          stats={stats}
-          name="Penetration"
-          value="penetration"
-          decimals={0}
-        />
-        <CompareRow stats={stats} name="Damage" value="damage" decimals={0} />
+        <CompareRow stats={stats} value="penetration" decimals={0} />
+        <CompareRow stats={stats} value="damage" decimals={0} />
         {hasNonRegularGun && (
-          <CompareRow
-            stats={stats}
-            name="clipping potential"
-            indent
-            value="clipDamage"
-            decimals={0}
-          />
+          <CompareRow stats={stats} indent value="clipDamage" decimals={0} />
         )}
+        <CompareRow stats={stats} value="moduleDamage" decimals={0} />
+        <CompareRow stats={stats} value="caliber" decimals={0} />
+        <CompareRow stats={stats} value="shellNormalization" decimals={0} />
         <CompareRow
           stats={stats}
-          name="Module damage"
-          value="moduleDamage"
-          decimals={0}
-        />
-        <CompareRow stats={stats} name="Caliber" value="caliber" decimals={0} />
-        <CompareRow
-          stats={stats}
-          name="Normalization"
-          value="shellNormalization"
-          decimals={0}
-        />
-        <CompareRow
-          stats={stats}
-          name="Ricochet"
           value="shellRicochet"
           deltaType="lowerIsBetter"
           decimals={0}
         />
+        <CompareRow stats={stats} value="shellVelocity" decimals={0} />
+        <CompareRow stats={stats} value="shellRange" decimals={0} />
+        <CompareRow stats={stats} value="shellCapacity" decimals={0} />
         <CompareRow
           stats={stats}
-          name="Shell velocity"
-          value="shellVelocity"
-          decimals={0}
-        />
-        <CompareRow
-          stats={stats}
-          name="Shell range"
-          value="shellRange"
-          decimals={0}
-        />
-        <CompareRow
-          stats={stats}
-          name="Shell capacity"
-          value="shellCapacity"
-          decimals={0}
-        />
-        <CompareRow
-          stats={stats}
-          name="Aim time"
           value="aimTime"
           deltaType="lowerIsBetter"
           decimals={2}
         />
         <CompareRow
           stats={stats}
-          name="Dispersion"
           value="dispersion"
           deltaType="lowerIsBetter"
           decimals={3}
         />
         <CompareRow
           stats={stats}
-          name="moving"
           indent
           value="dispersionMoving"
           deltaType="lowerIsBetter"
@@ -189,7 +143,6 @@ export function Body({ stats }: BodyProps) {
         />
         <CompareRow
           stats={stats}
-          name="hull traversing"
           indent
           value="dispersionHullTraversing"
           deltaType="lowerIsBetter"
@@ -197,7 +150,6 @@ export function Body({ stats }: BodyProps) {
         />
         <CompareRow
           stats={stats}
-          name="turret traversing"
           indent
           value="dispersionTurretTraversing"
           deltaType="lowerIsBetter"
@@ -205,7 +157,6 @@ export function Body({ stats }: BodyProps) {
         />
         <CompareRow
           stats={stats}
-          name="shooting"
           indent
           value="dispersionShooting"
           deltaType="lowerIsBetter"
@@ -213,79 +164,42 @@ export function Body({ stats }: BodyProps) {
         />
         <CompareRow
           stats={stats}
-          name="gun damaged"
           indent
           value="dispersionGunDamaged"
           deltaType="lowerIsBetter"
           decimals={3}
         />
-        <CompareRow
-          stats={stats}
-          name="Gun depression"
-          value="gunDepression"
-          decimals={1}
-        />
-        <CompareRow
-          stats={stats}
-          name="elevation"
-          indent
-          value="gunElevation"
-          decimals={1}
-        />
+        <CompareRow stats={stats} value="gunDepression" decimals={1} />
+        <CompareRow stats={stats} indent value="gunElevation" decimals={1} />
       </Table.Body>
 
       <CompareSectionTitle>Maneuverability</CompareSectionTitle>
       <Table.Body>
+        <CompareRow stats={stats} value="speedForwards" decimals={0} />
+        <CompareRow stats={stats} indent value="speedBackwards" decimals={0} />
+        <CompareRow stats={stats} value="enginePower" decimals={0} />
+        <CompareRow stats={stats} value="weight" decimals={1} />
+        <CompareRow stats={stats} value="hardTerrainCoefficient" decimals={0} />
         <CompareRow
           stats={stats}
-          name="Speed forwards"
-          value="speedForwards"
-          decimals={0}
-        />
-        <CompareRow
-          stats={stats}
-          name="backwards"
-          indent
-          value="speedBackwards"
-          decimals={0}
-        />
-        <CompareRow
-          stats={stats}
-          name="Engine power"
-          value="enginePower"
-          decimals={0}
-        />
-        <CompareRow stats={stats} name="Weight" value="weight" decimals={1} />
-        <CompareRow
-          stats={stats}
-          name="Terrain coefficient"
-          value="hardTerrainCoefficient"
-          decimals={0}
-        />
-        <CompareRow
-          stats={stats}
-          name="medium terrain"
           indent
           value="mediumTerrainCoefficient"
           decimals={0}
         />
         <CompareRow
           stats={stats}
-          name="soft terrain"
           indent
           value="softTerrainCoefficient"
           decimals={0}
         />
         <CompareRow
           stats={stats}
-          name="Raw terrain coefficient"
           value="hardTerrainCoefficientRaw"
           deltaType="lowerIsBetter"
           decimals={2}
         />
         <CompareRow
           stats={stats}
-          name="medium terrain"
           indent
           value="mediumTerrainCoefficientRaw"
           deltaType="lowerIsBetter"
@@ -293,7 +207,6 @@ export function Body({ stats }: BodyProps) {
         />
         <CompareRow
           stats={stats}
-          name="soft terrain"
           indent
           value="softTerrainCoefficientRaw"
           deltaType="lowerIsBetter"
@@ -301,46 +214,35 @@ export function Body({ stats }: BodyProps) {
         />
         <CompareRow
           stats={stats}
-          name="Power to weight ratio"
           value="powerToWeightRatioHardTerrain"
           decimals={1}
         />
         <CompareRow
           stats={stats}
-          name="medium terrain"
           indent
           value="powerToWeightRatioMediumTerrain"
           decimals={1}
         />
         <CompareRow
           stats={stats}
-          name="soft terrain"
           indent
           value="powerToWeightRatioSoftTerrain"
           decimals={1}
         />
+        <CompareRow stats={stats} value="turretTraverseSpeed" decimals={1} />
         <CompareRow
           stats={stats}
-          name="Turret traverse speed"
-          value="turretTraverseSpeed"
-          decimals={1}
-        />
-        <CompareRow
-          stats={stats}
-          name="Traverse speed"
           value="hullTraverseHardTerrain"
           decimals={1}
         />
         <CompareRow
           stats={stats}
-          name="medium terrain"
           indent
           value="hullTraverseMediumTerrain"
           decimals={1}
         />
         <CompareRow
           stats={stats}
-          name="soft terrain"
           indent
           value="hullTraverseSoftTerrain"
           decimals={1}
@@ -349,31 +251,23 @@ export function Body({ stats }: BodyProps) {
 
       <CompareSectionTitle>Survivability</CompareSectionTitle>
       <Table.Body>
-        <CompareRow stats={stats} name="Health" value="health" decimals={0} />
+        <CompareRow stats={stats} value="health" decimals={0} />
         <CompareRow
           stats={stats}
-          name="Fire chance"
           value="fireChance"
           deltaType="lowerIsBetter"
           display={(stats) => (stats.fireChance * 100).toFixed(0)}
           deltaNominalDisplay={(delta) => (delta * 100).toFixed(0)}
         />
+        <CompareRow stats={stats} value="viewRange" decimals={0} />
         <CompareRow
           stats={stats}
-          name="View range"
-          value="viewRange"
-          decimals={0}
-        />
-        <CompareRow
-          stats={stats}
-          name="Camouflage"
           value="camouflageStill"
           display={(stats) => (stats.camouflageStill * 100).toFixed(2)}
           deltaNominalDisplay={(delta) => (delta * 100).toFixed(2)}
         />
         <CompareRow
           stats={stats}
-          name="moving"
           indent
           value="camouflageMoving"
           display={(stats) => (stats.camouflageMoving * 100).toFixed(2)}
@@ -381,7 +275,6 @@ export function Body({ stats }: BodyProps) {
         />
         <CompareRow
           stats={stats}
-          name="shooting"
           indent
           value="camouflageShootingStill"
           display={(stats) => (stats.camouflageShootingStill * 100).toFixed(2)}
@@ -389,7 +282,6 @@ export function Body({ stats }: BodyProps) {
         />
         <CompareRow
           stats={stats}
-          name="shooting & moving"
           indent
           value="camouflageShootingMoving"
           display={(stats) => (stats.camouflageShootingMoving * 100).toFixed(2)}
@@ -397,7 +289,6 @@ export function Body({ stats }: BodyProps) {
         />
         <CompareRow
           stats={stats}
-          name="caught on fire"
           indent
           value="camouflageCaughtOnFire"
           display={(stats) => (stats.camouflageCaughtOnFire * 100).toFixed(2)}
@@ -405,14 +296,12 @@ export function Body({ stats }: BodyProps) {
         />
         <CompareRow
           stats={stats}
-          name="Volume"
           value="volume"
           deltaType="lowerIsBetter"
           decimals={1}
         />
         <CompareRow
           stats={stats}
-          name="width"
           indent
           value="width"
           deltaType="lowerIsBetter"
@@ -420,7 +309,6 @@ export function Body({ stats }: BodyProps) {
         />
         <CompareRow
           stats={stats}
-          name="height"
           indent
           value="height"
           deltaType="lowerIsBetter"
@@ -428,7 +316,6 @@ export function Body({ stats }: BodyProps) {
         />
         <CompareRow
           stats={stats}
-          name="length"
           indent
           value="length"
           deltaType="lowerIsBetter"
