@@ -1,13 +1,13 @@
 {
   "test": {
-    "default": "test",
-    "long": "This is a long test string. You MUST NEVER see this in the UI. My favorite fruit is %s1 because it has the color of %s2. I like it so much that I will say its name 3 times! %s1! %s1! %s1! Once again, it's %s2, not %s3.",
-    "fox": "The quick brown fox jumps over the lazy dog."
+    "default": "тест",
+    "long": "Это длинная тестовая строка. Вы, ДОЛЖНО быть, никогда не увидите этого в интерфейсе. Мой любимый фрукт — %s1, потому что у него цвет %s2. Он мне так нравится, что я повторю его название 3 раза! %s1! %s1! %s1! Еще раз, это %s2, а не %s3.",
+    "fox": "Съешь же ещё этих мягких французских булок, да выпей чаю."
   },
   "common": {
     "units": {
-      "m": "%s1m",
-      "mm": "%s1mm",
+      "m": "%s1м",
+      "mm": "%s1мм",
       "deg": "%s1°",
       "hp": "%s1hp",
       "x": "x%s1"
@@ -18,36 +18,36 @@
       "regular": "Regular"
     },
     "shells": {
-      "ap": "AP",
-      "apcr": "APCR",
-      "heat": "HEAT",
-      "he": "HE"
+      "ap": "ББ",
+      "apcr": "КС",
+      "heat": "КС",
+      "he": "Фугас"
     },
     "player_count_period": {
-      "total": "Total",
-      "d_120": "Past 120 days",
-      "d_90": "Past 90 days",
-      "d_60": "Past 60 days",
-      "d_30": "Past month",
-      "d_7": "Past week",
-      "d_1": "Yesterday"
+      "total": "Всего",
+      "d_120": "За последние 120 дней",
+      "d_90": "За последние 90 дней",
+      "d_60": "За последние 60 дней",
+      "d_30": "За последний месяц",
+      "d_7": "За неделю",
+      "d_1": "Вчера"
     },
     "branches": {
       "local": "dev",
-      "dev": "beta",
-      "opentest": "opentest",
-      "preview": "preview"
+      "dev": "бета",
+      "opentest": "открытый тест",
+      "preview": "превью"
     },
     "locales": {
-      "en": "English",
-      "es": "Spanish",
-      "pt": "Portuguese",
-      "ru": "Russian",
-      "uk": "Ukrainian",
-      "zh": "Chinese",
-      "ja": "Japanese",
-      "fr": "French",
-      "pl": "Polish"
+      "en": "Английский",
+      "es": "Испанский",
+      "pt": "Португальский",
+      "ru": "Русский",
+      "uk": "Украинский",
+      "zh": "Китайский",
+      "ja": "Японский",
+      "fr": "Французский",
+      "pl": "Польский"
     },
     "wn8_percentile": {
       "0": "Очень плохо",
@@ -98,9 +98,9 @@
     },
     "tank_class_short": {
       "-1": "неизвестно",
-      "0": "Лёгкий",
-      "1": "Средний",
-      "2": "Тяжёлый",
+      "0": "Лёгкий танк",
+      "1": "Средний танк",
+      "2": "Тяжёлый танк",
       "3": "ПТ-САУ"
     },
     "tank_class_short_plural_lowercase": {
@@ -111,9 +111,9 @@
     },
     "tank_class_medium": {
       "-1": "неизвестно",
-      "0": "Лёгкий",
-      "1": "Средний",
-      "2": "Тяжёлый",
+      "0": "Лёгкий танк",
+      "1": "Средний танк",
+      "2": "Тяжёлый танк",
       "3": "ПТ-САУ"
     },
     "tree_type": {
@@ -198,21 +198,21 @@
       "wn8": {
         "name": "WN8",
         "types": {
-          "very_bad": "Very bad",
-          "bad": "Bad",
-          "below_average": "Below average",
-          "average": "Average",
-          "above_average": "Above average",
-          "good": "Good",
-          "very_good": "Very good",
-          "great": "Great",
-          "unicum": "Unicum",
-          "super_unicum": "Super unicum"
+          "very_bad": "Очень плохо",
+          "bad": "Плохо",
+          "below_average": "Ниже среднего",
+          "average": "Средне",
+          "above_average": "Выше среднего",
+          "good": "Хорошо",
+          "very_good": "Очень хорошо",
+          "great": "Отлично",
+          "unicum": "Уникально",
+          "super_unicum": "Крайне уникально"
         }
       },
       "subcommands": {
         "today": {
-          "name": "today",
+          "name": "cегодня",
           "description": "Cегодня"
         },
         "30": {
@@ -228,19 +228,19 @@
           "description": "90 дней"
         },
         "career": {
-          "name": "career",
+          "name": "карьера",
           "description": "Карьера"
         },
         "custom": {
-          "name": "custom",
+          "name": "пользовательский",
           "description": "Собственный диапазон",
           "options": {
             "start": {
-              "name": "start",
+              "name": "начало",
               "description": "Начать через несколько дней с сегодняшнего дня"
             },
             "end": {
-              "name": "end",
+              "name": "конец",
               "description": "Закончить через несколько дней с сегодняшнего дня"
             }
           }
@@ -248,37 +248,37 @@
       },
       "options": {
         "clan": {
-          "name": "clan",
+          "name": "клан",
           "description": "Название или тег клана"
         },
         "tank": {
-          "name": "tank",
+          "name": "танк",
           "description": "Танк для получения статистики для"
         },
         "username": {
-          "name": "username",
+          "name": "ник",
           "description": "Blitz никнейм игрока"
         },
         "filters": {
           "nation": {
-            "name": "nation",
+            "name": "нация",
             "description": "Нация"
           },
           "class": {
-            "name": "class",
+            "name": "класс",
             "description": "Класс"
           },
           "type": {
-            "name": "type",
+            "name": "тип",
             "description": "Тип"
           }
         },
         "region": {
-          "name": "region",
+          "name": "регион",
           "description": "Регион"
         },
         "tier": {
-          "name": "tier",
+          "name": "уровень",
           "description": "Уровень",
           "choices": {
             "tier": "Уровень %s - %s"
@@ -625,15 +625,15 @@
         }
       },
       "rating": {
-        "name": "rating",
+        "name": "рейтинг",
         "description": "Статистика рейтинга игрока",
         "subcommands": {
           "today": {
-            "name": "today",
+            "name": "cегодня",
             "description": "Статистика рейтинга за сегодня"
           },
           "season": {
-            "name": "season",
+            "name": "сезон",
             "description": "Статистика рейтинга в этом сезоне"
           }
         },
@@ -652,38 +652,38 @@
   },
   "website": {
     "settings": {
-      "dev_mode": "Development mode",
-      "language": "Language"
+      "dev_mode": "Режим разработчика",
+      "language": "Язык"
     },
     "common": {
       "player_search": {
-        "hint": "Search players...",
-        "no_results": "No results",
-        "searching": "Searching..."
+        "hint": "Поиск игроков...",
+        "no_results": "Ничего не найденo",
+        "searching": "Поиск..."
       },
       "copy_button": {
-        "copied": "Copied!"
+        "copied": "Скопировано!"
       },
       "tank_search": {
-        "search_bar_hint": "Search tanks...",
-        "recent": "Recently viewed",
-        "select_all": "Select all",
-        "count_singular": "1 tank",
-        "count_plural": "%s1 tanks",
-        "sorting_by": "Sorting by %s1",
+        "search_bar_hint": "Поиск танков...",
+        "recent": "Недавние",
+        "select_all": "Выбрать всё",
+        "count_singular": "1 танк",
+        "count_plural": "%s1 танк",
+        "sorting_by": "Сортировать по %s1",
         "no_tanks_found": {
-          "body": "No tanks found.",
-          "search_again": "Try searching again.",
-          "clear_filters": "Try clearing filters."
+          "body": "Танков не найдено.",
+          "search_again": "Попробуйте повторить поиск.",
+          "clear_filters": "Попробуйте очистить фильтры."
         },
         "sort": {
-          "meta.none": "none",
-          "survivability.health": "health",
-          "survivability.viewRange": "view range",
-          "survivability.camouflageStill": "camouflage still",
-          "survivability.camouflageMoving": "camouflage moving",
-          "survivability.camouflageShooting": "camouflage shooting",
-          "survivability.volume": "volume",
+          "meta.none": "нет",
+          "survivability.health": "прочность",
+          "survivability.viewRange": "обзор",
+          "survivability.camouflageStill": "маскировка без движения корпуса",
+          "survivability.camouflageMoving": "маскировка в движении",
+          "survivability.camouflageShooting": "маскировка при выстреле",
+          "survivability.volume": "громкость",
           "survivability.length": "length",
           "fire.dpm": "standard DPM",
           "fire.dpmPremium": "premium DPM",
