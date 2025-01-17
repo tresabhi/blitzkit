@@ -13,15 +13,15 @@
       "x": "x%s1"
     },
     "gun_types": {
-      "auto_loader": "Система заряжения",
-      "auto_reloader": "Система дозарядки",
-      "regular": "Цикл"
+      "auto_loader": "Барабан",
+      "auto_reloader": "Барабан с дозарядкой",
+      "regular": "Стандартное"
     },
     "shells": {
       "ap": "ББ",
       "apcr": "КС",
       "heat": "КС",
-      "he": "Фугас"
+      "he": "ФС"
     },
     "player_count_period": {
       "total": "Всего",
@@ -746,7 +746,7 @@
     },
     "tools": {
       "tankopedia": {
-        "name": "Tankopedia",
+        "name": "Такнопедия",
         "button": "Найти танки",
         "description": "Танковая энциклопедия Blitz",
         "seo_description": "Статистика, броня и многое другое по всем танкам World of Tanks Blitz",
@@ -787,14 +787,14 @@
               "reset": "Сброс"
             },
             "advanced": "Продвинутая подсветка",
-            "shooter": "Shooter:",
+            "shooter": "Стреляет:",
             "shot_card": {
               "element": {
                 "primary": "Primary",
                 "spaced": "Spaced",
                 "external": "External",
                 "gap": "Gap",
-                "gun": "Gun",
+                "gun": "Орудие",
                 "track": "Tracks"
               },
               "status": {
@@ -848,11 +848,11 @@
           "route": "Ветка %s1 из %s2"
         },
         "game_modes": {
-          "title": "Способности игрового режима"
+          "title": "Способности в игровых режимах"
         },
         "review": {
           "title": "Видео обзоры",
-          "disclaimer": "BlitzKit не несёт ответственность ни за видео обзор.",
+          "disclaimer": "BlitzKit не несёт ответственность за видео обзоры.",
           "join": "Apply to %s1 YouTuber program"
         },
         "configuration": {
@@ -867,7 +867,7 @@
             "clear": "Очистить"
           },
           "provisions": {
-            "title": "Provisions",
+            "title": "Амуниция",
             "clear": "Очистить"
           },
           "consumables": {
@@ -878,7 +878,7 @@
           "skills": {
             "title": "Навыки экипажа",
             "clear": "Очистить",
-            "maximize": "Максимум",
+            "maximize": "Макс.",
             "info": "Желтые навыки применяются только при особых условиях. Удерживайте пробел, чтобы быстро переключаться между уровнями 0 и 7."
           },
           "miscellaneous": {
@@ -890,8 +890,8 @@
           "compare": {
             "label": "Сравнивать с",
             "class": "Tier %s1 %s2",
-            "tier": "All of tier %s1",
-            "all": "All tanks"
+            "tier": "Все %s1 уровня",
+            "all": "Все танки"
           },
           "values": {
             "shell_index": "Shell %s1",
@@ -904,7 +904,7 @@
             "raw_terrain_coefficients": "Raw terrain coefficients",
             "power_to_weight_ratio": "Power to weight ratio",
             "hull_traverse_speed": "Hull traverse speed",
-            "camouflage": "Камуфляж",
+            "camouflage": "Маскировка",
             "reload": "Reload",
             "crewCount": "Экипаж",
             "shellNormalization": "Нормализация",
@@ -956,7 +956,7 @@
             "hullTraverseHardTerrain": "Hard",
             "hullTraverseMediumTerrain": "Medium",
             "hullTraverseSoftTerrain": "Soft",
-            "health": "Health",
+            "health": "Прочность",
             "fireChance": "Fire chance",
             "viewRange": "View range",
             "camouflageStill": "Still",
@@ -970,7 +970,7 @@
             "volume": "Volume",
             "shellRange": "Shell range",
             "shellCapacity": "Shell capacity",
-            "gunType": "Gun type",
+            "gunType": "Тип орудия",
             "penetrationAt250m": "Пробитие на 250м"
           }
         },
@@ -978,31 +978,31 @@
           "title": "Огневая мощь"
         },
         "crew": {
-          "title": "Crew training",
-          "info": "represents the other roles a crew member can take.",
-          "count": "Crew count",
-          "commander": "Commander",
-          "gunner": "Gunner",
-          "driver": "Driver",
-          "radioman": "Radioman",
-          "loader": "Loader"
+          "title": "Мастерство экипажа",
+          "info": "обозначает другие роли, которые может взять член экипажа.",
+          "count": "Количество экипажа",
+          "commander": "Командир",
+          "gunner": "Заряжающий",
+          "driver": "Механик-водитель",
+          "radioman": "Радист",
+          "loader": "Заряжающий"
         },
         "maneuverability": {
-          "title": "Maneuverability"
+          "title": "Маневренность"
         },
         "survivability": {
           "title": "Survivability"
         }
       },
       "compare": {
-        "name": "Compare",
-        "button": "Compare tanks",
-        "description": "Compare tank statistics",
+        "name": "Сравнение",
+        "button": "Сравнить танки",
+        "description": "Сравнить статистику танков",
         "seo_description": "Compare tanks statistics and loadouts in World of Tanks Blitz",
         "actions": {
           "add": {
-            "button": "Add",
-            "title": "Add tanks",
+            "button": "Добавить",
+            "title": "Добавить танки",
             "description": "Select tanks to add to comparison"
           },
           "clear": "Clear",
@@ -1019,7 +1019,7 @@
         "table": {
           "equipment": {
             "clear": "Clear",
-            "apply_to_all": "Apply to all"
+            "apply_to_all": "Применить ко всем"
           },
           "skills": {
             "clear": "Clear",
@@ -1030,7 +1030,7 @@
             "upgrade": "Upgrade"
           },
           "provisions": {
-            "clear": "Clear"
+            "clear": "Очистить"
           },
           "consumables": {
             "clear": "Clear"
@@ -1075,8 +1075,8 @@
       "gallery": {
         "name": "Галерея",
         "button": "Browse all",
-        "description": "Blitz player avatars",
-        "seo_description": "All World of Tanks Blitz player avatars",
+        "description": "Аватары игрока Blitz",
+        "seo_description": "Все аватары игрока World of Tanks Blitz",
         "last_updated": "Last updated on %s1",
         "search": {
           "hint": "Search avatars...",
