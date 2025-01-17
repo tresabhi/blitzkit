@@ -6,7 +6,7 @@
   },
   "common": {
     "units": {
-      "m": "%s1m",
+      "m": "",
       "mm": "%s1mm",
       "deg": "%s1°",
       "hp": "%s1hp",
