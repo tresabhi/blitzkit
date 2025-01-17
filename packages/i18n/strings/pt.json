@@ -25,12 +25,12 @@
     },
     "player_count_period": {
       "total": "Total",
-      "d_120": "Past 120 days",
-      "d_90": "Past 90 days",
-      "d_60": "Past 60 days",
-      "d_30": "Past month",
-      "d_7": "Past week",
-      "d_1": "Yesterday"
+      "d_120": "Últimos 120 dias",
+      "d_90": "Últimos 90 dias",
+      "d_60": "Últimos 60 dias",
+      "d_30": "Último mês",
+      "d_7": "Última semana",
+      "d_1": "Ontem"
     },
     "branches": {
       "local": "dev",
@@ -39,7 +39,7 @@
       "preview": "preview"
     },
     "locales": {
-      "en": "English",
+      "en": "Inglês",
       "es": "Espanhol",
       "pt": "Portuguese",
       "ru": "Russo",
@@ -174,8 +174,8 @@
       "cumulative_spotted": "Total de detecções",
       "cumulative_survived_battles": "Batalhas sobrevividas",
       "cumulative_win_and_survived": "Batalhas ganhas e sobrevividas",
-      "cumulative_wins": "Wins",
-      "cumulative_xp": "Total XP",
+      "cumulative_wins": "Vitórias",
+      "cumulative_xp": "XP total",
       "cumulative_wn8": "WN8",
       "cumulative_battle_life_time": "Tempo de batalha total"
     }
@@ -185,12 +185,12 @@
       "errors": {
         "clan_not_found": "# Could not find clan\nCouldn't find \"%s\". Try selecting a clan from the search result.",
         "player_not_found": "# Could not find user\nI couldn't find user \"%s\". Try picking an user from the search result, typing in a valid username, or using the `/link` command.",
-        "player_not_linked": "# Use `/link` to get started\nI don't know who you are but you can tell me today!",
+        "player_not_linked": "Digite \"/link\" para começar.\nEu posso não saber quem é você, mas pode-me dizer hoje sobre isso!",
         "tank_name_not_found": "# Tank not found\nCould not find tank by the name \"%s\".",
         "tank_id_not_found": "# Tank not found\nCould not find tank by the ID \"%s\". Try typing the name of the tank instead of a number.",
-        "no_tank_stats": "# No tank stats available\nThis player doesn't have any stats available. This may not be the player you are looking for.",
-        "get_help": "Help Discord server",
-        "uncaught_error": "# BlitzKit ran into an error!\nWe're so sorry about this. Feel free to [join the official Discord server](https://discord.gg/nDt7AjGJQH) to get help.",
+        "no_tank_stats": "# Nenhuma estatística de tanques disponível\nEsse jogador não tem as suas estatísticas disponíveis. Talvez esse pode não ser o jogador que procura.",
+        "get_help": "Servidor de Ajuda no Discord",
+        "uncaught_error": "# O BlitzKit apresentou um erro!\nSentimos muito por isso. Sinta-se a vontade para [entrar no servidor oficial no Discord]\n(https://discord.gg/nDt7AjGJQH) para conseguir ajuda.",
         "preview": "# This command is in preview\n\nYou can only access this command in [the official Discord server](https://discord.gg/nDt7AjGJQH). The command will be generally available soon.",
         "query_too_small": "# Your search is too short\nYour search must be at least 3 characters long.",
         "query_too_long": "# Your search is too long\nYour search must be at most 100 characters long."
