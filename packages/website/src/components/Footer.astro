@@ -4,6 +4,7 @@ import { DEFAULT_LOCALE } from '@blitzkit/i18n';
 import { Box, Code, Flex, Heading, Link, Text } from '@radix-ui/themes';
 import packageJson from '../../../../package.json';
 import { getStrings } from '../core/i18n/getStrings';
+import { LinkI18n } from './LinkI18n';
 import { LocaleSwitcherThemeWrapper } from './LocaleSwitcher';
 
 const gameDefinitions = await fetchGameDefinitions();
@@ -78,9 +79,9 @@ const strings = getStrings(locale);
             sm: 'start',
           }}
         >
-          <Link href="/docs/about/credits" color="gray">
+          <LinkI18n {locale} href="/docs/about/credits" color="gray">
             {strings.website.footer.about.credits}
-          </Link>
+          </LinkI18n>
           <Link
             href="https://discord.gg/nDt7AjGJQH"
             target="_blank"
@@ -95,9 +96,9 @@ const strings = getStrings(locale);
           >
             {strings.website.footer.about.github}
           </Link>
-          <Link href="/docs/patches" color="gray">
+          <LinkI18n {locale} href="/docs/patches" color="gray">
             {strings.website.footer.about.patches}
-          </Link>
+          </LinkI18n>
         </Flex>
       </Flex>
 
@@ -115,12 +116,12 @@ const strings = getStrings(locale);
       >
         <Heading size="3">{strings.website.footer.legal.title}</Heading>
         <Flex direction="column">
-          <Link href="/docs/legal/privacy-policy" color="gray">
+          <LinkI18n {locale} href="/docs/legal/privacy-policy" color="gray">
             {strings.website.footer.legal.privacy}
-          </Link>
-          <Link href="/docs/legal/terms-of-service" color="gray">
+          </LinkI18n>
+          <LinkI18n {locale} href="/docs/legal/terms-of-service" color="gray">
             {strings.website.footer.legal.terms}
-          </Link>
+          </LinkI18n>
         </Flex>
       </Flex>
     </Flex>
