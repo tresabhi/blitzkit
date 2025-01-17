@@ -39,6 +39,8 @@ env:
   PUBLIC_WARGAMING_APPLICATION_ID: ${{ secrets.PUBLIC_WARGAMING_APPLICATION_ID }}
   PUBLIC_ASSET_REPO: ${{ secrets.PUBLIC_ASSET_REPO }}
   PUBLIC_ASSET_BRANCH: ${{ github.event.inputs.cdn_branch || secrets.PUBLIC_ASSET_BRANCH }}
+  WOTB_GLOSSARY_DOMAIN: ${{ secrets.WOTB_GLOSSARY_DOMAIN }}
+  WOTB_GLOSSARY_PATH: ${{ secrets.WOTB_GLOSSARY_PATH }}
 
 jobs:
   download_client:
