@@ -1,53 +1,53 @@
 {
   "test": {
     "default": "test",
-    "long": "This is a long test string. You MUST NEVER see this in the UI. My favorite fruit is %s1 because it has the color of %s2. I like it so much that I will say its name 3 times! %s1! %s1! %s1! Once again, it's %s2, not %s3.",
-    "fox": "The quick brown fox jumps over the lazy dog."
+    "long": "Esta es una cadena de prueba larga. NO DEBES verla NUNCA en la interfaz de usuario. Mi fruta favorita es %s1 porque tiene el color %s2. ¡Me gusta tanto que diré su nombre 3 veces! ¡ %s1! ¡ %s1! ¡ %s1! Una vez más, es %s2, no %s3.",
+    "fox": "El rápido zorro marrón salta sobre el perro perezoso."
   },
   "common": {
     "units": {
       "m": "%s1m",
       "mm": "%s1mm",
       "deg": "%s1°",
-      "hp": "%s1hp",
+      "hp": "%s1pv",
       "x": "x%s1"
     },
     "gun_types": {
-      "auto_loader": "Auto loader",
-      "auto_reloader": "Auto reloader",
+      "auto_loader": "Auto cargador",
+      "auto_reloader": "Auto recargador",
       "regular": "Regular"
     },
     "shells": {
       "ap": "AP",
       "apcr": "APCR",
-      "heat": "HEAT",
-      "he": "HE"
+      "heat": "AEAC",
+      "he": "AE"
     },
     "player_count_period": {
       "total": "Total",
-      "d_120": "Past 120 days",
-      "d_90": "Past 90 days",
-      "d_60": "Past 60 days",
-      "d_30": "Past month",
-      "d_7": "Past week",
-      "d_1": "Yesterday"
+      "d_120": "Últimos 120 días",
+      "d_90": "Últimos 90 días",
+      "d_60": "Últimos 60 días",
+      "d_30": "El mes pasado",
+      "d_7": "La semana pasada",
+      "d_1": "Ayer"
     },
     "branches": {
-      "local": "dev",
-      "dev": "beta",
-      "opentest": "opentest",
-      "preview": "preview"
+      "local": "DEV",
+      "dev": "Beta",
+      "opentest": "Prueba Abierta",
+      "preview": "Avance"
     },
     "locales": {
-      "en": "English",
-      "es": "Spanish",
-      "pt": "Portuguese",
-      "ru": "Russian",
-      "uk": "Ukrainian",
-      "zh": "Chinese",
-      "ja": "Japanese",
-      "fr": "French",
-      "pl": "Polish"
+      "en": "Ingles",
+      "es": "Español",
+      "pt": "Portugués",
+      "ru": "Ruso",
+      "uk": "Ucraniano",
+      "zh": "Chino",
+      "ja": "Japones",
+      "fr": "Francés",
+      "pl": "Polaco"
     },
     "wn8_percentile": {
       "0": "Muy malo",
@@ -131,7 +131,7 @@
       "short": {
         "com": "NA",
         "eu": "Europa",
-        "asia": "APAC"
+        "asia": "APAC - ASIA"
       }
     },
     "leagues": {
@@ -163,7 +163,7 @@
       "cumulative_damage_ratio": "Relación de daño",
       "cumulative_damage_received": "Daño total recibido",
       "cumulative_deaths": "Muertes totales",
-      "cumulative_dropped_capture_points": "Total dropped capture points",
+      "cumulative_dropped_capture_points": "Total de puntos de captura perdidos",
       "cumulative_frags": "Bajas totales",
       "cumulative_hits": "Aciertos totales",
       "cumulative_inaccuracy": "Imprecisión",
@@ -171,7 +171,7 @@
       "cumulative_losses": "Derrotas",
       "cumulative_misses": "Fallos totales",
       "cumulative_shots": "Disparos totales",
-      "cumulative_spotted": "Total spots",
+      "cumulative_spotted": "Total de tanques detectados",
       "cumulative_survived_battles": "Batallas sobrevividas",
       "cumulative_win_and_survived": "Batallas ganadas y sobrevividas",
       "cumulative_wins": "Victorias",
@@ -198,21 +198,21 @@
       "wn8": {
         "name": "WN8",
         "types": {
-          "very_bad": "Very bad",
-          "bad": "Bad",
-          "below_average": "Below average",
-          "average": "Average",
-          "above_average": "Above average",
-          "good": "Good",
-          "very_good": "Very good",
-          "great": "Great",
+          "very_bad": "Muy Malo",
+          "bad": "Malo",
+          "below_average": "Debajo del Promedio",
+          "average": "Promedio",
+          "above_average": "Superior al Promedio",
+          "good": "Bueno",
+          "very_good": "Muy Bueno",
+          "great": "Excelente",
           "unicum": "Unicum",
-          "super_unicum": "Super unicum"
+          "super_unicum": "Super Unicum"
         }
       },
       "subcommands": {
         "today": {
-          "name": "today",
+          "name": "Hoy",
           "description": "Hoy"
         },
         "30": {
@@ -228,19 +228,19 @@
           "description": "90 días"
         },
         "career": {
-          "name": "career",
+          "name": "carrera",
           "description": "Carrera"
         },
         "custom": {
-          "name": "custom",
+          "name": "personalizado",
           "description": "Rango personalizado",
           "options": {
             "start": {
-              "name": "start",
+              "name": "comenzar",
               "description": "Comenzar en cantidad de días pasados desde hoy"
             },
             "end": {
-              "name": "end",
+              "name": "fin",
               "description": "Terminar en cantidad de días pasados desde hoy"
             }
           }
@@ -252,29 +252,29 @@
           "description": "El nombre o etiqueta del clan"
         },
         "tank": {
-          "name": "tank",
+          "name": "tanque",
           "description": "El tanque al cual conseguirle estadísticas"
         },
         "username": {
-          "name": "username",
+          "name": "nombre de usuario",
           "description": "El nombre de usuario de Blitz"
         },
         "filters": {
           "nation": {
-            "name": "nation",
+            "name": "nación",
             "description": "Nación"
           },
           "class": {
-            "name": "class",
+            "name": "clase",
             "description": "Clase"
           },
           "type": {
-            "name": "type",
+            "name": "tipo",
             "description": "Tipo"
           }
         },
         "region": {
-          "name": "region",
+          "name": "región",
           "description": "Región"
         },
         "tier": {
@@ -317,7 +317,7 @@
     },
     "commands": {
       "auction": {
-        "name": "auction",
+        "name": "subasta",
         "description": "Tanques disponibles ahora mismo en la subasta",
         "body": {
           "title": "Subasta Blitz",
@@ -333,19 +333,19 @@
         }
       },
       "replay": {
-        "name": "replay",
-        "description": "Display replay results"
+        "name": "repetición",
+        "description": "Mostrar resultados de la repetición"
       },
       "research": {
-        "name": "research",
+        "name": "desarollar",
         "description": "Enumera los gastos por investigar una línea",
         "options": {
           "target_tank": {
-            "name": "target-tank",
+            "name": "tanque objetivo",
             "description": "El último tanque a investigar en la línea"
           },
           "starting_tank": {
-            "name": "starting-tank",
+            "name": "tanque de inicio",
             "description": "El tanque inicial en la línea (se deduce automáticamente si no se proporciona)"
           }
         },
@@ -368,11 +368,11 @@
         }
       },
       "about": {
-        "name": "about",
+        "name": "acerca",
         "description": "Toda la información que necesitas sobre el bot",
         "subcommands": {
           "commands": {
-            "name": "commands",
+            "name": "comandos",
             "description": "Lista de todos los comandos y sus descripciones",
             "body": "# Comandos\n\nBlitzKit ofrece los siguientes comandos:\n\n"
           },
@@ -381,25 +381,25 @@
             "description": "Cómo funcionan los embeds"
           },
           "introduction": {
-            "name": "introduction",
+            "name": "introducción",
             "description": "Sobre el bot"
           },
           "invite": {
-            "name": "invite",
+            "name": "invitar",
             "description": "Cómo invitar al bot"
           },
           "timezones": {
-            "name": "timezones",
+            "name": "zonas horarias",
             "description": "Cómo Blitzkrieg infiere y utiliza tu zona horaria"
           },
           "credits": {
-            "name": "credits",
+            "name": "créditos",
             "description": "Personas que han ayudado a BlitzKit"
           }
         }
       },
       "breakdown": {
-        "name": "breakdown",
+        "name": "resumen",
         "description": "Resumen de un período por tanques jugados",
         "body": {
           "total": "Total",
@@ -411,38 +411,38 @@
         }
       },
       "debug": {
-        "name": "debug",
+        "name": "depurar",
         "description": "Muestra más información sobre el bot",
         "body": {
           "title": "# Depuración\n\n",
           "version": "Versión",
           "shard": {
-            "label": "Shard",
+            "label": "Fragmentar",
             "default": "predeterminado"
           },
           "uptime": "Tiempo en línea"
         }
       },
       "evolution": {
-        "name": "evolution",
+        "name": "evolución",
         "description": "Evolución de estadísticas",
         "groups": {
           "player": {
-            "name": "player",
+            "name": "jugador",
             "description": "Estadísticas del jugador"
           },
           "tank": {
-            "name": "tank",
+            "name": "tanque",
             "description": "Estadísticas del tanque"
           }
         }
       },
       "inactive": {
-        "name": "inactive",
+        "name": "inactivo",
         "description": "Enumera a todos los jugadores inactivos en un clan por encima de un umbral",
         "options": {
           "threshold": {
-            "name": "threshold",
+            "name": "umbral",
             "description": "El número de días inactivo (predeterminado: %s días)"
           }
         },
@@ -452,31 +452,31 @@
         }
       },
       "full_stats": {
-        "name": "full-stats",
+        "name": "estadísticas completas",
         "description": "Estadísticas completas del juego",
         "body": {
           "cards": {
             "games": {
-              "title": "Games",
+              "title": "Partidas",
               "winrate": "Tasa de victorias",
               "battles": "Batallas",
               "wins_losses": "Victorias / derrotas"
             },
             "efficiency": {
-              "title": "Efficiency",
+              "title": "Eficiencia",
               "wn8": "WN8",
               "survival": "Supervivencia",
               "accuracy": "Precisión"
             },
             "lethality": {
-              "title": "Lethality",
+              "title": "Letalidad",
               "average_damage": "Daño promedio",
               "damage_per_tier": "Daño por nivel",
               "damage_ratio": "Relación de daño",
               "average_kills": "Promedio de bajas"
             },
             "miscellaneous": {
-              "title": "Miscellaneous",
+              "title": "Misceláneo",
               "average_tier": "Nivel promedio",
               "average_spots": "Promedio de detecciones",
               "average_xp": "Promedio de XP",
@@ -486,12 +486,12 @@
         }
       },
       "link": {
-        "name": "link",
+        "name": "vincular",
         "description": "Vincula tu cuenta de Blitz y Discord",
         "body": {
           "accounts_linked": "Cuentas vinculadas",
           "no_role_permissions": {
-            "title": "%s1 failed to verify",
+            "title": "%s1 no se pudo verificar",
             "description": "No tengo permiso para administrar roles."
           }
         },
@@ -501,11 +501,11 @@
         }
       },
       "search_clans": {
-        "name": "search-clans",
+        "name": "buscar clanes",
         "description": "Buscar clanes",
         "options": {
           "limit": {
-            "name": "limit",
+            "name": "límite",
             "description": "El número máximo de resultados de clanes (predeterminado: %s)"
           }
         },
@@ -515,11 +515,11 @@
         }
       },
       "search_players": {
-        "name": "search-players",
+        "name": "buscar jugadores",
         "description": "Buscar jugadores",
         "options": {
           "limit": {
-            "name": "limit",
+            "name": "límite",
             "description": "El número máximo para resultados de jugador (predeterminado: %s)"
           }
         },
@@ -529,32 +529,32 @@
         }
       },
       "rating_leaderboard": {
-        "name": "rating-leaderboard",
+        "name": "tabla de clasificación",
         "description": "Estadísticas de batallas de clasificatoria",
         "subcommands": {
           "neighbors": {
-            "name": "neighbors",
+            "name": "vecinos",
             "description": "Jugadores vecinos en la tabla de posiciones"
           },
           "league": {
-            "name": "league",
+            "name": "liga",
             "description": "Mejores jugadores de una liga"
           }
         },
         "options": {
           "limit": {
-            "name": "limit",
+            "name": "limite",
             "description": "Cuántos vecinos a mostrar (predeterminado: %s)"
           },
           "season": {
-            "name": "season",
+            "name": "temporada",
             "description": "Número de temporada (predeterminado: actual)",
             "choices": {
               "current": "%s (actual)"
             }
           },
           "league": {
-            "name": "league",
+            "name": "liga",
             "description": "La liga a mostrar"
           }
         },
@@ -568,22 +568,22 @@
         }
       },
       "today": {
-        "name": "today",
+        "name": "hoy",
         "description": "Tanques jugados hoy y estadísticas"
       },
       "stats": {
-        "name": "stats",
+        "name": "estadísticas",
         "description": "Estadísticas rápidas para un período"
       },
       "owned_tanks": {
-        "name": "owned-tanks",
+        "name": "tanques en propiedad",
         "description": "Muestra todos los tanques propios en un nivel",
         "body": {
           "title": "# Tanques de %s de nivel %s\n\n"
         }
       },
       "permissions": {
-        "name": "permissions",
+        "name": "permisos",
         "description": "Comprueba si el bot tiene los permisos requeridos para funcionar",
         "body": {
           "title": "# Permisos\n\n%s",
@@ -612,7 +612,7 @@
         }
       },
       "player_info": {
-        "name": "player-info",
+        "name": "info del jugador",
         "description": "Información básica sobre un jugador",
         "body": {
           "title": "Información de %s",
@@ -625,15 +625,15 @@
         }
       },
       "rating": {
-        "name": "rating",
+        "name": "clasificatoria",
         "description": "Estadísticas de clasificatoria del jugador",
         "subcommands": {
           "today": {
-            "name": "today",
+            "name": "hoy",
             "description": "Estadísticas de clasificatoria de hoy"
           },
           "season": {
-            "name": "season",
+            "name": "temporada",
             "description": "Estadísticas de clasificatoria de esta temporada"
           }
         },
@@ -652,166 +652,166 @@
   },
   "website": {
     "settings": {
-      "dev_mode": "Development mode",
-      "language": "Language"
+      "dev_mode": "Modo de desarrollador",
+      "language": "Idioma"
     },
     "common": {
       "player_search": {
-        "hint": "Search players...",
-        "no_results": "No results",
-        "searching": "Searching..."
+        "hint": "Buscar jugadores...",
+        "no_results": "Sin resultados",
+        "searching": "Buscando..."
       },
       "copy_button": {
-        "copied": "Copied!"
+        "copied": "Copiado!"
       },
       "tank_search": {
-        "search_bar_hint": "Search tanks...",
-        "recent": "Recently viewed",
-        "select_all": "Select all",
-        "count_singular": "1 tank",
-        "count_plural": "%s1 tanks",
-        "sorting_by": "Sorting by %s1",
+        "search_bar_hint": "Buscar tanques...",
+        "recent": "Visto recientemente",
+        "select_all": "Seleccionar todo",
+        "count_singular": "1 tanque",
+        "count_plural": "%s1 tanques",
+        "sorting_by": "Ordenar por %s1",
         "no_tanks_found": {
-          "body": "No tanks found.",
-          "search_again": "Try searching again.",
-          "clear_filters": "Try clearing filters."
+          "body": "No se encontraron tanques.",
+          "search_again": "Intenta buscar de nuevo.",
+          "clear_filters": "Intenta limpiar los filtros."
         },
         "sort": {
-          "meta.none": "none",
-          "survivability.health": "health",
-          "survivability.viewRange": "view range",
-          "survivability.camouflageStill": "camouflage still",
-          "survivability.camouflageMoving": "camouflage moving",
-          "survivability.camouflageShooting": "camouflage shooting",
-          "survivability.volume": "volume",
-          "survivability.length": "length",
-          "fire.dpm": "standard DPM",
-          "fire.dpmPremium": "premium DPM",
-          "fire.reload": "reload",
-          "fire.caliber": "caliber",
-          "fire.standardPenetration": "standard penetration",
-          "fire.premiumPenetration": "premium penetration",
-          "fire.damage": "damage",
-          "fire.moduleDamage": "module damage",
-          "fire.shellVelocity": "shell velocity",
-          "fire.shellRange": "shell range",
-          "fire.shellCapacity": "shell capacity",
-          "fire.aimTime": "aim time",
-          "fire.dispersionStill": "dispersion still",
-          "fire.dispersionMoving": "dispersion moving",
-          "fire.gunDepression": "gun depression",
-          "fire.gunElevation": "gun elevation",
-          "maneuverability.forwardsSpeed": "forwards speed",
-          "maneuverability.backwardsSpeed": "backwards speed",
-          "maneuverability.power": "power",
-          "maneuverability.powerToWeight": "power to weight",
-          "maneuverability.weight": "weight",
-          "maneuverability.traverseSpeed": "traverse speed"
+          "meta.none": "ninguno",
+          "survivability.health": "salud",
+          "survivability.viewRange": "Rango de vision",
+          "survivability.camouflageStill": "camuflaje estando quieto",
+          "survivability.camouflageMoving": "camuflaje en movimiento",
+          "survivability.camouflageShooting": "camuflaje al disparar",
+          "survivability.volume": "volumen",
+          "survivability.length": "largo",
+          "fire.dpm": "DPM estándar",
+          "fire.dpmPremium": "DPM prémium",
+          "fire.reload": "recargar",
+          "fire.caliber": "calibre",
+          "fire.standardPenetration": "penetración estándar",
+          "fire.premiumPenetration": "penetración prémium",
+          "fire.damage": "daño",
+          "fire.moduleDamage": "daño al módulo",
+          "fire.shellVelocity": "velocidad del proyectil",
+          "fire.shellRange": "rango del proyectil",
+          "fire.shellCapacity": "capacidad de proyectiles",
+          "fire.aimTime": "tiempo de apuntado",
+          "fire.dispersionStill": "dispersión estando quieto",
+          "fire.dispersionMoving": "dispersión en movimiento",
+          "fire.gunDepression": "depresión del cañón",
+          "fire.gunElevation": "elevación del cañón",
+          "maneuverability.forwardsSpeed": "velocidad hacia adelante",
+          "maneuverability.backwardsSpeed": "velocidad hacia atrás",
+          "maneuverability.power": "potencia",
+          "maneuverability.powerToWeight": "relación peso potencia",
+          "maneuverability.weight": "peso",
+          "maneuverability.traverseSpeed": "velocidad de desplazamiento"
         },
         "sort_dropdown": {
-          "label": "Sort",
+          "label": "Ordenar",
           "groups": {
             "sort": {
-              "no_sort": "No sort",
-              "label": "Sort by",
-              "fire": "Fire",
-              "maneuverability": "Maneuverability",
-              "survivability": "Survivability"
+              "no_sort": "Sin ordenar",
+              "label": "Ordenar por",
+              "fire": "Fuego",
+              "maneuverability": "Maniobrabilidad",
+              "survivability": "Supervivencia"
             },
             "direction": {
-              "label": "Direction",
-              "ascending": "Ascending",
-              "descending": "Descending"
+              "label": "Dirección",
+              "ascending": "Ascendente",
+              "descending": "Descendente"
             }
           }
         }
       },
       "warnings": {
-        "test": "Tanks in testing are subject to change and may not represent the final product."
+        "test": "Los tanques en pruebas están sujetos a cambios y pueden no representar el producto final."
       }
     },
     "home": {
       "hero": {
-        "credit": "By %s1 ❤️"
+        "credit": "Por %s1 ❤️"
       },
       "hot_tanks": {
-        "title": "Popular tanks",
-        "subtitle": "Last %s1 days"
+        "title": "Tanques populares",
+        "subtitle": "Últimos %s1 días"
       },
       "other_projects": {
-        "title": "Other cool projects"
+        "title": "Otros proyectos interesantes"
       },
-      "help_translate": "Please help translate %s1 to %s2!",
-      "seo_description": "Tools for everything World of Tanks Blitz"
+      "help_translate": "¡Por favor ayuda a traducir %s1 a %s2!",
+      "seo_description": "Herramientas para todo lo que es World of Tanks Blitz"
     },
     "tools": {
       "tankopedia": {
         "name": "Tankopedia",
-        "button": "Find tanks",
-        "description": "Blitz tank encyclopedia",
-        "seo_description": "Statistics, armor, and more for all tanks in World of Tanks Blitz",
-        "tank_seo_title": "%s1 - Tier %s2 %s3 %s4 | %s5 Tankopedia | World of Tanks Blitz (WoTB)",
-        "tank_seo_description": "%s1 armor, statistics, equipment, provisions, and more. %s2 DPM, %s3hp alpha, %s4mm penetration, %s5kph top speed, %s6hp health.",
+        "button": "Encuentra tanques",
+        "description": "Enciclopedia de tanques de WOTB",
+        "seo_description": "Estadísticas, armaduras y más para todos los tanques en World of Tanks Blitz",
+        "tank_seo_title": "%s1 - Nivel %s2 %s3 %s4 | %s5 Tankopedia | World of Tanks Blitz (WoTB)",
+        "tank_seo_description": "%s1 blindaje, estadisticas, equipamiento, proviciones y mas.\n%s2 DPM, %3hp alfa, %s4mm penetracion, %s5kph velocidad maxima, %s6 hp salud",
         "sandbox": {
           "poses": {
             "hull_down": "Hull down",
-            "face_hug": "Face hug",
-            "default": "Default"
+            "face_hug": "Cara a cara",
+            "default": "Predeterminado"
           },
           "settings": {
-            "armor": "Armor",
-            "green_penetration": "Green penetration",
-            "hide_model_under_armor": "Hide model under armor",
-            "opaque": "Opaque",
+            "armor": "Blindaje",
+            "green_penetration": "Penetración verde",
+            "hide_model_under_armor": "Ocultar modelo bajo la armadura",
+            "opaque": "Opaco",
             "dev_wireframe": "DEV: wireframe",
-            "environment": "Environment",
-            "show_grid": "Show grid"
+            "environment": "Entorno",
+            "show_grid": "Mostrar cuadrícula"
           },
           "screenshot": {
-            "download": "Download",
-            "copy": "Copy"
+            "download": "Descargar",
+            "copy": "Copiar"
           },
           "model": {
-            "name": "Model"
+            "name": "Modelo"
           },
           "dynamic": {
-            "name": "Dynamic armor",
+            "name": "Blindaje dinámico",
             "custom_shell": {
-              "type": "Type",
-              "caliber": "Caliber",
-              "penetration": "Penetration",
-              "normalization": "Normalization",
-              "ricochet": "Ricochet",
-              "explosion_radius": "Explosion radius",
-              "exit": "Exit",
-              "reset": "Reset"
+              "type": "Tipo",
+              "caliber": "Calibre",
+              "penetration": "Penetración",
+              "normalization": "Normalización",
+              "ricochet": "Rebote",
+              "explosion_radius": "Radio de Explosión",
+              "exit": "Salir",
+              "reset": "Restablecer"
             },
-            "advanced": "Advanced highlighting",
-            "shooter": "Shooter:",
+            "advanced": "Resaltado avanzado",
+            "shooter": "Tirador:",
             "shot_card": {
               "element": {
-                "primary": "Primary",
-                "spaced": "Spaced",
-                "external": "External",
-                "gap": "Gap",
-                "gun": "Gun",
-                "track": "Tracks"
+                "primary": "Primario",
+                "spaced": "Espaciado",
+                "external": "Externa",
+                "gap": "Brecha",
+                "gun": "Cañón",
+                "track": "Orugas"
               },
               "status": {
-                "penetration": "%s1hp penetration",
-                "blocked": "Blocked",
-                "ricochet": "Ricochet",
-                "splash": "%s1hp splash"
+                "penetration": "%s1pv penetracion",
+                "blocked": "Bloqueado",
+                "ricochet": "Rebote",
+                "splash": "%s1pv splash"
               },
               "stats": {
                 "thickness_and_angle": "%s1mm %s2°",
                 "nominal": "%s1mm nominal",
-                "ricochet_loss": "%s1% penetration"
+                "ricochet_loss": "%s1% penetracion"
               }
             }
           },
           "static": {
-            "name": "Static armor",
+            "name": "Blindaje estatico",
             "primary": "Primary",
             "spaced": "Spaced",
             "external": "External",
@@ -944,159 +944,159 @@
             "hardTerrainCoefficientRaw": "Hard",
             "mediumTerrainCoefficient": "Medium",
             "mediumTerrainCoefficientRaw": "Medium",
-            "softTerrainCoefficient": "Soft",
-            "softTerrainCoefficientRaw": "Soft",
-            "enginePower": "Engine power",
-            "powerToWeightRatioHardTerrain": "Hard",
-            "powerToWeightRatioMediumTerrain": "Medium",
-            "powerToWeightRatioSoftTerrain": "Soft",
-            "weight": "Weight",
-            "turretTraverseSpeed": "Turret traverse speed",
-            "gunTraverseSpeed": "Gun traverse speed",
-            "hullTraverseHardTerrain": "Hard",
-            "hullTraverseMediumTerrain": "Medium",
-            "hullTraverseSoftTerrain": "Soft",
-            "health": "Health",
-            "fireChance": "Fire chance",
-            "viewRange": "View range",
-            "camouflageStill": "Still",
-            "camouflageMoving": "Moving",
-            "camouflageShootingStill": "Still",
-            "camouflageShootingMoving": "Moving",
-            "camouflageCaughtOnFire": "Caught on fire",
-            "width": "Width",
-            "height": "Height",
-            "length": "Length",
-            "volume": "Volume",
-            "shellRange": "Shell range",
-            "shellCapacity": "Shell capacity",
-            "gunType": "Gun type",
-            "penetrationAt250m": "Penetration at 250m"
+            "softTerrainCoefficient": "Suave",
+            "softTerrainCoefficientRaw": "Suave",
+            "enginePower": "Potencia del motor",
+            "powerToWeightRatioHardTerrain": "Duro",
+            "powerToWeightRatioMediumTerrain": "Medio",
+            "powerToWeightRatioSoftTerrain": "Suave",
+            "weight": "Peso",
+            "turretTraverseSpeed": "Velocidad de recorrido de torreta",
+            "gunTraverseSpeed": "Velocidad de recorrido del cañón",
+            "hullTraverseHardTerrain": "Duro",
+            "hullTraverseMediumTerrain": "Medio",
+            "hullTraverseSoftTerrain": "Suave",
+            "health": "Salud",
+            "fireChance": "Probabilidad de incendio",
+            "viewRange": "Rango de visión",
+            "camouflageStill": "Quieto",
+            "camouflageMoving": "En movimiento",
+            "camouflageShootingStill": "Quieto",
+            "camouflageShootingMoving": "En movimiento",
+            "camouflageCaughtOnFire": "Atrapado en fuego",
+            "width": "Ancho",
+            "height": "Altura",
+            "length": "Largo",
+            "volume": "Volumen",
+            "shellRange": "Rango del proyectil",
+            "shellCapacity": "Capacidad de proyectiles",
+            "gunType": "Tipo de cañón",
+            "penetrationAt250m": "Penetración a 250 m"
           }
         },
         "firepower": {
-          "title": "Firepower"
+          "title": "Potencia de fuego"
         },
         "crew": {
-          "title": "Crew training",
-          "info": "represents the other roles a crew member can take.",
-          "count": "Crew count",
-          "commander": "Commander",
-          "gunner": "Gunner",
-          "driver": "Driver",
-          "radioman": "Radioman",
-          "loader": "Loader"
+          "title": "Entrenamiento de la tripulación",
+          "info": "representa los otros roles que un miembro de la tripulación puede asumir.",
+          "count": "Número de tripulaciones",
+          "commander": "Comandante",
+          "gunner": "Artillero",
+          "driver": "Conductor",
+          "radioman": "Operador de Radio",
+          "loader": "Cargador"
         },
         "maneuverability": {
-          "title": "Maneuverability"
+          "title": "Maniobrabilidad"
         },
         "survivability": {
-          "title": "Survivability"
+          "title": "Supervivencia"
         }
       },
       "compare": {
-        "name": "Compare",
-        "button": "Compare tanks",
-        "description": "Compare tank statistics",
-        "seo_description": "Compare tanks statistics and loadouts in World of Tanks Blitz",
+        "name": "Comparar",
+        "button": "Comparar tanques",
+        "description": "Comparar estadísticas del tanque",
+        "seo_description": "Comparar estadísticas y equipamientos de tanques en World of Tanks Blitz",
         "actions": {
           "add": {
-            "button": "Add",
-            "title": "Add tanks",
-            "description": "Select tanks to add to comparison"
+            "button": "Añadir",
+            "title": "Añadir tanques",
+            "description": "Selecciona los tanques para añadir a la comparación"
           },
-          "clear": "Clear",
+          "clear": "Limpiar",
           "deltas": {
-            "none": "No deltas",
-            "percentage": "Percentage",
-            "absolute": "Absolute"
+            "none": "Sin deltas",
+            "percentage": "Porcentaje",
+            "absolute": "Absoluto"
           }
         },
         "no_tanks": {
-          "title": "No tanks selected",
-          "body": "Press the Add button to get started"
+          "title": "No hay tanques seleccionados",
+          "body": "Pulse el botón Añadir para empezar"
         },
         "table": {
           "equipment": {
-            "clear": "Clear",
-            "apply_to_all": "Apply to all"
+            "clear": "Limpiar",
+            "apply_to_all": "Aplicar a todo"
           },
           "skills": {
-            "clear": "Clear",
-            "maximize": "Maximize"
+            "clear": "Limpiar",
+            "maximize": "Maximizar"
           },
           "modules": {
             "stock": "Stock",
-            "upgrade": "Upgrade"
+            "upgrade": "Mejorar"
           },
           "provisions": {
-            "clear": "Clear"
+            "clear": "Limpiar"
           },
           "consumables": {
-            "clear": "Clear"
+            "clear": "Limpiar"
           }
         }
       },
       "performance": {
-        "name": "Performance",
-        "button": "View tanks",
-        "description": "Tank performance statistics",
-        "seo_description": "Best tanks and their performances in World of Tanks Blitz",
+        "name": "Rendimiento",
+        "button": "Ver tanques",
+        "description": "Estadísticas de rendimiento del tanque",
+        "seo_description": "Los mejores tanques y su rendimiento en World of Tanks Blitz",
         "estimation": {
-          "body": "Estimated stats based on %s1 players. Updated %s2 ago.",
-          "hours": "%s1 hours",
-          "minutes": "%s1 minutes"
+          "body": "Estadísticas estimadas basadas en %s1 jugadores. Actualizado hace %s2.",
+          "hours": "%s1 horas",
+          "minutes": "%s1 minutos"
         },
         "player_count": {
-          "label": "Player count"
+          "label": "Contador de jugadores"
         },
         "table": {
           "tanks": {
-            "header": "Tank",
+            "header": "Tanque",
             "total": "Total"
           },
           "stats": {
-            "winrate": "Winrate",
-            "players": "Players",
-            "damage": "Damage",
-            "survival": "Survival",
-            "xp": "XP",
-            "kills": "Kills",
-            "spots": "Spots",
-            "accuracy": "Accuracy",
-            "shots": "Shots",
-            "hits": "Hits",
-            "damage_ratio": "Dmg. ratio",
-            "damage_taken": "Dmg. taken",
-            "capture_points": "Cap points"
+            "winrate": "Tasa de victorias",
+            "players": "Jugadores",
+            "damage": "Daño",
+            "survival": "Supervivencia",
+            "xp": "EXP",
+            "kills": "Bajas",
+            "spots": "Detectados",
+            "accuracy": "Precisión",
+            "shots": "Disparos",
+            "hits": "Aciertos",
+            "damage_ratio": "Relación de daño",
+            "damage_taken": "Daño recibido",
+            "capture_points": "Puntos de captura"
           }
         }
       },
       "gallery": {
-        "name": "Gallery",
-        "button": "Browse all",
-        "description": "Blitz player avatars",
-        "seo_description": "All World of Tanks Blitz player avatars",
-        "last_updated": "Last updated on %s1",
+        "name": "Galería",
+        "button": "Explorar todo",
+        "description": "Avatares para los jugadores de WOTB",
+        "seo_description": "Todos los avatares del jugador en World of Tanks Blitz",
+        "last_updated": "Última actualización el %s1",
         "search": {
-          "hint": "Search avatars...",
-          "results": "%s1 avatars"
+          "hint": "Buscar avatares...",
+          "results": "%s1 avatares"
         }
       },
       "session": {
-        "name": "Session",
-        "button": "Start tracking",
-        "description": "Live session stats",
-        "seo_description": "Track your stats in real time as you play World of Tanks Blitz",
+        "name": "Sesión",
+        "button": "Iniciar seguimiento",
+        "description": "Estadísticas de sesión en vivo",
+        "seo_description": "Sigue tus estadísticas en tiempo real mientras juegas a World of Tanks Blitz",
         "search": {
-          "lookup": "Look up a player to get started",
-          "hint": "Search players...",
-          "searching": "Searching...",
-          "no_results": "No players found"
+          "lookup": "Busca a un jugador para empezar",
+          "hint": "Busca jugadores...",
+          "searching": "Buscando...",
+          "no_results": "No se encontraron jugadores"
         },
         "controls": {
-          "title": "Tracking %s1",
-          "subtitle": "Since %s1",
+          "title": "Siguiendo a %s1",
+          "subtitle": "Desde %s1",
           "reset": "Reset",
           "change": "Change"
         },
