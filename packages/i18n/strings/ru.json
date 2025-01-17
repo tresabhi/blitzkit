@@ -13,9 +13,9 @@
       "x": "x%s1"
     },
     "gun_types": {
-      "auto_loader": "Auto loader",
-      "auto_reloader": "Auto reloader",
-      "regular": "Regular"
+      "auto_loader": "Система заряжения",
+      "auto_reloader": "Система дозарядки",
+      "regular": "Цикл"
     },
     "shells": {
       "ap": "ББ",
@@ -317,7 +317,7 @@
     },
     "commands": {
       "auction": {
-        "name": "auction",
+        "name": "аукцион",
         "description": "Танки доступные на аукционе сейчас",
         "body": {
           "title": "Blitz аукцион",
@@ -333,19 +333,19 @@
         }
       },
       "replay": {
-        "name": "replay",
+        "name": "повтор",
         "description": "Показать результаты повтора"
       },
       "research": {
-        "name": "research",
+        "name": "исследование",
         "description": "Список ресурсов для исследования ветки",
         "options": {
           "target_tank": {
-            "name": "target-tank",
+            "name": "целевой-танк",
             "description": "Конечный танк исследования ветки"
           },
           "starting_tank": {
-            "name": "starting-tank",
+            "name": "стартовый-танк",
             "description": "Стартовый танк в ветке (назначен автоматически, если не предусмотрен)"
           }
         },
@@ -368,38 +368,38 @@
         }
       },
       "about": {
-        "name": "about",
+        "name": "о-нас",
         "description": "Вся необходимая информация о боте",
         "subcommands": {
           "commands": {
-            "name": "commands",
+            "name": "команды",
             "description": "Список всех команд и их описаний",
             "body": "# Команды\n\nBlitzKit предлагает следующие команды:\n\n"
           },
           "embeds": {
-            "name": "embeds",
+            "name": "встраиваемые-элементы",
             "description": "Как работают встраиваемые элементы"
           },
           "introduction": {
-            "name": "introduction",
+            "name": "введение",
             "description": "О боте"
           },
           "invite": {
-            "name": "invite",
+            "name": "пригласить",
             "description": "Как пригласить бота"
           },
           "timezones": {
-            "name": "timezones",
+            "name": "часовой-пояс",
             "description": "Как BlitzKit вводит и использует ваш часовой пояс"
           },
           "credits": {
-            "name": "credits",
+            "name": "кредиты",
             "description": "Люди, которые помогли BlitzKit"
           }
         }
       },
       "breakdown": {
-        "name": "breakdown",
+        "name": "разбивка",
         "description": "Разбивка периода по сыгранным танкам",
         "body": {
           "total": "Всего",
@@ -411,38 +411,38 @@
         }
       },
       "debug": {
-        "name": "debug",
+        "name": "отладка",
         "description": "Отладочная информация о боте",
         "body": {
           "title": "# Отладка",
           "version": "Версия",
           "shard": {
-            "label": "Shard",
+            "label": "Фрагмент",
             "default": "по умолчанию"
           },
           "uptime": "Время работы"
         }
       },
       "evolution": {
-        "name": "evolution",
+        "name": "изменение",
         "description": "Изменения статистики",
         "groups": {
           "player": {
-            "name": "player",
+            "name": "игрок",
             "description": "Статистика игрока"
           },
           "tank": {
-            "name": "tank",
+            "name": "танк",
             "description": "Статистика танков"
           }
         }
       },
       "inactive": {
-        "name": "inactive",
+        "name": "неактивно",
         "description": "Список всех неактивных игроков в клане выше порога",
         "options": {
           "threshold": {
-            "name": "threshold",
+            "name": "порог",
             "description": "Количество дней не активности (по умолчанию: %s дней)"
           }
         },
@@ -452,18 +452,18 @@
         }
       },
       "full_stats": {
-        "name": "full-stats",
+        "name": "полная-статистика",
         "description": "Полная статистика в игре",
         "body": {
           "cards": {
             "games": {
-              "title": "Games",
+              "title": "Игры",
               "winrate": "Коэффициент побед",
               "battles": "Боёв",
               "wins_losses": "Побед / поражений"
             },
             "efficiency": {
-              "title": "Efficiency",
+              "title": "Эффективность",
               "wn8": "WN8",
               "survival": "Выжил",
               "accuracy": "Точность стрельбы"
@@ -476,7 +476,7 @@
               "average_kills": "Среднее число уничтоженных"
             },
             "miscellaneous": {
-              "title": "Miscellaneous",
+              "title": "Прочее",
               "average_tier": "Средний уровень",
               "average_spots": "Среднее число попаданий",
               "average_xp": "Средний опыт",
@@ -486,12 +486,12 @@
         }
       },
       "link": {
-        "name": "link",
+        "name": "ссылка",
         "description": "Привяжите учётную запись Blitz и Discord",
         "body": {
           "accounts_linked": "Аккаунты привязаны",
           "no_role_permissions": {
-            "title": "%s1 failed to verify",
+            "title": "%s1 не удалось проверить",
             "description": "У меня нет разрешения на управление ролями."
           }
         },
@@ -501,11 +501,11 @@
         }
       },
       "search_clans": {
-        "name": "search-clans",
+        "name": "поиск-кланов",
         "description": "Поиск кланов",
         "options": {
           "limit": {
-            "name": "limit",
+            "name": "лимит",
             "description": "Максимальное количество результатов клана (по умолчанию: %s)"
           }
         },
@@ -515,11 +515,11 @@
         }
       },
       "search_players": {
-        "name": "search-players",
+        "name": "поиск-игроков",
         "description": "Поиск игроков",
         "options": {
           "limit": {
-            "name": "limit",
+            "name": "лимит",
             "description": "Максимальное число результатов игрока (по умолчанию: %s)"
           }
         },
@@ -529,32 +529,32 @@
         }
       },
       "rating_leaderboard": {
-        "name": "rating-leaderboard",
+        "name": "таблица-лидеров",
         "description": "Статистика рейтингов боёв",
         "subcommands": {
           "neighbors": {
-            "name": "neighbors",
+            "name": "соседние",
             "description": "Соседние игроки в таблице лидеров"
           },
           "league": {
-            "name": "league",
+            "name": "лига",
             "description": "Топ игроков лиги"
           }
         },
         "options": {
           "limit": {
-            "name": "limit",
+            "name": "лимит",
             "description": "Сколько отображаемых соседних (по умолчанию: %s)"
           },
           "season": {
-            "name": "season",
+            "name": "сезон",
             "description": "Номер сезона (по умолчанию: текущий)",
             "choices": {
               "current": "%s (текущая)"
             }
           },
           "league": {
-            "name": "league",
+            "name": "лига",
             "description": "Отображаемая лига"
           }
         },
@@ -568,22 +568,22 @@
         }
       },
       "today": {
-        "name": "today",
+        "name": "cегодня",
         "description": "Танки, на которых сыграли сегодня и статистика"
       },
       "stats": {
-        "name": "stats",
+        "name": "статистика",
         "description": "Быстрая статистика за период"
       },
       "owned_tanks": {
-        "name": "owned-tanks",
+        "name": "cобственные-танки",
         "description": "Показывает все принадлежащие танки на уровне",
         "body": {
           "title": "# %s принадлежал уровень %s танков\n\n"
         }
       },
       "permissions": {
-        "name": "permissions",
+        "name": "разрешения",
         "description": "Проверяет, есть ли у бота необходимые разрешения для работы",
         "body": {
           "title": "# Разрешения\n\n%s",
@@ -594,7 +594,7 @@
         }
       },
       "ping": {
-        "name": "ping",
+        "name": "пинг",
         "description": "Проверьте, что бот жив.",
         "body": {
           "pong": "Понг 🏓",
@@ -612,7 +612,7 @@
         }
       },
       "player_info": {
-        "name": "player-info",
+        "name": "информация-об-игроке",
         "description": "Основная информация о игроке",
         "body": {
           "title": "Информация о %s",
@@ -677,79 +677,79 @@
           "clear_filters": "Попробуйте очистить фильтры."
         },
         "sort": {
-          "meta.none": "нет",
+          "meta.none": "Никак",
           "survivability.health": "прочность",
           "survivability.viewRange": "обзор",
-          "survivability.camouflageStill": "маскировка без движения корпуса",
+          "survivability.camouflageStill": "маскировка когда неподвижен",
           "survivability.camouflageMoving": "маскировка в движении",
           "survivability.camouflageShooting": "маскировка при выстреле",
-          "survivability.volume": "громкость",
-          "survivability.length": "length",
-          "fire.dpm": "standard DPM",
-          "fire.dpmPremium": "premium DPM",
-          "fire.reload": "reload",
-          "fire.caliber": "caliber",
-          "fire.standardPenetration": "standard penetration",
-          "fire.premiumPenetration": "premium penetration",
-          "fire.damage": "damage",
-          "fire.moduleDamage": "module damage",
-          "fire.shellVelocity": "shell velocity",
-          "fire.shellRange": "shell range",
-          "fire.shellCapacity": "shell capacity",
-          "fire.aimTime": "aim time",
-          "fire.dispersionStill": "dispersion still",
-          "fire.dispersionMoving": "dispersion moving",
-          "fire.gunDepression": "gun depression",
-          "fire.gunElevation": "gun elevation",
-          "maneuverability.forwardsSpeed": "forwards speed",
-          "maneuverability.backwardsSpeed": "backwards speed",
-          "maneuverability.power": "power",
-          "maneuverability.powerToWeight": "power to weight",
-          "maneuverability.weight": "weight",
-          "maneuverability.traverseSpeed": "traverse speed"
+          "survivability.volume": "объём",
+          "survivability.length": "длина",
+          "fire.dpm": "базовый ДПМ",
+          "fire.dpmPremium": "улучшенный ДПМ",
+          "fire.reload": "перезарядка",
+          "fire.caliber": "калибр",
+          "fire.standardPenetration": "базовое пробитие",
+          "fire.premiumPenetration": "улучшенное пробитие ",
+          "fire.damage": "урон",
+          "fire.moduleDamage": "урон по модулям",
+          "fire.shellVelocity": "скорость снаряда",
+          "fire.shellRange": "дальность снаряда",
+          "fire.shellCapacity": "боезапас",
+          "fire.aimTime": "время сведения",
+          "fire.dispersionStill": "разброс когда неподвижен",
+          "fire.dispersionMoving": "разброс в движении",
+          "fire.gunDepression": "углы вниз",
+          "fire.gunElevation": "углы вверх",
+          "maneuverability.forwardsSpeed": "скорость вперед",
+          "maneuverability.backwardsSpeed": "скорость назад",
+          "maneuverability.power": "мощность",
+          "maneuverability.powerToWeight": "мощность к весу",
+          "maneuverability.weight": "вес",
+          "maneuverability.traverseSpeed": "скорость поворота"
         },
         "sort_dropdown": {
-          "label": "Sort",
+          "label": "Сортировка",
           "groups": {
             "sort": {
-              "no_sort": "No sort",
-              "label": "Sort by",
-              "fire": "Fire",
-              "maneuverability": "Maneuverability",
-              "survivability": "Survivability"
+              "no_sort": "Без сортировки",
+              "label": "Сортировка",
+              "fire": "Стрельба",
+              "maneuverability": "Маневренность",
+              "survivability": "Живучесть"
             },
             "direction": {
-              "label": "Direction",
-              "ascending": "Ascending",
-              "descending": "Descending"
+              "label": "Направление",
+              "ascending": "По возрастанию",
+              "descending": "По убыванию"
             }
           }
         }
       },
       "warnings": {
-        "test": "Tanks in testing are subject to change and may not represent the final product."
+        "test": "Танки на тестировании могут быть изменены и не могут отражать конечный продукт."
       }
     },
     "home": {
       "hero": {
-        "credit": "By %s1 ❤️"
+        "credit": "От %s1 ❤️"
       },
       "hot_tanks": {
-        "title": "Popular tanks",
+        "title": "Популярные танки",
         "subtitle": "Last %s1 days"
       },
       "other_projects": {
-        "title": "Other cool projects"
+        "title": "Другие классные проекты"
       },
-      "help_translate": "Please help translate %s1 to %s2!",
-      "seo_description": "Tools for everything World of Tanks Blitz"
+      "help_translate": "Пожалуйста, помогите перевести %s1 на %s2!",
+      "seo_description": "Инструменты для World of Tanks Blitz"
     },
     "tools": {
       "tankopedia": {
         "name": "Tankopedia",
-        "button": "Find tanks",
-        "description": "Blitz tank encyclopedia",
-        "seo_description": "Statistics, armor, and more for all tanks in World of Tanks Blitz",
+        "button": "Найти танки",
+        "description": "Танковая энциклопедия Blitz",
+        "seo_description": "Статистика, броня и многое другое по всем танкам World of Tanks Blitz",
         "tank_seo_title": "%s1 - Tier %s2 %s3 %s4 | %s5 Tankopedia | World of Tanks Blitz (WoTB)",
         "tank_seo_description": "%s1 armor, statistics, equipment, provisions, and more. %s2 DPM, %s3hp alpha, %s4mm penetration, %s5kph top speed, %s6hp health.",
         "sandbox": {
@@ -822,73 +822,73 @@
           }
         },
         "meta": {
-          "back": "Back",
-          "compare": "Compare",
+          "back": "Назад",
+          "compare": "Сравнение",
           "swap": {
             "button": "Swap",
             "title": "Swap tanks"
           },
           "vanilla": "Vanilla",
-          "opentest": "OpenTest",
-          "full_name": "Full name",
-          "nation": "Nation",
-          "class": "Class",
-          "tier": "Tier",
-          "type": "Type",
+          "opentest": "Открытый тест",
+          "full_name": "Полное название",
+          "nation": "Нация",
+          "class": "Класс",
+          "tier": "Уровень",
+          "type": "Тип",
           "dev_id": "DEV: ID",
-          "purchase": "Purchase price",
-          "restoration": "Restoration price",
-          "sale": "Sale price",
-          "research": "Research XP"
+          "purchase": "Стоимость покупки",
+          "restoration": "Цена восстановления",
+          "sale": "Цена прожажи",
+          "research": "Необходимо опыта"
         },
         "tech_tree": {
-          "title": "Tech tree",
-          "battle": "1 battle",
-          "battles": "%s1 battles",
-          "route": "Route %s1 of %s2"
+          "title": "Дерево танков",
+          "battle": "1 бой",
+          "battles": "%s1 боёв",
+          "route": "Ветка %s1 из %s2"
         },
         "game_modes": {
-          "title": "Game mode abilities"
+          "title": "Способности игрового режима"
         },
         "review": {
-          "title": "Review videos",
-          "disclaimer": "BlitzKit does not endorse any review videos.",
+          "title": "Видео обзоры",
+          "disclaimer": "BlitzKit не несёт ответственность ни за видео обзор.",
           "join": "Apply to %s1 YouTuber program"
         },
         "configuration": {
           "title": "Configuration",
           "modules": {
-            "title": "Modules",
+            "title": "Модули",
             "stock": "Stock",
             "upgrade": "Upgrade"
           },
           "equipment": {
             "title": "Equipment",
-            "clear": "Clear"
+            "clear": "Очистить"
           },
           "provisions": {
             "title": "Provisions",
-            "clear": "Clear"
+            "clear": "Очистить"
           },
           "consumables": {
             "title": "Consumables",
-            "clear": "Clear",
+            "clear": "Очистить",
             "info": "Yellow consumables do not affect the statistics."
           },
           "skills": {
-            "title": "Crew skills",
+            "title": "Навыки экипажа",
             "clear": "Clear",
-            "maximize": "Maximize",
-            "info": "Yellow skills only apply under special circumstances. Hold Space to quickly toggle between level 0 and 7."
+            "maximize": "Максимум",
+            "info": "Желтые навыки применяются только при особых условиях. Удерживайте пробел, чтобы быстро переключаться между уровнями 0 и 7."
           },
           "miscellaneous": {
-            "title": "Miscellaneous"
+            "title": "Прочее"
           }
         },
         "characteristics": {
-          "title": "Characteristics",
+          "title": "Характеристики",
           "compare": {
-            "label": "Compare against",
+            "label": "Сравнивать с",
             "class": "Tier %s1 %s2",
             "tier": "All of tier %s1",
             "all": "All tanks"
@@ -904,23 +904,23 @@
             "raw_terrain_coefficients": "Raw terrain coefficients",
             "power_to_weight_ratio": "Power to weight ratio",
             "hull_traverse_speed": "Hull traverse speed",
-            "camouflage": "Camouflage",
+            "camouflage": "Камуфляж",
             "reload": "Reload",
-            "crewCount": "Crew count",
-            "shellNormalization": "Normalization",
-            "shellRicochet": "Ricochet",
-            "dpm": "DPM",
+            "crewCount": "Экипаж",
+            "shellNormalization": "Нормализация",
+            "shellRicochet": "Рикошет",
+            "dpm": "ДПМ",
             "dpmEffective": "Effective at 60s",
             "shells": "Shells",
             "mostOptimalShellIndex": "Most optimal shell",
             "shellReloads": "Shell reloads",
             "shellReload": "Shell reload",
             "intraClip": "Intra-clip",
-            "caliber": "Caliber",
-            "penetration": "Penetration",
-            "damage": "Damage",
+            "caliber": "Калибр",
+            "penetration": "Пробитие",
+            "damage": "Урон",
             "clipDamage": "Clipping potential",
-            "moduleDamage": "Module damage",
+            "moduleDamage": "Урон по модулям",
             "explosionRadius": "Explosion radius",
             "shellVelocity": "Shell velocity",
             "aimTime": "Aim time",
@@ -946,7 +946,7 @@
             "mediumTerrainCoefficientRaw": "Medium",
             "softTerrainCoefficient": "Soft",
             "softTerrainCoefficientRaw": "Soft",
-            "enginePower": "Engine power",
+            "enginePower": "Мощность двигателя",
             "powerToWeightRatioHardTerrain": "Hard",
             "powerToWeightRatioMediumTerrain": "Medium",
             "powerToWeightRatioSoftTerrain": "Soft",
@@ -971,11 +971,11 @@
             "shellRange": "Shell range",
             "shellCapacity": "Shell capacity",
             "gunType": "Gun type",
-            "penetrationAt250m": "Penetration at 250m"
+            "penetrationAt250m": "Пробитие на 250м"
           }
         },
         "firepower": {
-          "title": "Firepower"
+          "title": "Огневая мощь"
         },
         "crew": {
           "title": "Crew training",
@@ -1038,7 +1038,7 @@
         }
       },
       "performance": {
-        "name": "Performance",
+        "name": "Эффективность",
         "button": "View tanks",
         "description": "Tank performance statistics",
         "seo_description": "Best tanks and their performances in World of Tanks Blitz",
@@ -1073,7 +1073,7 @@
         }
       },
       "gallery": {
-        "name": "Gallery",
+        "name": "Галерея",
         "button": "Browse all",
         "description": "Blitz player avatars",
         "seo_description": "All World of Tanks Blitz player avatars",
@@ -1084,7 +1084,7 @@
         }
       },
       "session": {
-        "name": "Session",
+        "name": "Сессия",
         "button": "Start tracking",
         "description": "Live session stats",
         "seo_description": "Track your stats in real time as you play World of Tanks Blitz",
@@ -1116,19 +1116,19 @@
         }
       },
       "tier_list": {
-        "name": "Tier list",
+        "name": "Тир-лист",
         "button": "Rank tanks",
         "description": "Rank Blitz tanks",
         "seo_description": "Explore tier lists ranking tanks from best to worst, based on player ratings and statistical performance in World of Tanks Blitz",
         "buttons": {
-          "reset": "Reset",
-          "share": "Share"
+          "reset": "Сброс",
+          "share": "Поделиться"
         }
       },
       "embed": {
-        "name": "Embed",
+        "name": "Встройки",
         "button": "Create now",
-        "description": "Embeds for streaming",
+        "description": "Встраиваемые элементы для стримов",
         "seo_description": "Create embeds for streaming World of Tanks Blitz with extreme customization",
         "coming_soon": "More embeds coming soon.",
         "suggest": "Suggest ideas.",
