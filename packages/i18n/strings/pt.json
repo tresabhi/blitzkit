@@ -41,13 +41,13 @@
     "locales": {
       "en": "Inglês",
       "es": "Espanhol",
-      "pt": "Portuguese",
+      "pt": "Português",
       "ru": "Russo",
       "uk": "Ucraniano",
       "zh": "Chinês",
       "ja": "Japonês",
       "fr": "Francês",
-      "pl": "Polonês"
+      "pl": "Polaco"
     },
     "wn8_percentile": {
       "0": "Muito ruim",
@@ -56,7 +56,7 @@
       "3": "Na média",
       "4": "Acima da média",
       "5": "Bom",
-      "6": "Muito bom\n",
+      "6": "Muito bom",
       "7": "Ótimo",
       "8": "Excelente",
       "9": "Super unicum"
@@ -86,9 +86,9 @@
       "other": "Nação Híbrida"
     },
     "nations_adjectives": {
-      "ussr": "União Soviética",
+      "ussr": "União soviética",
       "germany": "Alemão",
-      "usa": "Americano",
+      "usa": "E.U.A.",
       "china": "Chinês",
       "uk": "Britânico",
       "france": "Francês",
