@@ -756,37 +756,37 @@
           "poses": {
             "hull_down": "Hull down",
             "face_hug": "Face hug",
-            "default": "Default"
+            "default": "По умолчанию"
           },
           "settings": {
-            "armor": "Armor",
+            "armor": "Броня",
             "green_penetration": "Green penetration",
-            "hide_model_under_armor": "Hide model under armor",
-            "opaque": "Opaque",
+            "hide_model_under_armor": "Скрыть модель под броней",
+            "opaque": "Прозрачность",
             "dev_wireframe": "DEV: wireframe",
-            "environment": "Environment",
-            "show_grid": "Show grid"
+            "environment": "Окружение",
+            "show_grid": "Показать сетку"
           },
           "screenshot": {
-            "download": "Download",
-            "copy": "Copy"
+            "download": "Загрузить",
+            "copy": "Скопировать"
           },
           "model": {
-            "name": "Model"
+            "name": "Модель"
           },
           "dynamic": {
-            "name": "Dynamic armor",
+            "name": "Динамическая броня",
             "custom_shell": {
-              "type": "Type",
-              "caliber": "Caliber",
-              "penetration": "Penetration",
-              "normalization": "Normalization",
-              "ricochet": "Ricochet",
-              "explosion_radius": "Explosion radius",
-              "exit": "Exit",
-              "reset": "Reset"
+              "type": "Тип",
+              "caliber": "Калибр",
+              "penetration": "Пробитие",
+              "normalization": "Нормализация",
+              "ricochet": "Рикошет",
+              "explosion_radius": "Разлет осколков",
+              "exit": "Выход",
+              "reset": "Сброс"
             },
-            "advanced": "Advanced highlighting",
+            "advanced": "Продвинутая подсветка",
             "shooter": "Shooter:",
             "shot_card": {
               "element": {
@@ -800,7 +800,7 @@
               "status": {
                 "penetration": "%s1hp penetration",
                 "blocked": "Blocked",
-                "ricochet": "Ricochet",
+                "ricochet": "Рикошет",
                 "splash": "%s1hp splash"
               },
               "stats": {
@@ -817,7 +817,7 @@
             "external": "External",
             "edit": {
               "label": "Edit",
-              "reset": "Reset"
+              "reset": "Сброс"
             }
           }
         },
@@ -859,11 +859,11 @@
           "title": "Configuration",
           "modules": {
             "title": "Модули",
-            "stock": "Stock",
+            "stock": "Сток",
             "upgrade": "Upgrade"
           },
           "equipment": {
-            "title": "Equipment",
+            "title": "Оборудование",
             "clear": "Очистить"
           },
           "provisions": {
@@ -871,13 +871,13 @@
             "clear": "Очистить"
           },
           "consumables": {
-            "title": "Consumables",
+            "title": "Расходники",
             "clear": "Очистить",
-            "info": "Yellow consumables do not affect the statistics."
+            "info": "Жёлтые расходники не влияют на характеристики."
           },
           "skills": {
             "title": "Навыки экипажа",
-            "clear": "Clear",
+            "clear": "Очистить",
             "maximize": "Максимум",
             "info": "Желтые навыки применяются только при особых условиях. Удерживайте пробел, чтобы быстро переключаться между уровнями 0 и 7."
           },
@@ -1150,25 +1150,25 @@
             "title": "Export",
             "description": "Copy all properties for you streaming software",
             "generate": {
-              "button": "Generate URL",
-              "title": "Generate URL",
-              "subtitle": "Search an account to track",
-              "cancel": "Cancel",
+              "button": "Сгенерировать URL",
+              "title": "Сгенерировать URL",
+              "subtitle": "Поиск учетной записи для отслеживания",
+              "cancel": "Отмена",
               "success": {
-                "title": "Copy URL",
+                "title": "Скопировать URL",
                 "info": "Generated the URL for %s1. The embed will start tracking as soon as the URL is pasted. Reset at any time by right-clicking on PC or long-pressing on mobile and then selecting \"Reset\".",
-                "back": "Back",
-                "copy": "Copy URL"
+                "back": "Назад",
+                "copy": "Скопировать URL"
               }
             },
-            "css": "Copy CSS",
-            "width": "Copy Width",
-            "height": "Copy Height",
-            "framerate": "Copy Framerate"
+            "css": "Скопировать CSS",
+            "width": "Скопировать ширину",
+            "height": "Скопировать высоту",
+            "framerate": "Скопировать частоту кадров"
           },
           "customize": {
-            "title": "Customize",
-            "reset": "Reset",
+            "title": "Настроить",
+            "reset": "Сброс",
             "description": "Bells and whistles of your embed"
           }
         },
@@ -1176,8 +1176,8 @@
           "breakdown": {
             "name": "Breakdown",
             "options": {
-              "width": "Width",
-              "height": "Height",
+              "width": "Ширина",
+              "height": "Высота",
               "showTotal": "Show total",
               "listGap": "List gap",
               "listMaxTanks": "Max tanks",
@@ -1216,9 +1216,9 @@
         "seo_description": "Live and archived full rating leaderboard for World of Tanks Blitz"
       },
       "discord": {
-        "name": "Discord bot",
-        "button": "Install now",
-        "description": "Stats right in Discord",
+        "name": "Discord-бот",
+        "button": "Установить сейчас",
+        "description": "Статистика в Discord",
         "seo_description": "Get stats right in Discord with BlitzKit's Discord bot"
       },
       "more": {
@@ -1247,25 +1247,25 @@
       },
       "blitz_insider": {
         "name": "Blitz Insider",
-        "button": "Discover today",
-        "description": "In-game session stats",
-        "seo_description": "In-game session stats in World of Tanks Blitz"
+        "button": "Откройте для себя",
+        "description": "Статистика сеанса игры",
+        "seo_description": "Статистика сеанса игры в World of Tanks Blitz"
       }
     },
     "footer": {
-      "motto": "Everything World of Tanks Blitz",
-      "copyright": "Unaffiliated with Wargaming or any service",
+      "motto": "Всё о World of Tanks Blitz",
+      "copyright": "Не связан с Wargaming или иным сервисом",
       "about": {
-        "title": "About",
-        "credits": "Credits",
+        "title": "О сайте",
+        "credits": "Авторы",
         "discord": "Discord",
         "github": "GitHub",
-        "patches": "Patches"
+        "patches": "Патчи"
       },
       "legal": {
-        "title": "Legal",
-        "privacy": "Privacy policy",
-        "terms": "Terms of service"
+        "title": "Правовая информация",
+        "privacy": "Политика конфиденциальности",
+        "terms": "Условия использования"
       }
     }
   }
