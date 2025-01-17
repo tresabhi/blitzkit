@@ -40,14 +40,14 @@
     },
     "locales": {
       "en": "English",
-      "es": "Spanish",
+      "es": "Espanhol",
       "pt": "Portuguese",
-      "ru": "Russian",
-      "uk": "Ukrainian",
-      "zh": "Chinese",
-      "ja": "Japanese",
-      "fr": "French",
-      "pl": "Polish"
+      "ru": "Russo",
+      "uk": "Ucraniano",
+      "zh": "Chinês",
+      "ja": "Japonês",
+      "fr": "Francês",
+      "pl": "Polonês"
     },
     "wn8_percentile": {
       "0": "Muito ruim",
