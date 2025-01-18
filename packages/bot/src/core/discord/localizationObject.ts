@@ -3,7 +3,8 @@ import { Locale } from 'discord.js';
 import { SUPPORTED_LOCALES_DISCORD } from '../localization/strings/constants';
 import { translator } from '../localization/translator';
 
-const validNameRegex = /^[-_\p{L}\p{N}\p{sc=Deva}\p{sc=Thai}]{1,32}$/u;
+const validNameRegex =
+  /^[\p{Ll}\p{Lm}\p{Lo}\p{N}\p{sc=Devanagari}\p{sc=Thai}_-]+$/u;
 
 export function localizationObject(
   path: (strings: BlitzKitStrings) => string,
