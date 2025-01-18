@@ -1,5 +1,4 @@
-import { fetchTankNames, TankType } from '@blitzkit/core';
-import { SUPPORTED_LOCALES } from '@blitzkit/i18n';
+import { fetchTankNames, SEARCH_KEYS, TankType } from '@blitzkit/core';
 import {
   ApplicationCommandOptionChoiceData,
   AutocompleteInteraction,
@@ -32,16 +31,7 @@ export async function autocompleteTanks(
           go(
             focusedOption.value,
             await (techTreeOnly ? tankNamesTechTreeOnly : tankNames),
-            {
-              keys: [
-                ...SUPPORTED_LOCALES.map((locale) => [
-                  `searchableName.{locale}`,
-                  `searchableNameDeburr.{locale}`,
-                ]).flat(),
-                'camouflages',
-              ],
-              limit: 10,
-            },
+            { keys: SEARCH_KEYS, limit: 10 },
           ).map(async (item) => {
             let name = unwrap(item.obj.searchableName);
 

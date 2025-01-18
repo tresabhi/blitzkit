@@ -1,4 +1,5 @@
 import { deburr } from 'lodash-es';
+import { SUPPORTED_LOCALES } from '../../../i18n/src/strings';
 import { I18nString } from '../protos';
 import { fetchCamouflageDefinitions } from './camouflageDefinitions';
 import { fetchTankDefinitions } from './tankDefinitions';
@@ -33,3 +34,11 @@ export async function fetchTankNames() {
     }),
   );
 }
+
+export const SEARCH_KEYS = [
+  ...SUPPORTED_LOCALES.map((locale) => [
+    `searchableName.locales.${locale}`,
+    `searchableNameDeburr.locales.${locale}`,
+  ]).flat(),
+  'camouflages',
+];

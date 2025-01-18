@@ -2,6 +2,7 @@ import {
   metaSortTank,
   normalizeBoundingBox,
   resolveDpm,
+  SEARCH_KEYS,
   unionBoundingBox,
   type TankDefinition,
 } from '@blitzkit/core';
@@ -410,7 +411,7 @@ export const TankSearch = memo<TankSearchProps>(
           : sorted.reverse();
       } else {
         const searchedRaw = fuzzysort.go(tankFilters.search, tankNames, {
-          keys: ['searchableName', 'searchableNameDeburr', 'camouflages'],
+          keys: SEARCH_KEYS,
         });
         const searchedTanks = searchedRaw.map(
           (result) => tankDefinitions.tanks[result.obj.id],
