@@ -2,6 +2,7 @@ import { TankSandbox } from '../../../../../components/Tankopedia/HeroSection/co
 import { awaitableModelDefinitions } from '../../../../../core/awaitables/modelDefinitions';
 import { awaitableProvisionDefinitions } from '../../../../../core/awaitables/provisionDefinitions';
 import { awaitableTankDefinitions } from '../../../../../core/awaitables/tankDefinitions';
+import { LocaleProvider } from '../../../../../hooks/useLocale';
 import { App } from '../../../../../stores/app';
 import { Duel } from '../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../stores/tankopediaEphemeral';
@@ -23,15 +24,17 @@ export function Page({ id }: PageProps) {
   const model = modelDefinitions.models[id];
 
   return (
-    <App.Provider>
-      <TankopediaPersistent.Provider>
-        <Duel.Provider data={{ provisionDefinitions, tank }}>
-          <TankopediaEphemeral.Provider data={model}>
-            <Content />
-          </TankopediaEphemeral.Provider>
-        </Duel.Provider>
-      </TankopediaPersistent.Provider>
-    </App.Provider>
+    <LocaleProvider locale="en">
+      <App.Provider>
+        <TankopediaPersistent.Provider>
+          <Duel.Provider data={{ provisionDefinitions, tank }}>
+            <TankopediaEphemeral.Provider data={model}>
+              <Content />
+            </TankopediaEphemeral.Provider>
+          </Duel.Provider>
+        </TankopediaPersistent.Provider>
+      </App.Provider>
+    </LocaleProvider>
   );
 }
 

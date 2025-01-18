@@ -30,6 +30,7 @@ const locale = Astro.params.locale ?? DEFAULT_LOCALE;
       import { SUPPORTED_LOCALES } from '@blitzkit/i18n';
       import { getBestLocale } from '../core/i18n/getBestLocale';
 
+      const isAPI = window.location.pathname.startsWith('/api');
       const isI18nPath = SUPPORTED_LOCALES.some((locale) =>
         window.location.pathname.startsWith(`/${locale}`),
       );
@@ -38,7 +39,7 @@ const locale = Astro.params.locale ?? DEFAULT_LOCALE;
         window.location.pathname.startsWith(`/${locale}`),
       );
 
-      if (bestLocale !== currentPathLocale) {
+      if (!isAPI && bestLocale !== currentPathLocale) {
         window.location.pathname = isI18nPath
           ? window.location.pathname.replace(
               `/${currentPathLocale}`,
