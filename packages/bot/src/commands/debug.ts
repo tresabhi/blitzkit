@@ -17,7 +17,7 @@ export const debugCommand = new Promise<CommandRegistry>((resolve) => {
       const list = [
         [strings.bot.commands.debug.body.version, packageJSON.version],
         [
-          strings.bot.commands.debug.body.shard,
+          strings.bot.commands.debug.body.shard.label,
           client.shard?.ids[0] ?? strings.bot.commands.debug.body.shard.default,
         ],
         [
