@@ -1138,7 +1138,7 @@
         },
         "configuration": {
           "import": {
-            "title": "Import",
+            "title": "Импорт",
             "description": "Paste your current URL if you have one already to import your settings",
             "hint": "Paste URL...",
             "apply": "Apply",
