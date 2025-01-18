@@ -13,9 +13,9 @@
       "x": "x%s1"
     },
     "gun_types": {
-      "auto_loader": "Auto loader",
-      "auto_reloader": "Auto reloader",
-      "regular": "Regular"
+      "auto_loader": "自動装填砲",
+      "auto_reloader": "自動再装填砲",
+      "regular": "単発砲"
     },
     "shells": {
       "ap": "AP",
@@ -24,13 +24,13 @@
       "he": "HE"
     },
     "player_count_period": {
-      "total": "Total",
-      "d_120": "Past 120 days",
-      "d_90": "Past 90 days",
-      "d_60": "Past 60 days",
-      "d_30": "Past month",
-      "d_7": "Past week",
-      "d_1": "Yesterday"
+      "total": "全て",
+      "d_120": "過去120日間",
+      "d_90": "過去90日間",
+      "d_60": "過去60日間",
+      "d_30": "過去1ヶ月",
+      "d_7": "過去1週間",
+      "d_1": "昨日"
     },
     "branches": {
       "local": "dev",
@@ -351,7 +351,7 @@
         },
         "body": {
           "subtitle": "Research",
-          "total": "Total",
+          "total": "全て",
           "research": "Research: %s1",
           "upgrades": "Upgrades: %s1",
           "purchase": "Purchase: %s1",
@@ -402,7 +402,7 @@
         "name": "breakdown",
         "description": "A period's breakdown by tanks played",
         "body": {
-          "total": "Total",
+          "total": "全て",
           "battles": "Battles",
           "wn8": "WN8",
           "winrate": "Winrate",
@@ -956,7 +956,7 @@
             "hullTraverseHardTerrain": "道",
             "hullTraverseMediumTerrain": "地面",
             "hullTraverseSoftTerrain": "水辺",
-            "health": "HP",
+            "health": "耐久値",
             "fireChance": "火災発生率",
             "viewRange": "視認範囲",
             "camouflageStill": "静止時",
@@ -1053,7 +1053,7 @@
         "table": {
           "tanks": {
             "header": "Tank",
-            "total": "Total"
+            "total": "全て"
           },
           "stats": {
             "winrate": "Winrate",
@@ -1111,7 +1111,7 @@
         },
         "table": {
           "tank": "Tank",
-          "total": "Total",
+          "total": "全て",
           "remove": "Remove"
         }
       },
