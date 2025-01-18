@@ -736,7 +736,7 @@
       },
       "hot_tanks": {
         "title": "Популярные танки",
-        "subtitle": "Last %s1 days"
+        "subtitle": "За последнее %s1 дней"
       },
       "other_projects": {
         "title": "Другие классные проекты"
