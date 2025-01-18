@@ -1,4 +1,5 @@
 import { assertSecret } from '@blitzkit/core';
+import { existsSync } from 'fs';
 import { mkdir, writeFile } from 'fs/promises';
 import { parse as parsePath } from 'path';
 import ProgressBar from 'progress';
@@ -48,8 +49,12 @@ while (true) {
     await Promise.all(
       files.map(async ({ path, data }) => {
         const { dir } = parsePath(path);
+        const dirPath = `${DATA}/${dir}`;
 
-        await mkdir(`${DATA}/${dir}`, { recursive: true });
+        if (!existsSync(dirPath)) {
+          await mkdir(dirPath, { recursive: true });
+        }
+
         await writeFile(
           `${DATA}/${path}`,
           new Uint8Array(writeDVPL(Buffer.from(data))),
