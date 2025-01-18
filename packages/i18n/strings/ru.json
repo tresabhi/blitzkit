@@ -293,7 +293,7 @@
       },
       "filters": {
         "none": "Без фильтров",
-        "tier": "Уровень %s"
+        "tier": "Уровень %s1"
       },
       "no_data": {
         "battles_in_period": "За этот период боёв не было",
@@ -704,7 +704,7 @@
           "maneuverability.forwardsSpeed": "скорость вперед",
           "maneuverability.backwardsSpeed": "скорость назад",
           "maneuverability.power": "мощность",
-          "maneuverability.powerToWeight": "мощность к весу",
+          "maneuverability.powerToWeight": "тяговооруженность",
           "maneuverability.weight": "вес",
           "maneuverability.traverseSpeed": "скорость поворота"
         },
@@ -715,7 +715,7 @@
               "no_sort": "Без сортировки",
               "label": "Сортировка",
               "fire": "Стрельба",
-              "maneuverability": "Маневренность",
+              "maneuverability": "Манёвренность",
               "survivability": "Живучесть"
             },
             "direction": {
@@ -747,10 +747,10 @@
     "tools": {
       "tankopedia": {
         "name": "Такнопедия",
-        "button": "Найти танки",
+        "button": "Найти",
         "description": "Танковая энциклопедия Blitz",
         "seo_description": "Статистика, броня и многое другое по всем танкам World of Tanks Blitz",
-        "tank_seo_title": "%s1 - Tier %s2 %s3 %s4 | %s5 Tankopedia | World of Tanks Blitz (WoTB)",
+        "tank_seo_title": "%s1- %s3 %s4 %s2 уровня | Танкопедия %s5 | World of Tanks Blitz (WoTB)",
         "tank_seo_description": "%s1 armor, statistics, equipment, provisions, and more. %s2 DPM, %s3hp alpha, %s4mm penetration, %s5kph top speed, %s6hp health.",
         "sandbox": {
           "poses": {
@@ -851,12 +851,12 @@
           "title": "Способности в игровых режимах"
         },
         "review": {
-          "title": "Видео обзоры",
-          "disclaimer": "BlitzKit не несёт ответственность за видео обзоры.",
+          "title": "Видеообзоры",
+          "disclaimer": "BlitzKit не несёт ответственности за видеообзоры.",
           "join": "Apply to %s1 YouTuber program"
         },
         "configuration": {
-          "title": "Configuration",
+          "title": "Конфигурация",
           "modules": {
             "title": "Модули",
             "stock": "Сток",
@@ -889,7 +889,7 @@
           "title": "Характеристики",
           "compare": {
             "label": "Сравнивать с",
-            "class": "Tier %s1 %s2",
+            "class": "%s2 %s1 уровня",
             "tier": "Все %s1 уровня",
             "all": "Все танки"
           },
@@ -902,11 +902,11 @@
             "speed": "Скорость",
             "terrain_coefficients": "Сопротивление грунтам",
             "raw_terrain_coefficients": "Сырое сопротивление грунтам",
-            "power_to_weight_ratio": "Мощность / вес",
+            "power_to_weight_ratio": "Тяговооружённость",
             "hull_traverse_speed": "Скорость поворота корпуса",
             "camouflage": "Маскировка",
             "reload": "Перезарядка",
-            "crewCount": "Экипаж",
+            "crewCount": "Количество экипажа",
             "shellNormalization": "Нормализация",
             "shellRicochet": "Рикошет",
             "dpm": "ДПМ",
@@ -914,7 +914,7 @@
             "shells": "Снарядов в барабане",
             "mostOptimalShellIndex": "Самый эффективный снаряд",
             "shellReloads": "Перезарядка снарядов",
-            "shellReload": "Перезагрузка снаряда",
+            "shellReload": "Перезарядка",
             "intraClip": "Между снарядами",
             "caliber": "Калибр",
             "penetration": "Пробитие",
@@ -936,8 +936,8 @@
             "gunFrontalElevation": "Вверх спереди",
             "gunRearDepression": "Вниз сзади",
             "gunRearElevation": "Вверх сзади",
-            "azimuthLeft": "Азимут слева",
-            "azimuthRight": "Азимут справа",
+            "azimuthLeft": "Влево",
+            "azimuthRight": "Вправо",
             "speedForwards": "Вперёд",
             "speedBackwards": "Назад",
             "hardTerrainCoefficient": "На жёстком грунте",
@@ -957,13 +957,13 @@
             "hullTraverseMediumTerrain": "На среднем грунте",
             "hullTraverseSoftTerrain": "На мягком грунте",
             "health": "Прочность",
-            "fireChance": "Fire chance",
+            "fireChance": "Вероятность возгорания",
             "viewRange": "Радиус обзора",
             "camouflageStill": "Когда неподвижен",
             "camouflageMoving": "В движении",
-            "camouflageShootingStill": "Когда неподвижен",
-            "camouflageShootingMoving": "В движении",
-            "camouflageCaughtOnFire": "Caught on fire",
+            "camouflageShootingStill": "После выстрела, если неподвижен",
+            "camouflageShootingMoving": "После выстрела в движении",
+            "camouflageCaughtOnFire": "При пожаре",
             "width": "Ширина",
             "height": "Высота",
             "length": "Длина",
@@ -982,13 +982,13 @@
           "info": "обозначает другие роли, которые может взять член экипажа.",
           "count": "Количество экипажа",
           "commander": "Командир",
-          "gunner": "Заряжающий",
+          "gunner": "Наводчик",
           "driver": "Механик-водитель",
           "radioman": "Радист",
           "loader": "Заряжающий"
         },
         "maneuverability": {
-          "title": "Маневренность"
+          "title": "Манёвренность"
         },
         "survivability": {
           "title": "Живучесть"
@@ -996,7 +996,7 @@
       },
       "compare": {
         "name": "Сравнение",
-        "button": "Сравнить танки",
+        "button": "Сравнить",
         "description": "Сравнить статистику танков",
         "seo_description": "Сравните статистику танков и снаряжения в World of Tanks Blitz",
         "actions": {
@@ -1023,7 +1023,7 @@
           },
           "skills": {
             "clear": "Очистить",
-            "maximize": "Макс."
+            "maximize": "Максимум"
           },
           "modules": {
             "stock": "Сток",
@@ -1039,13 +1039,13 @@
       },
       "performance": {
         "name": "Эффективность",
-        "button": "View tanks",
-        "description": "Tank performance statistics",
-        "seo_description": "Best tanks and their performances in World of Tanks Blitz",
+        "button": "Изучить",
+        "description": "Статистика эффективности танков",
+        "seo_description": "Лучшие танки и их эффективность в World of Tanks Blitz",
         "estimation": {
           "body": "Примерная статистика на основе %s1 игроков. Обновлено %s2 назад.",
-          "hours": "%s1 hours",
-          "minutes": "%s1 minutes"
+          "hours": "%s1 часов",
+          "minutes": "%s1 минут"
         },
         "player_count": {
           "label": "Количество игроков"
@@ -1056,7 +1056,7 @@
             "total": "Всего"
           },
           "stats": {
-            "winrate": "Коэффициент побед",
+            "winrate": "Коэф. побед",
             "players": "Игроки",
             "damage": "Урон",
             "survival": "Выжил",
@@ -1074,18 +1074,18 @@
       },
       "gallery": {
         "name": "Галерея",
-        "button": "Browse all",
+        "button": "Просмотреть",
         "description": "Аватары игрока Blitz",
         "seo_description": "Все аватары игрока World of Tanks Blitz",
-        "last_updated": "Last updated on %s1",
+        "last_updated": "Последнее обновление %s1",
         "search": {
           "hint": "Поиск аватаров...",
-          "results": "%s1 avatars"
+          "results": "%s1 аватар"
         }
       },
       "session": {
         "name": "Сессия",
-        "button": "Start tracking",
+        "button": "Найти",
         "description": "Статистика сеанса игры",
         "seo_description": "Track your stats in real time as you play World of Tanks Blitz",
         "search": {
@@ -1117,8 +1117,8 @@
       },
       "tier_list": {
         "name": "Тир-лист",
-        "button": "Rank tanks",
-        "description": "Rank Blitz tanks",
+        "button": "Ранжировать",
+        "description": "Ранжирование танков Blitz",
         "seo_description": "Explore tier lists ranking tanks from best to worst, based on player ratings and statistical performance in World of Tanks Blitz",
         "buttons": {
           "reset": "Сброс",
@@ -1127,7 +1127,7 @@
       },
       "embed": {
         "name": "Встройки",
-        "button": "Create now",
+        "button": "Создать",
         "description": "Встраиваемые элементы для стримов",
         "seo_description": "Create embeds for streaming World of Tanks Blitz with extreme customization",
         "coming_soon": "More embeds coming soon.",
@@ -1141,7 +1141,7 @@
             "title": "Импорт",
             "description": "Paste your current URL if you have one already to import your settings",
             "hint": "Paste URL...",
-            "apply": "Apply",
+            "apply": "Применить",
             "idiot_title": "Invalid URL",
             "idiot_description": "Try pasting the URL that BlitzKit previously generated, you silly goose!",
             "idiot_button": "Okay, my bad"
@@ -1210,22 +1210,22 @@
         "seo_description": "Charts and graphs on anything and everything about tanks, players, and events in World of Tanks Blitz"
       },
       "rating": {
-        "name": "Rating",
-        "button": "View leaderboard",
-        "description": "Full rating leaderboard",
+        "name": "Рейтинг",
+        "button": "Посмотреть таблицу лидеров",
+        "description": "Полный таблица лидеров",
         "seo_description": "Live and archived full rating leaderboard for World of Tanks Blitz"
       },
       "discord": {
         "name": "Discord-бот",
-        "button": "Установить сейчас",
+        "button": "Установить",
         "description": "Статистика в Discord",
         "seo_description": "Get stats right in Discord with BlitzKit's Discord bot"
       },
       "more": {
-        "name": "More coming soon",
-        "button": "Join Discord",
-        "description": "What we're making",
-        "seo_description": "What we're making with BlitzKit"
+        "name": "Дальше больше",
+        "button": "Присоединяйся",
+        "description": "Что мы готовим",
+        "seo_description": "Что мы готовим для BlitzKit"
       },
       "players": {
         "name": "Игроки",
@@ -1235,19 +1235,19 @@
       },
       "home": {
         "name": "Главная",
-        "button": "Get started",
+        "button": "Начать",
         "description": "Get started with BlitzKit",
         "seo_description": "Get started with BlitzKit"
       },
       "blitz_analysis": {
         "name": "BlitzAnalysis[]",
-        "button": "Analyze now",
-        "description": "Rich historic average stats",
+        "button": "Анализируй",
+        "description": "Богатая статистика",
         "seo_description": "Rich historic average stats in World of Tanks Blitz"
       },
       "blitz_insider": {
         "name": "Blitz Insider",
-        "button": "Откройте для себя",
+        "button": "Открой для себя",
         "description": "Статистика сеанса игры",
         "seo_description": "Статистика сеанса игры в World of Tanks Blitz"
       }
