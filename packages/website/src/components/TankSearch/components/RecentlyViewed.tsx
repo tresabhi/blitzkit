@@ -16,7 +16,9 @@ export function RecentlyViewed() {
   const tankopediaPersistentStore = TankopediaPersistent.useStore();
   const filters = useStore($tankFilters);
   // non-reactive because it is a little weird that it updates instantly even before the page loads
-  const recentlyViewed = tankopediaPersistentStore.getState().recentlyViewed;
+  const recentlyViewed = tankopediaPersistentStore
+    .getState()
+    .recentlyViewed.filter((id) => id in tankDefinitions.tanks);
   const sort = useStore($tankopediaSort);
   const hasFilters = useMemo(
     () =>

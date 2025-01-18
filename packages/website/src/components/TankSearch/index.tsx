@@ -456,7 +456,9 @@ export const TankSearch = memo<TankSearchProps>(
                     draft.recentlyViewed = uniq([
                       ...tanksFiltered.map(({ id }) => id),
                       ...draft.recentlyViewed,
-                    ]).slice(0, MAX_RECENTLY_VIEWED);
+                    ])
+                      .filter((id) => id in tankDefinitions.tanks)
+                      .slice(0, MAX_RECENTLY_VIEWED);
                   });
                 }}
               >

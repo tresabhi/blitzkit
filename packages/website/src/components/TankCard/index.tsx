@@ -1,4 +1,9 @@
-import { asset, TankType, type TankDefinition } from '@blitzkit/core';
+import {
+  asset,
+  fetchTankDefinitions,
+  TankType,
+  type TankDefinition,
+} from '@blitzkit/core';
 import { Flex, Text, type TextProps } from '@radix-ui/themes';
 import { uniq } from 'lodash-es';
 import { forwardRef, type ReactNode } from 'react';
@@ -15,6 +20,8 @@ type TankCardProps = TextProps & {
   discriminator?: ReactNode;
   noLink?: boolean;
 };
+
+const tankDefinitions = await fetchTankDefinitions();
 
 export const TankCard = forwardRef<HTMLSpanElement, TankCardProps>(
   (
@@ -49,10 +56,9 @@ export const TankCard = forwardRef<HTMLSpanElement, TankCardProps>(
         onClick={() => {
           onSelect?.(tank);
           mutateTankopediaPersistent((draft) => {
-            draft.recentlyViewed = uniq([
-              tank.id,
-              ...draft.recentlyViewed,
-            ]).slice(0, MAX_RECENTLY_VIEWED);
+            draft.recentlyViewed = uniq([tank.id, ...draft.recentlyViewed])
+              .filter((id) => id in tankDefinitions.tanks)
+              .slice(0, MAX_RECENTLY_VIEWED);
           });
         }}
         className="tank-search-card"
