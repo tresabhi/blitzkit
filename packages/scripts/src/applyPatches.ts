@@ -47,9 +47,16 @@ while (true) {
     );
 
     for (const { path, data } of files) {
+      console.log(`Patching "${path}"...`);
+
       const { dir } = parsePath(path);
 
-      await mkdir(`${DATA}/${dir}`, { recursive: true });
+      try {
+        await mkdir(`${DATA}/${dir}`, { recursive: true });
+      } catch (error) {
+        console.warn(`Failed to make directory "${dir}"`);
+      }
+
       await writeFile(
         `${DATA}/${path}`,
         new Uint8Array(writeDVPL(Buffer.from(data))),
