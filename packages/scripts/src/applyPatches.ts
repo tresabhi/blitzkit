@@ -46,23 +46,17 @@ while (true) {
       files.length,
     );
 
-    await Promise.all(
-      files.map(async ({ path, data }) => {
-        const { dir } = parsePath(path);
-        const dirPath = `${DATA}/${dir}`;
+    for (const { path, data } of files) {
+      const { dir } = parsePath(path);
 
-        if (!existsSync(dirPath)) {
-          await mkdir(dirPath, { recursive: true });
-        }
+      await mkdir(`${DATA}/${dir}`, { recursive: true });
+      await writeFile(
+        `${DATA}/${path}`,
+        new Uint8Array(writeDVPL(Buffer.from(data))),
+      );
 
-        await writeFile(
-          `${DATA}/${path}`,
-          new Uint8Array(writeDVPL(Buffer.from(data))),
-        );
-
-        bar.tick();
-      }),
-    );
+      bar.tick();
+    }
 
     if ('dynamicContentLocalizationsDir' in data) {
       console.log('Found dynamic content localizations; patching...');
