@@ -35,7 +35,8 @@
     "build:protos": "bun packages/scripts/src/protos.ts",
     "preview:website": "cd packages/website && bun run preview",
     "build:reviews": "cd packages/scripts && bun build:reviews",
-    "build:ids": "cd packages/scripts && bun build:ids"
+    "build:ids": "cd packages/scripts && bun build:ids",
+    "prunestrings": "cd packages/scripts && bun prunestrings"
   },
   "license": "MIT",
   "dependencies": {

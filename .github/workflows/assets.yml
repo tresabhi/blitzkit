@@ -141,7 +141,7 @@ jobs:
 
       - name: Start server and build assets
         run: |
-          bun dev:website --verbose & 
+          bun dev:website --verbosepa & 
           SERVER_PID=$!
 
           bun run build:assets --all-targets --depot --production
