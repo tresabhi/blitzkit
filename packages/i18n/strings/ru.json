@@ -9,19 +9,19 @@
       "m": "%s1м",
       "mm": "%s1мм",
       "deg": "%s1°",
-      "hp": "%s1hp",
+      "hp": "%s1оп",
       "x": "x%s1"
     },
     "gun_types": {
-      "auto_loader": "Система заряжения",
-      "auto_reloader": "Система дозарядки",
-      "regular": "Цикл"
+      "auto_loader": "Барабан",
+      "auto_reloader": "Барабан с дозарядкой",
+      "regular": "Стандартное"
     },
     "shells": {
       "ap": "ББ",
       "apcr": "КС",
       "heat": "КС",
-      "he": "Фугас"
+      "he": "ФС"
     },
     "player_count_period": {
       "total": "Всего",
@@ -104,9 +104,9 @@
       "3": "ПТ-САУ"
     },
     "tank_class_short_plural_lowercase": {
-      "0": "лёгкие",
-      "1": "средние",
-      "2": "тяжёлые",
+      "0": "Лёгкие",
+      "1": "Средние",
+      "2": "Тяжёлые",
       "3": "ПТ-САУ"
     },
     "tank_class_medium": {
@@ -469,7 +469,7 @@
               "accuracy": "Точность стрельбы"
             },
             "lethality": {
-              "title": "Lethality",
+              "title": "Смертность",
               "average_damage": "Средний урон",
               "damage_per_tier": "Урон по уровню",
               "damage_ratio": "Коэффициент урона",
@@ -746,7 +746,7 @@
     },
     "tools": {
       "tankopedia": {
-        "name": "Tankopedia",
+        "name": "Такнопедия",
         "button": "Найти танки",
         "description": "Танковая энциклопедия Blitz",
         "seo_description": "Статистика, броня и многое другое по всем танкам World of Tanks Blitz",
@@ -760,7 +760,7 @@
           },
           "settings": {
             "armor": "Броня",
-            "green_penetration": "Green penetration",
+            "green_penetration": "Зелёное пробитие",
             "hide_model_under_armor": "Скрыть модель под броней",
             "opaque": "Прозрачность",
             "dev_wireframe": "DEV: wireframe",
@@ -787,36 +787,36 @@
               "reset": "Сброс"
             },
             "advanced": "Продвинутая подсветка",
-            "shooter": "Shooter:",
+            "shooter": "Стреляет:",
             "shot_card": {
               "element": {
-                "primary": "Primary",
-                "spaced": "Spaced",
-                "external": "External",
-                "gap": "Gap",
-                "gun": "Gun",
-                "track": "Tracks"
+                "primary": "Броня",
+                "spaced": "Экран",
+                "external": "Вн. модуль",
+                "gap": "Зазор",
+                "gun": "Орудие",
+                "track": "Гусеницы"
               },
               "status": {
-                "penetration": "%s1hp penetration",
-                "blocked": "Blocked",
+                "penetration": "Пробитие на %s1оп",
+                "blocked": "Не пробил",
                 "ricochet": "Рикошет",
-                "splash": "%s1hp splash"
+                "splash": "Урон осколками на %s1оп"
               },
               "stats": {
-                "thickness_and_angle": "%s1mm %s2°",
-                "nominal": "%s1mm nominal",
-                "ricochet_loss": "%s1% penetration"
+                "thickness_and_angle": "%s1мм %s2°",
+                "nominal": "%s1мм номинала",
+                "ricochet_loss": "%s1% пробития"
               }
             }
           },
           "static": {
-            "name": "Static armor",
-            "primary": "Primary",
-            "spaced": "Spaced",
-            "external": "External",
+            "name": "Статичная броня",
+            "primary": "Броня",
+            "spaced": "Экраны",
+            "external": "Вн. модули",
             "edit": {
-              "label": "Edit",
+              "label": "Изменить",
               "reset": "Сброс"
             }
           }
@@ -825,8 +825,8 @@
           "back": "Назад",
           "compare": "Сравнение",
           "swap": {
-            "button": "Swap",
-            "title": "Swap tanks"
+            "button": "Поменять",
+            "title": "Поменять танк"
           },
           "vanilla": "Vanilla",
           "opentest": "Открытый тест",
@@ -848,11 +848,11 @@
           "route": "Ветка %s1 из %s2"
         },
         "game_modes": {
-          "title": "Способности игрового режима"
+          "title": "Способности в игровых режимах"
         },
         "review": {
           "title": "Видео обзоры",
-          "disclaimer": "BlitzKit не несёт ответственность ни за видео обзор.",
+          "disclaimer": "BlitzKit не несёт ответственность за видео обзоры.",
           "join": "Apply to %s1 YouTuber program"
         },
         "configuration": {
@@ -867,7 +867,7 @@
             "clear": "Очистить"
           },
           "provisions": {
-            "title": "Provisions",
+            "title": "Амуниция",
             "clear": "Очистить"
           },
           "consumables": {
@@ -878,7 +878,7 @@
           "skills": {
             "title": "Навыки экипажа",
             "clear": "Очистить",
-            "maximize": "Максимум",
+            "maximize": "Макс.",
             "info": "Желтые навыки применяются только при особых условиях. Удерживайте пробел, чтобы быстро переключаться между уровнями 0 и 7."
           },
           "miscellaneous": {
@@ -890,87 +890,87 @@
           "compare": {
             "label": "Сравнивать с",
             "class": "Tier %s1 %s2",
-            "tier": "All of tier %s1",
-            "all": "All tanks"
+            "tier": "Все %s1 уровня",
+            "all": "Все танки"
           },
           "values": {
-            "shell_index": "Shell %s1",
-            "at_distance": "At %s1m",
-            "at_distance_slider_label": "Distance",
-            "dispersion_at_distance": "Dispersion at %s1m",
-            "gun_flexibility": "Gun flexibility",
-            "speed": "Speed",
-            "terrain_coefficients": "Terrain coefficients",
-            "raw_terrain_coefficients": "Raw terrain coefficients",
-            "power_to_weight_ratio": "Power to weight ratio",
-            "hull_traverse_speed": "Hull traverse speed",
-            "camouflage": "Камуфляж",
-            "reload": "Reload",
+            "shell_index": "Снаряд %s1",
+            "at_distance": "На %s1м",
+            "at_distance_slider_label": "Дистанция",
+            "dispersion_at_distance": "Разброс на %s1м",
+            "gun_flexibility": "Углы наводки",
+            "speed": "Скорость",
+            "terrain_coefficients": "Сопротивление грунтам",
+            "raw_terrain_coefficients": "Сырое сопротивление грунтам",
+            "power_to_weight_ratio": "Мощность / вес",
+            "hull_traverse_speed": "Скорость поворота корпуса",
+            "camouflage": "Маскировка",
+            "reload": "Перезарядка",
             "crewCount": "Экипаж",
             "shellNormalization": "Нормализация",
             "shellRicochet": "Рикошет",
             "dpm": "ДПМ",
-            "dpmEffective": "Effective at 60s",
-            "shells": "Shells",
-            "mostOptimalShellIndex": "Most optimal shell",
-            "shellReloads": "Shell reloads",
-            "shellReload": "Shell reload",
-            "intraClip": "Intra-clip",
+            "dpmEffective": "Эффективность за 60с",
+            "shells": "Снарядов в барабане",
+            "mostOptimalShellIndex": "Самый эффективный снаряд",
+            "shellReloads": "Перезарядка снарядов",
+            "shellReload": "Перезагрузка снаряда",
+            "intraClip": "Между снарядами",
             "caliber": "Калибр",
             "penetration": "Пробитие",
             "damage": "Урон",
-            "clipDamage": "Clipping potential",
+            "clipDamage": "Урон с барабана",
             "moduleDamage": "Урон по модулям",
-            "explosionRadius": "Explosion radius",
-            "shellVelocity": "Shell velocity",
-            "aimTime": "Aim time",
-            "dispersion": "Still",
-            "dispersionMoving": "Moving",
-            "dispersionHullTraversing": "Hull traversing",
-            "dispersionTurretTraversing": "Turret traversing",
-            "dispersionShooting": "Shooting",
-            "dispersionGunDamaged": "Gun damaged",
-            "gunDepression": "Depression",
-            "gunElevation": "Elevation",
-            "gunFrontalDepression": "Frontal depression",
-            "gunFrontalElevation": "Frontal elevation",
-            "gunRearDepression": "Rear depression",
-            "gunRearElevation": "Rear elevation",
-            "azimuthLeft": "Azimuth left",
-            "azimuthRight": "Azimuth right",
-            "speedForwards": "Forwards",
-            "speedBackwards": "Backwards",
-            "hardTerrainCoefficient": "Hard",
-            "hardTerrainCoefficientRaw": "Hard",
-            "mediumTerrainCoefficient": "Medium",
-            "mediumTerrainCoefficientRaw": "Medium",
-            "softTerrainCoefficient": "Soft",
-            "softTerrainCoefficientRaw": "Soft",
+            "explosionRadius": "Разлет осколков",
+            "shellVelocity": "Скорость снаряда",
+            "aimTime": "Базовое время сведения",
+            "dispersion": "Когда неподвижен",
+            "dispersionMoving": "В движении",
+            "dispersionHullTraversing": "При повороте шасси",
+            "dispersionTurretTraversing": "При повороте башни",
+            "dispersionShooting": "После выстрела",
+            "dispersionGunDamaged": "Повреждено орудие",
+            "gunDepression": "Вниз",
+            "gunElevation": "Вверх",
+            "gunFrontalDepression": "Вниз спереди",
+            "gunFrontalElevation": "Вверх спереди",
+            "gunRearDepression": "Вниз сзади",
+            "gunRearElevation": "Вверх сзади",
+            "azimuthLeft": "Азимут слева",
+            "azimuthRight": "Азимут справа",
+            "speedForwards": "Вперёд",
+            "speedBackwards": "Назад",
+            "hardTerrainCoefficient": "На жёстком грунте",
+            "hardTerrainCoefficientRaw": "На жёстком грунте",
+            "mediumTerrainCoefficient": "На среднем грунте",
+            "mediumTerrainCoefficientRaw": "На среднем грунте",
+            "softTerrainCoefficient": "На мягком грунте",
+            "softTerrainCoefficientRaw": "На мягком грунте",
             "enginePower": "Мощность двигателя",
-            "powerToWeightRatioHardTerrain": "Hard",
-            "powerToWeightRatioMediumTerrain": "Medium",
-            "powerToWeightRatioSoftTerrain": "Soft",
-            "weight": "Weight",
-            "turretTraverseSpeed": "Turret traverse speed",
-            "gunTraverseSpeed": "Gun traverse speed",
-            "hullTraverseHardTerrain": "Hard",
-            "hullTraverseMediumTerrain": "Medium",
-            "hullTraverseSoftTerrain": "Soft",
-            "health": "Health",
+            "powerToWeightRatioHardTerrain": "На жёстком грунте",
+            "powerToWeightRatioMediumTerrain": "На среднем грунте",
+            "powerToWeightRatioSoftTerrain": "На мягком грунте",
+            "weight": "Вес",
+            "turretTraverseSpeed": "Скорость поворота башни",
+            "gunTraverseSpeed": "Скорость поворота орудия",
+            "hullTraverseHardTerrain": "На жёстком грунте",
+            "hullTraverseMediumTerrain": "На среднем грунте",
+            "hullTraverseSoftTerrain": "На мягком грунте",
+            "health": "Прочность",
             "fireChance": "Fire chance",
-            "viewRange": "View range",
-            "camouflageStill": "Still",
+            "viewRange": "Радиус обзора",
+            "camouflageStill": "Когда неподвижен",
             "camouflageMoving": "Moving",
-            "camouflageShootingStill": "Still",
+            "camouflageShootingStill": "Когда неподвижен",
             "camouflageShootingMoving": "Moving",
             "camouflageCaughtOnFire": "Caught on fire",
-            "width": "Width",
-            "height": "Height",
-            "length": "Length",
-            "volume": "Volume",
-            "shellRange": "Shell range",
-            "shellCapacity": "Shell capacity",
-            "gunType": "Gun type",
+            "width": "Ширина",
+            "height": "Высота",
+            "length": "Длина",
+            "volume": "Объём",
+            "shellRange": "Дальность снаряда",
+            "shellCapacity": "Боезапас",
+            "gunType": "Тип орудия",
             "penetrationAt250m": "Пробитие на 250м"
           }
         },
@@ -978,51 +978,51 @@
           "title": "Огневая мощь"
         },
         "crew": {
-          "title": "Crew training",
-          "info": "represents the other roles a crew member can take.",
-          "count": "Crew count",
-          "commander": "Commander",
-          "gunner": "Gunner",
-          "driver": "Driver",
-          "radioman": "Radioman",
-          "loader": "Loader"
+          "title": "Мастерство экипажа",
+          "info": "обозначает другие роли, которые может взять член экипажа.",
+          "count": "Количество экипажа",
+          "commander": "Командир",
+          "gunner": "Заряжающий",
+          "driver": "Механик-водитель",
+          "radioman": "Радист",
+          "loader": "Заряжающий"
         },
         "maneuverability": {
-          "title": "Maneuverability"
+          "title": "Маневренность"
         },
         "survivability": {
-          "title": "Survivability"
+          "title": "Живучесть"
         }
       },
       "compare": {
-        "name": "Compare",
-        "button": "Compare tanks",
-        "description": "Compare tank statistics",
-        "seo_description": "Compare tanks statistics and loadouts in World of Tanks Blitz",
+        "name": "Сравнение",
+        "button": "Сравнить танки",
+        "description": "Сравнить статистику танков",
+        "seo_description": "Сравните статистику танков и снаряжения в World of Tanks Blitz",
         "actions": {
           "add": {
-            "button": "Add",
-            "title": "Add tanks",
-            "description": "Select tanks to add to comparison"
+            "button": "Добавить",
+            "title": "Добавить танки",
+            "description": "Выберите танки для добавления к сравнению"
           },
-          "clear": "Clear",
+          "clear": "Очистить",
           "deltas": {
-            "none": "No deltas",
-            "percentage": "Percentage",
-            "absolute": "Absolute"
+            "none": "Без дельты",
+            "percentage": "Проценты",
+            "absolute": "Абсолютные"
           }
         },
         "no_tanks": {
-          "title": "No tanks selected",
-          "body": "Press the Add button to get started"
+          "title": "Нет выбранных танков",
+          "body": "Нажмите кнопку Добавить, чтобы начать"
         },
         "table": {
           "equipment": {
-            "clear": "Clear",
-            "apply_to_all": "Apply to all"
+            "clear": "Очистить",
+            "apply_to_all": "Применить ко всем"
           },
           "skills": {
-            "clear": "Clear",
+            "clear": "Очистить",
             "maximize": "Maximize"
           },
           "modules": {
@@ -1030,10 +1030,10 @@
             "upgrade": "Upgrade"
           },
           "provisions": {
-            "clear": "Clear"
+            "clear": "Очистить"
           },
           "consumables": {
-            "clear": "Clear"
+            "clear": "Очистить"
           }
         }
       },
@@ -1043,31 +1043,31 @@
         "description": "Tank performance statistics",
         "seo_description": "Best tanks and their performances in World of Tanks Blitz",
         "estimation": {
-          "body": "Estimated stats based on %s1 players. Updated %s2 ago.",
+          "body": "Примерная статистика на основе %s1 игроков. Обновлено %s2 назад.",
           "hours": "%s1 hours",
           "minutes": "%s1 minutes"
         },
         "player_count": {
-          "label": "Player count"
+          "label": "Количество игроков"
         },
         "table": {
           "tanks": {
-            "header": "Tank",
-            "total": "Total"
+            "header": "Танк",
+            "total": "Всего"
           },
           "stats": {
-            "winrate": "Winrate",
-            "players": "Players",
-            "damage": "Damage",
-            "survival": "Survival",
-            "xp": "XP",
-            "kills": "Kills",
-            "spots": "Spots",
-            "accuracy": "Accuracy",
-            "shots": "Shots",
-            "hits": "Hits",
-            "damage_ratio": "Dmg. ratio",
-            "damage_taken": "Dmg. taken",
+            "winrate": "Коэффициент побед",
+            "players": "Игроки",
+            "damage": "Урон",
+            "survival": "Выжил",
+            "xp": "Опыт",
+            "kills": "Уничтожил",
+            "spots": "Попаданий",
+            "accuracy": "Точность",
+            "shots": "Выстрелов",
+            "hits": "Уничтожен",
+            "damage_ratio": "Коэф. урона",
+            "damage_taken": "Получено урона",
             "capture_points": "Cap points"
           }
         }
@@ -1075,44 +1075,44 @@
       "gallery": {
         "name": "Галерея",
         "button": "Browse all",
-        "description": "Blitz player avatars",
-        "seo_description": "All World of Tanks Blitz player avatars",
+        "description": "Аватары игрока Blitz",
+        "seo_description": "Все аватары игрока World of Tanks Blitz",
         "last_updated": "Last updated on %s1",
         "search": {
-          "hint": "Search avatars...",
+          "hint": "Поиск аватаров...",
           "results": "%s1 avatars"
         }
       },
       "session": {
         "name": "Сессия",
         "button": "Start tracking",
-        "description": "Live session stats",
+        "description": "Статистика сеанса игры",
         "seo_description": "Track your stats in real time as you play World of Tanks Blitz",
         "search": {
           "lookup": "Look up a player to get started",
-          "hint": "Search players...",
-          "searching": "Searching...",
-          "no_results": "No players found"
+          "hint": "Поиск игроков...",
+          "searching": "Поиск...",
+          "no_results": "Игроков не найдено"
         },
         "controls": {
           "title": "Tracking %s1",
           "subtitle": "Since %s1",
-          "reset": "Reset",
-          "change": "Change"
+          "reset": "Сброс",
+          "change": "Изменить"
         },
         "no_cc": {
           "title": "You're attempting to track a CC account",
           "body": "CC (community contributor) accounts do not have public tank statistics. We are in the process of adding embeds for CC accounts, stay tuned.",
-          "alright": "Alright"
+          "alright": "Принять"
         },
         "no_battles": {
-          "title": "No battles",
+          "title": "Нет боёв",
           "hint": "Go ahead and play a game"
         },
         "table": {
-          "tank": "Tank",
-          "total": "Total",
-          "remove": "Remove"
+          "tank": "Танк",
+          "total": "Всего",
+          "remove": "Удалить"
         }
       },
       "tier_list": {
