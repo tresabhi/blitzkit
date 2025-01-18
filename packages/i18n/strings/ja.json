@@ -39,15 +39,15 @@
       "preview": "preview"
     },
     "locales": {
-      "en": "English",
-      "es": "Spanish",
-      "pt": "Portuguese",
-      "ru": "Russian",
-      "uk": "Ukrainian",
-      "zh": "Chinese",
-      "ja": "Japanese",
-      "fr": "French",
-      "pl": "Polish"
+      "en": "英語",
+      "es": "スペイン語",
+      "pt": "ポルトガル語",
+      "ru": "ロシア語",
+      "uk": "ウクライナ語",
+      "zh": "中国語",
+      "ja": "日本語",
+      "fr": "フランス語",
+      "pl": "ポーランド語"
     },
     "wn8_percentile": {
       "0": "Very bad",
@@ -75,26 +75,26 @@
       "10": "Super unicum"
     },
     "nations": {
-      "ussr": "U.S.S.R.",
-      "germany": "Germany",
-      "usa": "U.S.A.",
-      "china": "China",
-      "uk": "U.K.",
-      "france": "France",
-      "japan": "Japan",
-      "european": "European Nation",
-      "other": "Hybrid Nation"
+      "ussr": "ソ連",
+      "germany": "ドイツ",
+      "usa": "アメリカ",
+      "china": "中国",
+      "uk": "イギリス",
+      "france": "フランス",
+      "japan": "日本",
+      "european": "ヨーロッパ諸国",
+      "other": "多国籍"
     },
     "nations_adjectives": {
-      "ussr": "U.S.S.R.",
-      "germany": "German",
-      "usa": "U.S.A.",
-      "china": "Chinese",
-      "uk": "U.K.",
-      "france": "French",
-      "japan": "Japanese",
-      "european": "European",
-      "other": "Hybrid"
+      "ussr": "ソ連",
+      "germany": "ドイツ",
+      "usa": "アメリカ",
+      "china": "中国",
+      "uk": "イギリス",
+      "france": "フランス",
+      "japan": "日本",
+      "european": "ヨーロッパ",
+      "other": "多国籍"
     },
     "tank_class_short": {
       "-1": "unrecognized",
@@ -118,9 +118,9 @@
     },
     "tree_type": {
       "-1": "unrecognized",
-      "0": "Tech tree",
-      "1": "Premium",
-      "2": "Collector"
+      "0": "技術ツリー",
+      "1": "プレミアム",
+      "2": "コレクター"
     },
     "regions": {
       "normal": {
@@ -135,11 +135,11 @@
       }
     },
     "leagues": {
-      "diamond": "Diamond",
-      "platinum": "Platinum",
-      "gold": "Gold",
-      "silver": "Silver",
-      "bronze": "Bronze"
+      "diamond": "ダイヤモンド",
+      "platinum": "プラチナ",
+      "gold": "ゴールド",
+      "silver": "シルバー",
+      "bronze": "ブロンズ"
     },
     "composite_stats": {
       "normalized_damage_dealt": "Damage",
@@ -665,69 +665,69 @@
         "copied": "Copied!"
       },
       "tank_search": {
-        "search_bar_hint": "Search tanks...",
-        "recent": "Recently viewed",
-        "select_all": "Select all",
-        "count_singular": "1 tank",
-        "count_plural": "%s1 tanks",
-        "sorting_by": "Sorting by %s1",
+        "search_bar_hint": "車輌名を入力…",
+        "recent": "最近の閲覧",
+        "select_all": "全て選択",
+        "count_singular": "1 輌",
+        "count_plural": "%s1 輌",
+        "sorting_by": "並べ替え:%s1",
         "no_tanks_found": {
-          "body": "No tanks found.",
-          "search_again": "Try searching again.",
-          "clear_filters": "Try clearing filters."
+          "body": "該当する車輌が存在しません。",
+          "search_again": "もう一度探してください。",
+          "clear_filters": "フィルターをクリアしてください"
         },
         "sort": {
-          "meta.none": "none",
-          "survivability.health": "health",
-          "survivability.viewRange": "view range",
-          "survivability.camouflageStill": "camouflage still",
-          "survivability.camouflageMoving": "camouflage moving",
-          "survivability.camouflageShooting": "camouflage shooting",
-          "survivability.volume": "volume",
-          "survivability.length": "length",
-          "fire.dpm": "standard DPM",
-          "fire.dpmPremium": "premium DPM",
-          "fire.reload": "reload",
-          "fire.caliber": "caliber",
-          "fire.standardPenetration": "standard penetration",
-          "fire.premiumPenetration": "premium penetration",
-          "fire.damage": "damage",
-          "fire.moduleDamage": "module damage",
-          "fire.shellVelocity": "shell velocity",
-          "fire.shellRange": "shell range",
-          "fire.shellCapacity": "shell capacity",
-          "fire.aimTime": "aim time",
-          "fire.dispersionStill": "dispersion still",
-          "fire.dispersionMoving": "dispersion moving",
-          "fire.gunDepression": "gun depression",
-          "fire.gunElevation": "gun elevation",
-          "maneuverability.forwardsSpeed": "forwards speed",
-          "maneuverability.backwardsSpeed": "backwards speed",
-          "maneuverability.power": "power",
-          "maneuverability.powerToWeight": "power to weight",
-          "maneuverability.weight": "weight",
-          "maneuverability.traverseSpeed": "traverse speed"
+          "meta.none": "なし",
+          "survivability.health": "耐久値",
+          "survivability.viewRange": "視認範囲",
+          "survivability.camouflageStill": "静止時隠蔽率",
+          "survivability.camouflageMoving": "移動時隠蔽率",
+          "survivability.camouflageShooting": "射撃時隠蔽率",
+          "survivability.volume": "体積",
+          "survivability.length": "全長",
+          "fire.dpm": "通常弾DPM",
+          "fire.dpmPremium": "課金弾DPM",
+          "fire.reload": "装填速度",
+          "fire.caliber": "砲口径",
+          "fire.standardPenetration": "通常弾貫通力",
+          "fire.premiumPenetration": "課金弾貫通力",
+          "fire.damage": "ダメージ",
+          "fire.moduleDamage": "モジュールダメージ",
+          "fire.shellVelocity": "弾速",
+          "fire.shellRange": "射程範囲",
+          "fire.shellCapacity": "総弾数",
+          "fire.aimTime": "照準時間",
+          "fire.dispersionStill": "静止時散布界",
+          "fire.dispersionMoving": "移動時散布界",
+          "fire.gunDepression": "主砲俯角",
+          "fire.gunElevation": "主砲仰角",
+          "maneuverability.forwardsSpeed": "前進速度",
+          "maneuverability.backwardsSpeed": "後退速度",
+          "maneuverability.power": "馬力",
+          "maneuverability.powerToWeight": "出力重量比",
+          "maneuverability.weight": "重量",
+          "maneuverability.traverseSpeed": "車体旋回速度"
         },
         "sort_dropdown": {
           "label": "Sort",
           "groups": {
             "sort": {
               "no_sort": "No sort",
-              "label": "Sort by",
-              "fire": "Fire",
-              "maneuverability": "Maneuverability",
-              "survivability": "Survivability"
+              "label": "並べ替え項目",
+              "fire": "火力",
+              "maneuverability": "機動性",
+              "survivability": "生存性"
             },
             "direction": {
-              "label": "Direction",
-              "ascending": "Ascending",
-              "descending": "Descending"
+              "label": "方法",
+              "ascending": "昇順",
+              "descending": "降順"
             }
           }
         }
       },
       "warnings": {
-        "test": "Tanks in testing are subject to change and may not represent the final product."
+        "test": "テスト中の車輌は変更が加えられる可能性があり、最終的な性能と異なる場合があります。"
       }
     },
     "home": {
@@ -735,41 +735,41 @@
         "credit": "By %s1 ❤️"
       },
       "hot_tanks": {
-        "title": "Popular tanks",
-        "subtitle": "Last %s1 days"
+        "title": "人気の車輌",
+        "subtitle": "過去 %s1 日間"
       },
       "other_projects": {
         "title": "Other cool projects"
       },
-      "help_translate": "Please help translate %s1 to %s2!",
+      "help_translate": "%s1 の %s2 への翻訳にご協力ください！",
       "seo_description": "Tools for everything World of Tanks Blitz"
     },
     "tools": {
       "tankopedia": {
         "name": "Tankopedia",
-        "button": "Find tanks",
-        "description": "Blitz tank encyclopedia",
+        "button": "戦車を探す",
+        "description": "Blitz戦車百科事典",
         "seo_description": "Statistics, armor, and more for all tanks in World of Tanks Blitz",
         "tank_seo_title": "%s1 - Tier %s2 %s3 %s4 | %s5 Tankopedia | World of Tanks Blitz (WoTB)",
         "tank_seo_description": "%s1 armor, statistics, equipment, provisions, and more. %s2 DPM, %s3hp alpha, %s4mm penetration, %s5kph top speed, %s6hp health.",
         "sandbox": {
           "poses": {
-            "hull_down": "Hull down",
-            "face_hug": "Face hug",
-            "default": "Default"
+            "hull_down": "ハルダウン",
+            "face_hug": "密着",
+            "default": "通常"
           },
           "settings": {
-            "armor": "Armor",
-            "green_penetration": "Green penetration",
-            "hide_model_under_armor": "Hide model under armor",
-            "opaque": "Opaque",
+            "armor": "装甲",
+            "green_penetration": "貫通可能域を緑色表示",
+            "hide_model_under_armor": "車輌モデルを非表示",
+            "opaque": "貫通アシストを不透明にする",
             "dev_wireframe": "DEV: wireframe",
-            "environment": "Environment",
-            "show_grid": "Show grid"
+            "environment": "環境",
+            "show_grid": "グリッドを表示"
           },
           "screenshot": {
-            "download": "Download",
-            "copy": "Copy"
+            "download": "保存する",
+            "copy": "コピー"
           },
           "model": {
             "name": "Model"
@@ -777,56 +777,56 @@
           "dynamic": {
             "name": "Dynamic armor",
             "custom_shell": {
-              "type": "Type",
-              "caliber": "Caliber",
-              "penetration": "Penetration",
-              "normalization": "Normalization",
-              "ricochet": "Ricochet",
-              "explosion_radius": "Explosion radius",
-              "exit": "Exit",
-              "reset": "Reset"
+              "type": "弾種",
+              "caliber": "口径",
+              "penetration": "貫通力",
+              "normalization": "標準化",
+              "ricochet": "跳弾角度",
+              "explosion_radius": "爆風半径",
+              "exit": "決定",
+              "reset": "リセット"
             },
-            "advanced": "Advanced highlighting",
-            "shooter": "Shooter:",
+            "advanced": "高度なハイライト",
+            "shooter": "自車両",
             "shot_card": {
               "element": {
-                "primary": "Primary",
-                "spaced": "Spaced",
-                "external": "External",
-                "gap": "Gap",
-                "gun": "Gun",
-                "track": "Tracks"
+                "primary": "主装甲",
+                "spaced": "空間装甲",
+                "external": "外部モジュール",
+                "gap": "空間距離",
+                "gun": "主砲",
+                "track": "履帯"
               },
               "status": {
-                "penetration": "%s1hp penetration",
-                "blocked": "Blocked",
-                "ricochet": "Ricochet",
-                "splash": "%s1hp splash"
+                "penetration": "%s1hp 装甲貫通",
+                "blocked": "装甲非貫通",
+                "ricochet": "跳弾",
+                "splash": "%s1hp 爆風ダメージ"
               },
               "stats": {
                 "thickness_and_angle": "%s1mm %s2°",
-                "nominal": "%s1mm nominal",
+                "nominal": "%s1mm 装甲",
                 "ricochet_loss": "%s1% penetration"
               }
             }
           },
           "static": {
             "name": "Static armor",
-            "primary": "Primary",
-            "spaced": "Spaced",
-            "external": "External",
+            "primary": "主装甲",
+            "spaced": "空間装甲",
+            "external": "外部モジュール",
             "edit": {
-              "label": "Edit",
-              "reset": "Reset"
+              "label": "編集",
+              "reset": "リセット"
             }
           }
         },
         "meta": {
-          "back": "Back",
-          "compare": "Compare",
+          "back": "戻る",
+          "compare": "性能比較",
           "swap": {
-            "button": "Swap",
-            "title": "Swap tanks"
+            "button": "入れ替え",
+            "title": "車輌を入れ替える"
           },
           "vanilla": "Vanilla",
           "opentest": "OpenTest",
@@ -843,12 +843,12 @@
         },
         "tech_tree": {
           "title": "技術ツリー",
-          "battle": "1 battle",
-          "battles": "%s1 battles",
-          "route": "Route %s1 of %s2"
+          "battle": "1 戦",
+          "battles": "%s1 戦",
+          "route": "ルート %s1 / %s2"
         },
         "game_modes": {
-          "title": "Game mode abilities"
+          "title": "ゲームモードアビリティ"
         },
         "review": {
           "title": "Review videos",
@@ -1008,7 +1008,7 @@
           "clear": "クリア",
           "deltas": {
             "none": "No deltas",
-            "percentage": "割合(%)",
+            "percentage": "割合",
             "absolute": "絶対値"
           }
         },
@@ -1097,7 +1097,7 @@
         "controls": {
           "title": "Tracking %s1",
           "subtitle": "Since %s1",
-          "reset": "Reset",
+          "reset": "リセット",
           "change": "Change"
         },
         "no_cc": {
@@ -1121,7 +1121,7 @@
         "description": "Rank Blitz tanks",
         "seo_description": "Explore tier lists ranking tanks from best to worst, based on player ratings and statistical performance in World of Tanks Blitz",
         "buttons": {
-          "reset": "Reset",
+          "reset": "リセット",
           "share": "Share"
         }
       },
@@ -1157,7 +1157,7 @@
               "success": {
                 "title": "Copy URL",
                 "info": "Generated the URL for %s1. The embed will start tracking as soon as the URL is pasted. Reset at any time by right-clicking on PC or long-pressing on mobile and then selecting \"Reset\".",
-                "back": "Back",
+                "back": "戻る",
                 "copy": "Copy URL"
               }
             },
@@ -1168,7 +1168,7 @@
           },
           "customize": {
             "title": "Customize",
-            "reset": "Reset",
+            "reset": "リセット",
             "description": "Bells and whistles of your embed"
           }
         },
