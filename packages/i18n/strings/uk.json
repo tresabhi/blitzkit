@@ -1,6 +1,6 @@
 {
   "test": {
-    "default": "test",
+    "default": "тест",
     "long": "This is a long test string. You MUST NEVER see this in the UI. My favorite fruit is %s1 because it has the color of %s2. I like it so much that I will say its name 3 times! %s1! %s1! %s1! Once again, it's %s2, not %s3.",
     "fox": "The quick brown fox jumps over the lazy dog."
   },
@@ -66,7 +66,7 @@
       "1": "Malum",
       "2": "Very bad",
       "3": "Bad",
-      "4": "Below average",
+      "4": "Нижче середнього",
       "5": "Average",
       "6": "Above average",
       "7": "Good",
