@@ -12,8 +12,9 @@ export function translator(localeRaw: Locale) {
     SUPPORTED_LOCALES_DISCORD.includes(localeRaw)
       ? localeRaw
       : DEFAULT_LOCALE_DISCORD;
-  const strings = STRINGS[SUPPORTED_LOCALES_DISCORD_MAP_INVERSE[locale]];
-  const unwrap = unwrapper(SUPPORTED_LOCALES_DISCORD_MAP_INVERSE[locale]);
+  const bkLocale = SUPPORTED_LOCALES_DISCORD_MAP_INVERSE[locale];
+  const strings = STRINGS[bkLocale];
+  const unwrap = unwrapper(bkLocale);
 
-  return { locale, strings, unwrap };
+  return { locale, strings, unwrap, bkLocale };
 }

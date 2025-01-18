@@ -8,12 +8,12 @@ export async function filtersToDescription(
   { nation, tier, type, class: tankClass, tank }: StatFilters,
   locale: Locale,
 ) {
-  const { strings } = translator(locale);
+  const { strings, bkLocale } = translator(locale);
   const awaitedTankDefinitions = await fetchTankDefinitions();
   const info: string[] = [];
 
   // TODO: somehow localize tank names?
-  if (tank) return awaitedTankDefinitions.tanks[tank].name;
+  if (tank) return awaitedTankDefinitions.tanks[tank].name.locales[bkLocale];
   if (nation)
     info.push((strings.common.nations as Record<string, string>)[nation]);
   if (tier) {
