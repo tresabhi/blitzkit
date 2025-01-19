@@ -1,7 +1,7 @@
 {
   "test": {
     "default": "test",
-    "long": "To jest długi ciąg testowy. NIGDY NIE ZOBACZYSZ tego widzieć w interfejsie użytkownika. Moje ulubione owoce to %s1, ponieważ mają kolor %s2. Tak bardzo je lubię, że powiem ich nazwę trzykrotnie! %s1! %s1! %s1! Po raz kolejny to %s2, a nie %s3.",
+    "long": "To jest długi ciąg testowy. NIGDY NIE ZOBACZYSZ tego w interfejsie użytkownika. Mój ulubiony owoc to %s1, ponieważ ma kolor %s2. Tak bardzo je lubię, że powiem ich nazwę 3 razy! %s1! %s1! %s1! Po raz kolejny to %s2, a nie %s3.",
     "fox": "Szybki brązowy lis przeskoczył nad leniwym psem."
   },
   "common": {
