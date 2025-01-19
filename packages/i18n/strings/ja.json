@@ -1,311 +1,1272 @@
 {
+  "test": {
+    "default": "test",
+    "long": "This is a long test string. You MUST NEVER see this in the UI. My favorite fruit is %s1 because it has the color of %s2. I like it so much that I will say its name 3 times! %s1! %s1! %s1! Once again, it's %s2, not %s3.",
+    "fox": "The quick brown fox jumps over the lazy dog."
+  },
+  "common": {
+    "units": {
+      "m": "%s1m",
+      "mm": "%s1mm",
+      "deg": "%s1°",
+      "hp": "%s1hp",
+      "x": "x%s1"
+    },
+    "gun_types": {
+      "auto_loader": "自動装填砲",
+      "auto_reloader": "自動再装填砲",
+      "regular": "単発砲"
+    },
+    "shells": {
+      "ap": "AP",
+      "apcr": "APCR",
+      "heat": "HEAT",
+      "he": "HE"
+    },
+    "player_count_period": {
+      "total": "Total",
+      "d_120": "過去 120 日間",
+      "d_90": "過去 90 日間",
+      "d_60": "過去 60 日間",
+      "d_30": "過去 1 ヶ月",
+      "d_7": "過去 1 週間",
+      "d_1": "昨日"
+    },
+    "branches": {
+      "local": "dev",
+      "dev": "beta",
+      "opentest": "opentest",
+      "preview": "preview"
+    },
+    "locales": {
+      "en": "英語",
+      "es": "スペイン語",
+      "pt": "ポルトガル語",
+      "ru": "ロシア語",
+      "uk": "ウクライナ語",
+      "zh": "中国語",
+      "ja": "日本語",
+      "fr": "フランス語",
+      "pl": "ポーランド語"
+    },
+    "wn8_percentile": {
+      "0": "Very bad",
+      "1": "Bad",
+      "2": "Below average",
+      "3": "Average",
+      "4": "Above average",
+      "5": "Good",
+      "6": "Very good",
+      "7": "Great",
+      "8": "Unicum",
+      "9": "Super unicum"
+    },
+    "bkni_percentile": {
+      "0": "Super malum",
+      "1": "Malum",
+      "2": "Very bad",
+      "3": "Bad",
+      "4": "Below average",
+      "5": "Average",
+      "6": "Above average",
+      "7": "Good",
+      "8": "Very good",
+      "9": "Unicum",
+      "10": "Super unicum"
+    },
+    "nations": {
+      "ussr": "ソ連",
+      "germany": "ドイツ",
+      "usa": "アメリカ",
+      "china": "中国",
+      "uk": "イギリス",
+      "france": "フランス",
+      "japan": "日本",
+      "european": "ヨーロッパ諸国",
+      "other": "多国籍"
+    },
+    "nations_adjectives": {
+      "ussr": "ソ連",
+      "germany": "ドイツ",
+      "usa": "アメリカ",
+      "china": "中国",
+      "uk": "イギリス",
+      "france": "フランス",
+      "japan": "日本",
+      "european": "ヨーロッパ",
+      "other": "多国籍"
+    },
+    "tank_class_short": {
+      "-1": "不明",
+      "0": "軽戦車",
+      "1": "中戦車",
+      "2": "重戦車",
+      "3": "駆逐戦車"
+    },
+    "tank_class_short_plural_lowercase": {
+      "0": "LT",
+      "1": "MT",
+      "2": "HT",
+      "3": "TD"
+    },
+    "tank_class_medium": {
+      "-1": "不明",
+      "0": "軽戦車",
+      "1": "中戦車",
+      "2": "重戦車",
+      "3": "駆逐戦車"
+    },
+    "tree_type": {
+      "-1": "不明",
+      "0": "技術ツリー",
+      "1": "プレミアム",
+      "2": "コレクター"
+    },
+    "regions": {
+      "normal": {
+        "com": "North America",
+        "eu": "Europe",
+        "asia": "Asia-Pacific"
+      },
+      "short": {
+        "com": "NA",
+        "eu": "EU",
+        "asia": "APAC"
+      }
+    },
+    "leagues": {
+      "diamond": "ダイヤモンド",
+      "platinum": "プラチナ",
+      "gold": "ゴールド",
+      "silver": "シルバー",
+      "bronze": "ブロンズ"
+    },
+    "composite_stats": {
+      "normalized_damage_dealt": "Damage",
+      "normalized_damage_received": "Damage received",
+      "normalized_deaths": "Deathrate",
+      "normalized_frags": "Kills",
+      "normalized_hits": "Hits",
+      "normalized_losses": "Lossrate",
+      "normalized_misses": "Misses",
+      "normalized_shots": "Shots",
+      "normalized_spotted": "Spots",
+      "normalized_survived_battles": "Survival rate",
+      "normalized_win_and_survived": "Winning and surviving rate",
+      "normalized_wins": "Winrate",
+      "normalized_xp": "XP",
+      "normalized_battle_life_time": "Battle time",
+      "cumulative_accuracy": "Accuracy",
+      "cumulative_battles": "Battles",
+      "cumulative_capture_points": "Total capture points",
+      "cumulative_damage_dealt": "Total damage",
+      "cumulative_damage_ratio": "Damage ratio",
+      "cumulative_damage_received": "Total damage received",
+      "cumulative_deaths": "Total deaths",
+      "cumulative_dropped_capture_points": "Total dropped capture points",
+      "cumulative_frags": "Total kills",
+      "cumulative_hits": "Total hits",
+      "cumulative_inaccuracy": "Inaccuracy",
+      "cumulative_kills_to_death_ratio": "Kills to death ratio",
+      "cumulative_losses": "Losses",
+      "cumulative_misses": "Total misses",
+      "cumulative_shots": "Total shots",
+      "cumulative_spotted": "Total spots",
+      "cumulative_survived_battles": "Survived battles",
+      "cumulative_win_and_survived": "Won and survived battles",
+      "cumulative_wins": "Wins",
+      "cumulative_xp": "Total XP",
+      "cumulative_wn8": "WN8",
+      "cumulative_battle_life_time": "Total battle time"
+    }
+  },
   "bot": {
     "common": {
-      "errors": {},
+      "errors": {
+        "clan_not_found": "# Could not find clan\nCouldn't find \"%s1\". Try selecting a clan from the search result.",
+        "player_not_found": "# Could not find user\nI couldn't find user \"%s1\". Try picking an user from the search result, typing in a valid username, or using the `/link` command.",
+        "player_not_linked": "# Use `/link` to get started\nI don't know who you are but you can tell me today!",
+        "tank_name_not_found": "# Tank not found\nCould not find tank by the name \"%s1\".",
+        "tank_id_not_found": "# Tank not found\nCould not find tank by the ID \"%s1\". Try typing the name of the tank instead of a number.",
+        "no_tank_stats": "# No tank stats available\nThis player doesn't have any stats available. This may not be the player you are looking for.",
+        "get_help": "Help Discord server",
+        "uncaught_error": "# BlitzKit ran into an error!\nWe're so sorry about this. Feel free to [join the official Discord server](https://discord.gg/nDt7AjGJQH) to get help.",
+        "preview": "# This command is in preview\n\nYou can only access this command in [the official Discord server](https://discord.gg/nDt7AjGJQH). The command will be generally available soon.",
+        "query_too_small": "# Your search is too short\nYour search must be at least 3 characters long.",
+        "query_too_long": "# Your search is too long\nYour search must be at most 100 characters long."
+      },
       "wn8": {
-        "types": {}
+        "name": "WN8",
+        "types": {
+          "very_bad": "Very bad",
+          "bad": "Bad",
+          "below_average": "Below average",
+          "average": "Average",
+          "above_average": "Above average",
+          "good": "Good",
+          "very_good": "Very good",
+          "great": "Great",
+          "unicum": "Unicum",
+          "super_unicum": "Super unicum"
+        }
       },
       "subcommands": {
-        "30": {},
-        "60": {},
-        "90": {},
-        "today": {},
-        "career": {},
+        "today": {
+          "name": "today",
+          "description": "Today"
+        },
+        "30": {
+          "name": "30",
+          "description": "30 days"
+        },
+        "60": {
+          "name": "60",
+          "description": "60 days"
+        },
+        "90": {
+          "name": "90",
+          "description": "90 days"
+        },
+        "career": {
+          "name": "career",
+          "description": "Career"
+        },
         "custom": {
+          "name": "custom",
+          "description": "Custom range",
           "options": {
-            "start": {},
-            "end": {}
+            "start": {
+              "name": "start",
+              "description": "Start in number of days ago from today"
+            },
+            "end": {
+              "name": "end",
+              "description": "End in number of days ago from today"
+            }
           }
         }
       },
       "options": {
-        "clan": {},
-        "tank": {},
-        "username": {},
-        "filters": {
-          "nation": {},
-          "class": {},
-          "type": {}
+        "clan": {
+          "name": "clan",
+          "description": "The clan name or tag"
         },
-        "region": {},
+        "tank": {
+          "name": "tank",
+          "description": "The tank to get stats for"
+        },
+        "username": {
+          "name": "username",
+          "description": "The Blitz username of the player"
+        },
+        "filters": {
+          "nation": {
+            "name": "nation",
+            "description": "Nation"
+          },
+          "class": {
+            "name": "class",
+            "description": "Class"
+          },
+          "type": {
+            "name": "type",
+            "description": "Type"
+          }
+        },
+        "region": {
+          "name": "region",
+          "description": "Region"
+        },
         "tier": {
-          "choices": {}
+          "name": "tier",
+          "description": "Tier",
+          "choices": {
+            "tier": "Tier %s1 - %s2"
+          }
         }
       },
-      "periods": {},
-      "filters": {},
-      "no_data": {},
-      "buttons": {},
-      "hero_stats": {}
+      "periods": {
+        "career": "Career",
+        "today": "Today",
+        "days": "%s1 days",
+        "custom": "%s1 - %s2 days"
+      },
+      "filters": {
+        "none": "No filters",
+        "tier": "Tier %s1"
+      },
+      "no_data": {
+        "battles_in_period": "No battles played in this period",
+        "battles_in_season": "No battles played in this season",
+        "players_in_period": "No players in this period",
+        "tanks_found": "No tanks found"
+      },
+      "buttons": {
+        "refresh": "Refresh"
+      },
+      "hero_stats": {
+        "battles": "Battles",
+        "winrate": "Winrate",
+        "damage": "Damage",
+        "damage_ratio": "Damage ratio",
+        "tier": "Tier",
+        "survival": "Survival",
+        "accuracy": "Accuracy",
+        "kills": "Kills"
+      }
     },
     "commands": {
       "auction": {
-        "body": {},
-        "errors": {},
-        "actions": {}
-      },
-      "replay": {},
-      "research": {
-        "options": {
-          "target_tank": {},
-          "starting_tank": {}
+        "name": "auction",
+        "description": "Tanks available right now in the auction",
+        "body": {
+          "title": "Blitz Auction",
+          "subtitle": "%s1 available • next prices %s2\nBid now: %s3",
+          "next": "Next price: %s1",
+          "available": "Available: %s1 / %s2"
         },
-        "body": {},
-        "errors": {}
+        "errors": {
+          "no_auction": "# No ongoing auction\n\nCurrently, there are no tanks available for purchase in the auction. If you think this is an error, please report this discrepancy in [the official Discord Server](https://discord.gg/nDt7AjGJQH)."
+        },
+        "actions": {
+          "bid": "Bid now"
+        }
+      },
+      "replay": {
+        "name": "replay",
+        "description": "Display replay results"
+      },
+      "research": {
+        "name": "research",
+        "description": "Lists the expenses in researching a line",
+        "options": {
+          "target_tank": {
+            "name": "target-tank",
+            "description": "The final tank to research in the line"
+          },
+          "starting_tank": {
+            "name": "starting-tank",
+            "description": "The starting tank in the line (inferred automatically if not provided)"
+          }
+        },
+        "body": {
+          "subtitle": "Research",
+          "total": "Total",
+          "research": "Research: %s1",
+          "upgrades": "Upgrades: %s1",
+          "purchase": "Purchase: %s1",
+          "equipment": "Equipment: %s1",
+          "estimation": "# This is an estimation!\n\nThis list may include already researched tanks because of the inaccurate information Wargaming provides. Try providing a `starting-tank` from the line when using the command if you can."
+        },
+        "errors": {
+          "non_tech_tree": "# %s1 is not on the tech tree\n\nYou cannot research a premium/collector tank.",
+          "tier_1": "# %s1 is a tier I\n\nTier I tanks are always unlocked for free for all players.",
+          "already_researched": "# %s1 is already researched\n\nTry providing a `starting-tank` when using the command to view the totals for a line you have already researched.",
+          "start_end_equal": "# %s1 was provided twice\n\nMake sure `starting-tank` and `target-tank` are different.",
+          "tanks_not_on_line": "# %s1 and %s2 are not on the same line\n\nMake sure `starting-tank` and `target-tank` are on the same tech-tree line.",
+          "unordered": "# %s1 higher tiered to %s2\n\nMake sure to provide %s3 as the `starting-tank` instead as it is the lower tiered tank."
+        }
       },
       "about": {
+        "name": "about",
+        "description": "All the info you need about the bot",
         "subcommands": {
-          "commands": {},
-          "embeds": {},
-          "introduction": {},
-          "invite": {},
-          "timezones": {},
-          "credits": {}
+          "commands": {
+            "name": "commands",
+            "description": "List of all commands and their descriptions",
+            "body": "# Commands\n\nBlitzKit offers the following commands:\n\n"
+          },
+          "embeds": {
+            "name": "embeds",
+            "description": "How embeds work"
+          },
+          "introduction": {
+            "name": "introduction",
+            "description": "About the bot"
+          },
+          "invite": {
+            "name": "invite",
+            "description": "How to invite the bot"
+          },
+          "timezones": {
+            "name": "timezones",
+            "description": "How BlitzKit infers and uses your timezone"
+          },
+          "credits": {
+            "name": "credits",
+            "description": "People who have helped BlitzKit"
+          }
         }
       },
       "breakdown": {
-        "body": {}
+        "name": "breakdown",
+        "description": "A period's breakdown by tanks played",
+        "body": {
+          "total": "Total",
+          "battles": "Battles",
+          "wn8": "WN8",
+          "winrate": "Winrate",
+          "damage": "Damage",
+          "unknown_tank": "Unknown tank %s1"
+        }
       },
       "debug": {
+        "name": "debug",
+        "description": "Debug information about the bot",
         "body": {
-          "shard": {}
+          "title": "# Debug\n\n",
+          "version": "Version",
+          "shard": {
+            "label": "Shard",
+            "default": "default"
+          },
+          "uptime": "Uptime"
         }
       },
       "evolution": {
+        "name": "evolution",
+        "description": "Evolution of statistics",
         "groups": {
-          "player": {},
-          "tank": {}
+          "player": {
+            "name": "player",
+            "description": "Player statistics"
+          },
+          "tank": {
+            "name": "tank",
+            "description": "Tank statistics"
+          }
         }
       },
       "inactive": {
+        "name": "inactive",
+        "description": "Lists all inactive players in a clan above a threshold",
         "options": {
-          "threshold": {}
+          "threshold": {
+            "name": "threshold",
+            "description": "The number of days inactive (default: %s1 days)"
+          }
         },
-        "body": {}
+        "body": {
+          "subtitle": "Inactive for %s1+ days",
+          "listing": "%s1 days"
+        }
       },
       "full_stats": {
+        "name": "full-stats",
+        "description": "Full in-game statistics",
         "body": {
           "cards": {
-            "games": {},
-            "efficiency": {},
-            "lethality": {},
-            "miscellaneous": {}
+            "games": {
+              "title": "Games",
+              "winrate": "Winrate",
+              "battles": "Battles",
+              "wins_losses": "Wins / losses"
+            },
+            "efficiency": {
+              "title": "Efficiency",
+              "wn8": "WN8",
+              "survival": "Survival",
+              "accuracy": "Accuracy"
+            },
+            "lethality": {
+              "title": "Lethality",
+              "average_damage": "Average damage",
+              "damage_per_tier": "Damage per tier",
+              "damage_ratio": "Damage ratio",
+              "average_kills": "Average kills"
+            },
+            "miscellaneous": {
+              "title": "Miscellaneous",
+              "average_tier": "Average tier",
+              "average_spots": "Average spots",
+              "average_xp": "Average XP",
+              "kills_to_death_ratio": "Kills to death ratio"
+            }
           }
         }
       },
       "link": {
+        "name": "link",
+        "description": "Links your Blitz and Discord account",
         "body": {
-          "no_role_permissions": {}
+          "accounts_linked": "Accounts linked",
+          "no_role_permissions": {
+            "title": "%s1 failed to verify",
+            "description": "I don't have the permission to manage roles."
+          }
         },
-        "embed": {}
+        "embed": {
+          "title": "Incorrect account?",
+          "description": "Use the command again and select a username from the search results."
+        }
       },
       "search_clans": {
+        "name": "search-clans",
+        "description": "Search clans",
         "options": {
-          "limit": {}
+          "limit": {
+            "name": "limit",
+            "description": "The max number of clan results (default: %s1)"
+          }
         },
-        "body": {}
+        "body": {
+          "title": "Clan search for %s1 in region %s2",
+          "no_results": "No clans found"
+        }
       },
       "search_players": {
+        "name": "search-players",
+        "description": "Search players",
         "options": {
-          "limit": {}
+          "limit": {
+            "name": "limit",
+            "description": "The max number of player results (default: %s1)"
+          }
         },
-        "body": {}
+        "body": {
+          "title": "Player search for %s1 in region %s2",
+          "no_results": "No players found"
+        }
       },
       "rating_leaderboard": {
+        "name": "rating-leaderboard",
+        "description": "Rating battles statistics",
         "subcommands": {
-          "neighbors": {},
-          "league": {}
+          "neighbors": {
+            "name": "neighbors",
+            "description": "Neighboring players on the leaderboard"
+          },
+          "league": {
+            "name": "league",
+            "description": "Top players of a league"
+          }
         },
         "options": {
-          "limit": {},
-          "season": {
-            "choices": {}
+          "limit": {
+            "name": "limit",
+            "description": "How many neighbors to display (default: %s1)"
           },
-          "league": {}
+          "season": {
+            "name": "season",
+            "description": "Season number (default: current)",
+            "choices": {
+              "current": "%s1 (current)"
+            }
+          },
+          "league": {
+            "name": "league",
+            "description": "The league to display"
+          }
         },
-        "body": {}
+        "body": {
+          "top_players": "Top %s1 players",
+          "no_participation": "# %s1 didn't play rating in season %s2\n\nThis player did not participate in this season or did not get past calibration.",
+          "no_ongoing_season": "# No ongoing season\n\nThere isn't a currently running rating season.",
+          "deleted_player": "Deleted %s1",
+          "neighbors": "Rating neighbors",
+          "more": "+ %s1 more"
+        }
       },
-      "today": {},
-      "stats": {},
+      "today": {
+        "name": "today",
+        "description": "Today's played tanks and statistics"
+      },
+      "stats": {
+        "name": "stats",
+        "description": "Quick statistics for a period"
+      },
       "owned_tanks": {
-        "body": {}
+        "name": "owned-tanks",
+        "description": "Shows all own tanks in a tier",
+        "body": {
+          "title": "# %s1's owned tier %s2 tanks\n\n"
+        }
       },
       "permissions": {
-        "body": {}
+        "name": "permissions",
+        "description": "Checks wether the bot has the required permissions to function",
+        "body": {
+          "title": "# Permissions\n\n%s1",
+          "view_channels": "View channels: needed to find the message the refresh button was used on",
+          "read_message_history": "Read message history: needed to find the message to refresh",
+          "attach_files": "Attach files: needed to add images to image-based commands",
+          "external_emojis": "External emojis: needed to add national flags and tank class emojis"
+        }
       },
       "ping": {
-        "body": {},
+        "name": "ping",
+        "description": "Check wether the bot is alive.",
+        "body": {
+          "pong": "Pong 🏓",
+          "pong_with_time": "Pong 🏓 - %s1ms"
+        },
         "subcommands": {
-          "blitzkit": {},
-          "wotb": {}
+          "blitzkit": {
+            "name": "blitzkit",
+            "description": "Ping BlitzKit"
+          },
+          "wotb": {
+            "name": "wotb",
+            "description": "Ping World of Tanks Blitz"
+          }
         }
       },
       "player_info": {
-        "body": {}
+        "name": "player-info",
+        "description": "Basic information about a player",
+        "body": {
+          "title": "%s1's information",
+          "nickname": "Nickname",
+          "battles": "Battles",
+          "winrate": "Winrate",
+          "account_id": "Account ID",
+          "created": "Created",
+          "last_battle": "Last battle"
+        }
       },
       "rating": {
+        "name": "rating",
+        "description": "Rating player's statistics",
         "subcommands": {
-          "today": {},
-          "season": {}
+          "today": {
+            "name": "today",
+            "description": "Today's rating statistics"
+          },
+          "season": {
+            "name": "season",
+            "description": "This season's rating statistics"
+          }
         },
         "body": {
-          "subtitle": {}
+          "subtitle": {
+            "today": "Today's rating statistics",
+            "season": "This season's rating statistics"
+          }
         },
-        "errors": {}
+        "errors": {
+          "no_participation": "# %s1 hasn't played rating\n\nThis player hasn't participated in the rating gamemode this season.",
+          "unrecorded_stats": "# Statistics currently unavailable\n\nWargaming may be currently be facing server downtime. If there is an on-going season, statistics should be available withing 24 hours."
+        }
       }
     }
   },
-  "common": {
-    "units": {},
-    "gun_types": {},
-    "shells": {},
-    "player_count_period": {},
-    "branches": {},
-    "locales": {},
-    "wn8_percentile": {},
-    "bkni_percentile": {},
-    "nations": {},
-    "nations_adjectives": {},
-    "tank_class_short": {},
-    "tank_class_short_plural_lowercase": {},
-    "tank_class_medium": {},
-    "tree_type": {},
-    "regions": {
-      "normal": {},
-      "short": {}
-    },
-    "leagues": {},
-    "composite_stats": {}
-  },
-  "test": {},
   "website": {
-    "settings": {},
+    "settings": {
+      "dev_mode": "開発者モード",
+      "language": "言語 / Language"
+    },
     "common": {
-      "player_search": {},
-      "copy_button": {},
+      "player_search": {
+        "hint": "プレイヤーを検索中...",
+        "no_results": "該当なし",
+        "searching": "検索中..."
+      },
+      "copy_button": {
+        "copied": "コピーしました!"
+      },
       "tank_search": {
-        "no_tanks_found": {},
-        "sort": {},
+        "search_bar_hint": "車輌名を入力…",
+        "recent": "最近の閲覧",
+        "select_all": "全て選択",
+        "count_singular": "1 輌",
+        "count_plural": "%s1 輌",
+        "sorting_by": "並べ替え:%s1",
+        "no_tanks_found": {
+          "body": "該当する車輌が存在しません。",
+          "search_again": "もう一度探してください。",
+          "clear_filters": "フィルターをクリアしてください"
+        },
+        "sort": {
+          "meta.none": "なし",
+          "survivability.health": "耐久値",
+          "survivability.viewRange": "視認範囲",
+          "survivability.camouflageStill": "静止時隠蔽率",
+          "survivability.camouflageMoving": "移動時隠蔽率",
+          "survivability.camouflageShooting": "射撃時隠蔽率",
+          "survivability.volume": "体積",
+          "survivability.length": "全長",
+          "fire.dpm": "通常弾DPM",
+          "fire.dpmPremium": "課金弾DPM",
+          "fire.reload": "装填速度",
+          "fire.caliber": "砲口径",
+          "fire.standardPenetration": "通常弾貫通力",
+          "fire.premiumPenetration": "課金弾貫通力",
+          "fire.damage": "ダメージ",
+          "fire.moduleDamage": "モジュールダメージ",
+          "fire.shellVelocity": "弾速",
+          "fire.shellRange": "射程範囲",
+          "fire.shellCapacity": "総弾数",
+          "fire.aimTime": "照準時間",
+          "fire.dispersionStill": "静止時散布界",
+          "fire.dispersionMoving": "移動時散布界",
+          "fire.gunDepression": "主砲俯角",
+          "fire.gunElevation": "主砲仰角",
+          "maneuverability.forwardsSpeed": "前進速度",
+          "maneuverability.backwardsSpeed": "後退速度",
+          "maneuverability.power": "馬力",
+          "maneuverability.powerToWeight": "出力重量比",
+          "maneuverability.weight": "重量",
+          "maneuverability.traverseSpeed": "車体旋回速度"
+        },
         "sort_dropdown": {
+          "label": "ソート",
           "groups": {
-            "sort": {},
-            "direction": {}
+            "sort": {
+              "no_sort": "ソートなし",
+              "label": "並べ替え項目",
+              "fire": "火力",
+              "maneuverability": "機動性",
+              "survivability": "生存性"
+            },
+            "direction": {
+              "label": "方法",
+              "ascending": "昇順",
+              "descending": "降順"
+            }
           }
         }
       },
-      "warnings": {}
+      "warnings": {
+        "test": "テスト中の車輌は変更が加えられる可能性があり、最終的な性能と異なる場合があります。"
+      }
     },
     "home": {
-      "hero": {},
-      "hot_tanks": {},
-      "other_projects": {}
+      "hero": {
+        "credit": "By %s1 ❤️"
+      },
+      "hot_tanks": {
+        "title": "人気の車輌",
+        "subtitle": "過去 %s1 日間"
+      },
+      "other_projects": {
+        "title": "Other cool projects"
+      },
+      "help_translate": "%s1 の %s2 への翻訳にご協力ください！",
+      "seo_description": "Tools for everything World of Tanks Blitz"
     },
     "tools": {
       "tankopedia": {
+        "name": "Tankopedia",
+        "button": "戦車を探す",
+        "description": "Blitz戦車百科事典",
+        "seo_description": "Statistics, armor, and more for all tanks in World of Tanks Blitz",
+        "tank_seo_title": "%s1 - Tier %s2 %s3 %s4 | %s5 Tankopedia | World of Tanks Blitz (WoTB)",
+        "tank_seo_description": "%s1 armor, statistics, equipment, provisions, and more. %s2 DPM, %s3hp alpha, %s4mm penetration, %s5kph top speed, %s6hp health.",
         "sandbox": {
-          "poses": {},
-          "settings": {},
-          "screenshot": {},
-          "model": {},
+          "poses": {
+            "hull_down": "ハルダウン",
+            "face_hug": "密着",
+            "default": "通常"
+          },
+          "settings": {
+            "armor": "装甲",
+            "green_penetration": "貫通可能域を緑色表示",
+            "hide_model_under_armor": "車輌モデルを非表示",
+            "opaque": "貫通アシストを不透明にする",
+            "dev_wireframe": "DEV: wireframe",
+            "environment": "環境",
+            "show_grid": "グリッドを表示"
+          },
+          "screenshot": {
+            "download": "保存する",
+            "copy": "コピー"
+          },
+          "model": {
+            "name": "モデル"
+          },
           "dynamic": {
-            "custom_shell": {},
+            "name": "装甲ギア",
+            "custom_shell": {
+              "type": "弾種",
+              "caliber": "口径",
+              "penetration": "貫通力",
+              "normalization": "標準化",
+              "ricochet": "跳弾角度",
+              "explosion_radius": "爆風半径",
+              "exit": "決定",
+              "reset": "リセット"
+            },
+            "advanced": "高度なハイライト",
+            "shooter": "自車両",
             "shot_card": {
-              "element": {},
-              "status": {},
-              "stats": {}
+              "element": {
+                "primary": "主装甲",
+                "spaced": "空間装甲",
+                "external": "外部モジュール",
+                "gap": "空間",
+                "gun": "主砲",
+                "track": "履帯"
+              },
+              "status": {
+                "penetration": "%s1hp 装甲貫通",
+                "blocked": "装甲非貫通",
+                "ricochet": "跳弾",
+                "splash": "%s1hp 爆風ダメージ"
+              },
+              "stats": {
+                "thickness_and_angle": "%s1mm %s2°",
+                "nominal": "%s1mm 装甲",
+                "ricochet_loss": "%s1% penetration"
+              }
             }
           },
           "static": {
-            "edit": {}
+            "name": "Static armor",
+            "primary": "主装甲",
+            "spaced": "空間装甲",
+            "external": "外部モジュール",
+            "edit": {
+              "label": "編集",
+              "reset": "リセット"
+            }
           }
         },
         "meta": {
-          "swap": {}
+          "back": "戻る",
+          "compare": "性能比較",
+          "swap": {
+            "button": "入れ替え",
+            "title": "車輌を入れ替える"
+          },
+          "vanilla": "Vanilla",
+          "opentest": "OpenTest",
+          "full_name": "正式名称",
+          "nation": "国籍",
+          "class": "車種",
+          "tier": "Tier",
+          "type": "タイプ",
+          "dev_id": "DEV: ID",
+          "purchase": "購入価格",
+          "restoration": "再購入価格",
+          "sale": "売却価格",
+          "research": "研究費用"
         },
-        "tech_tree": {},
-        "game_modes": {},
-        "review": {},
+        "tech_tree": {
+          "title": "技術ツリー",
+          "battle": "1 戦",
+          "battles": "%s1 戦",
+          "route": "ルート %s1 / %s2"
+        },
+        "game_modes": {
+          "title": "ゲームモードアビリティ"
+        },
+        "review": {
+          "title": "Review videos",
+          "disclaimer": "BlitzKitはレビュー動画を推奨していません。",
+          "join": "%s1 YouTuberプログラムに応募する"
+        },
         "configuration": {
-          "modules": {},
-          "equipment": {},
-          "provisions": {},
-          "consumables": {},
-          "skills": {},
-          "miscellaneous": {}
+          "title": "構成",
+          "modules": {
+            "title": "モジュール",
+            "stock": "初期装備",
+            "upgrade": "最終装備"
+          },
+          "equipment": {
+            "title": "拡張パーツ",
+            "clear": "クリア"
+          },
+          "provisions": {
+            "title": "常備品",
+            "clear": "クリア"
+          },
+          "consumables": {
+            "title": "消耗品",
+            "clear": "クリア",
+            "info": "黄色の消耗品は統計には影響しません。"
+          },
+          "skills": {
+            "title": "搭乗員スキル",
+            "clear": "クリア",
+            "maximize": "最大",
+            "info": "黄色のスキルは特殊な状況下でのみ適用されます。スペースキーを長押しすると、レベル0とレベル7を素早く切り替えられます。"
+          },
+          "miscellaneous": {
+            "title": "その他"
+          }
         },
         "characteristics": {
-          "compare": {},
-          "values": {}
+          "title": "性能値",
+          "compare": {
+            "label": "比較対象",
+            "class": "Tier %s1 %s2",
+            "tier": "Tier %s1 全車輌",
+            "all": "全車輌"
+          },
+          "values": {
+            "shell_index": "Shell %s1",
+            "at_distance": "At %s1m",
+            "at_distance_slider_label": "距離",
+            "dispersion_at_distance": "%s1m での散布界",
+            "gun_flexibility": "主砲旋回上限",
+            "speed": "最高速度",
+            "terrain_coefficients": "地形走破能力",
+            "raw_terrain_coefficients": "地形係数",
+            "power_to_weight_ratio": "出力重量比",
+            "hull_traverse_speed": "車体旋回速度",
+            "camouflage": "隠蔽率",
+            "reload": "装填速度",
+            "crewCount": "搭乗員数",
+            "shellNormalization": "標準化",
+            "shellRicochet": "跳弾角度",
+            "dpm": "DPM",
+            "dpmEffective": "60秒での有効値",
+            "shells": "砲弾",
+            "mostOptimalShellIndex": "最適な弾数",
+            "shellReloads": "自動装填時間",
+            "shellReload": "弾倉再装填時間",
+            "intraClip": "砲弾再装填時間",
+            "caliber": "口径",
+            "penetration": "貫通力",
+            "damage": "ダメージ",
+            "clipDamage": "弾倉合計攻撃力",
+            "moduleDamage": "モジュールダメージ",
+            "explosionRadius": "爆風半径",
+            "shellVelocity": "弾速",
+            "aimTime": "照準時間",
+            "dispersion": "静止時",
+            "dispersionMoving": "移動時",
+            "dispersionHullTraversing": "車体旋回時",
+            "dispersionTurretTraversing": "砲塔旋回時",
+            "dispersionShooting": "射撃時",
+            "dispersionGunDamaged": "主砲損傷時",
+            "gunDepression": "俯角",
+            "gunElevation": "仰角",
+            "gunFrontalDepression": "正面俯角",
+            "gunFrontalElevation": "正面仰角",
+            "gunRearDepression": "背面俯角",
+            "gunRearElevation": "背面仰角",
+            "azimuthLeft": "左射界",
+            "azimuthRight": "右射界",
+            "speedForwards": "前進",
+            "speedBackwards": "後退",
+            "hardTerrainCoefficient": "道",
+            "hardTerrainCoefficientRaw": "道",
+            "mediumTerrainCoefficient": "地面",
+            "mediumTerrainCoefficientRaw": "地面",
+            "softTerrainCoefficient": "水辺",
+            "softTerrainCoefficientRaw": "水辺",
+            "enginePower": "エンジン出力",
+            "powerToWeightRatioHardTerrain": "道",
+            "powerToWeightRatioMediumTerrain": "地面",
+            "powerToWeightRatioSoftTerrain": "水辺",
+            "weight": "重量",
+            "turretTraverseSpeed": "砲塔旋回速度",
+            "gunTraverseSpeed": "主砲旋回速度",
+            "hullTraverseHardTerrain": "道",
+            "hullTraverseMediumTerrain": "地面",
+            "hullTraverseSoftTerrain": "水辺",
+            "health": "耐久値",
+            "fireChance": "火災発生率",
+            "viewRange": "視認範囲",
+            "camouflageStill": "静止時",
+            "camouflageMoving": "移動時",
+            "camouflageShootingStill": "静止時",
+            "camouflageShootingMoving": "移動時",
+            "camouflageCaughtOnFire": "Caught on fire",
+            "width": "全幅",
+            "height": "全高",
+            "length": "車体長",
+            "volume": "体積",
+            "shellRange": "射程範囲",
+            "shellCapacity": "総弾数",
+            "gunType": "主砲タイプ",
+            "penetrationAt250m": "250m での貫通力"
+          }
         },
-        "firepower": {},
-        "crew": {},
-        "maneuverability": {},
-        "survivability": {}
+        "firepower": {
+          "title": "火力"
+        },
+        "crew": {
+          "title": "搭乗員熟練度",
+          "info": "搭乗員が担うことができるその他の役割を表します",
+          "count": "搭乗員数",
+          "commander": "車長",
+          "gunner": "砲手",
+          "driver": "操縦手",
+          "radioman": "通信手",
+          "loader": "装填手"
+        },
+        "maneuverability": {
+          "title": "機動性"
+        },
+        "survivability": {
+          "title": "生存性"
+        }
       },
       "compare": {
+        "name": "性能比較",
+        "button": "戦車を比較",
+        "description": "車輌の統計を比較します",
+        "seo_description": "Compare tanks statistics and loadouts in World of Tanks Blitz",
         "actions": {
-          "add": {},
-          "deltas": {}
-        },
-        "no_tanks": {},
-        "table": {
-          "equipment": {},
-          "skills": {},
-          "modules": {},
-          "provisions": {},
-          "consumables": {}
-        }
-      },
-      "performance": {
-        "estimation": {},
-        "player_count": {},
-        "table": {
-          "tanks": {},
-          "stats": {}
-        }
-      },
-      "gallery": {
-        "search": {}
-      },
-      "session": {
-        "search": {},
-        "controls": {},
-        "no_cc": {},
-        "no_battles": {},
-        "table": {}
-      },
-      "tier_list": {
-        "buttons": {}
-      },
-      "embed": {
-        "preview": {},
-        "configuration": {
-          "import": {},
-          "export": {
-            "generate": {
-              "success": {}
-            }
+          "add": {
+            "button": "追加",
+            "title": "車輌を追加",
+            "description": "比較に追加する車輌を選択"
           },
-          "customize": {}
+          "clear": "クリア",
+          "deltas": {
+            "none": "差分なし",
+            "percentage": "割合",
+            "absolute": "絶対値"
+          }
         },
-        "types": {
-          "breakdown": {
-            "options": {}
+        "no_tanks": {
+          "title": "車輌が選択されていません",
+          "body": "「追加」ボタンを押して開始"
+        },
+        "table": {
+          "equipment": {
+            "clear": "クリア",
+            "apply_to_all": "すべて選択"
+          },
+          "skills": {
+            "clear": "クリア",
+            "maximize": "最大"
+          },
+          "modules": {
+            "stock": "初期装備",
+            "upgrade": "最終装備"
+          },
+          "provisions": {
+            "clear": "クリア"
+          },
+          "consumables": {
+            "clear": "クリア"
           }
         }
       },
-      "charts": {},
-      "rating": {},
-      "discord": {},
-      "more": {},
-      "players": {},
-      "home": {},
-      "blitz_analysis": {},
-      "blitz_insider": {}
+      "performance": {
+        "name": "Performance",
+        "button": "戦車を見る",
+        "description": "戦車性能統計",
+        "seo_description": "Best tanks and their performances in World of Tanks Blitz",
+        "estimation": {
+          "body": "%s1 人のプレイヤーの推定統計。 %s2前に更新されました。",
+          "hours": "%s1 時間",
+          "minutes": "%s1 分"
+        },
+        "player_count": {
+          "label": "統計期間:"
+        },
+        "table": {
+          "tanks": {
+            "header": "車輌名",
+            "total": "Total"
+          },
+          "stats": {
+            "winrate": "勝率",
+            "players": "プレイヤー数",
+            "damage": "ダメージ",
+            "survival": "生還率",
+            "xp": "EXP",
+            "kills": "撃破数",
+            "spots": "発見数",
+            "accuracy": "命中率",
+            "shots": "射撃数",
+            "hits": "命中回数",
+            "damage_ratio": "ダメージ比",
+            "damage_taken": "被ダメージ",
+            "capture_points": "占領ポイント"
+          }
+        }
+      },
+      "gallery": {
+        "name": "Gallery",
+        "button": "全て見る",
+        "description": "Blitzアバター図鑑",
+        "seo_description": "World of Tanks Blitz の 全ての プレイヤーアバター",
+        "last_updated": "最終更新:",
+        "search": {
+          "hint": "アバターを検索...",
+          "results": "検索結果: %s1 個"
+        }
+      },
+      "session": {
+        "name": "Session",
+        "button": "追跡開始",
+        "description": "セッション中プレイヤーの追跡",
+        "seo_description": "World of Tanks Blitz をプレイ中、統計をリアルタイムで追跡します",
+        "search": {
+          "lookup": "プレイヤーを検索して開始",
+          "hint": "プレイヤー名を入力...",
+          "searching": "検索中...",
+          "no_results": "プレイヤーが見つかりませんでした"
+        },
+        "controls": {
+          "title": "%s1 を追跡中",
+          "subtitle": "開始日時: %s1",
+          "reset": "リセット",
+          "change": "変更"
+        },
+        "no_cc": {
+          "title": "CCアカウントを追跡しようとしています",
+          "body": "CC (Community Contributor) アカウントは、統計が公開されていません。CC アカウントの埋め込みを追加する作業を進めていますので、お待ちください。",
+          "alright": "Alright"
+        },
+        "no_battles": {
+          "title": "まだ戦闘がありません",
+          "hint": "ゲームをプレイしてください"
+        },
+        "table": {
+          "tank": "車輌名",
+          "total": "Total",
+          "remove": "削除"
+        }
+      },
+      "tier_list": {
+        "name": "Tier list",
+        "button": "ランク付けする",
+        "description": "Blitzの戦車ランキング",
+        "seo_description": "World of Tanks Blitz のプレイヤー評価とパフォーマンス統計に基づいて、最良から最悪までのランキングを作成しましょう",
+        "buttons": {
+          "reset": "リセット",
+          "share": "共有"
+        }
+      },
+      "embed": {
+        "name": "Embed",
+        "button": "今すぐ作成",
+        "description": "ストリーミング用の埋め込み",
+        "seo_description": "Create embeds for streaming World of Tanks Blitz with extreme customization",
+        "coming_soon": "埋め込みは近日中さらに追加される予定です。",
+        "suggest": "アイデアを提案してください。",
+        "preview": {
+          "title": "Example preview",
+          "upload": "Upload test background"
+        },
+        "configuration": {
+          "import": {
+            "title": "Import",
+            "description": "Paste your current URL if you have one already to import your settings",
+            "hint": "Paste URL...",
+            "apply": "Apply",
+            "idiot_title": "Invalid URL",
+            "idiot_description": "Try pasting the URL that BlitzKit previously generated, you silly goose!",
+            "idiot_button": "Okay, my bad"
+          },
+          "export": {
+            "title": "Export",
+            "description": "Copy all properties for you streaming software",
+            "generate": {
+              "button": "Generate URL",
+              "title": "Generate URL",
+              "subtitle": "Search an account to track",
+              "cancel": "Cancel",
+              "success": {
+                "title": "Copy URL",
+                "info": "Generated the URL for %s1. The embed will start tracking as soon as the URL is pasted. Reset at any time by right-clicking on PC or long-pressing on mobile and then selecting \"Reset\".",
+                "back": "戻る",
+                "copy": "Copy URL"
+              }
+            },
+            "css": "Copy CSS",
+            "width": "Copy Width",
+            "height": "Copy Height",
+            "framerate": "Copy Framerate"
+          },
+          "customize": {
+            "title": "Customize",
+            "reset": "リセット",
+            "description": "Bells and whistles of your embed"
+          }
+        },
+        "types": {
+          "breakdown": {
+            "name": "Breakdown",
+            "options": {
+              "width": "全幅",
+              "height": "全高",
+              "showTotal": "Show total",
+              "listGap": "List gap",
+              "listMaxTanks": "Max tanks",
+              "cardRadius": "Card radius",
+              "cardHeaderBackgroundColor": "Card header background color",
+              "cardHeaderPadding": "Card header padding",
+              "cardTitle": "Card title",
+              "cardTitleTypeColor": "Card title type color",
+              "cardTitleClassIcon": "Card title class icon",
+              "cardBodyBackgroundColor": "Card body background color",
+              "cardBodyPadding": "Card body padding",
+              "columnGap": "Column gap",
+              "columnValue": "Column value",
+              "columnLabel": "Column label",
+              "column1": "Column 1",
+              "column2": "Column 2",
+              "column3": "Column 3",
+              "column4": "Column 4",
+              "column1CustomLabel": "Column 1 label",
+              "column2CustomLabel": "Column 2 label",
+              "column3CustomLabel": "Column 3 label"
+            }
+          }
+        }
+      },
+      "charts": {
+        "name": "Charts",
+        "button": "Nerd out",
+        "description": "Lots of graphs",
+        "seo_description": "Charts and graphs on anything and everything about tanks, players, and events in World of Tanks Blitz"
+      },
+      "rating": {
+        "name": "Rating",
+        "button": "View leaderboard",
+        "description": "Full rating leaderboard",
+        "seo_description": "Live and archived full rating leaderboard for World of Tanks Blitz"
+      },
+      "discord": {
+        "name": "Discord bot",
+        "button": "インストール",
+        "description": "Discordで統計情報を確認",
+        "seo_description": "Get stats right in Discord with BlitzKit's Discord bot"
+      },
+      "more": {
+        "name": "More coming soon",
+        "button": "Discord に参加",
+        "description": "近日追加予定 - 私たちが作っているもの",
+        "seo_description": "What we're making with BlitzKit"
+      },
+      "players": {
+        "name": "プレイヤー数",
+        "button": "Lookup player",
+        "description": "Periodical player statistics",
+        "seo_description": "Periodical player statistics in World of Tanks Blitz"
+      },
+      "home": {
+        "name": "Home",
+        "button": "Get started",
+        "description": "さあ、BlitzKit を始めよう!",
+        "seo_description": "さあ、BlitzKit を始めよう!"
+      },
+      "blitz_analysis": {
+        "name": "BlitzAnalysis[]",
+        "button": "Analyze now",
+        "description": "Rich historic average stats",
+        "seo_description": "Rich historic average stats in World of Tanks Blitz"
+      },
+      "blitz_insider": {
+        "name": "Blitz Insider",
+        "button": "Discover today",
+        "description": "ゲーム内のセッション統計",
+        "seo_description": "In-game session stats in World of Tanks Blitz"
+      }
     },
     "footer": {
-      "about": {},
-      "legal": {}
+      "motto": "Everything World of Tanks Blitz",
+      "copyright": "Wargamingやその他のサービスとは関係ありません",
+      "about": {
+        "title": "概要",
+        "credits": "クレジット",
+        "discord": "Discord",
+        "github": "GitHub",
+        "patches": "パッチノート"
+      },
+      "legal": {
+        "title": "法的事項",
+        "privacy": "Privacy policy",
+        "terms": "Terms of service"
+      }
     }
   }
 }
