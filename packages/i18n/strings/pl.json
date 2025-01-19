@@ -1,8 +1,8 @@
 {
   "test": {
     "default": "test",
-    "long": "This is a long test string. You MUST NEVER see this in the UI. My favorite fruit is %s1 because it has the color of %s2. I like it so much that I will say its name 3 times! %s1! %s1! %s1! Once again, it's %s2, not %s3.",
-    "fox": "The quick brown fox jumps over the lazy dog."
+    "long": "To jest długi ciąg testowy. NIGDY NIE ZOBACZYSZ tego widzieć w interfejsie użytkownika. Moje ulubione owoce to %s1, ponieważ mają kolor %s2. Tak bardzo je lubię, że powiem ich nazwę trzykrotnie! %s1! %s1! %s1! Po raz kolejny to %s2, a nie %s3.",
+    "fox": "Szybki brązowy lis przeskoczył nad leniwym psem."
   },
   "common": {
     "units": {
