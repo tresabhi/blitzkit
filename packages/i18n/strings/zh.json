@@ -2,11 +2,7 @@
   "bot": {
     "common": {
       "errors": {
-        "clan_not_found": "# 找不到军团\n找不到\"%s\"。请尝试从搜索结果中选择一个军团。",
-        "player_not_found": "# 找不到用户\n无法找到用户 \"%s\"。 尝试从搜索结果中挑选用户，输入一个有效的用户名或使用 \"/link\" 命令。",
         "player_not_linked": "# 使用 `/link` 来开始\n我不知道你是谁，但你今天可以告诉我！",
-        "tank_name_not_found": "# 坦克找不到\n无法找到名为 \"%s \"的坦克。",
-        "tank_id_not_found": "# 坦克找不到\n无法找到ID \"%s\"的坦克。 试着输入坦克的名称而不是数字。",
         "no_tank_stats": "# 没有这个坦克的数据\n这个玩家没有数据。你可能找错人了。",
         "uncaught_error": "# BlitzKit 崩溃了!\n非常抱歉。请加入[官方Discord](https://discord.gg/nDt7AjGJQH)，以方便帮助你的问题。",
         "preview": "# 此命令处于预览\n\n您只能在[官方Discord服务器](https://discord.gg/nDt7AjGJQH)访问此命令。该命令将很快可用。",
@@ -313,141 +309,10 @@
     }
   },
   "default": {
-    "test": {},
-    "common": {
-      "units": {},
-      "gun_types": {},
-      "shells": {},
-      "player_count_period": {},
-      "branches": {},
-      "locales": {},
-      "wn8_percentile": {
-        "0": "非常差",
-        "1": "差",
-        "2": "较差",
-        "3": "平均",
-        "4": "高于平均",
-        "5": "好",
-        "6": "非常好",
-        "7": "很好"
-      },
-      "bkni_percentile": {
-        "3": "差",
-        "4": "较差",
-        "5": "平均",
-        "6": "高于平均",
-        "7": "好",
-        "8": "非常好"
-      },
-      "nations": {
-        "ussr": "苏联 (S系)",
-        "germany": "德国 (D系)",
-        "usa": "美国 (M系)",
-        "china": "中国 (C系)",
-        "uk": "英国 (Y系)",
-        "france": "法国 (F系)",
-        "japan": "日本 (R系)",
-        "european": "欧盟 (E系)",
-        "other": "X系"
-      },
-      "nations_adjectives": {
-        "ussr": "苏联 (S系)",
-        "germany": "德国 (D系)",
-        "usa": "美国 (M系)",
-        "china": "中国 (C系)",
-        "uk": "英国 (Y系)",
-        "france": "法国 (F系)",
-        "japan": "日本 (R系)",
-        "european": "欧盟 (E系)",
-        "other": "X系"
-      },
-      "tank_class_short": {
-        "0": "轻型坦克",
-        "1": "中型坦克",
-        "2": "重型坦克",
-        "3": "坦克歼击车",
-        "-1": "无法识别"
-      },
-      "tank_class_short_plural_lowercase": {
-        "0": "轻型坦克",
-        "1": "中型坦克",
-        "2": "重型坦克",
-        "3": "坦克歼击车"
-      },
-      "tank_class_medium": {
-        "0": "轻型坦克",
-        "3": "坦克歼击车",
-        "-1": "无法识别"
-      },
-      "tree_type": {
-        "0": "科技树",
-        "1": "加值",
-        "2": "收藏"
-      },
-      "regions": {
-        "normal": {
-          "com": "北美",
-          "eu": "欧洲",
-          "asia": "亚太"
-        },
-        "short": {
-          "com": "北美",
-          "eu": "欧洲"
-        }
-      },
-      "leagues": {
-        "diamond": "钻石",
-        "platinum": "白金",
-        "gold": "黃金",
-        "silver": "白银",
-        "bronze": "青铜"
-      },
-      "composite_stats": {
-        "normalized_damage_dealt": "伤害",
-        "normalized_damage_received": "受到的伤害",
-        "normalized_deaths": "阵亡率",
-        "normalized_frags": "击杀数",
-        "normalized_hits": "命中数",
-        "normalized_losses": "战败率",
-        "normalized_misses": "未命中数",
-        "normalized_shots": "开火次数",
-        "normalized_spotted": "点亮次数",
-        "normalized_survived_battles": "存活率",
-        "normalized_win_and_survived": "胜利并存活率",
-        "normalized_wins": "胜率",
-        "normalized_xp": "经验值",
-        "normalized_battle_life_time": "战斗时间",
-        "cumulative_accuracy": "命中率",
-        "cumulative_battles": "战斗场次",
-        "cumulative_capture_points": "总占领点数",
-        "cumulative_damage_dealt": "总伤害",
-        "cumulative_damage_ratio": "伤害比率",
-        "cumulative_damage_received": "总承受伤害",
-        "cumulative_deaths": "总阵亡数",
-        "cumulative_dropped_capture_points": "总阻止的占领点数",
-        "cumulative_frags": "总击杀数",
-        "cumulative_hits": "总命中数",
-        "cumulative_inaccuracy": "未命中率",
-        "cumulative_kills_to_death_ratio": "战损比",
-        "cumulative_losses": "失败",
-        "cumulative_misses": "总射击失误数",
-        "cumulative_shots": "总射击数",
-        "cumulative_spotted": "场均发现敌人",
-        "cumulative_survived_battles": "幸存场次",
-        "cumulative_win_and_survived": "胜利和幸存场次",
-        "cumulative_wins": "胜利",
-        "cumulative_xp": "总经验",
-        "cumulative_battle_life_time": "总战斗时间"
-      }
-    },
     "bot": {
       "common": {
         "errors": {
-          "clan_not_found": "# 找不到军团\n找不到\"%s\"。请尝试从搜索结果中选择一个军团。",
-          "player_not_found": "# 找不到用户\n无法找到用户 \"%s\"。 尝试从搜索结果中挑选用户，输入一个有效的用户名或使用 \"/link\" 命令。",
           "player_not_linked": "# 使用 `/link` 来开始\n我不知道你是谁，但你今天可以告诉我！",
-          "tank_name_not_found": "# 坦克找不到\n无法找到名为 \"%s \"的坦克。",
-          "tank_id_not_found": "# 坦克找不到\n无法找到ID \"%s\"的坦克。 试着输入坦克的名称而不是数字。",
           "no_tank_stats": "# 没有这个坦克的数据\n这个玩家没有数据。你可能找错人了。",
           "uncaught_error": "# BlitzKit 崩溃了!\n非常抱歉。请加入[官方Discord](https://discord.gg/nDt7AjGJQH)，以方便帮助你的问题。",
           "preview": "# 此命令处于预览\n\n您只能在[官方Discord服务器](https://discord.gg/nDt7AjGJQH)访问此命令。该命令将很快可用。",
@@ -627,6 +492,133 @@
         }
       }
     },
+    "common": {
+      "units": {},
+      "gun_types": {},
+      "shells": {},
+      "player_count_period": {},
+      "branches": {},
+      "locales": {},
+      "wn8_percentile": {
+        "0": "非常差",
+        "1": "差",
+        "2": "较差",
+        "3": "平均",
+        "4": "高于平均",
+        "5": "好",
+        "6": "非常好",
+        "7": "很好"
+      },
+      "bkni_percentile": {
+        "3": "差",
+        "4": "较差",
+        "5": "平均",
+        "6": "高于平均",
+        "7": "好",
+        "8": "非常好"
+      },
+      "nations": {
+        "ussr": "苏联 (S系)",
+        "germany": "德国 (D系)",
+        "usa": "美国 (M系)",
+        "china": "中国 (C系)",
+        "uk": "英国 (Y系)",
+        "france": "法国 (F系)",
+        "japan": "日本 (R系)",
+        "european": "欧盟 (E系)",
+        "other": "X系"
+      },
+      "nations_adjectives": {
+        "ussr": "苏联 (S系)",
+        "germany": "德国 (D系)",
+        "usa": "美国 (M系)",
+        "china": "中国 (C系)",
+        "uk": "英国 (Y系)",
+        "france": "法国 (F系)",
+        "japan": "日本 (R系)",
+        "european": "欧盟 (E系)",
+        "other": "X系"
+      },
+      "tank_class_short": {
+        "0": "轻型坦克",
+        "1": "中型坦克",
+        "2": "重型坦克",
+        "3": "坦克歼击车",
+        "-1": "无法识别"
+      },
+      "tank_class_short_plural_lowercase": {
+        "0": "轻型坦克",
+        "1": "中型坦克",
+        "2": "重型坦克",
+        "3": "坦克歼击车"
+      },
+      "tank_class_medium": {
+        "0": "轻型坦克",
+        "3": "坦克歼击车",
+        "-1": "无法识别"
+      },
+      "tree_type": {
+        "0": "科技树",
+        "1": "加值",
+        "2": "收藏"
+      },
+      "regions": {
+        "normal": {
+          "com": "北美",
+          "eu": "欧洲",
+          "asia": "亚太"
+        },
+        "short": {
+          "com": "北美",
+          "eu": "欧洲"
+        }
+      },
+      "leagues": {
+        "diamond": "钻石",
+        "platinum": "白金",
+        "gold": "黃金",
+        "silver": "白银",
+        "bronze": "青铜"
+      },
+      "composite_stats": {
+        "normalized_damage_dealt": "伤害",
+        "normalized_damage_received": "受到的伤害",
+        "normalized_deaths": "阵亡率",
+        "normalized_frags": "击杀数",
+        "normalized_hits": "命中数",
+        "normalized_losses": "战败率",
+        "normalized_misses": "未命中数",
+        "normalized_shots": "开火次数",
+        "normalized_spotted": "点亮次数",
+        "normalized_survived_battles": "存活率",
+        "normalized_win_and_survived": "胜利并存活率",
+        "normalized_wins": "胜率",
+        "normalized_xp": "经验值",
+        "normalized_battle_life_time": "战斗时间",
+        "cumulative_accuracy": "命中率",
+        "cumulative_battles": "战斗场次",
+        "cumulative_capture_points": "总占领点数",
+        "cumulative_damage_dealt": "总伤害",
+        "cumulative_damage_ratio": "伤害比率",
+        "cumulative_damage_received": "总承受伤害",
+        "cumulative_deaths": "总阵亡数",
+        "cumulative_dropped_capture_points": "总阻止的占领点数",
+        "cumulative_frags": "总击杀数",
+        "cumulative_hits": "总命中数",
+        "cumulative_inaccuracy": "未命中率",
+        "cumulative_kills_to_death_ratio": "战损比",
+        "cumulative_losses": "失败",
+        "cumulative_misses": "总射击失误数",
+        "cumulative_shots": "总射击数",
+        "cumulative_spotted": "场均发现敌人",
+        "cumulative_survived_battles": "幸存场次",
+        "cumulative_win_and_survived": "胜利和幸存场次",
+        "cumulative_wins": "胜利",
+        "cumulative_xp": "总经验",
+        "cumulative_battle_life_time": "总战斗时间"
+      }
+    },
+    "test": {},
     "website": {
       "settings": {},
       "common": {

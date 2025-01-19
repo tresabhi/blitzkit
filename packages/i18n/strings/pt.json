@@ -304,150 +304,6 @@
     }
   },
   "default": {
-    "test": {},
-    "common": {
-      "units": {},
-      "gun_types": {},
-      "shells": {},
-      "player_count_period": {
-        "d_120": "Últimos 120 dias",
-        "d_90": "Últimos 90 dias",
-        "d_60": "Últimos 60 dias",
-        "d_30": "Último mês",
-        "d_7": "Última semana",
-        "d_1": "Ontem"
-      },
-      "branches": {},
-      "locales": {
-        "en": "Inglês",
-        "es": "Espanhol",
-        "pt": "Português",
-        "ru": "Russo",
-        "uk": "Ucraniano",
-        "zh": "Chinês",
-        "ja": "Japonês",
-        "fr": "Francês",
-        "pl": "Polaco"
-      },
-      "wn8_percentile": {
-        "0": "Muito ruim",
-        "1": "Ruim",
-        "2": "Abaixo da média",
-        "3": "Na média",
-        "4": "Acima da média",
-        "5": "Bom",
-        "6": "Muito bom",
-        "7": "Ótimo",
-        "8": "Excelente"
-      },
-      "bkni_percentile": {
-        "2": "Muito ruim",
-        "3": "Ruim",
-        "4": "Abaixo da média",
-        "5": "Na média",
-        "6": "Acima da média",
-        "7": "Bom",
-        "8": "Muito bom",
-        "10": "Super Unicum"
-      },
-      "nations": {
-        "ussr": "U.R.S.S.",
-        "germany": "Alemanha",
-        "usa": "E.U.A.",
-        "uk": "Reino Unido",
-        "france": "França",
-        "japan": "Japão",
-        "european": "Nação Europeia",
-        "other": "Nação Híbrida"
-      },
-      "nations_adjectives": {
-        "ussr": "União soviética",
-        "germany": "Alemão",
-        "usa": "E.U.A.",
-        "china": "Chinês",
-        "uk": "Britânico",
-        "france": "Francês",
-        "japan": "Japonês",
-        "european": "Europeu",
-        "other": "Híbrido"
-      },
-      "tank_class_short": {
-        "0": "Leve",
-        "1": "Médio",
-        "2": "Pesado",
-        "3": "Caça-tanques",
-        "-1": "Não reconhecido"
-      },
-      "tank_class_short_plural_lowercase": {
-        "0": "leves",
-        "1": "médios",
-        "2": "pesados",
-        "3": "Caça-tanques"
-      },
-      "tank_class_medium": {
-        "0": "Leve",
-        "1": "Médio",
-        "2": "Pesado",
-        "3": "Caça-tanque",
-        "-1": "não reconhecido"
-      },
-      "tree_type": {
-        "0": "Arvore Tecnológica",
-        "2": "Colecionador",
-        "-1": "não reconhecido"
-      },
-      "regions": {
-        "normal": {
-          "com": "América do Norte",
-          "eu": "Europa",
-          "asia": "Asia-Pacífico"
-        },
-        "short": {}
-      },
-      "leagues": {
-        "diamond": "Diamante",
-        "platinum": "Platina",
-        "gold": "Ouro",
-        "silver": "Prata"
-      },
-      "composite_stats": {
-        "normalized_damage_dealt": "Dano",
-        "normalized_damage_received": "Dano recebido",
-        "normalized_deaths": "Taxa de mortes",
-        "normalized_frags": "Abates",
-        "normalized_hits": "Acertos",
-        "normalized_losses": "Taxa de derrota",
-        "normalized_misses": "Tiros errados",
-        "normalized_shots": "Disparos",
-        "normalized_spotted": "Detecções",
-        "normalized_survived_battles": "Taxa de sobrevivência",
-        "normalized_win_and_survived": "Taxa de sobrevivência em vitórias",
-        "normalized_wins": "Taxa de vitória",
-        "normalized_xp": "EXP",
-        "normalized_battle_life_time": "Tempo em batalha",
-        "cumulative_accuracy": "Precisão",
-        "cumulative_battles": "Batalhas",
-        "cumulative_capture_points": "Total de pontos de captura",
-        "cumulative_damage_dealt": "Dano total",
-        "cumulative_damage_ratio": "Razão entre dano dado e recebido",
-        "cumulative_damage_received": "Dano total recebido",
-        "cumulative_deaths": "Total de mortes",
-        "cumulative_dropped_capture_points": "Total de pontos de captura perdidos",
-        "cumulative_frags": "Total de abates",
-        "cumulative_hits": "Total de acertos",
-        "cumulative_inaccuracy": "Imprecisão",
-        "cumulative_kills_to_death_ratio": "Razão entre abates e mortes",
-        "cumulative_losses": "Derrotas",
-        "cumulative_misses": "Total de tiros errados",
-        "cumulative_shots": "Total de disparos",
-        "cumulative_spotted": "Total de detecções",
-        "cumulative_survived_battles": "Batalhas sobrevividas",
-        "cumulative_win_and_survived": "Batalhas ganhas e sobrevividas",
-        "cumulative_wins": "Vitórias",
-        "cumulative_xp": "XP total",
-        "cumulative_battle_life_time": "Tempo de batalha total"
-      }
-    },
     "bot": {
       "common": {
         "errors": {
@@ -609,6 +465,150 @@
         }
       }
     },
+    "common": {
+      "units": {},
+      "gun_types": {},
+      "shells": {},
+      "player_count_period": {
+        "d_120": "Últimos 120 dias",
+        "d_90": "Últimos 90 dias",
+        "d_60": "Últimos 60 dias",
+        "d_30": "Último mês",
+        "d_7": "Última semana",
+        "d_1": "Ontem"
+      },
+      "branches": {},
+      "locales": {
+        "en": "Inglês",
+        "es": "Espanhol",
+        "pt": "Português",
+        "ru": "Russo",
+        "uk": "Ucraniano",
+        "zh": "Chinês",
+        "ja": "Japonês",
+        "fr": "Francês",
+        "pl": "Polaco"
+      },
+      "wn8_percentile": {
+        "0": "Muito ruim",
+        "1": "Ruim",
+        "2": "Abaixo da média",
+        "3": "Na média",
+        "4": "Acima da média",
+        "5": "Bom",
+        "6": "Muito bom",
+        "7": "Ótimo",
+        "8": "Excelente"
+      },
+      "bkni_percentile": {
+        "2": "Muito ruim",
+        "3": "Ruim",
+        "4": "Abaixo da média",
+        "5": "Na média",
+        "6": "Acima da média",
+        "7": "Bom",
+        "8": "Muito bom",
+        "10": "Super Unicum"
+      },
+      "nations": {
+        "ussr": "U.R.S.S.",
+        "germany": "Alemanha",
+        "usa": "E.U.A.",
+        "uk": "Reino Unido",
+        "france": "França",
+        "japan": "Japão",
+        "european": "Nação Europeia",
+        "other": "Nação Híbrida"
+      },
+      "nations_adjectives": {
+        "ussr": "União soviética",
+        "germany": "Alemão",
+        "usa": "E.U.A.",
+        "china": "Chinês",
+        "uk": "Britânico",
+        "france": "Francês",
+        "japan": "Japonês",
+        "european": "Europeu",
+        "other": "Híbrido"
+      },
+      "tank_class_short": {
+        "0": "Leve",
+        "1": "Médio",
+        "2": "Pesado",
+        "3": "Caça-tanques",
+        "-1": "Não reconhecido"
+      },
+      "tank_class_short_plural_lowercase": {
+        "0": "leves",
+        "1": "médios",
+        "2": "pesados",
+        "3": "Caça-tanques"
+      },
+      "tank_class_medium": {
+        "0": "Leve",
+        "1": "Médio",
+        "2": "Pesado",
+        "3": "Caça-tanque",
+        "-1": "não reconhecido"
+      },
+      "tree_type": {
+        "0": "Arvore Tecnológica",
+        "2": "Colecionador",
+        "-1": "não reconhecido"
+      },
+      "regions": {
+        "normal": {
+          "com": "América do Norte",
+          "eu": "Europa",
+          "asia": "Asia-Pacífico"
+        },
+        "short": {}
+      },
+      "leagues": {
+        "diamond": "Diamante",
+        "platinum": "Platina",
+        "gold": "Ouro",
+        "silver": "Prata"
+      },
+      "composite_stats": {
+        "normalized_damage_dealt": "Dano",
+        "normalized_damage_received": "Dano recebido",
+        "normalized_deaths": "Taxa de mortes",
+        "normalized_frags": "Abates",
+        "normalized_hits": "Acertos",
+        "normalized_losses": "Taxa de derrota",
+        "normalized_misses": "Tiros errados",
+        "normalized_shots": "Disparos",
+        "normalized_spotted": "Detecções",
+        "normalized_survived_battles": "Taxa de sobrevivência",
+        "normalized_win_and_survived": "Taxa de sobrevivência em vitórias",
+        "normalized_wins": "Taxa de vitória",
+        "normalized_xp": "EXP",
+        "normalized_battle_life_time": "Tempo em batalha",
+        "cumulative_accuracy": "Precisão",
+        "cumulative_battles": "Batalhas",
+        "cumulative_capture_points": "Total de pontos de captura",
+        "cumulative_damage_dealt": "Dano total",
+        "cumulative_damage_ratio": "Razão entre dano dado e recebido",
+        "cumulative_damage_received": "Dano total recebido",
+        "cumulative_deaths": "Total de mortes",
+        "cumulative_dropped_capture_points": "Total de pontos de captura perdidos",
+        "cumulative_frags": "Total de abates",
+        "cumulative_hits": "Total de acertos",
+        "cumulative_inaccuracy": "Imprecisão",
+        "cumulative_kills_to_death_ratio": "Razão entre abates e mortes",
+        "cumulative_losses": "Derrotas",
+        "cumulative_misses": "Total de tiros errados",
+        "cumulative_shots": "Total de disparos",
+        "cumulative_spotted": "Total de detecções",
+        "cumulative_survived_battles": "Batalhas sobrevividas",
+        "cumulative_win_and_survived": "Batalhas ganhas e sobrevividas",
+        "cumulative_wins": "Vitórias",
+        "cumulative_xp": "XP total",
+        "cumulative_battle_life_time": "Tempo de batalha total"
+      }
+    },
+    "test": {},
     "website": {
       "settings": {},
       "common": {

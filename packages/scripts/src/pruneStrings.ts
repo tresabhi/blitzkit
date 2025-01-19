@@ -19,9 +19,13 @@ function prune(defaultStrings: TranslationTree, strings: TranslationTree) {
       if (typeof defaultStrings[key] === typeof strings[key]) {
         if (typeof strings[key] === 'string') {
           if (
+            // are equivalent regardless of %s flavor
             (defaultStrings[key] as string).replaceAll(/%s\d/g, '%s') ===
               (strings[key] as string).replaceAll(/%s\d/g, '%s') ||
-            strings[key] === ''
+            // string is empty
+            strings[key] === '' ||
+            // string has old flavor of %s
+            strings[key].match(/%s([^\d]|$)/g) !== null
           ) {
             delete strings[key];
           }

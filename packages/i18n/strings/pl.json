@@ -60,9 +60,7 @@
           "starting_tank": {}
         },
         "body": {},
-        "errors": {
-          "tanks_not_on_line": "# %s i %s nie znajdują się w tej samej linii\n\nUpewnij się, że `starting-tank` i `target-tank` znajdują się na tej samej linii drzewa technicznego."
-        }
+        "errors": {}
       },
       "about": {
         "subcommands": {
@@ -90,9 +88,7 @@
       },
       "inactive": {
         "options": {
-          "threshold": {
-            "description": "Liczba dni nieaktywnych (domyślnie: %s dni)"
-          }
+          "threshold": {}
         },
         "body": {}
       },
@@ -126,9 +122,7 @@
       },
       "search_players": {
         "options": {
-          "limit": {
-            "description": "Maksymalna liczba wyników gracza (domyślnie: %s)"
-          }
+          "limit": {}
         },
         "body": {}
       },
@@ -207,34 +201,6 @@
     }
   },
   "default": {
-    "test": {},
-    "common": {
-      "units": {},
-      "gun_types": {},
-      "shells": {},
-      "player_count_period": {},
-      "branches": {},
-      "locales": {},
-      "wn8_percentile": {},
-      "bkni_percentile": {},
-      "nations": {},
-      "nations_adjectives": {},
-      "tank_class_short": {},
-      "tank_class_short_plural_lowercase": {},
-      "tank_class_medium": {
-        "0": "Lekki"
-      },
-      "tree_type": {},
-      "regions": {
-        "normal": {},
-        "short": {}
-      },
-      "leagues": {},
-      "composite_stats": {
-        "cumulative_spotted": "Suma wykryć",
-        "cumulative_xp": "Łączne PD"
-      }
-    },
     "bot": {
       "common": {
         "errors": {
@@ -296,9 +262,7 @@
             "starting_tank": {}
           },
           "body": {},
-          "errors": {
-            "tanks_not_on_line": "# %s i %s nie znajdują się w tej samej linii\n\nUpewnij się, że `starting-tank` i `target-tank` znajdują się na tej samej linii drzewa technicznego."
-          }
+          "errors": {}
         },
         "about": {
           "subcommands": {
@@ -326,9 +290,7 @@
         },
         "inactive": {
           "options": {
-            "threshold": {
-              "description": "Liczba dni nieaktywnych (domyślnie: %s dni)"
-            }
+            "threshold": {}
           },
           "body": {}
         },
@@ -362,9 +324,7 @@
         },
         "search_players": {
           "options": {
-            "limit": {
-              "description": "Maksymalna liczba wyników gracza (domyślnie: %s)"
-            }
+            "limit": {}
           },
           "body": {}
         },
@@ -415,6 +375,34 @@
         }
       }
     },
+    "common": {
+      "units": {},
+      "gun_types": {},
+      "shells": {},
+      "player_count_period": {},
+      "branches": {},
+      "locales": {},
+      "wn8_percentile": {},
+      "bkni_percentile": {},
+      "nations": {},
+      "nations_adjectives": {},
+      "tank_class_short": {},
+      "tank_class_short_plural_lowercase": {},
+      "tank_class_medium": {
+        "0": "Lekki"
+      },
+      "tree_type": {},
+      "regions": {
+        "normal": {},
+        "short": {}
+      },
+      "leagues": {},
+      "composite_stats": {
+        "cumulative_spotted": "Suma wykryć",
+        "cumulative_xp": "Łączne PD"
+      }
+    },
+    "test": {},
     "website": {
       "settings": {},
       "common": {

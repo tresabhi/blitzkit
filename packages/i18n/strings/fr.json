@@ -178,29 +178,6 @@
     "composite_stats": {}
   },
   "default": {
-    "test": {},
-    "common": {
-      "units": {},
-      "gun_types": {},
-      "shells": {},
-      "player_count_period": {},
-      "branches": {},
-      "locales": {},
-      "wn8_percentile": {},
-      "bkni_percentile": {},
-      "nations": {},
-      "nations_adjectives": {},
-      "tank_class_short": {},
-      "tank_class_short_plural_lowercase": {},
-      "tank_class_medium": {},
-      "tree_type": {},
-      "regions": {
-        "normal": {},
-        "short": {}
-      },
-      "leagues": {},
-      "composite_stats": {}
-    },
     "bot": {
       "common": {
         "errors": {},
@@ -357,6 +334,29 @@
         }
       }
     },
+    "common": {
+      "units": {},
+      "gun_types": {},
+      "shells": {},
+      "player_count_period": {},
+      "branches": {},
+      "locales": {},
+      "wn8_percentile": {},
+      "bkni_percentile": {},
+      "nations": {},
+      "nations_adjectives": {},
+      "tank_class_short": {},
+      "tank_class_short_plural_lowercase": {},
+      "tank_class_medium": {},
+      "tree_type": {},
+      "regions": {
+        "normal": {},
+        "short": {}
+      },
+      "leagues": {},
+      "composite_stats": {}
+    },
+    "test": {},
     "website": {
       "settings": {},
       "common": {
