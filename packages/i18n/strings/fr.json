@@ -9,13 +9,13 @@
       "m": "%s1m",
       "mm": "%s1mm",
       "deg": "%s1°",
-      "hp": "%s1hp",
+      "hp": "%s1ps",
       "x": "x%s1"
     },
     "gun_types": {
-      "auto_loader": "Auto loader",
-      "auto_reloader": "Auto reloader",
-      "regular": "Regular"
+      "auto_loader": "Chargement auto",
+      "auto_reloader": "Rechargement auto",
+      "regular": "Régulier"
     },
     "shells": {
       "ap": "AP",
@@ -25,54 +25,54 @@
     },
     "player_count_period": {
       "total": "Total",
-      "d_120": "Past 120 days",
-      "d_90": "Past 90 days",
-      "d_60": "Past 60 days",
-      "d_30": "Past month",
-      "d_7": "Past week",
-      "d_1": "Yesterday"
+      "d_120": "120 derniers jours",
+      "d_90": "90 derniers jours",
+      "d_60": "60 derniers jours",
+      "d_30": "Mois dernier",
+      "d_7": "Semaine dernière",
+      "d_1": "Hier"
     },
     "branches": {
       "local": "dev",
       "dev": "beta",
-      "opentest": "opentest",
-      "preview": "preview"
+      "opentest": "test ouvert",
+      "preview": "aperçu"
     },
     "locales": {
-      "en": "English",
-      "es": "Spanish",
-      "pt": "Portuguese",
-      "ru": "Russian",
-      "uk": "Ukrainian",
-      "zh": "Chinese",
-      "ja": "Japanese",
-      "fr": "French",
-      "pl": "Polish"
+      "en": "Anglais",
+      "es": "Espagnol",
+      "pt": "Portugais",
+      "ru": "Russe",
+      "uk": "Ukrainien",
+      "zh": "Chinois",
+      "ja": "Japonais",
+      "fr": "Français",
+      "pl": "Polonais"
     },
     "wn8_percentile": {
-      "0": "Very bad",
-      "1": "Bad",
-      "2": "Below average",
-      "3": "Average",
-      "4": "Above average",
-      "5": "Good",
-      "6": "Very good",
-      "7": "Great",
-      "8": "Unicum",
-      "9": "Super unicum"
+      "0": "Très nul",
+      "1": "Nul",
+      "2": "En-dessous de la moyenne",
+      "3": "Moyenne",
+      "4": "Au-dessus de la moyenne",
+      "5": "Bien",
+      "6": "Très bien",
+      "7": "Super",
+      "8": "Unique",
+      "9": "Super unique"
     },
     "bkni_percentile": {
-      "0": "Super malum",
-      "1": "Malum",
-      "2": "Very bad",
-      "3": "Bad",
-      "4": "Below average",
-      "5": "Average",
-      "6": "Above average",
-      "7": "Good",
-      "8": "Very good",
-      "9": "Unicum",
-      "10": "Super unicum"
+      "0": "Super mal",
+      "1": "Mal",
+      "2": "Très nul",
+      "3": "Nul",
+      "4": "En dessous de la moyenne",
+      "5": "Moyenne",
+      "6": "Au-dessus de la moyenne",
+      "7": "Bien",
+      "8": "Très bien",
+      "9": "Unique",
+      "10": "Super unique"
     },
     "nations": {
       "ussr": "U.S.S.R.",
@@ -89,10 +89,10 @@
       "ussr": "U.S.S.R.",
       "germany": "German",
       "usa": "U.S.A.",
-      "china": "Chinese",
+      "china": "Chinois",
       "uk": "U.K.",
-      "france": "French",
-      "japan": "Japanese",
+      "france": "Français",
+      "japan": "Japonais",
       "european": "European",
       "other": "Hybrid"
     },
@@ -145,39 +145,39 @@
       "normalized_damage_dealt": "Damage",
       "normalized_damage_received": "Damage received",
       "normalized_deaths": "Deathrate",
-      "normalized_frags": "Kills",
-      "normalized_hits": "Hits",
-      "normalized_losses": "Lossrate",
-      "normalized_misses": "Misses",
-      "normalized_shots": "Shots",
-      "normalized_spotted": "Spots",
-      "normalized_survived_battles": "Survival rate",
-      "normalized_win_and_survived": "Winning and surviving rate",
-      "normalized_wins": "Winrate",
+      "normalized_frags": "Tués",
+      "normalized_hits": "Coups",
+      "normalized_losses": "Taux de perte",
+      "normalized_misses": "Ratés",
+      "normalized_shots": "Tirs",
+      "normalized_spotted": "Détections",
+      "normalized_survived_battles": "Taux de survie",
+      "normalized_win_and_survived": "Taux de victoires et de survie",
+      "normalized_wins": "Taux de victoires",
       "normalized_xp": "XP",
-      "normalized_battle_life_time": "Battle time",
-      "cumulative_accuracy": "Accuracy",
-      "cumulative_battles": "Battles",
+      "normalized_battle_life_time": "Temps de bataille",
+      "cumulative_accuracy": "Précision",
+      "cumulative_battles": "Batailles",
       "cumulative_capture_points": "Total capture points",
-      "cumulative_damage_dealt": "Total damage",
-      "cumulative_damage_ratio": "Damage ratio",
-      "cumulative_damage_received": "Total damage received",
-      "cumulative_deaths": "Total deaths",
-      "cumulative_dropped_capture_points": "Total dropped capture points",
-      "cumulative_frags": "Total kills",
-      "cumulative_hits": "Total hits",
-      "cumulative_inaccuracy": "Inaccuracy",
-      "cumulative_kills_to_death_ratio": "Kills to death ratio",
-      "cumulative_losses": "Losses",
-      "cumulative_misses": "Total misses",
-      "cumulative_shots": "Total shots",
-      "cumulative_spotted": "Total spots",
-      "cumulative_survived_battles": "Survived battles",
-      "cumulative_win_and_survived": "Won and survived battles",
-      "cumulative_wins": "Wins",
+      "cumulative_damage_dealt": "Total de dégâts",
+      "cumulative_damage_ratio": "Rapport de dégâts",
+      "cumulative_damage_received": "Total de dégât reçus",
+      "cumulative_deaths": "Total de morts",
+      "cumulative_dropped_capture_points": "Total de points de capture abandonnés",
+      "cumulative_frags": "Total de tués",
+      "cumulative_hits": "Total de coups",
+      "cumulative_inaccuracy": "Imprécision",
+      "cumulative_kills_to_death_ratio": "Rapport tués/morts",
+      "cumulative_losses": "Défaites",
+      "cumulative_misses": "Total de ratés",
+      "cumulative_shots": "Total de tirs",
+      "cumulative_spotted": "Total de détections",
+      "cumulative_survived_battles": "Batailles survécues",
+      "cumulative_win_and_survived": "Batailles gagnées et survécues",
+      "cumulative_wins": "Victoires",
       "cumulative_xp": "Total XP",
       "cumulative_wn8": "WN8",
-      "cumulative_battle_life_time": "Total battle time"
+      "cumulative_battle_life_time": "Total de temps de bataille"
     }
   },
   "bot": {
@@ -198,16 +198,16 @@
       "wn8": {
         "name": "WN8",
         "types": {
-          "very_bad": "Very bad",
-          "bad": "Bad",
-          "below_average": "Below average",
-          "average": "Average",
-          "above_average": "Above average",
-          "good": "Good",
-          "very_good": "Very good",
-          "great": "Great",
-          "unicum": "Unicum",
-          "super_unicum": "Super unicum"
+          "very_bad": "Très nul",
+          "bad": "Nul",
+          "below_average": "En-dessous de la moyenne",
+          "average": "Moyenne",
+          "above_average": "Au-dessus de la moyenne",
+          "good": "Bien",
+          "very_good": "Très bien",
+          "great": "Super",
+          "unicum": "Unique",
+          "super_unicum": "Super unique"
         }
       },
       "subcommands": {
@@ -305,14 +305,14 @@
         "refresh": "Refresh"
       },
       "hero_stats": {
-        "battles": "Battles",
-        "winrate": "Winrate",
+        "battles": "Batailles",
+        "winrate": "Taux de victoires",
         "damage": "Damage",
-        "damage_ratio": "Damage ratio",
+        "damage_ratio": "Rapport de dégâts",
         "tier": "Tier",
         "survival": "Survival",
-        "accuracy": "Accuracy",
-        "kills": "Kills"
+        "accuracy": "Précision",
+        "kills": "Tués"
       }
     },
     "commands": {
@@ -403,9 +403,9 @@
         "description": "A period's breakdown by tanks played",
         "body": {
           "total": "Total",
-          "battles": "Battles",
+          "battles": "Batailles",
           "wn8": "WN8",
-          "winrate": "Winrate",
+          "winrate": "Taux de victoires",
           "damage": "Damage",
           "unknown_tank": "Unknown tank %s1"
         }
@@ -458,21 +458,21 @@
           "cards": {
             "games": {
               "title": "Games",
-              "winrate": "Winrate",
-              "battles": "Battles",
+              "winrate": "Taux de victoires",
+              "battles": "Batailles",
               "wins_losses": "Wins / losses"
             },
             "efficiency": {
               "title": "Efficiency",
               "wn8": "WN8",
               "survival": "Survival",
-              "accuracy": "Accuracy"
+              "accuracy": "Précision"
             },
             "lethality": {
               "title": "Lethality",
               "average_damage": "Average damage",
               "damage_per_tier": "Damage per tier",
-              "damage_ratio": "Damage ratio",
+              "damage_ratio": "Rapport de dégâts",
               "average_kills": "Average kills"
             },
             "miscellaneous": {
@@ -480,7 +480,7 @@
               "average_tier": "Average tier",
               "average_spots": "Average spots",
               "average_xp": "Average XP",
-              "kills_to_death_ratio": "Kills to death ratio"
+              "kills_to_death_ratio": "Rapport tués/morts"
             }
           }
         }
@@ -617,8 +617,8 @@
         "body": {
           "title": "%s1's information",
           "nickname": "Nickname",
-          "battles": "Battles",
-          "winrate": "Winrate",
+          "battles": "Batailles",
+          "winrate": "Taux de victoires",
           "account_id": "Account ID",
           "created": "Created",
           "last_battle": "Last battle"
@@ -1056,16 +1056,16 @@
             "total": "Total"
           },
           "stats": {
-            "winrate": "Winrate",
+            "winrate": "Taux de victoires",
             "players": "Players",
             "damage": "Damage",
             "survival": "Survival",
             "xp": "XP",
-            "kills": "Kills",
-            "spots": "Spots",
-            "accuracy": "Accuracy",
-            "shots": "Shots",
-            "hits": "Hits",
+            "kills": "Tués",
+            "spots": "Détections",
+            "accuracy": "Précision",
+            "shots": "Tirs",
+            "hits": "Coups",
             "damage_ratio": "Dmg. ratio",
             "damage_taken": "Dmg. taken",
             "capture_points": "Cap points"
