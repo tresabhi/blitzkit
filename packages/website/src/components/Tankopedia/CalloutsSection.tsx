@@ -1,4 +1,4 @@
-import { assertSecret } from '@blitzkit/core';
+import { assertSecret, fetchTankDefinitions } from '@blitzkit/core';
 import { MinusCircledIcon } from '@radix-ui/react-icons';
 import { Callout, Flex } from '@radix-ui/themes';
 import { uniq } from 'lodash-es';
@@ -9,6 +9,8 @@ import { AesonPlug } from '../AesonPlug';
 import { ExperimentIcon } from '../ExperimentIcon';
 import { MAX_RECENTLY_VIEWED } from '../TankSearch/constants';
 
+const tankDefinitions = await fetchTankDefinitions();
+
 export function CalloutsSection() {
   const tank = Duel.use((state) => state.protagonist.tank);
   const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
@@ -17,10 +19,9 @@ export function CalloutsSection() {
 
   useEffect(() => {
     mutateTankopediaPersistent((draft) => {
-      draft.recentlyViewed = uniq([tank.id, ...draft.recentlyViewed]).slice(
-        0,
-        MAX_RECENTLY_VIEWED,
-      );
+      draft.recentlyViewed = uniq([tank.id, ...draft.recentlyViewed])
+        .filter((id) => id in tankDefinitions.tanks)
+        .slice(0, MAX_RECENTLY_VIEWED);
     });
   }, [tank]);
 

@@ -12,7 +12,7 @@ export function NoResults({ type = 'filters' }: NoResultsProps) {
   return (
     <Flex flexGrow="1" align="center" justify="center">
       <Text color="gray">
-        {strings.website.common.tank_search.no_tanks_found.body}.{' '}
+        {strings.website.common.tank_search.no_tanks_found.body}{' '}
         <Link
           href="#"
           underline="always"
@@ -25,7 +25,6 @@ export function NoResults({ type = 'filters' }: NoResultsProps) {
             ? strings.website.common.tank_search.no_tanks_found.clear_filters
             : strings.website.common.tank_search.no_tanks_found.search_again}
         </Link>
-        .
       </Text>
     </Flex>
   );

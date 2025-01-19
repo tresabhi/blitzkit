@@ -39,6 +39,17 @@ env:
   PUBLIC_WARGAMING_APPLICATION_ID: ${{ secrets.PUBLIC_WARGAMING_APPLICATION_ID }}
   PUBLIC_ASSET_REPO: ${{ secrets.PUBLIC_ASSET_REPO }}
   PUBLIC_ASSET_BRANCH: ${{ github.event.inputs.cdn_branch || secrets.PUBLIC_ASSET_BRANCH }}
+  WOTB_GLOSSARY_DOMAIN: ${{ secrets.WOTB_GLOSSARY_DOMAIN }}
+  WOTB_GLOSSARY_PATH: ${{ secrets.WOTB_GLOSSARY_PATH }}
+  PUBLIC_PROMOTE_OPENTEST: ${{ secrets.PUBLIC_PROMOTE_OPENTEST }}
+  ALLOW_ROBOTS: true
+  PUBLIC_GOOGLE_TAG_MANAGER_ID: ${{ secrets.PUBLIC_GOOGLE_TAG_MANAGER_ID }}
+  PUBLIC_GOOGLE_ANALYTICS_PROPERTY_ID: ${{ secrets.PUBLIC_GOOGLE_ANALYTICS_PROPERTY_ID }}
+  PUBLIC_PATREON_CLIENT_ID: ${{ secrets.PUBLIC_PATREON_CLIENT_ID }}
+  PUBLIC_PATREON_REDIRECT_URI: ${{ secrets.PUBLIC_PATREON_REDIRECT_URI }}
+  PATREON_CLIENT_SECRET: ${{ secrets.PATREON_CLIENT_SECRET }}
+  PUBLIC_NITROPAY_ID: ${{ secrets.PUBLIC_NITROPAY_ID }}
+  PUBLIC_DEBUG_MISSING_I18N: false
 
 jobs:
   download_client:
@@ -106,6 +117,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          token: ${{ secrets.GH_TOKEN }}
 
       - name: Setup bun
         uses: oven-sh/setup-bun@v1
@@ -127,7 +141,7 @@ jobs:
 
       - name: Start server and build assets
         run: |
-          bun dev:website & 
+          bun dev:website --verbosepa & 
           SERVER_PID=$!
 
           bun run build:assets --all-targets --depot --production

@@ -2,6 +2,7 @@ import {
   metaSortTank,
   normalizeBoundingBox,
   resolveDpm,
+  SEARCH_KEYS,
   unionBoundingBox,
   type TankDefinition,
 } from '@blitzkit/core';
@@ -410,7 +411,7 @@ export const TankSearch = memo<TankSearchProps>(
           : sorted.reverse();
       } else {
         const searchedRaw = fuzzysort.go(tankFilters.search, tankNames, {
-          keys: ['searchableName', 'searchableNameDeburr', 'camouflages'],
+          keys: SEARCH_KEYS,
         });
         const searchedTanks = searchedRaw.map(
           (result) => tankDefinitions.tanks[result.obj.id],
@@ -456,7 +457,9 @@ export const TankSearch = memo<TankSearchProps>(
                     draft.recentlyViewed = uniq([
                       ...tanksFiltered.map(({ id }) => id),
                       ...draft.recentlyViewed,
-                    ]).slice(0, MAX_RECENTLY_VIEWED);
+                    ])
+                      .filter((id) => id in tankDefinitions.tanks)
+                      .slice(0, MAX_RECENTLY_VIEWED);
                   });
                 }}
               >

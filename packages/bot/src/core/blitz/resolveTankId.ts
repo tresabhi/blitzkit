@@ -1,3 +1,4 @@
+import { SEARCH_KEYS } from '@blitzkit/core';
 import { literals } from '@blitzkit/i18n';
 import { Locale } from 'discord.js';
 import { go } from 'fuzzysort';
@@ -19,10 +20,7 @@ export async function resolveTankId(
     const searchResult = go(
       `${tank}`,
       await (techTreeOnly ? tankNamesTechTreeOnly : tankNames),
-      {
-        keys: ['searchableName', 'searchableNameDeburr', 'camouflages'],
-        limit: 1,
-      },
+      { keys: SEARCH_KEYS, limit: 1 },
     );
 
     if (searchResult.length === 0) {

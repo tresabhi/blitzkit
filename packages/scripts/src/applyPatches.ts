@@ -1,4 +1,5 @@
 import { assertSecret } from '@blitzkit/core';
+import { existsSync } from 'fs';
 import { mkdir, writeFile } from 'fs/promises';
 import { parse as parsePath } from 'path';
 import ProgressBar from 'progress';
@@ -45,19 +46,24 @@ while (true) {
       files.length,
     );
 
-    await Promise.all(
-      files.map(async ({ path, data }) => {
-        const { dir } = parsePath(path);
+    for (const { path, data } of files) {
+      console.log(`Patching "${path}"...`);
 
+      const { dir } = parsePath(path);
+
+      try {
         await mkdir(`${DATA}/${dir}`, { recursive: true });
-        await writeFile(
-          `${DATA}/${path}`,
-          new Uint8Array(writeDVPL(Buffer.from(data))),
-        );
+      } catch (error) {
+        console.warn(`Failed to make directory "${dir}"`);
+      }
 
-        bar.tick();
-      }),
-    );
+      await writeFile(
+        `${DATA}/${path}`,
+        new Uint8Array(writeDVPL(Buffer.from(data))),
+      );
+
+      bar.tick();
+    }
 
     if ('dynamicContentLocalizationsDir' in data) {
       console.log('Found dynamic content localizations; patching...');
