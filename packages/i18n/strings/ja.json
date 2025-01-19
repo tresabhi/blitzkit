@@ -24,7 +24,7 @@
       "he": "HE"
     },
     "player_count_period": {
-      "total": "全て",
+      "total": "Total",
       "d_120": "過去 120 日間",
       "d_90": "過去 90 日間",
       "d_60": "過去 60 日間",
@@ -351,7 +351,7 @@
         },
         "body": {
           "subtitle": "Research",
-          "total": "全て",
+          "total": "Total",
           "research": "Research: %s1",
           "upgrades": "Upgrades: %s1",
           "purchase": "Purchase: %s1",
@@ -402,7 +402,7 @@
         "name": "breakdown",
         "description": "A period's breakdown by tanks played",
         "body": {
-          "total": "全て",
+          "total": "Total",
           "battles": "Battles",
           "wn8": "WN8",
           "winrate": "Winrate",
@@ -1053,7 +1053,7 @@
         "table": {
           "tanks": {
             "header": "Tank",
-            "total": "全て"
+            "total": "Total"
           },
           "stats": {
             "winrate": "Winrate",
@@ -1111,7 +1111,7 @@
         },
         "table": {
           "tank": "Tank",
-          "total": "全て",
+          "total": "Total",
           "remove": "Remove"
         }
       },
