@@ -8,7 +8,7 @@ import { writeFile } from 'fs/promises';
 const ROOT = '@blitzkit/i18n/strings';
 const WORKING_ROOT = '../../packages/i18n/strings';
 
-const defaultStrings = await import(`${ROOT}/${DEFAULT_LOCALE}.json`);
+const defaultStrings = require(`${ROOT}/${DEFAULT_LOCALE}.json`).default;
 const nonDefaultLocales = SUPPORTED_LOCALES.filter(
   (locale) => locale !== DEFAULT_LOCALE,
 );
@@ -46,7 +46,7 @@ function prune(defaultStrings: TranslationTree, strings: TranslationTree) {
 for (const locale of nonDefaultLocales) {
   console.log(`Pruning ${locale}...`);
 
-  const strings = await import(`${ROOT}/${locale}.json`);
+  const strings = require(`${ROOT}/${locale}.json`).default;
   const pruned = prune(defaultStrings, strings);
 
   writeFile(`${WORKING_ROOT}/${locale}.json`, JSON.stringify(pruned, null, 2));
