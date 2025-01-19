@@ -97,27 +97,27 @@
       "other": "多国籍"
     },
     "tank_class_short": {
-      "-1": "unrecognized",
-      "0": "Light",
-      "1": "Medium",
-      "2": "Heavy",
-      "3": "TD"
+      "-1": "不明",
+      "0": "軽戦車",
+      "1": "中戦車",
+      "2": "重戦車",
+      "3": "駆逐戦車"
     },
     "tank_class_short_plural_lowercase": {
-      "0": "lights",
-      "1": "mediums",
-      "2": "heavies",
-      "3": "TDs"
+      "0": "LT",
+      "1": "MT",
+      "2": "HT",
+      "3": "TD"
     },
     "tank_class_medium": {
-      "-1": "unrecognized",
-      "0": "Light",
-      "1": "Medium",
-      "2": "Heavy",
-      "3": "Tank destroyer"
+      "-1": "不明",
+      "0": "軽戦車",
+      "1": "中戦車",
+      "2": "重戦車",
+      "3": "駆逐戦車"
     },
     "tree_type": {
-      "-1": "unrecognized",
+      "-1": "不明",
       "0": "技術ツリー",
       "1": "プレミアム",
       "2": "コレクター"
@@ -652,17 +652,17 @@
   },
   "website": {
     "settings": {
-      "dev_mode": "Development mode",
-      "language": "Language"
+      "dev_mode": "開発者モード",
+      "language": "言語 / Language"
     },
     "common": {
       "player_search": {
-        "hint": "Search players...",
-        "no_results": "No results",
-        "searching": "Searching..."
+        "hint": "プレイヤーを検索中...",
+        "no_results": "該当なし",
+        "searching": "検索中..."
       },
       "copy_button": {
-        "copied": "Copied!"
+        "copied": "コピーしました!"
       },
       "tank_search": {
         "search_bar_hint": "車輌名を入力…",
@@ -709,10 +709,10 @@
           "maneuverability.traverseSpeed": "車体旋回速度"
         },
         "sort_dropdown": {
-          "label": "Sort",
+          "label": "ソート",
           "groups": {
             "sort": {
-              "no_sort": "No sort",
+              "no_sort": "ソートなし",
               "label": "並べ替え項目",
               "fire": "火力",
               "maneuverability": "機動性",
@@ -772,10 +772,10 @@
             "copy": "コピー"
           },
           "model": {
-            "name": "Model"
+            "name": "モデル"
           },
           "dynamic": {
-            "name": "Dynamic armor",
+            "name": "装甲ギア",
             "custom_shell": {
               "type": "弾種",
               "caliber": "口径",
@@ -839,7 +839,7 @@
           "purchase": "購入価格",
           "restoration": "再購入価格",
           "sale": "売却価格",
-          "research": "Research XP"
+          "research": "研究費用"
         },
         "tech_tree": {
           "title": "技術ツリー",
@@ -852,11 +852,11 @@
         },
         "review": {
           "title": "Review videos",
-          "disclaimer": "BlitzKit does not endorse any review videos.",
-          "join": "Apply to %s1 YouTuber program"
+          "disclaimer": "BlitzKitはレビュー動画を推奨していません。",
+          "join": "%s1 YouTuberプログラムに応募する"
         },
         "configuration": {
-          "title": "Configuration",
+          "title": "構成",
           "modules": {
             "title": "モジュール",
             "stock": "初期装備",
@@ -873,13 +873,13 @@
           "consumables": {
             "title": "消耗品",
             "clear": "クリア",
-            "info": "Yellow consumables do not affect the statistics."
+            "info": "黄色の消耗品は統計には影響しません。"
           },
           "skills": {
             "title": "搭乗員スキル",
             "clear": "クリア",
             "maximize": "最大",
-            "info": "Yellow skills only apply under special circumstances. Hold Space to quickly toggle between level 0 and 7."
+            "info": "黄色のスキルは特殊な状況下でのみ適用されます。スペースキーを長押しすると、レベル0とレベル7を素早く切り替えられます。"
           },
           "miscellaneous": {
             "title": "その他"
@@ -905,14 +905,14 @@
             "power_to_weight_ratio": "出力重量比",
             "hull_traverse_speed": "車体旋回速度",
             "camouflage": "隠蔽率",
-            "reload": "Reload",
+            "reload": "装填速度",
             "crewCount": "搭乗員数",
             "shellNormalization": "標準化",
             "shellRicochet": "跳弾角度",
             "dpm": "DPM",
-            "dpmEffective": "Effective at 60s",
-            "shells": "Shells",
-            "mostOptimalShellIndex": "Most optimal shell",
+            "dpmEffective": "60秒での有効値",
+            "shells": "砲弾",
+            "mostOptimalShellIndex": "最適な弾数",
             "shellReloads": "自動装填時間",
             "shellReload": "弾倉再装填時間",
             "intraClip": "砲弾再装填時間",
@@ -967,7 +967,7 @@
             "width": "全幅",
             "height": "全高",
             "length": "車体長",
-            "volume": "Volume",
+            "volume": "体積",
             "shellRange": "射程範囲",
             "shellCapacity": "総弾数",
             "gunType": "主砲タイプ",
@@ -979,7 +979,7 @@
         },
         "crew": {
           "title": "搭乗員熟練度",
-          "info": "represents the other roles a crew member can take.",
+          "info": "搭乗員が担うことができるその他の役割を表します",
           "count": "搭乗員数",
           "commander": "車長",
           "gunner": "砲手",
@@ -1007,7 +1007,7 @@
           },
           "clear": "クリア",
           "deltas": {
-            "none": "No deltas",
+            "none": "差分なし",
             "percentage": "割合",
             "absolute": "絶対値"
           }
@@ -1039,99 +1039,99 @@
       },
       "performance": {
         "name": "Performance",
-        "button": "View tanks",
-        "description": "Tank performance statistics",
+        "button": "戦車を見る",
+        "description": "戦車性能統計",
         "seo_description": "Best tanks and their performances in World of Tanks Blitz",
         "estimation": {
-          "body": "Estimated stats based on %s1 players. Updated %s2 ago.",
-          "hours": "%s1 hours",
-          "minutes": "%s1 minutes"
+          "body": "%s1 人のプレイヤーの推定統計。 %s2前に更新されました。",
+          "hours": "%s1 時間",
+          "minutes": "%s1 分"
         },
         "player_count": {
-          "label": "Player count"
+          "label": "統計期間:"
         },
         "table": {
           "tanks": {
-            "header": "Tank",
+            "header": "車輌名",
             "total": "Total"
           },
           "stats": {
-            "winrate": "Winrate",
-            "players": "Players",
-            "damage": "Damage",
-            "survival": "Survival",
-            "xp": "XP",
-            "kills": "Kills",
-            "spots": "Spots",
-            "accuracy": "Accuracy",
-            "shots": "Shots",
-            "hits": "Hits",
-            "damage_ratio": "Dmg. ratio",
-            "damage_taken": "Dmg. taken",
-            "capture_points": "Cap points"
+            "winrate": "勝率",
+            "players": "プレイヤー数",
+            "damage": "ダメージ",
+            "survival": "生還率",
+            "xp": "EXP",
+            "kills": "撃破数",
+            "spots": "発見数",
+            "accuracy": "命中率",
+            "shots": "射撃数",
+            "hits": "命中回数",
+            "damage_ratio": "ダメージ比",
+            "damage_taken": "被ダメージ",
+            "capture_points": "占領ポイント"
           }
         }
       },
       "gallery": {
         "name": "Gallery",
-        "button": "Browse all",
-        "description": "Blitz player avatars",
-        "seo_description": "All World of Tanks Blitz player avatars",
-        "last_updated": "Last updated on %s1",
+        "button": "全て見る",
+        "description": "Blitzアバター図鑑",
+        "seo_description": "World of Tanks Blitz の 全ての プレイヤーアバター",
+        "last_updated": "最終更新:",
         "search": {
-          "hint": "Search avatars...",
-          "results": "%s1 avatars"
+          "hint": "アバターを検索...",
+          "results": "検索結果: %s1 個"
         }
       },
       "session": {
         "name": "Session",
-        "button": "Start tracking",
-        "description": "Live session stats",
-        "seo_description": "Track your stats in real time as you play World of Tanks Blitz",
+        "button": "追跡開始",
+        "description": "セッション中プレイヤーの追跡",
+        "seo_description": "World of Tanks Blitz をプレイ中、統計をリアルタイムで追跡します",
         "search": {
-          "lookup": "Look up a player to get started",
-          "hint": "Search players...",
-          "searching": "Searching...",
-          "no_results": "No players found"
+          "lookup": "プレイヤーを検索して開始",
+          "hint": "プレイヤー名を入力...",
+          "searching": "検索中...",
+          "no_results": "プレイヤーが見つかりませんでした"
         },
         "controls": {
-          "title": "Tracking %s1",
-          "subtitle": "Since %s1",
+          "title": "%s1 を追跡中",
+          "subtitle": "開始日時: %s1",
           "reset": "リセット",
-          "change": "Change"
+          "change": "変更"
         },
         "no_cc": {
-          "title": "You're attempting to track a CC account",
-          "body": "CC (community contributor) accounts do not have public tank statistics. We are in the process of adding embeds for CC accounts, stay tuned.",
+          "title": "CCアカウントを追跡しようとしています",
+          "body": "CC (Community Contributor) アカウントは、統計が公開されていません。CC アカウントの埋め込みを追加する作業を進めていますので、お待ちください。",
           "alright": "Alright"
         },
         "no_battles": {
-          "title": "No battles",
-          "hint": "Go ahead and play a game"
+          "title": "まだ戦闘がありません",
+          "hint": "ゲームをプレイしてください"
         },
         "table": {
-          "tank": "Tank",
+          "tank": "車輌名",
           "total": "Total",
-          "remove": "Remove"
+          "remove": "削除"
         }
       },
       "tier_list": {
         "name": "Tier list",
-        "button": "Rank tanks",
-        "description": "Rank Blitz tanks",
-        "seo_description": "Explore tier lists ranking tanks from best to worst, based on player ratings and statistical performance in World of Tanks Blitz",
+        "button": "ランク付けする",
+        "description": "Blitzの戦車ランキング",
+        "seo_description": "World of Tanks Blitz のプレイヤー評価とパフォーマンス統計に基づいて、最良から最悪までのランキングを作成しましょう",
         "buttons": {
           "reset": "リセット",
-          "share": "Share"
+          "share": "共有"
         }
       },
       "embed": {
         "name": "Embed",
-        "button": "Create now",
-        "description": "Embeds for streaming",
+        "button": "今すぐ作成",
+        "description": "ストリーミング用の埋め込み",
         "seo_description": "Create embeds for streaming World of Tanks Blitz with extreme customization",
-        "coming_soon": "More embeds coming soon.",
-        "suggest": "Suggest ideas.",
+        "coming_soon": "埋め込みは近日中さらに追加される予定です。",
+        "suggest": "アイデアを提案してください。",
         "preview": {
           "title": "Example preview",
           "upload": "Upload test background"
@@ -1217,18 +1217,18 @@
       },
       "discord": {
         "name": "Discord bot",
-        "button": "Install now",
-        "description": "Stats right in Discord",
+        "button": "インストール",
+        "description": "Discordで統計情報を確認",
         "seo_description": "Get stats right in Discord with BlitzKit's Discord bot"
       },
       "more": {
         "name": "More coming soon",
-        "button": "Join Discord",
-        "description": "What we're making",
+        "button": "Discord に参加",
+        "description": "近日追加予定 - 私たちが作っているもの",
         "seo_description": "What we're making with BlitzKit"
       },
       "players": {
-        "name": "Players",
+        "name": "プレイヤー数",
         "button": "Lookup player",
         "description": "Periodical player statistics",
         "seo_description": "Periodical player statistics in World of Tanks Blitz"
@@ -1236,8 +1236,8 @@
       "home": {
         "name": "Home",
         "button": "Get started",
-        "description": "Get started with BlitzKit",
-        "seo_description": "Get started with BlitzKit"
+        "description": "さあ、BlitzKit を始めよう!",
+        "seo_description": "さあ、BlitzKit を始めよう!"
       },
       "blitz_analysis": {
         "name": "BlitzAnalysis[]",
@@ -1248,22 +1248,22 @@
       "blitz_insider": {
         "name": "Blitz Insider",
         "button": "Discover today",
-        "description": "In-game session stats",
+        "description": "ゲーム内のセッション統計",
         "seo_description": "In-game session stats in World of Tanks Blitz"
       }
     },
     "footer": {
       "motto": "Everything World of Tanks Blitz",
-      "copyright": "Unaffiliated with Wargaming or any service",
+      "copyright": "Wargamingやその他のサービスとは関係ありません",
       "about": {
-        "title": "About",
-        "credits": "Credits",
+        "title": "概要",
+        "credits": "クレジット",
         "discord": "Discord",
         "github": "GitHub",
-        "patches": "Patches"
+        "patches": "パッチノート"
       },
       "legal": {
-        "title": "Legal",
+        "title": "法的事項",
         "privacy": "Privacy policy",
         "terms": "Terms of service"
       }
