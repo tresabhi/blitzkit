@@ -754,8 +754,8 @@
         "tank_seo_description": "%s1 armor, statistics, equipment, provisions, and more. %s2 DPM, %s3hp alpha, %s4mm penetration, %s5kph top speed, %s6hp health.",
         "sandbox": {
           "poses": {
-            "hull_down": "Hull down",
-            "face_hug": "Face hug",
+            "hull_down": "За холмом",
+            "face_hug": "В упор",
             "default": "По умолчанию"
           },
           "settings": {
@@ -1087,9 +1087,9 @@
         "name": "Сессия",
         "button": "Найти",
         "description": "Статистика сеанса игры",
-        "seo_description": "Track your stats in real time as you play World of Tanks Blitz",
+        "seo_description": "Отслеживайте свою статистику в реальном времени во время игры World of Tanks Blitz",
         "search": {
-          "lookup": "Look up a player to get started",
+          "lookup": "Искать игрока, чтобы начать",
           "hint": "Поиск игроков...",
           "searching": "Поиск...",
           "no_results": "Игроков не найдено"
@@ -1101,8 +1101,8 @@
           "change": "Изменить"
         },
         "no_cc": {
-          "title": "You're attempting to track a CC account",
-          "body": "CC (community contributor) accounts do not have public tank statistics. We are in the process of adding embeds for CC accounts, stay tuned.",
+          "title": "Вы пытаетесь отследить аккаунт контребьютера",
+          "body": "Учетные записи контрибьютеров не имеют публичной статистики танков. Мы находимся в процессе добавления вставки для аккаунтов контрибьютеров, оставайтесь с нами.",
           "alright": "Принять"
         },
         "no_battles": {
@@ -1129,7 +1129,7 @@
         "name": "Встройки",
         "button": "Создать",
         "description": "Встраиваемые элементы для стримов",
-        "seo_description": "Create embeds for streaming World of Tanks Blitz with extreme customization",
+        "seo_description": "Создать вставки для стримов по World of Tanks Blitz с невероятной кастомизации",
         "coming_soon": "Скоро появятся новые встраиваемые элементы.",
         "suggest": "Предложить идеи.",
         "preview": {
@@ -1156,7 +1156,7 @@
               "cancel": "Отмена",
               "success": {
                 "title": "Скопировать URL",
-                "info": "Generated the URL for %s1. The embed will start tracking as soon as the URL is pasted. Reset at any time by right-clicking on PC or long-pressing on mobile and then selecting \"Reset\".",
+                "info": "Сгенерирован URL для %s1. Встройка начнет отслеживание, как только URL будет вставлен. Можно сбросить, щелкнув правой кнопкой мыши на ПК или долгим нажатием на мобильном телефоне и выбором «Сброс».",
                 "back": "Назад",
                 "copy": "Скопировать URL"
               }
@@ -1183,7 +1183,7 @@
               "listMaxTanks": "Число танков",
               "cardRadius": "Радиус карточки",
               "cardHeaderBackgroundColor": "Цвет фона заголовка карточки",
-              "cardHeaderPadding": "Card header padding",
+              "cardHeaderPadding": "Отступ в заголовке",
               "cardTitle": "Заголовок карточки",
               "cardTitleTypeColor": "Цвет по типу в заголовке",
               "cardTitleClassIcon": "Иконка класса в заголовке",
@@ -1243,7 +1243,7 @@
         "name": "BlitzAnalysis[]",
         "button": "Анализируй",
         "description": "Богатая статистика",
-        "seo_description": "Rich historic average stats in World of Tanks Blitz"
+        "seo_description": "Богатые статистика по World of Tanks Blitz"
       },
       "blitz_insider": {
         "name": "Blitz Insider",
