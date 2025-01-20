@@ -775,7 +775,7 @@
             "name": "モデル"
           },
           "dynamic": {
-            "name": "装甲ギア",
+            "name": "貫通テスト",
             "custom_shell": {
               "type": "弾種",
               "caliber": "口径",
@@ -798,8 +798,8 @@
                 "track": "履帯"
               },
               "status": {
-                "penetration": "%s1hp 装甲貫通",
-                "blocked": "装甲非貫通",
+                "penetration": "%s1hp 貫通",
+                "blocked": "非貫通",
                 "ricochet": "跳弾",
                 "splash": "%s1hp 爆風ダメージ"
               },
@@ -811,7 +811,7 @@
             }
           },
           "static": {
-            "name": "Static armor",
+            "name": "装甲モデル",
             "primary": "主装甲",
             "spaced": "空間装甲",
             "external": "外部モジュール",
