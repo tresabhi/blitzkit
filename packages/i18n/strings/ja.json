@@ -1077,7 +1077,7 @@
         "button": "全て見る",
         "description": "Blitzアバター図鑑",
         "seo_description": "World of Tanks Blitz の 全ての プレイヤーアバター",
-        "last_updated": "最終更新:",
+        "last_updated": "最終更新: %s1",
         "search": {
           "hint": "アバターを検索...",
           "results": "検索結果: %s1 個"
