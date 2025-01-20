@@ -86,14 +86,14 @@
       "other": "Сборная нация"
     },
     "nations_adjectives": {
-      "ussr": "Советский",
-      "germany": "Немецкий",
-      "usa": "Американский",
-      "china": "Китайский",
-      "uk": "Великобританский",
-      "france": "Французский",
-      "japan": "Японский",
-      "european": "Европейский",
+      "ussr": "СССР",
+      "germany": "Германии",
+      "usa": "США",
+      "china": "Китая",
+      "uk": "Великобритании",
+      "france": "Франции",
+      "japan": "Японии",
+      "european": "Сборной Европы",
       "other": "Сборной нации"
     },
     "tank_class_short": {
@@ -750,7 +750,7 @@
         "button": "Найти",
         "description": "Танковая энциклопедия Blitz",
         "seo_description": "Статистика, броня и многое другое по всем танкам World of Tanks Blitz",
-        "tank_seo_title": "%s1- %s3 %s4 %s2 уровня | Танкопедия %s5 | World of Tanks Blitz (WoTB)",
+        "tank_seo_title": "%s1 - %s4 %s3 %s2 уровня | Танкопедия %s5 | World of Tanks Blitz (WoTB)",
         "tank_seo_description": "%s1 armor, statistics, equipment, provisions, and more. %s2 DPM, %s3hp alpha, %s4mm penetration, %s5kph top speed, %s6hp health.",
         "sandbox": {
           "poses": {
@@ -860,7 +860,7 @@
           "modules": {
             "title": "Модули",
             "stock": "Сток",
-            "upgrade": "Upgrade"
+            "upgrade": "Топ"
           },
           "equipment": {
             "title": "Оборудование",
@@ -1027,7 +1027,7 @@
           },
           "modules": {
             "stock": "Сток",
-            "upgrade": "Upgrade"
+            "upgrade": "Топ"
           },
           "provisions": {
             "clear": "Очистить"
@@ -1130,8 +1130,8 @@
         "button": "Создать",
         "description": "Встраиваемые элементы для стримов",
         "seo_description": "Create embeds for streaming World of Tanks Blitz with extreme customization",
-        "coming_soon": "More embeds coming soon.",
-        "suggest": "Suggest ideas.",
+        "coming_soon": "Скоро появятся новые встраиваемые элементы.",
+        "suggest": "Предложить идеи.",
         "preview": {
           "title": "Example preview",
           "upload": "Upload test background"
