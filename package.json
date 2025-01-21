@@ -36,7 +36,8 @@
     "preview:website": "cd packages/website && bun run preview",
     "build:reviews": "cd packages/scripts && bun build:reviews",
     "build:ids": "cd packages/scripts && bun build:ids",
-    "prunestrings": "cd packages/scripts && bun prunestrings"
+    "prunestrings": "cd packages/scripts && bun prunestrings",
+    "test:cli": "cd src/CLI && dotnet run"
   },
   "license": "MIT",
   "dependencies": {
