@@ -15,13 +15,13 @@
     "gun_types": {
       "auto_loader": "Auto loader",
       "auto_reloader": "Auto reloader",
-      "regular": "Regular"
+      "regular": ""
     },
     "shells": {
       "ap": "AP",
       "apcr": "APCR",
       "heat": "HEAT",
-      "he": "HE"
+      "he": "OB"
     },
     "player_count_period": {
       "total": "Total",
@@ -78,7 +78,7 @@
       "ussr": "U.S.S.R.",
       "germany": "Germany",
       "usa": "U.S.A.",
-      "china": "China",
+      "china": "Chiny",
       "uk": "U.K.",
       "france": "France",
       "japan": "Japan",
