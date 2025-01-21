@@ -901,7 +901,7 @@
             "gun_flexibility": "Gun flexibility",
             "speed": "Speed",
             "terrain_coefficients": "Terrain coefficients",
-            "raw_terrain_coefficients": "Raw terrain coefficients",
+            "raw_terrain_coefficients": "Coeficientes brutos do terreno",
             "power_to_weight_ratio": "Power to weight ratio",
             "hull_traverse_speed": "Hull traverse speed",
             "camouflage": "Camouflage",

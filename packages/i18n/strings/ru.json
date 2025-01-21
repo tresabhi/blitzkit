@@ -86,14 +86,14 @@
       "other": "Сборная нация"
     },
     "nations_adjectives": {
-      "ussr": "Советский",
-      "germany": "Немецкий",
-      "usa": "Американский",
-      "china": "Китайский",
-      "uk": "Великобританский",
-      "france": "Французский",
-      "japan": "Японский",
-      "european": "Европейский",
+      "ussr": "СССР",
+      "germany": "Германии",
+      "usa": "США",
+      "china": "Китая",
+      "uk": "Великобритании",
+      "france": "Франции",
+      "japan": "Японии",
+      "european": "Сборной Европы",
       "other": "Сборной нации"
     },
     "tank_class_short": {
@@ -118,7 +118,7 @@
     },
     "tree_type": {
       "-1": "неизвестно",
-      "0": "Дерево танков",
+      "0": "Исследуемый",
       "1": "Премиальный",
       "2": "Коллекционный"
     },
@@ -183,15 +183,15 @@
   "bot": {
     "common": {
       "errors": {
-        "clan_not_found": "# Не удалось найти клан\nНе найден «%s». Попробуйте выбрать клан из результатов поиска.",
-        "player_not_found": "# Не удалось найти пользователя\nЯ не могу найти пользователя «%s». Попробуйте выбрать пользователя из результатов поиска, введя правильное имя пользователя или используя команду «/link».",
-        "player_not_linked": "# Используйте «/link», чтобы начать\nЯ не знаю, кто ты, но можешь мне сказать сегодня!",
-        "tank_name_not_found": "# Танк не найден\nНе удалось найти танк по названию «%s».",
-        "tank_id_not_found": "# Танк не найден\nНе удалось найти танк по ID «%s». Попробуйте ввести название танка вместо числа.",
+        "clan_not_found": "# Не удалось найти клан\nНе найден «%s1». Попробуйте выбрать клан из результатов поиска.",
+        "player_not_found": "# Не удалось найти пользователя\nНе удалось найти пользователя «%s1». Попробуйте выбрать пользователя из результатов поиска, введя правильное имя пользователя или используя команду «/link».",
+        "player_not_linked": "# Используйте «/link», чтобы начать\nЯ не знаю, кто ты, но давай познакомимся сегодня!",
+        "tank_name_not_found": "# Танк не найден\nНе удалось найти танк по названию «%s1».",
+        "tank_id_not_found": "# Танк не найден\nНе удалось найти танк по ID «%s1». Попробуйте ввести название танка вместо числа.",
         "no_tank_stats": "# Статистика танка недоступна\nУ этого игрока нет доступной статистики. Возможно, это не тот игрок, которого вы ищете.",
-        "get_help": "Помочь Discord серверу",
-        "uncaught_error": "# BlitzKit столкнулся с ошибкой!\nНам так жаль об этом. Не стесняйтесь [присоединиться к официальному серверу Discord](https://discord.gg/nDt7AjGJQH), чтобы получить помощь.",
-        "preview": "# Эта команда находится в предварительном просмотре\n\nВы можете получить доступ к этой команде только на [официальном сервере Discord] (https://discord.gg/nDt7AjGJQH). Команда скоро станет общедоступной.",
+        "get_help": "Получить помощь",
+        "uncaught_error": "# BlitzKit столкнулся с ошибкой!\nНам очень жаль. Не стесняйтесь и [присоединяйтесь к официальному серверу Discord](https://discord.gg/nDt7AjGJQH), чтобы получить помощь.",
+        "preview": "# Эта команда находится в тестируется\n\nВы можете получить доступ к этой команде только на [официальном сервере Discord] (https://discord.gg/nDt7AjGJQH). Команда скоро станет общедоступной.",
         "query_too_small": "# Ваш поисковой запрос слишком короткий\nДлина вашего запроса должна составлять не менее 3 символов.",
         "query_too_long": "# Ваш поисковой запрос слишком длинный\nДлина вашего запроса должна составлять не более 100 символов."
       },
@@ -346,7 +346,7 @@
           },
           "starting_tank": {
             "name": "стартовый-танк",
-            "description": "Стартовый танк в ветке (назначен автоматически, если не предусмотрен)"
+            "description": "Стартовый танк в ветке (назначен автоматически, если не установлен)"
           }
         },
         "body": {
@@ -356,7 +356,7 @@
           "upgrades": "Улучшения: %s",
           "purchase": "Покупка: %s",
           "equipment": "Снаряжение: %s",
-          "estimation": "# Это приблизительная оценка!\n\nВ этот список могут входить уже исследованные танки из-за неточной информации, предоставляемой Wargaming. Попробуйте указать «стартовый танк» в строке при использовании команды, если сможете."
+          "estimation": "# Это приблизительная оценка!\n\nВ этот список могут входить уже исследованные танки из-за неточной информации, предоставляемой Wargaming. Попробуйте указать «стартовый-танк» в строке при использовании команды, если сможете."
         },
         "errors": {
           "non_tech_tree": "# %s отсутствует в дереве танков\n\nВы не можете исследовать премиум / коллекционный танк.",
@@ -368,7 +368,7 @@
         }
       },
       "about": {
-        "name": "о-нас",
+        "name": "о-боте",
         "description": "Вся необходимая информация о боте",
         "subcommands": {
           "commands": {
@@ -393,7 +393,7 @@
             "description": "Как BlitzKit вводит и использует ваш часовой пояс"
           },
           "credits": {
-            "name": "кредиты",
+            "name": "авторы",
             "description": "Люди, которые помогли BlitzKit"
           }
         }
@@ -424,7 +424,7 @@
         }
       },
       "evolution": {
-        "name": "изменение",
+        "name": "изменения",
         "description": "Изменения статистики",
         "groups": {
           "player": {
@@ -727,7 +727,7 @@
         }
       },
       "warnings": {
-        "test": "Танки на тестировании могут быть изменены и не могут отражать конечный продукт."
+        "test": "Танки на тестировании могут быть изменены и могут сильно отличатся при появлении в игре."
       }
     },
     "home": {
@@ -750,12 +750,12 @@
         "button": "Найти",
         "description": "Танковая энциклопедия Blitz",
         "seo_description": "Статистика, броня и многое другое по всем танкам World of Tanks Blitz",
-        "tank_seo_title": "%s1- %s3 %s4 %s2 уровня | Танкопедия %s5 | World of Tanks Blitz (WoTB)",
+        "tank_seo_title": "%s1 - %s4 %s3 %s2 уровня | Танкопедия %s5 | World of Tanks Blitz (WoTB)",
         "tank_seo_description": "%s1 armor, statistics, equipment, provisions, and more. %s2 DPM, %s3hp alpha, %s4mm penetration, %s5kph top speed, %s6hp health.",
         "sandbox": {
           "poses": {
-            "hull_down": "Hull down",
-            "face_hug": "Face hug",
+            "hull_down": "За холмом",
+            "face_hug": "В упор",
             "default": "По умолчанию"
           },
           "settings": {
@@ -842,7 +842,7 @@
           "research": "Необходимо опыта"
         },
         "tech_tree": {
-          "title": "Дерево танков",
+          "title": "Исследуемый",
           "battle": "1 бой",
           "battles": "%s1 боёв",
           "route": "Ветка %s1 из %s2"
@@ -860,7 +860,7 @@
           "modules": {
             "title": "Модули",
             "stock": "Сток",
-            "upgrade": "Upgrade"
+            "upgrade": "Топ"
           },
           "equipment": {
             "title": "Оборудование",
@@ -1027,7 +1027,7 @@
           },
           "modules": {
             "stock": "Сток",
-            "upgrade": "Upgrade"
+            "upgrade": "Топ"
           },
           "provisions": {
             "clear": "Очистить"
@@ -1087,9 +1087,9 @@
         "name": "Сессия",
         "button": "Найти",
         "description": "Статистика сеанса игры",
-        "seo_description": "Track your stats in real time as you play World of Tanks Blitz",
+        "seo_description": "Отслеживайте свою статистику в реальном времени во время игры World of Tanks Blitz",
         "search": {
-          "lookup": "Look up a player to get started",
+          "lookup": "Искать игрока, чтобы начать",
           "hint": "Поиск игроков...",
           "searching": "Поиск...",
           "no_results": "Игроков не найдено"
@@ -1101,8 +1101,8 @@
           "change": "Изменить"
         },
         "no_cc": {
-          "title": "You're attempting to track a CC account",
-          "body": "CC (community contributor) accounts do not have public tank statistics. We are in the process of adding embeds for CC accounts, stay tuned.",
+          "title": "Вы пытаетесь отследить аккаунт контребьютера",
+          "body": "Учетные записи контрибьютеров не имеют публичной статистики танков. Мы находимся в процессе добавления вставки для аккаунтов контрибьютеров, оставайтесь с нами.",
           "alright": "Принять"
         },
         "no_battles": {
@@ -1129,26 +1129,26 @@
         "name": "Встройки",
         "button": "Создать",
         "description": "Встраиваемые элементы для стримов",
-        "seo_description": "Create embeds for streaming World of Tanks Blitz with extreme customization",
-        "coming_soon": "More embeds coming soon.",
-        "suggest": "Suggest ideas.",
+        "seo_description": "Создать вставки для стримов по World of Tanks Blitz с невероятной кастомизации",
+        "coming_soon": "Скоро появятся новые встраиваемые элементы.",
+        "suggest": "Предложить идеи.",
         "preview": {
-          "title": "Example preview",
-          "upload": "Upload test background"
+          "title": "Предпросмотр",
+          "upload": "Загрузить фон для теста"
         },
         "configuration": {
           "import": {
             "title": "Импорт",
-            "description": "Paste your current URL if you have one already to import your settings",
-            "hint": "Paste URL...",
+            "description": "Вставьте свой текущий URL, если он у вас уже есть, чтобы импортировать свои настройки",
+            "hint": "Вставить URL...",
             "apply": "Применить",
-            "idiot_title": "Invalid URL",
-            "idiot_description": "Try pasting the URL that BlitzKit previously generated, you silly goose!",
-            "idiot_button": "Okay, my bad"
+            "idiot_title": "Недопустимый URL",
+            "idiot_description": "Попробуй вставить URL, который ранее сгенерировал BlitzKit, глупый ты гусь!",
+            "idiot_button": "Ладно, виноват"
           },
           "export": {
-            "title": "Export",
-            "description": "Copy all properties for you streaming software",
+            "title": "Экспорт",
+            "description": "Скопируйте все свойства для вашего приложения для стриминга",
             "generate": {
               "button": "Сгенерировать URL",
               "title": "Сгенерировать URL",
@@ -1156,7 +1156,7 @@
               "cancel": "Отмена",
               "success": {
                 "title": "Скопировать URL",
-                "info": "Generated the URL for %s1. The embed will start tracking as soon as the URL is pasted. Reset at any time by right-clicking on PC or long-pressing on mobile and then selecting \"Reset\".",
+                "info": "Сгенерирован URL для %s1. Встройка начнет отслеживание, как только URL будет вставлен. Можно сбросить, щелкнув правой кнопкой мыши на ПК или долгим нажатием на мобильном телефоне и выбором «Сброс».",
                 "back": "Назад",
                 "copy": "Скопировать URL"
               }
@@ -1169,36 +1169,36 @@
           "customize": {
             "title": "Настроить",
             "reset": "Сброс",
-            "description": "Bells and whistles of your embed"
+            "description": "Навороты для вашей встройки"
           }
         },
         "types": {
           "breakdown": {
-            "name": "Breakdown",
+            "name": "Разбивка",
             "options": {
               "width": "Ширина",
               "height": "Высота",
-              "showTotal": "Show total",
-              "listGap": "List gap",
-              "listMaxTanks": "Max tanks",
-              "cardRadius": "Card radius",
-              "cardHeaderBackgroundColor": "Card header background color",
-              "cardHeaderPadding": "Card header padding",
-              "cardTitle": "Card title",
-              "cardTitleTypeColor": "Card title type color",
-              "cardTitleClassIcon": "Card title class icon",
-              "cardBodyBackgroundColor": "Card body background color",
-              "cardBodyPadding": "Card body padding",
-              "columnGap": "Column gap",
-              "columnValue": "Column value",
-              "columnLabel": "Column label",
-              "column1": "Column 1",
-              "column2": "Column 2",
-              "column3": "Column 3",
-              "column4": "Column 4",
-              "column1CustomLabel": "Column 1 label",
-              "column2CustomLabel": "Column 2 label",
-              "column3CustomLabel": "Column 3 label"
+              "showTotal": "Показать «Общая»",
+              "listGap": "Разрыв",
+              "listMaxTanks": "Число танков",
+              "cardRadius": "Радиус карточки",
+              "cardHeaderBackgroundColor": "Цвет фона заголовка карточки",
+              "cardHeaderPadding": "Отступ в заголовке",
+              "cardTitle": "Заголовок карточки",
+              "cardTitleTypeColor": "Цвет по типу в заголовке",
+              "cardTitleClassIcon": "Иконка класса в заголовке",
+              "cardBodyBackgroundColor": "Цвет фона карточки",
+              "cardBodyPadding": "Отступ в карточке",
+              "columnGap": "Разрыв столбцов",
+              "columnValue": "Значение столбца",
+              "columnLabel": "Название столбца",
+              "column1": "Столбец 1",
+              "column2": "Столбец 2",
+              "column3": "Столбец 3",
+              "column4": "Столбец 4",
+              "column1CustomLabel": "Название столбца 1",
+              "column2CustomLabel": "Название столбца 2",
+              "column3CustomLabel": "Название столбца 3"
             }
           }
         }
@@ -1243,7 +1243,7 @@
         "name": "BlitzAnalysis[]",
         "button": "Анализируй",
         "description": "Богатая статистика",
-        "seo_description": "Rich historic average stats in World of Tanks Blitz"
+        "seo_description": "Богатые статистика по World of Tanks Blitz"
       },
       "blitz_insider": {
         "name": "Blitz Insider",
