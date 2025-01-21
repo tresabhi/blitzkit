@@ -470,10 +470,10 @@
             },
             "lethality": {
               "title": "Lethality",
-              "average_damage": "Dano médio",
-              "damage_per_tier": "Dano por nível",
+              "average_damage": "Average damage",
+              "damage_per_tier": "Damage per tier",
               "damage_ratio": "Razão entre dano dado e recebido",
-              "average_kills": "Média de destruições"
+              "average_kills": "Average kills"
             },
             "miscellaneous": {
               "title": "Miscellaneous",
@@ -678,34 +678,34 @@
         },
         "sort": {
           "meta.none": "none",
-          "survivability.health": "vida",
-          "survivability.viewRange": "Alcance de visão",
-          "survivability.camouflageStill": "Camuflagem quando estacionário",
-          "survivability.camouflageMoving": "Camuflagem em movimento",
-          "survivability.camouflageShooting": "Camuflagem ao disparar",
-          "survivability.volume": "Volume",
-          "survivability.length": "Comprimento",
-          "fire.dpm": "DPM padrão",
-          "fire.dpmPremium": "DPM premium",
-          "fire.reload": "Tempo de recarga",
-          "fire.caliber": "Calibre",
-          "fire.standardPenetration": "Penetração padrão",
-          "fire.premiumPenetration": "Penetração premium",
-          "fire.damage": "Dano",
-          "fire.moduleDamage": "Dano a módulos",
-          "fire.shellVelocity": "Velocidade do projétil",
-          "fire.shellRange": "Alcance do projétil",
-          "fire.shellCapacity": "Capacidade de munição",
-          "fire.aimTime": "Tempo de mira",
-          "fire.dispersionStill": "Dispersão quando estacionário",
-          "fire.dispersionMoving": "Dispersão em movimento",
-          "fire.gunDepression": "Depressão de canhão",
-          "fire.gunElevation": "Elevação de canhão",
-          "maneuverability.forwardsSpeed": "Velocidade frontal",
-          "maneuverability.backwardsSpeed": "Velocidade da ré",
-          "maneuverability.power": "Potência",
-          "maneuverability.powerToWeight": "Relação Potência-peso",
-          "maneuverability.weight": "Peso",
+          "survivability.health": "health",
+          "survivability.viewRange": "view range",
+          "survivability.camouflageStill": "camouflage still",
+          "survivability.camouflageMoving": "camouflage moving",
+          "survivability.camouflageShooting": "camouflage shooting",
+          "survivability.volume": "volume",
+          "survivability.length": "length",
+          "fire.dpm": "standard DPM",
+          "fire.dpmPremium": "premium DPM",
+          "fire.reload": "reload",
+          "fire.caliber": "caliber",
+          "fire.standardPenetration": "standard penetration",
+          "fire.premiumPenetration": "premium penetration",
+          "fire.damage": "damage",
+          "fire.moduleDamage": "module damage",
+          "fire.shellVelocity": "shell velocity",
+          "fire.shellRange": "shell range",
+          "fire.shellCapacity": "shell capacity",
+          "fire.aimTime": "aim time",
+          "fire.dispersionStill": "dispersion still",
+          "fire.dispersionMoving": "dispersion moving",
+          "fire.gunDepression": "gun depression",
+          "fire.gunElevation": "gun elevation",
+          "maneuverability.forwardsSpeed": "forwards speed",
+          "maneuverability.backwardsSpeed": "backwards speed",
+          "maneuverability.power": "power",
+          "maneuverability.powerToWeight": "power to weight",
+          "maneuverability.weight": "weight",
           "maneuverability.traverseSpeed": "traverse speed"
         },
         "sort_dropdown": {
@@ -715,7 +715,7 @@
               "no_sort": "No sort",
               "label": "Sort by",
               "fire": "Fire",
-              "maneuverability": "Manobrabilidade",
+              "maneuverability": "Maneuverability",
               "survivability": "Survivability"
             },
             "direction": {
@@ -759,48 +759,48 @@
             "default": "Default"
           },
           "settings": {
-            "armor": "Blindagem",
-            "green_penetration": "Penetração verde",
+            "armor": "Armor",
+            "green_penetration": "Green penetration",
             "hide_model_under_armor": "Hide model under armor",
-            "opaque": "Opaco",
+            "opaque": "Opaque",
             "dev_wireframe": "DEV: wireframe",
             "environment": "Environment",
-            "show_grid": "Mostrar grade"
+            "show_grid": "Show grid"
           },
           "screenshot": {
             "download": "Download",
-            "copy": "Copiar"
+            "copy": "Copy"
           },
           "model": {
-            "name": "Modelo"
+            "name": "Model"
           },
           "dynamic": {
-            "name": "Blindagem dinâmica",
+            "name": "Dynamic armor",
             "custom_shell": {
-              "type": "Tipo",
-              "caliber": "Calibre",
-              "penetration": "Penetração",
-              "normalization": "Normalização",
-              "ricochet": "Ricochete",
-              "explosion_radius": "Raio de explosão",
+              "type": "Type",
+              "caliber": "Caliber",
+              "penetration": "Penetration",
+              "normalization": "Normalization",
+              "ricochet": "Ricochet",
+              "explosion_radius": "Explosion radius",
               "exit": "Exit",
-              "reset": "Redefinir"
+              "reset": "Reset"
             },
-            "advanced": "Destacamento avançado",
-            "shooter": "Atirador:",
+            "advanced": "Advanced highlighting",
+            "shooter": "Shooter:",
             "shot_card": {
               "element": {
-                "primary": "Principal",
-                "spaced": "Espaçada",
-                "external": "Externa",
+                "primary": "Primary",
+                "spaced": "Spaced",
+                "external": "External",
                 "gap": "Gap",
-                "gun": "Canhão",
-                "track": "Esteiras"
+                "gun": "Gun",
+                "track": "Tracks"
               },
               "status": {
                 "penetration": "%s1hp penetration",
-                "blocked": "Bloqueado",
-                "ricochet": "Ricochete",
+                "blocked": "Blocked",
+                "ricochet": "Ricochet",
                 "splash": "%s1hp splash"
               },
               "stats": {
@@ -811,13 +811,13 @@
             }
           },
           "static": {
-            "name": "Blindagem estática",
-            "primary": "Principal",
-            "spaced": "Espaçada",
-            "external": "Externa",
+            "name": "Static armor",
+            "primary": "Primary",
+            "spaced": "Spaced",
+            "external": "External",
             "edit": {
               "label": "Edit",
-              "reset": "Redefinir"
+              "reset": "Reset"
             }
           }
         },
@@ -886,7 +886,7 @@
           }
         },
         "characteristics": {
-          "title": "Características",
+          "title": "Characteristics",
           "compare": {
             "label": "Compare against",
             "class": "Tier %s1 %s2",
@@ -894,104 +894,104 @@
             "all": "All tanks"
           },
           "values": {
-            "shell_index": "Projétil %s1",
-            "at_distance": "A %s1m",
-            "at_distance_slider_label": "Distância",
-            "dispersion_at_distance": "Dispersão a %s1m",
-            "gun_flexibility": "Flexibilidade do canhão",
-            "speed": "Velocidade",
-            "terrain_coefficients": "Coeficientes do terreno",
-            "raw_terrain_coefficients": "Coeficientes brutos de terreno",
-            "power_to_weight_ratio": "Relação potência/peso",
-            "hull_traverse_speed": "Taxa de rotação do casco",
-            "camouflage": "Camuflagem",
-            "reload": "Tempo de recarga",
-            "crewCount": "Quantidade de tripulantes",
-            "shellNormalization": "Normalização",
-            "shellRicochet": "Ricochete",
+            "shell_index": "Shell %s1",
+            "at_distance": "At %s1m",
+            "at_distance_slider_label": "Distance",
+            "dispersion_at_distance": "Dispersion at %s1m",
+            "gun_flexibility": "Gun flexibility",
+            "speed": "Speed",
+            "terrain_coefficients": "Terrain coefficients",
+            "raw_terrain_coefficients": "Coeficientes brutos do terreno",
+            "power_to_weight_ratio": "Power to weight ratio",
+            "hull_traverse_speed": "Hull traverse speed",
+            "camouflage": "Camouflage",
+            "reload": "Reload",
+            "crewCount": "Crew count",
+            "shellNormalization": "Normalization",
+            "shellRicochet": "Ricochet",
             "dpm": "DPM",
             "dpmEffective": "Effective at 60s",
-            "shells": "Projéteis",
-            "mostOptimalShellIndex": "Projétil ideal",
-            "shellReloads": "Tempo de recarga de projéteis",
-            "shellReload": "Tempo de recarga de projétil",
+            "shells": "Shells",
+            "mostOptimalShellIndex": "Most optimal shell",
+            "shellReloads": "Shell reloads",
+            "shellReload": "Shell reload",
             "intraClip": "Intra-clip",
-            "caliber": "Calibre",
-            "penetration": "Penetração",
+            "caliber": "Caliber",
+            "penetration": "Penetration",
             "damage": "Dano",
-            "clipDamage": "Potencial de pente",
-            "moduleDamage": "Dano a módulos",
-            "explosionRadius": "Raio de Explosão",
-            "shellVelocity": "Velocidade do projétil",
-            "aimTime": "Tempo de Mira",
-            "dispersion": "Parado",
-            "dispersionMoving": "Em movimento",
-            "dispersionHullTraversing": "Movendo o casco",
-            "dispersionTurretTraversing": "Movendo a torre",
-            "dispersionShooting": "Disparando",
-            "dispersionGunDamaged": "Canhão danificado",
-            "gunDepression": "Depressão",
-            "gunElevation": "Elevação",
-            "gunFrontalDepression": "Depressão Frontal",
-            "gunFrontalElevation": "Elevação Frontal",
-            "gunRearDepression": "Depressão traseira",
-            "gunRearElevation": "Elevação traseira",
+            "clipDamage": "Clipping potential",
+            "moduleDamage": "Module damage",
+            "explosionRadius": "Explosion radius",
+            "shellVelocity": "Shell velocity",
+            "aimTime": "Aim time",
+            "dispersion": "Still",
+            "dispersionMoving": "Moving",
+            "dispersionHullTraversing": "Hull traversing",
+            "dispersionTurretTraversing": "Turret traversing",
+            "dispersionShooting": "Shooting",
+            "dispersionGunDamaged": "Gun damaged",
+            "gunDepression": "Depression",
+            "gunElevation": "Elevation",
+            "gunFrontalDepression": "Frontal depression",
+            "gunFrontalElevation": "Frontal elevation",
+            "gunRearDepression": "Rear depression",
+            "gunRearElevation": "Rear elevation",
             "azimuthLeft": "Azimuth left",
             "azimuthRight": "Azimuth right",
-            "speedForwards": "Frontal",
-            "speedBackwards": "Ré",
+            "speedForwards": "Forwards",
+            "speedBackwards": "Backwards",
             "hardTerrainCoefficient": "Hard",
             "hardTerrainCoefficientRaw": "Hard",
             "mediumTerrainCoefficient": "Médio",
             "mediumTerrainCoefficientRaw": "Médio",
             "softTerrainCoefficient": "Soft",
             "softTerrainCoefficientRaw": "Soft",
-            "enginePower": "Potência do motor",
+            "enginePower": "Engine power",
             "powerToWeightRatioHardTerrain": "Hard",
             "powerToWeightRatioMediumTerrain": "Médio",
             "powerToWeightRatioSoftTerrain": "Soft",
-            "weight": "Peso",
-            "turretTraverseSpeed": "Taxa de rotação da torre",
-            "gunTraverseSpeed": "Taxa de movimento do canhão",
+            "weight": "Weight",
+            "turretTraverseSpeed": "Turret traverse speed",
+            "gunTraverseSpeed": "Gun traverse speed",
             "hullTraverseHardTerrain": "Hard",
             "hullTraverseMediumTerrain": "Médio",
             "hullTraverseSoftTerrain": "Soft",
-            "health": "Vida",
-            "fireChance": "Probabilidade de incêndio",
-            "viewRange": "Alcance de visão",
-            "camouflageStill": "Parado",
-            "camouflageMoving": "Em movimento",
-            "camouflageShootingStill": "Parado",
-            "camouflageShootingMoving": "Em movimento",
-            "camouflageCaughtOnFire": "Em chamas",
-            "width": "Largura",
-            "height": "Altura",
-            "length": "Comprimento",
+            "health": "Health",
+            "fireChance": "Fire chance",
+            "viewRange": "View range",
+            "camouflageStill": "Still",
+            "camouflageMoving": "Moving",
+            "camouflageShootingStill": "Still",
+            "camouflageShootingMoving": "Moving",
+            "camouflageCaughtOnFire": "Caught on fire",
+            "width": "Width",
+            "height": "Height",
+            "length": "Length",
             "volume": "Volume",
-            "shellRange": "Alcance de projétil",
-            "shellCapacity": "Capacidade de munição",
-            "gunType": "Tipo de canhão",
-            "penetrationAt250m": "Penetração a 250m"
+            "shellRange": "Shell range",
+            "shellCapacity": "Shell capacity",
+            "gunType": "Gun type",
+            "penetrationAt250m": "Penetration at 250m"
           }
         },
         "firepower": {
-          "title": "Poder de fogo"
+          "title": "Firepower"
         },
         "crew": {
-          "title": "Treinamento da tripulação",
-          "info": "Representa os outros papéis que um membro da tripulação pode assumir.",
-          "count": "Quantidade de tripulantes",
-          "commander": "Comandante",
-          "gunner": "Artilheiro",
-          "driver": "Motorista",
+          "title": "Crew training",
+          "info": "represents the other roles a crew member can take.",
+          "count": "Crew count",
+          "commander": "Commander",
+          "gunner": "Gunner",
+          "driver": "Driver",
           "radioman": "Radioman",
-          "loader": "Carregador"
+          "loader": "Loader"
         },
         "maneuverability": {
-          "title": "Manobrabilidade"
+          "title": "Maneuverability"
         },
         "survivability": {
-          "title": "Capacidade de sobrevivência"
+          "title": "Survivability"
         }
       },
       "compare": {
@@ -1097,7 +1097,7 @@
         "controls": {
           "title": "Tracking %s1",
           "subtitle": "Since %s1",
-          "reset": "Redefinir",
+          "reset": "Reset",
           "change": "Change"
         },
         "no_cc": {
@@ -1121,7 +1121,7 @@
         "description": "Rank Blitz tanks",
         "seo_description": "Explore tier lists ranking tanks from best to worst, based on player ratings and statistical performance in World of Tanks Blitz",
         "buttons": {
-          "reset": "Redefinir",
+          "reset": "Reset",
           "share": "Share"
         }
       },
@@ -1168,7 +1168,7 @@
           },
           "customize": {
             "title": "Customize",
-            "reset": "Redefinir",
+            "reset": "Reset",
             "description": "Bells and whistles of your embed"
           }
         },
@@ -1176,8 +1176,8 @@
           "breakdown": {
             "name": "Breakdown",
             "options": {
-              "width": "Largura",
-              "height": "Altura",
+              "width": "Width",
+              "height": "Height",
               "showTotal": "Show total",
               "listGap": "List gap",
               "listMaxTanks": "Max tanks",
