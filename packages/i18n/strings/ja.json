@@ -225,10 +225,10 @@
         },
         "90": {
           "name": "90",
-          "description": "90 days"
+          "description": "９０日"
         },
         "career": {
-          "name": "career",
+          "name": "総合戦績",
           "description": "Career"
         },
         "custom": {
@@ -265,7 +265,7 @@
             "description": "Nation"
           },
           "class": {
-            "name": "class",
+            "name": "",
             "description": "Class"
           },
           "type": {
@@ -852,7 +852,7 @@
         },
         "review": {
           "title": "Review videos",
-          "disclaimer": "BlitzKitはレビュー動画を推奨していません。",
+          "disclaimer": "BlitzKitはいかなるレビュー動画も後援していません。",
           "join": "%s1 YouTuberプログラムに応募する"
         },
         "configuration": {
@@ -919,7 +919,7 @@
             "caliber": "口径",
             "penetration": "貫通力",
             "damage": "ダメージ",
-            "clipDamage": "弾倉合計攻撃力",
+            "clipDamage": "弾倉火力",
             "moduleDamage": "モジュールダメージ",
             "explosionRadius": "爆風半径",
             "shellVelocity": "弾速",
@@ -995,7 +995,7 @@
         }
       },
       "compare": {
-        "name": "Compare",
+        "name": "比較",
         "button": "戦車を比較",
         "description": "車輌の特性を比較",
         "seo_description": "Compare tanks statistics and loadouts in World of Tanks Blitz",
