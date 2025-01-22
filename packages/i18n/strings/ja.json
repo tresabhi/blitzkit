@@ -1106,7 +1106,7 @@
           "alright": "Alright"
         },
         "no_battles": {
-          "title": "まだ戦闘がありません",
+          "title": "まだ戦闘未参加です",
           "hint": "ゲームをプレイしてください"
         },
         "table": {
