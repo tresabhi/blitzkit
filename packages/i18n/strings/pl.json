@@ -1,6 +1,6 @@
 {
   "test": {
-    "default": "test",
+    "default": "",
     "long": "To jest długi ciąg testowy. NIGDY NIE ZOBACZYSZ tego w interfejsie użytkownika. Mój ulubiony owoc to %s1, ponieważ ma kolor %s2. Tak bardzo je lubię, że powiem ich nazwę 3 razy! %s1! %s1! %s1! Po raz kolejny to %s2, a nie %s3.",
     "fox": "Szybki brązowy lis przeskoczył nad leniwym psem."
   },
@@ -75,22 +75,22 @@
       "10": "Super unikalny"
     },
     "nations": {
-      "ussr": "U.S.S.R.",
+      "ussr": "ZSRR",
       "germany": "Germany",
       "usa": "U.S.A.",
       "china": "Chiny",
-      "uk": "U.K.",
+      "uk": "Wielka Brytania",
       "france": "France",
       "japan": "Japan",
-      "european": "European Nation",
-      "other": "Hybrid Nation"
+      "european": "Nacja Europejska",
+      "other": "Nacja Hybrydowa"
     },
     "nations_adjectives": {
-      "ussr": "U.S.S.R.",
+      "ussr": "ZSRR",
       "germany": "German",
-      "usa": "U.S.A.",
+      "usa": "Amerykański",
       "china": "Chiński",
-      "uk": "U.K.",
+      "uk": "Wielkiej Brytanii",
       "france": "Francuski",
       "japan": "Japoński",
       "european": "European",
@@ -120,7 +120,7 @@
       "-1": "unrecognized",
       "0": "Tech tree",
       "1": "Premium",
-      "2": "Collector"
+      "2": "Kolekcjonerski"
     },
     "regions": {
       "normal": {
@@ -189,11 +189,11 @@
         "tank_name_not_found": "# Czołg nie został znaleziony\nNie można znaleźć czołgu o nazwie \"%s1\".",
         "tank_id_not_found": "# Czołg nie został znaleziony\nNie można znaleźć czołgu o ID \"%s1\". Spróbuj wpisać nazwę czołgu zamiast liczby.",
         "no_tank_stats": "# Brak dostępnych statystyk czołgów\nTen gracz nie ma żadnych dostępnych statystyk. Może to nie być gracz, którego szukasz.",
-        "get_help": "Help Discord server",
+        "get_help": "Pomóż serwerowi Discord",
         "uncaught_error": "# BlitzKit wpadł w błąd!\nPrzepraszamy za to. Możesz [dołączyć do oficjalnego serwera Discord](https://discord.gg/nDt7AjGJQH), aby uzyskać pomoc.",
-        "preview": "# This command is in preview\n\nYou can only access this command in [the official Discord server](https://discord.gg/nDt7AjGJQH). The command will be generally available soon.",
-        "query_too_small": "# Your search is too short\nYour search must be at least 3 characters long.",
-        "query_too_long": "# Your search is too long\nYour search must be at most 100 characters long."
+        "preview": "# Ta komenda jest w podglądzie\n\nMożesz uzyskać dostęp do tej komendy tylko na [oficjalnym serwerze Discorda](https://discord.gg/nDt7AjGJQH). Polecenie będzie ogólnie dostępne wkrótce.",
+        "query_too_small": "# Twoje wyszukiwanie jest zbyt krótkie\nTwoje wyszukiwanie musi mieć co najmniej 3 znaki.",
+        "query_too_long": "# Twoje wyszukiwanie jest zbyt długie\nTwoje wyszukiwanie musi mieć maksymalnie 100 znaków."
       },
       "wn8": {
         "name": "WN8",
@@ -201,76 +201,76 @@
           "very_bad": "Bardzo złe",
           "bad": "Złe",
           "below_average": "Poniżej średniej",
-          "average": "Średnie",
+          "average": "Średnia",
           "above_average": "Powyżej średniej",
-          "good": "Dobre",
-          "very_good": "Bardzo dobre",
+          "good": "Dobrze",
+          "very_good": "Bardzo dobrze",
           "great": "Świetne",
-          "unicum": "Unikalny",
-          "super_unicum": "Super unikalny"
+          "unicum": "Unikalny ",
+          "super_unicum": "Bardzo unikalny"
         }
       },
       "subcommands": {
         "today": {
-          "name": "today",
-          "description": "Today"
+          "name": "dziś",
+          "description": "Dziś"
         },
         "30": {
           "name": "30",
-          "description": "30 days"
+          "description": "30 dni"
         },
         "60": {
           "name": "60",
-          "description": "60 days"
+          "description": "60 dni"
         },
         "90": {
           "name": "90",
-          "description": "90 days"
+          "description": "90 dni"
         },
         "career": {
-          "name": "career",
-          "description": "Career"
+          "name": "kariera",
+          "description": "Kariera"
         },
         "custom": {
-          "name": "custom",
-          "description": "Custom range",
+          "name": "Niestandardowy",
+          "description": "Zakres niestandardowy",
           "options": {
             "start": {
               "name": "start",
-              "description": "Start in number of days ago from today"
+              "description": "Rozpocznij od dnia dzisiejszego"
             },
             "end": {
-              "name": "end",
-              "description": "End in number of days ago from today"
+              "name": "zakończ",
+              "description": "Zakończ od dnia dzisiejszego"
             }
           }
         }
       },
       "options": {
         "clan": {
-          "name": "clan",
-          "description": "The clan name or tag"
+          "name": "klan",
+          "description": "Wpisz nazwę klanu lub tag"
         },
         "tank": {
-          "name": "tank",
+          "name": "czołg",
           "description": "Czołg do pobrania statystyk"
         },
         "username": {
-          "name": "username",
-          "description": "The Blitz username of the player"
+          "name": "nazwa użytkownika",
+          "description": "Nazwa użytkownika Blitz gracza"
         },
         "filters": {
           "nation": {
-            "name": "nation",
-            "description": "Nation"
+            "name": "naród",
+            "description": "Naród"
           },
           "class": {
-            "name": "class",
-            "description": "Class"
+            "name": "klasa",
+            "description": "Klasa"
           },
           "type": {
-            "name": "type",
-            "description": "Type"
+            "name": "rodzaj",
+            "description": "Rodzaj"
           }
         },
         "region": {
@@ -278,47 +278,47 @@
           "description": "Region"
         },
         "tier": {
-          "name": "tier",
-          "description": "Tier",
+          "name": "poziom",
+          "description": "Poziom",
           "choices": {
-            "tier": "Tier %s1 - %s2"
+            "tier": "Poziom %s1 - %s2"
           }
         }
       },
       "periods": {
-        "career": "Career",
-        "today": "Today",
-        "days": "%s1 days",
-        "custom": "%s1 - %s2 days"
+        "career": "Kariera",
+        "today": "Dzisiaj",
+        "days": "%s1 dzień",
+        "custom": "%s1 - %s2 dni"
       },
       "filters": {
         "none": "Brak filtrów",
-        "tier": "Tier %s1"
+        "tier": "Poziom %s1"
       },
       "no_data": {
-        "battles_in_period": "No battles played in this period",
-        "battles_in_season": "No battles played in this season",
-        "players_in_period": "No players in this period",
-        "tanks_found": "No tanks found"
+        "battles_in_period": "Brak bitew w tym okresie",
+        "battles_in_season": "Brak bitew w tym sezonie",
+        "players_in_period": "Brak graczy w tym okresie",
+        "tanks_found": "Nie znaleziono czołgu"
       },
       "buttons": {
-        "refresh": "Refresh"
+        "refresh": "Odśwież"
       },
       "hero_stats": {
         "battles": "Bitwy",
-        "winrate": "Śr. wygranych",
-        "damage": "Uszkodzenia",
+        "winrate": "Zwycięstwa",
+        "damage": "Obrażenia",
         "damage_ratio": "Współczynnik obrażeń",
-        "tier": "Tier",
-        "survival": "Survival",
-        "accuracy": "Skuteczność",
-        "kills": "Zniszczenia"
+        "tier": "Poziom",
+        "survival": "Przeżycie",
+        "accuracy": "Celność",
+        "kills": "Zabójstwa"
       }
     },
     "commands": {
       "auction": {
-        "name": "auction",
-        "description": "Tanks available right now in the auction",
+        "name": "aukcja",
+        "description": "Czołgi dostępne na aukcji",
         "body": {
           "title": "Aukcja Blitz",
           "subtitle": "%s1 dostępne • następne ceny %s2\nOferta teraz: %s3",
@@ -425,7 +425,7 @@
       },
       "evolution": {
         "name": "rozwój",
-        "description": "Evolution of statistics",
+        "description": "Rozwój statystyk",
         "groups": {
           "player": {
             "name": "gracz",
@@ -448,7 +448,7 @@
         },
         "body": {
           "subtitle": "Inactive for %s1+ days",
-          "listing": "%s1 days"
+          "listing": "%s1 dzień"
         }
       },
       "full_stats": {
@@ -465,7 +465,7 @@
             "efficiency": {
               "title": "Efficiency",
               "wn8": "WN8",
-              "survival": "Survival",
+              "survival": "Przeżycie",
               "accuracy": "Skuteczność"
             },
             "lethality": {
@@ -625,8 +625,8 @@
         }
       },
       "rating": {
-        "name": "ocena",
-        "description": "Statystyki gracza ocen",
+        "name": "klasyfikacja",
+        "description": "Statystyki klasyfikacji gracza",
         "subcommands": {
           "today": {
             "name": "dzisiaj",
@@ -634,13 +634,13 @@
           },
           "season": {
             "name": "sezon",
-            "description": "Dzisiejsze statystyki klasyfikacji"
+            "description": "Statystyki klasyfikacji w tym sezonie"
           }
         },
         "body": {
           "subtitle": {
             "today": "Dzisiejsze statystyki klasyfikacji",
-            "season": "Dzisiejsze statystyki klasyfikacji"
+            "season": "Statystyki klasyfikacji w tym sezonie"
           }
         },
         "errors": {
@@ -777,7 +777,7 @@
           "dynamic": {
             "name": "Dynamic armor",
             "custom_shell": {
-              "type": "Type",
+              "type": "Rodzaj",
               "caliber": "Caliber",
               "penetration": "Penetration",
               "normalization": "Normalization",
@@ -831,10 +831,10 @@
           "vanilla": "Vanilla",
           "opentest": "OpenTest",
           "full_name": "Full name",
-          "nation": "Nation",
-          "class": "Class",
-          "tier": "Tier",
-          "type": "Type",
+          "nation": "Naród",
+          "class": "Klasa",
+          "tier": "Poziom",
+          "type": "Rodzaj",
           "dev_id": "DEV: ID",
           "purchase": "Purchase price",
           "restoration": "Restoration price",
@@ -1059,7 +1059,7 @@
             "winrate": "Śr. wygranych",
             "players": "Players",
             "damage": "Uszkodzenia",
-            "survival": "Survival",
+            "survival": "Przeżycie",
             "xp": "XP",
             "kills": "Zniszczenia",
             "spots": "Zwiad",
