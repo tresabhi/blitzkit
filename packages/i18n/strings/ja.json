@@ -914,7 +914,7 @@
             "shells": "砲弾",
             "mostOptimalShellIndex": "最適な弾数",
             "shellReloads": "自動装填時間",
-            "shellReload": "弾倉再装填時間",
+            "shellReload": "装填時間",
             "intraClip": "砲弾再装填時間",
             "caliber": "口径",
             "penetration": "貫通力",
