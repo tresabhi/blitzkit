@@ -852,11 +852,11 @@
         },
         "review": {
           "title": "Review videos",
-          "disclaimer": "BlitzKit does not endorse any review videos.",
+          "disclaimer": "BlitzKit no respalda ningún vídeo de reseñas.",
           "join": "Apply to %s1 YouTuber program"
         },
         "configuration": {
-          "title": "Configuration",
+          "title": "",
           "modules": {
             "title": "Modules",
             "stock": "Stock",
