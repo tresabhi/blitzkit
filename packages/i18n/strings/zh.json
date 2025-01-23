@@ -2,7 +2,7 @@
   "test": {
     "default": "测试",
     "long": "这是一个测试用长字符串。你不会再用户界面中看见这些。我最喜欢的水果是%s1因为它的颜色是%s2。我如此喜欢它以至于我会把它的名字念3次！%s1！%s1！%s1！重申一次，它是%s2而不是%s3。",
-    "fox": "The quick brown fox jumps over the lazy dog."
+    "fox": "褐色的狐狸迅速地跳过那只懒狗"
   },
   "common": {
     "units": {
@@ -359,7 +359,7 @@
           "estimation": "# This is an estimation!\n\nThis list may include already researched tanks because of the inaccurate information Wargaming provides. Try providing a `starting-tank` from the line when using the command if you can."
         },
         "errors": {
-          "non_tech_tree": "# %s1 is not on the tech tree\n\nYou cannot research a premium/collector tank.",
+          "non_tech_tree": "#%s1不在科技树里\n\n你不能研究一个高级/收集 坦克",
           "tier_1": "# %s1 is a tier I\n\nTier I tanks are always unlocked for free for all players.",
           "already_researched": "# %s1 is already researched\n\nTry providing a `starting-tank` when using the command to view the totals for a line you have already researched.",
           "start_end_equal": "# %s1 was provided twice\n\nMake sure `starting-tank` and `target-tank` are different.",
