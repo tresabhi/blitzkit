@@ -1,27 +1,21 @@
-﻿using System.Text.Json;
+﻿using CLI.Functions;
 using CLI.Models;
 
 namespace CLI
 {
   class Program
   {
-    static readonly JsonSerializerOptions options = new() { PropertyNameCaseInsensitive = true };
-
     static void Main(string[] args)
     {
-      string RootDir = @"C:\Users\coola\AppData\Local\Blitz";
-      string paksPath = Path.Combine(RootDir, @"Saved\PersistentDownloadDir\Dlc\PakCache");
-      string localManifestPath = Path.Combine(paksPath, "LocalManifest.json");
-      string localManifestContent = File.ReadAllText(localManifestPath);
+      Arguments arguments = new(args);
 
-      LocalManifest localManifest =
-        JsonSerializer.Deserialize<LocalManifest>(localManifestContent, options)
-        ?? throw new Exception("Failed to deserialize LocalManifest");
-
-      foreach (var pakFile in localManifest.PakFiles)
+      switch (args[0])
       {
-        string pakFilePath = Path.Combine(paksPath, pakFile.Key);
-        Console.WriteLine($"({pakFile.Value.FileSize}) {pakFilePath}");
+        case "dlc":
+        {
+          DLC.Run(arguments);
+          break;
+        }
       }
     }
   }

@@ -1,6 +1,6 @@
 namespace CLI.Models
 {
-  public class PakFile
+  public class LocalManifestPakFile
   {
     public long FileSize { get; set; }
     public required string FileHash { get; set; }
@@ -8,6 +8,6 @@ namespace CLI.Models
 
   public class LocalManifest
   {
-    public required Dictionary<string, PakFile> PakFiles { get; set; }
+    public required Dictionary<string, LocalManifestPakFile> PakFiles { get; set; }
   }
 }
