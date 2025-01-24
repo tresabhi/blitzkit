@@ -616,16 +616,16 @@
         "description": "Basic information about a player",
         "body": {
           "title": "%s1's information",
-          "nickname": "Nickname",
+          "nickname": "Нік",
           "battles": "Бої",
           "winrate": "Відсоток перемог",
-          "account_id": "Account ID",
-          "created": "Created",
-          "last_battle": "Last battle"
+          "account_id": "ID акаунта",
+          "created": "Створено",
+          "last_battle": "Остання битва"
         }
       },
       "rating": {
-        "name": "rating",
+        "name": "рейтинг",
         "description": "Rating player's statistics",
         "subcommands": {
           "today": {
