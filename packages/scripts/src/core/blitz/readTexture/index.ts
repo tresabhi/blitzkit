@@ -6,7 +6,7 @@ import { TextureMutation } from './constants';
 
 export async function readTexture(path: string, mutation?: TextureMutation) {
   const ddsTexturePath = path.replace('.tex', '.dx11.dds');
-  const isDds = existsSync(ddsTexturePath);
+  const isDds = existsSync(`${ddsTexturePath}.dvpl`);
   const resolvedTexturePath = isDds
     ? ddsTexturePath
     : ddsTexturePath.replace('.dds', '.pvr');
