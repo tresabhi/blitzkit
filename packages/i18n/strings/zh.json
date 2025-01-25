@@ -76,24 +76,24 @@
     },
     "nations": {
       "ussr": "苏联 (S系)",
-      "germany": "德国 (D系)",
-      "usa": "美国 (M系)",
-      "china": "中国 (C系)",
-      "uk": "英国 (Y系)",
-      "france": "法国 (F系)",
-      "japan": "日本 (R系)",
-      "european": "欧盟 (E系)",
+      "germany": "德系",
+      "usa": "美系",
+      "china": "中系",
+      "uk": "英系",
+      "france": "法系",
+      "japan": "日系",
+      "european": "泛欧",
       "other": "X系"
     },
     "nations_adjectives": {
-      "ussr": "苏联 (S系)",
-      "germany": "德国 (D系)",
-      "usa": "美国 (M系)",
-      "china": "中国 (C系)",
-      "uk": "英国 (Y系)",
-      "france": "法国 (F系)",
-      "japan": "日本 (R系)",
-      "european": "欧盟 (E系)",
+      "ussr": "苏系",
+      "germany": "德系",
+      "usa": "美系",
+      "china": "中系",
+      "uk": "英系",
+      "france": "法系",
+      "japan": "日系",
+      "european": "泛欧",
       "other": "X系"
     },
     "tank_class_short": {
@@ -119,8 +119,8 @@
     "tree_type": {
       "-1": "无法识别",
       "0": "科技树",
-      "1": "加值",
-      "2": "收藏"
+      "1": "金币车",
+      "2": "收藏车"
     },
     "regions": {
       "normal": {
@@ -171,7 +171,7 @@
       "cumulative_losses": "失败",
       "cumulative_misses": "总射击失误数",
       "cumulative_shots": "总射击数",
-      "cumulative_spotted": "场均发现敌人",
+      "cumulative_spotted": "总发现敌人数",
       "cumulative_survived_battles": "幸存场次",
       "cumulative_win_and_survived": "胜利和幸存场次",
       "cumulative_wins": "胜利",
@@ -183,11 +183,11 @@
   "bot": {
     "common": {
       "errors": {
-        "clan_not_found": "# 找不到军团\n找不到\"%s\"。请尝试从搜索结果中选择一个军团。",
-        "player_not_found": "# 找不到用户\n无法找到用户 \"%s\"。 尝试从搜索结果中挑选用户，输入一个有效的用户名或使用 \"/link\" 命令。",
+        "clan_not_found": "# 找不到军团\n找不到\"%s1\"。请尝试从搜索结果中选择一个军团。",
+        "player_not_found": "# 找不到用户\n无法找到用户 \"%s1\"。 尝试从搜索结果中挑选用户，输入一个有效的用户名或使用 \"/link\" 命令。",
         "player_not_linked": "# 使用 `/link` 来开始\n我不知道你是谁，但你今天可以告诉我！",
-        "tank_name_not_found": "# 坦克找不到\n无法找到名为 \"%s \"的坦克。",
-        "tank_id_not_found": "# 坦克找不到\n无法找到ID \"%s\"的坦克。 试着输入坦克的名称而不是数字。",
+        "tank_name_not_found": "# 坦克找不到\n无法找到名为 \"%s1 \"的坦克。",
+        "tank_id_not_found": "# 坦克找不到\n无法找到ID \"%s1\"的坦克。 试着输入坦克的名称而不是数字。",
         "no_tank_stats": "# 没有这个坦克的数据\n这个玩家没有数据。你可能找错人了。",
         "get_help": "Help Discord server",
         "uncaught_error": "# BlitzKit 崩溃了!\n非常抱歉。请加入[官方Discord](https://discord.gg/nDt7AjGJQH)，以方便帮助你的问题。",
@@ -674,7 +674,7 @@
         "no_tanks_found": {
           "body": "未找到战车。",
           "search_again": "请尝试重新搜索。",
-          "clear_filters": "请尝试清除过滤。"
+          "clear_filters": "请尝试清空筛选"
         },
         "sort": {
           "meta.none": "无",
@@ -823,7 +823,7 @@
         },
         "meta": {
           "back": "返回",
-          "compare": "比较",
+          "compare": "对比",
           "swap": {
             "button": "调换",
             "title": "调换战车"
@@ -927,7 +927,7 @@
             "dispersion": "静止时",
             "dispersionMoving": "移动时",
             "dispersionHullTraversing": "车体转向时",
-            "dispersionTurretTraversing": "炮塔旋转时",
+            "dispersionTurretTraversing": "炮塔轨迹",
             "dispersionShooting": "开火时",
             "dispersionGunDamaged": "主炮损坏时",
             "gunDepression": "俯角",
@@ -945,20 +945,20 @@
             "mediumTerrainCoefficient": "中型坦克",
             "mediumTerrainCoefficientRaw": "中型坦克",
             "softTerrainCoefficient": "Soft",
-            "softTerrainCoefficientRaw": "Soft",
-            "enginePower": "Engine power",
-            "powerToWeightRatioHardTerrain": "Hard",
+            "softTerrainCoefficientRaw": "软地",
+            "enginePower": "引擎功率",
+            "powerToWeightRatioHardTerrain": "硬地",
             "powerToWeightRatioMediumTerrain": "中型坦克",
             "powerToWeightRatioSoftTerrain": "Soft",
-            "weight": "Weight",
-            "turretTraverseSpeed": "Turret traverse speed",
+            "weight": "重量",
+            "turretTraverseSpeed": "炮塔旋转速度",
             "gunTraverseSpeed": "Gun traverse speed",
             "hullTraverseHardTerrain": "Hard",
             "hullTraverseMediumTerrain": "中型坦克",
             "hullTraverseSoftTerrain": "Soft",
             "health": "Health",
             "fireChance": "Fire chance",
-            "viewRange": "View range",
+            "viewRange": "视野范围",
             "camouflageStill": "静止时",
             "camouflageMoving": "移动时",
             "camouflageShootingStill": "静止时",
@@ -968,8 +968,8 @@
             "height": "Height",
             "length": "Length",
             "volume": "Volume",
-            "shellRange": "Shell range",
-            "shellCapacity": "Shell capacity",
+            "shellRange": "射程",
+            "shellCapacity": "弹药容量",
             "gunType": "Gun type",
             "penetrationAt250m": "Penetration at 250m"
           }
@@ -981,28 +981,28 @@
           "title": "Crew training",
           "info": "represents the other roles a crew member can take.",
           "count": "Crew count",
-          "commander": "Commander",
-          "gunner": "Gunner",
-          "driver": "Driver",
-          "radioman": "Radioman",
-          "loader": "Loader"
+          "commander": "车长",
+          "gunner": "炮手",
+          "driver": "驾驶员",
+          "radioman": "通讯兵",
+          "loader": "装填手"
         },
         "maneuverability": {
           "title": "Maneuverability"
         },
         "survivability": {
-          "title": "Survivability"
+          "title": "生存性"
         }
       },
       "compare": {
-        "name": "比较",
-        "button": "Compare tanks",
+        "name": "对比",
+        "button": "坦克对比",
         "description": "Compare tank statistics",
         "seo_description": "Compare tanks statistics and loadouts in World of Tanks Blitz",
         "actions": {
           "add": {
-            "button": "Add",
-            "title": "Add tanks",
+            "button": "增加...",
+            "title": "添加坦克",
             "description": "Select tanks to add to comparison"
           },
           "clear": "Clear",
