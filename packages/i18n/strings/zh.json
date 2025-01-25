@@ -690,7 +690,7 @@
           "fire.reload": "装填时间",
           "fire.caliber": "口径",
           "fire.standardPenetration": "标准炮弹穿深",
-          "fire.premiumPenetration": "金币炮弹穿深",
+          "fire.premiumPenetration": "金币弹穿深",
           "fire.damage": "伤害值",
           "fire.moduleDamage": "模组伤害值",
           "fire.shellVelocity": "炮弹飞行速度",
