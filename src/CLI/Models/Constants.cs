@@ -9,9 +9,5 @@ namespace CLI.Constants
 
   public static class BlitzConstants
   {
-    public const EGame EngineVersion = EGame.GAME_UE5_3;
-    public const string InstallationDirectory =
-      "C:/Program Files (x86)/Steam/steamapps/common/World of Tanks Blitz Playtest";
-    public const string AppDataDirectory = "C:/Users/coola/AppData/Local/Blitz/";
   }
 }

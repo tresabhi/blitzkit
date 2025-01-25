@@ -1,6 +1,5 @@
 using CLI.Models;
-using CUE4Parse.FileProvider.Objects;
-using CUE4Parse.UE4.Pak;
+using CLI.Utils;
 
 namespace CLI.Functions
 {
@@ -8,34 +7,21 @@ namespace CLI.Functions
   {
     public static void Run(Arguments args)
     {
-      // DefaultFileProvider provider = new(
-      //   directory: new(BlitzConstants.AppDataDirectory),
-      //   searchOption: SearchOption.AllDirectories,
-      //   isCaseInsensitive: false,
-      //   extraDirectories: [new(BlitzConstants.InstallationDirectory)]
+      BlitzVfs vfs = new();
+
+      vfs.Initialize();
+
+      // PakFileReader reader = new(
+      //   "C:/Program Files (x86)/Steam/steamapps/common/World of Tanks Blitz Playtest/Blitz/Content/Paks/pakchunk0-Windows.pak"
       // );
 
-      // provider.Initialize();
+      // reader.Mount();
 
-      // Console.WriteLine("Mounted containers: " + provider.MountedVfs.Count);
-
-      // foreach (var file in provider.Files)
+      // foreach (var file in reader.Files)
       // {
       //   GameFile gameFile = file.Value;
-      //   Console.WriteLine(gameFile.Name);
+      //   Console.WriteLine(gameFile);
       // }
-
-      PakFileReader reader = new(
-        "C:/Program Files (x86)/Steam/steamapps/common/World of Tanks Blitz Playtest/Blitz/Content/Paks/pakchunk0-Windows.pak"
-      );
-
-      reader.Mount();
-
-      foreach (var file in reader.Files)
-      {
-        GameFile gameFile = file.Value;
-        // Console.WriteLine(gameFile);
-      }
     }
   }
 }
