@@ -1,3 +1,4 @@
+using CUE4Parse.Compression;
 using CUE4Parse.FileProvider.Vfs;
 using CUE4Parse.UE4.Pak;
 using CUE4Parse.UE4.Versions;
@@ -41,6 +42,9 @@ namespace CLI.Utils
 
     public override void Initialize()
     {
+      ZlibHelper.DownloadDll("temp/zlib.dll");
+      ZlibHelper.Initialize("temp/zlib.dll");
+
       List<string> containers = IndexContainers();
 
       foreach (string container in containers)
@@ -51,8 +55,21 @@ namespace CLI.Utils
 
         foreach (var gameFile in reader.Files)
         {
-          Console.WriteLine(gameFile.Value);
+          Console.WriteLine($"Reading \"{gameFile.Key}\"");
+
+          byte[] bytes = gameFile.Value.Read();
+          string path = $"temp/container/{gameFile.Key}";
+          string? directory = Path.GetDirectoryName(path);
+
+          if (directory != null && !Directory.Exists(directory))
+          {
+            Directory.CreateDirectory(directory);
+          }
+
+          File.WriteAllBytes(path, bytes);
         }
+
+        break;
       }
     }
   }
