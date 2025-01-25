@@ -190,10 +190,10 @@
         "tank_id_not_found": "# Tank not found\nCould not find tank by the ID \"%s1\". Try typing the name of the tank instead of a number.",
         "no_tank_stats": "# No tank stats available\nThis player doesn't have any stats available. This may not be the player you are looking for.",
         "get_help": "Допомогти Discord серверу",
-        "uncaught_error": "# BlitzKit ran into an error!\nWe're so sorry about this. Feel free to [join the official Discord server](https://discord.gg/nDt7AjGJQH) to get help.",
-        "preview": "# This command is in preview\n\nYou can only access this command in [the official Discord server](https://discord.gg/nDt7AjGJQH). The command will be generally available soon.",
-        "query_too_small": "# Your search is too short\nYour search must be at least 3 characters long.",
-        "query_too_long": "# Your search is too long\nYour search must be at most 100 characters long."
+        "uncaught_error": "# Упс! BlitzKit зіткнувся з помилкою!\nНам дуже шкода. Можете попросити допомоги на [офіційному сервері Discord](https://discord.gg/nDt7AjGJQH).",
+        "preview": "# Ця команда є в попередньому перегляді\n\nВи можете отримати доступ лише до цієї команди на [офіційному сервері Discord](https://discord.gg/nDt7AjGJQH). Команда в цілому буде доступна найближчим часом.",
+        "query_too_small": "# Ваш пошук занадто короткий\nВаш пошук повинен бути щонайменше 3 символи.",
+        "query_too_long": "# Ваш пошук занадто довгий\nВаш пошук повинен бути щонайбільше 100 символи."
       },
       "wn8": {
         "name": "WN8",
@@ -356,13 +356,13 @@
           "upgrades": "Покращення: %s1",
           "purchase": "Придбання: %s1",
           "equipment": "Спорядження: %s1",
-          "estimation": "# This is an estimation!\n\nThis list may include already researched tanks because of the inaccurate information Wargaming provides. Try providing a `starting-tank` from the line when using the command if you can."
+          "estimation": "# Це оцінка!\n\nЦей список може включати вже досліджені танки через неточну інформацію для вантажу. Спробуйте використати \"початковий танк\" з рядка за допомогою команди."
         },
         "errors": {
-          "non_tech_tree": "# %s1 is not on the tech tree\n\nYou cannot research a premium/collector tank.",
-          "tier_1": "# %s1 is a tier I\n\nTier I tanks are always unlocked for free for all players.",
-          "already_researched": "# %s1 is already researched\n\nTry providing a `starting-tank` when using the command to view the totals for a line you have already researched.",
-          "start_end_equal": "# %s1 was provided twice\n\nMake sure `starting-tank` and `target-tank` are different.",
+          "non_tech_tree": "# %s1 не в технічному дереві\n\nВи не можете досліджувати преміум/колекційний танк.",
+          "tier_1": "# %s1 це рівень I\n\nТанки рівню I завжди відкриті для всіх гравців безкоштовно.",
+          "already_researched": "# %s1 уже досліджено!\n\nСпробуйте забезпечити `starting-tank` коли використовуєте команду щоб подивитись підсумки гілки, яку ви вже дослідили.",
+          "start_end_equal": "# %s1 було надано двічі\n\nПереконайся, що `starting-tank` та `target-tank` різні.",
           "tanks_not_on_line": "# %s1 and %s2 are not on the same line\n\nMake sure `starting-tank` and `target-tank` are on the same tech-tree line.",
           "unordered": "# %s1 higher tiered to %s2\n\nMake sure to provide %s3 as the `starting-tank` instead as it is the lower tiered tank."
         }
