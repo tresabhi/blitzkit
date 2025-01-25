@@ -1,4 +1,11 @@
+using CLI.Constants;
 using CLI.Models;
+using CUE4Parse.FileProvider;
+using CUE4Parse.UE4.Pak;
+using CUE4Parse.UE4.Readers;
+using CUE4Parse.UE4.Versions;
+using CUE4Parse.UE4.VirtualFileSystem;
+using UE4Config.Parsing;
 
 namespace CLI.Functions
 {
@@ -6,22 +13,25 @@ namespace CLI.Functions
   {
     public static void Run(Arguments args)
     {
-      if (args.raw.Length < 2)
-      {
-        throw new ArgumentException("No directory provided");
-      }
+      // string[] bundledContainers = Directory.GetFiles(Containers.BundledContainersDirectory);
 
-      string dlcPaksDirectory = args.raw[1];
+      // foreach (string bundledContainer in bundledContainers)
+      // {
+      //   string fileName = Path.GetFileName(bundledContainer);
 
-      if (args.sanitize && Directory.Exists(dlcPaksDirectory))
-      {
-        Directory.Delete(dlcPaksDirectory, true);
-      }
+      //   Console.WriteLine($"Parsing bundled container \"{fileName}\"...");
 
-      Directory.CreateDirectory(dlcPaksDirectory);
+      // }
 
-      string testFilePath = Path.Combine(dlcPaksDirectory, "test.txt");
-      File.WriteAllText(testFilePath, "test");
+
+      DefaultFileProvider provider = new(
+        directory: ContainerConstants.DLCContainersDirectory,
+        searchOption: SearchOption.TopDirectoryOnly,
+        isCaseInsensitive: false,
+        versions: new VersionContainer(BlitzConstants.EngineVersion)
+      );
+
+      provider.Initialize();
     }
   }
 }
