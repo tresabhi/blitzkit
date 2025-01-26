@@ -16,7 +16,7 @@ namespace CLI
 
         case "test":
         {
-          Test.Run(args);
+          Debug.Run(args);
           break;
         }
 
