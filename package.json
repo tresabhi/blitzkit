@@ -37,7 +37,7 @@
     "build:reviews": "cd packages/scripts && bun build:reviews",
     "build:ids": "cd packages/scripts && bun build:ids",
     "prunestrings": "cd packages/scripts && bun prunestrings",
-    "test:cli": "cd src/CLI && dotnet run"
+    "dev:cli:unpack": "cd src/CLI && dotnet run unpack \"C:/Program Files (x86)/Steam/steamapps/common/World of Tanks Blitz Playtest\""
   },
   "license": "MIT",
   "dependencies": {
