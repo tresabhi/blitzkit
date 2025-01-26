@@ -6,8 +6,8 @@ namespace CLI.Functions
 {
   class Unpacker
   {
-    public static string ZlibPath = "../../temp/zlib.dll";
-    public static string VFSWriteDir = "../../temp/vfs/";
+    private const string contentGroup = "p14y73c7_p5e_b10gg3RS_big_play";
+    private const string vfs = "../../temp/vfs/";
 
     // this may be different from the one provided in args so check this and not args[1]
     // we don't wanna delete my local installation of the game when debugging haha!
@@ -22,7 +22,26 @@ namespace CLI.Functions
 
       AgnosticZlibHelper.Initialize();
 
-      string workingDirectory = args[1];
+      UnpackDepot(args[1]);
+      UnpackDLC();
+    }
+
+    private static void UnpackDLC()
+    {
+      string defaultDlcPath = Path.Combine(vfs, "Blitz/Config/DefaultDlc.ini");
+      IniParser iniParser = new(defaultDlcPath);
+      string? contentBuildId = iniParser.GetString("DefaultContentBuildId");
+
+      if (string.IsNullOrEmpty(contentBuildId))
+      {
+        throw new Exception("Failed to read content build id from DefaultDlc.ini");
+      }
+
+      Console.WriteLine($"Exploring DLC {contentBuildId} within group {contentGroup}");
+    }
+
+    private static void UnpackDepot(string workingDirectory)
+    {
       string paksDirectory = Path.Combine(workingDirectory, "Blitz/Content/Paks");
       string[] containers = Directory.GetFiles(paksDirectory, "*.pak");
 
@@ -38,7 +57,7 @@ namespace CLI.Functions
       }
     }
 
-    public static void Exergy(string container)
+    private static void Exergy(string container)
     {
       Console.WriteLine($"Filtering {container}");
 
@@ -56,7 +75,7 @@ namespace CLI.Functions
           continue;
         }
 
-        string writePath = Path.Combine(VFSWriteDir, gameFile.Path);
+        string writePath = Path.Combine(vfs, gameFile.Path);
 
         if (File.Exists(writePath))
         {
@@ -77,9 +96,9 @@ namespace CLI.Functions
       }
     }
 
-    public static string[] ExergizableFiles = ["Blitz/Config/DefaultDlc.ini"];
+    private static string[] ExergizableFiles = ["Blitz/Config/DefaultDlc.ini"];
 
-    public static bool ShouldExergize(string path)
+    private static bool ShouldExergize(string path)
     {
       return ExergizableFiles.Contains(path);
     }
