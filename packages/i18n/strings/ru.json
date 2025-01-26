@@ -751,7 +751,7 @@
         "description": "Танковая энциклопедия Blitz",
         "seo_description": "Статистика, броня и многое другое по всем танкам World of Tanks Blitz",
         "tank_seo_title": "%s1 - %s4 %s3 %s2 уровня | Танкопедия %s5 | World of Tanks Blitz (WoTB)",
-        "tank_seo_description": "%s1 armor, statistics, equipment, provisions, and more. %s2 DPM, %s3hp alpha, %s4mm penetration, %s5kph top speed, %s6hp health.",
+        "tank_seo_description": "%s1 броня, статистика, оборудование, снабжение и многое другое. %s2 УВМ, %s3hp альфа, %s4mm пробитие, %s5км/ч лучшая скорость, %s6hp здоровье.",
         "sandbox": {
           "poses": {
             "hull_down": "За холмом",
@@ -828,7 +828,7 @@
             "button": "Поменять",
             "title": "Поменять танк"
           },
-          "vanilla": "Vanilla",
+          "vanilla": "Без модов",
           "opentest": "Открытый тест",
           "full_name": "Полное название",
           "nation": "Нация",
@@ -853,7 +853,7 @@
         "review": {
           "title": "Видеообзоры",
           "disclaimer": "BlitzKit не несёт ответственности за видеообзоры.",
-          "join": "Apply to %s1 YouTuber program"
+          "join": "Применить к %s1 программе YouTuber"
         },
         "configuration": {
           "title": "Конфигурация",
@@ -1068,7 +1068,7 @@
             "hits": "Уничтожен",
             "damage_ratio": "Коэф. урона",
             "damage_taken": "Получено урона",
-            "capture_points": "Cap points"
+            "capture_points": "Ограничительные точки"
           }
         }
       },
@@ -1095,8 +1095,8 @@
           "no_results": "Игроков не найдено"
         },
         "controls": {
-          "title": "Tracking %s1",
-          "subtitle": "Since %s1",
+          "title": "Отслеживание %s1",
+          "subtitle": "Начиная с %s1",
           "reset": "Сброс",
           "change": "Изменить"
         },
