@@ -1,4 +1,4 @@
-using CUE4Parse.Compression;
+using CLI.Utils;
 using CUE4Parse.FileProvider.Objects;
 using CUE4Parse.UE4.Pak;
 
@@ -7,7 +7,11 @@ namespace CLI.Functions
   class Unpacker
   {
     public static string ZlibPath = "../../temp/zlib.dll";
-    public static string VFSWriteDirectory = "../../temp/vfs/";
+    public static string VFSWriteDir = "../../temp/vfs/";
+
+    // this may be different from the one provided in args so check this and not args[1]
+    // we don't wanna delete my local installation of the game when debugging haha!
+    public static string tempDepotsDir = "../../temp/depot/";
 
     public static void Unpack(string[] args)
     {
@@ -16,17 +20,7 @@ namespace CLI.Functions
         throw new ArgumentException("Missing required initial paks directory");
       }
 
-      if (File.Exists(ZlibPath))
-      {
-        Console.WriteLine($"Zlib found at {ZlibPath}; using that...");
-      }
-      else
-      {
-        Console.WriteLine($"Zlib not found; downloading to {ZlibPath}...");
-        ZlibHelper.DownloadDll(ZlibPath);
-      }
-
-      ZlibHelper.Initialize(ZlibPath);
+      AgnosticZlibHelper.Initialize();
 
       string workingDirectory = args[1];
       string paksDirectory = Path.Combine(workingDirectory, "Blitz/Content/Paks");
@@ -35,6 +29,12 @@ namespace CLI.Functions
       foreach (string container in containers)
       {
         Exergy(container);
+      }
+
+      if (Directory.Exists(tempDepotsDir))
+      {
+        Console.WriteLine("Deleting temp depots directory...");
+        Directory.Delete(tempDepotsDir, true);
       }
     }
 
@@ -56,7 +56,7 @@ namespace CLI.Functions
           continue;
         }
 
-        string writePath = Path.Combine(VFSWriteDirectory, gameFile.Path);
+        string writePath = Path.Combine(VFSWriteDir, gameFile.Path);
 
         if (File.Exists(writePath))
         {
