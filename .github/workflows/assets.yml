@@ -31,7 +31,9 @@ jobs:
         uses: actions/setup-dotnet@v4
 
       - name: Restore
-        run: dotnet restore
+        run: |
+          cd src/CLI
+          dotnet restore
 
       - name: Setup DepotDownloader
         run: |
