@@ -41,6 +41,21 @@ namespace CLI.Utils
         throw new PlatformNotSupportedException();
       }
 
+      string fileName = $"oodle.{extension}";
+      string filePath = Path.Combine(BINARY_DIR, fileName);
+
+      if (File.Exists(filePath))
+      {
+        Console.WriteLine($"Oodle found at {filePath}; using that");
+        OodleHelper.Initialize(filePath);
+
+        return;
+      }
+
+      Console.WriteLine(
+        $"Oodle not found; downloading to {filePath} from {url} and extracting {entry}"
+      );
+
       HttpClient client = new();
       using var response = await client.GetAsync(url).ConfigureAwait(false);
 
@@ -54,12 +69,11 @@ namespace CLI.Utils
 
       ArgumentNullException.ThrowIfNull(zipEntry, "oodle entry in zip not found");
 
-      string path = Path.Combine(BINARY_DIR, $"oodle.{extension}");
       await using var entryStream = zipEntry.Open();
-      await using var fs = File.Create(path);
+      await using var fs = File.Create(filePath);
       await entryStream.CopyToAsync(fs).ConfigureAwait(false);
 
-      OodleHelper.Initialize(path);
+      OodleHelper.Initialize(filePath);
     }
 
     public static void InitializeZlib()
@@ -87,11 +101,11 @@ namespace CLI.Utils
 
       if (File.Exists(filePath))
       {
-        Console.WriteLine($"Zlib found at {filePath}; using that...");
+        Console.WriteLine($"Zlib found at {filePath}; using that");
       }
       else
       {
-        Console.WriteLine($"Zlib not found; downloading to {filePath} from {url}...");
+        Console.WriteLine($"Zlib not found; downloading to {filePath} from {url}");
         ZlibHelper.DownloadDll(filePath, url);
       }
 
