@@ -44,30 +44,75 @@ namespace CLI.Functions
 
       Console.WriteLine($"Exploring DLC \"{contentBuildId}\" within group \"{CONTENT_GROUP}\"");
 
-      using HttpClient httpClient = new();
       DlcManifest manifest = await FetchManifest(CONTENT_GROUP, contentBuildId);
+
+      List<PakFile> nonHdPaks = [];
+      List<PakFile> hdPaks = [];
+
+      Console.WriteLine("Filtering HD and non-HD containers");
 
       foreach (var pakFile in manifest.PakFiles)
       {
-        Console.WriteLine($"Exergizing DLC container \"{pakFile.FileName}\"");
+        long chunkId = pakFile.ChunkId;
+        manifest.ChunkTags.TryGetValue(chunkId.ToString(), out var tags);
 
-        string url = $"{WG_DLC_DOMAIN}/dlc/{CONTENT_GROUP}/dlc/{pakFile.RelativeUrl}";
+        if (tags == null)
+        {
+          throw new Exception($"Failed to find tags for chunk {chunkId}");
+        }
 
-        // load to stream
-        Stream httpStream = await httpClient.GetStreamAsync(url);
-        MemoryStream memoryStream = new();
+        bool isHd = tags.GameplayTags.Any(tag => tag.TagName == "Dlc.HdTextures");
 
-        await httpStream.CopyToAsync(memoryStream);
-        memoryStream.Seek(0, SeekOrigin.Begin);
-
-        FStreamArchive archive = new(url, memoryStream);
-        PakFileReader reader = new(archive);
-
-        Exergize(reader);
-
-        memoryStream.Dispose();
-        httpStream.Dispose();
+        if (isHd)
+        {
+          hdPaks.Add(pakFile);
+        }
+        else
+        {
+          nonHdPaks.Add(pakFile);
+        }
       }
+
+      Console.WriteLine(
+        $"Found {nonHdPaks.Count} non-HD containers and {hdPaks.Count} HD containers"
+      );
+
+      Console.WriteLine($"Exergizing non-HD containers");
+
+      foreach (var pak in nonHdPaks)
+      {
+        await ExergizeManifestPakFile(pak);
+      }
+
+      Console.WriteLine($"Exergizing HD containers");
+
+      foreach (var pak in hdPaks)
+      {
+        await ExergizeManifestPakFile(pak);
+      }
+    }
+
+    private static async Task ExergizeManifestPakFile(PakFile pak)
+    {
+      Console.WriteLine($"Exergizing DLC container \"{pak.FileName}\"");
+
+      string url = $"{WG_DLC_DOMAIN}/dlc/{CONTENT_GROUP}/dlc/{pak.RelativeUrl}";
+
+      using HttpClient httpClient = new();
+      Stream httpStream = await httpClient.GetStreamAsync(url);
+      MemoryStream memoryStream = new();
+
+      await httpStream.CopyToAsync(memoryStream);
+      memoryStream.Seek(0, SeekOrigin.Begin);
+
+      FStreamArchive archive = new(url, memoryStream);
+      PakFileReader reader = new(archive);
+
+      Exergize(reader);
+
+      memoryStream.Dispose();
+      httpStream.Dispose();
+      archive.Dispose();
     }
 
     public static async Task<DlcManifest> FetchManifest(string group, string build)
