@@ -14,6 +14,12 @@ namespace CLI
           break;
         }
 
+        case "test":
+        {
+          Test.Run(args);
+          break;
+        }
+
         default:
         {
           throw new ArgumentException("Invalid command");

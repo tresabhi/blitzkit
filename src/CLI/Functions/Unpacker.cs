@@ -4,6 +4,7 @@ using CLI.Utils;
 using CUE4Parse.FileProvider.Objects;
 using CUE4Parse.UE4.Pak;
 using CUE4Parse.UE4.Readers;
+using DotNet.Globbing;
 
 namespace CLI.Functions
 {
@@ -185,12 +186,18 @@ namespace CLI.Functions
       }
     }
 
-    private static string[] ExergizableFiles = ["Blitz/Config/DefaultDlc.ini"];
+    private static readonly string[] ExergizableGlobsRaw =
+    [
+      "Blitz/Config/DefaultDlc.ini",
+      "Blitz/Content/Tanks/**",
+      "Blitz/Content/TankSets/*",
+    ];
+    private static readonly Glob[] ExergizableGlobs = [.. ExergizableGlobsRaw.Select(Glob.Parse)];
 
     private static bool ShouldExergize(string path)
     {
-      return true;
-      // return ExergizableFiles.Contains(path);
+      // return true;
+      return ExergizableGlobs.Any(glob => glob.IsMatch(path));
     }
   }
 }
