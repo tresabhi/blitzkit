@@ -168,7 +168,6 @@ namespace CLI.Functions
         if (File.Exists(writePath))
         {
           Console.WriteLine($"Exergize 🟡 {gameFile.Path}");
-          continue;
         }
         else
         {
