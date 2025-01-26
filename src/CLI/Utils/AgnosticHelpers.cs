@@ -32,7 +32,7 @@ namespace CLI.Utils
       }
       else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
       {
-        url = $"{ZLIB_BINARY_URL_PREFIX}/gcc.zip";
+        url = $"{OODLE_BINARY_URL_PREFIX}/gcc.zip";
         entry = "lib/Release/liboodle-data-shared.so";
         extension = "so";
       }
