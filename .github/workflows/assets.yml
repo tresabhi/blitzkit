@@ -11,6 +11,8 @@ concurrency:
 env:
   DEPOT_DOWNLOADER_USERNAME: ${{ secrets.DEPOT_DOWNLOADER_USERNAME }}
   DEPOT_DOWNLOADER_PASSWORD: ${{ secrets.DEPOT_DOWNLOADER_PASSWORD }}
+  STEAM_APP: 3341250
+  STEAM_DEPOT: 3341251
 
 jobs:
   download_client:
@@ -43,4 +45,4 @@ jobs:
       - name: (Steam) Download client
         run: |
           chmod +x temp/depotDownloader/DepotDownloader
-          temp/depotDownloader/DepotDownloader -q -os windows -depot 3341251 -username "${{ env.DEPOT_DOWNLOADER_USERNAME }}" -password "${{ env.DEPOT_DOWNLOADER_PASSWORD }}"
+          temp/depotDownloader/DepotDownloader -q -os windows -app ${{ env.STEAM_APP }} -depot ${{ env.STEAM_DEPOT }} -username "${{ env.DEPOT_DOWNLOADER_USERNAME }}" -password "${{ env.DEPOT_DOWNLOADER_PASSWORD }}"
