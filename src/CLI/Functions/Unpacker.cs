@@ -25,7 +25,7 @@ namespace CLI.Functions
         throw new ArgumentException("Missing required initial paks directory");
       }
 
-      AgnosticZlibHelper.Initialize();
+      AgnosticHelpers.Initialize();
 
       UnpackDepot(args[1]);
       await UnpackDLC();
@@ -64,6 +64,9 @@ namespace CLI.Functions
         PakFileReader reader = new(archive);
 
         Exergize(reader);
+
+        memoryStream.Dispose();
+        httpStream.Dispose();
       }
     }
 
