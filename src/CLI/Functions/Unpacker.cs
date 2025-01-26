@@ -1,15 +1,26 @@
-using CLI.Models;
-using CLI.Utils;
-
 namespace CLI.Functions
 {
-  class DLC
+  class Unpacker
   {
-    public static void Run(Arguments args)
+    public static void Unpack(string[] args)
     {
-      BlitzVfs vfs = new();
+      if (args.Length < 2)
+      {
+        throw new ArgumentException("Missing required working directory argument");
+      }
 
-      vfs.Initialize();
+      string workingDirectory = args[1];
+      string paksDirectory = Path.Combine(workingDirectory, "Blitz/Content/Paks");
+      string[] files = Directory.GetFiles(paksDirectory, "*.pak");
+
+      foreach (string file in files)
+      {
+        Console.WriteLine($"Reading \"{file}\"");
+      }
+
+      // BlitzVfs vfs = new();
+
+      // vfs.Initialize();
 
       // DefaultFileProvider provider = new(
       //   directory: new(

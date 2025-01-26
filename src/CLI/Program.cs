@@ -1,5 +1,4 @@
 ﻿using CLI.Functions;
-using CLI.Models;
 
 namespace CLI
 {
@@ -7,14 +6,17 @@ namespace CLI
   {
     static void Main(string[] args)
     {
-      Arguments arguments = new(args);
-
       switch (args[0])
       {
-        case "dlc":
+        case "unpack":
         {
-          DLC.Run(arguments);
+          Unpacker.Unpack(args);
           break;
+        }
+
+        default:
+        {
+          throw new ArgumentException("Invalid command");
         }
       }
     }

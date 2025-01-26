@@ -21,10 +21,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.GH_TOKEN }}
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+
+      - name: Restore
+        run: dotnet restore
 
       - name: Setup DepotDownloader
         run: |
@@ -43,7 +50,7 @@ jobs:
           echo "Download complete; files:"
           ls temp/depotDownloader
 
-      - name: (Steam) Download client
+      - name: Download client
         run: |
           chmod +x temp/depotDownloader/DepotDownloader
           temp/depotDownloader/DepotDownloader \
@@ -52,4 +59,21 @@ jobs:
             -os ${{ env.STEAM_OS }} \
             -app ${{ env.STEAM_APP }} \
             -depot ${{ env.STEAM_DEPOT }} \
-            -filelist regex:.+/Blitz/Content/Paks/.+\.pak
+            -dir temp/depots
+
+      - name: Unpack
+        run: |
+          cd temp/depots/${{ env.STEAM_APP }}
+
+          SUBDIR_COUNT=$(ls | wc -l)
+          if [ "$SUBDIR_COUNT" -ne 1 ]; then
+            echo "Error: Expected exactly 1 subdirectory, found $SUBDIR_COUNT"
+            exit 1
+          fi
+
+          DEPOT_BRANCH_BUILD_ID=$(ls)
+          echo "Found build ID: $DEPOT_BRANCH_BUILD_ID"
+
+          cd ../../../src/CLI
+
+          dotnet run unpack ../../temp/depots/${{ env.STEAM_APP }}/$DEPOT_BRANCH_BUILD_ID/
