@@ -12,10 +12,10 @@ namespace CLI.Utils
     public const string OODLE_BINARY_URL_PREFIX =
       "https://github.com/WorkingRobot/OodleUE/releases/download/2024-11-01-726";
 
-    public static void Initialize()
+    public static async Task Initialize()
     {
       InitializeZlib();
-      InitializeOodle();
+      await InitializeOodle();
     }
 
     public static async Task InitializeOodle()
