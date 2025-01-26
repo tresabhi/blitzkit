@@ -42,31 +42,28 @@ namespace CLI.Functions
         throw new Exception("Failed to read content build id from DefaultDlc.ini");
       }
 
-      Console.WriteLine($"Exploring DLC {contentBuildId} within group {CONTENT_GROUP}");
+      Console.WriteLine($"Exploring DLC \"{contentBuildId}\" within group \"{CONTENT_GROUP}\"");
 
       using HttpClient httpClient = new();
       DlcManifest manifest = await FetchManifest(CONTENT_GROUP, contentBuildId);
 
       foreach (var pakFile in manifest.PakFiles)
       {
-        Console.WriteLine($"{pakFile.FileName} downloading exergy...");
+        Console.WriteLine($"Exergizing DLC container \"{pakFile.FileName}\"");
 
         string url = $"{WG_DLC_DOMAIN}/dlc/{CONTENT_GROUP}/dlc/{pakFile.RelativeUrl}";
 
         // load to stream
-        Stream stream = await httpClient.GetStreamAsync(url);
-        FStreamArchive archive = new(url, stream);
+        Stream httpStream = await httpClient.GetStreamAsync(url);
+        MemoryStream memoryStream = new();
+
+        await httpStream.CopyToAsync(memoryStream);
+        memoryStream.Seek(0, SeekOrigin.Begin);
+
+        FStreamArchive archive = new(url, memoryStream);
         PakFileReader reader = new(archive);
 
-        reader.Mount();
-
-        foreach (var file in reader.Files)
-        {
-          var gameFile = file.Value;
-          Console.WriteLine(gameFile.Path);
-        }
-
-        break;
+        Exergize(reader);
       }
     }
 
@@ -90,22 +87,21 @@ namespace CLI.Functions
 
       foreach (string container in containers)
       {
-        Exergy(container);
+        Console.WriteLine($"Exergizing disk container \"{container}\"");
+
+        PakFileReader reader = new(container);
+        Exergize(reader);
       }
 
       if (Directory.Exists(TEMP_DEPOT_DIR))
       {
-        Console.WriteLine("Deleting temp depots directory...");
+        Console.WriteLine("Deleting temp depots directory");
         Directory.Delete(TEMP_DEPOT_DIR, true);
       }
     }
 
-    private static void Exergy(string container)
+    private static void Exergize(PakFileReader reader)
     {
-      Console.WriteLine($"Filtering {container}");
-
-      PakFileReader reader = new(container);
-
       reader.Mount();
 
       foreach (var file in reader.Files)
@@ -115,6 +111,7 @@ namespace CLI.Functions
 
         if (!exergizable)
         {
+          Console.WriteLine($"Exergize 🔴 {gameFile.Path}");
           continue;
         }
 
@@ -122,11 +119,13 @@ namespace CLI.Functions
 
         if (File.Exists(writePath))
         {
-          Console.WriteLine($"{gameFile.Path} already exists; skipping...");
+          Console.WriteLine($"Exergize 🟡 {gameFile.Path}");
           continue;
         }
-
-        Console.WriteLine($"{gameFile.Path} writing from vfs...");
+        else
+        {
+          Console.WriteLine($"Exergize 🟢 {gameFile.Path}");
+        }
 
         string? directory = Path.GetDirectoryName(writePath);
 
@@ -143,7 +142,8 @@ namespace CLI.Functions
 
     private static bool ShouldExergize(string path)
     {
-      return ExergizableFiles.Contains(path);
+      return true;
+      // return ExergizableFiles.Contains(path);
     }
   }
 }
