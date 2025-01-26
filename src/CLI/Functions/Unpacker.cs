@@ -1,19 +1,23 @@
+using System.Text.Json;
+using CLI.Models;
 using CLI.Utils;
 using CUE4Parse.FileProvider.Objects;
 using CUE4Parse.UE4.Pak;
 
 namespace CLI.Functions
 {
-  class Unpacker
+  public static class Unpacker
   {
-    private const string contentGroup = "p14y73c7_p5e_b10gg3RS_big_play";
-    private const string vfs = "../../temp/vfs/";
+    private const string CONTENT_GROUP = "p14y73c7_p5e_b10gg3RS_big_play";
+    private const string VFS_PATH = "../../temp/vfs/";
 
     // this may be different from the one provided in args so check this and not args[1]
     // we don't wanna delete my local installation of the game when debugging haha!
-    public static string tempDepotsDir = "../../temp/depot/";
+    private const string TEMP_DEPOT_DIR = "../../temp/depot/";
+    private const string WG_DLC_DOMAIN = "http://dl-wotblitz-gc.wargaming.net";
+    private const string BUILD_MANIFEST_OS = "Windows";
 
-    public static void Unpack(string[] args)
+    public static async Task Unpack(string[] args)
     {
       if (args.Length < 2)
       {
@@ -23,12 +27,12 @@ namespace CLI.Functions
       AgnosticZlibHelper.Initialize();
 
       UnpackDepot(args[1]);
-      UnpackDLC();
+      await UnpackDLC();
     }
 
-    private static void UnpackDLC()
+    private static async Task UnpackDLC()
     {
-      string defaultDlcPath = Path.Combine(vfs, "Blitz/Config/DefaultDlc.ini");
+      string defaultDlcPath = Path.Combine(VFS_PATH, "Blitz/Config/DefaultDlc.ini");
       IniParser iniParser = new(defaultDlcPath);
       string? contentBuildId = iniParser.GetString("DefaultContentBuildId");
 
@@ -37,7 +41,32 @@ namespace CLI.Functions
         throw new Exception("Failed to read content build id from DefaultDlc.ini");
       }
 
-      Console.WriteLine($"Exploring DLC {contentBuildId} within group {contentGroup}");
+      Console.WriteLine($"Exploring DLC {contentBuildId} within group {CONTENT_GROUP}");
+
+      using HttpClient httpClient = new();
+      DlcManifest manifest = await FetchManifest(CONTENT_GROUP, contentBuildId);
+
+      foreach (var pakFile in manifest.PakFiles)
+      {
+        Console.WriteLine($"{pakFile.FileName} downloading exergy...");
+
+        string url = $"{WG_DLC_DOMAIN}/dlc/{CONTENT_GROUP}/dlc/{pakFile.RelativeUrl}";
+
+        // TODO: load to memory and write exergy to disk
+      }
+    }
+
+    public static async Task<DlcManifest> FetchManifest(string group, string build)
+    {
+      string url =
+        $"{WG_DLC_DOMAIN}/dlc/{group}/dlc/BuildManifest-{BUILD_MANIFEST_OS}-{build}.json";
+      using HttpClient client = new();
+      string jsonString = await client.GetStringAsync(url);
+      DlcManifest manifest =
+        JsonSerializer.Deserialize<DlcManifest>(jsonString)
+        ?? throw new Exception("Failed to deserialize manifest");
+
+      return manifest;
     }
 
     private static void UnpackDepot(string workingDirectory)
@@ -50,10 +79,10 @@ namespace CLI.Functions
         Exergy(container);
       }
 
-      if (Directory.Exists(tempDepotsDir))
+      if (Directory.Exists(TEMP_DEPOT_DIR))
       {
         Console.WriteLine("Deleting temp depots directory...");
-        Directory.Delete(tempDepotsDir, true);
+        Directory.Delete(TEMP_DEPOT_DIR, true);
       }
     }
 
@@ -75,7 +104,7 @@ namespace CLI.Functions
           continue;
         }
 
-        string writePath = Path.Combine(vfs, gameFile.Path);
+        string writePath = Path.Combine(VFS_PATH, gameFile.Path);
 
         if (File.Exists(writePath))
         {

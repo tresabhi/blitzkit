@@ -4,13 +4,13 @@ namespace CLI
 {
   class Program
   {
-    static void Main(string[] args)
+    static async Task Main(string[] args)
     {
       switch (args[0])
       {
         case "unpack":
         {
-          Unpacker.Unpack(args);
+          await Unpacker.Unpack(args);
           break;
         }
 

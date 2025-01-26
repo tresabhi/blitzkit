@@ -5,8 +5,8 @@ namespace CLI.Utils
 {
   public static class AgnosticZlibHelper
   {
-    public const string ZlibRootPath = "../../temp/";
-    public const string ZlibBinariesPrefix =
+    public const string ZLIB_BINARY_DIR = "../../temp/";
+    public const string ZLIB_BINARY_URL_PREFIX =
       "https://github.com/NotOfficer/Zlib-ng.NET/releases/download/1.0.0";
 
     public static void Initialize()
@@ -16,12 +16,12 @@ namespace CLI.Utils
 
       if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
       {
-        binariesUrl = $"{ZlibBinariesPrefix}/zlib-ng2.dll";
+        binariesUrl = $"{ZLIB_BINARY_URL_PREFIX}/zlib-ng2.dll";
         fileExtension = "dll";
       }
       else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
       {
-        binariesUrl = $"{ZlibBinariesPrefix}/libz-ng.so";
+        binariesUrl = $"{ZLIB_BINARY_URL_PREFIX}/libz-ng.so";
         fileExtension = "so";
       }
       else
@@ -30,7 +30,7 @@ namespace CLI.Utils
       }
 
       string fileName = $"zlib.{fileExtension}";
-      string filePath = Path.Combine(ZlibRootPath, fileName);
+      string filePath = Path.Combine(ZLIB_BINARY_DIR, fileName);
 
       if (File.Exists(filePath))
       {
