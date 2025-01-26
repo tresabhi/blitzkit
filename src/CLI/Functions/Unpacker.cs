@@ -3,6 +3,7 @@ using CLI.Models;
 using CLI.Utils;
 using CUE4Parse.FileProvider.Objects;
 using CUE4Parse.UE4.Pak;
+using CUE4Parse.UE4.Readers;
 
 namespace CLI.Functions
 {
@@ -52,7 +53,20 @@ namespace CLI.Functions
 
         string url = $"{WG_DLC_DOMAIN}/dlc/{CONTENT_GROUP}/dlc/{pakFile.RelativeUrl}";
 
-        // TODO: load to memory and write exergy to disk
+        // load to stream
+        Stream stream = await httpClient.GetStreamAsync(url);
+        FStreamArchive archive = new(url, stream);
+        PakFileReader reader = new(archive);
+
+        reader.Mount();
+
+        foreach (var file in reader.Files)
+        {
+          var gameFile = file.Value;
+          Console.WriteLine(gameFile.Path);
+        }
+
+        break;
       }
     }
 
