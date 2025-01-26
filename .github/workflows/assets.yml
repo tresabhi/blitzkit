@@ -69,3 +69,9 @@ jobs:
         run: |
           cd src/CLI
           dotnet run unpack ../../temp/depot/
+
+      - name: Archive VFS
+        uses: actions/upload-artifact@v4
+        with:
+          name: vfs
+          path: temp/vfs
