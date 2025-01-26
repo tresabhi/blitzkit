@@ -1,26 +1,26 @@
 {
   "test": {
     "default": "тест",
-    "long": "Это длинная тестовая строка. Вы, ДОЛЖНО быть, никогда не увидите этого в интерфейсе. Мой любимый фрукт — %s1, потому что у него цвет %s2. Он мне так нравится, что я повторю его название 3 раза! %s1! %s1! %s1! Еще раз, это %s2, а не %s3.",
-    "fox": "Съешь же ещё этих мягких французских булок, да выпей чаю."
+    "long": "Это длинная тестовая строка. Вы НИКОГДА НЕ ДОЛЖНЫ видеть это в пользовательском интерфейсе. Мой любимый фрукт - %s1, потому что он имеет цвет %s2. Мне это так нравится, что я повторю его название 3 раза! %s1! %s1! %s1! Еще раз, это %s2, а не %s3.",
+    "fox": "Быстрая бурая лисица перепрыгивает через ленивую собаку."
   },
   "common": {
     "units": {
       "m": "%s1м",
       "mm": "%s1мм",
       "deg": "%s1°",
-      "hp": "%s1оп",
+      "hp": "%s1hp",
       "x": "x%s1"
     },
     "gun_types": {
       "auto_loader": "Барабан",
       "auto_reloader": "Барабан с дозарядкой",
-      "regular": "Стандартное"
+      "regular": "Стандартный"
     },
     "shells": {
       "ap": "ББ",
       "apcr": "КС",
-      "heat": "КС",
+      "heat": "ХФ",
       "he": "ФС"
     },
     "player_count_period": {
@@ -746,8 +746,8 @@
     },
     "tools": {
       "tankopedia": {
-        "name": "Такнопедия",
-        "button": "Найти",
+        "name": "Танкопедия",
+        "button": "Поиск танков",
         "description": "Танковая энциклопедия Blitz",
         "seo_description": "Статистика, броня и многое другое по всем танкам World of Tanks Blitz",
         "tank_seo_title": "%s1 - %s4 %s3 %s2 уровня | Танкопедия %s5 | World of Tanks Blitz (WoTB)",
@@ -1107,7 +1107,7 @@
         },
         "no_battles": {
           "title": "Нет боёв",
-          "hint": "Go ahead and play a game"
+          "hint": "Идите вперед и поиграйте в игру"
         },
         "table": {
           "tank": "Танк",
@@ -1119,7 +1119,7 @@
         "name": "Тир-лист",
         "button": "Ранжировать",
         "description": "Ранжирование танков Blitz",
-        "seo_description": "Explore tier lists ranking tanks from best to worst, based on player ratings and statistical performance in World of Tanks Blitz",
+        "seo_description": "Изучите списки уровней, в которых танки ранжируются от лучших к худшим на основе рейтингов игроков и статистических показателей в World of Tanks Blitz",
         "buttons": {
           "reset": "Сброс",
           "share": "Поделиться"
@@ -1204,22 +1204,22 @@
         }
       },
       "charts": {
-        "name": "Charts",
-        "button": "Nerd out",
-        "description": "Lots of graphs",
-        "seo_description": "Charts and graphs on anything and everything about tanks, players, and events in World of Tanks Blitz"
+        "name": "Таблицы",
+        "button": "Ботаник вне игры",
+        "description": "Множество графиков",
+        "seo_description": "Таблицы и графики обо всем, что касается танков, игроков и событий в World of Tanks Blitz"
       },
       "rating": {
         "name": "Рейтинг",
         "button": "Посмотреть таблицу лидеров",
         "description": "Полный таблица лидеров",
-        "seo_description": "Live and archived full rating leaderboard for World of Tanks Blitz"
+        "seo_description": "Полная рейтинговая таблица лидеров World of Tanks Blitz в реальном времени и в архиве"
       },
       "discord": {
         "name": "Discord-бот",
         "button": "Установить",
         "description": "Статистика в Discord",
-        "seo_description": "Get stats right in Discord with BlitzKit's Discord bot"
+        "seo_description": "Получите статистику прямо в Discord с помощью бота Discord BlitzKit"
       },
       "more": {
         "name": "Дальше больше",
@@ -1229,15 +1229,15 @@
       },
       "players": {
         "name": "Игроки",
-        "button": "Lookup player",
-        "description": "Periodical player statistics",
-        "seo_description": "Periodical player statistics in World of Tanks Blitz"
+        "button": "Поиск игрока",
+        "description": "Периодическая статистика игроков",
+        "seo_description": "Периодическая статистика игроков в World of Tanks Blitz"
       },
       "home": {
         "name": "Главная",
         "button": "Начать",
-        "description": "Get started with BlitzKit",
-        "seo_description": "Get started with BlitzKit"
+        "description": "Начните с BlitzKit",
+        "seo_description": "Начните с BlitzKit"
       },
       "blitz_analysis": {
         "name": "BlitzAnalysis[]",
