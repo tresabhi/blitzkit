@@ -52,4 +52,4 @@ jobs:
             -os ${{ env.STEAM_OS }} \
             -app ${{ env.STEAM_APP }} \
             -depot ${{ env.STEAM_DEPOT }} \
-            -filelist regex:Blitz/Content/Paks/.+\.paks
+            -filelist regex:Blitz/Content/Paks/.+\.pak
