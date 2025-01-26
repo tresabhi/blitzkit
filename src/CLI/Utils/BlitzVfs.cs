@@ -1,6 +1,5 @@
 using CUE4Parse.Compression;
 using CUE4Parse.FileProvider.Vfs;
-using CUE4Parse.UE4.Pak;
 using CUE4Parse.UE4.Versions;
 
 namespace CLI.Utils

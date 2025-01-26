@@ -11,17 +11,17 @@ namespace CLI.Functions
 
       vfs.Initialize();
 
-      // PakFileReader reader = new(
-      //   "C:/Program Files (x86)/Steam/steamapps/common/World of Tanks Blitz Playtest/Blitz/Content/Paks/pakchunk0-Windows.pak"
+      // DefaultFileProvider provider = new(
+      //   directory: new(
+      //     "C:/Program Files (x86)/Steam/steamapps/common/World of Tanks Blitz Playtest"
+      //   ),
+      //   extraDirectories: [new DirectoryInfo("C:/Users/coola/AppData/Local/Blitz")],
+      //   searchOption: SearchOption.AllDirectories,
+      //   isCaseInsensitive: false,
+      //   versions: new(game: EGame.GAME_UE5_3, platform: ETexturePlatform.DesktopMobile, ver: new())
       // );
 
-      // reader.Mount();
-
-      // foreach (var file in reader.Files)
-      // {
-      //   GameFile gameFile = file.Value;
-      //   Console.WriteLine(gameFile);
-      // }
+      // provider.Initialize();
     }
   }
 }

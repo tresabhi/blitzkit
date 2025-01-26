@@ -2,54 +2,15 @@ name: Build Assets
 
 on:
   push:
-    branches: main
-
   workflow_dispatch:
-    inputs:
-      cdn_branch:
-        type: string
-        required: false
-        default: main
-        description: What CDN branch to write to
-      zip_url:
-        type: string
-        required: false
-        description: ZIP URL to download instead of Steam client
-      zip_root:
-        type: string
-        required: false
-        description: Root dir of ZIP which houses the executable and Data dir
-
-  schedule:
-    - cron: '0 2 * * *'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event.inputs.cdn_branch }}
   cancel-in-progress: true
 
 env:
-  DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
-  GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-  DATABASE_URL: ${{ secrets.DATABASE_URL }}
-  VIDEOS_SHEET: ${{ secrets.VIDEOS_SHEET }}
-  GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-  WOTB_GLOSSARY: ${{ secrets.WOTB_GLOSSARY }}
-  WOTB_DLC_CDN: ${{ secrets.WOTB_DLC_CDN }}
-  PUBLIC_WARGAMING_APPLICATION_ID: ${{ secrets.PUBLIC_WARGAMING_APPLICATION_ID }}
-  PUBLIC_ASSET_REPO: ${{ secrets.PUBLIC_ASSET_REPO }}
-  PUBLIC_ASSET_BRANCH: ${{ github.event.inputs.cdn_branch || secrets.PUBLIC_ASSET_BRANCH }}
-  WOTB_GLOSSARY_DOMAIN: ${{ secrets.WOTB_GLOSSARY_DOMAIN }}
-  WOTB_GLOSSARY_PATH: ${{ secrets.WOTB_GLOSSARY_PATH }}
-  PUBLIC_PROMOTE_OPENTEST: ${{ secrets.PUBLIC_PROMOTE_OPENTEST }}
-  ALLOW_ROBOTS: true
-  PUBLIC_GOOGLE_TAG_MANAGER_ID: ${{ secrets.PUBLIC_GOOGLE_TAG_MANAGER_ID }}
-  PUBLIC_GOOGLE_ANALYTICS_PROPERTY_ID: ${{ secrets.PUBLIC_GOOGLE_ANALYTICS_PROPERTY_ID }}
-  PUBLIC_PATREON_CLIENT_ID: ${{ secrets.PUBLIC_PATREON_CLIENT_ID }}
-  PUBLIC_PATREON_REDIRECT_URI: ${{ secrets.PUBLIC_PATREON_REDIRECT_URI }}
-  PATREON_CLIENT_SECRET: ${{ secrets.PATREON_CLIENT_SECRET }}
-  PUBLIC_NITROPAY_ID: ${{ secrets.PUBLIC_NITROPAY_ID }}
-  PUBLIC_DEBUG_MISSING_I18N: false
+  DEPOT_DOWNLOADER_USERNAME: ${{ secrets.DEPOT_DOWNLOADER_USERNAME }}
+  DEPOT_DOWNLOADER_PASSWORD: ${{ secrets.DEPOT_DOWNLOADER_PASSWORD }}
 
 jobs:
   download_client:
@@ -57,93 +18,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: (ZIP) Maximize build space
-        if: github.event.inputs.zip_url != ''
-        uses: easimon/maximize-build-space@master
-        with:
-          root-reserve-mb: 512
-          swap-size-mb: 1024
-          remove-dotnet: 'true'
-
       - uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.GH_TOKEN }}
 
-      - name: (Steam) Setup bun
-        uses: oven-sh/setup-bun@v1
-        if: github.event.inputs.zip_url == ''
+      - name: Setup DepotDownloader
+        run: |
+          mkdir -p temp
 
-      - name: (Steam) Install dependencies
-        if: github.event.inputs.zip_url == ''
-        run: bun install
+          echo "Downloading..."
+          DOWNLOAD_URL=$(curl -s https://api.github.com/repos/SteamRE/DepotDownloader/releases/latest | \
+            grep -i "linux-x64" | \
+            grep "browser_download_url" | \
+            cut -d '"' -f 4)
+          curl -L "$DOWNLOAD_URL" -o temp/depotDownloader.zip
 
-      - name: (Steam) Setup DepotDownloader
-        if: github.event.inputs.zip_url == ''
-        run: bun run setup:depotdownloader
+          echo "Unzipping..."
+          unzip temp/depotDownloader.zip -d temp/depotDownloader
+
+          echo "Download complete; files:"
+          ls temp/depotDownloader
 
       - name: (Steam) Download client
-        if: github.event.inputs.zip_url == ''
         run: |
-          chmod +x ./temp/depotDownloader/DepotDownloader
-          ./temp/depotDownloader/DepotDownloader -q -os windows -app 444200 -username ${{ secrets.DEPOT_DOWNLOADER_USERNAME }} -password "${{ secrets.DEPOT_DOWNLOADER_PASSWORD }}"
-
-      - name: (Steam) Apply patches
-        if: github.event.inputs.zip_url == ''
-        run: bun setup:patches --depot
-
-      - name: (ZIP) Download client
-        if: github.event.inputs.zip_url != ''
-        env:
-          ZIP_URL: ${{ github.event.inputs.zip_url }}
-          ZIP_ROOT: ${{ github.event.inputs.zip_root }}
-        run: |
-          wget -q -O client.zip $ZIP_URL
-          unzip -q client.zip -d client
-          rm client.zip
-          mkdir -p depots/444202/0
-          mv client/$ZIP_ROOT/* depots/444202/0
-
-      - name: Archive depots
-        uses: actions/upload-artifact@v4
-        with:
-          name: depots
-          path: depots
-
-  build_assets:
-    name: Build assets
-    runs-on: ubuntu-latest
-    needs: download_client
-
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          token: ${{ secrets.GH_TOKEN }}
-
-      - name: Setup bun
-        uses: oven-sh/setup-bun@v1
-
-      - name: Install dependencies
-        run: bun install
-
-      - name: Lint
-        run: bun run lint:website
-
-      - name: Download depots
-        uses: actions/download-artifact@v4
-        with:
-          name: depots
-          path: depots
-
-      - name: AppArmor hack
-        run: echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
-
-      - name: Start server and build assets
-        run: |
-          bun dev:website --verbosepa & 
-          SERVER_PID=$!
-
-          bun run build:assets --all-targets --depot --production
-
-          kill $SERVER_PID || true
+          chmod +x temp/depotDownloader/DepotDownloader
+          temp/depotDownloader/DepotDownloader -q -os windows -depot 3341251 -username "${{ env.DEPOT_DOWNLOADER_USERNAME }}" -password "${{ env.DEPOT_DOWNLOADER_PASSWORD }}"
