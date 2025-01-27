@@ -14,6 +14,12 @@ namespace CLI
           break;
         }
 
+        case "mangle":
+        {
+          Mangler.Mangle();
+          break;
+        }
+
         case "test":
         {
           Debug.Run(args);
