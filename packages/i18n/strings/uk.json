@@ -653,23 +653,23 @@
   "website": {
     "settings": {
       "dev_mode": "Development mode",
-      "language": "Language"
+      "language": "Мова"
     },
     "common": {
       "player_search": {
-        "hint": "Search players...",
-        "no_results": "No results",
-        "searching": "Searching..."
+        "hint": "Пошук гравців...",
+        "no_results": "Немає результатів",
+        "searching": "Пошук..."
       },
       "copy_button": {
-        "copied": "Copied!"
+        "copied": "Скопійовано!"
       },
       "tank_search": {
-        "search_bar_hint": "Search tanks...",
-        "recent": "Recently viewed",
-        "select_all": "Select all",
-        "count_singular": "1 tank",
-        "count_plural": "%s1 tanks",
+        "search_bar_hint": "Шукайте техніку...",
+        "recent": "Недавно переглянуті",
+        "select_all": "Вибрати все",
+        "count_singular": "1 танк",
+        "count_plural": "%s1 танків",
         "sorting_by": "Sorting by %s1",
         "no_tanks_found": {
           "body": "No tanks found.",
@@ -1090,8 +1090,8 @@
         "seo_description": "Track your stats in real time as you play World of Tanks Blitz",
         "search": {
           "lookup": "Look up a player to get started",
-          "hint": "Search players...",
-          "searching": "Searching...",
+          "hint": "Пошук гравців...",
+          "searching": "Пошук...",
           "no_results": "Гравця не знайдено"
         },
         "controls": {
