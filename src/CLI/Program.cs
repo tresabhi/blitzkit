@@ -20,9 +20,9 @@ namespace CLI
           break;
         }
 
-        case "test":
+        case "buildassets":
         {
-          Debug.Run(args);
+          AssetsBuilder.Build(args);
           break;
         }
 
