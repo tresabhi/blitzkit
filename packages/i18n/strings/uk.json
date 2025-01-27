@@ -670,56 +670,56 @@
         "select_all": "Вибрати все",
         "count_singular": "1 танк",
         "count_plural": "%s1 танків",
-        "sorting_by": "Sorting by %s1",
+        "sorting_by": "Сортувати за %s1",
         "no_tanks_found": {
-          "body": "No tanks found.",
-          "search_again": "Try searching again.",
-          "clear_filters": "Try clearing filters."
+          "body": "Нічого не знайдено.",
+          "search_again": "Спробуйте шукати заново.",
+          "clear_filters": "Спробуйте очистити фільтри."
         },
         "sort": {
-          "meta.none": "none",
-          "survivability.health": "health",
-          "survivability.viewRange": "view range",
-          "survivability.camouflageStill": "camouflage still",
-          "survivability.camouflageMoving": "camouflage moving",
-          "survivability.camouflageShooting": "camouflage shooting",
-          "survivability.volume": "volume",
-          "survivability.length": "length",
-          "fire.dpm": "standard DPM",
-          "fire.dpmPremium": "premium DPM",
-          "fire.reload": "reload",
-          "fire.caliber": "caliber",
-          "fire.standardPenetration": "standard penetration",
-          "fire.premiumPenetration": "premium penetration",
-          "fire.damage": "damage",
-          "fire.moduleDamage": "module damage",
-          "fire.shellVelocity": "shell velocity",
-          "fire.shellRange": "shell range",
-          "fire.shellCapacity": "shell capacity",
-          "fire.aimTime": "aim time",
-          "fire.dispersionStill": "dispersion still",
-          "fire.dispersionMoving": "dispersion moving",
-          "fire.gunDepression": "gun depression",
-          "fire.gunElevation": "gun elevation",
-          "maneuverability.forwardsSpeed": "forwards speed",
-          "maneuverability.backwardsSpeed": "backwards speed",
-          "maneuverability.power": "power",
-          "maneuverability.powerToWeight": "power to weight",
-          "maneuverability.weight": "weight",
-          "maneuverability.traverseSpeed": "traverse speed"
+          "meta.none": "нічого",
+          "survivability.health": "міцність",
+          "survivability.viewRange": "радіус огляду",
+          "survivability.camouflageStill": "непомітність (стоячи)",
+          "survivability.camouflageMoving": "непомітність (в русі)",
+          "survivability.camouflageShooting": "непомітність (після пострілу)",
+          "survivability.volume": "об'єм(?)",
+          "survivability.length": "довжина",
+          "fire.dpm": "шкода за хвилину (базова)",
+          "fire.dpmPremium": "шкода за хвилину (преміум)",
+          "fire.reload": "швидкість перезаряджання",
+          "fire.caliber": "калібр",
+          "fire.standardPenetration": "базове пробиття",
+          "fire.premiumPenetration": "преміум пробиття",
+          "fire.damage": "шкода",
+          "fire.moduleDamage": "шкода по модулях",
+          "fire.shellVelocity": "швидкість польоту снаряда",
+          "fire.shellRange": "дальність польоту",
+          "fire.shellCapacity": "кількість снарядів",
+          "fire.aimTime": "час зведення",
+          "fire.dispersionStill": "розкид стоячи",
+          "fire.dispersionMoving": "розкид в русі",
+          "fire.gunDepression": "КВН вниз",
+          "fire.gunElevation": "КВН вгору",
+          "maneuverability.forwardsSpeed": "максимальна швидкість вперед",
+          "maneuverability.backwardsSpeed": "максимальна швидкість назад",
+          "maneuverability.power": "потужність двигуна",
+          "maneuverability.powerToWeight": "притома потужність",
+          "maneuverability.weight": "маса",
+          "maneuverability.traverseSpeed": "швидкість повороту"
         },
         "sort_dropdown": {
-          "label": "Sort",
+          "label": "Сортувати",
           "groups": {
             "sort": {
-              "no_sort": "No sort",
-              "label": "Sort by",
-              "fire": "Fire",
-              "maneuverability": "Maneuverability",
-              "survivability": "Survivability"
+              "no_sort": "Не сортувати",
+              "label": "Сортувати за",
+              "fire": "Вогнева міць",
+              "maneuverability": "Маневреність",
+              "survivability": "Живучість"
             },
             "direction": {
-              "label": "Direction",
+              "label": "Напрямок",
               "ascending": "Ascending",
               "descending": "Descending"
             }
@@ -988,10 +988,10 @@
           "loader": "Loader"
         },
         "maneuverability": {
-          "title": "Maneuverability"
+          "title": "Маневреність"
         },
         "survivability": {
-          "title": "Survivability"
+          "title": "Живучість"
         }
       },
       "compare": {
