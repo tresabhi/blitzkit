@@ -1,4 +1,5 @@
 ﻿using CLI.Functions;
+using CLI.Utils;
 
 namespace CLI
 {
@@ -6,6 +7,8 @@ namespace CLI
   {
     static async Task Main(string[] args)
     {
+      await AgnosticHelpers.Initialize();
+
       switch (args[0])
       {
         case "unpack":
@@ -17,12 +20,6 @@ namespace CLI
         case "mangle":
         {
           Mangler.Mangle();
-          break;
-        }
-
-        case "buildassets":
-        {
-          AssetsBuilder.Build(args);
           break;
         }
 

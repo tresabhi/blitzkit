@@ -26,8 +26,6 @@ namespace CLI.Functions
         throw new ArgumentException("Missing required initial paks directory");
       }
 
-      await AgnosticHelpers.Initialize();
-
       UnpackDepot(args[1]);
       await UnpackDLC();
     }

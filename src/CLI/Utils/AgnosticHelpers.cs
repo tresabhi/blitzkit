@@ -14,6 +14,11 @@ namespace CLI.Utils
 
     public static async Task Initialize()
     {
+      if (!Directory.Exists(BINARY_DIR))
+      {
+        Directory.CreateDirectory(BINARY_DIR);
+      }
+
       InitializeZlib();
       await InitializeOodle();
     }
