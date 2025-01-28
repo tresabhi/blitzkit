@@ -1,7 +1,7 @@
 using CUE4Parse.FileProvider;
 using CUE4Parse.FileProvider.Objects;
 
-namespace CLI.Models
+namespace BlitzKit.CLI.Models
 {
   public class BlitzProvider : DefaultFileProvider
   {

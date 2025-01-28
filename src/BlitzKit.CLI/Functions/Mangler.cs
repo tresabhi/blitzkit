@@ -1,6 +1,6 @@
-using CLI.Models;
+using BlitzKit.CLI.Models;
 
-namespace CLI.Functions
+namespace BlitzKit.CLI.Functions
 {
   public static class Mangler
   {

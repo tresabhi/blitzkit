@@ -1,4 +1,4 @@
-namespace CLI.Utils
+namespace BlitzKit.CLI.Utils
 {
   public class IniParser
   {

@@ -2,7 +2,7 @@ using System.IO.Compression;
 using System.Runtime.InteropServices;
 using CUE4Parse.Compression;
 
-namespace CLI.Utils
+namespace BlitzKit.CLI.Utils
 {
   public static class AgnosticHelpers
   {

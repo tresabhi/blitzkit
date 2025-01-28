@@ -1,12 +1,12 @@
 using System.Text.Json;
-using CLI.Models;
-using CLI.Utils;
+using BlitzKit.CLI.Models;
+using BlitzKit.CLI.Utils;
 using CUE4Parse.FileProvider.Objects;
 using CUE4Parse.UE4.Pak;
 using CUE4Parse.UE4.Readers;
 using DotNet.Globbing;
 
-namespace CLI.Functions
+namespace BlitzKit.CLI.Functions
 {
   public static class Unpacker
   {

@@ -1,7 +1,7 @@
-﻿using CLI.Functions;
-using CLI.Utils;
+﻿using BlitzKit.CLI.Functions;
+using BlitzKit.CLI.Utils;
 
-namespace CLI
+namespace BlitzKit.CLI
 {
   class Program
   {

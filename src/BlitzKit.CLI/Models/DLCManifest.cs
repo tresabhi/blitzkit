@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace CLI.Models
+namespace BlitzKit.CLI.Models
 {
   public partial class DlcManifest
   {

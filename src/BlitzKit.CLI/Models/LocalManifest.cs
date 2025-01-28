@@ -1,4 +1,4 @@
-namespace CLI.Models
+namespace BlitzKit.CLI.Models
 {
   public class LocalManifestPakFile
   {

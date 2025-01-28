@@ -34,7 +34,7 @@ jobs:
 
       - name: Restore
         run: |
-          cd src/CLI
+          cd src/BlitzKit.CLI
           dotnet restore
 
       - name: Setup DepotDownloader
@@ -67,7 +67,7 @@ jobs:
 
       - name: Unpack
         run: |
-          cd src/CLI
+          cd src/BlitzKit.CLI
           dotnet run unpack ../../temp/depot/
 
       - name: Archive VFS
