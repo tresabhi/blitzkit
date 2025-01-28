@@ -60,6 +60,10 @@ namespace CLI.Models
 
     public void AddFile(string name, GameFile file) => Files.TryAdd(name, file);
 
+    public bool HasFile(string name) => Files.ContainsKey(name);
+
+    public GameFile GetFile(string name) => Files[name];
+
     public bool HasDirectory(string name) => Directories.ContainsKey(name);
 
     public VfsDirectory GetDirectory(string name)

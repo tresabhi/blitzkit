@@ -15,7 +15,10 @@ namespace CLI.Functions
 
         foreach (var tank in nation.Value.Directories)
         {
-          Console.WriteLine(tank.Key);
+          if (!tank.Value.HasFile($"DA_{tank.Key}_Attributes.uasset"))
+          {
+            Console.WriteLine($"{nation.Key}/{tank.Key}");
+          }
         }
       }
     }

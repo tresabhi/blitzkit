@@ -11,7 +11,7 @@ message Tank {
   required ModuleHealth engine_health = 6;
   required ModuleHealth fuel_tank_health = 7;
 
-  map<string, CrewHealth> crew_healths = 8;
+  map<string, float> crew_healths = 8;
 
   required float max_health = 9;
   required float concealment_stationary = 10;
