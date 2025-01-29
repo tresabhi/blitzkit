@@ -1,5 +1,7 @@
 using CUE4Parse.FileProvider;
 using CUE4Parse.FileProvider.Objects;
+using CUE4Parse.MappingsProvider;
+using CUE4Parse.UE4.Versions;
 
 namespace BlitzKit.CLI.Models
 {
@@ -10,6 +12,8 @@ namespace BlitzKit.CLI.Models
       $"C:/Users/{LOCAL_USER}/AppData/Local/Blitz/Saved/PersistentDownloadDir/Dlc/PakCache";
     private static readonly string LOCAL_BUNDLED_CONTAINERS_PATH =
       "C:/Program Files (x86)/Steam/steamapps/common/World of Tanks Blitz Playtest/Blitz/Content/Paks";
+    private static readonly string LOCAL_MAPPINGS_PATH =
+      "../../submodules/blitzkit-closed/blitz.usmap";
 
     public readonly VfsDirectory RootDirectory = new();
 
@@ -17,9 +21,12 @@ namespace BlitzKit.CLI.Models
       : base(
         directory: new DirectoryInfo(LOCAL_BUNDLED_CONTAINERS_PATH),
         extraDirectories: [new(LOCAL_DLC_CONTAINERS_PATH)],
-        searchOption: SearchOption.TopDirectoryOnly
+        searchOption: SearchOption.TopDirectoryOnly,
+        versions: new(EGame.GAME_UE5_3)
       )
     {
+      MappingsContainer = new FileUsmapTypeMappingsProvider(LOCAL_MAPPINGS_PATH);
+
       Initialize();
       Mount();
 
@@ -62,7 +69,15 @@ namespace BlitzKit.CLI.Models
 
     public bool HasFile(string name) => Files.ContainsKey(name);
 
-    public GameFile GetFile(string name) => Files[name];
+    public GameFile GetFile(string name)
+    {
+      var directoryPath = Path.GetDirectoryName(name);
+      var fileName = Path.GetFileName(name);
+      var directory =
+        directoryPath == null || directoryPath.Length == 0 ? this : GetDirectory(directoryPath);
+
+      return directory.Files[name];
+    }
 
     public bool HasDirectory(string name) => Directories.ContainsKey(name);
 
@@ -73,13 +88,11 @@ namespace BlitzKit.CLI.Models
 
       foreach (var segment in segments)
       {
-        directory = directory.GetImmediateDirectory(segment);
+        directory = directory.Directories[segment];
       }
 
       return directory;
     }
-
-    private VfsDirectory GetImmediateDirectory(string name) => Directories[name];
 
     public void AddDirectory(string name, VfsDirectory directory) =>
       Directories.Add(name, directory);
