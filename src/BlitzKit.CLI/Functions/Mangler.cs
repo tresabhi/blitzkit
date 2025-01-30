@@ -2,7 +2,6 @@ using Blitzkit;
 using BlitzKit.CLI.Models;
 using BlitzKit.CLI.Utils;
 using CUE4Parse.FileProvider.Objects;
-using Google.Protobuf;
 using Google.Protobuf.Collections;
 using Newtonsoft.Json.Linq;
 
@@ -24,10 +23,12 @@ namespace BlitzKit.CLI.Functions
 
         foreach (var tankDir in nationDir.Value.Directories)
         {
-          if (tankDir.Key != "R90_IS_4")
+          var id = tankDir.Key;
+
+          if (id != "R90_IS_4")
             continue;
 
-          var attributeFileName = $"DA_{tankDir.Key}_Attributes.uasset";
+          var attributeFileName = $"DA_{id}_Attributes.uasset";
           var hasAttributesFile = tankDir.Value.HasFile(attributeFileName);
           GameFile? attributesFile = null;
 
@@ -38,7 +39,7 @@ namespace BlitzKit.CLI.Functions
           else
           {
             PrettyLog.Warn(
-              $"No attributes file found for {nationDir.Key}/{tankDir.Key}, it may be misspelled; finding any attributes file..."
+              $"No attributes file found for {nationDir.Key}/{id}, it may be misspelled; finding any attributes file..."
             );
 
             foreach (var file in tankDir.Value.Files)
@@ -53,7 +54,7 @@ namespace BlitzKit.CLI.Functions
             if (attributesFile == null)
             {
               PrettyLog.Error(
-                $"No suffixed attributes file found for {nationDir.Key}/{tankDir.Key}; skipping..."
+                $"No suffixed attributes file found for {nationDir.Key}/{id}; skipping..."
               );
               continue;
             }
@@ -65,46 +66,44 @@ namespace BlitzKit.CLI.Functions
             exports.First((export) => export.ExportType == "TankAttributesDataAsset")
             ?? throw new Exception("TankAttributesDataAsset not found");
           var attr = JObject.FromObject(tankAttributesDataAsset);
-          var props = attr.GetValue("Properties");
 
-          if (props == null || props["MaxHealth"] == null)
+          if (attr["Properties"] is not JObject props || props["MaxHealth"] == null)
           {
-            PrettyLog.Warn(
-              $"{nationDir.Key}/{tankDir.Key} has not migrated to Reforged; skipping..."
-            );
+            PrettyLog.Warn($"{nationDir.Key}/{id} has not migrated to Reforged; skipping...");
             continue;
           }
 
-          Tank tank = new()
-          {
-            Id = tankDir.Key,
-            // TODO: Name
-            // TODO: Set
-            // TODO: Class
-            // TODO: Faction
-
-            TurretRotatorHealth = MangleModuleHealth((props["TurretRotatorHealth"] as JObject)!),
-            SurveyingDeviceHealth = MangleModuleHealth(
-              (props["SurveyingDeviceHealth"] as JObject)!
-            ),
-            GunHealth = MangleModuleHealth((props["GunHealth"] as JObject)!),
-            ChassisHealth = MangleModuleHealth((props["ChassisHealth"] as JObject)!),
-            AmmoBayHealth = MangleModuleHealth((props["AmmoBayHealth"] as JObject)!),
-            EngineHealth = MangleModuleHealth((props["EngineHealth"] as JObject)!),
-            FuelTankHealth = MangleModuleHealth((props["FuelTankHealth"] as JObject)!),
-          };
-
-          MangleCrewHealth(tank.CrewHealth, (props["CrewHealth"] as JArray)!);
+          var tank = MangleTank(id, props);
 
           tanks.Tanks_.Add(tank.Id);
 
-          var tankBytes = tank.ToByteArray();
-
-          Console.WriteLine($"Mangled {nationDir.Key}/{tankDir.Key}");
+          Console.WriteLine($"Mangled {nationDir.Key}/{id}");
         }
       }
+    }
 
-      var tanksBytes = tanks.ToByteArray();
+    public static Tank MangleTank(string id, JObject props)
+    {
+      Tank tank = new()
+      {
+        Id = id,
+        // TODO: Name
+        // TODO: Set
+        // TODO: Class
+        // TODO: Faction
+
+        TurretRotatorHealth = MangleModuleHealth((props["TurretRotatorHealth"] as JObject)!),
+        SurveyingDeviceHealth = MangleModuleHealth((props["SurveyingDeviceHealth"] as JObject)!),
+        GunHealth = MangleModuleHealth((props["GunHealth"] as JObject)!),
+        ChassisHealth = MangleModuleHealth((props["ChassisHealth"] as JObject)!),
+        AmmoBayHealth = MangleModuleHealth((props["AmmoBayHealth"] as JObject)!),
+        EngineHealth = MangleModuleHealth((props["EngineHealth"] as JObject)!),
+        FuelTankHealth = MangleModuleHealth((props["FuelTankHealth"] as JObject)!),
+      };
+
+      MangleCrewHealth(tank.CrewHealth, (props["CrewHealth"] as JArray)!);
+
+      return tank;
     }
 
     public static Dictionary<string, CrewType> CrewTypes = new()
