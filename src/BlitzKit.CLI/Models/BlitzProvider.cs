@@ -76,7 +76,7 @@ namespace BlitzKit.CLI.Models
       var directory =
         directoryPath == null || directoryPath.Length == 0 ? this : GetDirectory(directoryPath);
 
-      return directory.Files[name];
+      return directory.Files[fileName];
     }
 
     public bool HasDirectory(string name) => Directories.ContainsKey(name);

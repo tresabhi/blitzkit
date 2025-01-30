@@ -1,83 +1,82 @@
 syntax = "proto2";
 
+import "packages/core/src/protos/i18n.proto";
+
 package blitzkit;
 
 message Tank {
-  required ModuleHealth turret_rotator_health = 1;
-  required ModuleHealth surveying_device_health = 2;
-  required ModuleHealth gun_health = 3;
-  required ModuleHealth chassis_health = 4;
-  required ModuleHealth ammo_bay_health = 5;
-  required ModuleHealth engine_health = 6;
-  required ModuleHealth fuel_tank_health = 7;
+  required string id = 1;
+  required I18n name = 2;
+  required string set = 3;
+  required string class = 4;
+  // nations have been renamed to factions
+  required string faction = 5;
 
-  map<string, float> crew_healths = 8;
+  required ModuleHealth turret_rotator_health = 6;
+  required ModuleHealth surveying_device_health = 7;
+  required ModuleHealth gun_health = 8;
+  required ModuleHealth chassis_health = 9;
+  required ModuleHealth ammo_bay_health = 10;
+  required ModuleHealth engine_health = 11;
+  required ModuleHealth fuel_tank_health = 12;
+  map<string, float> crew_health = 13;
+  required float max_health = 14;
+  required float health_burn_per_second = 15;
+  required float fire_starting_chance = 16;
+  
+  required float concealment_stationary = 17;
+  required float concealment_moving = 18;
+  required float concealment_factor_on_shot = 19;
+  
+  required float turret_turn_rate = 20;
+  required float circular_vision_radius = 21;
 
-  required float max_health = 9;
-  required float concealment_stationary = 10;
-  required float concealment_moving = 11;
-  required float concealment_on_shot = 12;
-
-  repeated PitchLimit up_pitch_limits = 13;
-  repeated PitchLimit down_pitch_limits = 14;
-
-  required float turret_turn_rate = 15;
-  required float spotting_range = 16;
-
-  repeated Shell shells = 17;
-
-  required float reload_time = 18;
-
-  required float dispersion_stationary = 19;
-  required float dispersion_turret_rotation = 20;
-  required float dispersion_moving = 21;
-  required float dispersion_hull_rotation = 22;
-
-  required float gun_turn_rate = 23;
-  required float mass = 24;
-  required float engine_power = 25;
-  required float max_speed_forwards = 26;
-  required float max_speed_backwards = 27;
-  required float rotation_speed = 28;
-
-  required float terrain_resistance_hard = 29;
-  required float terrain_resistance_medium = 30;
-  required float terrain_resistance_soft = 31;
-
-  required float brake_force = 32;
+  repeated Shell shells = 22;
+  required float reload_time = 23;
+  required float dispersion_angle = 24;
+  required float shot_dispersion_factor = 25;
+  required float turret_rotation_dispersion_factor = 26;
+  required float aiming_time = 27;
+  required float gun_turn_rate = 28;
+  
+  required float mass = 29;
+  required float engine_power = 30;
+  required float forward_max_speed = 31;
+  required float backward_max_speed = 32;
+  required float rotation_speed = 33;
+  required float terrain_resistance_hard = 34;
+  required float brake_force = 35;
+  required bool b_rotation_is_around_center = 36;
 }
 
 message Shell {
   required float speed = 1;
-  required float armor_damage = 2;
-  required float module_damage = 3;
-  required float caliber = 4;
-  required float penetration = 5;
-  required float penetration_500m = 6;
-  required float normalization = 7;
-  required float range = 8;
-  required float ricochet = 9;
-  required float penetration_loss_by_distance = 10;
-  required float explosion_radius = 11;
-  required int32 max_count = 12;
-}
-
-message PitchLimit {
-  required float angle = 1;
-  required float value = 2;
+  required float gravity = 2;
+  required float armor_damage = 3;
+  required float module_damage = 4;
+  required float caliber = 5;
+  required float piercing_power = 6;
+  required float piercing_power_500m = 7;
+  required float normalization = 8;
+  required float max_distance = 9;
+  required float ricochet_angle = 10;
+  required float piercing_power_loss_factor_by_distance = 11;
+  required float explosion_radius = 12;
+  required int32 max_count = 13;
 }
 
 message ModuleHealth {
   // max health, assigned by default at the start of the battle
-  required float max = 1;
+  required float max_health = 1;
   // max health reached as the module regenerates after breaking
-  required float max_regen = 2;
+  required float max_regen_health = 2;
   // the range from 0 to this where the module is "red" and doesn't function
   // all the while healing; after surpassing this, the "yellow" phase is reached
-  required float hysteresis = 3;
+  required float hysteresis_health = 3;
   // the heal rate (per second); this won't apply if the health is at or above
   // max_regen hence always leaving it in the "yellow" phase until repaired
-  required float heal_rate = 4;
-  // damage received (per second) to the modules when caught on fire
-  required float burn_rate = 5;
+  required float health_regen_per_second = 4;
+  // damage received (per second) to the modules when caught on fire; this can
+  // be undefined for some modules like the gun or chassis
+  optional float health_burn_per_second = 5;
 }

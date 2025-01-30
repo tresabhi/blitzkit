@@ -2,6 +2,6 @@ syntax = "proto2";
 
 package blitzkit;
 
-message I18nString {
+message I18n {
   map<string, string> locales = 1;
 }
