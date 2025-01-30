@@ -14,32 +14,33 @@ namespace BlitzKit.CLI.Functions
       Tanks tanks = new();
       BlitzProvider provider = new();
 
-      foreach (var nation in provider.RootDirectory.GetDirectory("Blitz/Content/Tanks").Directories)
+      foreach (
+        var nationDir in provider.RootDirectory.GetDirectory("Blitz/Content/Tanks").Directories
+      )
       {
-        if (nation.Key == "TankStub")
+        if (nationDir.Key == "TankStub")
           continue;
 
-        foreach (var tank in nation.Value.Directories)
+        foreach (var tankDir in nationDir.Value.Directories)
         {
-          if (tank.Key != "R90_IS_4")
+          if (tankDir.Key != "R90_IS_4")
             continue;
 
-          tanks.Tanks_.Add(tank.Key);
-          var attributeFileName = $"DA_{tank.Key}_Attributes.uasset";
-          var hasAttributesFile = tank.Value.HasFile(attributeFileName);
+          var attributeFileName = $"DA_{tankDir.Key}_Attributes.uasset";
+          var hasAttributesFile = tankDir.Value.HasFile(attributeFileName);
           GameFile? attributesFile = null;
 
           if (hasAttributesFile)
           {
-            attributesFile = tank.Value.GetFile(attributeFileName);
+            attributesFile = tankDir.Value.GetFile(attributeFileName);
           }
           else
           {
             PrettyLog.Warn(
-              $"No attributes file found for {nation.Key}/{tank.Key}, it may be misspelled; finding any attributes file..."
+              $"No attributes file found for {nationDir.Key}/{tankDir.Key}, it may be misspelled; finding any attributes file..."
             );
 
-            foreach (var file in tank.Value.Files)
+            foreach (var file in tankDir.Value.Files)
             {
               if (file.Key.EndsWith("_Attributes.uasset"))
               {
@@ -51,7 +52,7 @@ namespace BlitzKit.CLI.Functions
             if (attributesFile == null)
             {
               PrettyLog.Error(
-                $"No suffixed attributes file found for {nation.Key}/{tank.Key}; skipping..."
+                $"No suffixed attributes file found for {nationDir.Key}/{tankDir.Key}; skipping..."
               );
               continue;
             }
@@ -63,12 +64,68 @@ namespace BlitzKit.CLI.Functions
             exports.First((export) => export.ExportType == "TankAttributesDataAsset")
             ?? throw new Exception("TankAttributesDataAsset not found");
           var attr = JObject.FromObject(tankAttributesDataAsset);
+          var props = attr.GetValue("Properties");
 
-          Console.WriteLine(attr);
+          if (props == null || props["MaxHealth"] == null)
+          {
+            PrettyLog.Warn(
+              $"{nationDir.Key}/{tankDir.Key} has not migrated to Reforged; skipping..."
+            );
+            continue;
+          }
+
+          Tank tank = new()
+          {
+            Id = tankDir.Key,
+            // TODO: Name
+            // TODO: Set
+            // TODO: Class
+            // TODO: Faction
+
+            TurretRotatorHealth = MangleModuleHealth((props["TurretRotatorHealth"] as JObject)!),
+            SurveyingDeviceHealth = MangleModuleHealth(
+              (props["SurveyingDeviceHealth"] as JObject)!
+            ),
+            GunHealth = MangleModuleHealth((props["GunHealth"] as JObject)!),
+            ChassisHealth = MangleModuleHealth((props["ChassisHealth"] as JObject)!),
+            AmmoBayHealth = MangleModuleHealth((props["AmmoBayHealth"] as JObject)!),
+            EngineHealth = MangleModuleHealth((props["EngineHealth"] as JObject)!),
+            FuelTankHealth = MangleModuleHealth((props["FuelTankHealth"] as JObject)!),
+          };
+
+          tank.CrewHealth.Add("", 1);
+
+          tanks.Tanks_.Add(tank.Id);
+
+          var tankBytes = tank.ToByteArray();
+
+          Console.WriteLine($"Mangled {nationDir.Key}/{tankDir.Key}");
         }
       }
 
       var tanksBytes = tanks.ToByteArray();
+    }
+
+    public static ModuleHealth MangleModuleHealth(JObject obj)
+    {
+      ModuleHealth moduleHealth = new()
+      {
+        MaxHealth = obj["MaxHealth"]!.Value<float>(),
+        MaxRegenHealth = obj["MaxRegenHealth"]!.Value<float>(),
+        HealthRegenPerSec = obj["HealthRegenPerSec"]!.Value<float>(),
+      };
+
+      if (obj.TryGetValue("HysteresisHealth", out var hysteresis))
+      {
+        moduleHealth.HysteresisHealth = hysteresis.Value<float>();
+      }
+
+      if (obj.TryGetValue("HealthBurnPerSec", out var burn))
+      {
+        moduleHealth.HealthBurnPerSec = burn.Value<float>();
+      }
+
+      return moduleHealth;
     }
   }
 }

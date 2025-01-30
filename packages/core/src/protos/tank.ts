@@ -6,10 +6,17 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
+import { I18n } from "./i18n";
 
 export const protobufPackage = "blitzkit";
 
 export interface Tank {
+  id: string;
+  name: I18n;
+  set: string;
+  class: string;
+  /** nations have been renamed to factions */
+  faction: string;
   turret_rotator_health: ModuleHealth;
   surveying_device_health: ModuleHealth;
   gun_health: ModuleHealth;
@@ -17,79 +24,82 @@ export interface Tank {
   ammo_bay_health: ModuleHealth;
   engine_health: ModuleHealth;
   fuel_tank_health: ModuleHealth;
-  crew_healths: { [key: string]: number };
+  crew_health: { [key: string]: number };
   max_health: number;
+  health_burn_per_second: number;
+  fire_starting_chance: number;
   concealment_stationary: number;
   concealment_moving: number;
-  concealment_on_shot: number;
-  up_pitch_limits: PitchLimit[];
-  down_pitch_limits: PitchLimit[];
+  concealment_factor_on_shot: number;
   turret_turn_rate: number;
-  spotting_range: number;
+  circular_vision_radius: number;
   shells: Shell[];
   reload_time: number;
-  dispersion_stationary: number;
-  dispersion_turret_rotation: number;
-  dispersion_moving: number;
-  dispersion_hull_rotation: number;
+  dispersion_angle: number;
+  shot_dispersion_factor: number;
+  turret_rotation_dispersion_factor: number;
+  aiming_time: number;
   gun_turn_rate: number;
   mass: number;
   engine_power: number;
-  max_speed_forwards: number;
-  max_speed_backwards: number;
+  forward_max_speed: number;
+  backward_max_speed: number;
   rotation_speed: number;
   terrain_resistance_hard: number;
-  terrain_resistance_medium: number;
-  terrain_resistance_soft: number;
   brake_force: number;
+  b_rotation_is_around_center: boolean;
 }
 
-export interface Tank_CrewHealthsEntry {
+export interface Tank_CrewHealthEntry {
   key: string;
   value: number;
 }
 
 export interface Shell {
   speed: number;
+  gravity: number;
   armor_damage: number;
   module_damage: number;
   caliber: number;
-  penetration: number;
-  penetration_500m: number;
+  piercing_power: number;
+  piercing_power_500m: number;
   normalization: number;
-  range: number;
-  ricochet: number;
-  penetration_loss_by_distance: number;
+  max_distance: number;
+  ricochet_angle: number;
+  piercing_power_loss_factor_by_distance: number;
   explosion_radius: number;
   max_count: number;
 }
 
-export interface PitchLimit {
-  angle: number;
-  value: number;
-}
-
 export interface ModuleHealth {
   /** max health, assigned by default at the start of the battle */
-  max: number;
+  max_health: number;
   /** max health reached as the module regenerates after breaking */
-  max_regen: number;
+  max_regen_health: number;
   /**
    * the range from 0 to this where the module is "red" and doesn't function
    * all the while healing; after surpassing this, the "yellow" phase is reached
    */
-  hysteresis: number;
+  hysteresis_health: number;
   /**
    * the heal rate (per second); this won't apply if the health is at or above
    * max_regen hence always leaving it in the "yellow" phase until repaired
    */
-  heal_rate: number;
-  /** damage received (per second) to the modules when caught on fire */
-  burn_rate: number;
+  health_regen_per_sec: number;
+  /**
+   * damage received (per second) to the modules when caught on fire; this can
+   * be undefined for some modules like the gun or chassis
+   */
+  health_burn_per_sec?: number | undefined;
 }
 
 function createBaseTank(): Tank {
   return {
+    id: "",
+    name: createBaseI18n(),
+    set: "",
+    class: "",
+    faction: "",
     turret_rotator_health: createBaseModuleHealth(),
     surveying_device_health: createBaseModuleHealth(),
     gun_health: createBaseModuleHealth(),
@@ -97,131 +107,142 @@ function createBaseTank(): Tank {
     ammo_bay_health: createBaseModuleHealth(),
     engine_health: createBaseModuleHealth(),
     fuel_tank_health: createBaseModuleHealth(),
-    crew_healths: {},
+    crew_health: {},
     max_health: 0,
+    health_burn_per_second: 0,
+    fire_starting_chance: 0,
     concealment_stationary: 0,
     concealment_moving: 0,
-    concealment_on_shot: 0,
-    up_pitch_limits: [],
-    down_pitch_limits: [],
+    concealment_factor_on_shot: 0,
     turret_turn_rate: 0,
-    spotting_range: 0,
+    circular_vision_radius: 0,
     shells: [],
     reload_time: 0,
-    dispersion_stationary: 0,
-    dispersion_turret_rotation: 0,
-    dispersion_moving: 0,
-    dispersion_hull_rotation: 0,
+    dispersion_angle: 0,
+    shot_dispersion_factor: 0,
+    turret_rotation_dispersion_factor: 0,
+    aiming_time: 0,
     gun_turn_rate: 0,
     mass: 0,
     engine_power: 0,
-    max_speed_forwards: 0,
-    max_speed_backwards: 0,
+    forward_max_speed: 0,
+    backward_max_speed: 0,
     rotation_speed: 0,
     terrain_resistance_hard: 0,
-    terrain_resistance_medium: 0,
-    terrain_resistance_soft: 0,
     brake_force: 0,
+    b_rotation_is_around_center: false,
   };
 }
 
 export const Tank: MessageFns<Tank> = {
   encode(message: Tank, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.name !== undefined) {
+      I18n.encode(message.name, writer.uint32(18).fork()).join();
+    }
+    if (message.set !== "") {
+      writer.uint32(26).string(message.set);
+    }
+    if (message.class !== "") {
+      writer.uint32(34).string(message.class);
+    }
+    if (message.faction !== "") {
+      writer.uint32(42).string(message.faction);
+    }
     if (message.turret_rotator_health !== undefined) {
-      ModuleHealth.encode(message.turret_rotator_health, writer.uint32(10).fork()).join();
+      ModuleHealth.encode(message.turret_rotator_health, writer.uint32(50).fork()).join();
     }
     if (message.surveying_device_health !== undefined) {
-      ModuleHealth.encode(message.surveying_device_health, writer.uint32(18).fork()).join();
+      ModuleHealth.encode(message.surveying_device_health, writer.uint32(58).fork()).join();
     }
     if (message.gun_health !== undefined) {
-      ModuleHealth.encode(message.gun_health, writer.uint32(26).fork()).join();
+      ModuleHealth.encode(message.gun_health, writer.uint32(66).fork()).join();
     }
     if (message.chassis_health !== undefined) {
-      ModuleHealth.encode(message.chassis_health, writer.uint32(34).fork()).join();
+      ModuleHealth.encode(message.chassis_health, writer.uint32(74).fork()).join();
     }
     if (message.ammo_bay_health !== undefined) {
-      ModuleHealth.encode(message.ammo_bay_health, writer.uint32(42).fork()).join();
+      ModuleHealth.encode(message.ammo_bay_health, writer.uint32(82).fork()).join();
     }
     if (message.engine_health !== undefined) {
-      ModuleHealth.encode(message.engine_health, writer.uint32(50).fork()).join();
+      ModuleHealth.encode(message.engine_health, writer.uint32(90).fork()).join();
     }
     if (message.fuel_tank_health !== undefined) {
-      ModuleHealth.encode(message.fuel_tank_health, writer.uint32(58).fork()).join();
+      ModuleHealth.encode(message.fuel_tank_health, writer.uint32(98).fork()).join();
     }
-    Object.entries(message.crew_healths).forEach(([key, value]) => {
-      Tank_CrewHealthsEntry.encode({ key: key as any, value }, writer.uint32(66).fork()).join();
+    Object.entries(message.crew_health).forEach(([key, value]) => {
+      Tank_CrewHealthEntry.encode({ key: key as any, value }, writer.uint32(106).fork()).join();
     });
     if (message.max_health !== 0) {
-      writer.uint32(77).float(message.max_health);
+      writer.uint32(117).float(message.max_health);
+    }
+    if (message.health_burn_per_second !== 0) {
+      writer.uint32(125).float(message.health_burn_per_second);
+    }
+    if (message.fire_starting_chance !== 0) {
+      writer.uint32(133).float(message.fire_starting_chance);
     }
     if (message.concealment_stationary !== 0) {
-      writer.uint32(85).float(message.concealment_stationary);
+      writer.uint32(141).float(message.concealment_stationary);
     }
     if (message.concealment_moving !== 0) {
-      writer.uint32(93).float(message.concealment_moving);
+      writer.uint32(149).float(message.concealment_moving);
     }
-    if (message.concealment_on_shot !== 0) {
-      writer.uint32(101).float(message.concealment_on_shot);
-    }
-    for (const v of message.up_pitch_limits) {
-      PitchLimit.encode(v!, writer.uint32(106).fork()).join();
-    }
-    for (const v of message.down_pitch_limits) {
-      PitchLimit.encode(v!, writer.uint32(114).fork()).join();
+    if (message.concealment_factor_on_shot !== 0) {
+      writer.uint32(157).float(message.concealment_factor_on_shot);
     }
     if (message.turret_turn_rate !== 0) {
-      writer.uint32(125).float(message.turret_turn_rate);
+      writer.uint32(165).float(message.turret_turn_rate);
     }
-    if (message.spotting_range !== 0) {
-      writer.uint32(133).float(message.spotting_range);
+    if (message.circular_vision_radius !== 0) {
+      writer.uint32(173).float(message.circular_vision_radius);
     }
     for (const v of message.shells) {
-      Shell.encode(v!, writer.uint32(138).fork()).join();
+      Shell.encode(v!, writer.uint32(178).fork()).join();
     }
     if (message.reload_time !== 0) {
-      writer.uint32(149).float(message.reload_time);
+      writer.uint32(189).float(message.reload_time);
     }
-    if (message.dispersion_stationary !== 0) {
-      writer.uint32(157).float(message.dispersion_stationary);
+    if (message.dispersion_angle !== 0) {
+      writer.uint32(197).float(message.dispersion_angle);
     }
-    if (message.dispersion_turret_rotation !== 0) {
-      writer.uint32(165).float(message.dispersion_turret_rotation);
+    if (message.shot_dispersion_factor !== 0) {
+      writer.uint32(205).float(message.shot_dispersion_factor);
     }
-    if (message.dispersion_moving !== 0) {
-      writer.uint32(173).float(message.dispersion_moving);
+    if (message.turret_rotation_dispersion_factor !== 0) {
+      writer.uint32(213).float(message.turret_rotation_dispersion_factor);
     }
-    if (message.dispersion_hull_rotation !== 0) {
-      writer.uint32(181).float(message.dispersion_hull_rotation);
+    if (message.aiming_time !== 0) {
+      writer.uint32(221).float(message.aiming_time);
     }
     if (message.gun_turn_rate !== 0) {
-      writer.uint32(189).float(message.gun_turn_rate);
+      writer.uint32(229).float(message.gun_turn_rate);
     }
     if (message.mass !== 0) {
-      writer.uint32(197).float(message.mass);
+      writer.uint32(237).float(message.mass);
     }
     if (message.engine_power !== 0) {
-      writer.uint32(205).float(message.engine_power);
+      writer.uint32(245).float(message.engine_power);
     }
-    if (message.max_speed_forwards !== 0) {
-      writer.uint32(213).float(message.max_speed_forwards);
+    if (message.forward_max_speed !== 0) {
+      writer.uint32(253).float(message.forward_max_speed);
     }
-    if (message.max_speed_backwards !== 0) {
-      writer.uint32(221).float(message.max_speed_backwards);
+    if (message.backward_max_speed !== 0) {
+      writer.uint32(261).float(message.backward_max_speed);
     }
     if (message.rotation_speed !== 0) {
-      writer.uint32(229).float(message.rotation_speed);
+      writer.uint32(269).float(message.rotation_speed);
     }
     if (message.terrain_resistance_hard !== 0) {
-      writer.uint32(237).float(message.terrain_resistance_hard);
-    }
-    if (message.terrain_resistance_medium !== 0) {
-      writer.uint32(245).float(message.terrain_resistance_medium);
-    }
-    if (message.terrain_resistance_soft !== 0) {
-      writer.uint32(253).float(message.terrain_resistance_soft);
+      writer.uint32(277).float(message.terrain_resistance_hard);
     }
     if (message.brake_force !== 0) {
-      writer.uint32(261).float(message.brake_force);
+      writer.uint32(285).float(message.brake_force);
+    }
+    if (message.b_rotation_is_around_center !== false) {
+      writer.uint32(288).bool(message.b_rotation_is_around_center);
     }
     return writer;
   },
@@ -238,7 +259,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.turret_rotator_health = ModuleHealth.decode(reader, reader.uint32());
+          message.id = reader.string();
           continue;
         }
         case 2: {
@@ -246,7 +267,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.surveying_device_health = ModuleHealth.decode(reader, reader.uint32());
+          message.name = I18n.decode(reader, reader.uint32());
           continue;
         }
         case 3: {
@@ -254,7 +275,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.gun_health = ModuleHealth.decode(reader, reader.uint32());
+          message.set = reader.string();
           continue;
         }
         case 4: {
@@ -262,7 +283,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.chassis_health = ModuleHealth.decode(reader, reader.uint32());
+          message.class = reader.string();
           continue;
         }
         case 5: {
@@ -270,7 +291,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.ammo_bay_health = ModuleHealth.decode(reader, reader.uint32());
+          message.faction = reader.string();
           continue;
         }
         case 6: {
@@ -278,7 +299,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.engine_health = ModuleHealth.decode(reader, reader.uint32());
+          message.turret_rotator_health = ModuleHealth.decode(reader, reader.uint32());
           continue;
         }
         case 7: {
@@ -286,7 +307,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.fuel_tank_health = ModuleHealth.decode(reader, reader.uint32());
+          message.surveying_device_health = ModuleHealth.decode(reader, reader.uint32());
           continue;
         }
         case 8: {
@@ -294,42 +315,39 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          const entry8 = Tank_CrewHealthsEntry.decode(reader, reader.uint32());
-          if (entry8.value !== undefined) {
-            message.crew_healths[entry8.key] = entry8.value;
-          }
+          message.gun_health = ModuleHealth.decode(reader, reader.uint32());
           continue;
         }
         case 9: {
-          if (tag !== 77) {
+          if (tag !== 74) {
             break;
           }
 
-          message.max_health = reader.float();
+          message.chassis_health = ModuleHealth.decode(reader, reader.uint32());
           continue;
         }
         case 10: {
-          if (tag !== 85) {
+          if (tag !== 82) {
             break;
           }
 
-          message.concealment_stationary = reader.float();
+          message.ammo_bay_health = ModuleHealth.decode(reader, reader.uint32());
           continue;
         }
         case 11: {
-          if (tag !== 93) {
+          if (tag !== 90) {
             break;
           }
 
-          message.concealment_moving = reader.float();
+          message.engine_health = ModuleHealth.decode(reader, reader.uint32());
           continue;
         }
         case 12: {
-          if (tag !== 101) {
+          if (tag !== 98) {
             break;
           }
 
-          message.concealment_on_shot = reader.float();
+          message.fuel_tank_health = ModuleHealth.decode(reader, reader.uint32());
           continue;
         }
         case 13: {
@@ -337,15 +355,18 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.up_pitch_limits.push(PitchLimit.decode(reader, reader.uint32()));
+          const entry13 = Tank_CrewHealthEntry.decode(reader, reader.uint32());
+          if (entry13.value !== undefined) {
+            message.crew_health[entry13.key] = entry13.value;
+          }
           continue;
         }
         case 14: {
-          if (tag !== 114) {
+          if (tag !== 117) {
             break;
           }
 
-          message.down_pitch_limits.push(PitchLimit.decode(reader, reader.uint32()));
+          message.max_health = reader.float();
           continue;
         }
         case 15: {
@@ -353,7 +374,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.turret_turn_rate = reader.float();
+          message.health_burn_per_second = reader.float();
           continue;
         }
         case 16: {
@@ -361,15 +382,15 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.spotting_range = reader.float();
+          message.fire_starting_chance = reader.float();
           continue;
         }
         case 17: {
-          if (tag !== 138) {
+          if (tag !== 141) {
             break;
           }
 
-          message.shells.push(Shell.decode(reader, reader.uint32()));
+          message.concealment_stationary = reader.float();
           continue;
         }
         case 18: {
@@ -377,7 +398,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.reload_time = reader.float();
+          message.concealment_moving = reader.float();
           continue;
         }
         case 19: {
@@ -385,7 +406,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.dispersion_stationary = reader.float();
+          message.concealment_factor_on_shot = reader.float();
           continue;
         }
         case 20: {
@@ -393,7 +414,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.dispersion_turret_rotation = reader.float();
+          message.turret_turn_rate = reader.float();
           continue;
         }
         case 21: {
@@ -401,15 +422,15 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.dispersion_moving = reader.float();
+          message.circular_vision_radius = reader.float();
           continue;
         }
         case 22: {
-          if (tag !== 181) {
+          if (tag !== 178) {
             break;
           }
 
-          message.dispersion_hull_rotation = reader.float();
+          message.shells.push(Shell.decode(reader, reader.uint32()));
           continue;
         }
         case 23: {
@@ -417,7 +438,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.gun_turn_rate = reader.float();
+          message.reload_time = reader.float();
           continue;
         }
         case 24: {
@@ -425,7 +446,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.mass = reader.float();
+          message.dispersion_angle = reader.float();
           continue;
         }
         case 25: {
@@ -433,7 +454,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.engine_power = reader.float();
+          message.shot_dispersion_factor = reader.float();
           continue;
         }
         case 26: {
@@ -441,7 +462,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.max_speed_forwards = reader.float();
+          message.turret_rotation_dispersion_factor = reader.float();
           continue;
         }
         case 27: {
@@ -449,7 +470,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.max_speed_backwards = reader.float();
+          message.aiming_time = reader.float();
           continue;
         }
         case 28: {
@@ -457,7 +478,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.rotation_speed = reader.float();
+          message.gun_turn_rate = reader.float();
           continue;
         }
         case 29: {
@@ -465,7 +486,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.terrain_resistance_hard = reader.float();
+          message.mass = reader.float();
           continue;
         }
         case 30: {
@@ -473,7 +494,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.terrain_resistance_medium = reader.float();
+          message.engine_power = reader.float();
           continue;
         }
         case 31: {
@@ -481,7 +502,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.terrain_resistance_soft = reader.float();
+          message.forward_max_speed = reader.float();
           continue;
         }
         case 32: {
@@ -489,7 +510,39 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
+          message.backward_max_speed = reader.float();
+          continue;
+        }
+        case 33: {
+          if (tag !== 269) {
+            break;
+          }
+
+          message.rotation_speed = reader.float();
+          continue;
+        }
+        case 34: {
+          if (tag !== 277) {
+            break;
+          }
+
+          message.terrain_resistance_hard = reader.float();
+          continue;
+        }
+        case 35: {
+          if (tag !== 285) {
+            break;
+          }
+
           message.brake_force = reader.float();
+          continue;
+        }
+        case 36: {
+          if (tag !== 288) {
+            break;
+          }
+
+          message.b_rotation_is_around_center = reader.bool();
           continue;
         }
       }
@@ -503,6 +556,11 @@ export const Tank: MessageFns<Tank> = {
 
   fromJSON(object: any): Tank {
     return {
+      id: globalThis.String(assertSet("Tank.id", object.id)),
+      name: I18n.fromJSON(assertSet("Tank.name", object.name)),
+      set: globalThis.String(assertSet("Tank.set", object.set)),
+      class: globalThis.String(assertSet("Tank.class", object.class)),
+      faction: globalThis.String(assertSet("Tank.faction", object.faction)),
       turret_rotator_health: ModuleHealth.fromJSON(
         assertSet("Tank.turret_rotator_health", object.turret_rotator_health),
       ),
@@ -514,57 +572,71 @@ export const Tank: MessageFns<Tank> = {
       ammo_bay_health: ModuleHealth.fromJSON(assertSet("Tank.ammo_bay_health", object.ammo_bay_health)),
       engine_health: ModuleHealth.fromJSON(assertSet("Tank.engine_health", object.engine_health)),
       fuel_tank_health: ModuleHealth.fromJSON(assertSet("Tank.fuel_tank_health", object.fuel_tank_health)),
-      crew_healths: isObject(object.crew_healths)
-        ? Object.entries(object.crew_healths).reduce<{ [key: string]: number }>((acc, [key, value]) => {
+      crew_health: isObject(object.crew_health)
+        ? Object.entries(object.crew_health).reduce<{ [key: string]: number }>((acc, [key, value]) => {
           acc[key] = Number(value);
           return acc;
         }, {})
         : {},
       max_health: globalThis.Number(assertSet("Tank.max_health", object.max_health)),
+      health_burn_per_second: globalThis.Number(
+        assertSet("Tank.health_burn_per_second", object.health_burn_per_second),
+      ),
+      fire_starting_chance: globalThis.Number(assertSet("Tank.fire_starting_chance", object.fire_starting_chance)),
       concealment_stationary: globalThis.Number(
         assertSet("Tank.concealment_stationary", object.concealment_stationary),
       ),
       concealment_moving: globalThis.Number(assertSet("Tank.concealment_moving", object.concealment_moving)),
-      concealment_on_shot: globalThis.Number(assertSet("Tank.concealment_on_shot", object.concealment_on_shot)),
-      up_pitch_limits: globalThis.Array.isArray(object?.up_pitch_limits)
-        ? object.up_pitch_limits.map((e: any) => PitchLimit.fromJSON(e))
-        : [],
-      down_pitch_limits: globalThis.Array.isArray(object?.down_pitch_limits)
-        ? object.down_pitch_limits.map((e: any) => PitchLimit.fromJSON(e))
-        : [],
+      concealment_factor_on_shot: globalThis.Number(
+        assertSet("Tank.concealment_factor_on_shot", object.concealment_factor_on_shot),
+      ),
       turret_turn_rate: globalThis.Number(assertSet("Tank.turret_turn_rate", object.turret_turn_rate)),
-      spotting_range: globalThis.Number(assertSet("Tank.spotting_range", object.spotting_range)),
+      circular_vision_radius: globalThis.Number(
+        assertSet("Tank.circular_vision_radius", object.circular_vision_radius),
+      ),
       shells: globalThis.Array.isArray(object?.shells) ? object.shells.map((e: any) => Shell.fromJSON(e)) : [],
       reload_time: globalThis.Number(assertSet("Tank.reload_time", object.reload_time)),
-      dispersion_stationary: globalThis.Number(assertSet("Tank.dispersion_stationary", object.dispersion_stationary)),
-      dispersion_turret_rotation: globalThis.Number(
-        assertSet("Tank.dispersion_turret_rotation", object.dispersion_turret_rotation),
+      dispersion_angle: globalThis.Number(assertSet("Tank.dispersion_angle", object.dispersion_angle)),
+      shot_dispersion_factor: globalThis.Number(
+        assertSet("Tank.shot_dispersion_factor", object.shot_dispersion_factor),
       ),
-      dispersion_moving: globalThis.Number(assertSet("Tank.dispersion_moving", object.dispersion_moving)),
-      dispersion_hull_rotation: globalThis.Number(
-        assertSet("Tank.dispersion_hull_rotation", object.dispersion_hull_rotation),
+      turret_rotation_dispersion_factor: globalThis.Number(
+        assertSet("Tank.turret_rotation_dispersion_factor", object.turret_rotation_dispersion_factor),
       ),
+      aiming_time: globalThis.Number(assertSet("Tank.aiming_time", object.aiming_time)),
       gun_turn_rate: globalThis.Number(assertSet("Tank.gun_turn_rate", object.gun_turn_rate)),
       mass: globalThis.Number(assertSet("Tank.mass", object.mass)),
       engine_power: globalThis.Number(assertSet("Tank.engine_power", object.engine_power)),
-      max_speed_forwards: globalThis.Number(assertSet("Tank.max_speed_forwards", object.max_speed_forwards)),
-      max_speed_backwards: globalThis.Number(assertSet("Tank.max_speed_backwards", object.max_speed_backwards)),
+      forward_max_speed: globalThis.Number(assertSet("Tank.forward_max_speed", object.forward_max_speed)),
+      backward_max_speed: globalThis.Number(assertSet("Tank.backward_max_speed", object.backward_max_speed)),
       rotation_speed: globalThis.Number(assertSet("Tank.rotation_speed", object.rotation_speed)),
       terrain_resistance_hard: globalThis.Number(
         assertSet("Tank.terrain_resistance_hard", object.terrain_resistance_hard),
       ),
-      terrain_resistance_medium: globalThis.Number(
-        assertSet("Tank.terrain_resistance_medium", object.terrain_resistance_medium),
-      ),
-      terrain_resistance_soft: globalThis.Number(
-        assertSet("Tank.terrain_resistance_soft", object.terrain_resistance_soft),
-      ),
       brake_force: globalThis.Number(assertSet("Tank.brake_force", object.brake_force)),
+      b_rotation_is_around_center: globalThis.Boolean(
+        assertSet("Tank.b_rotation_is_around_center", object.b_rotation_is_around_center),
+      ),
     };
   },
 
   toJSON(message: Tank): unknown {
     const obj: any = {};
+    if (message.id !== "") {
+      obj.id = message.id;
+    }
+    if (message.name !== undefined) {
+      obj.name = I18n.toJSON(message.name);
+    }
+    if (message.set !== "") {
+      obj.set = message.set;
+    }
+    if (message.class !== "") {
+      obj.class = message.class;
+    }
+    if (message.faction !== "") {
+      obj.faction = message.faction;
+    }
     if (message.turret_rotator_health !== undefined) {
       obj.turret_rotator_health = ModuleHealth.toJSON(message.turret_rotator_health);
     }
@@ -586,17 +658,23 @@ export const Tank: MessageFns<Tank> = {
     if (message.fuel_tank_health !== undefined) {
       obj.fuel_tank_health = ModuleHealth.toJSON(message.fuel_tank_health);
     }
-    if (message.crew_healths) {
-      const entries = Object.entries(message.crew_healths);
+    if (message.crew_health) {
+      const entries = Object.entries(message.crew_health);
       if (entries.length > 0) {
-        obj.crew_healths = {};
+        obj.crew_health = {};
         entries.forEach(([k, v]) => {
-          obj.crew_healths[k] = v;
+          obj.crew_health[k] = v;
         });
       }
     }
     if (message.max_health !== 0) {
       obj.max_health = message.max_health;
+    }
+    if (message.health_burn_per_second !== 0) {
+      obj.health_burn_per_second = message.health_burn_per_second;
+    }
+    if (message.fire_starting_chance !== 0) {
+      obj.fire_starting_chance = message.fire_starting_chance;
     }
     if (message.concealment_stationary !== 0) {
       obj.concealment_stationary = message.concealment_stationary;
@@ -604,20 +682,14 @@ export const Tank: MessageFns<Tank> = {
     if (message.concealment_moving !== 0) {
       obj.concealment_moving = message.concealment_moving;
     }
-    if (message.concealment_on_shot !== 0) {
-      obj.concealment_on_shot = message.concealment_on_shot;
-    }
-    if (message.up_pitch_limits?.length) {
-      obj.up_pitch_limits = message.up_pitch_limits.map((e) => PitchLimit.toJSON(e));
-    }
-    if (message.down_pitch_limits?.length) {
-      obj.down_pitch_limits = message.down_pitch_limits.map((e) => PitchLimit.toJSON(e));
+    if (message.concealment_factor_on_shot !== 0) {
+      obj.concealment_factor_on_shot = message.concealment_factor_on_shot;
     }
     if (message.turret_turn_rate !== 0) {
       obj.turret_turn_rate = message.turret_turn_rate;
     }
-    if (message.spotting_range !== 0) {
-      obj.spotting_range = message.spotting_range;
+    if (message.circular_vision_radius !== 0) {
+      obj.circular_vision_radius = message.circular_vision_radius;
     }
     if (message.shells?.length) {
       obj.shells = message.shells.map((e) => Shell.toJSON(e));
@@ -625,17 +697,17 @@ export const Tank: MessageFns<Tank> = {
     if (message.reload_time !== 0) {
       obj.reload_time = message.reload_time;
     }
-    if (message.dispersion_stationary !== 0) {
-      obj.dispersion_stationary = message.dispersion_stationary;
+    if (message.dispersion_angle !== 0) {
+      obj.dispersion_angle = message.dispersion_angle;
     }
-    if (message.dispersion_turret_rotation !== 0) {
-      obj.dispersion_turret_rotation = message.dispersion_turret_rotation;
+    if (message.shot_dispersion_factor !== 0) {
+      obj.shot_dispersion_factor = message.shot_dispersion_factor;
     }
-    if (message.dispersion_moving !== 0) {
-      obj.dispersion_moving = message.dispersion_moving;
+    if (message.turret_rotation_dispersion_factor !== 0) {
+      obj.turret_rotation_dispersion_factor = message.turret_rotation_dispersion_factor;
     }
-    if (message.dispersion_hull_rotation !== 0) {
-      obj.dispersion_hull_rotation = message.dispersion_hull_rotation;
+    if (message.aiming_time !== 0) {
+      obj.aiming_time = message.aiming_time;
     }
     if (message.gun_turn_rate !== 0) {
       obj.gun_turn_rate = message.gun_turn_rate;
@@ -646,11 +718,11 @@ export const Tank: MessageFns<Tank> = {
     if (message.engine_power !== 0) {
       obj.engine_power = message.engine_power;
     }
-    if (message.max_speed_forwards !== 0) {
-      obj.max_speed_forwards = message.max_speed_forwards;
+    if (message.forward_max_speed !== 0) {
+      obj.forward_max_speed = message.forward_max_speed;
     }
-    if (message.max_speed_backwards !== 0) {
-      obj.max_speed_backwards = message.max_speed_backwards;
+    if (message.backward_max_speed !== 0) {
+      obj.backward_max_speed = message.backward_max_speed;
     }
     if (message.rotation_speed !== 0) {
       obj.rotation_speed = message.rotation_speed;
@@ -658,14 +730,11 @@ export const Tank: MessageFns<Tank> = {
     if (message.terrain_resistance_hard !== 0) {
       obj.terrain_resistance_hard = message.terrain_resistance_hard;
     }
-    if (message.terrain_resistance_medium !== 0) {
-      obj.terrain_resistance_medium = message.terrain_resistance_medium;
-    }
-    if (message.terrain_resistance_soft !== 0) {
-      obj.terrain_resistance_soft = message.terrain_resistance_soft;
-    }
     if (message.brake_force !== 0) {
       obj.brake_force = message.brake_force;
+    }
+    if (message.b_rotation_is_around_center !== false) {
+      obj.b_rotation_is_around_center = message.b_rotation_is_around_center;
     }
     return obj;
   },
@@ -675,6 +744,13 @@ export const Tank: MessageFns<Tank> = {
   },
   fromPartial<I extends Exact<DeepPartial<Tank>, I>>(object: I): Tank {
     const message = createBaseTank();
+    message.id = object.id ?? "";
+    message.name = (object.name !== undefined && object.name !== null)
+      ? I18n.fromPartial(object.name)
+      : createBaseI18n();
+    message.set = object.set ?? "";
+    message.class = object.class ?? "";
+    message.faction = object.faction ?? "";
     message.turret_rotator_health =
       (object.turret_rotator_health !== undefined && object.turret_rotator_health !== null)
         ? ModuleHealth.fromPartial(object.turret_rotator_health)
@@ -698,7 +774,7 @@ export const Tank: MessageFns<Tank> = {
     message.fuel_tank_health = (object.fuel_tank_health !== undefined && object.fuel_tank_health !== null)
       ? ModuleHealth.fromPartial(object.fuel_tank_health)
       : createBaseModuleHealth();
-    message.crew_healths = Object.entries(object.crew_healths ?? {}).reduce<{ [key: string]: number }>(
+    message.crew_health = Object.entries(object.crew_health ?? {}).reduce<{ [key: string]: number }>(
       (acc, [key, value]) => {
         if (value !== undefined) {
           acc[key] = globalThis.Number(value);
@@ -708,39 +784,38 @@ export const Tank: MessageFns<Tank> = {
       {},
     );
     message.max_health = object.max_health ?? 0;
+    message.health_burn_per_second = object.health_burn_per_second ?? 0;
+    message.fire_starting_chance = object.fire_starting_chance ?? 0;
     message.concealment_stationary = object.concealment_stationary ?? 0;
     message.concealment_moving = object.concealment_moving ?? 0;
-    message.concealment_on_shot = object.concealment_on_shot ?? 0;
-    message.up_pitch_limits = object.up_pitch_limits?.map((e) => PitchLimit.fromPartial(e)) || [];
-    message.down_pitch_limits = object.down_pitch_limits?.map((e) => PitchLimit.fromPartial(e)) || [];
+    message.concealment_factor_on_shot = object.concealment_factor_on_shot ?? 0;
     message.turret_turn_rate = object.turret_turn_rate ?? 0;
-    message.spotting_range = object.spotting_range ?? 0;
+    message.circular_vision_radius = object.circular_vision_radius ?? 0;
     message.shells = object.shells?.map((e) => Shell.fromPartial(e)) || [];
     message.reload_time = object.reload_time ?? 0;
-    message.dispersion_stationary = object.dispersion_stationary ?? 0;
-    message.dispersion_turret_rotation = object.dispersion_turret_rotation ?? 0;
-    message.dispersion_moving = object.dispersion_moving ?? 0;
-    message.dispersion_hull_rotation = object.dispersion_hull_rotation ?? 0;
+    message.dispersion_angle = object.dispersion_angle ?? 0;
+    message.shot_dispersion_factor = object.shot_dispersion_factor ?? 0;
+    message.turret_rotation_dispersion_factor = object.turret_rotation_dispersion_factor ?? 0;
+    message.aiming_time = object.aiming_time ?? 0;
     message.gun_turn_rate = object.gun_turn_rate ?? 0;
     message.mass = object.mass ?? 0;
     message.engine_power = object.engine_power ?? 0;
-    message.max_speed_forwards = object.max_speed_forwards ?? 0;
-    message.max_speed_backwards = object.max_speed_backwards ?? 0;
+    message.forward_max_speed = object.forward_max_speed ?? 0;
+    message.backward_max_speed = object.backward_max_speed ?? 0;
     message.rotation_speed = object.rotation_speed ?? 0;
     message.terrain_resistance_hard = object.terrain_resistance_hard ?? 0;
-    message.terrain_resistance_medium = object.terrain_resistance_medium ?? 0;
-    message.terrain_resistance_soft = object.terrain_resistance_soft ?? 0;
     message.brake_force = object.brake_force ?? 0;
+    message.b_rotation_is_around_center = object.b_rotation_is_around_center ?? false;
     return message;
   },
 };
 
-function createBaseTank_CrewHealthsEntry(): Tank_CrewHealthsEntry {
+function createBaseTank_CrewHealthEntry(): Tank_CrewHealthEntry {
   return { key: "", value: 0 };
 }
 
-export const Tank_CrewHealthsEntry: MessageFns<Tank_CrewHealthsEntry> = {
-  encode(message: Tank_CrewHealthsEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const Tank_CrewHealthEntry: MessageFns<Tank_CrewHealthEntry> = {
+  encode(message: Tank_CrewHealthEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.key !== undefined) {
       writer.uint32(10).string(message.key);
     }
@@ -750,10 +825,10 @@ export const Tank_CrewHealthsEntry: MessageFns<Tank_CrewHealthsEntry> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): Tank_CrewHealthsEntry {
+  decode(input: BinaryReader | Uint8Array, length?: number): Tank_CrewHealthEntry {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseTank_CrewHealthsEntry();
+    const message = createBaseTank_CrewHealthEntry();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -782,14 +857,14 @@ export const Tank_CrewHealthsEntry: MessageFns<Tank_CrewHealthsEntry> = {
     return message;
   },
 
-  fromJSON(object: any): Tank_CrewHealthsEntry {
+  fromJSON(object: any): Tank_CrewHealthEntry {
     return {
-      key: globalThis.String(assertSet("Tank_CrewHealthsEntry.key", object.key)),
-      value: globalThis.Number(assertSet("Tank_CrewHealthsEntry.value", object.value)),
+      key: globalThis.String(assertSet("Tank_CrewHealthEntry.key", object.key)),
+      value: globalThis.Number(assertSet("Tank_CrewHealthEntry.value", object.value)),
     };
   },
 
-  toJSON(message: Tank_CrewHealthsEntry): unknown {
+  toJSON(message: Tank_CrewHealthEntry): unknown {
     const obj: any = {};
     if (message.key !== undefined) {
       obj.key = message.key;
@@ -800,11 +875,11 @@ export const Tank_CrewHealthsEntry: MessageFns<Tank_CrewHealthsEntry> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<Tank_CrewHealthsEntry>, I>>(base?: I): Tank_CrewHealthsEntry {
-    return Tank_CrewHealthsEntry.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<Tank_CrewHealthEntry>, I>>(base?: I): Tank_CrewHealthEntry {
+    return Tank_CrewHealthEntry.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<Tank_CrewHealthsEntry>, I>>(object: I): Tank_CrewHealthsEntry {
-    const message = createBaseTank_CrewHealthsEntry();
+  fromPartial<I extends Exact<DeepPartial<Tank_CrewHealthEntry>, I>>(object: I): Tank_CrewHealthEntry {
+    const message = createBaseTank_CrewHealthEntry();
     message.key = object.key ?? "";
     message.value = object.value ?? 0;
     return message;
@@ -814,15 +889,16 @@ export const Tank_CrewHealthsEntry: MessageFns<Tank_CrewHealthsEntry> = {
 function createBaseShell(): Shell {
   return {
     speed: 0,
+    gravity: 0,
     armor_damage: 0,
     module_damage: 0,
     caliber: 0,
-    penetration: 0,
-    penetration_500m: 0,
+    piercing_power: 0,
+    piercing_power_500m: 0,
     normalization: 0,
-    range: 0,
-    ricochet: 0,
-    penetration_loss_by_distance: 0,
+    max_distance: 0,
+    ricochet_angle: 0,
+    piercing_power_loss_factor_by_distance: 0,
     explosion_radius: 0,
     max_count: 0,
   };
@@ -833,38 +909,41 @@ export const Shell: MessageFns<Shell> = {
     if (message.speed !== 0) {
       writer.uint32(13).float(message.speed);
     }
+    if (message.gravity !== 0) {
+      writer.uint32(21).float(message.gravity);
+    }
     if (message.armor_damage !== 0) {
-      writer.uint32(21).float(message.armor_damage);
+      writer.uint32(29).float(message.armor_damage);
     }
     if (message.module_damage !== 0) {
-      writer.uint32(29).float(message.module_damage);
+      writer.uint32(37).float(message.module_damage);
     }
     if (message.caliber !== 0) {
-      writer.uint32(37).float(message.caliber);
+      writer.uint32(45).float(message.caliber);
     }
-    if (message.penetration !== 0) {
-      writer.uint32(45).float(message.penetration);
+    if (message.piercing_power !== 0) {
+      writer.uint32(53).float(message.piercing_power);
     }
-    if (message.penetration_500m !== 0) {
-      writer.uint32(53).float(message.penetration_500m);
+    if (message.piercing_power_500m !== 0) {
+      writer.uint32(61).float(message.piercing_power_500m);
     }
     if (message.normalization !== 0) {
-      writer.uint32(61).float(message.normalization);
+      writer.uint32(69).float(message.normalization);
     }
-    if (message.range !== 0) {
-      writer.uint32(69).float(message.range);
+    if (message.max_distance !== 0) {
+      writer.uint32(77).float(message.max_distance);
     }
-    if (message.ricochet !== 0) {
-      writer.uint32(77).float(message.ricochet);
+    if (message.ricochet_angle !== 0) {
+      writer.uint32(85).float(message.ricochet_angle);
     }
-    if (message.penetration_loss_by_distance !== 0) {
-      writer.uint32(85).float(message.penetration_loss_by_distance);
+    if (message.piercing_power_loss_factor_by_distance !== 0) {
+      writer.uint32(93).float(message.piercing_power_loss_factor_by_distance);
     }
     if (message.explosion_radius !== 0) {
-      writer.uint32(93).float(message.explosion_radius);
+      writer.uint32(101).float(message.explosion_radius);
     }
     if (message.max_count !== 0) {
-      writer.uint32(96).int32(message.max_count);
+      writer.uint32(104).int32(message.max_count);
     }
     return writer;
   },
@@ -889,7 +968,7 @@ export const Shell: MessageFns<Shell> = {
             break;
           }
 
-          message.armor_damage = reader.float();
+          message.gravity = reader.float();
           continue;
         }
         case 3: {
@@ -897,7 +976,7 @@ export const Shell: MessageFns<Shell> = {
             break;
           }
 
-          message.module_damage = reader.float();
+          message.armor_damage = reader.float();
           continue;
         }
         case 4: {
@@ -905,7 +984,7 @@ export const Shell: MessageFns<Shell> = {
             break;
           }
 
-          message.caliber = reader.float();
+          message.module_damage = reader.float();
           continue;
         }
         case 5: {
@@ -913,7 +992,7 @@ export const Shell: MessageFns<Shell> = {
             break;
           }
 
-          message.penetration = reader.float();
+          message.caliber = reader.float();
           continue;
         }
         case 6: {
@@ -921,7 +1000,7 @@ export const Shell: MessageFns<Shell> = {
             break;
           }
 
-          message.penetration_500m = reader.float();
+          message.piercing_power = reader.float();
           continue;
         }
         case 7: {
@@ -929,7 +1008,7 @@ export const Shell: MessageFns<Shell> = {
             break;
           }
 
-          message.normalization = reader.float();
+          message.piercing_power_500m = reader.float();
           continue;
         }
         case 8: {
@@ -937,7 +1016,7 @@ export const Shell: MessageFns<Shell> = {
             break;
           }
 
-          message.range = reader.float();
+          message.normalization = reader.float();
           continue;
         }
         case 9: {
@@ -945,7 +1024,7 @@ export const Shell: MessageFns<Shell> = {
             break;
           }
 
-          message.ricochet = reader.float();
+          message.max_distance = reader.float();
           continue;
         }
         case 10: {
@@ -953,7 +1032,7 @@ export const Shell: MessageFns<Shell> = {
             break;
           }
 
-          message.penetration_loss_by_distance = reader.float();
+          message.ricochet_angle = reader.float();
           continue;
         }
         case 11: {
@@ -961,11 +1040,19 @@ export const Shell: MessageFns<Shell> = {
             break;
           }
 
-          message.explosion_radius = reader.float();
+          message.piercing_power_loss_factor_by_distance = reader.float();
           continue;
         }
         case 12: {
-          if (tag !== 96) {
+          if (tag !== 101) {
+            break;
+          }
+
+          message.explosion_radius = reader.float();
+          continue;
+        }
+        case 13: {
+          if (tag !== 104) {
             break;
           }
 
@@ -984,16 +1071,17 @@ export const Shell: MessageFns<Shell> = {
   fromJSON(object: any): Shell {
     return {
       speed: globalThis.Number(assertSet("Shell.speed", object.speed)),
+      gravity: globalThis.Number(assertSet("Shell.gravity", object.gravity)),
       armor_damage: globalThis.Number(assertSet("Shell.armor_damage", object.armor_damage)),
       module_damage: globalThis.Number(assertSet("Shell.module_damage", object.module_damage)),
       caliber: globalThis.Number(assertSet("Shell.caliber", object.caliber)),
-      penetration: globalThis.Number(assertSet("Shell.penetration", object.penetration)),
-      penetration_500m: globalThis.Number(assertSet("Shell.penetration_500m", object.penetration_500m)),
+      piercing_power: globalThis.Number(assertSet("Shell.piercing_power", object.piercing_power)),
+      piercing_power_500m: globalThis.Number(assertSet("Shell.piercing_power_500m", object.piercing_power_500m)),
       normalization: globalThis.Number(assertSet("Shell.normalization", object.normalization)),
-      range: globalThis.Number(assertSet("Shell.range", object.range)),
-      ricochet: globalThis.Number(assertSet("Shell.ricochet", object.ricochet)),
-      penetration_loss_by_distance: globalThis.Number(
-        assertSet("Shell.penetration_loss_by_distance", object.penetration_loss_by_distance),
+      max_distance: globalThis.Number(assertSet("Shell.max_distance", object.max_distance)),
+      ricochet_angle: globalThis.Number(assertSet("Shell.ricochet_angle", object.ricochet_angle)),
+      piercing_power_loss_factor_by_distance: globalThis.Number(
+        assertSet("Shell.piercing_power_loss_factor_by_distance", object.piercing_power_loss_factor_by_distance),
       ),
       explosion_radius: globalThis.Number(assertSet("Shell.explosion_radius", object.explosion_radius)),
       max_count: globalThis.Number(assertSet("Shell.max_count", object.max_count)),
@@ -1005,6 +1093,9 @@ export const Shell: MessageFns<Shell> = {
     if (message.speed !== 0) {
       obj.speed = message.speed;
     }
+    if (message.gravity !== 0) {
+      obj.gravity = message.gravity;
+    }
     if (message.armor_damage !== 0) {
       obj.armor_damage = message.armor_damage;
     }
@@ -1014,23 +1105,23 @@ export const Shell: MessageFns<Shell> = {
     if (message.caliber !== 0) {
       obj.caliber = message.caliber;
     }
-    if (message.penetration !== 0) {
-      obj.penetration = message.penetration;
+    if (message.piercing_power !== 0) {
+      obj.piercing_power = message.piercing_power;
     }
-    if (message.penetration_500m !== 0) {
-      obj.penetration_500m = message.penetration_500m;
+    if (message.piercing_power_500m !== 0) {
+      obj.piercing_power_500m = message.piercing_power_500m;
     }
     if (message.normalization !== 0) {
       obj.normalization = message.normalization;
     }
-    if (message.range !== 0) {
-      obj.range = message.range;
+    if (message.max_distance !== 0) {
+      obj.max_distance = message.max_distance;
     }
-    if (message.ricochet !== 0) {
-      obj.ricochet = message.ricochet;
+    if (message.ricochet_angle !== 0) {
+      obj.ricochet_angle = message.ricochet_angle;
     }
-    if (message.penetration_loss_by_distance !== 0) {
-      obj.penetration_loss_by_distance = message.penetration_loss_by_distance;
+    if (message.piercing_power_loss_factor_by_distance !== 0) {
+      obj.piercing_power_loss_factor_by_distance = message.piercing_power_loss_factor_by_distance;
     }
     if (message.explosion_radius !== 0) {
       obj.explosion_radius = message.explosion_radius;
@@ -1047,117 +1138,48 @@ export const Shell: MessageFns<Shell> = {
   fromPartial<I extends Exact<DeepPartial<Shell>, I>>(object: I): Shell {
     const message = createBaseShell();
     message.speed = object.speed ?? 0;
+    message.gravity = object.gravity ?? 0;
     message.armor_damage = object.armor_damage ?? 0;
     message.module_damage = object.module_damage ?? 0;
     message.caliber = object.caliber ?? 0;
-    message.penetration = object.penetration ?? 0;
-    message.penetration_500m = object.penetration_500m ?? 0;
+    message.piercing_power = object.piercing_power ?? 0;
+    message.piercing_power_500m = object.piercing_power_500m ?? 0;
     message.normalization = object.normalization ?? 0;
-    message.range = object.range ?? 0;
-    message.ricochet = object.ricochet ?? 0;
-    message.penetration_loss_by_distance = object.penetration_loss_by_distance ?? 0;
+    message.max_distance = object.max_distance ?? 0;
+    message.ricochet_angle = object.ricochet_angle ?? 0;
+    message.piercing_power_loss_factor_by_distance = object.piercing_power_loss_factor_by_distance ?? 0;
     message.explosion_radius = object.explosion_radius ?? 0;
     message.max_count = object.max_count ?? 0;
     return message;
   },
 };
 
-function createBasePitchLimit(): PitchLimit {
-  return { angle: 0, value: 0 };
-}
-
-export const PitchLimit: MessageFns<PitchLimit> = {
-  encode(message: PitchLimit, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.angle !== 0) {
-      writer.uint32(13).float(message.angle);
-    }
-    if (message.value !== 0) {
-      writer.uint32(21).float(message.value);
-    }
-    return writer;
-  },
-
-  decode(input: BinaryReader | Uint8Array, length?: number): PitchLimit {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBasePitchLimit();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1: {
-          if (tag !== 13) {
-            break;
-          }
-
-          message.angle = reader.float();
-          continue;
-        }
-        case 2: {
-          if (tag !== 21) {
-            break;
-          }
-
-          message.value = reader.float();
-          continue;
-        }
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skip(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): PitchLimit {
-    return {
-      angle: globalThis.Number(assertSet("PitchLimit.angle", object.angle)),
-      value: globalThis.Number(assertSet("PitchLimit.value", object.value)),
-    };
-  },
-
-  toJSON(message: PitchLimit): unknown {
-    const obj: any = {};
-    if (message.angle !== 0) {
-      obj.angle = message.angle;
-    }
-    if (message.value !== 0) {
-      obj.value = message.value;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<PitchLimit>, I>>(base?: I): PitchLimit {
-    return PitchLimit.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<PitchLimit>, I>>(object: I): PitchLimit {
-    const message = createBasePitchLimit();
-    message.angle = object.angle ?? 0;
-    message.value = object.value ?? 0;
-    return message;
-  },
-};
-
 function createBaseModuleHealth(): ModuleHealth {
-  return { max: 0, max_regen: 0, hysteresis: 0, heal_rate: 0, burn_rate: 0 };
+  return {
+    max_health: 0,
+    max_regen_health: 0,
+    hysteresis_health: 0,
+    health_regen_per_sec: 0,
+    health_burn_per_sec: undefined,
+  };
 }
 
 export const ModuleHealth: MessageFns<ModuleHealth> = {
   encode(message: ModuleHealth, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.max !== 0) {
-      writer.uint32(13).float(message.max);
+    if (message.max_health !== 0) {
+      writer.uint32(13).float(message.max_health);
     }
-    if (message.max_regen !== 0) {
-      writer.uint32(21).float(message.max_regen);
+    if (message.max_regen_health !== 0) {
+      writer.uint32(21).float(message.max_regen_health);
     }
-    if (message.hysteresis !== 0) {
-      writer.uint32(29).float(message.hysteresis);
+    if (message.hysteresis_health !== 0) {
+      writer.uint32(29).float(message.hysteresis_health);
     }
-    if (message.heal_rate !== 0) {
-      writer.uint32(37).float(message.heal_rate);
+    if (message.health_regen_per_sec !== 0) {
+      writer.uint32(37).float(message.health_regen_per_sec);
     }
-    if (message.burn_rate !== 0) {
-      writer.uint32(45).float(message.burn_rate);
+    if (message.health_burn_per_sec !== undefined && message.health_burn_per_sec !== undefined) {
+      writer.uint32(45).float(message.health_burn_per_sec);
     }
     return writer;
   },
@@ -1174,7 +1196,7 @@ export const ModuleHealth: MessageFns<ModuleHealth> = {
             break;
           }
 
-          message.max = reader.float();
+          message.max_health = reader.float();
           continue;
         }
         case 2: {
@@ -1182,7 +1204,7 @@ export const ModuleHealth: MessageFns<ModuleHealth> = {
             break;
           }
 
-          message.max_regen = reader.float();
+          message.max_regen_health = reader.float();
           continue;
         }
         case 3: {
@@ -1190,7 +1212,7 @@ export const ModuleHealth: MessageFns<ModuleHealth> = {
             break;
           }
 
-          message.hysteresis = reader.float();
+          message.hysteresis_health = reader.float();
           continue;
         }
         case 4: {
@@ -1198,7 +1220,7 @@ export const ModuleHealth: MessageFns<ModuleHealth> = {
             break;
           }
 
-          message.heal_rate = reader.float();
+          message.health_regen_per_sec = reader.float();
           continue;
         }
         case 5: {
@@ -1206,7 +1228,7 @@ export const ModuleHealth: MessageFns<ModuleHealth> = {
             break;
           }
 
-          message.burn_rate = reader.float();
+          message.health_burn_per_sec = reader.float();
           continue;
         }
       }
@@ -1220,30 +1242,34 @@ export const ModuleHealth: MessageFns<ModuleHealth> = {
 
   fromJSON(object: any): ModuleHealth {
     return {
-      max: globalThis.Number(assertSet("ModuleHealth.max", object.max)),
-      max_regen: globalThis.Number(assertSet("ModuleHealth.max_regen", object.max_regen)),
-      hysteresis: globalThis.Number(assertSet("ModuleHealth.hysteresis", object.hysteresis)),
-      heal_rate: globalThis.Number(assertSet("ModuleHealth.heal_rate", object.heal_rate)),
-      burn_rate: globalThis.Number(assertSet("ModuleHealth.burn_rate", object.burn_rate)),
+      max_health: globalThis.Number(assertSet("ModuleHealth.max_health", object.max_health)),
+      max_regen_health: globalThis.Number(assertSet("ModuleHealth.max_regen_health", object.max_regen_health)),
+      hysteresis_health: globalThis.Number(assertSet("ModuleHealth.hysteresis_health", object.hysteresis_health)),
+      health_regen_per_sec: globalThis.Number(
+        assertSet("ModuleHealth.health_regen_per_sec", object.health_regen_per_sec),
+      ),
+      health_burn_per_sec: isSet(object.health_burn_per_sec)
+        ? globalThis.Number(object.health_burn_per_sec)
+        : undefined,
     };
   },
 
   toJSON(message: ModuleHealth): unknown {
     const obj: any = {};
-    if (message.max !== 0) {
-      obj.max = message.max;
+    if (message.max_health !== 0) {
+      obj.max_health = message.max_health;
     }
-    if (message.max_regen !== 0) {
-      obj.max_regen = message.max_regen;
+    if (message.max_regen_health !== 0) {
+      obj.max_regen_health = message.max_regen_health;
     }
-    if (message.hysteresis !== 0) {
-      obj.hysteresis = message.hysteresis;
+    if (message.hysteresis_health !== 0) {
+      obj.hysteresis_health = message.hysteresis_health;
     }
-    if (message.heal_rate !== 0) {
-      obj.heal_rate = message.heal_rate;
+    if (message.health_regen_per_sec !== 0) {
+      obj.health_regen_per_sec = message.health_regen_per_sec;
     }
-    if (message.burn_rate !== 0) {
-      obj.burn_rate = message.burn_rate;
+    if (message.health_burn_per_sec !== undefined && message.health_burn_per_sec !== undefined) {
+      obj.health_burn_per_sec = message.health_burn_per_sec;
     }
     return obj;
   },
@@ -1253,11 +1279,11 @@ export const ModuleHealth: MessageFns<ModuleHealth> = {
   },
   fromPartial<I extends Exact<DeepPartial<ModuleHealth>, I>>(object: I): ModuleHealth {
     const message = createBaseModuleHealth();
-    message.max = object.max ?? 0;
-    message.max_regen = object.max_regen ?? 0;
-    message.hysteresis = object.hysteresis ?? 0;
-    message.heal_rate = object.heal_rate ?? 0;
-    message.burn_rate = object.burn_rate ?? 0;
+    message.max_health = object.max_health ?? 0;
+    message.max_regen_health = object.max_regen_health ?? 0;
+    message.hysteresis_health = object.hysteresis_health ?? 0;
+    message.health_regen_per_sec = object.health_regen_per_sec ?? 0;
+    message.health_burn_per_sec = object.health_burn_per_sec ?? undefined;
     return message;
   },
 };

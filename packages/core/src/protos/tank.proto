@@ -72,11 +72,12 @@ message ModuleHealth {
   required float max_regen_health = 2;
   // the range from 0 to this where the module is "red" and doesn't function
   // all the while healing; after surpassing this, the "yellow" phase is reached
-  required float hysteresis_health = 3;
+  // undefined for modules like ammo bays
+  optional float hysteresis_health = 3;
   // the heal rate (per second); this won't apply if the health is at or above
   // max_regen hence always leaving it in the "yellow" phase until repaired
-  required float health_regen_per_second = 4;
+  required float health_regen_per_sec = 4;
   // damage received (per second) to the modules when caught on fire; this can
   // be undefined for some modules like the gun or chassis
-  optional float health_burn_per_second = 5;
+  optional float health_burn_per_sec = 5;
 }

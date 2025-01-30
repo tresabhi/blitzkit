@@ -32,13 +32,13 @@
     "update": "yarn upgrade --latest",
     "tunnel": "cloudflared tunnel --url http://localhost:3000",
     "discoverids": "scripts/discoverIds.ts",
-    "build:protos": "protoc packages/core/src/protos/*.proto --csharp_out=src/BlitzKit.CLI/Protos && bun packages/scripts/src/protos.ts",
+    "protos": "protoc packages/core/src/protos/*.proto --csharp_out=src/BlitzKit.CLI/Protos && bun packages/scripts/src/protos.ts",
     "preview:website": "cd packages/website && bun run preview",
     "build:reviews": "cd packages/scripts && bun build:reviews",
     "build:ids": "cd packages/scripts && bun build:ids",
     "prunestrings": "cd packages/scripts && bun prunestrings",
     "dev:cli:unpack": "cd src/BlitzKit.CLI && dotnet run unpack \"C:/Program Files (x86)/Steam/steamapps/common/World of Tanks Blitz Playtest\" --no-overwrite",
-    "dev:cli:mangle": "cd src/BlitzKit.CLI && dotnet run mangle"
+    "mangle": "cd src/BlitzKit.CLI && dotnet run mangle"
   },
   "license": "MIT",
   "dependencies": {
