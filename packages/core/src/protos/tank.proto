@@ -19,7 +19,7 @@ message Tank {
   required ModuleHealth ammo_bay_health = 10;
   required ModuleHealth engine_health = 11;
   required ModuleHealth fuel_tank_health = 12;
-  map<string, float> crew_health = 13;
+  repeated CrewHealth crew_health = 13;
   required float max_health = 14;
   required float health_burn_per_second = 15;
   required float fire_starting_chance = 16;
@@ -47,6 +47,20 @@ message Tank {
   required float terrain_resistance_hard = 34;
   required float brake_force = 35;
   required bool b_rotation_is_around_center = 36;
+}
+
+enum CrewType {
+  COMMANDER = 0;
+  DRIVER = 1;
+  GUNNER_1 = 2;
+  GUNNER_2 = 3;
+  LOADER_1 = 4;
+  LOADER_2 = 5;
+}
+
+message CrewHealth {
+  required CrewType type = 1;
+  required float max_health = 2;
 }
 
 message Shell {

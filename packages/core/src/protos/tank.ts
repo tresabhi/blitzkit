@@ -10,6 +10,59 @@ import { I18n } from "./i18n";
 
 export const protobufPackage = "blitzkit";
 
+export enum CrewType {
+  COMMANDER = 0,
+  DRIVER = 1,
+  GUNNER_1 = 2,
+  GUNNER_2 = 3,
+  LOADER_1 = 4,
+  LOADER_2 = 5,
+}
+
+export function crewTypeFromJSON(object: any): CrewType {
+  switch (object) {
+    case 0:
+    case "COMMANDER":
+      return CrewType.COMMANDER;
+    case 1:
+    case "DRIVER":
+      return CrewType.DRIVER;
+    case 2:
+    case "GUNNER_1":
+      return CrewType.GUNNER_1;
+    case 3:
+    case "GUNNER_2":
+      return CrewType.GUNNER_2;
+    case 4:
+    case "LOADER_1":
+      return CrewType.LOADER_1;
+    case 5:
+    case "LOADER_2":
+      return CrewType.LOADER_2;
+    default:
+      throw new globalThis.Error("Unrecognized enum value " + object + " for enum CrewType");
+  }
+}
+
+export function crewTypeToJSON(object: CrewType): string {
+  switch (object) {
+    case CrewType.COMMANDER:
+      return "COMMANDER";
+    case CrewType.DRIVER:
+      return "DRIVER";
+    case CrewType.GUNNER_1:
+      return "GUNNER_1";
+    case CrewType.GUNNER_2:
+      return "GUNNER_2";
+    case CrewType.LOADER_1:
+      return "LOADER_1";
+    case CrewType.LOADER_2:
+      return "LOADER_2";
+    default:
+      throw new globalThis.Error("Unrecognized enum value " + object + " for enum CrewType");
+  }
+}
+
 export interface Tank {
   id: string;
   name: I18n;
@@ -24,7 +77,7 @@ export interface Tank {
   ammo_bay_health: ModuleHealth;
   engine_health: ModuleHealth;
   fuel_tank_health: ModuleHealth;
-  crew_health: { [key: string]: number };
+  crew_health: CrewHealth[];
   max_health: number;
   health_burn_per_second: number;
   fire_starting_chance: number;
@@ -50,9 +103,9 @@ export interface Tank {
   b_rotation_is_around_center: boolean;
 }
 
-export interface Tank_CrewHealthEntry {
-  key: string;
-  value: number;
+export interface CrewHealth {
+  type: CrewType;
+  max_health: number;
 }
 
 export interface Shell {
@@ -79,8 +132,11 @@ export interface ModuleHealth {
   /**
    * the range from 0 to this where the module is "red" and doesn't function
    * all the while healing; after surpassing this, the "yellow" phase is reached
+   * undefined for modules like ammo bays
    */
-  hysteresis_health: number;
+  hysteresis_health?:
+    | number
+    | undefined;
   /**
    * the heal rate (per second); this won't apply if the health is at or above
    * max_regen hence always leaving it in the "yellow" phase until repaired
@@ -107,7 +163,7 @@ function createBaseTank(): Tank {
     ammo_bay_health: createBaseModuleHealth(),
     engine_health: createBaseModuleHealth(),
     fuel_tank_health: createBaseModuleHealth(),
-    crew_health: {},
+    crew_health: [],
     max_health: 0,
     health_burn_per_second: 0,
     fire_starting_chance: 0,
@@ -172,9 +228,9 @@ export const Tank: MessageFns<Tank> = {
     if (message.fuel_tank_health !== undefined) {
       ModuleHealth.encode(message.fuel_tank_health, writer.uint32(98).fork()).join();
     }
-    Object.entries(message.crew_health).forEach(([key, value]) => {
-      Tank_CrewHealthEntry.encode({ key: key as any, value }, writer.uint32(106).fork()).join();
-    });
+    for (const v of message.crew_health) {
+      CrewHealth.encode(v!, writer.uint32(106).fork()).join();
+    }
     if (message.max_health !== 0) {
       writer.uint32(117).float(message.max_health);
     }
@@ -355,10 +411,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          const entry13 = Tank_CrewHealthEntry.decode(reader, reader.uint32());
-          if (entry13.value !== undefined) {
-            message.crew_health[entry13.key] = entry13.value;
-          }
+          message.crew_health.push(CrewHealth.decode(reader, reader.uint32()));
           continue;
         }
         case 14: {
@@ -572,12 +625,9 @@ export const Tank: MessageFns<Tank> = {
       ammo_bay_health: ModuleHealth.fromJSON(assertSet("Tank.ammo_bay_health", object.ammo_bay_health)),
       engine_health: ModuleHealth.fromJSON(assertSet("Tank.engine_health", object.engine_health)),
       fuel_tank_health: ModuleHealth.fromJSON(assertSet("Tank.fuel_tank_health", object.fuel_tank_health)),
-      crew_health: isObject(object.crew_health)
-        ? Object.entries(object.crew_health).reduce<{ [key: string]: number }>((acc, [key, value]) => {
-          acc[key] = Number(value);
-          return acc;
-        }, {})
-        : {},
+      crew_health: globalThis.Array.isArray(object?.crew_health)
+        ? object.crew_health.map((e: any) => CrewHealth.fromJSON(e))
+        : [],
       max_health: globalThis.Number(assertSet("Tank.max_health", object.max_health)),
       health_burn_per_second: globalThis.Number(
         assertSet("Tank.health_burn_per_second", object.health_burn_per_second),
@@ -658,14 +708,8 @@ export const Tank: MessageFns<Tank> = {
     if (message.fuel_tank_health !== undefined) {
       obj.fuel_tank_health = ModuleHealth.toJSON(message.fuel_tank_health);
     }
-    if (message.crew_health) {
-      const entries = Object.entries(message.crew_health);
-      if (entries.length > 0) {
-        obj.crew_health = {};
-        entries.forEach(([k, v]) => {
-          obj.crew_health[k] = v;
-        });
-      }
+    if (message.crew_health?.length) {
+      obj.crew_health = message.crew_health.map((e) => CrewHealth.toJSON(e));
     }
     if (message.max_health !== 0) {
       obj.max_health = message.max_health;
@@ -774,15 +818,7 @@ export const Tank: MessageFns<Tank> = {
     message.fuel_tank_health = (object.fuel_tank_health !== undefined && object.fuel_tank_health !== null)
       ? ModuleHealth.fromPartial(object.fuel_tank_health)
       : createBaseModuleHealth();
-    message.crew_health = Object.entries(object.crew_health ?? {}).reduce<{ [key: string]: number }>(
-      (acc, [key, value]) => {
-        if (value !== undefined) {
-          acc[key] = globalThis.Number(value);
-        }
-        return acc;
-      },
-      {},
-    );
+    message.crew_health = object.crew_health?.map((e) => CrewHealth.fromPartial(e)) || [];
     message.max_health = object.max_health ?? 0;
     message.health_burn_per_second = object.health_burn_per_second ?? 0;
     message.fire_starting_chance = object.fire_starting_chance ?? 0;
@@ -810,34 +846,34 @@ export const Tank: MessageFns<Tank> = {
   },
 };
 
-function createBaseTank_CrewHealthEntry(): Tank_CrewHealthEntry {
-  return { key: "", value: 0 };
+function createBaseCrewHealth(): CrewHealth {
+  return { type: 0, max_health: 0 };
 }
 
-export const Tank_CrewHealthEntry: MessageFns<Tank_CrewHealthEntry> = {
-  encode(message: Tank_CrewHealthEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.key !== undefined) {
-      writer.uint32(10).string(message.key);
+export const CrewHealth: MessageFns<CrewHealth> = {
+  encode(message: CrewHealth, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.type !== 0) {
+      writer.uint32(8).int32(message.type);
     }
-    if (message.value !== undefined) {
-      writer.uint32(21).float(message.value);
+    if (message.max_health !== 0) {
+      writer.uint32(21).float(message.max_health);
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): Tank_CrewHealthEntry {
+  decode(input: BinaryReader | Uint8Array, length?: number): CrewHealth {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseTank_CrewHealthEntry();
+    const message = createBaseCrewHealth();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1: {
-          if (tag !== 10) {
+          if (tag !== 8) {
             break;
           }
 
-          message.key = reader.string();
+          message.type = reader.int32() as any;
           continue;
         }
         case 2: {
@@ -845,7 +881,7 @@ export const Tank_CrewHealthEntry: MessageFns<Tank_CrewHealthEntry> = {
             break;
           }
 
-          message.value = reader.float();
+          message.max_health = reader.float();
           continue;
         }
       }
@@ -857,31 +893,31 @@ export const Tank_CrewHealthEntry: MessageFns<Tank_CrewHealthEntry> = {
     return message;
   },
 
-  fromJSON(object: any): Tank_CrewHealthEntry {
+  fromJSON(object: any): CrewHealth {
     return {
-      key: globalThis.String(assertSet("Tank_CrewHealthEntry.key", object.key)),
-      value: globalThis.Number(assertSet("Tank_CrewHealthEntry.value", object.value)),
+      type: crewTypeFromJSON(assertSet("CrewHealth.type", object.type)),
+      max_health: globalThis.Number(assertSet("CrewHealth.max_health", object.max_health)),
     };
   },
 
-  toJSON(message: Tank_CrewHealthEntry): unknown {
+  toJSON(message: CrewHealth): unknown {
     const obj: any = {};
-    if (message.key !== undefined) {
-      obj.key = message.key;
+    if (message.type !== 0) {
+      obj.type = crewTypeToJSON(message.type);
     }
-    if (message.value !== undefined) {
-      obj.value = message.value;
+    if (message.max_health !== 0) {
+      obj.max_health = message.max_health;
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<Tank_CrewHealthEntry>, I>>(base?: I): Tank_CrewHealthEntry {
-    return Tank_CrewHealthEntry.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<CrewHealth>, I>>(base?: I): CrewHealth {
+    return CrewHealth.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<Tank_CrewHealthEntry>, I>>(object: I): Tank_CrewHealthEntry {
-    const message = createBaseTank_CrewHealthEntry();
-    message.key = object.key ?? "";
-    message.value = object.value ?? 0;
+  fromPartial<I extends Exact<DeepPartial<CrewHealth>, I>>(object: I): CrewHealth {
+    const message = createBaseCrewHealth();
+    message.type = object.type ?? 0;
+    message.max_health = object.max_health ?? 0;
     return message;
   },
 };
@@ -1158,7 +1194,7 @@ function createBaseModuleHealth(): ModuleHealth {
   return {
     max_health: 0,
     max_regen_health: 0,
-    hysteresis_health: 0,
+    hysteresis_health: undefined,
     health_regen_per_sec: 0,
     health_burn_per_sec: undefined,
   };
@@ -1172,7 +1208,7 @@ export const ModuleHealth: MessageFns<ModuleHealth> = {
     if (message.max_regen_health !== 0) {
       writer.uint32(21).float(message.max_regen_health);
     }
-    if (message.hysteresis_health !== 0) {
+    if (message.hysteresis_health !== undefined && message.hysteresis_health !== undefined) {
       writer.uint32(29).float(message.hysteresis_health);
     }
     if (message.health_regen_per_sec !== 0) {
@@ -1244,7 +1280,7 @@ export const ModuleHealth: MessageFns<ModuleHealth> = {
     return {
       max_health: globalThis.Number(assertSet("ModuleHealth.max_health", object.max_health)),
       max_regen_health: globalThis.Number(assertSet("ModuleHealth.max_regen_health", object.max_regen_health)),
-      hysteresis_health: globalThis.Number(assertSet("ModuleHealth.hysteresis_health", object.hysteresis_health)),
+      hysteresis_health: isSet(object.hysteresis_health) ? globalThis.Number(object.hysteresis_health) : undefined,
       health_regen_per_sec: globalThis.Number(
         assertSet("ModuleHealth.health_regen_per_sec", object.health_regen_per_sec),
       ),
@@ -1262,7 +1298,7 @@ export const ModuleHealth: MessageFns<ModuleHealth> = {
     if (message.max_regen_health !== 0) {
       obj.max_regen_health = message.max_regen_health;
     }
-    if (message.hysteresis_health !== 0) {
+    if (message.hysteresis_health !== undefined && message.hysteresis_health !== undefined) {
       obj.hysteresis_health = message.hysteresis_health;
     }
     if (message.health_regen_per_sec !== 0) {
@@ -1281,7 +1317,7 @@ export const ModuleHealth: MessageFns<ModuleHealth> = {
     const message = createBaseModuleHealth();
     message.max_health = object.max_health ?? 0;
     message.max_regen_health = object.max_regen_health ?? 0;
-    message.hysteresis_health = object.hysteresis_health ?? 0;
+    message.hysteresis_health = object.hysteresis_health ?? undefined;
     message.health_regen_per_sec = object.health_regen_per_sec ?? 0;
     message.health_burn_per_sec = object.health_burn_per_sec ?? undefined;
     return message;
@@ -1300,10 +1336,6 @@ export type DeepPartial<T> = T extends Builtin ? T
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
-
-function isObject(value: any): boolean {
-  return typeof value === "object" && value !== null;
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
