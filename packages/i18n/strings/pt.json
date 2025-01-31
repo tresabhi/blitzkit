@@ -233,115 +233,115 @@
         },
         "custom": {
           "name": "personalizado",
-          "description": "Custom range",
+          "description": "Intervalo personalizado",
           "options": {
             "start": {
-              "name": "start",
-              "description": "Start in number of days ago from today"
+              "name": "iniciar",
+              "description": "Iniciar em número de dias atrás a partir de hoje"
             },
             "end": {
-              "name": "end",
-              "description": "End in number of days ago from today"
+              "name": "terminar",
+              "description": "Termina em número de dias atrás a partir de hoje"
             }
           }
         }
       },
       "options": {
         "clan": {
-          "name": "clan",
-          "description": "The clan name or tag"
+          "name": "clã",
+          "description": "O nome ou tag do clã"
         },
         "tank": {
-          "name": "tank",
-          "description": "The tank to get stats for"
+          "name": "tanque",
+          "description": "O tanque para obter estatísticas para"
         },
         "username": {
-          "name": "username",
-          "description": "The Blitz username of the player"
+          "name": "nome de usuário",
+          "description": "O nome de usuário Blitz do jogador"
         },
         "filters": {
           "nation": {
-            "name": "nation",
-            "description": "Nation"
+            "name": "nação",
+            "description": "Nação"
           },
           "class": {
-            "name": "class",
-            "description": "Class"
+            "name": "classe",
+            "description": "Classe"
           },
           "type": {
-            "name": "type",
-            "description": "Type"
+            "name": "tipo",
+            "description": "Tipo"
           }
         },
         "region": {
-          "name": "region",
-          "description": "Region"
+          "name": "região",
+          "description": "Região"
         },
         "tier": {
-          "name": "tier",
-          "description": "Tier",
+          "name": "nível",
+          "description": "Nível",
           "choices": {
-            "tier": "Tier %s1 - %s2"
+            "tier": "Nível %s1 - %s2"
           }
         }
       },
       "periods": {
         "career": "Carreira",
         "today": "Hoje",
-        "days": "%s1 days",
-        "custom": "%s1 - %s2 days"
+        "days": "%s1 dias",
+        "custom": "%s1 - %s2 dias"
       },
       "filters": {
-        "none": "No filters",
-        "tier": "Tier %s1"
+        "none": "Sem filtros",
+        "tier": "Nível %s1"
       },
       "no_data": {
-        "battles_in_period": "No battles played in this period",
-        "battles_in_season": "No battles played in this season",
-        "players_in_period": "No players in this period",
-        "tanks_found": "No tanks found"
+        "battles_in_period": "Não há batalhas jogadas neste período",
+        "battles_in_season": "Não há batalhas jogadas nesta temporada",
+        "players_in_period": "Nenhum jogador neste período",
+        "tanks_found": "Nenhum tanque encontrado"
       },
       "buttons": {
-        "refresh": "Refresh"
+        "refresh": "Atualizar"
       },
       "hero_stats": {
         "battles": "Batalhas",
         "winrate": "Taxa de vitória",
         "damage": "Dano",
         "damage_ratio": "Razão entre dano dado e recebido",
-        "tier": "Tier",
-        "survival": "Survival",
+        "tier": "Nível",
+        "survival": "Sobrevivência",
         "accuracy": "Precisão",
         "kills": "Abates"
       }
     },
     "commands": {
       "auction": {
-        "name": "auction",
-        "description": "Tanks available right now in the auction",
+        "name": "leilão",
+        "description": "Tanques disponíveis agora mesmo no leilão",
         "body": {
-          "title": "Blitz Auction",
-          "subtitle": "%s1 available • next prices %s2\nBid now: %s3",
-          "next": "Next price: %s1",
-          "available": "Available: %s1 / %s2"
+          "title": "Leilão Blitz",
+          "subtitle": "%s1 disponível • próximos preços %s2 oferta agora: %s3",
+          "next": "Próximo preço: %s1",
+          "available": "Disponível: %s1 / %s2"
         },
         "errors": {
-          "no_auction": "# No ongoing auction\n\nCurrently, there are no tanks available for purchase in the auction. If you think this is an error, please report this discrepancy in [the official Discord Server](https://discord.gg/nDt7AjGJQH)."
+          "no_auction": "# Nenhum leilão em curso\n\nNo momento, não há tanques disponíveis para compra no leilão. Se você acha que isso é um erro, relate esta discrepância no [servidor oficial do Discord](https://discord.gg/nDt7AjGJQH)."
         },
         "actions": {
-          "bid": "Bid now"
+          "bid": "Ofertar agora"
         }
       },
       "replay": {
         "name": "replay",
-        "description": "Display replay results"
+        "description": "Exibir resultados de replays"
       },
       "research": {
-        "name": "research",
-        "description": "Lists the expenses in researching a line",
+        "name": "pesquisa",
+        "description": "Liste as despesas na pesquisa de uma linha",
         "options": {
           "target_tank": {
-            "name": "target-tank",
+            "name": "tanque-alvo",
             "description": "The final tank to research in the line"
           },
           "starting_tank": {
@@ -432,7 +432,7 @@
             "description": "Player statistics"
           },
           "tank": {
-            "name": "tank",
+            "name": "tanque",
             "description": "Tank statistics"
           }
         }
@@ -448,7 +448,7 @@
         },
         "body": {
           "subtitle": "Inactive for %s1+ days",
-          "listing": "%s1 days"
+          "listing": "%s1 dias"
         }
       },
       "full_stats": {
@@ -465,7 +465,7 @@
             "efficiency": {
               "title": "Efficiency",
               "wn8": "WN8",
-              "survival": "Survival",
+              "survival": "Sobrevivência",
               "accuracy": "Precisão"
             },
             "lethality": {
@@ -777,7 +777,7 @@
           "dynamic": {
             "name": "Dynamic armor",
             "custom_shell": {
-              "type": "Type",
+              "type": "Tipo",
               "caliber": "Caliber",
               "penetration": "Penetration",
               "normalization": "Normalization",
@@ -831,10 +831,10 @@
           "vanilla": "Vanilla",
           "opentest": "OpenTest",
           "full_name": "Full name",
-          "nation": "Nation",
-          "class": "Class",
-          "tier": "Tier",
-          "type": "Type",
+          "nation": "Nação",
+          "class": "Classe",
+          "tier": "Nível",
+          "type": "Tipo",
           "dev_id": "DEV: ID",
           "purchase": "Purchase price",
           "restoration": "Restoration price",
@@ -1059,7 +1059,7 @@
             "winrate": "Taxa de vitória",
             "players": "Players",
             "damage": "Dano",
-            "survival": "Survival",
+            "survival": "Sobrevivência",
             "xp": "EXP",
             "kills": "Abates",
             "spots": "Detecções",
