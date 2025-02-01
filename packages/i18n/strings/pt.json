@@ -673,391 +673,391 @@
         "sorting_by": "Ordenando por %s1",
         "no_tanks_found": {
           "body": "Nenhum tanque encontrado.",
-          "search_again": "Try searching again.",
-          "clear_filters": "Try clearing filters."
+          "search_again": "Tente pesquisar novamente.",
+          "clear_filters": "Tente limpar os filtros."
         },
         "sort": {
-          "meta.none": "none",
-          "survivability.health": "health",
-          "survivability.viewRange": "view range",
-          "survivability.camouflageStill": "camouflage still",
-          "survivability.camouflageMoving": "camouflage moving",
-          "survivability.camouflageShooting": "camouflage shooting",
+          "meta.none": "nenhum",
+          "survivability.health": "vida",
+          "survivability.viewRange": "alcance de visão",
+          "survivability.camouflageStill": "camuflagem quando estacionário",
+          "survivability.camouflageMoving": "camuflagem em movimento",
+          "survivability.camouflageShooting": "camuflagem ao disparar",
           "survivability.volume": "volume",
-          "survivability.length": "length",
-          "fire.dpm": "standard DPM",
-          "fire.dpmPremium": "premium DPM",
-          "fire.reload": "reload",
-          "fire.caliber": "caliber",
-          "fire.standardPenetration": "standard penetration",
-          "fire.premiumPenetration": "premium penetration",
-          "fire.damage": "damage",
-          "fire.moduleDamage": "module damage",
-          "fire.shellVelocity": "shell velocity",
-          "fire.shellRange": "shell range",
-          "fire.shellCapacity": "shell capacity",
-          "fire.aimTime": "aim time",
-          "fire.dispersionStill": "dispersion still",
-          "fire.dispersionMoving": "dispersion moving",
-          "fire.gunDepression": "gun depression",
-          "fire.gunElevation": "gun elevation",
-          "maneuverability.forwardsSpeed": "forwards speed",
-          "maneuverability.backwardsSpeed": "backwards speed",
-          "maneuverability.power": "power",
-          "maneuverability.powerToWeight": "power to weight",
-          "maneuverability.weight": "weight",
-          "maneuverability.traverseSpeed": "traverse speed"
+          "survivability.length": "comprimento",
+          "fire.dpm": "DPM padrão",
+          "fire.dpmPremium": "DPM premium",
+          "fire.reload": "recarga",
+          "fire.caliber": "calibre",
+          "fire.standardPenetration": "penetração padrão",
+          "fire.premiumPenetration": "penetração premium",
+          "fire.damage": "dano",
+          "fire.moduleDamage": "dano a módulos",
+          "fire.shellVelocity": "velocidade do projétil",
+          "fire.shellRange": "alcance de projétil",
+          "fire.shellCapacity": "capacidade de projéteis",
+          "fire.aimTime": "tempo de mira",
+          "fire.dispersionStill": "dispersão quando estacionário",
+          "fire.dispersionMoving": "dispersão em movimento",
+          "fire.gunDepression": "depressão da arma",
+          "fire.gunElevation": "elevação da arma",
+          "maneuverability.forwardsSpeed": "velocidade frontal",
+          "maneuverability.backwardsSpeed": "velocidade de ré",
+          "maneuverability.power": "potência",
+          "maneuverability.powerToWeight": "relação peso/potência",
+          "maneuverability.weight": "peso",
+          "maneuverability.traverseSpeed": "taxa de rotação"
         },
         "sort_dropdown": {
-          "label": "Sort",
+          "label": "Ordenar",
           "groups": {
             "sort": {
-              "no_sort": "No sort",
-              "label": "Sort by",
-              "fire": "Fire",
-              "maneuverability": "Maneuverability",
-              "survivability": "Survivability"
+              "no_sort": "Sem ordenação",
+              "label": "Ordenar por",
+              "fire": "Fogo",
+              "maneuverability": "Manobrabilidade",
+              "survivability": "Capacidade de sobrevivência"
             },
             "direction": {
-              "label": "Direction",
-              "ascending": "Ascending",
-              "descending": "Descending"
+              "label": "Direção",
+              "ascending": "Ascendente",
+              "descending": "Descendente"
             }
           }
         }
       },
       "warnings": {
-        "test": "Tanks in testing are subject to change and may not represent the final product."
+        "test": "Os tanques em testes estão sujeitos a alterações e não podem representar o produto final."
       }
     },
     "home": {
       "hero": {
-        "credit": "By %s1 ❤️"
+        "credit": "Por %s1 ❤️"
       },
       "hot_tanks": {
-        "title": "Popular tanks",
-        "subtitle": "Last %s1 days"
+        "title": "Tanques populares",
+        "subtitle": "Último %s1 dias"
       },
       "other_projects": {
-        "title": "Other cool projects"
+        "title": "Outros projetos legais"
       },
-      "help_translate": "Please help translate %s1 to %s2!",
-      "seo_description": "Tools for everything World of Tanks Blitz"
+      "help_translate": "Por favor, ajude a traduzir %s1 para %s2!",
+      "seo_description": "Ferramentas para tudo World of Tanks Blitz"
     },
     "tools": {
       "tankopedia": {
-        "name": "Tankopedia",
-        "button": "Find tanks",
-        "description": "Blitz tank encyclopedia",
-        "seo_description": "Statistics, armor, and more for all tanks in World of Tanks Blitz",
-        "tank_seo_title": "%s1 - Tier %s2 %s3 %s4 | %s5 Tankopedia | World of Tanks Blitz (WoTB)",
-        "tank_seo_description": "%s1 armor, statistics, equipment, provisions, and more. %s2 DPM, %s3hp alpha, %s4mm penetration, %s5kph top speed, %s6hp health.",
+        "name": "Tanquepedia",
+        "button": "Encontre tanques",
+        "description": "Blitz enciclopédia de tanques",
+        "seo_description": "Estatísticas, blindagem, e mais para todos os tanques de Wolrd of Tanks Blitz",
+        "tank_seo_title": "%s1 - Nível %s2 %s3 %s4 | %s5 Tanquepedia | World of Tanks Blitz (WoTB)",
+        "tank_seo_description": "%s1 blindagem, estatísticas, equipamentos, provisões e mais. %s2 DPM, %s3hp alfa, %s4mm de penetração, %s5km/h velocidade máxima, %s6hp vida.",
         "sandbox": {
           "poses": {
-            "hull_down": "Hull down",
-            "face_hug": "Face hug",
-            "default": "Default"
+            "hull_down": "Casco para baixo",
+            "face_hug": "Abraço facial",
+            "default": "Padrão"
           },
           "settings": {
-            "armor": "Armor",
-            "green_penetration": "Green penetration",
-            "hide_model_under_armor": "Hide model under armor",
-            "opaque": "Opaque",
+            "armor": "Blindagem",
+            "green_penetration": "Penetração verde",
+            "hide_model_under_armor": "Ocultar modelo sob blindagem",
+            "opaque": "Opaco",
             "dev_wireframe": "DEV: wireframe",
-            "environment": "Environment",
-            "show_grid": "Show grid"
+            "environment": "Ambiente",
+            "show_grid": "Exibir grade"
           },
           "screenshot": {
             "download": "Download",
-            "copy": "Copy"
+            "copy": "Copiar"
           },
           "model": {
-            "name": "Model"
+            "name": "Modelo"
           },
           "dynamic": {
-            "name": "Dynamic armor",
+            "name": "Blindagem dinâmica",
             "custom_shell": {
               "type": "Tipo",
-              "caliber": "Caliber",
-              "penetration": "Penetration",
-              "normalization": "Normalization",
-              "ricochet": "Ricochet",
-              "explosion_radius": "Explosion radius",
-              "exit": "Exit",
-              "reset": "Reset"
+              "caliber": "Calibre",
+              "penetration": "Penetração",
+              "normalization": "Normalização",
+              "ricochet": "Ricochete",
+              "explosion_radius": "Raio de Explosão",
+              "exit": "Sair",
+              "reset": "Restaurar"
             },
-            "advanced": "Advanced highlighting",
-            "shooter": "Shooter:",
+            "advanced": "Realce avançado",
+            "shooter": "Atirador:",
             "shot_card": {
               "element": {
-                "primary": "Primary",
-                "spaced": "Spaced",
-                "external": "External",
-                "gap": "Gap",
-                "gun": "Gun",
-                "track": "Tracks"
+                "primary": "Primário",
+                "spaced": "Espaçado",
+                "external": "Externo",
+                "gap": "Lacuna",
+                "gun": "Arma",
+                "track": "Esteiras"
               },
               "status": {
-                "penetration": "%s1hp penetration",
-                "blocked": "Blocked",
-                "ricochet": "Ricochet",
-                "splash": "%s1hp splash"
+                "penetration": "%s1HP penetração",
+                "blocked": "Bloqueado",
+                "ricochet": "Ricochete",
+                "splash": "%s1hp respingo"
               },
               "stats": {
                 "thickness_and_angle": "%s1mm %s2°",
                 "nominal": "%s1mm nominal",
-                "ricochet_loss": "%s1% penetration"
+                "ricochet_loss": "%s1% penetração"
               }
             }
           },
           "static": {
-            "name": "Static armor",
-            "primary": "Primary",
-            "spaced": "Spaced",
-            "external": "External",
+            "name": "Blindagem estática",
+            "primary": "Primário",
+            "spaced": "Espaçada",
+            "external": "Externa",
             "edit": {
-              "label": "Edit",
-              "reset": "Reset"
+              "label": "Editar",
+              "reset": "Redefinir"
             }
           }
         },
         "meta": {
-          "back": "Back",
-          "compare": "Compare",
+          "back": "Voltar",
+          "compare": "Comparar",
           "swap": {
-            "button": "Swap",
-            "title": "Swap tanks"
+            "button": "Trocar",
+            "title": "Trocar tanques"
           },
-          "vanilla": "Vanilla",
-          "opentest": "OpenTest",
-          "full_name": "Full name",
+          "vanilla": "Padrão",
+          "opentest": "TesteAberto",
+          "full_name": "Nome completo",
           "nation": "Nação",
           "class": "Classe",
           "tier": "Nível",
           "type": "Tipo",
           "dev_id": "DEV: ID",
-          "purchase": "Purchase price",
-          "restoration": "Restoration price",
-          "sale": "Sale price",
-          "research": "Research XP"
+          "purchase": "Preço de compra",
+          "restoration": "Preço de recuperação",
+          "sale": "Preço de venda",
+          "research": "EXP de pesquisa"
         },
         "tech_tree": {
           "title": "Árvore tecnológica",
-          "battle": "1 battle",
-          "battles": "%s1 battles",
-          "route": "Route %s1 of %s2"
+          "battle": "1 batalha",
+          "battles": "%s1 batalhas",
+          "route": "Rota %s1 de %s2"
         },
         "game_modes": {
-          "title": "Game mode abilities"
+          "title": "Habilidades do modo de jogo"
         },
         "review": {
-          "title": "Review videos",
-          "disclaimer": "BlitzKit does not endorse any review videos.",
-          "join": "Apply to %s1 YouTuber program"
+          "title": "Vídeos de análise",
+          "disclaimer": "BlitzKit não aprova nenhum vídeo de análise.",
+          "join": "Candidate-se para %s1 um programa YouTuber"
         },
         "configuration": {
-          "title": "Configuration",
+          "title": "Configuração",
           "modules": {
-            "title": "Modules",
-            "stock": "Stock",
-            "upgrade": "Upgrade"
+            "title": "Módulos",
+            "stock": "Padrão",
+            "upgrade": "Melhorar"
           },
           "equipment": {
-            "title": "Equipment",
-            "clear": "Clear"
+            "title": "Equipamento",
+            "clear": "Limpar"
           },
           "provisions": {
-            "title": "Provisions",
-            "clear": "Clear"
+            "title": "Provisões",
+            "clear": "Limpar"
           },
           "consumables": {
-            "title": "Consumables",
-            "clear": "Clear",
-            "info": "Yellow consumables do not affect the statistics."
+            "title": "Consumíveis",
+            "clear": "Limpar",
+            "info": "Os consumíveis amarelos não afetam as estatísticas."
           },
           "skills": {
-            "title": "Crew skills",
-            "clear": "Clear",
-            "maximize": "Maximize",
-            "info": "Yellow skills only apply under special circumstances. Hold Space to quickly toggle between level 0 and 7."
+            "title": "Habilidades da tripulação",
+            "clear": "Limpar",
+            "maximize": "Maximizar",
+            "info": "As habilidades amarelas só se aplicam em circunstâncias especiais. Segure Espaço para alternar rapidamente entre o nível 0 e 7."
           },
           "miscellaneous": {
             "title": "Diversos"
           }
         },
         "characteristics": {
-          "title": "Characteristics",
+          "title": "Características",
           "compare": {
-            "label": "Compare against",
-            "class": "Tier %s1 %s2",
-            "tier": "All of tier %s1",
-            "all": "All tanks"
+            "label": "Comparar com",
+            "class": "Nível %s1 %s2",
+            "tier": "Tudo de nível %s1",
+            "all": "Todos os tanques"
           },
           "values": {
-            "shell_index": "Shell %s1",
-            "at_distance": "At %s1m",
-            "at_distance_slider_label": "Distance",
-            "dispersion_at_distance": "Dispersion at %s1m",
-            "gun_flexibility": "Gun flexibility",
-            "speed": "Speed",
-            "terrain_coefficients": "Terrain coefficients",
+            "shell_index": "Projétil %s1",
+            "at_distance": "À %s1m",
+            "at_distance_slider_label": "Distância",
+            "dispersion_at_distance": "Dispersão à %s1m",
+            "gun_flexibility": "Flexibilidade da arma",
+            "speed": "Velocidade",
+            "terrain_coefficients": "Coeficientes do terreno",
             "raw_terrain_coefficients": "Coeficientes brutos do terreno",
-            "power_to_weight_ratio": "Power to weight ratio",
-            "hull_traverse_speed": "Hull traverse speed",
-            "camouflage": "Camouflage",
-            "reload": "Reload",
-            "crewCount": "Crew count",
-            "shellNormalization": "Normalization",
-            "shellRicochet": "Ricochet",
+            "power_to_weight_ratio": "Taxa de peso para potência",
+            "hull_traverse_speed": "Taxa de rotação do casco",
+            "camouflage": "Camuflagem",
+            "reload": "Recarga",
+            "crewCount": "Quantidade de tripulantes",
+            "shellNormalization": "Normalização",
+            "shellRicochet": "Ricochete",
             "dpm": "DPM",
-            "dpmEffective": "Effective at 60s",
-            "shells": "Shells",
-            "mostOptimalShellIndex": "Most optimal shell",
-            "shellReloads": "Shell reloads",
-            "shellReload": "Shell reload",
-            "intraClip": "Intra-clip",
-            "caliber": "Caliber",
-            "penetration": "Penetration",
+            "dpmEffective": "Efetivo aos 60s",
+            "shells": "Projéteis",
+            "mostOptimalShellIndex": "Projétil mais ideal",
+            "shellReloads": "Recarga de projétil",
+            "shellReload": "Recarregamento de projétil",
+            "intraClip": "Intra-clipe",
+            "caliber": "Calibre",
+            "penetration": "Penetração",
             "damage": "Dano",
-            "clipDamage": "Clipping potential",
-            "moduleDamage": "Module damage",
-            "explosionRadius": "Explosion radius",
-            "shellVelocity": "Shell velocity",
-            "aimTime": "Aim time",
-            "dispersion": "Still",
-            "dispersionMoving": "Moving",
-            "dispersionHullTraversing": "Hull traversing",
-            "dispersionTurretTraversing": "Turret traversing",
-            "dispersionShooting": "Shooting",
-            "dispersionGunDamaged": "Gun damaged",
-            "gunDepression": "Depression",
-            "gunElevation": "Elevation",
-            "gunFrontalDepression": "Frontal depression",
-            "gunFrontalElevation": "Frontal elevation",
-            "gunRearDepression": "Rear depression",
-            "gunRearElevation": "Rear elevation",
-            "azimuthLeft": "Azimuth left",
-            "azimuthRight": "Azimuth right",
-            "speedForwards": "Forwards",
-            "speedBackwards": "Backwards",
-            "hardTerrainCoefficient": "Hard",
-            "hardTerrainCoefficientRaw": "Hard",
+            "clipDamage": "Potencial de clipe",
+            "moduleDamage": "Dano a módulos",
+            "explosionRadius": "Raio de Explosão",
+            "shellVelocity": "Velocidade do projétil",
+            "aimTime": "Tempo de mira",
+            "dispersion": "Parado",
+            "dispersionMoving": "Em movimento",
+            "dispersionHullTraversing": "Deslocamento de casco",
+            "dispersionTurretTraversing": "Deslocamento de torre",
+            "dispersionShooting": "Disparando",
+            "dispersionGunDamaged": "Arma danificada",
+            "gunDepression": "Depressão",
+            "gunElevation": "Elevação",
+            "gunFrontalDepression": "Depressão Frontal",
+            "gunFrontalElevation": "Elevação frontal",
+            "gunRearDepression": "Depressão traseira",
+            "gunRearElevation": "Elevação traseira",
+            "azimuthLeft": "Azimute à esquerda",
+            "azimuthRight": "Azimute à direita",
+            "speedForwards": "Para frente",
+            "speedBackwards": "Para trás",
+            "hardTerrainCoefficient": "Difícil",
+            "hardTerrainCoefficientRaw": "Difícil",
             "mediumTerrainCoefficient": "Médio",
             "mediumTerrainCoefficientRaw": "Médio",
-            "softTerrainCoefficient": "Soft",
-            "softTerrainCoefficientRaw": "Soft",
-            "enginePower": "Engine power",
-            "powerToWeightRatioHardTerrain": "Hard",
+            "softTerrainCoefficient": "Macio",
+            "softTerrainCoefficientRaw": "Macio",
+            "enginePower": "Potência do motor",
+            "powerToWeightRatioHardTerrain": "Difícil",
             "powerToWeightRatioMediumTerrain": "Médio",
-            "powerToWeightRatioSoftTerrain": "Soft",
-            "weight": "Weight",
-            "turretTraverseSpeed": "Turret traverse speed",
-            "gunTraverseSpeed": "Gun traverse speed",
-            "hullTraverseHardTerrain": "Hard",
+            "powerToWeightRatioSoftTerrain": "Macio",
+            "weight": "Peso",
+            "turretTraverseSpeed": "Taxa de rotação da torreta",
+            "gunTraverseSpeed": "Taxa de rotação da arma",
+            "hullTraverseHardTerrain": "Difícil",
             "hullTraverseMediumTerrain": "Médio",
-            "hullTraverseSoftTerrain": "Soft",
-            "health": "Health",
-            "fireChance": "Fire chance",
-            "viewRange": "View range",
-            "camouflageStill": "Still",
-            "camouflageMoving": "Moving",
-            "camouflageShootingStill": "Still",
-            "camouflageShootingMoving": "Moving",
-            "camouflageCaughtOnFire": "Caught on fire",
-            "width": "Width",
-            "height": "Height",
-            "length": "Length",
+            "hullTraverseSoftTerrain": "Macio",
+            "health": "Vida",
+            "fireChance": "Chance de incêndio",
+            "viewRange": "Alcance de visão",
+            "camouflageStill": "Parado",
+            "camouflageMoving": "Em movimento",
+            "camouflageShootingStill": "Parado",
+            "camouflageShootingMoving": "Em movimento",
+            "camouflageCaughtOnFire": "Preso em chamas",
+            "width": "Largura",
+            "height": "Altura",
+            "length": "Comprimento",
             "volume": "Volume",
-            "shellRange": "Shell range",
-            "shellCapacity": "Shell capacity",
-            "gunType": "Gun type",
-            "penetrationAt250m": "Penetration at 250m"
+            "shellRange": "Alcance de projétil",
+            "shellCapacity": "Capacidade de projéteis",
+            "gunType": "Tipo de arma",
+            "penetrationAt250m": "Penetração à 250m"
           }
         },
         "firepower": {
-          "title": "Firepower"
+          "title": "Poder de fogo"
         },
         "crew": {
-          "title": "Crew training",
-          "info": "represents the other roles a crew member can take.",
-          "count": "Crew count",
-          "commander": "Commander",
-          "gunner": "Gunner",
-          "driver": "Driver",
-          "radioman": "Radioman",
-          "loader": "Loader"
+          "title": "Treinamento da tripulação",
+          "info": "representa os outros papéis que um membro da tripulação pode assumir.",
+          "count": "Quantidade de tripulantes",
+          "commander": "Comandante",
+          "gunner": "Artilheiro",
+          "driver": "Motorista",
+          "radioman": "Radialista",
+          "loader": "Carregador"
         },
         "maneuverability": {
-          "title": "Maneuverability"
+          "title": "Manobrabilidade"
         },
         "survivability": {
-          "title": "Survivability"
+          "title": "Capacidade de sobrevivência"
         }
       },
       "compare": {
-        "name": "Compare",
-        "button": "Compare tanks",
-        "description": "Compare tank statistics",
-        "seo_description": "Compare tanks statistics and loadouts in World of Tanks Blitz",
+        "name": "Comparar",
+        "button": "Comparar tanques",
+        "description": "Comparar estatísticas do tanque",
+        "seo_description": "Compare estatísticas dos tanques e arsenais no World of Tanks Blitz",
         "actions": {
           "add": {
-            "button": "Add",
-            "title": "Add tanks",
-            "description": "Select tanks to add to comparison"
+            "button": "Adicionar",
+            "title": "Adicionar tanques",
+            "description": "Selecione tanques para adicionar à comparação"
           },
-          "clear": "Clear",
+          "clear": "Limpar",
           "deltas": {
-            "none": "No deltas",
-            "percentage": "Percentage",
-            "absolute": "Absolute"
+            "none": "Sem deltas",
+            "percentage": "Porcentagem",
+            "absolute": "Absoluto"
           }
         },
         "no_tanks": {
-          "title": "No tanks selected",
-          "body": "Press the Add button to get started"
+          "title": "Nenhum tanque selecionado",
+          "body": "Pressione o botão Adicionar para começar"
         },
         "table": {
           "equipment": {
-            "clear": "Clear",
-            "apply_to_all": "Apply to all"
+            "clear": "Limpar",
+            "apply_to_all": "Aplicar a todos"
           },
           "skills": {
-            "clear": "Clear",
-            "maximize": "Maximize"
+            "clear": "Limpar",
+            "maximize": "Maximizar"
           },
           "modules": {
-            "stock": "Stock",
-            "upgrade": "Upgrade"
+            "stock": "Padrão",
+            "upgrade": "Melhorar"
           },
           "provisions": {
-            "clear": "Clear"
+            "clear": "Limpar"
           },
           "consumables": {
-            "clear": "Clear"
+            "clear": "Limpar"
           }
         }
       },
       "performance": {
-        "name": "Performance",
-        "button": "View tanks",
-        "description": "Tank performance statistics",
-        "seo_description": "Best tanks and their performances in World of Tanks Blitz",
+        "name": "Desempenho",
+        "button": "Ver tanques",
+        "description": "Estatísticas de desempenho do tanque",
+        "seo_description": "Melhores tanques e suas performances no World of Tanks Blitz",
         "estimation": {
-          "body": "Estimated stats based on %s1 players. Updated %s2 ago.",
-          "hours": "%s1 hours",
-          "minutes": "%s1 minutes"
+          "body": "Estatísticas estimadas baseadas em %s1 jogadores. Atualizado %s2 atrás.",
+          "hours": "%s1 horas",
+          "minutes": "%s1 minutos"
         },
         "player_count": {
-          "label": "Player count"
+          "label": "Número de jogadores"
         },
         "table": {
           "tanks": {
-            "header": "Tank",
+            "header": "Tanque",
             "total": "Total"
           },
           "stats": {
             "winrate": "Taxa de vitória",
-            "players": "Players",
+            "players": "Jogadores",
             "damage": "Dano",
             "survival": "Sobrevivência",
             "xp": "EXP",
@@ -1066,39 +1066,39 @@
             "accuracy": "Precisão",
             "shots": "Disparos",
             "hits": "Acertos",
-            "damage_ratio": "Dmg. ratio",
-            "damage_taken": "Dmg. taken",
-            "capture_points": "Cap points"
+            "damage_ratio": "Razão de dano",
+            "damage_taken": "Dano tomado",
+            "capture_points": "Pontos de captura"
           }
         }
       },
       "gallery": {
-        "name": "Gallery",
-        "button": "Browse all",
-        "description": "Blitz player avatars",
-        "seo_description": "All World of Tanks Blitz player avatars",
-        "last_updated": "Last updated on %s1",
+        "name": "Galeria",
+        "button": "Procurar todos",
+        "description": "Avatares do jogador Blitz",
+        "seo_description": "Todos os avatares do jogador World of Tanks Blitz",
+        "last_updated": "Última atualização em %s1",
         "search": {
-          "hint": "Search avatars...",
-          "results": "%s1 avatars"
+          "hint": "Procurar avatares...",
+          "results": "%s1 avatares"
         }
       },
       "session": {
-        "name": "Session",
-        "button": "Start tracking",
-        "description": "Live session stats",
-        "seo_description": "Track your stats in real time as you play World of Tanks Blitz",
+        "name": "Temporada",
+        "button": "Iniciar rastreamento",
+        "description": "Estatísticas da temporada ao vivo",
+        "seo_description": "Registre suas estatísticas em tempo real enquanto você joga World of Tanks Blitz",
         "search": {
-          "lookup": "Look up a player to get started",
+          "lookup": "Procure um jogador para começar",
           "hint": "Procurar jogadores...",
           "searching": "Pesquisando...",
           "no_results": "Nenhum jogador encontrado"
         },
         "controls": {
-          "title": "Tracking %s1",
-          "subtitle": "Since %s1",
-          "reset": "Reset",
-          "change": "Change"
+          "title": "Rastreando %s1",
+          "subtitle": "Desde %s1",
+          "reset": "Restaurar",
+          "change": "Mudança"
         },
         "no_cc": {
           "title": "You're attempting to track a CC account",
@@ -1110,7 +1110,7 @@
           "hint": "Go ahead and play a game"
         },
         "table": {
-          "tank": "Tank",
+          "tank": "Tanque",
           "total": "Total",
           "remove": "Remove"
         }
@@ -1121,7 +1121,7 @@
         "description": "Rank Blitz tanks",
         "seo_description": "Explore tier lists ranking tanks from best to worst, based on player ratings and statistical performance in World of Tanks Blitz",
         "buttons": {
-          "reset": "Reset",
+          "reset": "Restaurar",
           "share": "Share"
         }
       },
@@ -1157,7 +1157,7 @@
               "success": {
                 "title": "Copy URL",
                 "info": "Generated the URL for %s1. The embed will start tracking as soon as the URL is pasted. Reset at any time by right-clicking on PC or long-pressing on mobile and then selecting \"Reset\".",
-                "back": "Back",
+                "back": "Voltar",
                 "copy": "Copy URL"
               }
             },
@@ -1168,7 +1168,7 @@
           },
           "customize": {
             "title": "Customize",
-            "reset": "Reset",
+            "reset": "Restaurar",
             "description": "Bells and whistles of your embed"
           }
         },
@@ -1176,8 +1176,8 @@
           "breakdown": {
             "name": "Breakdown",
             "options": {
-              "width": "Width",
-              "height": "Height",
+              "width": "Largura",
+              "height": "Altura",
               "showTotal": "Show total",
               "listGap": "List gap",
               "listMaxTanks": "Max tanks",
