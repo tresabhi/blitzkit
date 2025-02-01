@@ -8,7 +8,7 @@
     "units": {
       "m": "%s1m",
       "mm": "%s1mm",
-      "deg": "%s1º",
+      "deg": "%s1°",
       "hp": "%s1hp",
       "x": "x%s1"
     },
@@ -47,7 +47,7 @@
       "zh": "Chinês",
       "ja": "Japonês",
       "fr": "Francês",
-      "pl": "Polaco"
+      "pl": "Polonês"
     },
     "wn8_percentile": {
       "0": "Muito ruim",
@@ -152,7 +152,7 @@
       "normalized_shots": "Disparos",
       "normalized_spotted": "Detecções",
       "normalized_survived_battles": "Taxa de sobrevivência",
-      "normalized_win_and_survived": "Taxa de sobrevivência em vitórias",
+      "normalized_win_and_survived": "Taxa de sobrevivência e vitórias",
       "normalized_wins": "Taxa de vitória",
       "normalized_xp": "EXP",
       "normalized_battle_life_time": "Tempo em batalha",
@@ -478,7 +478,7 @@
             "miscellaneous": {
               "title": "Diversos",
               "average_tier": "Nível médio",
-              "average_spots": "Média de avistamento",
+              "average_spots": "Média de detecções",
               "average_xp": "EXP Médio",
               "kills_to_death_ratio": "Razão entre abates e mortes"
             }
@@ -1101,119 +1101,119 @@
           "change": "Mudança"
         },
         "no_cc": {
-          "title": "You're attempting to track a CC account",
-          "body": "CC (community contributor) accounts do not have public tank statistics. We are in the process of adding embeds for CC accounts, stay tuned.",
-          "alright": "Alright"
+          "title": "Você está tentando rastrear uma conta de um CC",
+          "body": "Contas CC (colaborador da comunidade) não possuem estatísticas públicas de tanques. Estamos no processo de adicionar incorporações para contas CC, fique ligado.",
+          "alright": "Tudo bem"
         },
         "no_battles": {
-          "title": "No battles",
-          "hint": "Go ahead and play a game"
+          "title": "Sem Batalhas",
+          "hint": "Vá em frente e jogue uma partida"
         },
         "table": {
           "tank": "Tanque",
           "total": "Total",
-          "remove": "Remove"
+          "remove": "Remover"
         }
       },
       "tier_list": {
         "name": "Tier list",
-        "button": "Rank tanks",
-        "description": "Rank Blitz tanks",
-        "seo_description": "Explore tier lists ranking tanks from best to worst, based on player ratings and statistical performance in World of Tanks Blitz",
+        "button": "Ranque de tanques",
+        "description": "Ranque de tanques Blitz",
+        "seo_description": "Explore listas de classificação de tanques do melhor para o pior, baseado nas classificações dos jogadores e no desempenho estatístico em World of Tanks Blitz",
         "buttons": {
           "reset": "Restaurar",
-          "share": "Share"
+          "share": "Compartilhar"
         }
       },
       "embed": {
-        "name": "Embed",
-        "button": "Create now",
-        "description": "Embeds for streaming",
-        "seo_description": "Create embeds for streaming World of Tanks Blitz with extreme customization",
-        "coming_soon": "More embeds coming soon.",
-        "suggest": "Suggest ideas.",
+        "name": "Incorporar",
+        "button": "Crie agora",
+        "description": "Incorporações para streaming",
+        "seo_description": "Crie incorporações para streaming do World of Tanks Blitz com extrema personalização",
+        "coming_soon": "Mais incorporações vindo em breve.",
+        "suggest": "Sugira ideias.",
         "preview": {
-          "title": "Example preview",
-          "upload": "Upload test background"
+          "title": "Pré-visualização de exemplo",
+          "upload": "Enviar fundo de teste"
         },
         "configuration": {
           "import": {
-            "title": "Import",
-            "description": "Paste your current URL if you have one already to import your settings",
-            "hint": "Paste URL...",
-            "apply": "Apply",
-            "idiot_title": "Invalid URL",
-            "idiot_description": "Try pasting the URL that BlitzKit previously generated, you silly goose!",
-            "idiot_button": "Okay, my bad"
+            "title": "Importar",
+            "description": "Cole sua URL atual se você já tiver uma para importar suas configurações",
+            "hint": "Colar URL...",
+            "apply": "Aplicar",
+            "idiot_title": "URL inválida",
+            "idiot_description": "Tente colar a URL que BlitzKit gerou anteriormente, seu ganso idiota!",
+            "idiot_button": "Okay, foi mal"
           },
           "export": {
-            "title": "Export",
-            "description": "Copy all properties for you streaming software",
+            "title": "Exportar",
+            "description": "Copiar todas as propriedades para seu software de streaming",
             "generate": {
-              "button": "Generate URL",
-              "title": "Generate URL",
-              "subtitle": "Search an account to track",
-              "cancel": "Cancel",
+              "button": "Gerar URL",
+              "title": "Gerar URL",
+              "subtitle": "Procurar uma conta para rastrear",
+              "cancel": "Cancelar",
               "success": {
-                "title": "Copy URL",
-                "info": "Generated the URL for %s1. The embed will start tracking as soon as the URL is pasted. Reset at any time by right-clicking on PC or long-pressing on mobile and then selecting \"Reset\".",
+                "title": "Copiar URL",
+                "info": "Gerou a URL para %s1. A incorporação começará a rastrear assim que a URL for colada. Redefina a qualquer momento clicando com o botão direito no PC ou pressionando longamente no celular e, em seguida, selecionando \"Redefinir\".",
                 "back": "Voltar",
-                "copy": "Copy URL"
+                "copy": "Copiar URL"
               }
             },
-            "css": "Copy CSS",
-            "width": "Copy Width",
-            "height": "Copy Height",
-            "framerate": "Copy Framerate"
+            "css": "Copiar CSS",
+            "width": "Copiar Largura",
+            "height": "Copiar Altura",
+            "framerate": "Copiar Framerate"
           },
           "customize": {
-            "title": "Customize",
+            "title": "Personalizar",
             "reset": "Restaurar",
-            "description": "Bells and whistles of your embed"
+            "description": "Sinos e assobios de sua incorporação"
           }
         },
         "types": {
           "breakdown": {
-            "name": "Breakdown",
+            "name": "Divisão",
             "options": {
               "width": "Largura",
               "height": "Altura",
-              "showTotal": "Show total",
-              "listGap": "List gap",
-              "listMaxTanks": "Max tanks",
-              "cardRadius": "Card radius",
-              "cardHeaderBackgroundColor": "Card header background color",
-              "cardHeaderPadding": "Card header padding",
-              "cardTitle": "Card title",
-              "cardTitleTypeColor": "Card title type color",
-              "cardTitleClassIcon": "Card title class icon",
-              "cardBodyBackgroundColor": "Card body background color",
-              "cardBodyPadding": "Card body padding",
-              "columnGap": "Column gap",
-              "columnValue": "Column value",
-              "columnLabel": "Column label",
-              "column1": "Column 1",
-              "column2": "Column 2",
-              "column3": "Column 3",
-              "column4": "Column 4",
-              "column1CustomLabel": "Column 1 label",
-              "column2CustomLabel": "Column 2 label",
-              "column3CustomLabel": "Column 3 label"
+              "showTotal": "Exibir total",
+              "listGap": "Listar lacuna",
+              "listMaxTanks": "Máximo de tanques",
+              "cardRadius": "Raio do cartão",
+              "cardHeaderBackgroundColor": "Cor de fundo do cabeçalho do cartão",
+              "cardHeaderPadding": "Preenchimento do cabeçalho do cartão\n",
+              "cardTitle": "Título do cartão",
+              "cardTitleTypeColor": "Tipo de cor do título do cartão",
+              "cardTitleClassIcon": "Ícone de classe do título do cartão",
+              "cardBodyBackgroundColor": "Cor de fundo do corpo do cartão",
+              "cardBodyPadding": "Preenchimento do corpo do cartão",
+              "columnGap": "Lacuna da coluna",
+              "columnValue": "Valor da coluna",
+              "columnLabel": "Rótulo da coluna",
+              "column1": "Coluna 1",
+              "column2": "Coluna 2",
+              "column3": "Coluna 3",
+              "column4": "Coluna 4",
+              "column1CustomLabel": "Rótulo da coluna 1",
+              "column2CustomLabel": "Rótulo da coluna 2",
+              "column3CustomLabel": "Rótulo da coluna 3"
             }
           }
         }
       },
       "charts": {
-        "name": "Charts",
-        "button": "Nerd out",
-        "description": "Lots of graphs",
+        "name": "Gráfico",
+        "button": "Nerdice para fora",
+        "description": "Muitos gráficos",
         "seo_description": "Tabelas e gráficos sobre qualquer coisa e tudo sobre tanques, jogadores e eventos em World of Tanks Blitz"
       },
       "rating": {
         "name": "Classificação",
         "button": "Ver tabela de classificação",
-        "description": "Classificação completa do placar",
-        "seo_description": "Classificações ao vivo e arquivadasdo placar para World of Tanks Blitz"
+        "description": "Classificação completa da tabela de classificação",
+        "seo_description": "Classificação completa ao vivo e arquivada para World of Tanks Blitz"
       },
       "discord": {
         "name": "Bot do discord",
@@ -1242,19 +1242,19 @@
       "blitz_analysis": {
         "name": "AnaliseBlitz[]",
         "button": "Analise agora",
-        "description": "Rich historic average stats",
-        "seo_description": "Rich historic average stats in World of Tanks Blitz"
+        "description": "Estatísticas médias históricas ricas",
+        "seo_description": "Estatísticas médias históricas ricas no World of Tanks Blitz"
       },
       "blitz_insider": {
-        "name": "Blitz Insider",
+        "name": "Assistente Blitz",
         "button": "Descubra hoje",
-        "description": "In-game session stats",
-        "seo_description": "In-game session stats in World of Tanks Blitz"
+        "description": "Estatísticas da temporada em jogo",
+        "seo_description": "Estatísticas da temporada em jogo em World of Tanks Blitz"
       }
     },
     "footer": {
-      "motto": "Everything World of Tanks Blitz",
-      "copyright": "Unaffiliated with Wargaming or any service",
+      "motto": "Tudo World of Tanks Blitz",
+      "copyright": "Não afiliado à Wargaming ou qualquer serviço",
       "about": {
         "title": "Sobre",
         "credits": "Créditos",
