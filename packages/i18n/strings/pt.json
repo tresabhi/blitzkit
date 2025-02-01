@@ -342,144 +342,144 @@
         "options": {
           "target_tank": {
             "name": "tanque-alvo",
-            "description": "The final tank to research in the line"
+            "description": "O último tanque para pesquisar na linha"
           },
           "starting_tank": {
-            "name": "starting-tank",
-            "description": "The starting tank in the line (inferred automatically if not provided)"
+            "name": "tanque-inicial",
+            "description": "O tanque inicial na linha (inferido automaticamente se não fornecido)"
           }
         },
         "body": {
-          "subtitle": "Research",
+          "subtitle": "Pesquisa",
           "total": "Total",
-          "research": "Research: %s1",
-          "upgrades": "Upgrades: %s1",
-          "purchase": "Purchase: %s1",
-          "equipment": "Equipment: %s1",
-          "estimation": "# This is an estimation!\n\nThis list may include already researched tanks because of the inaccurate information Wargaming provides. Try providing a `starting-tank` from the line when using the command if you can."
+          "research": "Pesquisa: %s1",
+          "upgrades": "Melhorias: %s1",
+          "purchase": "Compra: %s1",
+          "equipment": "Equipamento: %s1",
+          "estimation": "# Esta é uma estimativa!\n\nEsta lista pode incluir tanques já pesquisados devido à informação imprecisa que a Wargaming fornece. Tente fornecer um `tanque-inicial` da linha ao usar o comando, se puder."
         },
         "errors": {
-          "non_tech_tree": "# %s1 is not on the tech tree\n\nYou cannot research a premium/collector tank.",
-          "tier_1": "# %s1 is a tier I\n\nTier I tanks are always unlocked for free for all players.",
-          "already_researched": "# %s1 is already researched\n\nTry providing a `starting-tank` when using the command to view the totals for a line you have already researched.",
-          "start_end_equal": "# %s1 was provided twice\n\nMake sure `starting-tank` and `target-tank` are different.",
-          "tanks_not_on_line": "# %s1 and %s2 are not on the same line\n\nMake sure `starting-tank` and `target-tank` are on the same tech-tree line.",
-          "unordered": "# %s1 higher tiered to %s2\n\nMake sure to provide %s3 as the `starting-tank` instead as it is the lower tiered tank."
+          "non_tech_tree": "# %s1 não está na árvore tecnológica\n\nVocê não pode pesquisar um tanque premium/colecionador.",
+          "tier_1": "# %s1 é um nível I\n\nOs tanques de nível I sempre são desbloqueados gratuitamente para todos os jogadores.",
+          "already_researched": "# %s1 já foi pesquisado\n\nTente fornecer um `tanque-inicial` ao usar o comando para ver os totais de uma linha que você já pesquisou.",
+          "start_end_equal": "# %s1 foi fornecido duas vezes\n\nCertifique-se de que `tanque-inicial` e `tanque-alvo` são diferentes.",
+          "tanks_not_on_line": "# %s1 e %s2 não estão na mesma linha\n\nCertifique-se de que `tanque-inicial` e `tanque-alvo` estão na mesma linha tecnológica.",
+          "unordered": "# %s1 de nível mais alto para %s2\n\nCertifique-se de fornecer %s3 como o `tanque-inicial` em vez disso, pois é o tanque de nível inferior."
         }
       },
       "about": {
-        "name": "about",
-        "description": "All the info you need about the bot",
+        "name": "sobre",
+        "description": "Todas as informações que você precisa sobre o bot",
         "subcommands": {
           "commands": {
-            "name": "commands",
-            "description": "List of all commands and their descriptions",
-            "body": "# Commands\n\nBlitzKit offers the following commands:\n\n"
+            "name": "comandos",
+            "description": "Lista de todos os comandos e suas descrições",
+            "body": "# Comandos\n\nBlitzKit oferece os seguintes comandos:\n"
           },
           "embeds": {
-            "name": "embeds",
-            "description": "How embeds work"
+            "name": "incorporar",
+            "description": "Como incorporações funcionam"
           },
           "introduction": {
-            "name": "introduction",
-            "description": "About the bot"
+            "name": "Introdução",
+            "description": "Sobre o bot"
           },
           "invite": {
-            "name": "invite",
-            "description": "How to invite the bot"
+            "name": "convite",
+            "description": "Como convidar o bot"
           },
           "timezones": {
-            "name": "timezones",
-            "description": "How BlitzKit infers and uses your timezone"
+            "name": "fusos horários",
+            "description": "Como o BlitzKit inferi e usa seu fuso horário"
           },
           "credits": {
-            "name": "credits",
-            "description": "People who have helped BlitzKit"
+            "name": "créditos",
+            "description": "Pessoas que ajudaram BlitzKit"
           }
         }
       },
       "breakdown": {
-        "name": "breakdown",
-        "description": "A period's breakdown by tanks played",
+        "name": "divisão",
+        "description": "Análise de um período por tanques jogados",
         "body": {
           "total": "Total",
           "battles": "Batalhas",
           "wn8": "WN8",
           "winrate": "Taxa de vitória",
           "damage": "Dano",
-          "unknown_tank": "Unknown tank %s1"
+          "unknown_tank": "Tanque desconhecido %s1"
         }
       },
       "debug": {
-        "name": "debug",
-        "description": "Debug information about the bot",
+        "name": "depuração",
+        "description": "Depurar informações sobre o bot",
         "body": {
-          "title": "# Debug\n\n",
-          "version": "Version",
+          "title": "# Depuração\n",
+          "version": "Versão",
           "shard": {
-            "label": "Shard",
-            "default": "default"
+            "label": "Fragmento",
+            "default": "padrão"
           },
-          "uptime": "Uptime"
+          "uptime": "Tempo de atividade"
         }
       },
       "evolution": {
-        "name": "evolution",
-        "description": "Evolution of statistics",
+        "name": "evolução",
+        "description": "Evolução das estatísticas",
         "groups": {
           "player": {
-            "name": "player",
-            "description": "Player statistics"
+            "name": "jogador",
+            "description": "Estatísticas do Jogador"
           },
           "tank": {
             "name": "tanque",
-            "description": "Tank statistics"
+            "description": "Estatísticas do tanque"
           }
         }
       },
       "inactive": {
-        "name": "inactive",
-        "description": "Lists all inactive players in a clan above a threshold",
+        "name": "inativo",
+        "description": "Liste todos os jogadores inativos em um clã acima de um limite",
         "options": {
           "threshold": {
-            "name": "threshold",
-            "description": "The number of days inactive (default: %s1 days)"
+            "name": "limite",
+            "description": "O número de dias inativos (padrão: %s1 dias)"
           }
         },
         "body": {
-          "subtitle": "Inactive for %s1+ days",
+          "subtitle": "Inativo por %s1+ dias",
           "listing": "%s1 dias"
         }
       },
       "full_stats": {
-        "name": "full-stats",
-        "description": "Full in-game statistics",
+        "name": "estatísticas-completas",
+        "description": "Estatísticas completas dentro do jogo",
         "body": {
           "cards": {
             "games": {
-              "title": "Games",
+              "title": "Jogos",
               "winrate": "Taxa de vitória",
               "battles": "Batalhas",
-              "wins_losses": "Wins / losses"
+              "wins_losses": "Vitórias / Derrotas"
             },
             "efficiency": {
-              "title": "Efficiency",
+              "title": "Eficiência",
               "wn8": "WN8",
               "survival": "Sobrevivência",
               "accuracy": "Precisão"
             },
             "lethality": {
-              "title": "Lethality",
-              "average_damage": "Average damage",
-              "damage_per_tier": "Damage per tier",
+              "title": "Letalidade",
+              "average_damage": "Dano médio",
+              "damage_per_tier": "Dano por nível",
               "damage_ratio": "Razão entre dano dado e recebido",
-              "average_kills": "Average kills"
+              "average_kills": "Média de abates"
             },
             "miscellaneous": {
-              "title": "Miscellaneous",
-              "average_tier": "Average tier",
-              "average_spots": "Average spots",
-              "average_xp": "Average XP",
+              "title": "Diversos",
+              "average_tier": "Nível médio",
+              "average_spots": "Média de avistamento",
+              "average_xp": "EXP Médio",
               "kills_to_death_ratio": "Razão entre abates e mortes"
             }
           }
@@ -487,115 +487,115 @@
       },
       "link": {
         "name": "link",
-        "description": "Links your Blitz and Discord account",
+        "description": "Conecte sua conta Blitz e Discord",
         "body": {
-          "accounts_linked": "Accounts linked",
+          "accounts_linked": "Contas vinculadas",
           "no_role_permissions": {
-            "title": "%s1 failed to verify",
-            "description": "I don't have the permission to manage roles."
+            "title": "%s1 falhou ao verificar",
+            "description": "Eu não tenho permissão para gerenciar funções."
           }
         },
         "embed": {
-          "title": "Incorrect account?",
-          "description": "Use the command again and select a username from the search results."
+          "title": "Conta incorreta?",
+          "description": "Use o comando novamente e selecione um nome de usuário dos resultados da pesquisa."
         }
       },
       "search_clans": {
-        "name": "search-clans",
-        "description": "Search clans",
+        "name": "procurar-clãs",
+        "description": "Procurar clãs",
         "options": {
           "limit": {
-            "name": "limit",
-            "description": "The max number of clan results (default: %s1)"
+            "name": "limite",
+            "description": "O número máximo de resultados do clã (padrão: %s1)"
           }
         },
         "body": {
-          "title": "Clan search for %s1 in region %s2",
-          "no_results": "No clans found"
+          "title": "Pesquisa do clã para %s1 na região %s2",
+          "no_results": "Nenhum clã encontrado"
         }
       },
       "search_players": {
-        "name": "search-players",
-        "description": "Search players",
+        "name": "pesquisa-jogadores",
+        "description": "Procurar jogadores",
         "options": {
           "limit": {
-            "name": "limit",
-            "description": "The max number of player results (default: %s1)"
+            "name": "limite",
+            "description": "O número máximo de resultados do jogador (padrão: %s1)"
           }
         },
         "body": {
-          "title": "Player search for %s1 in region %s2",
-          "no_results": "No players found"
+          "title": "Busca de jogador para %s1 na região %s2",
+          "no_results": "Nenhum jogador encontrado"
         }
       },
       "rating_leaderboard": {
-        "name": "rating-leaderboard",
-        "description": "Rating battles statistics",
+        "name": "classificação-tabela de classificação",
+        "description": "Estatísticas de batalhas de classificação",
         "subcommands": {
           "neighbors": {
-            "name": "neighbors",
-            "description": "Neighboring players on the leaderboard"
+            "name": "vizinhos",
+            "description": "Jogadores vizinhos na tabela de classificação"
           },
           "league": {
-            "name": "league",
-            "description": "Top players of a league"
+            "name": "Liga",
+            "description": "Melhores jogadores de uma liga"
           }
         },
         "options": {
           "limit": {
-            "name": "limit",
-            "description": "How many neighbors to display (default: %s1)"
+            "name": "limite",
+            "description": "Quantos vizinhos exibir (padrão: %s1)"
           },
           "season": {
-            "name": "season",
-            "description": "Season number (default: current)",
+            "name": "temporada",
+            "description": "Número da temporada (padrão: atual)",
             "choices": {
-              "current": "%s1 (current)"
+              "current": "%s1 (atual)"
             }
           },
           "league": {
-            "name": "league",
-            "description": "The league to display"
+            "name": "Liga",
+            "description": "A liga para exibir"
           }
         },
         "body": {
-          "top_players": "Top %s1 players",
-          "no_participation": "# %s1 didn't play rating in season %s2\n\nThis player did not participate in this season or did not get past calibration.",
-          "no_ongoing_season": "# No ongoing season\n\nThere isn't a currently running rating season.",
-          "deleted_player": "Deleted %s1",
-          "neighbors": "Rating neighbors",
-          "more": "+ %s1 more"
+          "top_players": "Melhores %s1 jogadores",
+          "no_participation": "# %s1 não jogou classificação na temporada %s2\n\nEste jogador não participou nesta temporada ou não passou da calibração.",
+          "no_ongoing_season": "# Nenhuma temporada em andamento\n\nNão há uma temporada de classificação em execução no momento.",
+          "deleted_player": "Excluído %s1",
+          "neighbors": "Classificação de vizinhos",
+          "more": "+ %s1 mais"
         }
       },
       "today": {
         "name": "hoje",
-        "description": "Today's played tanks and statistics"
+        "description": "Tanques jogados hoje e estatísticas"
       },
       "stats": {
-        "name": "stats",
-        "description": "Quick statistics for a period"
+        "name": "estatísticas",
+        "description": "Estatísticas rápidas para um período"
       },
       "owned_tanks": {
-        "name": "owned-tanks",
-        "description": "Shows all own tanks in a tier",
+        "name": "tanques-possuídos",
+        "description": "Mostra todos os tanques possuídos em um nível",
         "body": {
-          "title": "# %s1's owned tier %s2 tanks\n\n"
+          "title": "# %s1's possuía nível %s2 tanques\n\n"
         }
       },
       "permissions": {
-        "name": "permissions",
-        "description": "Checks wether the bot has the required permissions to function",
+        "name": "Permissões",
+        "description": "Verifica se o bot tem as permissões necessárias para funcionar",
         "body": {
-          "title": "# Permissions\n\n%s1",
-          "view_channels": "View channels: needed to find the message the refresh button was used on",
-          "read_message_history": "Read message history: needed to find the message to refresh",
-          "attach_files": "Attach files: needed to add images to image-based commands",
-          "external_emojis": "External emojis: needed to add national flags and tank class emojis"
+          "title": "# Permissões\n\n%s1",
+          "view_channels": "Ver canais: necessário para encontrar a mensagem em que o botão atualizar foi usado",
+          "read_message_history": "Histórico de mensagens lidas: necessário para encontrar a mensagem para atualizar",
+          "attach_files": "Anexar arquivos: necessário para adicionar imagens a comandos baseados em imagens",
+          "external_emojis": "Emojis externos: necessário para adicionar bandeiras nacionais e emojis de classe de tanque"
         }
       },
       "ping": {
         "name": "ping",
-        "description": "Check wether the bot is alive.",
+        "description": "Verifique se o bot está vivo.",
         "body": {
           "pong": "Pong 🏓",
           "pong_with_time": "Pong 🏓 - %s1ms"
@@ -612,67 +612,67 @@
         }
       },
       "player_info": {
-        "name": "player-info",
-        "description": "Basic information about a player",
+        "name": "informação do jogador",
+        "description": "Informações básicas sobre um jogador",
         "body": {
-          "title": "%s1's information",
-          "nickname": "Nickname",
+          "title": "%s1's informações",
+          "nickname": "Apelido",
           "battles": "Batalhas",
           "winrate": "Taxa de vitória",
-          "account_id": "Account ID",
-          "created": "Created",
-          "last_battle": "Last battle"
+          "account_id": "ID da conta",
+          "created": "Criado",
+          "last_battle": "Última batalha"
         }
       },
       "rating": {
-        "name": "rating",
-        "description": "Rating player's statistics",
+        "name": "classificação",
+        "description": "Estatísticas de jogador de classificação",
         "subcommands": {
           "today": {
             "name": "hoje",
-            "description": "Today's rating statistics"
+            "description": "Estatísticas de classificação hoje"
           },
           "season": {
-            "name": "season",
-            "description": "This season's rating statistics"
+            "name": "temporada",
+            "description": "Estatísticas de classificação desta temporada"
           }
         },
         "body": {
           "subtitle": {
-            "today": "Today's rating statistics",
-            "season": "This season's rating statistics"
+            "today": "Estatísticas de classificação hoje",
+            "season": "Estatísticas de classificação desta temporada"
           }
         },
         "errors": {
-          "no_participation": "# %s1 hasn't played rating\n\nThis player hasn't participated in the rating gamemode this season.",
-          "unrecorded_stats": "# Statistics currently unavailable\n\nWargaming may be currently be facing server downtime. If there is an on-going season, statistics should be available withing 24 hours."
+          "no_participation": "# %s1 não jogou classificação\n\nEste jogador não participou do modo de classificação nesta temporada.",
+          "unrecorded_stats": "# Estatísticas atualmente indisponível\n\nWargaming pode estar no momento, enfrentando tempo de inatividade do servidor. Se houver uma temporada em curso, as estatísticas deverão ser disponibilizadas dentro de 24 horas."
         }
       }
     }
   },
   "website": {
     "settings": {
-      "dev_mode": "Development mode",
-      "language": "Language"
+      "dev_mode": "Modo de desenvolvimento",
+      "language": "Idioma"
     },
     "common": {
       "player_search": {
-        "hint": "Search players...",
-        "no_results": "No results",
-        "searching": "Searching..."
+        "hint": "Procurar jogadores...",
+        "no_results": "Sem resultados",
+        "searching": "Pesquisando..."
       },
       "copy_button": {
-        "copied": "Copied!"
+        "copied": "Copiado!"
       },
       "tank_search": {
-        "search_bar_hint": "Search tanks...",
-        "recent": "Recently viewed",
-        "select_all": "Select all",
-        "count_singular": "1 tank",
-        "count_plural": "%s1 tanks",
-        "sorting_by": "Sorting by %s1",
+        "search_bar_hint": "Procurar tanques...",
+        "recent": "Visto recentemente",
+        "select_all": "Selecionar todos",
+        "count_singular": "1 tanque",
+        "count_plural": "%s1 tanques",
+        "sorting_by": "Ordenando por %s1",
         "no_tanks_found": {
-          "body": "No tanks found.",
+          "body": "Nenhum tanque encontrado.",
           "search_again": "Try searching again.",
           "clear_filters": "Try clearing filters."
         },
@@ -882,7 +882,7 @@
             "info": "Yellow skills only apply under special circumstances. Hold Space to quickly toggle between level 0 and 7."
           },
           "miscellaneous": {
-            "title": "Miscellaneous"
+            "title": "Diversos"
           }
         },
         "characteristics": {
@@ -1090,9 +1090,9 @@
         "seo_description": "Track your stats in real time as you play World of Tanks Blitz",
         "search": {
           "lookup": "Look up a player to get started",
-          "hint": "Search players...",
-          "searching": "Searching...",
-          "no_results": "No players found"
+          "hint": "Procurar jogadores...",
+          "searching": "Pesquisando...",
+          "no_results": "Nenhum jogador encontrado"
         },
         "controls": {
           "title": "Tracking %s1",
