@@ -353,7 +353,7 @@
           "subtitle": "Research",
           "total": "全部",
           "research": "Research: %s1",
-          "upgrades": "Upgrades: %s1",
+          "upgrades": "",
           "purchase": "Purchase: %s1",
           "equipment": "Equipment: %s1",
           "estimation": "# This is an estimation!\n\nThis list may include already researched tanks because of the inaccurate information Wargaming provides. Try providing a `starting-tank` from the line when using the command if you can."
