@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../../submodules/CUE4Parse/CUE4Parse-Conversion/CUE4Parse-Conversion.csproj" />
     <ProjectReference Include="../../submodules/CUE4Parse/CUE4Parse/CUE4Parse.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CUE4Parse" Version="1.2.1" />
     <PackageReference Include="DotNet.Glob" Version="3.1.3" />
     <PackageReference Include="Google.Protobuf" Version="3.29.3" />
   </ItemGroup>

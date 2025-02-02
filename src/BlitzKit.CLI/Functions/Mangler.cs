@@ -1,8 +1,15 @@
 using Blitzkit;
 using BlitzKit.CLI.Models;
 using BlitzKit.CLI.Utils;
+using CUE4Parse_Conversion;
+using CUE4Parse_Conversion.Animations;
+using CUE4Parse_Conversion.Meshes;
+using CUE4Parse_Conversion.Textures;
+using CUE4Parse_Conversion.UEFormat.Enums;
 using CUE4Parse.UE4.Assets.Exports.Engine;
+using CUE4Parse.UE4.Assets.Exports.Material;
 using CUE4Parse.UE4.Assets.Exports.StaticMesh;
+using CUE4Parse.UE4.Assets.Exports.Texture;
 using CUE4Parse.UE4.Objects.UObject;
 using CUE4Parse.Utils;
 using Google.Protobuf.Collections;
@@ -66,9 +73,21 @@ namespace BlitzKit.CLI.Functions
       var hullVisual = hull.GetObject("VisualData");
       var hullMeshSettings = hullVisual.GetStruct("MeshSettings");
       var hullMesh = hullMeshSettings.GetSoftObject<UStaticMesh>("Mesh");
+      MeshExporter hullMeshExporter = new(
+        hullMesh,
+        new()
+        {
+          MeshFormat = EMeshFormat.Gltf2,
+          ExportMaterials = true,
+          ExportMorphTargets = false,
+          LodFormat = ELodFormat.FirstLod,
+          TextureFormat = ETextureFormat.Jpeg,
+          SocketFormat = ESocketFormat.None,
+          Platform = ETexturePlatform.DesktopMobile,
+        }
+      );
 
-      // var hullMesh = hullMeshSettings.GetSoftObject("Mesh");
-      // GLB hullGlb = new(hullMesh);
+      hullMeshExporter.TryWriteToDir(new("../../temp"), out _, out _);
 
       return new() { Id = tankId };
     }
