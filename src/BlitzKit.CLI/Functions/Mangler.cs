@@ -1,6 +1,10 @@
 using Blitzkit;
 using BlitzKit.CLI.Models;
 using BlitzKit.CLI.Utils;
+using CUE4Parse.UE4.Assets.Exports.Engine;
+using CUE4Parse.UE4.Assets.Exports.StaticMesh;
+using CUE4Parse.UE4.Objects.UObject;
+using CUE4Parse.Utils;
 using Google.Protobuf.Collections;
 using Newtonsoft.Json.Linq;
 
@@ -28,8 +32,8 @@ namespace BlitzKit.CLI.Functions
     {
       foreach (var tankDir in nation.Directories)
       {
-        // if (tankDir.Value.Name != "R90_IS_4")
-        //   continue;
+        if (tankDir.Value.Name != "R90_IS_4")
+          continue;
 
         var tank = MangleTank(tankDir.Value);
 
@@ -56,6 +60,15 @@ namespace BlitzKit.CLI.Functions
       {
         PrettyLog.Success($"Mangling tank:     {tankId}");
       }
+
+      var hulls = pda.GetObjectDataTable("DT_Hulls");
+      var hull = hulls.GetRow("hull");
+      var hullVisual = hull.GetObject("VisualData");
+      var hullMeshSettings = hullVisual.GetStruct("MeshSettings");
+      var hullMesh = hullMeshSettings.GetSoftObject<UStaticMesh>("Mesh");
+
+      // var hullMesh = hullMeshSettings.GetSoftObject("Mesh");
+      // GLB hullGlb = new(hullMesh);
 
       return new() { Id = tankId };
     }

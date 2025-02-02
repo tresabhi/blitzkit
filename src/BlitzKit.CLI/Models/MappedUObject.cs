@@ -1,6 +1,10 @@
+using System.Collections;
+using System.Collections.Frozen;
+using System.Dynamic;
 using CUE4Parse.FileProvider;
 using CUE4Parse.FileProvider.Objects;
 using CUE4Parse.UE4.Assets.Exports;
+using CUE4Parse.UE4.Assets.Exports.Engine;
 using CUE4Parse.UE4.Assets.Objects;
 using CUE4Parse.UE4.Assets.Objects.Properties;
 using CUE4Parse.UE4.Objects.UObject;
@@ -18,6 +22,7 @@ namespace BlitzKit.CLI.Models
     readonly Dictionary<string, ArrayProperty> Arrays = [];
     readonly Dictionary<string, TextProperty> Texts = [];
     readonly Dictionary<string, IntProperty> Ints = [];
+    readonly Dictionary<string, MapProperty> Maps = [];
 
     public MappedUObject(List<FPropertyTag> properties)
       : base(properties)
@@ -80,6 +85,12 @@ namespace BlitzKit.CLI.Models
             break;
           }
 
+          case MapProperty map:
+          {
+            Maps.Add(property.Name.Text, map);
+            break;
+          }
+
           default:
           {
             throw new Exception($"Unhandled property type: {property}");
@@ -88,19 +99,47 @@ namespace BlitzKit.CLI.Models
       }
     }
 
-    public string GetName(string name)
-    {
-      return Names[name].Value.Text;
-    }
+    public FPropertyTag GetAny(string name) =>
+      Properties.First(property => property.Name.Text == name);
 
-    public bool GetBool(string name)
-    {
-      return Booleans[name].Value;
-    }
+    public string GetName(string name) => Names[name].Value.Text;
 
-    public bool? TryGetBool(string name)
+    public string? TryGetName(string name) =>
+      Names.TryGetValue(name, out var entry) ? entry.Value.Text : null;
+
+    public bool GetBool(string name) => Booleans[name].Value;
+
+    public bool? TryGetBool(string name) =>
+      Booleans.TryGetValue(name, out var entry) ? entry.Value : null;
+
+    public T GetSoftObject<T>(string name)
+      where T : UObject => SoftObjects[name].Value.Load<T>();
+
+    public MappedUObject GetMappedSoftObject(string name) =>
+      new(GetMappedSoftObject(name).Properties);
+
+    public MappedUObject? TryGetSoftObject(string name) =>
+      SoftObjects.TryGetValue(name, out var entry)
+        ? new MappedUObject(entry.Value.Load().Properties)
+        : null;
+
+    public MappedUObject GetObject(string name) => new(Objects[name].Value!.Load()!.Properties);
+
+    public MappedUDataTable GetObjectDataTable(string name) =>
+      new(Objects[name].Value!.Load<UDataTable>()!);
+
+    public MappedUObject GetStruct(string name) =>
+      new(Structs[name].GetValue<FStructFallback>()!.Properties);
+
+    public MappedUObject[] GetArray(string name)
     {
-      return Booleans.TryGetValue(name, out var entry) ? entry.Value : null;
+      return
+      [
+        .. Arrays[name]
+          .Value!.Properties.Select(property => new MappedUObject(
+            property.GetValue<FStructFallback>()!.Properties
+          )),
+      ];
     }
   }
 }

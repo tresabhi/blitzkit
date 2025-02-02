@@ -1,5 +1,6 @@
 using System.Text.Json;
 using BlitzKit.CLI.Models;
+using BlitzKit.CLI.Quicktype;
 using BlitzKit.CLI.Utils;
 using CUE4Parse.FileProvider.Objects;
 using CUE4Parse.UE4.Pak;
