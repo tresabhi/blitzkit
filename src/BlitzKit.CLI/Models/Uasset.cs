@@ -7,7 +7,7 @@ namespace BlitzKit.CLI.Models
   public class Uasset
   {
     readonly GameFile file;
-    readonly Dictionary<string, UObject> objects = [];
+    readonly Dictionary<string, MappedUObject> objects = [];
 
     public Uasset(GameFile file, AbstractFileProvider provider)
     {
@@ -16,10 +16,10 @@ namespace BlitzKit.CLI.Models
 
       foreach (var obj in objects)
       {
-        this.objects.Add(obj.Name, obj);
+        this.objects.Add(obj.Name, new(obj.Properties));
       }
     }
 
-    public UObject Get(string name) => objects[name];
+    public MappedUObject Get(string name) => objects[name];
   }
 }

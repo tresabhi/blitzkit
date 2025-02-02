@@ -40,10 +40,9 @@ namespace BlitzKit.CLI.Functions
     {
       var pdaName = $"PDA_{tankDir.Name}";
       var pda = tankDir.GetUasset($"{pdaName}.uasset").Get(pdaName);
+      var tankId = pda.GetName("TankId");
 
-      Console.WriteLine(pda);
-
-      return new();
+      return new() { Id = tankId };
     }
 
     Dictionary<string, CrewType> CrewTypes = new()
