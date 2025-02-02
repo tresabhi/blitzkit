@@ -1,5 +1,6 @@
 using Blitzkit;
 using BlitzKit.CLI.Models;
+using BlitzKit.CLI.Utils;
 using Google.Protobuf.Collections;
 using Newtonsoft.Json.Linq;
 
@@ -27,20 +28,34 @@ namespace BlitzKit.CLI.Functions
     {
       foreach (var tankDir in nation.Directories)
       {
-        if (tankDir.Value.Name != "R90_IS_4")
-          continue;
+        // if (tankDir.Value.Name != "R90_IS_4")
+        //   continue;
 
         var tank = MangleTank(tankDir.Value);
+
+        if (tank == null)
+          continue;
 
         tanks.Tanks_.Add(tank.Id);
       }
     }
 
-    Tank MangleTank(VfsDirectory tankDir)
+    Tank? MangleTank(VfsDirectory tankDir)
     {
       var pdaName = $"PDA_{tankDir.Name}";
       var pda = tankDir.GetUasset($"{pdaName}.uasset").Get(pdaName);
       var tankId = pda.GetName("TankId");
+      var isDev = pda.TryGetBool("bInDevelopment") ?? true;
+
+      if (isDev)
+      {
+        PrettyLog.Warn($"Skipping dev tank: {tankId}");
+        return null;
+      }
+      else
+      {
+        PrettyLog.Success($"Mangling tank:     {tankId}");
+      }
 
       return new() { Id = tankId };
     }

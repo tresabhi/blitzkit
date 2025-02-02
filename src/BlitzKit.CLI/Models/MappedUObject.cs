@@ -16,6 +16,8 @@ namespace BlitzKit.CLI.Models
     readonly Dictionary<string, BoolProperty> Booleans = [];
     readonly Dictionary<string, FloatProperty> Floats = [];
     readonly Dictionary<string, ArrayProperty> Arrays = [];
+    readonly Dictionary<string, TextProperty> Texts = [];
+    readonly Dictionary<string, IntProperty> Ints = [];
 
     public MappedUObject(List<FPropertyTag> properties)
       : base(properties)
@@ -66,6 +68,18 @@ namespace BlitzKit.CLI.Models
             break;
           }
 
+          case TextProperty text:
+          {
+            Texts.Add(property.Name.Text, text);
+            break;
+          }
+
+          case IntProperty integer:
+          {
+            Ints.Add(property.Name.Text, integer);
+            break;
+          }
+
           default:
           {
             throw new Exception($"Unhandled property type: {property}");
@@ -77,6 +91,16 @@ namespace BlitzKit.CLI.Models
     public string GetName(string name)
     {
       return Names[name].Value.Text;
+    }
+
+    public bool GetBool(string name)
+    {
+      return Booleans[name].Value;
+    }
+
+    public bool? TryGetBool(string name)
+    {
+      return Booleans.TryGetValue(name, out var entry) ? entry.Value : null;
     }
   }
 }
