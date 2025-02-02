@@ -15,7 +15,7 @@ namespace BlitzKit.CLI.Models
     private static readonly string LOCAL_MAPPINGS_PATH =
       "../../submodules/blitzkit-closed/blitz.usmap";
 
-    public readonly VfsDirectory RootDirectory = new();
+    public readonly VfsDirectory RootDirectory;
 
     public BlitzProvider()
       : base(
@@ -25,6 +25,7 @@ namespace BlitzKit.CLI.Models
         versions: new(EGame.GAME_UE5_3)
       )
     {
+      RootDirectory = new() { Name = "", provider = this };
       MappingsContainer = new FileUsmapTypeMappingsProvider(LOCAL_MAPPINGS_PATH);
 
       Initialize();
@@ -51,50 +52,12 @@ namespace BlitzKit.CLI.Models
           }
           else
           {
-            VfsDirectory newDirectory = new();
+            VfsDirectory newDirectory = new() { Name = segment, provider = this };
             directory.AddDirectory(segment, newDirectory);
             directory = newDirectory;
           }
         }
       }
     }
-  }
-
-  public class VfsDirectory
-  {
-    public Dictionary<string, VfsDirectory> Directories = [];
-    public Dictionary<string, GameFile> Files = [];
-
-    public void AddFile(string name, GameFile file) => Files.TryAdd(name, file);
-
-    public bool HasFile(string name) => Files.ContainsKey(name);
-
-    public GameFile GetFile(string name)
-    {
-      var directoryPath = Path.GetDirectoryName(name);
-      var fileName = Path.GetFileName(name);
-      var directory =
-        directoryPath == null || directoryPath.Length == 0 ? this : GetDirectory(directoryPath);
-
-      return directory.Files[fileName];
-    }
-
-    public bool HasDirectory(string name) => Directories.ContainsKey(name);
-
-    public VfsDirectory GetDirectory(string name)
-    {
-      var segments = name.Split('/');
-      var directory = this;
-
-      foreach (var segment in segments)
-      {
-        directory = directory.Directories[segment];
-      }
-
-      return directory;
-    }
-
-    public void AddDirectory(string name, VfsDirectory directory) =>
-      Directories.Add(name, directory);
   }
 }

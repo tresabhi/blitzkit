@@ -19,7 +19,10 @@ namespace BlitzKit.CLI
 
         case "mangle":
         {
-          Mangler.Mangle();
+          Mangler mangler = new();
+
+          mangler.Mangle();
+
           break;
         }
 

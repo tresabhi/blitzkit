@@ -79,11 +79,11 @@ export interface Tank {
   fuel_tank_health: ModuleHealth;
   crew_health: CrewHealth[];
   max_health: number;
-  health_burn_per_second: number;
+  health_burn_per_sec: number;
   fire_starting_chance: number;
   concealment_stationary: number;
   concealment_moving: number;
-  concealment_factor_on_shot: number;
+  concealment_factor_at_shot: number;
   turret_turn_rate: number;
   circular_vision_radius: number;
   shells: Shell[];
@@ -100,7 +100,6 @@ export interface Tank {
   rotation_speed: number;
   terrain_resistance_hard: number;
   brake_force: number;
-  b_rotation_is_around_center: boolean;
 }
 
 export interface CrewHealth {
@@ -165,11 +164,11 @@ function createBaseTank(): Tank {
     fuel_tank_health: createBaseModuleHealth(),
     crew_health: [],
     max_health: 0,
-    health_burn_per_second: 0,
+    health_burn_per_sec: 0,
     fire_starting_chance: 0,
     concealment_stationary: 0,
     concealment_moving: 0,
-    concealment_factor_on_shot: 0,
+    concealment_factor_at_shot: 0,
     turret_turn_rate: 0,
     circular_vision_radius: 0,
     shells: [],
@@ -186,7 +185,6 @@ function createBaseTank(): Tank {
     rotation_speed: 0,
     terrain_resistance_hard: 0,
     brake_force: 0,
-    b_rotation_is_around_center: false,
   };
 }
 
@@ -234,8 +232,8 @@ export const Tank: MessageFns<Tank> = {
     if (message.max_health !== 0) {
       writer.uint32(117).float(message.max_health);
     }
-    if (message.health_burn_per_second !== 0) {
-      writer.uint32(125).float(message.health_burn_per_second);
+    if (message.health_burn_per_sec !== 0) {
+      writer.uint32(125).float(message.health_burn_per_sec);
     }
     if (message.fire_starting_chance !== 0) {
       writer.uint32(133).float(message.fire_starting_chance);
@@ -246,8 +244,8 @@ export const Tank: MessageFns<Tank> = {
     if (message.concealment_moving !== 0) {
       writer.uint32(149).float(message.concealment_moving);
     }
-    if (message.concealment_factor_on_shot !== 0) {
-      writer.uint32(157).float(message.concealment_factor_on_shot);
+    if (message.concealment_factor_at_shot !== 0) {
+      writer.uint32(157).float(message.concealment_factor_at_shot);
     }
     if (message.turret_turn_rate !== 0) {
       writer.uint32(165).float(message.turret_turn_rate);
@@ -296,9 +294,6 @@ export const Tank: MessageFns<Tank> = {
     }
     if (message.brake_force !== 0) {
       writer.uint32(285).float(message.brake_force);
-    }
-    if (message.b_rotation_is_around_center !== false) {
-      writer.uint32(288).bool(message.b_rotation_is_around_center);
     }
     return writer;
   },
@@ -427,7 +422,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.health_burn_per_second = reader.float();
+          message.health_burn_per_sec = reader.float();
           continue;
         }
         case 16: {
@@ -459,7 +454,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.concealment_factor_on_shot = reader.float();
+          message.concealment_factor_at_shot = reader.float();
           continue;
         }
         case 20: {
@@ -590,14 +585,6 @@ export const Tank: MessageFns<Tank> = {
           message.brake_force = reader.float();
           continue;
         }
-        case 36: {
-          if (tag !== 288) {
-            break;
-          }
-
-          message.b_rotation_is_around_center = reader.bool();
-          continue;
-        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -629,16 +616,14 @@ export const Tank: MessageFns<Tank> = {
         ? object.crew_health.map((e: any) => CrewHealth.fromJSON(e))
         : [],
       max_health: globalThis.Number(assertSet("Tank.max_health", object.max_health)),
-      health_burn_per_second: globalThis.Number(
-        assertSet("Tank.health_burn_per_second", object.health_burn_per_second),
-      ),
+      health_burn_per_sec: globalThis.Number(assertSet("Tank.health_burn_per_sec", object.health_burn_per_sec)),
       fire_starting_chance: globalThis.Number(assertSet("Tank.fire_starting_chance", object.fire_starting_chance)),
       concealment_stationary: globalThis.Number(
         assertSet("Tank.concealment_stationary", object.concealment_stationary),
       ),
       concealment_moving: globalThis.Number(assertSet("Tank.concealment_moving", object.concealment_moving)),
-      concealment_factor_on_shot: globalThis.Number(
-        assertSet("Tank.concealment_factor_on_shot", object.concealment_factor_on_shot),
+      concealment_factor_at_shot: globalThis.Number(
+        assertSet("Tank.concealment_factor_at_shot", object.concealment_factor_at_shot),
       ),
       turret_turn_rate: globalThis.Number(assertSet("Tank.turret_turn_rate", object.turret_turn_rate)),
       circular_vision_radius: globalThis.Number(
@@ -664,9 +649,6 @@ export const Tank: MessageFns<Tank> = {
         assertSet("Tank.terrain_resistance_hard", object.terrain_resistance_hard),
       ),
       brake_force: globalThis.Number(assertSet("Tank.brake_force", object.brake_force)),
-      b_rotation_is_around_center: globalThis.Boolean(
-        assertSet("Tank.b_rotation_is_around_center", object.b_rotation_is_around_center),
-      ),
     };
   },
 
@@ -714,8 +696,8 @@ export const Tank: MessageFns<Tank> = {
     if (message.max_health !== 0) {
       obj.max_health = message.max_health;
     }
-    if (message.health_burn_per_second !== 0) {
-      obj.health_burn_per_second = message.health_burn_per_second;
+    if (message.health_burn_per_sec !== 0) {
+      obj.health_burn_per_sec = message.health_burn_per_sec;
     }
     if (message.fire_starting_chance !== 0) {
       obj.fire_starting_chance = message.fire_starting_chance;
@@ -726,8 +708,8 @@ export const Tank: MessageFns<Tank> = {
     if (message.concealment_moving !== 0) {
       obj.concealment_moving = message.concealment_moving;
     }
-    if (message.concealment_factor_on_shot !== 0) {
-      obj.concealment_factor_on_shot = message.concealment_factor_on_shot;
+    if (message.concealment_factor_at_shot !== 0) {
+      obj.concealment_factor_at_shot = message.concealment_factor_at_shot;
     }
     if (message.turret_turn_rate !== 0) {
       obj.turret_turn_rate = message.turret_turn_rate;
@@ -777,9 +759,6 @@ export const Tank: MessageFns<Tank> = {
     if (message.brake_force !== 0) {
       obj.brake_force = message.brake_force;
     }
-    if (message.b_rotation_is_around_center !== false) {
-      obj.b_rotation_is_around_center = message.b_rotation_is_around_center;
-    }
     return obj;
   },
 
@@ -820,11 +799,11 @@ export const Tank: MessageFns<Tank> = {
       : createBaseModuleHealth();
     message.crew_health = object.crew_health?.map((e) => CrewHealth.fromPartial(e)) || [];
     message.max_health = object.max_health ?? 0;
-    message.health_burn_per_second = object.health_burn_per_second ?? 0;
+    message.health_burn_per_sec = object.health_burn_per_sec ?? 0;
     message.fire_starting_chance = object.fire_starting_chance ?? 0;
     message.concealment_stationary = object.concealment_stationary ?? 0;
     message.concealment_moving = object.concealment_moving ?? 0;
-    message.concealment_factor_on_shot = object.concealment_factor_on_shot ?? 0;
+    message.concealment_factor_at_shot = object.concealment_factor_at_shot ?? 0;
     message.turret_turn_rate = object.turret_turn_rate ?? 0;
     message.circular_vision_radius = object.circular_vision_radius ?? 0;
     message.shells = object.shells?.map((e) => Shell.fromPartial(e)) || [];
@@ -841,7 +820,6 @@ export const Tank: MessageFns<Tank> = {
     message.rotation_speed = object.rotation_speed ?? 0;
     message.terrain_resistance_hard = object.terrain_resistance_hard ?? 0;
     message.brake_force = object.brake_force ?? 0;
-    message.b_rotation_is_around_center = object.b_rotation_is_around_center ?? false;
     return message;
   },
 };

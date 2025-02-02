@@ -21,12 +21,12 @@ message Tank {
   required ModuleHealth fuel_tank_health = 12;
   repeated CrewHealth crew_health = 13;
   required float max_health = 14;
-  required float health_burn_per_second = 15;
+  required float health_burn_per_sec = 15;
   required float fire_starting_chance = 16;
   
   required float concealment_stationary = 17;
   required float concealment_moving = 18;
-  required float concealment_factor_on_shot = 19;
+  required float concealment_factor_at_shot = 19;
   
   required float turret_turn_rate = 20;
   required float circular_vision_radius = 21;
@@ -46,7 +46,6 @@ message Tank {
   required float rotation_speed = 33;
   required float terrain_resistance_hard = 34;
   required float brake_force = 35;
-  required bool b_rotation_is_around_center = 36;
 }
 
 enum CrewType {

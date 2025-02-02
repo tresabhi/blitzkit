@@ -1,112 +1,52 @@
 using Blitzkit;
 using BlitzKit.CLI.Models;
-using BlitzKit.CLI.Utils;
-using CUE4Parse.FileProvider.Objects;
 using Google.Protobuf.Collections;
 using Newtonsoft.Json.Linq;
 
 namespace BlitzKit.CLI.Functions
 {
-  public static class Mangler
+  public class Mangler
   {
-    public static void Mangle()
-    {
-      Tanks tanks = new();
-      BlitzProvider provider = new();
+    readonly Tanks tanks = new();
+    readonly BlitzProvider provider = new();
 
-      foreach (
-        var nationDir in provider.RootDirectory.GetDirectory("Blitz/Content/Tanks").Directories
-      )
+    public void Mangle()
+    {
+      var nationDirs = provider.RootDirectory.GetDirectory("Blitz/Content/Tanks").Directories;
+
+      foreach (var nationDir in nationDirs)
       {
         if (nationDir.Key == "TankStub")
           continue;
 
-        foreach (var tankDir in nationDir.Value.Directories)
-        {
-          var id = tankDir.Key;
-
-          if (id != "R90_IS_4")
-            continue;
-
-          var attributeFileName = $"DA_{id}_Attributes.uasset";
-          var hasAttributesFile = tankDir.Value.HasFile(attributeFileName);
-          GameFile? attributesFile = null;
-
-          if (hasAttributesFile)
-          {
-            attributesFile = tankDir.Value.GetFile(attributeFileName);
-          }
-          else
-          {
-            PrettyLog.Warn(
-              $"No attributes file found for {nationDir.Key}/{id}, it may be misspelled; finding any attributes file..."
-            );
-
-            foreach (var file in tankDir.Value.Files)
-            {
-              if (file.Key.EndsWith("_Attributes.uasset"))
-              {
-                attributesFile = file.Value;
-                break;
-              }
-            }
-
-            if (attributesFile == null)
-            {
-              PrettyLog.Error(
-                $"No suffixed attributes file found for {nationDir.Key}/{id}; skipping..."
-              );
-              continue;
-            }
-          }
-
-          var exports = provider.LoadAllObjects(attributesFile.Path);
-
-          var tankAttributesDataAsset =
-            exports.First((export) => export.ExportType == "TankAttributesDataAsset")
-            ?? throw new Exception("TankAttributesDataAsset not found");
-          var attr = JObject.FromObject(tankAttributesDataAsset);
-
-          if (attr["Properties"] is not JObject props || props["MaxHealth"] == null)
-          {
-            PrettyLog.Warn($"{nationDir.Key}/{id} has not migrated to Reforged; skipping...");
-            continue;
-          }
-
-          var tank = MangleTank(id, props);
-
-          tanks.Tanks_.Add(tank.Id);
-
-          Console.WriteLine($"Mangled {nationDir.Key}/{id}");
-        }
+        MangleNation(nationDir.Value);
       }
     }
 
-    public static Tank MangleTank(string id, JObject props)
+    void MangleNation(VfsDirectory nation)
     {
-      Tank tank = new()
+      foreach (var tankDir in nation.Directories)
       {
-        Id = id,
-        // TODO: Name
-        // TODO: Set
-        // TODO: Class
-        // TODO: Faction
+        if (tankDir.Value.Name != "R90_IS_4")
+          continue;
 
-        TurretRotatorHealth = MangleModuleHealth((props["TurretRotatorHealth"] as JObject)!),
-        SurveyingDeviceHealth = MangleModuleHealth((props["SurveyingDeviceHealth"] as JObject)!),
-        GunHealth = MangleModuleHealth((props["GunHealth"] as JObject)!),
-        ChassisHealth = MangleModuleHealth((props["ChassisHealth"] as JObject)!),
-        AmmoBayHealth = MangleModuleHealth((props["AmmoBayHealth"] as JObject)!),
-        EngineHealth = MangleModuleHealth((props["EngineHealth"] as JObject)!),
-        FuelTankHealth = MangleModuleHealth((props["FuelTankHealth"] as JObject)!),
-      };
+        var tank = MangleTank(tankDir.Value);
 
-      MangleCrewHealth(tank.CrewHealth, (props["CrewHealth"] as JArray)!);
-
-      return tank;
+        tanks.Tanks_.Add(tank.Id);
+      }
     }
 
-    public static Dictionary<string, CrewType> CrewTypes = new()
+    Tank MangleTank(VfsDirectory tankDir)
+    {
+      var pdaName = $"PDA_{tankDir.Name}";
+      var pda = tankDir.GetUasset($"{pdaName}.uasset").Get(pdaName);
+
+      Console.WriteLine(pda);
+
+      return new();
+    }
+
+    Dictionary<string, CrewType> CrewTypes = new()
     {
       { "EModuleOrTankmen::Commander", CrewType.Commander },
       { "EModuleOrTankmen::Driver", CrewType.Driver },
@@ -116,7 +56,7 @@ namespace BlitzKit.CLI.Functions
       { "EModuleOrTankmen::Loader2", CrewType.Loader2 },
     };
 
-    public static void MangleCrewHealth(RepeatedField<CrewHealth> map, JArray array)
+    void MangleCrewHealth(RepeatedField<CrewHealth> map, JArray array)
     {
       foreach (var member in array.Cast<JObject>())
       {
@@ -138,7 +78,7 @@ namespace BlitzKit.CLI.Functions
       }
     }
 
-    public static ModuleHealth MangleModuleHealth(JObject obj)
+    ModuleHealth MangleModuleHealth(JObject obj)
     {
       ModuleHealth moduleHealth = new()
       {
