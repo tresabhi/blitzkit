@@ -79,11 +79,7 @@ namespace BlitzKit.CLI.Functions
       var hullMeshSettings = hullVisual.GetStruct("MeshSettings");
       var hullMesh = hullMeshSettings.GetSoftObject<UStaticMesh>("Mesh");
 
-
-
-
-
-      MonoGltf hullGltf = new(tankId, hullMesh);
+      MonoGltf hullGltf = new(hullMesh);
 
       // Gltf gltf = new(hullMesh.Name, hullLod0, null, new() { });
       // FArchiveWriter archiveWriter = new();

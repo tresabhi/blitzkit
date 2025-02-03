@@ -1,11 +1,16 @@
 using System.Numerics;
+using CUE4Parse_Conversion;
 using CUE4Parse_Conversion.Materials;
 using CUE4Parse_Conversion.Meshes;
 using CUE4Parse_Conversion.Meshes.glTF;
 using CUE4Parse_Conversion.Meshes.PSK;
+using CUE4Parse_Conversion.Textures;
+using CUE4Parse.UE4.Assets;
+using CUE4Parse.UE4.Assets.Exports.Material;
 using CUE4Parse.UE4.Assets.Exports.StaticMesh;
 using CUE4Parse.UE4.Objects.Core.Math;
 using CUE4Parse.UE4.Objects.Meshes;
+using CUE4Parse.Utils;
 using SharpGLTF.Geometry;
 using SharpGLTF.Geometry.VertexTypes;
 using SharpGLTF.Materials;
@@ -14,23 +19,56 @@ using SharpGLTF.Schema2;
 
 namespace BlitzKit.CLI.Models
 {
-  using VERTEX = VertexPositionNormalTangent;
+  using ConfiguredMeshBuilder = MeshBuilder<
+    VertexPositionNormalTangent,
+    VertexColorXTextureX,
+    VertexEmpty
+  >;
 
   public class MonoGltf
   {
-    public MonoGltf(string name, UStaticMesh staticMesh)
+    public MonoGltf(UStaticMesh staticMesh)
     {
+      ExporterOptions options = new() { TextureFormat = ETextureFormat.Jpeg };
       staticMesh.TryConvert(out var convertedMesh);
+      SceneBuilder sceneBuilder = new(staticMesh.Name);
       var lod =
         convertedMesh.LODs.Find(lod => !lod.SkipLod) ?? throw new Exception("Failed to find lod0");
 
-      SceneBuilder sceneBuilder = new(name);
-      MeshBuilder<VERTEX, VertexColorXTextureX, VertexEmpty> meshBuilder = new();
-      MaterialBuilder materialBuilder = new(name);
-      var primitive = meshBuilder.UsePrimitive(materialBuilder);
+      int sectionIndex = 0;
+      foreach (var section in lod.Sections.Value)
+      {
+        sectionIndex++;
+      }
+
+      MaterialBuilder emptyMaterial = new("empty_material");
+      Dictionary<string, MaterialBuilder> namedMaterials = [];
 
       foreach (var section in lod.Sections.Value)
       {
+        ConfiguredMeshBuilder meshBuilder = new($"{staticMesh.Name}_section_{sectionIndex}");
+        MaterialBuilder materialBuilder;
+
+        if (section.Material == null || section.MaterialName == null)
+        {
+          materialBuilder = emptyMaterial;
+        }
+        else if (namedMaterials.TryGetValue(section.MaterialName, out MaterialBuilder? value))
+        {
+          materialBuilder = value;
+        }
+        else
+        {
+          var materialInterface = section.Material.Load<UMaterialInterface>()!;
+          MaterialExporter2 materialExporter = new(materialInterface, options);
+
+          materialExporter.TryWriteToDir(new("../../temp"), out _, out _);
+
+          materialBuilder = new(section.MaterialName);
+        }
+
+        var primitive = meshBuilder.UsePrimitive(materialBuilder);
+
         for (int faceIndex = 0; faceIndex < section.NumFaces; faceIndex++)
         {
           var wedgeIndex = new int[3];
@@ -48,32 +86,33 @@ namespace BlitzKit.CLI.Models
 
           primitive.AddTriangle((v1, c1), (v2, c2), (v3, c3));
         }
+
+        sceneBuilder.AddRigidMesh(meshBuilder, Matrix4x4.Identity);
       }
 
-      sceneBuilder.AddRigidMesh(meshBuilder, Matrix4x4.Identity);
+      var gltf2 = sceneBuilder.ToGltf2();
+      var glbBytes = gltf2.WriteGLB();
 
-      var model = sceneBuilder.ToGltf2();
-
-      File.WriteAllBytes("../../temp/test.glb", model.WriteGLB());
+      File.WriteAllBytes("../../temp/test.glb", glbBytes);
     }
 
-    private static (VERTEX, VERTEX, VERTEX) PrepareTris(
-      CMeshVertex vert1,
-      CMeshVertex vert2,
-      CMeshVertex vert3
-    )
+    private static (
+      VertexPositionNormalTangent,
+      VertexPositionNormalTangent,
+      VertexPositionNormalTangent
+    ) PrepareTris(CMeshVertex vert1, CMeshVertex vert2, CMeshVertex vert3)
     {
-      VERTEX v1 = new(
+      VertexPositionNormalTangent v1 = new(
         SwapYZ(vert1.Position * 0.01f),
         SwapYZAndNormalize((FVector)vert1.Normal),
         SwapYZAndNormalize((Vector4)vert1.Tangent)
       );
-      VERTEX v2 = new(
+      VertexPositionNormalTangent v2 = new(
         SwapYZ(vert2.Position * 0.01f),
         SwapYZAndNormalize((FVector)vert2.Normal),
         SwapYZAndNormalize((Vector4)vert2.Tangent)
       );
-      VERTEX v3 = new(
+      VertexPositionNormalTangent v3 = new(
         SwapYZ(vert3.Position * 0.01f),
         SwapYZAndNormalize((FVector)vert3.Normal),
         SwapYZAndNormalize((Vector4)vert3.Tangent)
