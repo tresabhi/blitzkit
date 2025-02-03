@@ -1,4 +1,5 @@
 using System.Numerics;
+using BlitzKit.CLI.Utils;
 using CUE4Parse_Conversion;
 using CUE4Parse_Conversion.Materials;
 using CUE4Parse_Conversion.Meshes;
@@ -8,6 +9,7 @@ using CUE4Parse_Conversion.Textures;
 using CUE4Parse.UE4.Assets;
 using CUE4Parse.UE4.Assets.Exports.Material;
 using CUE4Parse.UE4.Assets.Exports.StaticMesh;
+using CUE4Parse.UE4.Assets.Exports.Texture;
 using CUE4Parse.UE4.Objects.Core.Math;
 using CUE4Parse.UE4.Objects.Meshes;
 using CUE4Parse.Utils;
@@ -60,11 +62,59 @@ namespace BlitzKit.CLI.Models
         else
         {
           var materialInterface = section.Material.Load<UMaterialInterface>()!;
-          MaterialExporter2 materialExporter = new(materialInterface, options);
-
-          materialExporter.TryWriteToDir(new("../../temp"), out _, out _);
-
+          MaterialData materialData = new() { Textures = [], Parameters = new() };
+          materialInterface.GetParams(materialData.Parameters, options.MaterialFormat);
           materialBuilder = new(section.MaterialName);
+
+          foreach (var parameterTexture in materialData.Parameters.Textures)
+          {
+            var texture = parameterTexture.Value;
+
+            if (
+              texture is not UTexture2D texture2d
+              || texture2d.Decode(options.Platform) is not { } bitmap
+            )
+              return;
+
+            var encodedBitmap = bitmap.Encode(options.TextureFormat, 100);
+
+            try
+            {
+              var textureBytes = encodedBitmap.ToArray();
+
+              switch (parameterTexture.Key)
+              {
+                case "BaseColor":
+                  materialBuilder.WithBaseColor(textureBytes);
+                  break;
+
+                case "RM":
+                  materialBuilder.WithMetallicRoughness(textureBytes);
+                  break;
+
+                case "PM_SpecularMasks":
+                  // materialBuilder.WithSpecularGlossiness(textureBytes);
+                  break;
+
+                case "PM_Diffuse":
+                  // materialBuilder.WithDiffuse(textureBytes);
+                  break;
+
+                case "T_R90_IS_4_MISC":
+                case "T_R90_IS_4_MASK":
+                case "Misc":
+                case "Mask":
+                  break;
+
+                default:
+                  throw new Exception($"Unsupported texture type: {parameterTexture.Key}");
+              }
+            }
+            catch
+            {
+              PrettyLog.Warn($"Failed to load texture: {parameterTexture.Key}");
+            }
+          }
         }
 
         var primitive = meshBuilder.UsePrimitive(materialBuilder);
