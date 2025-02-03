@@ -24,7 +24,7 @@
       "he": "HE"
     },
     "player_count_period": {
-      "total": "Total",
+      "total": "トータル",
       "d_120": "過去 120 日間",
       "d_90": "過去 90 日間",
       "d_60": "過去 60 日間",
@@ -225,10 +225,10 @@
         },
         "90": {
           "name": "90",
-          "description": "90 days"
+          "description": "９０日"
         },
         "career": {
-          "name": "career",
+          "name": "総合戦績",
           "description": "Career"
         },
         "custom": {
@@ -265,7 +265,7 @@
             "description": "Nation"
           },
           "class": {
-            "name": "class",
+            "name": "",
             "description": "Class"
           },
           "type": {
@@ -351,7 +351,7 @@
         },
         "body": {
           "subtitle": "Research",
-          "total": "Total",
+          "total": "トータル",
           "research": "Research: %s1",
           "upgrades": "Upgrades: %s1",
           "purchase": "Purchase: %s1",
@@ -402,7 +402,7 @@
         "name": "breakdown",
         "description": "A period's breakdown by tanks played",
         "body": {
-          "total": "Total",
+          "total": "トータル",
           "battles": "Battles",
           "wn8": "WN8",
           "winrate": "Winrate",
@@ -687,7 +687,7 @@
           "survivability.length": "全長",
           "fire.dpm": "通常弾DPM",
           "fire.dpmPremium": "課金弾DPM",
-          "fire.reload": "装填速度",
+          "fire.reload": "装填時間",
           "fire.caliber": "砲口径",
           "fire.standardPenetration": "通常弾貫通力",
           "fire.premiumPenetration": "課金弾貫通力",
@@ -741,14 +741,14 @@
       "other_projects": {
         "title": "Other cool projects"
       },
-      "help_translate": "%s1 の %s2 への翻訳にご協力ください！",
+      "help_translate": "%s1の %s2への翻訳にご協力ください！",
       "seo_description": "Tools for everything World of Tanks Blitz"
     },
     "tools": {
       "tankopedia": {
         "name": "Tankopedia",
         "button": "戦車を探す",
-        "description": "Blitz戦車百科事典",
+        "description": "Blitz戦車百科",
         "seo_description": "Statistics, armor, and more for all tanks in World of Tanks Blitz",
         "tank_seo_title": "%s1 - Tier %s2 %s3 %s4 | %s5 Tankopedia | World of Tanks Blitz (WoTB)",
         "tank_seo_description": "%s1 armor, statistics, equipment, provisions, and more. %s2 DPM, %s3hp alpha, %s4mm penetration, %s5kph top speed, %s6hp health.",
@@ -775,7 +775,7 @@
             "name": "モデル"
           },
           "dynamic": {
-            "name": "装甲ギア",
+            "name": "貫通テスト",
             "custom_shell": {
               "type": "弾種",
               "caliber": "口径",
@@ -798,8 +798,8 @@
                 "track": "履帯"
               },
               "status": {
-                "penetration": "%s1hp 装甲貫通",
-                "blocked": "装甲非貫通",
+                "penetration": "%s1hp 貫通",
+                "blocked": "非貫通",
                 "ricochet": "跳弾",
                 "splash": "%s1hp 爆風ダメージ"
               },
@@ -811,7 +811,7 @@
             }
           },
           "static": {
-            "name": "Static armor",
+            "name": "装甲モデル",
             "primary": "主装甲",
             "spaced": "空間装甲",
             "external": "外部モジュール",
@@ -852,7 +852,7 @@
         },
         "review": {
           "title": "Review videos",
-          "disclaimer": "BlitzKitはレビュー動画を推奨していません。",
+          "disclaimer": "BlitzKitはいかなるレビュー動画も後援していません。",
           "join": "%s1 YouTuberプログラムに応募する"
         },
         "configuration": {
@@ -905,7 +905,7 @@
             "power_to_weight_ratio": "出力重量比",
             "hull_traverse_speed": "車体旋回速度",
             "camouflage": "隠蔽率",
-            "reload": "装填速度",
+            "reload": "装填時間",
             "crewCount": "搭乗員数",
             "shellNormalization": "標準化",
             "shellRicochet": "跳弾角度",
@@ -914,12 +914,12 @@
             "shells": "砲弾",
             "mostOptimalShellIndex": "最適な弾数",
             "shellReloads": "自動装填時間",
-            "shellReload": "弾倉再装填時間",
+            "shellReload": "装填時間",
             "intraClip": "砲弾再装填時間",
             "caliber": "口径",
             "penetration": "貫通力",
             "damage": "ダメージ",
-            "clipDamage": "弾倉合計攻撃力",
+            "clipDamage": "弾倉火力",
             "moduleDamage": "モジュールダメージ",
             "explosionRadius": "爆風半径",
             "shellVelocity": "弾速",
@@ -995,9 +995,9 @@
         }
       },
       "compare": {
-        "name": "性能比較",
+        "name": "比較",
         "button": "戦車を比較",
-        "description": "車輌の統計を比較します",
+        "description": "車輌の特性を比較",
         "seo_description": "Compare tanks statistics and loadouts in World of Tanks Blitz",
         "actions": {
           "add": {
@@ -1040,7 +1040,7 @@
       "performance": {
         "name": "Performance",
         "button": "戦車を見る",
-        "description": "戦車性能統計",
+        "description": "車輌の戦闘統計",
         "seo_description": "Best tanks and their performances in World of Tanks Blitz",
         "estimation": {
           "body": "%s1 人のプレイヤーの推定統計。 %s2前に更新されました。",
@@ -1053,21 +1053,21 @@
         "table": {
           "tanks": {
             "header": "車輌名",
-            "total": "Total"
+            "total": "トータル"
           },
           "stats": {
             "winrate": "勝率",
             "players": "プレイヤー数",
-            "damage": "ダメージ",
+            "damage": "Dmg",
             "survival": "生還率",
             "xp": "EXP",
             "kills": "撃破数",
             "spots": "発見数",
             "accuracy": "命中率",
             "shots": "射撃数",
-            "hits": "命中回数",
-            "damage_ratio": "ダメージ比",
-            "damage_taken": "被ダメージ",
+            "hits": "命中数",
+            "damage_ratio": "ダメ比",
+            "damage_taken": "被ダメ",
             "capture_points": "占領ポイント"
           }
         }
@@ -1077,7 +1077,7 @@
         "button": "全て見る",
         "description": "Blitzアバター図鑑",
         "seo_description": "World of Tanks Blitz の 全ての プレイヤーアバター",
-        "last_updated": "最終更新:",
+        "last_updated": "最終更新: %s1",
         "search": {
           "hint": "アバターを検索...",
           "results": "検索結果: %s1 個"
@@ -1106,18 +1106,18 @@
           "alright": "Alright"
         },
         "no_battles": {
-          "title": "まだ戦闘がありません",
+          "title": "まだ戦闘未参加です",
           "hint": "ゲームをプレイしてください"
         },
         "table": {
           "tank": "車輌名",
-          "total": "Total",
+          "total": "トータル",
           "remove": "削除"
         }
       },
       "tier_list": {
         "name": "Tier list",
-        "button": "ランク付けする",
+        "button": "ランク付け",
         "description": "Blitzの戦車ランキング",
         "seo_description": "World of Tanks Blitz のプレイヤー評価とパフォーマンス統計に基づいて、最良から最悪までのランキングを作成しましょう",
         "buttons": {
@@ -1264,8 +1264,8 @@
       },
       "legal": {
         "title": "法的事項",
-        "privacy": "Privacy policy",
-        "terms": "Terms of service"
+        "privacy": "プライバシーポリシー",
+        "terms": "利用規約"
       }
     }
   }

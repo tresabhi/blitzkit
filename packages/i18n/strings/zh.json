@@ -1,53 +1,53 @@
 {
   "test": {
-    "default": "test",
-    "long": "This is a long test string. You MUST NEVER see this in the UI. My favorite fruit is %s1 because it has the color of %s2. I like it so much that I will say its name 3 times! %s1! %s1! %s1! Once again, it's %s2, not %s3.",
-    "fox": "The quick brown fox jumps over the lazy dog."
+    "default": "测试",
+    "long": "这是一个测试用长字符串。你不会再用户界面中看见这些。我最喜欢的水果是%s1因为它的颜色是%s2。我如此喜欢它以至于我会把它的名字念3次！%s1！%s1！%s1！重申一次，它是%s2而不是%s3。",
+    "fox": "褐色的狐狸迅速地跳过那只懒狗"
   },
   "common": {
     "units": {
-      "m": "%s1m",
-      "mm": "%s1mm",
-      "deg": "%s1°",
-      "hp": "%s1hp",
-      "x": "x%s1"
+      "m": "%s米",
+      "mm": "%s毫米",
+      "deg": "%s1度",
+      "hp": "%s生命值",
+      "x": ""
     },
     "gun_types": {
-      "auto_loader": "Auto loader",
-      "auto_reloader": "Auto reloader",
-      "regular": "Regular"
+      "auto_loader": "弹夹",
+      "auto_reloader": "弹鼓",
+      "regular": "单发"
     },
     "shells": {
-      "ap": "AP",
-      "apcr": "APCR",
-      "heat": "HEAT",
-      "he": "HE"
+      "ap": "穿甲弹",
+      "apcr": "复合型穿甲弹",
+      "heat": "破甲弹",
+      "he": "高爆弹"
     },
     "player_count_period": {
-      "total": "Total",
-      "d_120": "Past 120 days",
-      "d_90": "Past 90 days",
-      "d_60": "Past 60 days",
-      "d_30": "Past month",
-      "d_7": "Past week",
-      "d_1": "Yesterday"
+      "total": "全部",
+      "d_120": "过去120天",
+      "d_90": "过去90天",
+      "d_60": "过去60天",
+      "d_30": "过去一个月",
+      "d_7": "过去一周",
+      "d_1": "昨日"
     },
     "branches": {
-      "local": "dev",
-      "dev": "beta",
-      "opentest": "opentest",
-      "preview": "preview"
+      "local": "开发者",
+      "dev": "测试版",
+      "opentest": "开放测试",
+      "preview": "预览"
     },
     "locales": {
-      "en": "English",
-      "es": "Spanish",
-      "pt": "Portuguese",
-      "ru": "Russian",
-      "uk": "Ukrainian",
-      "zh": "Chinese",
-      "ja": "Japanese",
-      "fr": "French",
-      "pl": "Polish"
+      "en": "英语",
+      "es": "西班牙语",
+      "pt": "葡萄牙语",
+      "ru": "俄语",
+      "uk": "乌克兰语",
+      "zh": "中文",
+      "ja": "日语",
+      "fr": "法语",
+      "pl": "波兰语"
     },
     "wn8_percentile": {
       "0": "非常差",
@@ -58,8 +58,8 @@
       "5": "好",
       "6": "非常好",
       "7": "很好",
-      "8": "Unicum",
-      "9": "Super unicum"
+      "8": "",
+      "9": "超级强势玩家"
     },
     "bkni_percentile": {
       "0": "Super malum",
@@ -71,29 +71,29 @@
       "6": "高于平均",
       "7": "好",
       "8": "非常好",
-      "9": "Unicum",
-      "10": "Super unicum"
+      "9": "",
+      "10": "超级强势玩家"
     },
     "nations": {
       "ussr": "苏联 (S系)",
-      "germany": "德国 (D系)",
-      "usa": "美国 (M系)",
-      "china": "中国 (C系)",
-      "uk": "英国 (Y系)",
-      "france": "法国 (F系)",
-      "japan": "日本 (R系)",
-      "european": "欧盟 (E系)",
+      "germany": "德系",
+      "usa": "美系",
+      "china": "中系",
+      "uk": "英系",
+      "france": "法系",
+      "japan": "日系",
+      "european": "泛欧",
       "other": "X系"
     },
     "nations_adjectives": {
-      "ussr": "苏联 (S系)",
-      "germany": "德国 (D系)",
-      "usa": "美国 (M系)",
-      "china": "中国 (C系)",
-      "uk": "英国 (Y系)",
-      "france": "法国 (F系)",
-      "japan": "日本 (R系)",
-      "european": "欧盟 (E系)",
+      "ussr": "苏系",
+      "germany": "德系",
+      "usa": "美系",
+      "china": "中系",
+      "uk": "英系",
+      "france": "法系",
+      "japan": "日系",
+      "european": "泛欧",
       "other": "X系"
     },
     "tank_class_short": {
@@ -119,8 +119,8 @@
     "tree_type": {
       "-1": "无法识别",
       "0": "科技树",
-      "1": "加值",
-      "2": "收藏"
+      "1": "金币车",
+      "2": "收藏车"
     },
     "regions": {
       "normal": {
@@ -171,7 +171,7 @@
       "cumulative_losses": "失败",
       "cumulative_misses": "总射击失误数",
       "cumulative_shots": "总射击数",
-      "cumulative_spotted": "场均发现敌人",
+      "cumulative_spotted": "总发现敌人数",
       "cumulative_survived_battles": "幸存场次",
       "cumulative_win_and_survived": "胜利和幸存场次",
       "cumulative_wins": "胜利",
@@ -183,11 +183,11 @@
   "bot": {
     "common": {
       "errors": {
-        "clan_not_found": "# 找不到军团\n找不到\"%s\"。请尝试从搜索结果中选择一个军团。",
-        "player_not_found": "# 找不到用户\n无法找到用户 \"%s\"。 尝试从搜索结果中挑选用户，输入一个有效的用户名或使用 \"/link\" 命令。",
+        "clan_not_found": "# 找不到军团\n找不到\"%s1\"。请尝试从搜索结果中选择一个军团。",
+        "player_not_found": "# 找不到用户\n无法找到用户 \"%s1\"。 尝试从搜索结果中挑选用户，输入一个有效的用户名或使用 \"/link\" 命令。",
         "player_not_linked": "# 使用 `/link` 来开始\n我不知道你是谁，但你今天可以告诉我！",
-        "tank_name_not_found": "# 坦克找不到\n无法找到名为 \"%s \"的坦克。",
-        "tank_id_not_found": "# 坦克找不到\n无法找到ID \"%s\"的坦克。 试着输入坦克的名称而不是数字。",
+        "tank_name_not_found": "# 坦克找不到\n无法找到名为 \"%s1 \"的坦克。",
+        "tank_id_not_found": "# 坦克找不到\n无法找到ID \"%s1\"的坦克。 试着输入坦克的名称而不是数字。",
         "no_tank_stats": "# 没有这个坦克的数据\n这个玩家没有数据。你可能找错人了。",
         "get_help": "Help Discord server",
         "uncaught_error": "# BlitzKit 崩溃了!\n非常抱歉。请加入[官方Discord](https://discord.gg/nDt7AjGJQH)，以方便帮助你的问题。",
@@ -206,13 +206,13 @@
           "good": "好",
           "very_good": "非常好",
           "great": "很好",
-          "unicum": "Unicum",
-          "super_unicum": "Super unicum"
+          "unicum": "",
+          "super_unicum": "超级强势玩家"
         }
       },
       "subcommands": {
         "today": {
-          "name": "today",
+          "name": "今日",
           "description": "今日："
         },
         "30": {
@@ -228,19 +228,19 @@
           "description": "90天"
         },
         "career": {
-          "name": "career",
+          "name": "生涯",
           "description": "玩家资料"
         },
         "custom": {
-          "name": "custom",
+          "name": "自定义",
           "description": "自定义范围",
           "options": {
             "start": {
-              "name": "start",
+              "name": "开始",
               "description": "从今天开始于数天前"
             },
             "end": {
-              "name": "end",
+              "name": "结束",
               "description": "从今天开始于数天前"
             }
           }
@@ -248,33 +248,33 @@
       },
       "options": {
         "clan": {
-          "name": "clan",
-          "description": "The clan name or tag"
+          "name": "军团",
+          "description": "军团名称或标签"
         },
         "tank": {
-          "name": "tank",
-          "description": "The tank to get stats for"
+          "name": "坦克",
+          "description": "要获取战绩的坦克"
         },
         "username": {
-          "name": "username",
-          "description": "The Blitz username of the player"
+          "name": "用户名",
+          "description": "玩家的闪击战游戏昵称"
         },
         "filters": {
           "nation": {
-            "name": "nation",
-            "description": "Nation"
+            "name": "国别",
+            "description": "国别"
           },
           "class": {
-            "name": "class",
-            "description": "Class"
+            "name": "类别",
+            "description": "战车组别"
           },
           "type": {
-            "name": "type",
-            "description": "Type"
+            "name": "战车类型",
+            "description": "战车类型"
           }
         },
         "region": {
-          "name": "region",
+          "name": "所在地区",
           "description": "Region"
         },
         "tier": {
@@ -351,15 +351,15 @@
         },
         "body": {
           "subtitle": "Research",
-          "total": "Total",
+          "total": "全部",
           "research": "Research: %s1",
-          "upgrades": "Upgrades: %s1",
+          "upgrades": "",
           "purchase": "Purchase: %s1",
           "equipment": "Equipment: %s1",
           "estimation": "# This is an estimation!\n\nThis list may include already researched tanks because of the inaccurate information Wargaming provides. Try providing a `starting-tank` from the line when using the command if you can."
         },
         "errors": {
-          "non_tech_tree": "# %s1 is not on the tech tree\n\nYou cannot research a premium/collector tank.",
+          "non_tech_tree": "#%s1不在科技树里\n\n你不能研究一个高级/收集 坦克",
           "tier_1": "# %s1 is a tier I\n\nTier I tanks are always unlocked for free for all players.",
           "already_researched": "# %s1 is already researched\n\nTry providing a `starting-tank` when using the command to view the totals for a line you have already researched.",
           "start_end_equal": "# %s1 was provided twice\n\nMake sure `starting-tank` and `target-tank` are different.",
@@ -381,16 +381,16 @@
             "description": "How embeds work"
           },
           "introduction": {
-            "name": "introduction",
-            "description": "About the bot"
+            "name": "介绍",
+            "description": "关于此机器人"
           },
           "invite": {
-            "name": "invite",
-            "description": "How to invite the bot"
+            "name": "邀请",
+            "description": "如何邀请添加机器人"
           },
           "timezones": {
-            "name": "timezones",
-            "description": "How BlitzKit infers and uses your timezone"
+            "name": "时区",
+            "description": "BlitzKit如何推断并使用你的时区"
           },
           "credits": {
             "name": "credits",
@@ -402,7 +402,7 @@
         "name": "breakdown",
         "description": "A period's breakdown by tanks played",
         "body": {
-          "total": "Total",
+          "total": "全部",
           "battles": "战斗场次",
           "wn8": "WN8",
           "winrate": "胜率",
@@ -432,7 +432,7 @@
             "description": "Player statistics"
           },
           "tank": {
-            "name": "tank",
+            "name": "坦克",
             "description": "Tank statistics"
           }
         }
@@ -470,23 +470,23 @@
             },
             "lethality": {
               "title": "Lethality",
-              "average_damage": "Average damage",
-              "damage_per_tier": "Damage per tier",
+              "average_damage": "平均伤害",
+              "damage_per_tier": "每级别伤害",
               "damage_ratio": "伤害比率",
-              "average_kills": "Average kills"
+              "average_kills": "平均击毁"
             },
             "miscellaneous": {
-              "title": "Miscellaneous",
-              "average_tier": "Average tier",
-              "average_spots": "Average spots",
-              "average_xp": "Average XP",
+              "title": "杂项",
+              "average_tier": "平均等级",
+              "average_spots": "平均点亮",
+              "average_xp": "平均经验",
               "kills_to_death_ratio": "战损比"
             }
           }
         }
       },
       "link": {
-        "name": "link",
+        "name": "链接",
         "description": "Links your Blitz and Discord account",
         "body": {
           "accounts_linked": "Accounts linked",
@@ -516,7 +516,7 @@
       },
       "search_players": {
         "name": "search-players",
-        "description": "Search players",
+        "description": "搜索玩家",
         "options": {
           "limit": {
             "name": "limit",
@@ -568,7 +568,7 @@
         }
       },
       "today": {
-        "name": "today",
+        "name": "今日",
         "description": "Today's played tanks and statistics"
       },
       "stats": {
@@ -629,7 +629,7 @@
         "description": "Rating player's statistics",
         "subcommands": {
           "today": {
-            "name": "today",
+            "name": "今日",
             "description": "Today's rating statistics"
           },
           "season": {
@@ -652,56 +652,56 @@
   },
   "website": {
     "settings": {
-      "dev_mode": "Development mode",
-      "language": "Language"
+      "dev_mode": "开发者模式",
+      "language": "语言"
     },
     "common": {
       "player_search": {
-        "hint": "Search players...",
-        "no_results": "No results",
-        "searching": "Searching..."
+        "hint": "搜索玩家",
+        "no_results": "无结果",
+        "searching": "搜索中..."
       },
       "copy_button": {
-        "copied": "Copied!"
+        "copied": "已复制！"
       },
       "tank_search": {
-        "search_bar_hint": "Search tanks...",
-        "recent": "Recently viewed",
-        "select_all": "Select all",
+        "search_bar_hint": "搜索坦克...",
+        "recent": "最近查看",
+        "select_all": "全选",
         "count_singular": "1 tank",
         "count_plural": "%s1 tanks",
         "sorting_by": "Sorting by %s1",
         "no_tanks_found": {
-          "body": "No tanks found.",
-          "search_again": "Try searching again.",
-          "clear_filters": "Try clearing filters."
+          "body": "未找到战车。",
+          "search_again": "请尝试重新搜索。",
+          "clear_filters": "请尝试清空筛选"
         },
         "sort": {
-          "meta.none": "none",
-          "survivability.health": "health",
-          "survivability.viewRange": "view range",
-          "survivability.camouflageStill": "camouflage still",
-          "survivability.camouflageMoving": "camouflage moving",
-          "survivability.camouflageShooting": "camouflage shooting",
-          "survivability.volume": "volume",
-          "survivability.length": "length",
-          "fire.dpm": "standard DPM",
-          "fire.dpmPremium": "premium DPM",
-          "fire.reload": "reload",
-          "fire.caliber": "caliber",
-          "fire.standardPenetration": "standard penetration",
-          "fire.premiumPenetration": "premium penetration",
-          "fire.damage": "damage",
-          "fire.moduleDamage": "module damage",
-          "fire.shellVelocity": "shell velocity",
-          "fire.shellRange": "shell range",
-          "fire.shellCapacity": "shell capacity",
-          "fire.aimTime": "aim time",
-          "fire.dispersionStill": "dispersion still",
-          "fire.dispersionMoving": "dispersion moving",
-          "fire.gunDepression": "gun depression",
-          "fire.gunElevation": "gun elevation",
-          "maneuverability.forwardsSpeed": "forwards speed",
+          "meta.none": "无",
+          "survivability.health": "生命值",
+          "survivability.viewRange": "侦察范围",
+          "survivability.camouflageStill": "静止中隐蔽值",
+          "survivability.camouflageMoving": "移动中隐蔽值",
+          "survivability.camouflageShooting": "开火隐蔽值",
+          "survivability.volume": "体积",
+          "survivability.length": "长度",
+          "fire.dpm": "标准炮弹每分钟伤害值",
+          "fire.dpmPremium": "金币炮弹每分钟伤害值",
+          "fire.reload": "装填时间",
+          "fire.caliber": "口径",
+          "fire.standardPenetration": "标准炮弹穿深",
+          "fire.premiumPenetration": "金币弹穿深",
+          "fire.damage": "伤害值",
+          "fire.moduleDamage": "模组伤害值",
+          "fire.shellVelocity": "炮弹飞行速度",
+          "fire.shellRange": "最大有效射程",
+          "fire.shellCapacity": "载弹量",
+          "fire.aimTime": "瞄准时间",
+          "fire.dispersionStill": "百米散步",
+          "fire.dispersionMoving": "移动散步惩罚",
+          "fire.gunDepression": "俯角",
+          "fire.gunElevation": "仰角",
+          "maneuverability.forwardsSpeed": "前进极速",
           "maneuverability.backwardsSpeed": "backwards speed",
           "maneuverability.power": "power",
           "maneuverability.powerToWeight": "power to weight",
@@ -768,78 +768,78 @@
             "show_grid": "Show grid"
           },
           "screenshot": {
-            "download": "Download",
-            "copy": "Copy"
+            "download": "下载",
+            "copy": "复制"
           },
           "model": {
-            "name": "Model"
+            "name": "模型"
           },
           "dynamic": {
-            "name": "Dynamic armor",
+            "name": "动态装甲",
             "custom_shell": {
-              "type": "Type",
-              "caliber": "Caliber",
-              "penetration": "Penetration",
-              "normalization": "Normalization",
-              "ricochet": "Ricochet",
-              "explosion_radius": "Explosion radius",
-              "exit": "Exit",
-              "reset": "Reset"
+              "type": "战车类型",
+              "caliber": "口径",
+              "penetration": "穿深",
+              "normalization": "转正",
+              "ricochet": "跳弹",
+              "explosion_radius": "溅射半径",
+              "exit": "退出",
+              "reset": "重置"
             },
-            "advanced": "Advanced highlighting",
-            "shooter": "Shooter:",
+            "advanced": "高级高亮显示",
+            "shooter": "主视角射击者",
             "shot_card": {
               "element": {
-                "primary": "Primary",
-                "spaced": "Spaced",
-                "external": "External",
-                "gap": "Gap",
-                "gun": "Gun",
-                "track": "Tracks"
+                "primary": "主装甲",
+                "spaced": "间隙装甲",
+                "external": "外部模块",
+                "gap": "空隙",
+                "gun": "主炮",
+                "track": "履带"
               },
               "status": {
-                "penetration": "%s1hp penetration",
-                "blocked": "Blocked",
-                "ricochet": "Ricochet",
-                "splash": "%s1hp splash"
+                "penetration": "%s生命值 击穿",
+                "blocked": "抵挡伤害",
+                "ricochet": "跳弹",
+                "splash": "%s生命值 溅射"
               },
               "stats": {
-                "thickness_and_angle": "%s1mm %s2°",
-                "nominal": "%s1mm nominal",
-                "ricochet_loss": "%s1% penetration"
+                "thickness_and_angle": "等效%s毫米 %s2度",
+                "nominal": "%s毫米 装甲厚度",
+                "ricochet_loss": "%s1%概率击穿"
               }
             }
           },
           "static": {
-            "name": "Static armor",
-            "primary": "Primary",
-            "spaced": "Spaced",
-            "external": "External",
+            "name": "静态装甲",
+            "primary": "主装甲",
+            "spaced": "间隙装甲",
+            "external": "外部模块",
             "edit": {
-              "label": "Edit",
-              "reset": "Reset"
+              "label": "编辑",
+              "reset": "重置"
             }
           }
         },
         "meta": {
-          "back": "Back",
-          "compare": "Compare",
+          "back": "返回",
+          "compare": "对比",
           "swap": {
-            "button": "Swap",
-            "title": "Swap tanks"
+            "button": "调换",
+            "title": "调换战车"
           },
           "vanilla": "Vanilla",
-          "opentest": "OpenTest",
-          "full_name": "Full name",
-          "nation": "Nation",
-          "class": "Class",
-          "tier": "Tier",
-          "type": "Type",
-          "dev_id": "DEV: ID",
-          "purchase": "Purchase price",
-          "restoration": "Restoration price",
-          "sale": "Sale price",
-          "research": "Research XP"
+          "opentest": "开放测试",
+          "full_name": "全称",
+          "nation": "国别",
+          "class": "战车组别",
+          "tier": "等级",
+          "type": "战车类型",
+          "dev_id": "开发者ID",
+          "purchase": "购买价格",
+          "restoration": "恢复战车价格",
+          "sale": "出售价格",
+          "research": "研发所需经验"
         },
         "tech_tree": {
           "title": "科技树",
@@ -882,7 +882,7 @@
             "info": "Yellow skills only apply under special circumstances. Hold Space to quickly toggle between level 0 and 7."
           },
           "miscellaneous": {
-            "title": "Miscellaneous"
+            "title": "杂项"
           }
         },
         "characteristics": {
@@ -907,8 +907,8 @@
             "camouflage": "Camouflage",
             "reload": "Reload",
             "crewCount": "Crew count",
-            "shellNormalization": "Normalization",
-            "shellRicochet": "Ricochet",
+            "shellNormalization": "转正",
+            "shellRicochet": "跳弹",
             "dpm": "DPM",
             "dpmEffective": "Effective at 60s",
             "shells": "Shells",
@@ -916,60 +916,60 @@
             "shellReloads": "Shell reloads",
             "shellReload": "Shell reload",
             "intraClip": "Intra-clip",
-            "caliber": "Caliber",
-            "penetration": "Penetration",
+            "caliber": "口径",
+            "penetration": "穿深",
             "damage": "伤害",
             "clipDamage": "Clipping potential",
-            "moduleDamage": "Module damage",
-            "explosionRadius": "Explosion radius",
-            "shellVelocity": "Shell velocity",
-            "aimTime": "Aim time",
-            "dispersion": "Still",
-            "dispersionMoving": "Moving",
-            "dispersionHullTraversing": "Hull traversing",
-            "dispersionTurretTraversing": "Turret traversing",
-            "dispersionShooting": "Shooting",
-            "dispersionGunDamaged": "Gun damaged",
-            "gunDepression": "Depression",
-            "gunElevation": "Elevation",
-            "gunFrontalDepression": "Frontal depression",
-            "gunFrontalElevation": "Frontal elevation",
-            "gunRearDepression": "Rear depression",
-            "gunRearElevation": "Rear elevation",
-            "azimuthLeft": "Azimuth left",
-            "azimuthRight": "Azimuth right",
-            "speedForwards": "Forwards",
+            "moduleDamage": "模组伤害",
+            "explosionRadius": "溅射半径",
+            "shellVelocity": "炮弹飞行速度",
+            "aimTime": "瞄准时间",
+            "dispersion": "静止时",
+            "dispersionMoving": "移动时",
+            "dispersionHullTraversing": "车体转向时",
+            "dispersionTurretTraversing": "炮塔轨迹",
+            "dispersionShooting": "开火时",
+            "dispersionGunDamaged": "主炮损坏时",
+            "gunDepression": "俯角",
+            "gunElevation": "仰角",
+            "gunFrontalDepression": "车体前部俯角",
+            "gunFrontalElevation": "车体前部仰角",
+            "gunRearDepression": "车体后部俯角",
+            "gunRearElevation": "车体后部仰角",
+            "azimuthLeft": "左射界",
+            "azimuthRight": "右射界",
+            "speedForwards": "前进极速",
             "speedBackwards": "Backwards",
             "hardTerrainCoefficient": "Hard",
             "hardTerrainCoefficientRaw": "Hard",
             "mediumTerrainCoefficient": "中型坦克",
             "mediumTerrainCoefficientRaw": "中型坦克",
             "softTerrainCoefficient": "Soft",
-            "softTerrainCoefficientRaw": "Soft",
-            "enginePower": "Engine power",
-            "powerToWeightRatioHardTerrain": "Hard",
+            "softTerrainCoefficientRaw": "软地",
+            "enginePower": "引擎功率",
+            "powerToWeightRatioHardTerrain": "硬地",
             "powerToWeightRatioMediumTerrain": "中型坦克",
             "powerToWeightRatioSoftTerrain": "Soft",
-            "weight": "Weight",
-            "turretTraverseSpeed": "Turret traverse speed",
+            "weight": "重量",
+            "turretTraverseSpeed": "炮塔旋转速度",
             "gunTraverseSpeed": "Gun traverse speed",
             "hullTraverseHardTerrain": "Hard",
             "hullTraverseMediumTerrain": "中型坦克",
             "hullTraverseSoftTerrain": "Soft",
             "health": "Health",
             "fireChance": "Fire chance",
-            "viewRange": "View range",
-            "camouflageStill": "Still",
-            "camouflageMoving": "Moving",
-            "camouflageShootingStill": "Still",
-            "camouflageShootingMoving": "Moving",
+            "viewRange": "视野范围",
+            "camouflageStill": "静止时",
+            "camouflageMoving": "移动时",
+            "camouflageShootingStill": "静止时",
+            "camouflageShootingMoving": "移动时",
             "camouflageCaughtOnFire": "Caught on fire",
             "width": "Width",
             "height": "Height",
             "length": "Length",
             "volume": "Volume",
-            "shellRange": "Shell range",
-            "shellCapacity": "Shell capacity",
+            "shellRange": "射程",
+            "shellCapacity": "弹药容量",
             "gunType": "Gun type",
             "penetrationAt250m": "Penetration at 250m"
           }
@@ -981,28 +981,28 @@
           "title": "Crew training",
           "info": "represents the other roles a crew member can take.",
           "count": "Crew count",
-          "commander": "Commander",
-          "gunner": "Gunner",
-          "driver": "Driver",
-          "radioman": "Radioman",
-          "loader": "Loader"
+          "commander": "车长",
+          "gunner": "炮手",
+          "driver": "驾驶员",
+          "radioman": "通讯兵",
+          "loader": "装填手"
         },
         "maneuverability": {
           "title": "Maneuverability"
         },
         "survivability": {
-          "title": "Survivability"
+          "title": "生存性"
         }
       },
       "compare": {
-        "name": "Compare",
-        "button": "Compare tanks",
+        "name": "对比",
+        "button": "坦克对比",
         "description": "Compare tank statistics",
         "seo_description": "Compare tanks statistics and loadouts in World of Tanks Blitz",
         "actions": {
           "add": {
-            "button": "Add",
-            "title": "Add tanks",
+            "button": "增加...",
+            "title": "添加坦克",
             "description": "Select tanks to add to comparison"
           },
           "clear": "Clear",
@@ -1053,7 +1053,7 @@
         "table": {
           "tanks": {
             "header": "Tank",
-            "total": "Total"
+            "total": "全部"
           },
           "stats": {
             "winrate": "胜率",
@@ -1090,14 +1090,14 @@
         "seo_description": "Track your stats in real time as you play World of Tanks Blitz",
         "search": {
           "lookup": "Look up a player to get started",
-          "hint": "Search players...",
-          "searching": "Searching...",
+          "hint": "搜索玩家",
+          "searching": "搜索中...",
           "no_results": "No players found"
         },
         "controls": {
           "title": "Tracking %s1",
           "subtitle": "Since %s1",
-          "reset": "Reset",
+          "reset": "重置",
           "change": "Change"
         },
         "no_cc": {
@@ -1111,7 +1111,7 @@
         },
         "table": {
           "tank": "Tank",
-          "total": "Total",
+          "total": "全部",
           "remove": "Remove"
         }
       },
@@ -1121,7 +1121,7 @@
         "description": "Rank Blitz tanks",
         "seo_description": "Explore tier lists ranking tanks from best to worst, based on player ratings and statistical performance in World of Tanks Blitz",
         "buttons": {
-          "reset": "Reset",
+          "reset": "重置",
           "share": "Share"
         }
       },
@@ -1157,7 +1157,7 @@
               "success": {
                 "title": "Copy URL",
                 "info": "Generated the URL for %s1. The embed will start tracking as soon as the URL is pasted. Reset at any time by right-clicking on PC or long-pressing on mobile and then selecting \"Reset\".",
-                "back": "Back",
+                "back": "返回",
                 "copy": "Copy URL"
               }
             },
@@ -1168,7 +1168,7 @@
           },
           "customize": {
             "title": "Customize",
-            "reset": "Reset",
+            "reset": "重置",
             "description": "Bells and whistles of your embed"
           }
         },
@@ -1206,12 +1206,12 @@
       "charts": {
         "name": "Charts",
         "button": "Nerd out",
-        "description": "Lots of graphs",
+        "description": "大量图标",
         "seo_description": "Charts and graphs on anything and everything about tanks, players, and events in World of Tanks Blitz"
       },
       "rating": {
-        "name": "Rating",
-        "button": "View leaderboard",
+        "name": "评级战斗",
+        "button": "查看排行榜",
         "description": "Full rating leaderboard",
         "seo_description": "Live and archived full rating leaderboard for World of Tanks Blitz"
       },

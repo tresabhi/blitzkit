@@ -816,30 +816,30 @@
             "spaced": "Espaciado",
             "external": "Externa",
             "edit": {
-              "label": "Edit",
+              "label": "Editar",
               "reset": "Restablecer"
             }
           }
         },
         "meta": {
-          "back": "Back",
-          "compare": "Compare",
+          "back": "Volver",
+          "compare": "Comparar",
           "swap": {
-            "button": "Swap",
-            "title": "Swap tanks"
+            "button": "Intercambiar",
+            "title": "Intercambio de tanques"
           },
-          "vanilla": "Vanilla",
-          "opentest": "OpenTest",
-          "full_name": "Full name",
+          "vanilla": "Vainilla",
+          "opentest": "Prueba abierta",
+          "full_name": "Nombre completo",
           "nation": "Nación",
           "class": "Clase",
           "tier": "Nivel",
           "type": "Tipo",
           "dev_id": "DEV: ID",
-          "purchase": "Purchase price",
-          "restoration": "Restoration price",
-          "sale": "Sale price",
-          "research": "Research XP"
+          "purchase": "Precio de compra",
+          "restoration": "Precio de restauración",
+          "sale": "Precio de venta",
+          "research": "Investigar experiencia"
         },
         "tech_tree": {
           "title": "Árbol tecnológico",
@@ -852,11 +852,11 @@
         },
         "review": {
           "title": "Review videos",
-          "disclaimer": "BlitzKit does not endorse any review videos.",
+          "disclaimer": "BlitzKit no respalda ningún vídeo de reseñas.",
           "join": "Apply to %s1 YouTuber program"
         },
         "configuration": {
-          "title": "Configuration",
+          "title": "",
           "modules": {
             "title": "Modules",
             "stock": "Stock",
@@ -867,8 +867,8 @@
             "clear": "Clear"
           },
           "provisions": {
-            "title": "Provisions",
-            "clear": "Clear"
+            "title": "Provisiones",
+            "clear": "Limpiar"
           },
           "consumables": {
             "title": "Consumables",
@@ -1157,7 +1157,7 @@
               "success": {
                 "title": "Copy URL",
                 "info": "Generated the URL for %s1. The embed will start tracking as soon as the URL is pasted. Reset at any time by right-clicking on PC or long-pressing on mobile and then selecting \"Reset\".",
-                "back": "Back",
+                "back": "Volver",
                 "copy": "Copy URL"
               }
             },

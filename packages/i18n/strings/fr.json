@@ -1,6 +1,6 @@
 {
   "test": {
-    "default": "test",
+    "default": "teste",
     "long": "This is a long test string. You MUST NEVER see this in the UI. My favorite fruit is %s1 because it has the color of %s2. I like it so much that I will say its name 3 times! %s1! %s1! %s1! Once again, it's %s2, not %s3.",
     "fox": "The quick brown fox jumps over the lazy dog."
   },
@@ -75,32 +75,32 @@
       "10": "Super unique"
     },
     "nations": {
-      "ussr": "U.S.S.R.",
-      "germany": "Germany",
-      "usa": "U.S.A.",
-      "china": "China",
+      "ussr": "U.R.S.S",
+      "germany": "Allemagne",
+      "usa": "\"U.S.A\".",
+      "china": "Chine",
       "uk": "U.K.",
       "france": "France",
-      "japan": "Japan",
+      "japan": "Japon",
       "european": "European Nation",
       "other": "Hybrid Nation"
     },
     "nations_adjectives": {
-      "ussr": "U.S.S.R.",
-      "germany": "German",
-      "usa": "U.S.A.",
+      "ussr": "U.R.S.S",
+      "germany": "Allemand",
+      "usa": "\"U.S.A\".",
       "china": "Chinois",
       "uk": "U.K.",
       "france": "Français",
       "japan": "Japonais",
-      "european": "European",
-      "other": "Hybrid"
+      "european": "Européen",
+      "other": "Hybride"
     },
     "tank_class_short": {
       "-1": "unrecognized",
-      "0": "Light",
+      "0": "Léger",
       "1": "Medium",
-      "2": "Heavy",
+      "2": "Lourd",
       "3": "TD"
     },
     "tank_class_short_plural_lowercase": {
@@ -111,9 +111,9 @@
     },
     "tank_class_medium": {
       "-1": "unrecognized",
-      "0": "Light",
+      "0": "Léger",
       "1": "Medium",
-      "2": "Heavy",
+      "2": "Lourd",
       "3": "Tank destroyer"
     },
     "tree_type": {
