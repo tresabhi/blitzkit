@@ -79,27 +79,27 @@
       "germany": "Allemagne",
       "usa": "\"U.S.A\".",
       "china": "Chine",
-      "uk": "U.K.",
+      "uk": "Royaume-Uni.",
       "france": "France",
       "japan": "Japon",
-      "european": "European Nation",
-      "other": "Hybrid Nation"
+      "european": "Nation européenne",
+      "other": "Nation hybride"
     },
     "nations_adjectives": {
       "ussr": "U.R.S.S",
       "germany": "Allemand",
       "usa": "\"U.S.A\".",
       "china": "Chinois",
-      "uk": "U.K.",
+      "uk": "Royaume-Uni.",
       "france": "Français",
       "japan": "Japonais",
       "european": "Européen",
       "other": "Hybride"
     },
     "tank_class_short": {
-      "-1": "unrecognized",
+      "-1": "Non reconnu",
       "0": "Léger",
-      "1": "Medium",
+      "1": "Moyen",
       "2": "Lourd",
       "3": "TD"
     },
@@ -110,41 +110,41 @@
       "3": "TDs"
     },
     "tank_class_medium": {
-      "-1": "unrecognized",
+      "-1": "Non reconnu",
       "0": "Léger",
-      "1": "Medium",
+      "1": "Moyen",
       "2": "Lourd",
       "3": "Tank destroyer"
     },
     "tree_type": {
-      "-1": "unrecognized",
+      "-1": "Non reconnu",
       "0": "Tech tree",
       "1": "Premium",
       "2": "Collector"
     },
     "regions": {
       "normal": {
-        "com": "North America",
+        "com": "Amérique du Nord",
         "eu": "Europe",
-        "asia": "Asia-Pacific"
+        "asia": "Asie-Pacifique"
       },
       "short": {
         "com": "NA",
-        "eu": "EU",
+        "eu": "Europe",
         "asia": "APAC"
       }
     },
     "leagues": {
-      "diamond": "Diamond",
-      "platinum": "Platinum",
-      "gold": "Gold",
-      "silver": "Silver",
+      "diamond": "Diamant",
+      "platinum": "Platine",
+      "gold": "Or",
+      "silver": "Argent",
       "bronze": "Bronze"
     },
     "composite_stats": {
-      "normalized_damage_dealt": "Damage",
-      "normalized_damage_received": "Damage received",
-      "normalized_deaths": "Deathrate",
+      "normalized_damage_dealt": "Dégâts",
+      "normalized_damage_received": "Dégâts reçus",
+      "normalized_deaths": "Taux de Mort",
       "normalized_frags": "Tués",
       "normalized_hits": "Coups",
       "normalized_losses": "Taux de perte",
@@ -158,7 +158,7 @@
       "normalized_battle_life_time": "Temps de bataille",
       "cumulative_accuracy": "Précision",
       "cumulative_battles": "Batailles",
-      "cumulative_capture_points": "Total capture points",
+      "cumulative_capture_points": "Points de capture totaux",
       "cumulative_damage_dealt": "Total de dégâts",
       "cumulative_damage_ratio": "Rapport de dégâts",
       "cumulative_damage_received": "Total de dégât reçus",
@@ -183,17 +183,17 @@
   "bot": {
     "common": {
       "errors": {
-        "clan_not_found": "# Could not find clan\nCouldn't find \"%s1\". Try selecting a clan from the search result.",
-        "player_not_found": "# Could not find user\nI couldn't find user \"%s1\". Try picking an user from the search result, typing in a valid username, or using the `/link` command.",
+        "clan_not_found": "# Impossible de trouver le clan\nImpossible de trouver «%s1 ». Essayez de sélectionner un clan dans le résultat de la recherche.",
+        "player_not_found": "# Impossible de trouver l'utilisateur\nJe n'ai pas pu trouver l'utilisateur \"%s1\". Essayez de choisir un utilisateur dans le résultat de la recherche, en tapant un nom d'utilisateur valide, ou en utilisant la commande `/link`.",
         "player_not_linked": "# Use `/link` to get started\nI don't know who you are but you can tell me today!",
-        "tank_name_not_found": "# Tank not found\nCould not find tank by the name \"%s1\".",
+        "tank_name_not_found": "Impossible de trouver le char sous le nom \"%s1\".",
         "tank_id_not_found": "# Tank not found\nCould not find tank by the ID \"%s1\". Try typing the name of the tank instead of a number.",
-        "no_tank_stats": "# No tank stats available\nThis player doesn't have any stats available. This may not be the player you are looking for.",
-        "get_help": "Help Discord server",
+        "no_tank_stats": "# Aucune statistique de tank disponible\nCe joueur n'a pas de statistiques disponibles. Ce n'est peut-être pas le joueur que vous cherchez.",
+        "get_help": "Aidez le serveur Discord",
         "uncaught_error": "# BlitzKit ran into an error!\nWe're so sorry about this. Feel free to [join the official Discord server](https://discord.gg/nDt7AjGJQH) to get help.",
-        "preview": "# This command is in preview\n\nYou can only access this command in [the official Discord server](https://discord.gg/nDt7AjGJQH). The command will be generally available soon.",
-        "query_too_small": "# Your search is too short\nYour search must be at least 3 characters long.",
-        "query_too_long": "# Your search is too long\nYour search must be at most 100 characters long."
+        "preview": "# Cette commande est en aperçu\n\nVous ne pouvez accéder à cette commande que dans [le serveur officiel Discord](https://discord.gg/nDt7AjGJQH). La commande sera généralement disponible sous peu.",
+        "query_too_small": "# Votre recherche est trop courte\nVotre recherche doit comporter au moins 3 caractères.",
+        "query_too_long": "# Votre recherche est trop longue\nVotre recherche doit comporter au maximum 100 caractères."
       },
       "wn8": {
         "name": "WN8",
@@ -212,12 +212,12 @@
       },
       "subcommands": {
         "today": {
-          "name": "today",
-          "description": "Today"
+          "name": "aujourd'hui",
+          "description": "Aujourd'hui"
         },
         "30": {
           "name": "30",
-          "description": "30 days"
+          "description": "30 jours"
         },
         "60": {
           "name": "60",
@@ -287,7 +287,7 @@
       },
       "periods": {
         "career": "Career",
-        "today": "Today",
+        "today": "Aujourd'hui",
         "days": "%s1 days",
         "custom": "%s1 - %s2 days"
       },
@@ -297,8 +297,8 @@
       },
       "no_data": {
         "battles_in_period": "No battles played in this period",
-        "battles_in_season": "No battles played in this season",
-        "players_in_period": "No players in this period",
+        "battles_in_season": "Aucune bataille jouée dans cette saison",
+        "players_in_period": "Aucun joueur pendant cette période",
         "tanks_found": "No tanks found"
       },
       "buttons": {
@@ -307,7 +307,7 @@
       "hero_stats": {
         "battles": "Batailles",
         "winrate": "Taux de victoires",
-        "damage": "Damage",
+        "damage": "Dégâts",
         "damage_ratio": "Rapport de dégâts",
         "tier": "Tier",
         "survival": "Survival",
@@ -406,7 +406,7 @@
           "battles": "Batailles",
           "wn8": "WN8",
           "winrate": "Taux de victoires",
-          "damage": "Damage",
+          "damage": "Dégâts",
           "unknown_tank": "Unknown tank %s1"
         }
       },
@@ -568,7 +568,7 @@
         }
       },
       "today": {
-        "name": "today",
+        "name": "aujourd'hui",
         "description": "Today's played tanks and statistics"
       },
       "stats": {
@@ -629,7 +629,7 @@
         "description": "Rating player's statistics",
         "subcommands": {
           "today": {
-            "name": "today",
+            "name": "aujourd'hui",
             "description": "Today's rating statistics"
           },
           "season": {
@@ -918,7 +918,7 @@
             "intraClip": "Intra-clip",
             "caliber": "Caliber",
             "penetration": "Penetration",
-            "damage": "Damage",
+            "damage": "Dégâts",
             "clipDamage": "Clipping potential",
             "moduleDamage": "Module damage",
             "explosionRadius": "Explosion radius",
@@ -942,19 +942,19 @@
             "speedBackwards": "Backwards",
             "hardTerrainCoefficient": "Hard",
             "hardTerrainCoefficientRaw": "Hard",
-            "mediumTerrainCoefficient": "Medium",
-            "mediumTerrainCoefficientRaw": "Medium",
+            "mediumTerrainCoefficient": "Moyen",
+            "mediumTerrainCoefficientRaw": "Moyen",
             "softTerrainCoefficient": "Soft",
             "softTerrainCoefficientRaw": "Soft",
             "enginePower": "Engine power",
             "powerToWeightRatioHardTerrain": "Hard",
-            "powerToWeightRatioMediumTerrain": "Medium",
+            "powerToWeightRatioMediumTerrain": "Moyen",
             "powerToWeightRatioSoftTerrain": "Soft",
             "weight": "Weight",
             "turretTraverseSpeed": "Turret traverse speed",
             "gunTraverseSpeed": "Gun traverse speed",
             "hullTraverseHardTerrain": "Hard",
-            "hullTraverseMediumTerrain": "Medium",
+            "hullTraverseMediumTerrain": "Moyen",
             "hullTraverseSoftTerrain": "Soft",
             "health": "Health",
             "fireChance": "Fire chance",
@@ -1058,7 +1058,7 @@
           "stats": {
             "winrate": "Taux de victoires",
             "players": "Players",
-            "damage": "Damage",
+            "damage": "Dégâts",
             "survival": "Survival",
             "xp": "XP",
             "kills": "Tués",
