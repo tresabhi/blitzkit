@@ -13,9 +13,9 @@
       "x": "x%s1"
     },
     "gun_types": {
-      "auto_loader": "Барабан",
+      "auto_loader": "Магазинна система заряджання",
       "auto_reloader": "Барабан з дозарядкою",
-      "regular": "Цикл"
+      "regular": "Циклічна"
     },
     "shells": {
       "ap": "ББ",
@@ -42,7 +42,7 @@
       "en": "Англійська",
       "es": "Іспанська",
       "pt": "Португальська",
-      "ru": "Російська",
+      "ru": "російська",
       "uk": "Українська",
       "zh": "Китайська",
       "ja": "Японська",
@@ -720,29 +720,29 @@
             },
             "direction": {
               "label": "Напрямок",
-              "ascending": "Ascending",
-              "descending": "Descending"
+              "ascending": "Зростає",
+              "descending": "Спадає"
             }
           }
         }
       },
       "warnings": {
-        "test": "Tanks in testing are subject to change and may not represent the final product."
+        "test": "Танки, що тестуються, можуть мінятися і можуть не являти собою фінальний."
       }
     },
     "home": {
       "hero": {
-        "credit": "By %s1 ❤️"
+        "credit": "Зроблено %s1 ❤"
       },
       "hot_tanks": {
-        "title": "Popular tanks",
-        "subtitle": "Last %s1 days"
+        "title": "Популярні танки",
+        "subtitle": "Останні %s1 дні(в)"
       },
       "other_projects": {
-        "title": "Other cool projects"
+        "title": "Інші класні проєкти"
       },
-      "help_translate": "Please help translate %s1 to %s2!",
-      "seo_description": "Tools for everything World of Tanks Blitz"
+      "help_translate": "Будь ласка, допоможіть перекласти %s1 на %s2!",
+      "seo_description": "Інструменти для всього, пов'язаного з WoT Blitz"
     },
     "tools": {
       "tankopedia": {
