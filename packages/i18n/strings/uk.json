@@ -14,7 +14,7 @@
     },
     "gun_types": {
       "auto_loader": "Магазинна система заряджання",
-      "auto_reloader": "Барабан з дозарядкою",
+      "auto_reloader": "Гармата з системою дозаряджання магазину",
       "regular": "Циклічна"
     },
     "shells": {
@@ -746,21 +746,21 @@
     },
     "tools": {
       "tankopedia": {
-        "name": "Tankopedia",
-        "button": "Find tanks",
-        "description": "Blitz tank encyclopedia",
-        "seo_description": "Statistics, armor, and more for all tanks in World of Tanks Blitz",
-        "tank_seo_title": "%s1 - Tier %s2 %s3 %s4 | %s5 Tankopedia | World of Tanks Blitz (WoTB)",
-        "tank_seo_description": "%s1 armor, statistics, equipment, provisions, and more. %s2 DPM, %s3hp alpha, %s4mm penetration, %s5kph top speed, %s6hp health.",
+        "name": "Танкопедія",
+        "button": "Знайти танки",
+        "description": "Танкова енциклопедія",
+        "seo_description": "Характеристики, броня та інше для всіх танків WoT Blitz",
+        "tank_seo_title": "%s1 - Рівень %s2 %s3 %s4 | %s5 Танкопедія | WoT Blitz",
+        "tank_seo_description": "%s1 броня, характеристики, обладнання, амуніція та більше. %s2 шкода на хвилину, %s3 разова шкода, %s4 мм пробиття, %s5 км/год максимальна швидкість, %s6 міцність.",
         "sandbox": {
           "poses": {
-            "hull_down": "Hull down",
-            "face_hug": "Face hug",
-            "default": "Default"
+            "hull_down": "Від башти",
+            "face_hug": "Клінч",
+            "default": "За замовчуванням"
           },
           "settings": {
-            "armor": "Armor",
-            "green_penetration": "Green penetration",
+            "armor": "Броня",
+            "green_penetration": "Зелене пробиття",
             "hide_model_under_armor": "Hide model under armor",
             "opaque": "Opaque",
             "dev_wireframe": "DEV: wireframe",
