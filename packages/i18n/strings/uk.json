@@ -1084,21 +1084,21 @@
         }
       },
       "session": {
-        "name": "Session",
-        "button": "Start tracking",
-        "description": "Live session stats",
-        "seo_description": "Track your stats in real time as you play World of Tanks Blitz",
+        "name": "Сесія",
+        "button": "Розпочати відстеження",
+        "description": "Статистика сесії в реальному часі",
+        "seo_description": "Відстежуйте свою статистику в реальному часі як ви граєте World of Tanks Blitz",
         "search": {
-          "lookup": "Look up a player to get started",
+          "lookup": "Знайди гравця щоб розпочати",
           "hint": "Пошук гравців...",
           "searching": "Пошук...",
           "no_results": "Гравця не знайдено"
         },
         "controls": {
-          "title": "Tracking %s1",
-          "subtitle": "Since %s1",
-          "reset": "Reset",
-          "change": "Change"
+          "title": "Відстежуємо %s1",
+          "subtitle": "Від %s1",
+          "reset": "Скинути",
+          "change": "Змінити"
         },
         "no_cc": {
           "title": "You're attempting to track a CC account",
@@ -1106,13 +1106,13 @@
           "alright": "Alright"
         },
         "no_battles": {
-          "title": "No battles",
+          "title": "Немає боїв",
           "hint": "Go ahead and play a game"
         },
         "table": {
-          "tank": "Tank",
+          "tank": "Танк",
           "total": "Загалом",
-          "remove": "Remove"
+          "remove": "Прибрати"
         }
       },
       "tier_list": {
@@ -1234,7 +1234,7 @@
         "seo_description": "Periodical player statistics in World of Tanks Blitz"
       },
       "home": {
-        "name": "Home",
+        "name": "Головна сторінка",
         "button": "Get started",
         "description": "Get started with BlitzKit",
         "seo_description": "Get started with BlitzKit"
