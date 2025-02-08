@@ -15,7 +15,7 @@
     "gun_types": {
       "auto_loader": "Chargement auto",
       "auto_reloader": "Rechargement auto",
-      "regular": "Régulier"
+      "regular": "Standard"
     },
     "shells": {
       "ap": "AP",
@@ -51,7 +51,7 @@
     },
     "wn8_percentile": {
       "0": "Très nul",
-      "1": "Nul",
+      "1": "Mauvais",
       "2": "En-dessous de la moyenne",
       "3": "Moyenne",
       "4": "Au-dessus de la moyenne",
@@ -352,29 +352,29 @@
         "body": {
           "subtitle": "Research",
           "total": "Total",
-          "research": "Research: %s1",
-          "upgrades": "Upgrades: %s1",
-          "purchase": "Purchase: %s1",
+          "research": "Recherche: %s1",
+          "upgrades": "Améliorations : %s1",
+          "purchase": "Achat : %s1",
           "equipment": "Equipment: %s1",
-          "estimation": "# This is an estimation!\n\nThis list may include already researched tanks because of the inaccurate information Wargaming provides. Try providing a `starting-tank` from the line when using the command if you can."
+          "estimation": "# Ceci est une estimation !\n\nCette liste peut inclure des chars déjà recherchés en raison de l'information inexacte fournie par Wargaming. Essayez de fournir un `char de départ` depuis la ligne lorsque vous utilisez la commande si vous le pouvez."
         },
         "errors": {
-          "non_tech_tree": "# %s1 is not on the tech tree\n\nYou cannot research a premium/collector tank.",
-          "tier_1": "# %s1 is a tier I\n\nTier I tanks are always unlocked for free for all players.",
-          "already_researched": "# %s1 is already researched\n\nTry providing a `starting-tank` when using the command to view the totals for a line you have already researched.",
+          "non_tech_tree": "# %s1 n'est pas dans l'arbre technologique\n\nVous ne pouvez pas rechercher un char prenium/de collection.",
+          "tier_1": "# %s1 est un char de tier I\n\nLe char de tier 1 sont déverrouillé gratuitement pour tous les joueurs.",
+          "already_researched": "# %s1 est déjà recherché\n\nEssayez de fournir un `char de départ` en utilisant la commande pour voir la progression d'une lignée.",
           "start_end_equal": "# %s1 was provided twice\n\nMake sure `starting-tank` and `target-tank` are different.",
           "tanks_not_on_line": "# %s1 and %s2 are not on the same line\n\nMake sure `starting-tank` and `target-tank` are on the same tech-tree line.",
           "unordered": "# %s1 higher tiered to %s2\n\nMake sure to provide %s3 as the `starting-tank` instead as it is the lower tiered tank."
         }
       },
       "about": {
-        "name": "about",
-        "description": "All the info you need about the bot",
+        "name": "à propos",
+        "description": "Toutes les informations dont vous avez besoin sur le bot",
         "subcommands": {
           "commands": {
-            "name": "commands",
-            "description": "List of all commands and their descriptions",
-            "body": "# Commands\n\nBlitzKit offers the following commands:\n\n"
+            "name": "commandes",
+            "description": "Liste de toutes les commandes et leurs descriptions",
+            "body": "# Commandes\n\nBlitzKit offre les commandes suivantes :\n\n"
           },
           "embeds": {
             "name": "embeds",
@@ -382,19 +382,19 @@
           },
           "introduction": {
             "name": "introduction",
-            "description": "About the bot"
+            "description": "À propos du bot"
           },
           "invite": {
-            "name": "invite",
-            "description": "How to invite the bot"
+            "name": "inviter",
+            "description": "Comment inviter le bot"
           },
           "timezones": {
-            "name": "timezones",
-            "description": "How BlitzKit infers and uses your timezone"
+            "name": "fuseau horaire",
+            "description": "Comment BlitzKit déduit et utilise votre fuseau horaire"
           },
           "credits": {
-            "name": "credits",
-            "description": "People who have helped BlitzKit"
+            "name": "crédits",
+            "description": "Personnes qui ont aidé BlitzKit"
           }
         }
       },
@@ -407,52 +407,52 @@
           "wn8": "WN8",
           "winrate": "Taux de victoires",
           "damage": "Dégâts",
-          "unknown_tank": "Unknown tank %s1"
+          "unknown_tank": "Char %s1 inconnu"
         }
       },
       "debug": {
-        "name": "debug",
-        "description": "Debug information about the bot",
+        "name": "déboguer",
+        "description": "Déboguer les informations sur le bot",
         "body": {
-          "title": "# Debug\n\n",
+          "title": "# Debog\n\n",
           "version": "Version",
           "shard": {
-            "label": "Shard",
-            "default": "default"
+            "label": "Fragment",
+            "default": "par défaut"
           },
-          "uptime": "Uptime"
+          "uptime": "Temps de fonctionnement"
         }
       },
       "evolution": {
-        "name": "evolution",
-        "description": "Evolution of statistics",
+        "name": "évolution",
+        "description": "Évolution des statistiques",
         "groups": {
           "player": {
-            "name": "player",
-            "description": "Player statistics"
+            "name": "joueur",
+            "description": "Statistiques du joueur"
           },
           "tank": {
             "name": "char",
-            "description": "Tank statistics"
+            "description": "Statistiques du char"
           }
         }
       },
       "inactive": {
-        "name": "inactive",
-        "description": "Lists all inactive players in a clan above a threshold",
+        "name": "inactif",
+        "description": "Liste tous les joueurs inactifs dans un clan au-dessus d'un seuil",
         "options": {
           "threshold": {
-            "name": "threshold",
-            "description": "The number of days inactive (default: %s1 days)"
+            "name": "seuil",
+            "description": "Le nombre de jours inactifs (par défaut: %s1 jours)"
           }
         },
         "body": {
-          "subtitle": "Inactive for %s1+ days",
+          "subtitle": "Inactif depuis %s1+ de jours",
           "listing": "%s1 jour"
         }
       },
       "full_stats": {
-        "name": "full-stats",
+        "name": "statistiques complètes",
         "description": "Full in-game statistics",
         "body": {
           "cards": {
