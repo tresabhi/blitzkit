@@ -399,7 +399,7 @@
         }
       },
       "breakdown": {
-        "name": "breakdown",
+        "name": "décomposition",
         "description": "A period's breakdown by tanks played",
         "body": {
           "total": "Total",
@@ -453,31 +453,31 @@
       },
       "full_stats": {
         "name": "statistiques complètes",
-        "description": "Full in-game statistics",
+        "description": "Statistiques complètes en jeu",
         "body": {
           "cards": {
             "games": {
               "title": "Games",
               "winrate": "Taux de victoires",
               "battles": "Batailles",
-              "wins_losses": "Wins / losses"
+              "wins_losses": "Victoires/Défaites"
             },
             "efficiency": {
-              "title": "Efficiency",
+              "title": "Efficacité",
               "wn8": "WN8",
               "survival": "Survie",
               "accuracy": "Précision"
             },
             "lethality": {
               "title": "Lethality",
-              "average_damage": "Average damage",
-              "damage_per_tier": "Damage per tier",
+              "average_damage": "Dégâts moyens",
+              "damage_per_tier": "Dégâts par tier",
               "damage_ratio": "Rapport de dégâts",
-              "average_kills": "Average kills"
+              "average_kills": "Destruction moyenne"
             },
             "miscellaneous": {
-              "title": "Miscellaneous",
-              "average_tier": "Average tier",
+              "title": "Divers",
+              "average_tier": "Tier moyen",
               "average_spots": "Average spots",
               "average_xp": "Average XP",
               "kills_to_death_ratio": "Rapport tués/morts"
@@ -882,7 +882,7 @@
             "info": "Yellow skills only apply under special circumstances. Hold Space to quickly toggle between level 0 and 7."
           },
           "miscellaneous": {
-            "title": "Miscellaneous"
+            "title": "Divers"
           }
         },
         "characteristics": {
