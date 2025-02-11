@@ -478,25 +478,25 @@
             "miscellaneous": {
               "title": "Divers",
               "average_tier": "Tier moyen",
-              "average_spots": "Average spots",
-              "average_xp": "Average XP",
+              "average_spots": "Repérage moyen",
+              "average_xp": "Exp. Moyenne par bataille",
               "kills_to_death_ratio": "Rapport tués/morts"
             }
           }
         }
       },
       "link": {
-        "name": "link",
-        "description": "Links your Blitz and Discord account",
+        "name": "lien",
+        "description": "Lier votre compte Blitz et Discord",
         "body": {
-          "accounts_linked": "Accounts linked",
+          "accounts_linked": "Comptes liés",
           "no_role_permissions": {
-            "title": "%s1 failed to verify",
-            "description": "I don't have the permission to manage roles."
+            "title": "La vérification de %s1 a échoué",
+            "description": "Je n'ai pas l'autorisation de gérer les rôles."
           }
         },
         "embed": {
-          "title": "Incorrect account?",
+          "title": "Compte invalide ?",
           "description": "Use the command again and select a username from the search results."
         }
       },
