@@ -768,11 +768,11 @@
             "show_grid": "Show grid"
           },
           "screenshot": {
-            "download": "Download",
-            "copy": "Copy"
+            "download": "Завантажити",
+            "copy": "Скопіювати"
           },
           "model": {
-            "name": "Model"
+            "name": "Модель"
           },
           "dynamic": {
             "name": "Dynamic armor",
