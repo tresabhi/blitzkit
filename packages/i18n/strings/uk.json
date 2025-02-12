@@ -775,14 +775,14 @@
             "name": "Модель"
           },
           "dynamic": {
-            "name": "Dynamic armor",
+            "name": "Динамічна броня",
             "custom_shell": {
               "type": "Вид",
-              "caliber": "Caliber",
-              "penetration": "Penetration",
-              "normalization": "Normalization",
-              "ricochet": "Ricochet",
-              "explosion_radius": "Explosion radius",
+              "caliber": "Калібр",
+              "penetration": "Бронепробиття",
+              "normalization": "Нормалізація",
+              "ricochet": "Рикошет",
+              "explosion_radius": "Радіус розльоту уламків",
               "exit": "Exit",
               "reset": "Reset"
             },
@@ -800,7 +800,7 @@
               "status": {
                 "penetration": "%s1hp penetration",
                 "blocked": "Blocked",
-                "ricochet": "Ricochet",
+                "ricochet": "Рикошет",
                 "splash": "%s1hp splash"
               },
               "stats": {
@@ -907,8 +907,8 @@
             "camouflage": "Camouflage",
             "reload": "Reload",
             "crewCount": "Crew count",
-            "shellNormalization": "Normalization",
-            "shellRicochet": "Ricochet",
+            "shellNormalization": "Нормалізація",
+            "shellRicochet": "Рикошет",
             "dpm": "DPM",
             "dpmEffective": "Effective at 60s",
             "shells": "Shells",
@@ -916,12 +916,12 @@
             "shellReloads": "Shell reloads",
             "shellReload": "Shell reload",
             "intraClip": "Intra-clip",
-            "caliber": "Caliber",
-            "penetration": "Penetration",
+            "caliber": "Калібр",
+            "penetration": "Бронепробиття",
             "damage": "Шкода",
             "clipDamage": "Clipping potential",
             "moduleDamage": "Module damage",
-            "explosionRadius": "Explosion radius",
+            "explosionRadius": "Радіус розльоту уламків",
             "shellVelocity": "Shell velocity",
             "aimTime": "Aim time",
             "dispersion": "Still",
