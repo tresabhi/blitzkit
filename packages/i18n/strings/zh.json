@@ -131,7 +131,7 @@
       "short": {
         "com": "北美",
         "eu": "欧洲",
-        "asia": "APAC"
+        "asia": "亞太地區"
       }
     },
     "leagues": {
@@ -1241,7 +1241,7 @@
       },
       "blitz_analysis": {
         "name": "BlitzAnalysis[]",
-        "button": "Analyze now",
+        "button": "現在分析",
         "description": "Rich historic average stats",
         "seo_description": "Rich historic average stats in World of Tanks Blitz"
       },
