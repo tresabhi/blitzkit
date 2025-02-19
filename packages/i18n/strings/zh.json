@@ -52,13 +52,13 @@
     "wn8_percentile": {
       "0": "非常差",
       "1": "差",
-      "2": "较差",
+      "2": "較差",
       "3": "平均",
-      "4": "高于平均",
+      "4": "高於平均",
       "5": "好",
       "6": "非常好",
       "7": "很好",
-      "8": "",
+      "8": "極品",
       "9": "超级强势玩家"
     },
     "bkni_percentile": {
@@ -71,7 +71,7 @@
       "6": "高于平均",
       "7": "好",
       "8": "非常好",
-      "9": "",
+      "9": "極品",
       "10": "超级强势玩家"
     },
     "nations": {
@@ -82,7 +82,7 @@
       "uk": "英系",
       "france": "法系",
       "japan": "日系",
-      "european": "泛欧",
+      "european": "歐洲國家",
       "other": "X系"
     },
     "nations_adjectives": {
@@ -93,57 +93,57 @@
       "uk": "英系",
       "france": "法系",
       "japan": "日系",
-      "european": "泛欧",
+      "european": "歐洲的",
       "other": "X系"
     },
     "tank_class_short": {
-      "-1": "无法识别",
-      "0": "轻型坦克",
-      "1": "中型坦克",
-      "2": "重型坦克",
-      "3": "坦克歼击车"
+      "-1": "未識別",
+      "0": "輕型戰車",
+      "1": "中型戰車",
+      "2": "重型戰車",
+      "3": "驅逐戰車"
     },
     "tank_class_short_plural_lowercase": {
-      "0": "轻型坦克",
-      "1": "中型坦克",
+      "0": "輕型戰車",
+      "1": "中型戰車",
       "2": "重型坦克",
-      "3": "坦克歼击车"
+      "3": "驅逐戰車"
     },
     "tank_class_medium": {
-      "-1": "无法识别",
-      "0": "轻型坦克",
-      "1": "中型坦克",
-      "2": "重型坦克",
-      "3": "坦克歼击车"
+      "-1": "未識別",
+      "0": "輕型戰車",
+      "1": "中型戰車",
+      "2": "重型戰車",
+      "3": "驅逐戰車"
     },
     "tree_type": {
-      "-1": "无法识别",
-      "0": "科技树",
-      "1": "金币车",
-      "2": "收藏车"
+      "-1": "未識別",
+      "0": "科技樹",
+      "1": "加值戰車",
+      "2": "收藏家戰車"
     },
     "regions": {
       "normal": {
         "com": "北美",
-        "eu": "欧洲",
-        "asia": "亚太"
+        "eu": "歐洲",
+        "asia": "亞太地區"
       },
       "short": {
         "com": "北美",
-        "eu": "欧洲",
+        "eu": "歐洲",
         "asia": "亞太地區"
       }
     },
     "leagues": {
-      "diamond": "钻石",
+      "diamond": "鑽石",
       "platinum": "白金",
       "gold": "黃金",
-      "silver": "白银",
-      "bronze": "青铜"
+      "silver": "白銀",
+      "bronze": "青銅"
     },
     "composite_stats": {
-      "normalized_damage_dealt": "伤害",
-      "normalized_damage_received": "受到的伤害",
+      "normalized_damage_dealt": "傷害",
+      "normalized_damage_received": "受到的傷害",
       "normalized_deaths": "阵亡率",
       "normalized_frags": "击杀数",
       "normalized_hits": "命中数",
@@ -174,7 +174,7 @@
       "cumulative_spotted": "总发现敌人数",
       "cumulative_survived_battles": "幸存场次",
       "cumulative_win_and_survived": "胜利和幸存场次",
-      "cumulative_wins": "胜利",
+      "cumulative_wins": "勝利",
       "cumulative_xp": "总经验",
       "cumulative_wn8": "WN8",
       "cumulative_battle_life_time": "总战斗时间"
@@ -183,10 +183,10 @@
   "bot": {
     "common": {
       "errors": {
-        "clan_not_found": "# 找不到军团\n找不到\"%s1\"。请尝试从搜索结果中选择一个军团。",
-        "player_not_found": "# 找不到用户\n无法找到用户 \"%s1\"。 尝试从搜索结果中挑选用户，输入一个有效的用户名或使用 \"/link\" 命令。",
-        "player_not_linked": "# 使用 `/link` 来开始\n我不知道你是谁，但你今天可以告诉我！",
-        "tank_name_not_found": "# 坦克找不到\n无法找到名为 \"%s1 \"的坦克。",
+        "clan_not_found": "# 找不到公會\n找不到\"%s1\"。請嘗試從搜尋結果中選擇一個公會。",
+        "player_not_found": "# 找不到玩家\n無法找到玩家 \"%s1\"。 嘗試從搜尋結果中選擇玩家，或輸入一個有效的玩家名稱或 \"/link\" 命令。",
+        "player_not_linked": "# 使用 `/link` 來開始\n我不知道你是誰，但你今天可以告訴我！",
+        "tank_name_not_found": "# 找不到戰車\n找不到名為 \"%s1 \"的戰車。",
         "tank_id_not_found": "# 坦克找不到\n无法找到ID \"%s1\"的坦克。 试着输入坦克的名称而不是数字。",
         "no_tank_stats": "# 没有这个坦克的数据\n这个玩家没有数据。你可能找错人了。",
         "get_help": "Help Discord server",
@@ -206,7 +206,7 @@
           "good": "好",
           "very_good": "非常好",
           "great": "很好",
-          "unicum": "",
+          "unicum": "極品",
           "super_unicum": "超级强势玩家"
         }
       },
@@ -657,29 +657,29 @@
     },
     "common": {
       "player_search": {
-        "hint": "搜索玩家",
-        "no_results": "无结果",
-        "searching": "搜索中..."
+        "hint": "搜尋玩家……",
+        "no_results": "無結果",
+        "searching": "搜尋中……"
       },
       "copy_button": {
-        "copied": "已复制！"
+        "copied": "已複製！"
       },
       "tank_search": {
-        "search_bar_hint": "搜索坦克...",
+        "search_bar_hint": "搜尋戰車",
         "recent": "最近查看",
-        "select_all": "全选",
+        "select_all": "選擇全部",
         "count_singular": "1 tank",
         "count_plural": "%s1 tanks",
         "sorting_by": "Sorting by %s1",
         "no_tanks_found": {
-          "body": "未找到战车。",
-          "search_again": "请尝试重新搜索。",
-          "clear_filters": "请尝试清空筛选"
+          "body": "找不到戰車。",
+          "search_again": "請嘗試重新搜尋。",
+          "clear_filters": "請嘗試重置篩選器。"
         },
         "sort": {
-          "meta.none": "无",
+          "meta.none": "無",
           "survivability.health": "生命值",
-          "survivability.viewRange": "侦察范围",
+          "survivability.viewRange": "偵查範圍",
           "survivability.camouflageStill": "静止中隐蔽值",
           "survivability.camouflageMoving": "移动中隐蔽值",
           "survivability.camouflageShooting": "开火隐蔽值",
@@ -732,23 +732,23 @@
     },
     "home": {
       "hero": {
-        "credit": "By %s1 ❤️"
+        "credit": "由 %s1 製作❤️"
       },
       "hot_tanks": {
         "title": "Popular tanks",
         "subtitle": "Last %s1 days"
       },
       "other_projects": {
-        "title": "Other cool projects"
+        "title": "其他酷炫的專案"
       },
-      "help_translate": "Please help translate %s1 to %s2!",
-      "seo_description": "Tools for everything World of Tanks Blitz"
+      "help_translate": "請幫忙將 %s1 翻譯成 %s2！",
+      "seo_description": "戰車世界閃擊戰 全方位工具"
     },
     "tools": {
       "tankopedia": {
-        "name": "Tankopedia",
-        "button": "Find tanks",
-        "description": "Blitz tank encyclopedia",
+        "name": "戰車百科",
+        "button": "尋找戰車",
+        "description": "閃擊戰戰車百科全書",
         "seo_description": "Statistics, armor, and more for all tanks in World of Tanks Blitz",
         "tank_seo_title": "%s1 - Tier %s2 %s3 %s4 | %s5 Tankopedia | World of Tanks Blitz (WoTB)",
         "tank_seo_description": "%s1 armor, statistics, equipment, provisions, and more. %s2 DPM, %s3hp alpha, %s4mm penetration, %s5kph top speed, %s6hp health.",
@@ -768,8 +768,8 @@
             "show_grid": "Show grid"
           },
           "screenshot": {
-            "download": "下载",
-            "copy": "复制"
+            "download": "下載",
+            "copy": "複製"
           },
           "model": {
             "name": "模型"
@@ -790,59 +790,59 @@
             "shooter": "主视角射击者",
             "shot_card": {
               "element": {
-                "primary": "主装甲",
-                "spaced": "间隙装甲",
+                "primary": "主裝甲",
+                "spaced": "間隙裝甲",
                 "external": "外部模块",
                 "gap": "空隙",
                 "gun": "主炮",
-                "track": "履带"
+                "track": "履帶"
               },
               "status": {
-                "penetration": "%s生命值 击穿",
-                "blocked": "抵挡伤害",
-                "ricochet": "跳弹",
+                "penetration": "%s生命值 擊穿",
+                "blocked": "阻擋傷害",
+                "ricochet": "跳彈",
                 "splash": "%s生命值 溅射"
               },
               "stats": {
                 "thickness_and_angle": "等效%s毫米 %s2度",
-                "nominal": "%s毫米 装甲厚度",
-                "ricochet_loss": "%s1%概率击穿"
+                "nominal": "%s毫米 裝甲厚度",
+                "ricochet_loss": "%s1%概率擊穿"
               }
             }
           },
           "static": {
-            "name": "静态装甲",
-            "primary": "主装甲",
-            "spaced": "间隙装甲",
+            "name": "静態裝甲",
+            "primary": "主裝甲",
+            "spaced": "間隙裝甲",
             "external": "外部模块",
             "edit": {
-              "label": "编辑",
+              "label": "編輯",
               "reset": "重置"
             }
           }
         },
         "meta": {
           "back": "返回",
-          "compare": "对比",
+          "compare": "對比",
           "swap": {
             "button": "调换",
             "title": "调换战车"
           },
           "vanilla": "Vanilla",
           "opentest": "开放测试",
-          "full_name": "全称",
-          "nation": "国别",
-          "class": "战车组别",
-          "tier": "等级",
-          "type": "战车类型",
-          "dev_id": "开发者ID",
-          "purchase": "购买价格",
-          "restoration": "恢复战车价格",
-          "sale": "出售价格",
-          "research": "研发所需经验"
+          "full_name": "全名",
+          "nation": "國別",
+          "class": "戰車分類",
+          "tier": "等級",
+          "type": "戰車類型",
+          "dev_id": "開發者ID",
+          "purchase": "購買價格",
+          "restoration": "恢復戰車價格",
+          "sale": "出售價格",
+          "research": "研發所需經驗"
         },
         "tech_tree": {
-          "title": "科技树",
+          "title": "科技樹",
           "battle": "1 battle",
           "battles": "%s1 battles",
           "route": "Route %s1 of %s2"
@@ -908,7 +908,7 @@
             "reload": "Reload",
             "crewCount": "Crew count",
             "shellNormalization": "转正",
-            "shellRicochet": "跳弹",
+            "shellRicochet": "跳彈",
             "dpm": "DPM",
             "dpmEffective": "Effective at 60s",
             "shells": "Shells",
@@ -916,20 +916,20 @@
             "shellReloads": "Shell reloads",
             "shellReload": "Shell reload",
             "intraClip": "Intra-clip",
-            "caliber": "口径",
+            "caliber": "口徑",
             "penetration": "穿深",
-            "damage": "伤害",
+            "damage": "傷害",
             "clipDamage": "Clipping potential",
-            "moduleDamage": "模组伤害",
+            "moduleDamage": "模组傷害",
             "explosionRadius": "溅射半径",
-            "shellVelocity": "炮弹飞行速度",
-            "aimTime": "瞄准时间",
-            "dispersion": "静止时",
-            "dispersionMoving": "移动时",
-            "dispersionHullTraversing": "车体转向时",
-            "dispersionTurretTraversing": "炮塔轨迹",
+            "shellVelocity": "炮弹飛行速度",
+            "aimTime": "瞄準時間",
+            "dispersion": "静止時",
+            "dispersionMoving": "移動時",
+            "dispersionHullTraversing": "車身轉向時",
+            "dispersionTurretTraversing": "炮塔轉向時",
             "dispersionShooting": "开火时",
-            "dispersionGunDamaged": "主炮损坏时",
+            "dispersionGunDamaged": "主炮損壞",
             "gunDepression": "俯角",
             "gunElevation": "仰角",
             "gunFrontalDepression": "车体前部俯角",
@@ -942,27 +942,27 @@
             "speedBackwards": "Backwards",
             "hardTerrainCoefficient": "Hard",
             "hardTerrainCoefficientRaw": "Hard",
-            "mediumTerrainCoefficient": "中型坦克",
-            "mediumTerrainCoefficientRaw": "中型坦克",
+            "mediumTerrainCoefficient": "中型戰車",
+            "mediumTerrainCoefficientRaw": "中型戰車",
             "softTerrainCoefficient": "Soft",
             "softTerrainCoefficientRaw": "软地",
             "enginePower": "引擎功率",
             "powerToWeightRatioHardTerrain": "硬地",
-            "powerToWeightRatioMediumTerrain": "中型坦克",
+            "powerToWeightRatioMediumTerrain": "中型戰車",
             "powerToWeightRatioSoftTerrain": "Soft",
             "weight": "重量",
             "turretTraverseSpeed": "炮塔旋转速度",
             "gunTraverseSpeed": "Gun traverse speed",
             "hullTraverseHardTerrain": "Hard",
-            "hullTraverseMediumTerrain": "中型坦克",
+            "hullTraverseMediumTerrain": "中型戰車",
             "hullTraverseSoftTerrain": "Soft",
             "health": "Health",
             "fireChance": "Fire chance",
-            "viewRange": "视野范围",
-            "camouflageStill": "静止时",
-            "camouflageMoving": "移动时",
-            "camouflageShootingStill": "静止时",
-            "camouflageShootingMoving": "移动时",
+            "viewRange": "視野範圍",
+            "camouflageStill": "靜止時",
+            "camouflageMoving": "移動時",
+            "camouflageShootingStill": "静止時",
+            "camouflageShootingMoving": "移動時",
             "camouflageCaughtOnFire": "Caught on fire",
             "width": "Width",
             "height": "Height",
@@ -981,11 +981,11 @@
           "title": "Crew training",
           "info": "represents the other roles a crew member can take.",
           "count": "Crew count",
-          "commander": "车长",
+          "commander": "車長",
           "gunner": "炮手",
-          "driver": "驾驶员",
-          "radioman": "通讯兵",
-          "loader": "装填手"
+          "driver": "駕駛員",
+          "radioman": "無線電操作員",
+          "loader": "裝填手"
         },
         "maneuverability": {
           "title": "Maneuverability"
@@ -995,14 +995,14 @@
         }
       },
       "compare": {
-        "name": "对比",
-        "button": "坦克对比",
+        "name": "比較",
+        "button": "戰車比較",
         "description": "Compare tank statistics",
         "seo_description": "Compare tanks statistics and loadouts in World of Tanks Blitz",
         "actions": {
           "add": {
             "button": "增加...",
-            "title": "添加坦克",
+            "title": "增加戰車",
             "description": "Select tanks to add to comparison"
           },
           "clear": "Clear",
@@ -1056,15 +1056,15 @@
             "total": "全部"
           },
           "stats": {
-            "winrate": "胜率",
+            "winrate": "勝率",
             "players": "Players",
-            "damage": "伤害",
+            "damage": "傷害",
             "survival": "生存性",
-            "xp": "经验值",
-            "kills": "击杀数",
+            "xp": "經驗值",
+            "kills": "擊殺數",
             "spots": "点亮次数",
             "accuracy": "命中率",
-            "shots": "开火次数",
+            "shots": "開火次數",
             "hits": "命中数",
             "damage_ratio": "Dmg. ratio",
             "damage_taken": "Dmg. taken",
@@ -1086,51 +1086,51 @@
       "session": {
         "name": "場次",
         "button": "開始追蹤",
-        "description": "Live session stats",
-        "seo_description": "Track your stats in real time as you play World of Tanks Blitz",
+        "description": "即時場次統計",
+        "seo_description": "在遊玩 戰車世界閃擊戰 時，實時追蹤你的統計數據",
         "search": {
-          "lookup": "Look up a player to get started",
-          "hint": "搜索玩家",
-          "searching": "搜索中...",
-          "no_results": "No players found"
+          "lookup": "查詢玩家以開始使用",
+          "hint": "搜尋玩家……",
+          "searching": "搜尋中……",
+          "no_results": "找不到玩家"
         },
         "controls": {
-          "title": "Tracking %s1",
-          "subtitle": "Since %s1",
+          "title": "追蹤 %s1",
+          "subtitle": "起始於 %s1",
           "reset": "重置",
-          "change": "Change"
+          "change": "變更"
         },
         "no_cc": {
-          "title": "You're attempting to track a CC account",
-          "body": "CC (community contributor) accounts do not have public tank statistics. We are in the process of adding embeds for CC accounts, stay tuned.",
-          "alright": "Alright"
+          "title": "你正在嘗試追蹤一個 CC 號",
+          "body": "CC（社群貢獻者）帳號沒有公開的戰車統計數據。我們正在為 CC 帳號添加嵌入功能，敬請期待。",
+          "alright": "好的"
         },
         "no_battles": {
-          "title": "No battles",
-          "hint": "Go ahead and play a game"
+          "title": "沒有戰鬥",
+          "hint": "開始遊戲吧"
         },
         "table": {
-          "tank": "Tank",
+          "tank": "戰車",
           "total": "全部",
-          "remove": "Remove"
+          "remove": "移除"
         }
       },
       "tier_list": {
-        "name": "Tier list",
-        "button": "Rank tanks",
-        "description": "Rank Blitz tanks",
-        "seo_description": "Explore tier lists ranking tanks from best to worst, based on player ratings and statistical performance in World of Tanks Blitz",
+        "name": "階級列表",
+        "button": "排名戰車",
+        "description": "戰車世界閃擊戰 戰車等級排名",
+        "seo_description": "探索根據玩家評分和統計表現，從最佳到最差排名的《戰車世界：閃擊戰》戰車等級列表",
         "buttons": {
           "reset": "重置",
-          "share": "Share"
+          "share": "分享"
         }
       },
       "embed": {
-        "name": "Embed",
-        "button": "Create now",
-        "description": "Embeds for streaming",
-        "seo_description": "Create embeds for streaming World of Tanks Blitz with extreme customization",
-        "coming_soon": "More embeds coming soon.",
+        "name": "嵌入",
+        "button": "現在創建",
+        "description": "串流嵌入功能",
+        "seo_description": "創建具有極高自訂化的《戰車世界：閃擊戰》串流嵌入功能",
+        "coming_soon": "更多嵌入功能即將推出。",
         "suggest": "Suggest ideas.",
         "preview": {
           "title": "Example preview",
@@ -1206,11 +1206,11 @@
       "charts": {
         "name": "圖表",
         "button": "瘋狂研究",
-        "description": "大量图标",
+        "description": "大量圖標",
         "seo_description": "有關 戰車世界閃擊戰 戰車、玩家與事件的各種圖表與圖形"
       },
       "rating": {
-        "name": "评级战斗",
+        "name": "評價戰鬥",
         "button": "查看排行榜",
         "description": "完整評價戰鬥排行榜",
         "seo_description": "《戰車世界：閃擊戰》即時與歷史完整評分排行榜"
@@ -1234,7 +1234,7 @@
         "seo_description": "戰車世界閃擊戰 定期玩家統計"
       },
       "home": {
-        "name": "主頁",
+        "name": "首頁",
         "button": "開始使用",
         "description": "開始使用 BlitzKit",
         "seo_description": "開始使用 BlitzKit"
