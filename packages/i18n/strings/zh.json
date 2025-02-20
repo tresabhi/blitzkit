@@ -59,14 +59,14 @@
       "6": "非常好",
       "7": "很好",
       "8": "極品",
-      "9": "超级强势玩家"
+      "9": "超強勢玩家"
     },
     "bkni_percentile": {
       "0": "Super malum",
       "1": "Malum",
       "2": "非常差",
       "3": "差",
-      "4": "较差",
+      "4": "低於平均",
       "5": "平均",
       "6": "高於平均",
       "7": "好",
@@ -76,25 +76,25 @@
     },
     "nations": {
       "ussr": "苏联 (S系)",
-      "germany": "德系",
-      "usa": "美系",
-      "china": "中系",
-      "uk": "英系",
-      "france": "法系",
-      "japan": "日系",
+      "germany": "德國",
+      "usa": "美國。",
+      "china": "中國",
+      "uk": "英國。",
+      "france": "法國",
+      "japan": "日本",
       "european": "歐洲國家",
-      "other": "X系"
+      "other": "混合型國家"
     },
     "nations_adjectives": {
-      "ussr": "苏系",
-      "germany": "德系",
-      "usa": "美系",
-      "china": "中系",
-      "uk": "英系",
-      "france": "法系",
-      "japan": "日系",
+      "ussr": "蘇聯。",
+      "germany": "德國",
+      "usa": "美國。",
+      "china": "中國",
+      "uk": "英國。",
+      "france": "法國",
+      "japan": "日本",
       "european": "歐洲的",
-      "other": "X系"
+      "other": "混合型國家"
     },
     "tank_class_short": {
       "-1": "未識別",
@@ -144,40 +144,40 @@
     "composite_stats": {
       "normalized_damage_dealt": "傷害",
       "normalized_damage_received": "受到的傷害",
-      "normalized_deaths": "阵亡率",
-      "normalized_frags": "击杀数",
-      "normalized_hits": "命中数",
-      "normalized_losses": "战败率",
-      "normalized_misses": "未命中数",
-      "normalized_shots": "开火次数",
-      "normalized_spotted": "点亮次数",
+      "normalized_deaths": "陣亡比",
+      "normalized_frags": "擊殺數",
+      "normalized_hits": "命中數",
+      "normalized_losses": "戰敗率",
+      "normalized_misses": "未命中數",
+      "normalized_shots": "射擊次數",
+      "normalized_spotted": "偵查次數",
       "normalized_survived_battles": "存活率",
-      "normalized_win_and_survived": "胜利并存活率",
+      "normalized_win_and_survived": "存活勝利率",
       "normalized_wins": "勝率",
       "normalized_xp": "經驗值",
       "normalized_battle_life_time": "戰鬥時間",
       "cumulative_accuracy": "命中率",
-      "cumulative_battles": "战斗场次",
-      "cumulative_capture_points": "总占领点数",
-      "cumulative_damage_dealt": "总伤害",
-      "cumulative_damage_ratio": "伤害比率",
-      "cumulative_damage_received": "总承受伤害",
-      "cumulative_deaths": "总阵亡数",
-      "cumulative_dropped_capture_points": "总阻止的占领点数",
-      "cumulative_frags": "总击杀数",
-      "cumulative_hits": "总命中数",
+      "cumulative_battles": "戰鬥場次",
+      "cumulative_capture_points": "總佔領點數",
+      "cumulative_damage_dealt": "總傷害",
+      "cumulative_damage_ratio": "傷害比",
+      "cumulative_damage_received": "總承受的傷害",
+      "cumulative_deaths": "總陣亡數",
+      "cumulative_dropped_capture_points": "總阻止的佔領點數",
+      "cumulative_frags": "總擊殺數",
+      "cumulative_hits": "總命中數",
       "cumulative_inaccuracy": "未命中率",
-      "cumulative_kills_to_death_ratio": "战损比",
-      "cumulative_losses": "失败",
-      "cumulative_misses": "总射击失误数",
-      "cumulative_shots": "总射击数",
-      "cumulative_spotted": "总发现敌人数",
-      "cumulative_survived_battles": "幸存场次",
-      "cumulative_win_and_survived": "胜利和幸存场次",
+      "cumulative_kills_to_death_ratio": "擊殺陣亡比",
+      "cumulative_losses": "戰敗",
+      "cumulative_misses": "總未命中數",
+      "cumulative_shots": "總射擊數",
+      "cumulative_spotted": "總偵查敵人數",
+      "cumulative_survived_battles": "存活場次",
+      "cumulative_win_and_survived": "勝利與存活場次",
       "cumulative_wins": "勝利",
       "cumulative_xp": "總經驗",
       "cumulative_wn8": "WN8",
-      "cumulative_battle_life_time": "总战斗时间"
+      "cumulative_battle_life_time": "總戰鬥時間"
     }
   },
   "bot": {
@@ -187,10 +187,10 @@
         "player_not_found": "# 找不到玩家\n無法找到玩家 \"%s1\"。 嘗試從搜尋結果中選擇玩家，或輸入一個有效的玩家名稱或 \"/link\" 命令。",
         "player_not_linked": "# 使用 `/link` 來開始\n我不知道你是誰，但你今天可以告訴我！",
         "tank_name_not_found": "# 找不到戰車\n找不到名為 \"%s1 \"的戰車。",
-        "tank_id_not_found": "# 找不到戰車\n無法找到ID \"%s1\"的戰車。 請嘗試輸入戰車的名稱而不是數字。",
+        "tank_id_not_found": "# 找不到戰車\n無法找到ID為 \"%s1\"的戰車。 請嘗試輸入戰車的名稱而不是數字。",
         "no_tank_stats": "# 没有這輛戰車的資料\n這個玩家沒有可用資料。這可能不是你要找的玩家。",
         "get_help": "Help Discord server",
-        "uncaught_error": "# BlitzKit 發生錯誤！\n非常抱歉。請加入[官方Discord](https://discord.gg/nDt7AjGJQH)，以方便幫助你解決問題。",
+        "uncaught_error": "# BlitzKit 發生錯誤！\n我們對此感到抱歉。請加入[官方Discord](https://discord.gg/nDt7AjGJQH)，以方便幫助你解決問題。",
         "preview": "# 此命令處於預覽\n\n您只能在[官方Discord伺服器](https://discord.gg/nDt7AjGJQH)訪問此命令。該命令將很快可用。",
         "query_too_small": "# 搜尋內容過短\n您的搜尋必需至少包含 3 個字元。",
         "query_too_long": "# 搜尋內容過長\n您搜尋的內容必須少於 100 個字元。"
@@ -207,7 +207,7 @@
           "very_good": "非常好",
           "great": "很好",
           "unicum": "極品",
-          "super_unicum": "超级强势玩家"
+          "super_unicum": "超強勢玩家"
         }
       },
       "subcommands": {
@@ -217,15 +217,15 @@
         },
         "30": {
           "name": "30",
-          "description": "30天"
+          "description": "30 天"
         },
         "60": {
           "name": "60",
-          "description": "60天"
+          "description": "60 天"
         },
         "90": {
           "name": "90",
-          "description": "90天"
+          "description": "90 天"
         },
         "career": {
           "name": "生涯",
@@ -237,23 +237,23 @@
           "options": {
             "start": {
               "name": "開始",
-              "description": "从今天开始于数天前"
+              "description": "從今天起算的天數前開始"
             },
             "end": {
               "name": "結束",
-              "description": "从今天开始于数天前"
+              "description": "從今天起算的天數前結束"
             }
           }
         }
       },
       "options": {
         "clan": {
-          "name": "军团",
-          "description": "军团名称或标签"
+          "name": "公會",
+          "description": "公會名稱或標籤"
         },
         "tank": {
           "name": "戰車",
-          "description": "要获取战绩的坦克"
+          "description": "要獲取統計資料的戰車"
         },
         "username": {
           "name": "使用者名稱",
@@ -305,14 +305,14 @@
         "refresh": "Refresh"
       },
       "hero_stats": {
-        "battles": "战斗场次",
+        "battles": "戰鬥場次",
         "winrate": "勝率",
         "damage": "傷害",
-        "damage_ratio": "伤害比率",
+        "damage_ratio": "傷害比",
         "tier": "等級",
         "survival": "生存性",
         "accuracy": "命中率",
-        "kills": "击杀数"
+        "kills": "擊殺數"
       }
     },
     "commands": {
@@ -471,7 +471,7 @@
             "lethality": {
               "title": "Lethality",
               "average_damage": "平均傷害",
-              "damage_per_tier": "個等級傷害",
+              "damage_per_tier": "各等級傷害",
               "damage_ratio": "傷害比",
               "average_kills": "平均擊毀"
             },
@@ -665,7 +665,7 @@
         "copied": "已複製！"
       },
       "tank_search": {
-        "search_bar_hint": "搜尋戰車..……",
+        "search_bar_hint": "搜尋戰車....",
         "recent": "最近查看",
         "select_all": "選擇全部",
         "count_singular": "1 tank",
@@ -1143,7 +1143,7 @@
             "hint": "Paste URL...",
             "apply": "Apply",
             "idiot_title": "無效的 URL",
-            "idiot_description": "Try pasting the URL that BlitzKit previously generated, you silly goose!",
+            "idiot_description": "試著貼上 BlitzKit 先前生成的網址吧，你這隻傻鵝！",
             "idiot_button": "Okay, my bad"
           },
           "export": {
