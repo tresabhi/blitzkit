@@ -18,7 +18,7 @@
       "regular": "單發"
     },
     "shells": {
-      "ap": "穿甲弹",
+      "ap": "穿甲彈",
       "apcr": "硬式複合穿甲彈",
       "heat": "反戰車高爆彈",
       "he": "高爆彈"
@@ -782,17 +782,17 @@
               "penetration": "穿深",
               "normalization": "轉正",
               "ricochet": "跳彈",
-              "explosion_radius": "溅射半径",
+              "explosion_radius": "爆炸半徑",
               "exit": "退出",
               "reset": "重置"
             },
-            "advanced": "高级高亮显示",
-            "shooter": "主视角射击者",
+            "advanced": "進階高亮顯示",
+            "shooter": "主視角射擊者：",
             "shot_card": {
               "element": {
                 "primary": "主裝甲",
                 "spaced": "間隙裝甲",
-                "external": "外部模块",
+                "external": "外部模組",
                 "gap": "空隙",
                 "gun": "主炮",
                 "track": "履帶"
@@ -801,12 +801,12 @@
                 "penetration": "%s生命值 擊穿",
                 "blocked": "阻擋傷害",
                 "ricochet": "跳彈",
-                "splash": "%s生命值 溅射"
+                "splash": "%s生命值 爆炸範圍"
               },
               "stats": {
                 "thickness_and_angle": "等效%s毫米 %s2度",
                 "nominal": "%s毫米 裝甲厚度",
-                "ricochet_loss": "%s1%概率擊穿"
+                "ricochet_loss": "%s1%機率擊穿"
               }
             }
           },
@@ -882,7 +882,7 @@
             "info": "Yellow skills only apply under special circumstances. Hold Space to quickly toggle between level 0 and 7."
           },
           "miscellaneous": {
-            "title": "杂项"
+            "title": "雜項"
           }
         },
         "characteristics": {
@@ -921,8 +921,8 @@
             "damage": "傷害",
             "clipDamage": "Clipping potential",
             "moduleDamage": "模組傷害",
-            "explosionRadius": "溅射半径",
-            "shellVelocity": "炮弹飛行速度",
+            "explosionRadius": "爆炸半徑",
+            "shellVelocity": "砲彈飛行速度",
             "aimTime": "瞄準時間",
             "dispersion": "静止時",
             "dispersionMoving": "移動時",
@@ -966,21 +966,21 @@
             "camouflageCaughtOnFire": "Caught on fire",
             "width": "Width",
             "height": "Height",
-            "length": "Length",
-            "volume": "Volume",
+            "length": "長度",
+            "volume": "體積",
             "shellRange": "射程",
             "shellCapacity": "彈藥容量",
-            "gunType": "Gun type",
-            "penetrationAt250m": "Penetration at 250m"
+            "gunType": "炮管類型",
+            "penetrationAt250m": "兩百五十公尺處的穿透力"
           }
         },
         "firepower": {
-          "title": "Firepower"
+          "title": "火力"
         },
         "crew": {
-          "title": "Crew training",
-          "info": "represents the other roles a crew member can take.",
-          "count": "Crew count",
+          "title": "乘員訓練",
+          "info": "代表車組成員可以擔任的其他角色。",
+          "count": "乘員人數",
           "commander": "車長",
           "gunner": "炮手",
           "driver": "駕駛員",
@@ -988,7 +988,7 @@
           "loader": "裝填手"
         },
         "maneuverability": {
-          "title": "Maneuverability"
+          "title": "機動性"
         },
         "survivability": {
           "title": "生存性"
@@ -997,29 +997,29 @@
       "compare": {
         "name": "比較",
         "button": "戰車比較",
-        "description": "Compare tank statistics",
-        "seo_description": "Compare tanks statistics and loadouts in World of Tanks Blitz",
+        "description": "比較戰車統計資料",
+        "seo_description": "比較《戰車世界：閃擊戰》中的戰車統計資料和裝備配置",
         "actions": {
           "add": {
             "button": "增加...",
             "title": "增加戰車",
-            "description": "Select tanks to add to comparison"
+            "description": "選擇要加入比較的戰車"
           },
-          "clear": "Clear",
+          "clear": "清除",
           "deltas": {
-            "none": "No deltas",
-            "percentage": "Percentage",
-            "absolute": "Absolute"
+            "none": "無變化",
+            "percentage": "百分比",
+            "absolute": "絕對"
           }
         },
         "no_tanks": {
-          "title": "No tanks selected",
-          "body": "Press the Add button to get started"
+          "title": "未選擇戰車",
+          "body": "按下 Add 按鈕來開始"
         },
         "table": {
           "equipment": {
-            "clear": "Clear",
-            "apply_to_all": "Apply to all"
+            "clear": "清除",
+            "apply_to_all": "套用所有"
           },
           "skills": {
             "clear": "Clear",
@@ -1144,19 +1144,19 @@
             "apply": "Apply",
             "idiot_title": "無效的 URL",
             "idiot_description": "試著貼上 BlitzKit 先前生成的網址吧，你這隻傻鵝！",
-            "idiot_button": "Okay, my bad"
+            "idiot_button": "好吧，我的錯"
           },
           "export": {
             "title": "匯出",
-            "description": "Copy all properties for you streaming software",
+            "description": "為你的串流軟體複製所有屬性",
             "generate": {
-              "button": "Generate URL",
-              "title": "Generate URL",
-              "subtitle": "Search an account to track",
+              "button": "生成網址",
+              "title": "生成網址",
+              "subtitle": "搜尋帳號以進行追蹤",
               "cancel": "取消",
               "success": {
                 "title": "複製 URL",
-                "info": "Generated the URL for %s1. The embed will start tracking as soon as the URL is pasted. Reset at any time by right-clicking on PC or long-pressing on mobile and then selecting \"Reset\".",
+                "info": "已為 %s1 生成網址。當網址貼上後，嵌入功能將開始追蹤。您可以隨時點擊右鍵 \"PC\" 或長按 \"手機\" 並選擇「重設」來重置。",
                 "back": "返回",
                 "copy": "複製 URL"
               }
