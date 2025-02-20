@@ -403,9 +403,9 @@
         "description": "A period's breakdown by tanks played",
         "body": {
           "total": "全部",
-          "battles": "战斗场次",
+          "battles": "戰鬥場次",
           "wn8": "WN8",
-          "winrate": "胜率",
+          "winrate": "勝率",
           "damage": "傷害",
           "unknown_tank": "Unknown tank %s1"
         }
@@ -459,7 +459,7 @@
             "games": {
               "title": "Games",
               "winrate": "勝率",
-              "battles": "战斗场次",
+              "battles": "戰鬥場次",
               "wins_losses": "Wins / losses"
             },
             "efficiency": {
@@ -471,16 +471,16 @@
             "lethality": {
               "title": "Lethality",
               "average_damage": "平均傷害",
-              "damage_per_tier": "每级别伤害",
-              "damage_ratio": "伤害比率",
+              "damage_per_tier": "個等級傷害",
+              "damage_ratio": "傷害比",
               "average_kills": "平均擊毀"
             },
             "miscellaneous": {
-              "title": "杂项",
+              "title": "雜項",
               "average_tier": "平均等級",
-              "average_spots": "平均点亮",
+              "average_spots": "平均偵查",
               "average_xp": "平均經驗",
-              "kills_to_death_ratio": "战损比"
+              "kills_to_death_ratio": "擊殺陣亡比"
             }
           }
         }
@@ -617,7 +617,7 @@
         "body": {
           "title": "%s1's information",
           "nickname": "Nickname",
-          "battles": "战斗场次",
+          "battles": "戰鬥場次",
           "winrate": "勝率",
           "account_id": "Account ID",
           "created": "Created",
