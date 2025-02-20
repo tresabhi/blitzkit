@@ -1084,7 +1084,7 @@
         }
       },
       "session": {
-        "name": "Temporada",
+        "name": "Sessão",
         "button": "Iniciar rastreamento",
         "description": "Estatísticas da temporada ao vivo",
         "seo_description": "Registre suas estatísticas em tempo real enquanto você joga World of Tanks Blitz",
@@ -1101,7 +1101,7 @@
           "change": "Mudança"
         },
         "no_cc": {
-          "title": "Você está tentando rastrear uma conta de um CC",
+          "title": "Não é possível acompanhar uma conta de Contribuidor da Comunidade (CC)",
           "body": "Contas CC (colaborador da comunidade) não possuem estatísticas públicas de tanques. Estamos no processo de adicionar incorporações para contas CC, fique ligado.",
           "alright": "Tudo bem"
         },
@@ -1152,7 +1152,7 @@
             "generate": {
               "button": "Gerar URL",
               "title": "Gerar URL",
-              "subtitle": "Procurar uma conta para rastrear",
+              "subtitle": "Procure uma conta para acompanhar",
               "cancel": "Cancelar",
               "success": {
                 "title": "Copiar URL",
@@ -1249,7 +1249,7 @@
         "name": "Assistente Blitz",
         "button": "Descubra hoje",
         "description": "Estatísticas da temporada dentro do jogo",
-        "seo_description": "Estatísticas da temporada em jogo em World of Tanks Blitz"
+        "seo_description": "Estatísticas da sessão no jogo World of Tanks Blitz"
       }
     },
     "footer": {
