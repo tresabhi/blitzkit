@@ -550,7 +550,7 @@
             "name": "赛季",
             "description": "赛季数 (默认：当前)",
             "choices": {
-              "current": "%s1 (current)"
+              "current": "%s1 (当前)"
             }
           },
           "league": {
@@ -564,7 +564,7 @@
           "no_ongoing_season": "# 没有进行中的季\n\n目前没有一个评分季。",
           "deleted_player": "删除 %s1",
           "neighbors": "对邻居进行评分",
-          "more": "+ %s1 more"
+          "more": "+ 增加 %s1"
         }
       },
       "today": {
@@ -579,14 +579,14 @@
         "name": "已拥有的坦克",
         "description": "在一个等级中显示所有已拥有的坦克",
         "body": {
-          "title": "# %s1's owned tier %s2 tanks\n\n"
+          "title": "# %s1所拥有的 %s2的坦克\n\n"
         }
       },
       "permissions": {
         "name": "权限管理",
         "description": "检查机器人是否拥有运行所需的权限",
         "body": {
-          "title": "# Permissions\n\n%s1",
+          "title": "# 权限\n\n%s1",
           "view_channels": "查看频道：需要找到刷新按钮使用的消息",
           "read_message_history": "读取消息历史: 需要找到消息以刷新",
           "attach_files": "附加文件：需要将图像添加到基于图像的命令",
@@ -594,28 +594,28 @@
         }
       },
       "ping": {
-        "name": "ping",
+        "name": "ping值（延迟值）",
         "description": "检查机器人处于活动状态。",
         "body": {
-          "pong": "Pong 🏓",
-          "pong_with_time": "Pong 🏓 - %s1ms"
+          "pong": "乒乓球拍",
+          "pong_with_time": "乒乓球拍%s1ms"
         },
         "subcommands": {
           "blitzkit": {
             "name": "blitzkit",
-            "description": "Ping BlitzKit"
+            "description": "测试BlitzKit的ping值（延迟值）"
           },
           "wotb": {
-            "name": "wotb",
-            "description": "Ping World of Tanks Blitz"
+            "name": "坦克世界闪击战",
+            "description": "测试坦克世界闪击战的ping值（延迟值）"
           }
         }
       },
       "player_info": {
-        "name": "player-info",
+        "name": "玩家信息",
         "description": "玩家基本信息",
         "body": {
-          "title": "%s1's information",
+          "title": "%s1的信息",
           "nickname": "昵称",
           "battles": "戰鬥場次",
           "winrate": "勝率",
@@ -668,9 +668,9 @@
         "search_bar_hint": "搜尋戰車....",
         "recent": "最近查看",
         "select_all": "選擇全部",
-        "count_singular": "1 tank",
-        "count_plural": "%s1 tanks",
-        "sorting_by": "Sorting by %s1",
+        "count_singular": "1 辆坦克",
+        "count_plural": "%s1辆坦克",
+        "sorting_by": "按 %s1 排序",
         "no_tanks_found": {
           "body": "找不到戰車。",
           "search_again": "請嘗試重新搜尋。",
@@ -702,32 +702,32 @@
           "fire.gunDepression": "俯角",
           "fire.gunElevation": "仰角",
           "maneuverability.forwardsSpeed": "最高前進速度",
-          "maneuverability.backwardsSpeed": "backwards speed",
-          "maneuverability.power": "power",
-          "maneuverability.powerToWeight": "power to weight",
-          "maneuverability.weight": "weight",
-          "maneuverability.traverseSpeed": "traverse speed"
+          "maneuverability.backwardsSpeed": "倒退速度",
+          "maneuverability.power": "功率",
+          "maneuverability.powerToWeight": "推重比",
+          "maneuverability.weight": "重量",
+          "maneuverability.traverseSpeed": "转速"
         },
         "sort_dropdown": {
-          "label": "Sort",
+          "label": "分类",
           "groups": {
             "sort": {
-              "no_sort": "No sort",
-              "label": "Sort by",
-              "fire": "Fire",
-              "maneuverability": "Maneuverability",
-              "survivability": "Survivability"
+              "no_sort": "未排序",
+              "label": "排序依据",
+              "fire": "开火",
+              "maneuverability": "机动性",
+              "survivability": "生存能力"
             },
             "direction": {
-              "label": "Direction",
-              "ascending": "Ascending",
-              "descending": "Descending"
+              "label": "转向",
+              "ascending": "爬升",
+              "descending": "下坡"
             }
           }
         }
       },
       "warnings": {
-        "test": "Tanks in testing are subject to change and may not represent the final product."
+        "test": "试验中的坦克可能会发生变化，可能不代表最终产品。"
       }
     },
     "home": {
@@ -735,8 +735,8 @@
         "credit": "由 %s1 製作❤️"
       },
       "hot_tanks": {
-        "title": "Popular tanks",
-        "subtitle": "Last %s1 days"
+        "title": "受欢迎的坦克",
+        "subtitle": "过去 %s1 天"
       },
       "other_projects": {
         "title": "其他酷炫的專案"
@@ -749,23 +749,23 @@
         "name": "戰車百科",
         "button": "尋找戰車",
         "description": "閃擊戰戰車百科全書",
-        "seo_description": "Statistics, armor, and more for all tanks in World of Tanks Blitz",
-        "tank_seo_title": "%s1 - Tier %s2 %s3 %s4 | %s5 Tankopedia | World of Tanks Blitz (WoTB)",
-        "tank_seo_description": "%s1 armor, statistics, equipment, provisions, and more. %s2 DPM, %s3hp alpha, %s4mm penetration, %s5kph top speed, %s6hp health.",
+        "seo_description": "世界坦克布莱茨坦克坦克世界闪击战的所有坦克的统计数字、装甲和更多",
+        "tank_seo_title": "%s1-Tier %s2 %s3 %s| %s5 Tankopedia | 世界坦克闪电战(WoTB)",
+        "tank_seo_description": "%s1 装甲，统计设备，装备，供给等。 %s2 每分钟伤害， %s3生命值， %s4毫米穿透， %s5kph 最高速度， %s6hp 生命值。",
         "sandbox": {
           "poses": {
-            "hull_down": "Hull down",
-            "face_hug": "Face hug",
-            "default": "Default"
+            "hull_down": "坦克下部",
+            "face_hug": "面部色调",
+            "default": "默认"
           },
           "settings": {
-            "armor": "Armor",
-            "green_penetration": "Green penetration",
-            "hide_model_under_armor": "Hide model under armor",
-            "opaque": "Opaque",
-            "dev_wireframe": "DEV: wireframe",
-            "environment": "Environment",
-            "show_grid": "Show grid"
+            "armor": "装甲",
+            "green_penetration": "击穿概率",
+            "hide_model_under_armor": "隐藏装甲下的模型",
+            "opaque": "不透明",
+            "dev_wireframe": "设备：线程",
+            "environment": "环境",
+            "show_grid": "显示网格"
           },
           "screenshot": {
             "download": "下載",
@@ -828,7 +828,7 @@
             "button": "調換",
             "title": "調換戰車"
           },
-          "vanilla": "Vanilla",
+          "vanilla": "原版",
           "opentest": "開放測試",
           "full_name": "全名",
           "nation": "國別",
@@ -843,83 +843,83 @@
         },
         "tech_tree": {
           "title": "科技樹",
-          "battle": "1 battle",
-          "battles": "%s1 battles",
-          "route": "Route %s1 of %s2"
+          "battle": "一场比赛",
+          "battles": "%s1场比赛",
+          "route": "路线 %s的 %s2"
         },
         "game_modes": {
-          "title": "Game mode abilities"
+          "title": "游戏模式技能"
         },
         "review": {
-          "title": "Review videos",
-          "disclaimer": "BlitzKit does not endorse any review videos.",
-          "join": "Apply to %s1 YouTuber program"
+          "title": "回看视频",
+          "disclaimer": "BlitzKit不支持任何回看视频。",
+          "join": "应用到 %s1 YouTuber程序"
         },
         "configuration": {
-          "title": "Configuration",
+          "title": "配置设置",
           "modules": {
-            "title": "Modules",
-            "stock": "Stock",
-            "upgrade": "Upgrade"
+            "title": "功能模块",
+            "stock": "库存",
+            "upgrade": "升级"
           },
           "equipment": {
-            "title": "Equipment",
-            "clear": "Clear"
+            "title": "装备",
+            "clear": "清空"
           },
           "provisions": {
-            "title": "Provisions",
-            "clear": "Clear"
+            "title": "补给品",
+            "clear": "清空"
           },
           "consumables": {
-            "title": "Consumables",
-            "clear": "Clear",
-            "info": "Yellow consumables do not affect the statistics."
+            "title": "消耗品",
+            "clear": "清空",
+            "info": "黄色消耗品不影响统计数据"
           },
           "skills": {
-            "title": "Crew skills",
-            "clear": "Clear",
-            "maximize": "Maximize",
-            "info": "Yellow skills only apply under special circumstances. Hold Space to quickly toggle between level 0 and 7."
+            "title": "乘员技能",
+            "clear": "清空",
+            "maximize": "最大化",
+            "info": "黄色技能只适用于特殊情况。按空格键可在0到7级之间快速切换。"
           },
           "miscellaneous": {
             "title": "雜項"
           }
         },
         "characteristics": {
-          "title": "Characteristics",
+          "title": "属性",
           "compare": {
-            "label": "Compare against",
-            "class": "Tier %s1 %s2",
-            "tier": "All of tier %s1",
-            "all": "All tanks"
+            "label": "比较",
+            "class": "%s1 %s2 级",
+            "tier": "所有级别 %s1",
+            "all": "所有坦克"
           },
           "values": {
-            "shell_index": "Shell %s1",
-            "at_distance": "At %s1m",
-            "at_distance_slider_label": "Distance",
-            "dispersion_at_distance": "Dispersion at %s1m",
-            "gun_flexibility": "Gun flexibility",
-            "speed": "Speed",
-            "terrain_coefficients": "Terrain coefficients",
-            "raw_terrain_coefficients": "Raw terrain coefficients",
-            "power_to_weight_ratio": "Power to weight ratio",
-            "hull_traverse_speed": "Hull traverse speed",
-            "camouflage": "Camouflage",
-            "reload": "Reload",
-            "crewCount": "Crew count",
+            "shell_index": "炮弹 %s1",
+            "at_distance": "在 %s1m",
+            "at_distance_slider_label": "距离",
+            "dispersion_at_distance": "%s1米的散射度",
+            "gun_flexibility": "炮控灵活度",
+            "speed": "速度",
+            "terrain_coefficients": "地势系数",
+            "raw_terrain_coefficients": "原始地形系数",
+            "power_to_weight_ratio": "推重比",
+            "hull_traverse_speed": "炮塔旋转速度",
+            "camouflage": "伪装",
+            "reload": "裝填",
+            "crewCount": "乘员人数",
             "shellNormalization": "轉正",
             "shellRicochet": "跳彈",
-            "dpm": "DPM",
-            "dpmEffective": "Effective at 60s",
-            "shells": "Shells",
-            "mostOptimalShellIndex": "Most optimal shell",
-            "shellReloads": "Shell reloads",
-            "shellReload": "Shell reload",
-            "intraClip": "Intra-clip",
+            "dpm": "每分钟伤害",
+            "dpmEffective": "60秒内生效",
+            "shells": "炮弹 ",
+            "mostOptimalShellIndex": "最优炮弹",
+            "shellReloads": "炮弹重装",
+            "shellReload": "炮弹重装",
+            "intraClip": "内置素材",
             "caliber": "口徑",
             "penetration": "穿深",
             "damage": "傷害",
-            "clipDamage": "Clipping potential",
+            "clipDamage": "爬坡性能",
             "moduleDamage": "模組傷害",
             "explosionRadius": "爆炸半徑",
             "shellVelocity": "砲彈飛行速度",
@@ -939,33 +939,33 @@
             "azimuthLeft": "左射界",
             "azimuthRight": "右射界",
             "speedForwards": "前進最高速度",
-            "speedBackwards": "Backwards",
-            "hardTerrainCoefficient": "Hard",
-            "hardTerrainCoefficientRaw": "Hard",
+            "speedBackwards": "后退",
+            "hardTerrainCoefficient": "坚硬的",
+            "hardTerrainCoefficientRaw": "坚硬的",
             "mediumTerrainCoefficient": "中型戰車",
             "mediumTerrainCoefficientRaw": "中型戰車",
-            "softTerrainCoefficient": "Soft",
+            "softTerrainCoefficient": "柔软的",
             "softTerrainCoefficientRaw": "軟的",
             "enginePower": "引擎功率",
             "powerToWeightRatioHardTerrain": "硬的",
             "powerToWeightRatioMediumTerrain": "中型戰車",
-            "powerToWeightRatioSoftTerrain": "Soft",
+            "powerToWeightRatioSoftTerrain": "柔软的",
             "weight": "重量",
             "turretTraverseSpeed": "炮塔迴轉速度",
-            "gunTraverseSpeed": "Gun traverse speed",
-            "hullTraverseHardTerrain": "Hard",
+            "gunTraverseSpeed": "炮塔旋转速度",
+            "hullTraverseHardTerrain": "坚硬的",
             "hullTraverseMediumTerrain": "中型戰車",
-            "hullTraverseSoftTerrain": "Soft",
-            "health": "Health",
-            "fireChance": "Fire chance",
+            "hullTraverseSoftTerrain": "柔软的",
+            "health": "生命值",
+            "fireChance": "着火概率",
             "viewRange": "可視範圍",
             "camouflageStill": "靜止時",
             "camouflageMoving": "移動時",
             "camouflageShootingStill": "静止時",
             "camouflageShootingMoving": "移動時",
-            "camouflageCaughtOnFire": "Caught on fire",
-            "width": "Width",
-            "height": "Height",
+            "camouflageCaughtOnFire": "被击中",
+            "width": "宽度",
+            "height": "高度",
             "length": "長度",
             "volume": "體積",
             "shellRange": "射程",
@@ -1022,23 +1022,23 @@
             "apply_to_all": "套用所有"
           },
           "skills": {
-            "clear": "Clear",
-            "maximize": "Maximize"
+            "clear": "清空",
+            "maximize": "最大化"
           },
           "modules": {
-            "stock": "Stock",
-            "upgrade": "Upgrade"
+            "stock": "库存量",
+            "upgrade": "升级"
           },
           "provisions": {
-            "clear": "Clear"
+            "clear": "清空"
           },
           "consumables": {
-            "clear": "Clear"
+            "clear": "清空"
           }
         }
       },
       "performance": {
-        "name": "Performance",
+        "name": "性能表现",
         "button": "查看坦克",
         "description": "坦克性能统计",
         "seo_description": "最好的坦克及其在世界坦克闪电战中的表现",
