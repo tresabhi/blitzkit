@@ -189,7 +189,7 @@
         "tank_name_not_found": "# 找不到戰車\n找不到名為 \"%s1 \"的戰車。",
         "tank_id_not_found": "# 找不到戰車\n無法找到ID為 \"%s1\"的戰車。 請嘗試輸入戰車的名稱而不是數字。",
         "no_tank_stats": "# 没有這輛戰車的資料\n這個玩家沒有可用資料。這可能不是你要找的玩家。",
-        "get_help": "Help Discord server",
+        "get_help": "Discord的协助服务器",
         "uncaught_error": "# BlitzKit 發生錯誤！\n我們對此感到抱歉。請加入[官方Discord](https://discord.gg/nDt7AjGJQH)，以方便幫助你解決問題。",
         "preview": "# 此命令處於預覽\n\n您只能在[官方Discord伺服器](https://discord.gg/nDt7AjGJQH)訪問此命令。該命令將很快可用。",
         "query_too_small": "# 搜尋內容過短\n您的搜尋必需至少包含 3 個字元。",
@@ -275,13 +275,13 @@
         },
         "region": {
           "name": "所在地區",
-          "description": "Region"
+          "description": "地区"
         },
         "tier": {
-          "name": "tier",
-          "description": "Tier",
+          "name": "等級",
+          "description": "等级",
           "choices": {
-            "tier": "Tier %s1 - %s2"
+            "tier": "%s1- %s2 级"
           }
         }
       },
@@ -292,17 +292,17 @@
         "custom": "%s1 - %s2 days"
       },
       "filters": {
-        "none": "No filters",
+        "none": "无过滤器",
         "tier": "Tier %s1"
       },
       "no_data": {
-        "battles_in_period": "No battles played in this period",
-        "battles_in_season": "No battles played in this season",
-        "players_in_period": "No players in this period",
-        "tanks_found": "No tanks found"
+        "battles_in_period": "在这段时间里没有玩过任何比赛",
+        "battles_in_season": "在这个季度中没有战斗记录",
+        "players_in_period": "这段时间内没有玩家",
+        "tanks_found": "未找到坦克"
       },
       "buttons": {
-        "refresh": "Refresh"
+        "refresh": "刷新"
       },
       "hero_stats": {
         "battles": "戰鬥場次",
@@ -317,63 +317,63 @@
     },
     "commands": {
       "auction": {
-        "name": "auction",
-        "description": "Tanks available right now in the auction",
+        "name": "拍卖",
+        "description": "目前拍卖中可用的坦克",
         "body": {
-          "title": "Blitz Auction",
-          "subtitle": "%s1 available • next prices %s2\nBid now: %s3",
-          "next": "Next price: %s1",
-          "available": "Available: %s1 / %s2"
+          "title": "Blitz 拍卖活动",
+          "subtitle": "%s1 可用 • 下一个价格 %s2\n现在出价： %s3",
+          "next": "下一个价格: %s1",
+          "available": "可用: %s1 / %s2"
         },
         "errors": {
-          "no_auction": "# No ongoing auction\n\nCurrently, there are no tanks available for purchase in the auction. If you think this is an error, please report this discrepancy in [the official Discord Server](https://discord.gg/nDt7AjGJQH)."
+          "no_auction": "# 目前没有正在进行的拍卖\n\n拍卖中没有可供购买的坦克。 如果你认为这是一个错误，请在[官方的 Discord服务器](https://discord.gg/nDt7AjGJQH)中报告这个差异。"
         },
         "actions": {
-          "bid": "Bid now"
+          "bid": "立刻购买"
         }
       },
       "replay": {
-        "name": "replay",
-        "description": "Display replay results"
+        "name": "回放",
+        "description": "显示回放结果"
       },
       "research": {
-        "name": "research",
-        "description": "Lists the expenses in researching a line",
+        "name": "研发",
+        "description": "列出研发线路的支出",
         "options": {
           "target_tank": {
-            "name": "target-tank",
-            "description": "The final tank to research in the line"
+            "name": "目标坦克",
+            "description": "科技线里最后的待研发坦克"
           },
           "starting_tank": {
-            "name": "starting-tank",
-            "description": "The starting tank in the line (inferred automatically if not provided)"
+            "name": "初始坦克",
+            "description": "科技线中初始坦克(如果未提供则自动推定)"
           }
         },
         "body": {
-          "subtitle": "Research",
+          "subtitle": "研发",
           "total": "全部",
-          "research": "Research: %s1",
+          "research": "研究： %s1",
           "upgrades": "升級：%s1",
-          "purchase": "Purchase: %s1",
-          "equipment": "Equipment: %s1",
-          "estimation": "# This is an estimation!\n\nThis list may include already researched tanks because of the inaccurate information Wargaming provides. Try providing a `starting-tank` from the line when using the command if you can."
+          "purchase": "购买: %s1",
+          "equipment": "装备: %s1",
+          "estimation": "# 这是一个估计！\n\n这个列表可能包括已经研究过的坦克，因为Warming提供了不准确的信息。 如果您可以，请尝试从行中提供一个 \"初始坦克\" 。"
         },
         "errors": {
           "non_tech_tree": "#%s1不在科技樹裡\n\n你不能研究一個 加值/收藏家 戰車。",
-          "tier_1": "# %s1 is a tier I\n\nTier I tanks are always unlocked for free for all players.",
-          "already_researched": "# %s1 is already researched\n\nTry providing a `starting-tank` when using the command to view the totals for a line you have already researched.",
-          "start_end_equal": "# %s1 was provided twice\n\nMake sure `starting-tank` and `target-tank` are different.",
-          "tanks_not_on_line": "# %s1 and %s2 are not on the same line\n\nMake sure `starting-tank` and `target-tank` are on the same tech-tree line.",
+          "tier_1": "# %s1是一级\n\n一级坦克总是为所有玩家免费解锁的。",
+          "already_researched": "一级坦克是已经完成研发的\n\n当在使用命令查看您已研究过的线路的总数时尝试请试图提供“初始坦克”。",
+          "start_end_equal": "”初始坦克“ 提供了两次\n\n请确认 \"初始坦克\" 和 \"目标坦克\" 是不同的。",
+          "tanks_not_on_line": "”初始坦克“和 \"目标坦克\" 不在同一科技线\n\n确保”初始坦克“和 \"目标坦克\" 处于同一技科技线。",
           "unordered": "# %s1 higher tiered to %s2\n\nMake sure to provide %s3 as the `starting-tank` instead as it is the lower tiered tank."
         }
       },
       "about": {
-        "name": "about",
-        "description": "All the info you need about the bot",
+        "name": "关于",
+        "description": "所有你需要的机器信息",
         "subcommands": {
           "commands": {
-            "name": "commands",
-            "description": "List of all commands and their descriptions",
+            "name": "技能",
+            "description": "所有命令及其描述列表",
             "body": "# Commands\n\nBlitzKit offers the following commands:\n\n"
           },
           "embeds": {
