@@ -196,7 +196,7 @@
         "query_too_long": "# 搜尋內容過長\n您搜尋的內容必須少於 100 個字元。"
       },
       "wn8": {
-        "name": "WN8",
+        "name": "玩家表現評分",
         "types": {
           "very_bad": "非常差",
           "bad": "差",
@@ -275,7 +275,7 @@
         },
         "region": {
           "name": "所在地區",
-          "description": "地区"
+          "description": "地區"
         },
         "tier": {
           "name": "等級",
@@ -292,7 +292,7 @@
         "custom": "%s1 - %s2 天"
       },
       "filters": {
-        "none": "无过滤器",
+        "none": "無篩選器",
         "tier": "等級 %s1"
       },
       "no_data": {
@@ -511,55 +511,55 @@
         },
         "body": {
           "title": "公會搜尋 %s1 在區域 %s2",
-          "no_results": "没有找到该族"
+          "no_results": "没有找到該公會"
         }
       },
       "search_players": {
-        "name": "搜索玩家",
+        "name": "搜尋玩家",
         "description": "搜尋玩家",
         "options": {
           "limit": {
             "name": "限制",
-            "description": "最大玩家结果数 (默认: %s1)"
+            "description": "最大玩家結果數 (預設: %s1)"
           }
         },
         "body": {
-          "title": "玩家在区域 %s2 中搜索 %s1",
+          "title": "玩家在區域 %s2 中搜尋 %s1",
           "no_results": "未找到玩家"
         }
       },
       "rating_leaderboard": {
-        "name": "评级排行榜",
-        "description": "评级战斗统计数据",
+        "name": "評價排行榜",
+        "description": "評價戰鬥統計資料",
         "subcommands": {
           "neighbors": {
             "name": "附近的",
             "description": "排行榜上附近的玩家"
           },
           "league": {
-            "name": "联盟",
-            "description": "联盟的顶尖玩家"
+            "name": "聯盟",
+            "description": "聯盟的頂尖玩家"
           }
         },
         "options": {
           "limit": {
             "name": "限制",
-            "description": "显示多少附近玩家(默认: %s1)"
+            "description": "顯示附近有多少玩家(預設: %s1)"
           },
           "season": {
-            "name": "赛季",
-            "description": "赛季数 (默认：当前)",
+            "name": "賽季",
+            "description": "賽季數 (預設：目前)",
             "choices": {
-              "current": "%s1 (当前)"
+              "current": "%s1 (目前)"
             }
           },
           "league": {
-            "name": "联盟",
-            "description": "要显示的联赛"
+            "name": "聯盟",
+            "description": "要顯示的聯賽"
           }
         },
         "body": {
-          "top_players": "前 %s1个玩家",
+          "top_players": "前 %s1玩家",
           "no_participation": "# %s1 在季 %s2进行过评级战斗\n\n该玩家没有参加本季或没有获得过去的校准。",
           "no_ongoing_season": "# 没有进行中的季\n\n目前没有一个评分季。",
           "deleted_player": "删除 %s1",
@@ -633,7 +633,7 @@
             "description": "今日评级统计"
           },
           "season": {
-            "name": "赛季",
+            "name": "賽季",
             "description": "本赛季评级统计"
           }
         },
