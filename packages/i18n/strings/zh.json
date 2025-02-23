@@ -293,16 +293,16 @@
       },
       "filters": {
         "none": "无过滤器",
-        "tier": "一级坦克"
+        "tier": "等級 %s1"
       },
       "no_data": {
-        "battles_in_period": "在这段时间里没有玩过任何比赛",
-        "battles_in_season": "在这个季度中没有战斗记录",
-        "players_in_period": "这段时间内没有玩家",
-        "tanks_found": "未找到坦克"
+        "battles_in_period": "在這段時間裡沒有參與任何戰鬥",
+        "battles_in_season": "在這個賽季中沒有戰鬥記錄",
+        "players_in_period": "這段時間內沒有玩家",
+        "tanks_found": "找不到戰車"
       },
       "buttons": {
-        "refresh": "刷新"
+        "refresh": "重新整理"
       },
       "hero_stats": {
         "battles": "戰鬥場次",
@@ -317,12 +317,12 @@
     },
     "commands": {
       "auction": {
-        "name": "拍卖",
-        "description": "目前拍卖中可用的坦克",
+        "name": "拍賣",
+        "description": "目前拍賣中的戰車",
         "body": {
-          "title": "Blitz 拍卖活动",
-          "subtitle": "%s1 可用 • 下一个价格 %s2\n现在出价： %s3",
-          "next": "下一个价格: %s1",
+          "title": "Blitz 拍賣活動",
+          "subtitle": "%s1 可用 • 下一個價格 %s2\n現在出價： %s3",
+          "next": "下一個價格: %s1",
           "available": "可用: %s1 / %s2"
         },
         "errors": {
