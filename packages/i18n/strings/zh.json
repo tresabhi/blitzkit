@@ -706,20 +706,20 @@
           "maneuverability.power": "功率",
           "maneuverability.powerToWeight": "推重比",
           "maneuverability.weight": "重量",
-          "maneuverability.traverseSpeed": "转速"
+          "maneuverability.traverseSpeed": "轉速"
         },
         "sort_dropdown": {
-          "label": "分类",
+          "label": "排序",
           "groups": {
             "sort": {
               "no_sort": "未排序",
-              "label": "排序依据",
-              "fire": "开火",
-              "maneuverability": "机动性",
+              "label": "排序依據",
+              "fire": "開火",
+              "maneuverability": "機動性",
               "survivability": "生存能力"
             },
             "direction": {
-              "label": "转向",
+              "label": "轉向",
               "ascending": "爬升",
               "descending": "下坡"
             }
@@ -727,7 +727,7 @@
         }
       },
       "warnings": {
-        "test": "试验中的坦克可能会发生变化，可能不代表最终产品。"
+        "test": "測試中的戰車可能會發生變化，並不代表最終結果。"
       }
     },
     "home": {
@@ -735,8 +735,8 @@
         "credit": "由 %s1 製作❤️"
       },
       "hot_tanks": {
-        "title": "受欢迎的坦克",
-        "subtitle": "过去 %s1 天"
+        "title": "受歡迎的戰車",
+        "subtitle": "過去 %s1 天"
       },
       "other_projects": {
         "title": "其他酷炫的專案"
@@ -750,16 +750,16 @@
         "button": "尋找戰車",
         "description": "閃擊戰戰車百科全書",
         "seo_description": "世界坦克布莱茨坦克坦克世界闪击战的所有坦克的统计数字、装甲和更多",
-        "tank_seo_title": "%s1-Tier %s2 %s3 %s| %s5 Tankopedia | 世界坦克闪电战(WoTB)",
-        "tank_seo_description": "%s1 装甲，统计设备，装备，供给等。 %s2 每分钟伤害， %s3生命值， %s4毫米穿透， %s5kph 最高速度， %s6hp 生命值。",
+        "tank_seo_title": "%s1-Tier %s2 %s3 %s4 | %s5 Tankopedia | 戰車世界閃擊戰 (WoTB)",
+        "tank_seo_description": "%s1-Tier %s2 %s3 %s4 | %s5 Tankopedia | 戰車世界閃擊戰 (WoTB)",
         "sandbox": {
           "poses": {
             "hull_down": "坦克下部",
             "face_hug": "面部色调",
-            "default": "默认"
+            "default": "預設"
           },
           "settings": {
-            "armor": "装甲",
+            "armor": "裝甲",
             "green_penetration": "击穿概率",
             "hide_model_under_armor": "隐藏装甲下的模型",
             "opaque": "不透明",
@@ -843,41 +843,41 @@
         },
         "tech_tree": {
           "title": "科技樹",
-          "battle": "一场比赛",
-          "battles": "%s1场比赛",
-          "route": "路线 %s的 %s2"
+          "battle": "一場比賽",
+          "battles": "%s1場比賽",
+          "route": "路線 %s1 的 %s2"
         },
         "game_modes": {
-          "title": "游戏模式技能"
+          "title": "路線 %s1 的 %s2"
         },
         "review": {
-          "title": "回看视频",
-          "disclaimer": "BlitzKit不支持任何回看视频。",
+          "title": "重播影片",
+          "disclaimer": "BlitzKit 不支援任何影片重播。",
           "join": "应用到 %s1 YouTuber程序"
         },
         "configuration": {
-          "title": "配置设置",
+          "title": "配置設定",
           "modules": {
-            "title": "功能模块",
-            "stock": "库存",
-            "upgrade": "升级"
+            "title": "功能模組",
+            "stock": "庫存",
+            "upgrade": "升級"
           },
           "equipment": {
-            "title": "装备",
-            "clear": "清空"
+            "title": "裝備",
+            "clear": "清除"
           },
           "provisions": {
-            "title": "补给品",
-            "clear": "清空"
+            "title": "補給品",
+            "clear": "清除"
           },
           "consumables": {
             "title": "消耗品",
-            "clear": "清空",
+            "clear": "清除",
             "info": "黄色消耗品不影响统计数据"
           },
           "skills": {
-            "title": "乘员技能",
-            "clear": "清空",
+            "title": "乘員技能",
+            "clear": "清除",
             "maximize": "最大化",
             "info": "黄色技能只适用于特殊情况。按空格键可在0到7级之间快速切换。"
           },
