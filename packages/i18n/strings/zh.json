@@ -176,7 +176,7 @@
       "cumulative_win_and_survived": "勝利與存活場次",
       "cumulative_wins": "勝利",
       "cumulative_xp": "總經驗",
-      "cumulative_wn8": "WN8",
+      "cumulative_wn8": "玩家表現評分",
       "cumulative_battle_life_time": "總戰鬥時間"
     }
   },
@@ -560,92 +560,92 @@
         },
         "body": {
           "top_players": "前 %s1玩家",
-          "no_participation": "# %s1 在季 %s2进行过评级战斗\n\n该玩家没有参加本季或没有获得过去的校准。",
-          "no_ongoing_season": "# 没有进行中的季\n\n目前没有一个评分季。",
-          "deleted_player": "删除 %s1",
-          "neighbors": "对邻居进行评分",
+          "no_participation": "# %s1 在賽季 %s2進行過評價戰鬥\n\n該玩家没有參加本賽季或没有獲得過去的校準。",
+          "no_ongoing_season": "# 没有進行中的賽季\n\n目前没有賽季季。",
+          "deleted_player": "刪除 %s1",
+          "neighbors": "對鄰居進行評分",
           "more": "+ 增加 %s1"
         }
       },
       "today": {
         "name": "今日",
-        "description": "今天玩过的坦克和统计数据"
+        "description": "今天玩過的戰車和統計資料"
       },
       "stats": {
-        "name": "统计数据",
-        "description": "一段时间内快速统计"
+        "name": "統計資料",
+        "description": "一段時間內快速統計"
       },
       "owned_tanks": {
-        "name": "已拥有的坦克",
-        "description": "在一个等级中显示所有已拥有的坦克",
+        "name": "已擁有的戰車",
+        "description": "在一個等級中顯示所有已擁有的戰車",
         "body": {
-          "title": "# %s1所拥有的 %s2的坦克\n\n"
+          "title": "# %s1所擁有的 %s2階戰車\n\n"
         }
       },
       "permissions": {
-        "name": "权限管理",
-        "description": "检查机器人是否拥有运行所需的权限",
+        "name": "權限",
+        "description": "檢查機器人是否擁有運作所需的權限",
         "body": {
-          "title": "# 权限\n\n%s1",
-          "view_channels": "查看频道：需要找到刷新按钮使用的消息",
-          "read_message_history": "读取消息历史: 需要找到消息以刷新",
-          "attach_files": "附加文件：需要将图像添加到基于图像的命令",
-          "external_emojis": "外部表情：需要添加国家旗帜和坦克等级表情"
+          "title": "# 權限\n\n%s1",
+          "view_channels": "查看頻道：需要找到重新整理按鈕使用的訊息",
+          "read_message_history": "讀取歷史訊息: 需要找到訊息以重新整理",
+          "attach_files": "附加文件：需要將圖像添加到基於圖像的命令",
+          "external_emojis": "外部表情：需要添加國家旗幟和戰車類別"
         }
       },
       "ping": {
-        "name": "ping值（延迟值）",
-        "description": "检查机器人处于活动状态。",
+        "name": "連線延遲",
+        "description": "檢查機器人處於活動狀態。",
         "body": {
-          "pong": "乒乓球拍",
-          "pong_with_time": "乒乓球拍%s1ms"
+          "pong": "桌球拍",
+          "pong_with_time": "桌球拍-%s1ms"
         },
         "subcommands": {
           "blitzkit": {
             "name": "blitzkit",
-            "description": "测试BlitzKit的ping值（延迟值）"
+            "description": "BlitzKit 的 Ping 值"
           },
           "wotb": {
-            "name": "坦克世界闪击战",
-            "description": "测试坦克世界闪击战的ping值（延迟值）"
+            "name": "戰車世界閃擊戰",
+            "description": "戰車世界閃擊戰的 Ping 值"
           }
         }
       },
       "player_info": {
-        "name": "玩家信息",
-        "description": "玩家基本信息",
+        "name": "玩家資訊",
+        "description": "玩家基本資訊",
         "body": {
-          "title": "%s1的信息",
-          "nickname": "昵称",
+          "title": "%s1的資訊",
+          "nickname": "暱稱",
           "battles": "戰鬥場次",
           "winrate": "勝率",
-          "account_id": "账号ID",
-          "created": "已创建",
-          "last_battle": "上次战斗"
+          "account_id": "帳號 ID",
+          "created": "已創建",
+          "last_battle": "最後戰鬥"
         }
       },
       "rating": {
         "name": "评级战斗",
-        "description": "评级战斗统计数据",
+        "description": "評價戰鬥統計資料",
         "subcommands": {
           "today": {
             "name": "今日",
-            "description": "今日评级统计"
+            "description": "今日評價統計資料"
           },
           "season": {
             "name": "賽季",
-            "description": "本赛季评级统计"
+            "description": "本賽季評價統計資料"
           }
         },
         "body": {
           "subtitle": {
-            "today": "今日评级统计",
-            "season": "本赛季评级统计"
+            "today": "今日評價統計資料",
+            "season": "本賽季評價統計資料"
           }
         },
         "errors": {
-          "no_participation": "# %s1 未完成评级\n该玩家未参加本赛季的评级游戏模式。",
-          "unrecorded_stats": "# 统计数据当前不可用\n\nWargaming可能正面临服务器停用。 如果有连续的季节，统计信息可能在24小时内提供。"
+          "no_participation": "# %s1 未完成評價\n該玩家未參與本賽季的評價戰鬥。",
+          "unrecorded_stats": "# 統計資料目前無法使用\n\nWargaming 可能暫停了伺服器。 如果有連續的賽季，統計資料可能在24小時内提供。"
         }
       }
     }
@@ -668,8 +668,8 @@
         "search_bar_hint": "搜尋戰車....",
         "recent": "最近查看",
         "select_all": "選擇全部",
-        "count_singular": "1 辆坦克",
-        "count_plural": "%s1辆坦克",
+        "count_singular": "1 台戰車",
+        "count_plural": "%s1戰車",
         "sorting_by": "按 %s1 排序",
         "no_tanks_found": {
           "body": "找不到戰車。",
