@@ -24,10 +24,8 @@ namespace BlitzKit.CLI
 
         case "mangle":
         {
-          Mangler mangler = new();
-
+          Mangler mangler = new(args);
           await mangler.Mangle();
-
           break;
         }
 

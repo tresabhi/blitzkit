@@ -14,6 +14,9 @@ env:
   STEAM_OS: windows
   STEAM_APP: 3341250
   STEAM_DEPOT: 3341251
+  PUBLIC_ASSET_REPO: tresabhi/blitzkit-assets
+  PUBLIC_ASSET_BRANCH: ue
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
 jobs:
   download_client:
@@ -68,7 +71,12 @@ jobs:
       - name: Unpack
         run: |
           cd src/BlitzKit.CLI
-          dotnet run unpack ../../temp/depot/
+          dotnet run unpack
+
+      - name: Mangle
+        run: |
+          cd src/BlitzKit.CLI
+          dotnet run mangle --depot
 
       - name: Archive VFS
         uses: actions/upload-artifact@v4

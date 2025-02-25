@@ -11,10 +11,10 @@ using Newtonsoft.Json.Linq;
 
 namespace BlitzKit.CLI.Functions
 {
-  public class Mangler
+  public class Mangler(string[] args)
   {
     readonly Tanks tanks = new();
-    readonly BlitzProvider provider = new();
+    readonly BlitzProvider provider = new(args.Contains("--depot"));
     readonly List<FileChange> changes = [];
 
     public async Task Mangle()
@@ -54,6 +54,7 @@ namespace BlitzKit.CLI.Functions
       var pda = provider.LoadObject($"{tankDir.Path}/{pdaName}.{pdaName}");
 
       var tankId = PropertyUtil.Get<FName>(pda, "TankId").Text;
+      Console.WriteLine($"Mangling {tankId}...");
 
       var hulls = PropertyUtil.Get<UDataTable>(pda, "DT_Hulls");
       UDataTableUtility.TryGetDataTableRow(hulls, "hull", StringComparison.Ordinal, out var hull);

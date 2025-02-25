@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Net;
 using BlitzKit.CLI.Utils;
 using DotNetEnv;
@@ -7,8 +8,8 @@ namespace BlitzKit.CLI.Models
 {
   public static class BlitzKitAssets
   {
-    public static int TIME_PER_BLOB = (int)Math.Pow(2, 4) * 10000;
-    public static int TIME_BETWEEN_BLOBS = (int)(60 * 60 * 1000 / 5000 / 0.9);
+    private static int TIME_PER_BLOB = (int)Math.Pow(2, 4) * 10000;
+    private static int TIME_BETWEEN_BLOBS = (int)(60 * 60 * 1000 / 5000 / 0.9);
 
     public static async Task CommitAssets(string message, List<FileChange> changes)
     {
@@ -98,10 +99,13 @@ namespace BlitzKit.CLI.Models
 
       foreach (var change in changes)
       {
+        Console.WriteLine($"blobbing {change.Path}");
+
         while (true)
         {
           try
           {
+            var stopwatch = Stopwatch.StartNew();
             var blobSha = octokit
               .Git.Blob.Create(
                 owner,
@@ -114,7 +118,7 @@ namespace BlitzKit.CLI.Models
               )
               .Result.Sha;
 
-            await Task.Delay(TIME_BETWEEN_BLOBS);
+            await Task.Delay((int)Math.Max(0, TIME_BETWEEN_BLOBS - stopwatch.ElapsedMilliseconds));
 
             newTree.Tree.Add(
               new()

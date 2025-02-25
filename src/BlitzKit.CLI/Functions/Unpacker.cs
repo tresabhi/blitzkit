@@ -12,7 +12,7 @@ namespace BlitzKit.CLI.Functions
   public static class Unpacker
   {
     private const string CONTENT_GROUP = "p14y73c7_p5e_b10gg3RS_big_play";
-    private const string VFS_PATH = "../../temp/vfs/";
+    private const string VFS_PATH = "../../temp/containers/";
 
     // this may be different from the one provided in args so check this and not args[1]
     // we don't wanna delete my local installation of the game when debugging haha!

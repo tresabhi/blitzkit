@@ -7,20 +7,19 @@ namespace BlitzKit.CLI.Models
 {
   public class BlitzProvider : DefaultFileProvider
   {
-    private static readonly string LOCAL_USER = "coola";
     private static readonly string LOCAL_DLC_CONTAINERS_PATH =
-      $"C:/Users/{LOCAL_USER}/AppData/Local/Blitz/Saved/PersistentDownloadDir/Dlc/PakCache";
+      $"C:/Users/coola/AppData/Local/Blitz/Saved/PersistentDownloadDir/Dlc/PakCache";
     private static readonly string LOCAL_BUNDLED_CONTAINERS_PATH =
       "C:/Program Files (x86)/Steam/steamapps/common/World of Tanks Blitz Playtest/Blitz/Content/Paks";
-    private static readonly string LOCAL_MAPPINGS_PATH =
-      "../../submodules/blitzkit-closed/blitz.usmap";
+    private static readonly string DEPOT_CONTAINERS_PATH = "../../temp/containers";
+    private static readonly string MAPPINGS_PATH = "../../submodules/blitzkit-closed/blitz.usmap";
 
     public readonly VFS RootDirectory;
 
-    public BlitzProvider()
+    public BlitzProvider(bool depot)
       : base(
-        directory: new DirectoryInfo(LOCAL_BUNDLED_CONTAINERS_PATH),
-        extraDirectories: [new(LOCAL_DLC_CONTAINERS_PATH)],
+        directory: new DirectoryInfo(depot ? DEPOT_CONTAINERS_PATH : LOCAL_BUNDLED_CONTAINERS_PATH),
+        extraDirectories: depot ? [] : [new(LOCAL_DLC_CONTAINERS_PATH)],
         searchOption: SearchOption.TopDirectoryOnly,
         versions: new(EGame.GAME_UE5_3)
       )
@@ -32,7 +31,7 @@ namespace BlitzKit.CLI.Models
         Name = "",
         provider = this,
       };
-      MappingsContainer = new FileUsmapTypeMappingsProvider(LOCAL_MAPPINGS_PATH);
+      MappingsContainer = new FileUsmapTypeMappingsProvider(MAPPINGS_PATH);
 
       Initialize();
       Mount();
