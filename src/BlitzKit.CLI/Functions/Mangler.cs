@@ -1,18 +1,26 @@
+using System.Data;
+using AssetRipper.TextureDecoder.Rgb.Channels;
 using Blitzkit;
 using BlitzKit.CLI.Models;
 using BlitzKit.CLI.Utils;
 using CommunityToolkit.HighPerformance;
 using CommunityToolkit.HighPerformance.Helpers;
+using CUE4Parse;
 using CUE4Parse_Conversion;
 using CUE4Parse_Conversion.Animations;
 using CUE4Parse_Conversion.Meshes;
 using CUE4Parse_Conversion.Meshes.glTF;
 using CUE4Parse_Conversion.Textures;
 using CUE4Parse_Conversion.UEFormat.Enums;
+using CUE4Parse.FileProvider.Objects;
+using CUE4Parse.UE4.Assets.Exports;
 using CUE4Parse.UE4.Assets.Exports.Engine;
 using CUE4Parse.UE4.Assets.Exports.Material;
 using CUE4Parse.UE4.Assets.Exports.StaticMesh;
 using CUE4Parse.UE4.Assets.Exports.Texture;
+using CUE4Parse.UE4.Assets.Objects;
+using CUE4Parse.UE4.Assets.Objects.Properties;
+using CUE4Parse.UE4.Assets.Utils;
 using CUE4Parse.UE4.Objects.UObject;
 using CUE4Parse.UE4.Readers;
 using CUE4Parse.UE4.Writers;
@@ -40,7 +48,7 @@ namespace BlitzKit.CLI.Functions
       }
     }
 
-    void MangleNation(VfsDirectory nation)
+    void MangleNation(VFS nation)
     {
       foreach (var tankDir in nation.Directories)
       {
@@ -56,61 +64,17 @@ namespace BlitzKit.CLI.Functions
       }
     }
 
-    Tank? MangleTank(VfsDirectory tankDir)
+    Tank? MangleTank(VFS tankDir)
     {
       var pdaName = $"PDA_{tankDir.Name}";
-      var pda = tankDir.GetUasset($"{pdaName}.uasset").Get(pdaName);
-      var tankId = pda.GetName("TankId");
-      var isDev = pda.TryGetBool("bInDevelopment") ?? true;
+      var pda = provider.LoadObject($"{tankDir.Path}/{pdaName}.{pdaName}");
+      var hulls = PropertyUtil.Get<UDataTable>(pda, "DT_Hulls");
+      UDataTableUtility.TryGetDataTableRow(hulls, "hull", StringComparison.Ordinal, out var hull);
+      var hullVisualData = PropertyUtil.Get<UObject>(hull, "VisualData");
+      var hullMeshSettings = PropertyUtil.Get<FStructFallback>(hullVisualData, "MeshSettings");
+      var hullCollision = PropertyUtil.Get<UStaticMesh>(hullMeshSettings, "CollisionMesh");
 
-      if (isDev)
-      {
-        PrettyLog.Warn($"Skipping dev tank: {tankId}");
-        return null;
-      }
-      else
-      {
-        PrettyLog.Success($"Mangling tank:     {tankId}");
-      }
-
-      var hulls = pda.GetObjectDataTable("DT_Hulls");
-      var hull = hulls.GetRow("hull");
-      var hullVisual = hull.GetObject("VisualData");
-      var hullMeshSettings = hullVisual.GetStruct("MeshSettings");
-      var hullMesh = hullMeshSettings.GetSoftObject<UStaticMesh>("Mesh");
-
-      MonoGltf hullGltf = new(hullMesh);
-
-      // Gltf gltf = new(hullMesh.Name, hullLod0, null, new() { });
-      // FArchiveWriter archiveWriter = new();
-
-      // gltf.Save(EMeshFormat.Gltf2, archiveWriter);
-
-      // MeshExporter hullMeshExporter = new(
-      //   hullMesh,
-      //   new()
-      //   {
-      //     MeshFormat = EMeshFormat.Gltf2,
-      //     ExportMaterials = true,
-      //     ExportMorphTargets = false,
-      //     LodFormat = ELodFormat.FirstLod,
-      //     TextureFormat = ETextureFormat.Jpeg,
-      //     SocketFormat = ESocketFormat.None,
-      //     Platform = ETexturePlatform.DesktopMobile,
-      //   }
-      // );
-
-
-
-
-      // var hullLod0 = hullMeshExporter.MeshLods[0];
-      // var hullMeshData = hullLod0.FileData;
-
-      // File.WriteAllBytes($"../../temp/{tankId}.glb", hullMeshData);
-
-      // hullMeshExporter.TryWriteToDir(new("../../temp"), out _, out _);
-
-      return new() { Id = tankId };
+      return new() { Id = "" };
     }
 
     Dictionary<string, CrewType> CrewTypes = new()

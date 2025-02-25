@@ -1,25 +1,31 @@
 using CUE4Parse.FileProvider;
 using CUE4Parse.FileProvider.Objects;
+using CUE4Parse.UE4.Assets.Exports;
+using CUE4Parse.UE4.Assets.Exports.Engine;
+using CUE4Parse.UE4.Assets.Objects;
+using CUE4Parse.UE4.Assets.Objects.Properties;
 
 namespace BlitzKit.CLI.Models
 {
-  public class VfsDirectory
+  public class VFS
   {
-    public Dictionary<string, VfsDirectory> Directories = [];
+    public Dictionary<string, VFS> Directories = [];
     public Dictionary<string, GameFile> Files = [];
+
+    public required string ParentPath;
+    public required string Path;
     public required string Name;
+
     public required AbstractFileProvider provider;
 
     public void AddFile(string name, GameFile file) => Files.TryAdd(name, file);
 
     public bool HasFile(string name) => Files.ContainsKey(name);
 
-    public Uasset GetUasset(string name) => new(GetFile(name), provider);
-
     public GameFile GetFile(string name)
     {
-      var directoryPath = Path.GetDirectoryName(name);
-      var fileName = Path.GetFileName(name);
+      var directoryPath = System.IO.Path.GetDirectoryName(name);
+      var fileName = System.IO.Path.GetFileName(name);
       var directory =
         directoryPath == null || directoryPath.Length == 0 ? this : GetDirectory(directoryPath);
 
@@ -28,7 +34,7 @@ namespace BlitzKit.CLI.Models
 
     public bool HasDirectory(string name) => Directories.ContainsKey(name);
 
-    public VfsDirectory GetDirectory(string name)
+    public VFS GetDirectory(string name)
     {
       var segments = name.Split('/');
       var directory = this;
@@ -41,7 +47,6 @@ namespace BlitzKit.CLI.Models
       return directory;
     }
 
-    public void AddDirectory(string name, VfsDirectory directory) =>
-      Directories.Add(name, directory);
+    public void AddDirectory(string name, VFS directory) => Directories.Add(name, directory);
   }
 }

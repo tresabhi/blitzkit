@@ -15,7 +15,7 @@ namespace BlitzKit.CLI.Models
     private static readonly string LOCAL_MAPPINGS_PATH =
       "../../submodules/blitzkit-closed/blitz.usmap";
 
-    public readonly VfsDirectory RootDirectory;
+    public readonly VFS RootDirectory;
 
     public BlitzProvider()
       : base(
@@ -25,7 +25,13 @@ namespace BlitzKit.CLI.Models
         versions: new(EGame.GAME_UE5_3)
       )
     {
-      RootDirectory = new() { Name = "", provider = this };
+      RootDirectory = new()
+      {
+        ParentPath = "",
+        Path = "",
+        Name = "",
+        provider = this,
+      };
       MappingsContainer = new FileUsmapTypeMappingsProvider(LOCAL_MAPPINGS_PATH);
 
       Initialize();
@@ -37,6 +43,7 @@ namespace BlitzKit.CLI.Models
         var path = gameFile.Path.Split('/');
         var lastPathSegment = path.Last();
         var directory = RootDirectory;
+        var parentPath = "";
 
         foreach (var segment in path)
         {
@@ -52,10 +59,18 @@ namespace BlitzKit.CLI.Models
           }
           else
           {
-            VfsDirectory newDirectory = new() { Name = segment, provider = this };
+            VFS newDirectory = new()
+            {
+              ParentPath = parentPath,
+              Path = parentPath == "" ? "" : $"{parentPath}{segment}",
+              Name = segment,
+              provider = this,
+            };
             directory.AddDirectory(segment, newDirectory);
             directory = newDirectory;
           }
+
+          parentPath += $"{segment}/";
         }
       }
     }

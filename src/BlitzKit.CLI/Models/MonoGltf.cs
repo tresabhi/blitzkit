@@ -18,6 +18,7 @@ using SharpGLTF.Geometry.VertexTypes;
 using SharpGLTF.Materials;
 using SharpGLTF.Scenes;
 using SharpGLTF.Schema2;
+using SkiaSharp;
 
 namespace BlitzKit.CLI.Models
 {
@@ -76,21 +77,38 @@ namespace BlitzKit.CLI.Models
             )
               return;
 
-            var encodedBitmap = bitmap.Encode(options.TextureFormat, 100);
-
             try
             {
-              var textureBytes = encodedBitmap.ToArray();
-
               switch (parameterTexture.Key)
               {
                 case "BaseColor":
-                  materialBuilder.WithBaseColor(textureBytes);
+                {
+                  var encoded = bitmap.Encode(options.TextureFormat, 100);
+                  var bytes = encoded.ToArray();
+                  materialBuilder.WithBaseColor(bytes);
+
                   break;
+                }
 
                 case "RM":
-                  materialBuilder.WithMetallicRoughness(textureBytes);
+                {
+                  var encoded = bitmap.Encode(options.TextureFormat, 100);
+
+                  for (int y = 0; y < bitmap.Height; y++)
+                  {
+                    for (int x = 0; x < bitmap.Width; x++)
+                    {
+                      var index = y * bitmap.Width + x;
+                      var color = bitmap.Pixels[index];
+                      bitmap.Pixels[index] = new(color.Blue, color.Red, color.Green, color.Alpha);
+                    }
+                  }
+
+                  var bytes = encoded.ToArray();
+                  materialBuilder.WithBaseColor(bytes);
+
                   break;
+                }
 
                 case "PM_SpecularMasks":
                   // materialBuilder.WithSpecularGlossiness(textureBytes);
