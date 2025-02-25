@@ -30,11 +30,13 @@ namespace BlitzKit.CLI.Models
 
   public class MonoGltf
   {
+    readonly SceneBuilder Scene;
+
     public MonoGltf(UStaticMesh staticMesh)
     {
+      Scene = new(staticMesh.Name);
       ExporterOptions options = new() { TextureFormat = ETextureFormat.Jpeg };
       staticMesh.TryConvert(out var convertedMesh);
-      SceneBuilder sceneBuilder = new(staticMesh.Name);
       var lod =
         convertedMesh.LODs.Find(lod => !lod.SkipLod) ?? throw new Exception("Failed to find lod0");
 
@@ -155,13 +157,13 @@ namespace BlitzKit.CLI.Models
           primitive.AddTriangle((v1, c1), (v2, c2), (v3, c3));
         }
 
-        sceneBuilder.AddRigidMesh(meshBuilder, Matrix4x4.Identity);
+        Scene.AddRigidMesh(meshBuilder, Matrix4x4.Identity);
       }
+    }
 
-      var gltf2 = sceneBuilder.ToGltf2();
-      var glbBytes = gltf2.WriteGLB();
-
-      File.WriteAllBytes("../../temp/test.glb", glbBytes);
+    public ArraySegment<byte> Write()
+    {
+      return Scene.ToGltf2().WriteGLB();
     }
 
     private static (

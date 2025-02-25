@@ -1,30 +1,10 @@
 using System.Data;
-using AssetRipper.TextureDecoder.Rgb.Channels;
 using Blitzkit;
 using BlitzKit.CLI.Models;
-using BlitzKit.CLI.Utils;
-using CommunityToolkit.HighPerformance;
-using CommunityToolkit.HighPerformance.Helpers;
-using CUE4Parse;
-using CUE4Parse_Conversion;
-using CUE4Parse_Conversion.Animations;
-using CUE4Parse_Conversion.Meshes;
-using CUE4Parse_Conversion.Meshes.glTF;
-using CUE4Parse_Conversion.Textures;
-using CUE4Parse_Conversion.UEFormat.Enums;
-using CUE4Parse.FileProvider.Objects;
 using CUE4Parse.UE4.Assets.Exports;
 using CUE4Parse.UE4.Assets.Exports.Engine;
-using CUE4Parse.UE4.Assets.Exports.Material;
 using CUE4Parse.UE4.Assets.Exports.StaticMesh;
-using CUE4Parse.UE4.Assets.Exports.Texture;
 using CUE4Parse.UE4.Assets.Objects;
-using CUE4Parse.UE4.Assets.Objects.Properties;
-using CUE4Parse.UE4.Assets.Utils;
-using CUE4Parse.UE4.Objects.UObject;
-using CUE4Parse.UE4.Readers;
-using CUE4Parse.UE4.Writers;
-using CUE4Parse.Utils;
 using Google.Protobuf.Collections;
 using Newtonsoft.Json.Linq;
 
@@ -52,8 +32,8 @@ namespace BlitzKit.CLI.Functions
     {
       foreach (var tankDir in nation.Directories)
       {
-        if (tankDir.Value.Name != "R90_IS_4")
-          continue;
+        // if (tankDir.Value.Name != "R90_IS_4")
+        //   continue;
 
         var tank = MangleTank(tankDir.Value);
 
@@ -73,6 +53,9 @@ namespace BlitzKit.CLI.Functions
       var hullVisualData = PropertyUtil.Get<UObject>(hull, "VisualData");
       var hullMeshSettings = PropertyUtil.Get<FStructFallback>(hullVisualData, "MeshSettings");
       var hullCollision = PropertyUtil.Get<UStaticMesh>(hullMeshSettings, "CollisionMesh");
+      MonoGltf hullCollisionGltf = new(hullCollision);
+
+      hullCollisionGltf.Write();
 
       return new() { Id = "" };
     }
