@@ -5,6 +5,7 @@ using CUE4Parse.UE4.Assets.Exports;
 using CUE4Parse.UE4.Assets.Exports.Engine;
 using CUE4Parse.UE4.Assets.Exports.StaticMesh;
 using CUE4Parse.UE4.Assets.Objects;
+using CUE4Parse.UE4.Objects.UObject;
 using Google.Protobuf.Collections;
 using Newtonsoft.Json.Linq;
 
@@ -14,8 +15,9 @@ namespace BlitzKit.CLI.Functions
   {
     readonly Tanks tanks = new();
     readonly BlitzProvider provider = new();
+    readonly List<FileChange> changes = [];
 
-    public void Mangle()
+    public async Task Mangle()
     {
       var nationDirs = provider.RootDirectory.GetDirectory("Blitz/Content/Tanks").Directories;
 
@@ -26,6 +28,8 @@ namespace BlitzKit.CLI.Functions
 
         MangleNation(nationDir.Value);
       }
+
+      await BlitzKitAssets.CommitAssets("ue assets", changes);
     }
 
     void MangleNation(VFS nation)
@@ -48,6 +52,9 @@ namespace BlitzKit.CLI.Functions
     {
       var pdaName = $"PDA_{tankDir.Name}";
       var pda = provider.LoadObject($"{tankDir.Path}/{pdaName}.{pdaName}");
+
+      var tankId = PropertyUtil.Get<FName>(pda, "TankId").Text;
+
       var hulls = PropertyUtil.Get<UDataTable>(pda, "DT_Hulls");
       UDataTableUtility.TryGetDataTableRow(hulls, "hull", StringComparison.Ordinal, out var hull);
       var hullVisualData = PropertyUtil.Get<UObject>(hull, "VisualData");
@@ -55,9 +62,9 @@ namespace BlitzKit.CLI.Functions
       var hullCollision = PropertyUtil.Get<UStaticMesh>(hullMeshSettings, "CollisionMesh");
       MonoGltf hullCollisionGltf = new(hullCollision);
 
-      hullCollisionGltf.Write();
+      changes.Add(new($"tanks/{tankId}/collision/hull.glb", hullCollisionGltf.Write()));
 
-      return new() { Id = "" };
+      return new() { Id = tankId };
     }
 
     Dictionary<string, CrewType> CrewTypes = new()

@@ -32,7 +32,9 @@ export async function commitMultipleFiles(
 
         // we discard blob if they're the same size; it's unlikely their
         // contents will be different; I love playing russian roulette!
-        const equal = buffer.length === change.content.length || buffer.equals(change.content);
+        const equal =
+          buffer.length === change.content.length ||
+          buffer.equals(change.content);
         if (!equal) {
           const diff = change.content.length - buffer.length;
 

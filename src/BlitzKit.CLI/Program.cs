@@ -1,12 +1,17 @@
-﻿using BlitzKit.CLI.Functions;
+﻿using System.Globalization;
+using BlitzKit.CLI.Functions;
 using BlitzKit.CLI.Utils;
+using DotNetEnv;
 
 namespace BlitzKit.CLI
 {
   class Program
   {
+    public static CultureInfo Culture = new("en-US");
+
     static async Task Main(string[] args)
     {
+      Env.Load();
       await AgnosticHelpers.Initialize();
 
       switch (args[0])
@@ -21,7 +26,7 @@ namespace BlitzKit.CLI
         {
           Mangler mangler = new();
 
-          mangler.Mangle();
+          await mangler.Mangle();
 
           break;
         }
