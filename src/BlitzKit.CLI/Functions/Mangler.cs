@@ -1,4 +1,6 @@
 using System.Data;
+using System.Text;
+using System.Text.Unicode;
 using Blitzkit;
 using BlitzKit.CLI.Models;
 using CUE4Parse.UE4.Assets.Exports;
@@ -6,6 +8,7 @@ using CUE4Parse.UE4.Assets.Exports.Engine;
 using CUE4Parse.UE4.Assets.Exports.StaticMesh;
 using CUE4Parse.UE4.Assets.Objects;
 using CUE4Parse.UE4.Objects.UObject;
+using CUE4Parse.UE4.Pak.Objects;
 using Google.Protobuf.Collections;
 using Newtonsoft.Json.Linq;
 

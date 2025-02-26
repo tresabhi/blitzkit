@@ -5,10 +5,8 @@ namespace BlitzKit.CLI.Utils
     private readonly Dictionary<string, string> strings = [];
     private readonly Dictionary<string, List<string>> arrays = [];
 
-    public IniParser(string file)
+    public IniParser(string content)
     {
-      string content = File.ReadAllText(file);
-
       foreach (string line in content.Split('\n'))
       {
         if (string.IsNullOrWhiteSpace(line))

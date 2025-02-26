@@ -1,10 +1,14 @@
+using System.Text;
 using System.Text.Json;
 using BlitzKit.CLI.Models;
 using BlitzKit.CLI.Quicktype;
 using BlitzKit.CLI.Utils;
+using CUE4Parse.FileProvider;
 using CUE4Parse.FileProvider.Objects;
 using CUE4Parse.UE4.Pak;
+using CUE4Parse.UE4.Pak.Objects;
 using CUE4Parse.UE4.Readers;
+using CUE4Parse.UE4.Versions;
 using DotNet.Globbing;
 
 namespace BlitzKit.CLI.Functions
@@ -27,21 +31,30 @@ namespace BlitzKit.CLI.Functions
         throw new ArgumentException("Missing required initial paks directory");
       }
 
+      var pak0Path = Path.Combine(TEMP_DEPOT_DIR, "Blitz/Content/Paks/pakchunk0-Windows.pak");
+      DefaultFileProvider provider0 = new(
+        directory: new DirectoryInfo(pak0Path),
+        searchOption: SearchOption.TopDirectoryOnly,
+        versions: new(EGame.GAME_UE5_3)
+      );
+      provider0.Initialize();
+      provider0.Mount();
+      provider0.TryFindGameFile("Blitz/Config/DefaultDlc.ini", out var defaultDlcGameFile);
+
+      if (defaultDlcGameFile is not FPakEntry)
+        throw new Exception("Failed to find DefaultDlc.ini");
+
+      IniParser defaultDlc = new(Encoding.UTF8.GetString(defaultDlcGameFile.Read()));
+
       using HttpClient client = new();
-      string defaultDlcPath = Path.Combine(VFS_PATH, "Blitz/Config/DefaultDlc.ini");
-      IniParser iniParser = new(defaultDlcPath);
-      string? contentBuildId = iniParser.GetString("DefaultContentBuildId");
+      string? contentBuildId = defaultDlc.GetString("DefaultContentBuildId");
 
       if (string.IsNullOrEmpty(contentBuildId))
       {
         throw new Exception("Failed to read content build id from DefaultDlc.ini");
       }
 
-      Console.WriteLine($"Exploring DLC \"{contentBuildId}\" within group \"{CONTENT_GROUP}\"");
-
       DlcManifest manifest = await FetchManifest(CONTENT_GROUP, contentBuildId);
-
-      Console.WriteLine("Filtering HD and non-HD containers");
 
       foreach (var pakFile in manifest.PakFiles)
       {
