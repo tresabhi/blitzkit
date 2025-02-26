@@ -71,7 +71,7 @@ jobs:
       - name: Unpack
         run: |
           cd src/BlitzKit.CLI
-          dotnet run unpack
+          dotnet run unpack ../../temp/depot
 
       - name: Mangle
         run: |

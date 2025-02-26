@@ -27,12 +27,7 @@ namespace BlitzKit.CLI.Functions
         throw new ArgumentException("Missing required initial paks directory");
       }
 
-      UnpackDepot(args[1]);
-      await UnpackDLC();
-    }
-
-    private static async Task UnpackDLC()
-    {
+      using HttpClient client = new();
       string defaultDlcPath = Path.Combine(VFS_PATH, "Blitz/Config/DefaultDlc.ini");
       IniParser iniParser = new(defaultDlcPath);
       string? contentBuildId = iniParser.GetString("DefaultContentBuildId");
@@ -46,73 +41,17 @@ namespace BlitzKit.CLI.Functions
 
       DlcManifest manifest = await FetchManifest(CONTENT_GROUP, contentBuildId);
 
-      List<PakFile> nonHdPaks = [];
-      List<PakFile> hdPaks = [];
-
       Console.WriteLine("Filtering HD and non-HD containers");
 
       foreach (var pakFile in manifest.PakFiles)
       {
-        long chunkId = pakFile.ChunkId;
-        manifest.ChunkTags.TryGetValue(chunkId.ToString(), out var tags);
+        var localContainerPath = Path.Combine(VFS_PATH, pakFile.FileName);
+        var fullContainerURL = $"{WG_DLC_DOMAIN}/dlc/{CONTENT_GROUP}/dlc/{pakFile.RelativeUrl}";
+        var response = await client.GetAsync(fullContainerURL);
+        var bytes = await response.Content.ReadAsByteArrayAsync();
 
-        if (tags == null)
-        {
-          throw new Exception($"Failed to find tags for chunk {chunkId}");
-        }
-
-        bool isHd = tags.GameplayTags.Any(tag => tag.TagName == "Dlc.HdTextures");
-
-        if (isHd)
-        {
-          hdPaks.Add(pakFile);
-        }
-        else
-        {
-          nonHdPaks.Add(pakFile);
-        }
+        File.WriteAllBytes(localContainerPath, bytes);
       }
-
-      Console.WriteLine(
-        $"Found {nonHdPaks.Count} non-HD containers and {hdPaks.Count} HD containers"
-      );
-
-      Console.WriteLine($"Exergizing non-HD containers");
-
-      foreach (var pak in nonHdPaks)
-      {
-        await ExergizeManifestPakFile(pak);
-      }
-
-      Console.WriteLine($"Exergizing HD containers");
-
-      foreach (var pak in hdPaks)
-      {
-        await ExergizeManifestPakFile(pak);
-      }
-    }
-
-    private static async Task ExergizeManifestPakFile(PakFile pak)
-    {
-      Console.WriteLine($"Exergizing DLC container \"{pak.FileName}\"");
-
-      string url = $"{WG_DLC_DOMAIN}/dlc/{CONTENT_GROUP}/dlc/{pak.RelativeUrl}";
-
-      using HttpClient httpClient = new();
-      Stream httpStream = await httpClient.GetStreamAsync(url);
-      MemoryStream memoryStream = new();
-
-      await httpStream.CopyToAsync(memoryStream);
-      memoryStream.Seek(0, SeekOrigin.Begin);
-
-      FStreamArchive archive = new(url, memoryStream);
-      PakFileReader reader = new(archive);
-
-      Exergize(reader);
-
-      memoryStream.Dispose();
-      httpStream.Dispose();
-      archive.Dispose();
     }
 
     public static async Task<DlcManifest> FetchManifest(string group, string build)
@@ -126,77 +65,6 @@ namespace BlitzKit.CLI.Functions
         ?? throw new Exception("Failed to deserialize manifest");
 
       return manifest;
-    }
-
-    private static void UnpackDepot(string workingDirectory)
-    {
-      string paksDirectory = Path.Combine(workingDirectory, "Blitz/Content/Paks");
-      string[] containers = Directory.GetFiles(paksDirectory, "*.pak");
-
-      foreach (string container in containers)
-      {
-        Console.WriteLine($"Exergizing disk container \"{container}\"");
-
-        PakFileReader reader = new(container);
-        Exergize(reader);
-      }
-
-      if (Directory.Exists(TEMP_DEPOT_DIR))
-      {
-        Console.WriteLine("Deleting temp depots directory");
-        Directory.Delete(TEMP_DEPOT_DIR, true);
-      }
-    }
-
-    private static void Exergize(PakFileReader reader)
-    {
-      reader.Mount();
-
-      foreach (var file in reader.Files)
-      {
-        GameFile gameFile = file.Value;
-        bool exergizable = ShouldExergize(gameFile.Path);
-
-        if (!exergizable)
-        {
-          Console.WriteLine($"Exergize 🔴 {gameFile.Path}");
-          continue;
-        }
-
-        string writePath = Path.Combine(VFS_PATH, gameFile.Path);
-
-        if (File.Exists(writePath))
-        {
-          Console.WriteLine($"Exergize 🟡 {gameFile.Path}");
-        }
-        else
-        {
-          Console.WriteLine($"Exergize 🟢 {gameFile.Path}");
-        }
-
-        string? directory = Path.GetDirectoryName(writePath);
-
-        if (directory != null && !Directory.Exists(directory))
-        {
-          Directory.CreateDirectory(directory);
-        }
-
-        File.WriteAllBytes(writePath, gameFile.Read());
-      }
-    }
-
-    private static readonly string[] ExergizableGlobsRaw =
-    [
-      "Blitz/Config/DefaultDlc.ini",
-      "Blitz/Content/Tanks/**",
-      "Blitz/Content/TankSets/*",
-    ];
-    private static readonly Glob[] ExergizableGlobs = [.. ExergizableGlobsRaw.Select(Glob.Parse)];
-
-    private static bool ShouldExergize(string path)
-    {
-      // return true;
-      return ExergizableGlobs.Any(glob => glob.IsMatch(path));
     }
   }
 }
