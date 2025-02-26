@@ -67,6 +67,7 @@ jobs:
             -app ${{ env.STEAM_APP }} \
             -depot ${{ env.STEAM_DEPOT }} \
             -dir temp/depot
+            -filelist temp/depot/Blitz/Content/Paks/pakchunk0-Windows.pak
 
       - name: Unpack
         run: |
