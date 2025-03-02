@@ -56,6 +56,9 @@ namespace BlitzKit.CLI.Functions
 
       DlcManifest manifest = await FetchManifest(CONTENT_GROUP, contentBuildId);
 
+      Console.WriteLine("Deleting depot...");
+      Directory.Delete(TEMP_DEPOT_DIR, true);
+
       Console.WriteLine($"Downloading {manifest.PakFiles.Count} containers...");
       foreach (var pakFile in manifest.PakFiles)
       {
@@ -75,9 +78,6 @@ namespace BlitzKit.CLI.Functions
       {
         File.Move(file, Path.Combine(CONTAINERS_PATH, Path.GetFileName(file)));
       }
-
-      Console.WriteLine("Deleting depot...");
-      Directory.Delete(TEMP_DEPOT_DIR, true);
     }
 
     public static async Task<DlcManifest> FetchManifest(string group, string build)
