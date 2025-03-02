@@ -3,5 +3,10 @@ syntax = "proto2";
 package blitzkit;
 
 message Tanks {
-  repeated string tanks = 1;
+  repeated TankMeta tanks = 1;
+}
+
+message TankMeta {
+  required string id = 1;
+  required string seo_id = 2;
 }

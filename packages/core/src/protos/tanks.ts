@@ -10,7 +10,12 @@ import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 export const protobufPackage = "blitzkit";
 
 export interface Tanks {
-  tanks: string[];
+  tanks: TankMeta[];
+}
+
+export interface TankMeta {
+  id: string;
+  seo_id: string;
 }
 
 function createBaseTanks(): Tanks {
@@ -20,7 +25,7 @@ function createBaseTanks(): Tanks {
 export const Tanks: MessageFns<Tanks> = {
   encode(message: Tanks, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     for (const v of message.tanks) {
-      writer.uint32(10).string(v!);
+      TankMeta.encode(v!, writer.uint32(10).fork()).join();
     }
     return writer;
   },
@@ -37,7 +42,7 @@ export const Tanks: MessageFns<Tanks> = {
             break;
           }
 
-          message.tanks.push(reader.string());
+          message.tanks.push(TankMeta.decode(reader, reader.uint32()));
           continue;
         }
       }
@@ -50,13 +55,13 @@ export const Tanks: MessageFns<Tanks> = {
   },
 
   fromJSON(object: any): Tanks {
-    return { tanks: globalThis.Array.isArray(object?.tanks) ? object.tanks.map((e: any) => globalThis.String(e)) : [] };
+    return { tanks: globalThis.Array.isArray(object?.tanks) ? object.tanks.map((e: any) => TankMeta.fromJSON(e)) : [] };
   },
 
   toJSON(message: Tanks): unknown {
     const obj: any = {};
     if (message.tanks?.length) {
-      obj.tanks = message.tanks;
+      obj.tanks = message.tanks.map((e) => TankMeta.toJSON(e));
     }
     return obj;
   },
@@ -66,7 +71,83 @@ export const Tanks: MessageFns<Tanks> = {
   },
   fromPartial<I extends Exact<DeepPartial<Tanks>, I>>(object: I): Tanks {
     const message = createBaseTanks();
-    message.tanks = object.tanks?.map((e) => e) || [];
+    message.tanks = object.tanks?.map((e) => TankMeta.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseTankMeta(): TankMeta {
+  return { id: "", seo_id: "" };
+}
+
+export const TankMeta: MessageFns<TankMeta> = {
+  encode(message: TankMeta, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.seo_id !== "") {
+      writer.uint32(18).string(message.seo_id);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): TankMeta {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTankMeta();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.seo_id = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): TankMeta {
+    return {
+      id: globalThis.String(assertSet("TankMeta.id", object.id)),
+      seo_id: globalThis.String(assertSet("TankMeta.seo_id", object.seo_id)),
+    };
+  },
+
+  toJSON(message: TankMeta): unknown {
+    const obj: any = {};
+    if (message.id !== "") {
+      obj.id = message.id;
+    }
+    if (message.seo_id !== "") {
+      obj.seo_id = message.seo_id;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<TankMeta>, I>>(base?: I): TankMeta {
+    return TankMeta.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<TankMeta>, I>>(object: I): TankMeta {
+    const message = createBaseTankMeta();
+    message.id = object.id ?? "";
+    message.seo_id = object.seo_id ?? "";
     return message;
   },
 };
@@ -83,6 +164,18 @@ export type DeepPartial<T> = T extends Builtin ? T
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
+}
+
+function assertSet<T>(field: string, value: T | undefined): T {
+  if (!isSet(value)) {
+    throw new TypeError(`Required field ${field} is not set`);
+  }
+
+  return value as T;
+}
 
 export interface MessageFns<T> {
   encode(message: T, writer?: BinaryWriter): BinaryWriter;

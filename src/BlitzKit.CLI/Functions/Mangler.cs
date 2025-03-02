@@ -1,14 +1,17 @@
 using System.Data;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Text.Unicode;
 using Blitzkit;
 using BlitzKit.CLI.Models;
+using BlitzKit.CLI.Utils;
 using CUE4Parse.UE4.Assets.Exports;
 using CUE4Parse.UE4.Assets.Exports.Engine;
 using CUE4Parse.UE4.Assets.Exports.StaticMesh;
 using CUE4Parse.UE4.Assets.Objects;
 using CUE4Parse.UE4.Objects.UObject;
 using CUE4Parse.UE4.Pak.Objects;
+using Google.Protobuf;
 using Google.Protobuf.Collections;
 using Newtonsoft.Json.Linq;
 
@@ -16,7 +19,6 @@ namespace BlitzKit.CLI.Functions
 {
   public class Mangler(string[] args)
   {
-    readonly Tanks tanks = new();
     readonly BlitzProvider provider = new(args.Contains("--depot"));
     readonly List<FileChange> changes = [];
 
@@ -37,6 +39,8 @@ namespace BlitzKit.CLI.Functions
 
     void MangleNation(VFS nation)
     {
+      Tanks tanks = new();
+
       foreach (var tankDir in nation.Directories)
       {
         // if (tankDir.Value.Name != "R90_IS_4")
@@ -44,14 +48,28 @@ namespace BlitzKit.CLI.Functions
 
         var tank = MangleTank(tankDir.Value);
 
-        if (tank == null)
-          continue;
+        if (!tank.Name.Locales.TryGetValue("en", out var nameEn))
+        {
+          throw new Exception($"Failed to get name for {tankDir.Value.Name}");
+        }
 
-        tanks.Tanks_.Add(tank.Id);
+        var seoId = Diacritics.Remove(nameEn).ToLower();
+        seoId = Regex.Replace(seoId, "[^a-z0-9]", "-");
+        seoId = Regex.Replace(seoId, "--+", "-");
+        seoId = Regex.Replace(seoId, "-$", "");
+
+        Console.WriteLine($"{nameEn} -> {seoId}");
+
+        TankMeta tankMeta = new() { Id = tank.Id, SeoId = seoId };
+
+        tanks.Tanks_.Add(tankMeta);
       }
+
+      FileChange change = new("definitions/tanks.pb", tanks.ToByteArray());
+      changes.Add(change);
     }
 
-    Tank? MangleTank(VFS tankDir)
+    Tank MangleTank(VFS tankDir)
     {
       var pdaName = $"PDA_{tankDir.Name}";
       var pda = provider.LoadObject($"{tankDir.Path}/{pdaName}.{pdaName}");
@@ -68,7 +86,10 @@ namespace BlitzKit.CLI.Functions
 
       changes.Add(new($"tanks/{tankId}/collision/hull.glb", hullCollisionGltf.Write()));
 
-      return new() { Id = tankId };
+      I18n Name = new();
+      Name.Locales.Add("en", tankId);
+
+      return new() { Id = tankId, Name = Name };
     }
 
     Dictionary<string, CrewType> CrewTypes = new()
