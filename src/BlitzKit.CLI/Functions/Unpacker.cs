@@ -16,7 +16,7 @@ namespace BlitzKit.CLI.Functions
   public static class Unpacker
   {
     private const string CONTENT_GROUP = "p14y73c7_p5e_b10gg3RS_big_play";
-    private const string VFS_PATH = "../../temp/containers/";
+    private const string CONTAINERS_PATH = "../../temp/containers/";
 
     // this may be different from the one provided in args so check this and not args[1]
     // we don't wanna delete my local installation of the game when debugging haha!
@@ -56,19 +56,34 @@ namespace BlitzKit.CLI.Functions
 
       DlcManifest manifest = await FetchManifest(CONTENT_GROUP, contentBuildId);
 
+      Console.WriteLine($"Downloading {manifest.PakFiles.Count} containers...");
       foreach (var pakFile in manifest.PakFiles)
       {
-        var localContainerPath = Path.Combine(VFS_PATH, pakFile.FileName);
+        var localContainerPath = Path.Combine(CONTAINERS_PATH, pakFile.FileName);
         var fullContainerURL = $"{WG_DLC_DOMAIN}/dlc/{CONTENT_GROUP}/dlc/{pakFile.RelativeUrl}";
         var response = await client.GetAsync(fullContainerURL);
         var bytes = await response.Content.ReadAsByteArrayAsync();
 
+        Directory.CreateDirectory(CONTAINERS_PATH);
         File.WriteAllBytes(localContainerPath, bytes);
       }
+
+      Console.WriteLine("Moving pre-bundled containers...");
+      foreach (
+        var file in Directory.GetFiles(Path.Combine(TEMP_DEPOT_DIR, "Blitz/Content/Paks"), "*.pak")
+      )
+      {
+        File.Move(file, Path.Combine(CONTAINERS_PATH, Path.GetFileName(file)));
+      }
+
+      Console.WriteLine("Deleting depot...");
+      Directory.Delete(TEMP_DEPOT_DIR, true);
     }
 
     public static async Task<DlcManifest> FetchManifest(string group, string build)
     {
+      Console.WriteLine($"Fetching manifest for group {group} and build {build}");
+
       string url =
         $"{WG_DLC_DOMAIN}/dlc/{group}/dlc/BuildManifest-{BUILD_MANIFEST_OS}-{build}.json";
       using HttpClient client = new();
