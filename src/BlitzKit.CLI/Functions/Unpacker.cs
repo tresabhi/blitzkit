@@ -31,7 +31,7 @@ namespace BlitzKit.CLI.Functions
         throw new ArgumentException("Missing required initial paks directory");
       }
 
-      var pak0Path = Path.Combine(TEMP_DEPOT_DIR, "Blitz/Content/Paks/pakchunk0-Windows.pak");
+      var pak0Path = Path.Combine(TEMP_DEPOT_DIR, "Blitz/Content/Paks/");
       DefaultFileProvider provider0 = new(
         directory: new DirectoryInfo(pak0Path),
         searchOption: SearchOption.TopDirectoryOnly,
