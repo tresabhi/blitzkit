@@ -66,8 +66,8 @@ jobs:
             -os ${{ env.STEAM_OS }} \
             -app ${{ env.STEAM_APP }} \
             -depot ${{ env.STEAM_DEPOT }} \
-            -dir temp/depot
-            -filelist steam.filtelist
+            -dir temp/depot \
+            -filelist filelist.txt
 
       - name: Unpack
         run: |
