@@ -13,9 +13,9 @@
       "x": "x%s1"
     },
     "gun_types": {
-      "auto_loader": "Барабан",
-      "auto_reloader": "Барабан з дозарядкою",
-      "regular": "Цикл"
+      "auto_loader": "Магазинна система заряджання",
+      "auto_reloader": "Гармата з системою дозаряджання магазину",
+      "regular": "Циклічна"
     },
     "shells": {
       "ap": "ББ",
@@ -42,7 +42,7 @@
       "en": "Англійська",
       "es": "Іспанська",
       "pt": "Португальська",
-      "ru": "Російська",
+      "ru": "російська",
       "uk": "Українська",
       "zh": "Китайська",
       "ja": "Японська",
@@ -554,7 +554,7 @@
             }
           },
           "league": {
-            "name": "league",
+            "name": "ліга",
             "description": "The league to display"
           }
         },
@@ -720,47 +720,47 @@
             },
             "direction": {
               "label": "Напрямок",
-              "ascending": "Ascending",
-              "descending": "Descending"
+              "ascending": "Зростає",
+              "descending": "Спадає"
             }
           }
         }
       },
       "warnings": {
-        "test": "Tanks in testing are subject to change and may not represent the final product."
+        "test": "Танки, що тестуються, можуть мінятися і можуть не являти собою фінальний."
       }
     },
     "home": {
       "hero": {
-        "credit": "By %s1 ❤️"
+        "credit": "Зроблено %s1 ❤"
       },
       "hot_tanks": {
-        "title": "Popular tanks",
-        "subtitle": "Last %s1 days"
+        "title": "Популярні танки",
+        "subtitle": "Останні %s1 дні(в)"
       },
       "other_projects": {
-        "title": "Other cool projects"
+        "title": "Інші класні проєкти"
       },
-      "help_translate": "Please help translate %s1 to %s2!",
-      "seo_description": "Tools for everything World of Tanks Blitz"
+      "help_translate": "Будь ласка, допоможіть перекласти %s1 на %s2!",
+      "seo_description": "Інструменти для всього, пов'язаного з WoT Blitz"
     },
     "tools": {
       "tankopedia": {
-        "name": "Tankopedia",
-        "button": "Find tanks",
-        "description": "Blitz tank encyclopedia",
-        "seo_description": "Statistics, armor, and more for all tanks in World of Tanks Blitz",
-        "tank_seo_title": "%s1 - Tier %s2 %s3 %s4 | %s5 Tankopedia | World of Tanks Blitz (WoTB)",
-        "tank_seo_description": "%s1 armor, statistics, equipment, provisions, and more. %s2 DPM, %s3hp alpha, %s4mm penetration, %s5kph top speed, %s6hp health.",
+        "name": "Танкопедія",
+        "button": "Знайти танки",
+        "description": "Танкова енциклопедія",
+        "seo_description": "Характеристики, броня та інше для всіх танків WoT Blitz",
+        "tank_seo_title": "%s1 - Рівень %s2 %s3 %s4 | %s5 Танкопедія | WoT Blitz",
+        "tank_seo_description": "%s1 броня, характеристики, обладнання, амуніція та більше. %s2 шкода на хвилину, %s3 разова шкода, %s4 мм пробиття, %s5 км/год максимальна швидкість, %s6 міцність.",
         "sandbox": {
           "poses": {
-            "hull_down": "Hull down",
-            "face_hug": "Face hug",
-            "default": "Default"
+            "hull_down": "Від башти",
+            "face_hug": "Клінч",
+            "default": "За замовчуванням"
           },
           "settings": {
-            "armor": "Armor",
-            "green_penetration": "Green penetration",
+            "armor": "Броня",
+            "green_penetration": "Зелене пробиття",
             "hide_model_under_armor": "Hide model under armor",
             "opaque": "Opaque",
             "dev_wireframe": "DEV: wireframe",
@@ -768,21 +768,21 @@
             "show_grid": "Show grid"
           },
           "screenshot": {
-            "download": "Download",
-            "copy": "Copy"
+            "download": "Завантажити",
+            "copy": "Скопіювати"
           },
           "model": {
-            "name": "Model"
+            "name": "Модель"
           },
           "dynamic": {
-            "name": "Dynamic armor",
+            "name": "Динамічна броня",
             "custom_shell": {
               "type": "Вид",
-              "caliber": "Caliber",
-              "penetration": "Penetration",
-              "normalization": "Normalization",
-              "ricochet": "Ricochet",
-              "explosion_radius": "Explosion radius",
+              "caliber": "Калібр",
+              "penetration": "Бронепробиття",
+              "normalization": "Нормалізація",
+              "ricochet": "Рикошет",
+              "explosion_radius": "Радіус розльоту уламків",
               "exit": "Exit",
               "reset": "Reset"
             },
@@ -800,7 +800,7 @@
               "status": {
                 "penetration": "%s1hp penetration",
                 "blocked": "Blocked",
-                "ricochet": "Ricochet",
+                "ricochet": "Рикошет",
                 "splash": "%s1hp splash"
               },
               "stats": {
@@ -816,20 +816,20 @@
             "spaced": "Spaced",
             "external": "External",
             "edit": {
-              "label": "Edit",
+              "label": "Редагувати",
               "reset": "Reset"
             }
           }
         },
         "meta": {
-          "back": "Back",
-          "compare": "Compare",
+          "back": "Назад",
+          "compare": "Порівняти",
           "swap": {
             "button": "Swap",
             "title": "Swap tanks"
           },
           "vanilla": "Vanilla",
-          "opentest": "OpenTest",
+          "opentest": "Відкритий тест",
           "full_name": "Full name",
           "nation": "Нація",
           "class": "Клас",
@@ -843,7 +843,7 @@
         },
         "tech_tree": {
           "title": "Звичайний",
-          "battle": "1 battle",
+          "battle": "1 бій",
           "battles": "%s1 battles",
           "route": "Route %s1 of %s2"
         },
@@ -858,21 +858,21 @@
         "configuration": {
           "title": "Configuration",
           "modules": {
-            "title": "Modules",
+            "title": "Модулі",
             "stock": "Stock",
             "upgrade": "Upgrade"
           },
           "equipment": {
-            "title": "Equipment",
+            "title": "Обладнання",
             "clear": "Clear"
           },
           "provisions": {
-            "title": "Provisions",
-            "clear": "Clear"
+            "title": "Амуніція",
+            "clear": "Очистити"
           },
           "consumables": {
-            "title": "Consumables",
-            "clear": "Clear",
+            "title": "Спорядження",
+            "clear": "Очистити",
             "info": "Yellow consumables do not affect the statistics."
           },
           "skills": {
@@ -891,41 +891,41 @@
             "label": "Compare against",
             "class": "Tier %s1 %s2",
             "tier": "All of tier %s1",
-            "all": "All tanks"
+            "all": "Усі танки"
           },
           "values": {
-            "shell_index": "Shell %s1",
+            "shell_index": "Снаряд %s1",
             "at_distance": "At %s1m",
-            "at_distance_slider_label": "Distance",
+            "at_distance_slider_label": "Відстань",
             "dispersion_at_distance": "Dispersion at %s1m",
             "gun_flexibility": "Gun flexibility",
-            "speed": "Speed",
+            "speed": "Швидкість",
             "terrain_coefficients": "Terrain coefficients",
             "raw_terrain_coefficients": "Raw terrain coefficients",
             "power_to_weight_ratio": "Power to weight ratio",
             "hull_traverse_speed": "Hull traverse speed",
-            "camouflage": "Camouflage",
-            "reload": "Reload",
+            "camouflage": "Камуфляж",
+            "reload": "Час перезаряджання",
             "crewCount": "Crew count",
-            "shellNormalization": "Normalization",
-            "shellRicochet": "Ricochet",
+            "shellNormalization": "Нормалізація",
+            "shellRicochet": "Рикошет",
             "dpm": "DPM",
             "dpmEffective": "Effective at 60s",
-            "shells": "Shells",
+            "shells": "Снаряди",
             "mostOptimalShellIndex": "Most optimal shell",
             "shellReloads": "Shell reloads",
             "shellReload": "Shell reload",
             "intraClip": "Intra-clip",
-            "caliber": "Caliber",
-            "penetration": "Penetration",
+            "caliber": "Калібр",
+            "penetration": "Бронепробиття",
             "damage": "Шкода",
             "clipDamage": "Clipping potential",
-            "moduleDamage": "Module damage",
-            "explosionRadius": "Explosion radius",
-            "shellVelocity": "Shell velocity",
-            "aimTime": "Aim time",
-            "dispersion": "Still",
-            "dispersionMoving": "Moving",
+            "moduleDamage": "Шкода по модулях",
+            "explosionRadius": "Радіус розльоту уламків",
+            "shellVelocity": "Швидкість польоту снаряда",
+            "aimTime": "Час зведення",
+            "dispersion": "Нерухомо",
+            "dispersionMoving": "У русі",
             "dispersionHullTraversing": "Hull traversing",
             "dispersionTurretTraversing": "Turret traversing",
             "dispersionShooting": "Shooting",
@@ -950,7 +950,7 @@
             "powerToWeightRatioHardTerrain": "Hard",
             "powerToWeightRatioMediumTerrain": "Середній",
             "powerToWeightRatioSoftTerrain": "Soft",
-            "weight": "Weight",
+            "weight": "Маса",
             "turretTraverseSpeed": "Turret traverse speed",
             "gunTraverseSpeed": "Gun traverse speed",
             "hullTraverseHardTerrain": "Hard",
@@ -959,10 +959,10 @@
             "health": "Health",
             "fireChance": "Fire chance",
             "viewRange": "View range",
-            "camouflageStill": "Still",
-            "camouflageMoving": "Moving",
-            "camouflageShootingStill": "Still",
-            "camouflageShootingMoving": "Moving",
+            "camouflageStill": "Нерухомо",
+            "camouflageMoving": "У русі",
+            "camouflageShootingStill": "Нерухомо",
+            "camouflageShootingMoving": "У русі",
             "camouflageCaughtOnFire": "Caught on fire",
             "width": "Width",
             "height": "Height",
@@ -970,7 +970,7 @@
             "volume": "Volume",
             "shellRange": "Shell range",
             "shellCapacity": "Shell capacity",
-            "gunType": "Gun type",
+            "gunType": "Тип гармати",
             "penetrationAt250m": "Penetration at 250m"
           }
         },
@@ -981,11 +981,11 @@
           "title": "Crew training",
           "info": "represents the other roles a crew member can take.",
           "count": "Crew count",
-          "commander": "Commander",
-          "gunner": "Gunner",
-          "driver": "Driver",
+          "commander": "Командир",
+          "gunner": "Навідник",
+          "driver": "Водій",
           "radioman": "Radioman",
-          "loader": "Loader"
+          "loader": "Заряджаючий"
         },
         "maneuverability": {
           "title": "Маневреність"
@@ -995,26 +995,26 @@
         }
       },
       "compare": {
-        "name": "Compare",
-        "button": "Compare tanks",
+        "name": "Порівняти",
+        "button": "Порівняти танки",
         "description": "Compare tank statistics",
         "seo_description": "Compare tanks statistics and loadouts in World of Tanks Blitz",
         "actions": {
           "add": {
-            "button": "Add",
+            "button": "Додати",
             "title": "Add tanks",
             "description": "Select tanks to add to comparison"
           },
           "clear": "Clear",
           "deltas": {
             "none": "No deltas",
-            "percentage": "Percentage",
+            "percentage": "Відсоток",
             "absolute": "Absolute"
           }
         },
         "no_tanks": {
-          "title": "No tanks selected",
-          "body": "Press the Add button to get started"
+          "title": "Не вибрано жодного танку",
+          "body": "Натисніть кнопку Додати, щоб розпочати"
         },
         "table": {
           "equipment": {
@@ -1052,12 +1052,12 @@
         },
         "table": {
           "tanks": {
-            "header": "Tank",
+            "header": "Танк",
             "total": "Загалом"
           },
           "stats": {
             "winrate": "Відсоток перемог",
-            "players": "Players",
+            "players": "Гравці",
             "damage": "Шкода",
             "survival": "Виживання",
             "xp": "Досвід",
@@ -1084,35 +1084,35 @@
         }
       },
       "session": {
-        "name": "Session",
-        "button": "Start tracking",
-        "description": "Live session stats",
-        "seo_description": "Track your stats in real time as you play World of Tanks Blitz",
+        "name": "Сесія",
+        "button": "Розпочати відстеження",
+        "description": "Статистика сесії в реальному часі",
+        "seo_description": "Відстежуйте свою статистику в реальному часі як ви граєте World of Tanks Blitz",
         "search": {
-          "lookup": "Look up a player to get started",
+          "lookup": "Знайди гравця щоб розпочати",
           "hint": "Пошук гравців...",
           "searching": "Пошук...",
           "no_results": "Гравця не знайдено"
         },
         "controls": {
-          "title": "Tracking %s1",
-          "subtitle": "Since %s1",
-          "reset": "Reset",
-          "change": "Change"
+          "title": "Відстежуємо %s1",
+          "subtitle": "Від %s1",
+          "reset": "Скинути",
+          "change": "Змінити"
         },
         "no_cc": {
-          "title": "You're attempting to track a CC account",
+          "title": "",
           "body": "CC (community contributor) accounts do not have public tank statistics. We are in the process of adding embeds for CC accounts, stay tuned.",
           "alright": "Alright"
         },
         "no_battles": {
-          "title": "No battles",
+          "title": "Немає боїв",
           "hint": "Go ahead and play a game"
         },
         "table": {
-          "tank": "Tank",
+          "tank": "Танк",
           "total": "Загалом",
-          "remove": "Remove"
+          "remove": "Прибрати"
         }
       },
       "tier_list": {
@@ -1157,7 +1157,7 @@
               "success": {
                 "title": "Copy URL",
                 "info": "Generated the URL for %s1. The embed will start tracking as soon as the URL is pasted. Reset at any time by right-clicking on PC or long-pressing on mobile and then selecting \"Reset\".",
-                "back": "Back",
+                "back": "Назад",
                 "copy": "Copy URL"
               }
             },
@@ -1228,13 +1228,13 @@
         "seo_description": "What we're making with BlitzKit"
       },
       "players": {
-        "name": "Players",
+        "name": "Гравці",
         "button": "Lookup player",
         "description": "Periodical player statistics",
         "seo_description": "Periodical player statistics in World of Tanks Blitz"
       },
       "home": {
-        "name": "Home",
+        "name": "Головна сторінка",
         "button": "Get started",
         "description": "Get started with BlitzKit",
         "seo_description": "Get started with BlitzKit"
