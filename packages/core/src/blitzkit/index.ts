@@ -46,4 +46,5 @@ export * from './votes';
 export * from './createDefaultProvisions';
 export * from './metaSortTank';
 export * from './romanize';
+export * from './tanks';
 export * from './youtubers';

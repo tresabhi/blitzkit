@@ -7,90 +7,34 @@ package blitzkit;
 message Tank {
   required string id = 1;
   required I18n name = 2;
-  required string set = 3;
-  required string class = 4;
-  // nations have been renamed to factions
-  required string faction = 5;
+  required TankClass class = 3;
+  required TankType type = 4;
+}
 
-  required ModuleHealth turret_rotator_health = 6;
-  required ModuleHealth surveying_device_health = 7;
-  required ModuleHealth gun_health = 8;
-  required ModuleHealth chassis_health = 9;
-  required ModuleHealth ammo_bay_health = 10;
-  required ModuleHealth engine_health = 11;
-  required ModuleHealth fuel_tank_health = 12;
-  repeated CrewHealth crew_health = 13;
-  required float max_health = 14;
-  required float health_burn_per_sec = 15;
-  required float fire_starting_chance = 16;
-  
-  required float concealment_stationary = 17;
-  required float concealment_moving = 18;
-  required float concealment_factor_at_shot = 19;
-  
-  required float turret_turn_rate = 20;
-  required float circular_vision_radius = 21;
+enum TankClass {
+  LIGHT = 1;
+  MEDIUM = 2;
+  HEAVY = 3;
+  TANK_DESTROYER = 4;
+}
 
-  repeated Shell shells = 22;
-  required float reload_time = 23;
-  required float dispersion_angle = 24;
-  required float shot_dispersion_factor = 25;
-  required float turret_rotation_dispersion_factor = 26;
-  required float aiming_time = 27;
-  required float gun_turn_rate = 28;
-  
-  required float mass = 29;
-  required float engine_power = 30;
-  required float forward_max_speed = 31;
-  required float backward_max_speed = 32;
-  required float rotation_speed = 33;
-  required float terrain_resistance_hard = 34;
-  required float brake_force = 35;
+enum TankType {
+  RESEARCHABLE = 1;
+  PREMIUM = 2;
+  COLLECTOR = 3;
+}
+
+enum ShellType {
+  AP = 1;
+  APCR = 2;
+  HEAT = 3;
+  HE = 4;
 }
 
 enum CrewType {
-  COMMANDER = 0;
-  DRIVER = 1;
-  GUNNER_1 = 2;
-  GUNNER_2 = 3;
-  LOADER_1 = 4;
-  LOADER_2 = 5;
-}
-
-message CrewHealth {
-  required CrewType type = 1;
-  required float max_health = 2;
-}
-
-message Shell {
-  required float speed = 1;
-  required float gravity = 2;
-  required float armor_damage = 3;
-  required float module_damage = 4;
-  required float caliber = 5;
-  required float piercing_power = 6;
-  required float piercing_power_500m = 7;
-  required float normalization = 8;
-  required float max_distance = 9;
-  required float ricochet_angle = 10;
-  required float piercing_power_loss_factor_by_distance = 11;
-  required float explosion_radius = 12;
-  required int32 max_count = 13;
-}
-
-message ModuleHealth {
-  // max health, assigned by default at the start of the battle
-  required float max_health = 1;
-  // max health reached as the module regenerates after breaking
-  required float max_regen_health = 2;
-  // the range from 0 to this where the module is "red" and doesn't function
-  // all the while healing; after surpassing this, the "yellow" phase is reached
-  // undefined for modules like ammo bays
-  optional float hysteresis_health = 3;
-  // the heal rate (per second); this won't apply if the health is at or above
-  // max_regen hence always leaving it in the "yellow" phase until repaired
-  required float health_regen_per_sec = 4;
-  // damage received (per second) to the modules when caught on fire; this can
-  // be undefined for some modules like the gun or chassis
-  optional float health_burn_per_sec = 5;
+  COMMANDER = 1;
+  DRIVER = 2;
+  GUNNER = 3;
+  LOADER = 4;
+  RADIOMAN = 5;
 }
