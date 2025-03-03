@@ -11,8 +11,6 @@ const gameDefinitions = await fetchGameDefinitions();
 const PUBLIC_ASSET_BRANCH = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
 const locale = Astro.params.locale ?? DEFAULT_LOCALE;
 const strings = getStrings(locale);
-
-console.log(`DEBUG: ${gameDefinitions.version}`);
 ---
 
 <style>
