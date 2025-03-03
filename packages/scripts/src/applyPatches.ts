@@ -1,5 +1,4 @@
 import { assertSecret } from '@blitzkit/core';
-import { existsSync } from 'fs';
 import { mkdir, writeFile } from 'fs/promises';
 import { parse as parsePath } from 'path';
 import ProgressBar from 'progress';
@@ -57,9 +56,12 @@ while (true) {
         console.warn(`Failed to make directory "${dir}"`);
       }
 
+      const isDvpl = path.endsWith('.dvpl');
+      const buffer = Buffer.from(data);
+
       await writeFile(
-        `${DATA}/${path}`,
-        new Uint8Array(writeDVPL(Buffer.from(data))),
+        `${DATA}/${path}${isDvpl ? '' : '.dvpl'}`,
+        new Uint8Array(isDvpl ? buffer : writeDVPL(buffer)),
       );
 
       bar.tick();
