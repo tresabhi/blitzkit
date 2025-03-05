@@ -97,8 +97,6 @@ namespace BlitzKit.CLI.Models
 
       foreach (var change in changes)
       {
-        Console.WriteLine($"blobbing {change.Path}");
-
         while (true)
         {
           try
@@ -117,6 +115,8 @@ namespace BlitzKit.CLI.Models
               .Result.Sha;
 
             await Task.Delay((int)Math.Max(0, TIME_BETWEEN_BLOBS - stopwatch.ElapsedMilliseconds));
+
+            Console.WriteLine($"blobbed {change.Path} (+{stopwatch.ElapsedMilliseconds}ms)");
 
             newTree.Tree.Add(
               new()
