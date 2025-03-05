@@ -15,11 +15,13 @@ const tanks = await awaitableTanks;
 <ToolLayout tool={tanksTool}>
   <PageWrapper>
     {
-      tanks.tanks.map((tank) => (
-        <LinkI18n {locale} href={`/tanks/${tank.slug}`}>
-          {tank.slug} ({tank.id})
-        </LinkI18n>
-      ))
+      tanks.tanks
+        .sort((a, b) => a.slug.localeCompare(b.slug))
+        .map((tank) => (
+          <LinkI18n {locale} href={`/tanks/${tank.slug}`}>
+            {tank.slug}
+          </LinkI18n>
+        ))
     }
   </PageWrapper>
 </ToolLayout>
