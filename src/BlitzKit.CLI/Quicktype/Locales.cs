@@ -2,15 +2,15 @@
 //
 // To parse this JSON data, add NuGet 'System.Text.Json' then do:
 //
-//    using BlitzKit.CLI.Quicktype;
+//    using BlitzKit.CLI.Quicktype.Locales;
 //
-//    var dlcManifest = DlcManifest.FromJson(jsonString);
+//    var locales = Locales.FromJson(jsonString);
 #nullable enable
 #pragma warning disable CS8618
 #pragma warning disable CS8601
 #pragma warning disable CS8603
 
-namespace BlitzKit.CLI.Quicktype.DLCManifest
+namespace BlitzKit.CLI.Quicktype.Locales
 {
     using System;
     using System.Collections.Generic;
@@ -19,68 +19,33 @@ namespace BlitzKit.CLI.Quicktype.DLCManifest
     using System.Text.Json.Serialization;
     using System.Globalization;
 
-    public partial class DlcManifest
+    public partial class Locales
     {
-        [JsonPropertyName("contentBuildId")]
-        public string ContentBuildId { get; set; }
+        [JsonPropertyName("default")]
+        public string Default { get; set; }
 
-        [JsonPropertyName("pakFiles")]
-        public List<PakFile> PakFiles { get; set; }
-
-        [JsonPropertyName("chunkTags")]
-        public Dictionary<string, ChunkTag> ChunkTags { get; set; }
-
-        [JsonPropertyName("chunkDependencies")]
-        public List<ChunkDependency> ChunkDependencies { get; set; }
+        [JsonPropertyName("supported")]
+        public List<Supported> Supported { get; set; }
     }
 
-    public partial class ChunkDependency
+    public partial class Supported
     {
-        [JsonPropertyName("chunkId")]
-        public long ChunkId { get; set; }
+        [JsonPropertyName("locale")]
+        public string Locale { get; set; }
 
-        [JsonPropertyName("parentChunkId")]
-        public long ParentChunkId { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        [JsonPropertyName("blitz")]
+        public string Blitz { get; set; }
     }
 
-    public partial class ChunkTag
+    public partial class Locales
     {
-        [JsonPropertyName("gameplayTags")]
-        public List<GameplayTag> GameplayTags { get; set; }
-    }
-
-    public partial class GameplayTag
-    {
-        [JsonPropertyName("tagName")]
-        public string TagName { get; set; }
-    }
-
-    public partial class PakFile
-    {
-        [JsonPropertyName("fileName")]
-        public string FileName { get; set; }
-
-        [JsonPropertyName("fileSize")]
-        public long FileSize { get; set; }
-
-        [JsonPropertyName("fileVersion")]
-        public string FileVersion { get; set; }
-
-        [JsonPropertyName("chunkId")]
-        public long ChunkId { get; set; }
-
-        [JsonPropertyName("relativeUrl")]
-        public string RelativeUrl { get; set; }
-    }
-
-    public partial class DlcManifest
-    {
-        public static DlcManifest FromJson(string json) => JsonSerializer.Deserialize<DlcManifest>(json, BlitzKit.CLI.Quicktype.DLCManifest.Converter.Settings);
+        public static Locales FromJson(string json) => JsonSerializer.Deserialize<Locales>(json, BlitzKit.CLI.Quicktype.Locales.Converter.Settings);
     }
 
     public static class Serialize
     {
-        public static string ToJson(this DlcManifest self) => JsonSerializer.Serialize(self, BlitzKit.CLI.Quicktype.DLCManifest.Converter.Settings);
+        public static string ToJson(this Locales self) => JsonSerializer.Serialize(self, BlitzKit.CLI.Quicktype.Locales.Converter.Settings);
     }
 
     internal static class Converter

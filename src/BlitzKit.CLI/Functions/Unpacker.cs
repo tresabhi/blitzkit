@@ -1,7 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using BlitzKit.CLI.Models;
-using BlitzKit.CLI.Quicktype;
+using BlitzKit.CLI.Quicktype.DLCManifest;
 using BlitzKit.CLI.Utils;
 using CUE4Parse.FileProvider;
 using CUE4Parse.FileProvider.Objects;
@@ -15,13 +15,13 @@ namespace BlitzKit.CLI.Functions
 {
   public static class Unpacker
   {
-    private const string CONTENT_GROUP = "p14y73c7_p5e_b10gg3RS_big_play";
+    public const string CONTENT_GROUP = "p14y73c7_p5e_b10gg3RS_big_play";
     private const string CONTAINERS_PATH = "../../temp/containers/";
 
     // this may be different from the one provided in args so check this and not args[1]
     // we don't wanna delete my local installation of the game when debugging haha!
     private const string TEMP_DEPOT_DIR = "../../temp/depot/";
-    private const string WG_DLC_DOMAIN = "http://dl-wotblitz-gc.wargaming.net";
+    public const string WG_DLC_DOMAIN = "http://dl-wotblitz-gc.wargaming.net";
     private const string BUILD_MANIFEST_OS = "Windows";
 
     public static async Task Unpack(string[] args)

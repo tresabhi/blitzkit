@@ -18,7 +18,7 @@ export interface I18nString_LocalesEntry {
   value: string;
 }
 
-export function createBaseI18nString(): I18nString {
+function createBaseI18nString(): I18nString {
   return { locales: {} };
 }
 

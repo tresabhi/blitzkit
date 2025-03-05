@@ -15,7 +15,6 @@ export interface Tanks {
 
 export interface TankMeta {
   id: string;
-  seo_id: string;
 }
 
 function createBaseTanks(): Tanks {
@@ -77,16 +76,13 @@ export const Tanks: MessageFns<Tanks> = {
 };
 
 function createBaseTankMeta(): TankMeta {
-  return { id: "", seo_id: "" };
+  return { id: "" };
 }
 
 export const TankMeta: MessageFns<TankMeta> = {
   encode(message: TankMeta, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
-    }
-    if (message.seo_id !== "") {
-      writer.uint32(18).string(message.seo_id);
     }
     return writer;
   },
@@ -106,14 +102,6 @@ export const TankMeta: MessageFns<TankMeta> = {
           message.id = reader.string();
           continue;
         }
-        case 2: {
-          if (tag !== 18) {
-            break;
-          }
-
-          message.seo_id = reader.string();
-          continue;
-        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -124,19 +112,13 @@ export const TankMeta: MessageFns<TankMeta> = {
   },
 
   fromJSON(object: any): TankMeta {
-    return {
-      id: globalThis.String(assertSet("TankMeta.id", object.id)),
-      seo_id: globalThis.String(assertSet("TankMeta.seo_id", object.seo_id)),
-    };
+    return { id: globalThis.String(assertSet("TankMeta.id", object.id)) };
   },
 
   toJSON(message: TankMeta): unknown {
     const obj: any = {};
     if (message.id !== "") {
       obj.id = message.id;
-    }
-    if (message.seo_id !== "") {
-      obj.seo_id = message.seo_id;
     }
     return obj;
   },
@@ -147,7 +129,6 @@ export const TankMeta: MessageFns<TankMeta> = {
   fromPartial<I extends Exact<DeepPartial<TankMeta>, I>>(object: I): TankMeta {
     const message = createBaseTankMeta();
     message.id = object.id ?? "";
-    message.seo_id = object.seo_id ?? "";
     return message;
   },
 };

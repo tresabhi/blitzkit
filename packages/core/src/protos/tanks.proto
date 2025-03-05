@@ -8,5 +8,4 @@ message Tanks {
 
 message TankMeta {
   required string id = 1;
-  required string seo_id = 2;
 }

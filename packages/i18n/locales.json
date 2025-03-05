@@ -1,0 +1,14 @@
+{
+  "default": "en",
+  "supported": [
+    { "locale": "en" },
+    { "locale": "es" },
+    { "locale": "fr" },
+    { "locale": "ja" },
+    { "locale": "pl" },
+    { "locale": "pt" },
+    { "locale": "ru" },
+    { "locale": "uk" },
+    { "locale": "zh", "blitz": "zh_Hans_SG" }
+  ]
+}

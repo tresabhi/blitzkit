@@ -25,12 +25,13 @@ namespace Blitzkit {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CiNwYWNrYWdlcy9jb3JlL3NyYy9wcm90b3MvdGFuay5wcm90bxIIYmxpdHpr",
-            "aXQaI3BhY2thZ2VzL2NvcmUvc3JjL3Byb3Rvcy9pMThuLnByb3RvIjAKBFRh",
-            "bmsSCgoCaWQYASACKAkSHAoEbmFtZRgCIAIoCzIOLmJsaXR6a2l0LkkxOG4="));
+            "aXQaI3BhY2thZ2VzL2NvcmUvc3JjL3Byb3Rvcy9pMThuLnByb3RvIkAKBFRh",
+            "bmsSCgoCaWQYASACKAkSDgoGc2VvX2lkGAIgAigJEhwKBG5hbWUYAyACKAsy",
+            "Di5ibGl0emtpdC5JMThu"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Blitzkit.I18NReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Blitzkit.Tank), global::Blitzkit.Tank.Parser, new[]{ "Id", "Name" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Blitzkit.Tank), global::Blitzkit.Tank.Parser, new[]{ "Id", "SeoId", "Name" }, null, null, null, null)
           }));
     }
     #endregion
@@ -73,6 +74,7 @@ namespace Blitzkit {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public Tank(Tank other) : this() {
       id_ = other.id_;
+      seoId_ = other.seoId_;
       name_ = other.name_ != null ? other.name_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -109,8 +111,34 @@ namespace Blitzkit {
       id_ = null;
     }
 
+    /// <summary>Field number for the "seo_id" field.</summary>
+    public const int SeoIdFieldNumber = 2;
+    private readonly static string SeoIdDefaultValue = "";
+
+    private string seoId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string SeoId {
+      get { return seoId_ ?? SeoIdDefaultValue; }
+      set {
+        seoId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+    /// <summary>Gets whether the "seo_id" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasSeoId {
+      get { return seoId_ != null; }
+    }
+    /// <summary>Clears the value of the "seo_id" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearSeoId() {
+      seoId_ = null;
+    }
+
     /// <summary>Field number for the "name" field.</summary>
-    public const int NameFieldNumber = 2;
+    public const int NameFieldNumber = 3;
     private global::Blitzkit.I18n name_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -137,6 +165,7 @@ namespace Blitzkit {
         return true;
       }
       if (Id != other.Id) return false;
+      if (SeoId != other.SeoId) return false;
       if (!object.Equals(Name, other.Name)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -146,6 +175,7 @@ namespace Blitzkit {
     public override int GetHashCode() {
       int hash = 1;
       if (HasId) hash ^= Id.GetHashCode();
+      if (HasSeoId) hash ^= SeoId.GetHashCode();
       if (name_ != null) hash ^= Name.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -169,8 +199,12 @@ namespace Blitzkit {
         output.WriteRawTag(10);
         output.WriteString(Id);
       }
-      if (name_ != null) {
+      if (HasSeoId) {
         output.WriteRawTag(18);
+        output.WriteString(SeoId);
+      }
+      if (name_ != null) {
+        output.WriteRawTag(26);
         output.WriteMessage(Name);
       }
       if (_unknownFields != null) {
@@ -187,8 +221,12 @@ namespace Blitzkit {
         output.WriteRawTag(10);
         output.WriteString(Id);
       }
-      if (name_ != null) {
+      if (HasSeoId) {
         output.WriteRawTag(18);
+        output.WriteString(SeoId);
+      }
+      if (name_ != null) {
+        output.WriteRawTag(26);
         output.WriteMessage(Name);
       }
       if (_unknownFields != null) {
@@ -203,6 +241,9 @@ namespace Blitzkit {
       int size = 0;
       if (HasId) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Id);
+      }
+      if (HasSeoId) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(SeoId);
       }
       if (name_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Name);
@@ -221,6 +262,9 @@ namespace Blitzkit {
       }
       if (other.HasId) {
         Id = other.Id;
+      }
+      if (other.HasSeoId) {
+        SeoId = other.SeoId;
       }
       if (other.name_ != null) {
         if (name_ == null) {
@@ -252,6 +296,10 @@ namespace Blitzkit {
             break;
           }
           case 18: {
+            SeoId = input.ReadString();
+            break;
+          }
+          case 26: {
             if (name_ == null) {
               Name = new global::Blitzkit.I18n();
             }
@@ -282,6 +330,10 @@ namespace Blitzkit {
             break;
           }
           case 18: {
+            SeoId = input.ReadString();
+            break;
+          }
+          case 26: {
             if (name_ == null) {
               Name = new global::Blitzkit.I18n();
             }

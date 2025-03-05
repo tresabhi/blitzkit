@@ -6,7 +6,7 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
-import { I18nString, createBaseI18nString } from "./legacy_i18n";
+import { I18nString } from "./legacy_i18n";
 
 export const protobufPackage = "blitzkit";
 
