@@ -134,8 +134,6 @@ namespace BlitzKit.CLI.Functions
 
       // MangleHull(id, pda);
 
-      Console.WriteLine(slug);
-
       Tank tank = new()
       {
         Id = id,

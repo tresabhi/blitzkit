@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Net;
 using BlitzKit.CLI.Utils;
@@ -41,7 +42,8 @@ namespace BlitzKit.CLI.Models
       {
         Credentials = new(Env.GetString("GH_TOKEN")),
       };
-      List<FileChange> changes = [];
+      var seenPaths = new ConcurrentDictionary<string, bool>();
+      var changes = new ConcurrentBag<FileChange>(); // Thread-safe alternative
 
       await Task.WhenAll(
         changesRaw
@@ -55,16 +57,19 @@ namespace BlitzKit.CLI.Models
 
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
-              Console.WriteLine(
-                $"🟢 (+{change.Content.Count.ToString("N0", Program.Culture)}B) {blobPath}"
-              );
-              changes.Add(change);
+              if (seenPaths.TryAdd(change.Path, true)) // Ensures uniqueness
+              {
+                Console.WriteLine(
+                  $"🟢 (+{change.Content.Count.ToString("N0", Program.Culture)}B) {blobPath}"
+                );
+                changes.Add(change);
+              }
             }
             else if (response.StatusCode == HttpStatusCode.OK)
             {
               var bytes = await response.Content.ReadAsByteArrayAsync();
 
-              if (!bytes.SequenceEqual([.. change.Content]))
+              if (!bytes.SequenceEqual([.. change.Content]) && seenPaths.TryAdd(change.Path, true))
               {
                 var diff = change.Content.Count - bytes.Length;
 
@@ -83,7 +88,7 @@ namespace BlitzKit.CLI.Models
           .ToList()
       );
 
-      if (changes.Count == 0)
+      if (changes.IsEmpty)
         return;
 
       var repoRawSplit = repoRaw.Split('/');
