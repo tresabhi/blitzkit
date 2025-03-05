@@ -7,34 +7,4 @@ package blitzkit;
 message Tank {
   required string id = 1;
   required I18n name = 2;
-  required TankClass class = 3;
-  required TankType type = 4;
-}
-
-enum TankClass {
-  LIGHT = 1;
-  MEDIUM = 2;
-  HEAVY = 3;
-  TANK_DESTROYER = 4;
-}
-
-enum TankType {
-  RESEARCHABLE = 1;
-  PREMIUM = 2;
-  COLLECTOR = 3;
-}
-
-enum ShellType {
-  AP = 1;
-  APCR = 2;
-  HEAT = 3;
-  HE = 4;
-}
-
-enum CrewType {
-  COMMANDER = 1;
-  DRIVER = 2;
-  GUNNER = 3;
-  LOADER = 4;
-  RADIOMAN = 5;
 }

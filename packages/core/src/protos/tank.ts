@@ -10,179 +10,13 @@ import { I18n } from "./i18n";
 
 export const protobufPackage = "blitzkit";
 
-export enum TankClass {
-  LIGHT = 1,
-  MEDIUM = 2,
-  HEAVY = 3,
-  TANK_DESTROYER = 4,
-}
-
-export function tankClassFromJSON(object: any): TankClass {
-  switch (object) {
-    case 1:
-    case "LIGHT":
-      return TankClass.LIGHT;
-    case 2:
-    case "MEDIUM":
-      return TankClass.MEDIUM;
-    case 3:
-    case "HEAVY":
-      return TankClass.HEAVY;
-    case 4:
-    case "TANK_DESTROYER":
-      return TankClass.TANK_DESTROYER;
-    default:
-      throw new globalThis.Error("Unrecognized enum value " + object + " for enum TankClass");
-  }
-}
-
-export function tankClassToJSON(object: TankClass): string {
-  switch (object) {
-    case TankClass.LIGHT:
-      return "LIGHT";
-    case TankClass.MEDIUM:
-      return "MEDIUM";
-    case TankClass.HEAVY:
-      return "HEAVY";
-    case TankClass.TANK_DESTROYER:
-      return "TANK_DESTROYER";
-    default:
-      throw new globalThis.Error("Unrecognized enum value " + object + " for enum TankClass");
-  }
-}
-
-export enum TankType {
-  RESEARCHABLE = 1,
-  PREMIUM = 2,
-  COLLECTOR = 3,
-}
-
-export function tankTypeFromJSON(object: any): TankType {
-  switch (object) {
-    case 1:
-    case "RESEARCHABLE":
-      return TankType.RESEARCHABLE;
-    case 2:
-    case "PREMIUM":
-      return TankType.PREMIUM;
-    case 3:
-    case "COLLECTOR":
-      return TankType.COLLECTOR;
-    default:
-      throw new globalThis.Error("Unrecognized enum value " + object + " for enum TankType");
-  }
-}
-
-export function tankTypeToJSON(object: TankType): string {
-  switch (object) {
-    case TankType.RESEARCHABLE:
-      return "RESEARCHABLE";
-    case TankType.PREMIUM:
-      return "PREMIUM";
-    case TankType.COLLECTOR:
-      return "COLLECTOR";
-    default:
-      throw new globalThis.Error("Unrecognized enum value " + object + " for enum TankType");
-  }
-}
-
-export enum ShellType {
-  AP = 1,
-  APCR = 2,
-  HEAT = 3,
-  HE = 4,
-}
-
-export function shellTypeFromJSON(object: any): ShellType {
-  switch (object) {
-    case 1:
-    case "AP":
-      return ShellType.AP;
-    case 2:
-    case "APCR":
-      return ShellType.APCR;
-    case 3:
-    case "HEAT":
-      return ShellType.HEAT;
-    case 4:
-    case "HE":
-      return ShellType.HE;
-    default:
-      throw new globalThis.Error("Unrecognized enum value " + object + " for enum ShellType");
-  }
-}
-
-export function shellTypeToJSON(object: ShellType): string {
-  switch (object) {
-    case ShellType.AP:
-      return "AP";
-    case ShellType.APCR:
-      return "APCR";
-    case ShellType.HEAT:
-      return "HEAT";
-    case ShellType.HE:
-      return "HE";
-    default:
-      throw new globalThis.Error("Unrecognized enum value " + object + " for enum ShellType");
-  }
-}
-
-export enum CrewType {
-  COMMANDER = 1,
-  DRIVER = 2,
-  GUNNER = 3,
-  LOADER = 4,
-  RADIOMAN = 5,
-}
-
-export function crewTypeFromJSON(object: any): CrewType {
-  switch (object) {
-    case 1:
-    case "COMMANDER":
-      return CrewType.COMMANDER;
-    case 2:
-    case "DRIVER":
-      return CrewType.DRIVER;
-    case 3:
-    case "GUNNER":
-      return CrewType.GUNNER;
-    case 4:
-    case "LOADER":
-      return CrewType.LOADER;
-    case 5:
-    case "RADIOMAN":
-      return CrewType.RADIOMAN;
-    default:
-      throw new globalThis.Error("Unrecognized enum value " + object + " for enum CrewType");
-  }
-}
-
-export function crewTypeToJSON(object: CrewType): string {
-  switch (object) {
-    case CrewType.COMMANDER:
-      return "COMMANDER";
-    case CrewType.DRIVER:
-      return "DRIVER";
-    case CrewType.GUNNER:
-      return "GUNNER";
-    case CrewType.LOADER:
-      return "LOADER";
-    case CrewType.RADIOMAN:
-      return "RADIOMAN";
-    default:
-      throw new globalThis.Error("Unrecognized enum value " + object + " for enum CrewType");
-  }
-}
-
 export interface Tank {
   id: string;
   name: I18n;
-  class: TankClass;
-  type: TankType;
 }
 
 function createBaseTank(): Tank {
-  return { id: "", name: createBaseI18n(), class: 1, type: 1 };
+  return { id: "", name: createBaseI18n() };
 }
 
 export const Tank: MessageFns<Tank> = {
@@ -192,12 +26,6 @@ export const Tank: MessageFns<Tank> = {
     }
     if (message.name !== undefined) {
       I18n.encode(message.name, writer.uint32(18).fork()).join();
-    }
-    if (message.class !== 1) {
-      writer.uint32(24).int32(message.class);
-    }
-    if (message.type !== 1) {
-      writer.uint32(32).int32(message.type);
     }
     return writer;
   },
@@ -225,22 +53,6 @@ export const Tank: MessageFns<Tank> = {
           message.name = I18n.decode(reader, reader.uint32());
           continue;
         }
-        case 3: {
-          if (tag !== 24) {
-            break;
-          }
-
-          message.class = reader.int32() as any;
-          continue;
-        }
-        case 4: {
-          if (tag !== 32) {
-            break;
-          }
-
-          message.type = reader.int32() as any;
-          continue;
-        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -254,8 +66,6 @@ export const Tank: MessageFns<Tank> = {
     return {
       id: globalThis.String(assertSet("Tank.id", object.id)),
       name: I18n.fromJSON(assertSet("Tank.name", object.name)),
-      class: tankClassFromJSON(assertSet("Tank.class", object.class)),
-      type: tankTypeFromJSON(assertSet("Tank.type", object.type)),
     };
   },
 
@@ -266,12 +76,6 @@ export const Tank: MessageFns<Tank> = {
     }
     if (message.name !== undefined) {
       obj.name = I18n.toJSON(message.name);
-    }
-    if (message.class !== 1) {
-      obj.class = tankClassToJSON(message.class);
-    }
-    if (message.type !== 1) {
-      obj.type = tankTypeToJSON(message.type);
     }
     return obj;
   },
@@ -285,8 +89,6 @@ export const Tank: MessageFns<Tank> = {
     message.name = (object.name !== undefined && object.name !== null)
       ? I18n.fromPartial(object.name)
       : createBaseI18n();
-    message.class = object.class ?? 1;
-    message.type = object.type ?? 1;
     return message;
   },
 };
