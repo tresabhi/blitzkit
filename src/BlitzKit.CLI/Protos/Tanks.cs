@@ -26,12 +26,12 @@ namespace Blitzkit {
           string.Concat(
             "CiRwYWNrYWdlcy9jb3JlL3NyYy9wcm90b3MvdGFua3MucHJvdG8SCGJsaXR6",
             "a2l0IioKBVRhbmtzEiEKBXRhbmtzGAEgAygLMhIuYmxpdHpraXQuVGFua01l",
-            "dGEiFgoIVGFua01ldGESCgoCaWQYASACKAk="));
+            "dGEiJAoIVGFua01ldGESCgoCaWQYASACKAkSDAoEc2x1ZxgCIAIoCQ=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Blitzkit.Tanks), global::Blitzkit.Tanks.Parser, new[]{ "Tanks_" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Blitzkit.TankMeta), global::Blitzkit.TankMeta.Parser, new[]{ "Id" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Blitzkit.TankMeta), global::Blitzkit.TankMeta.Parser, new[]{ "Id", "Slug" }, null, null, null, null)
           }));
     }
     #endregion
@@ -261,6 +261,7 @@ namespace Blitzkit {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public TankMeta(TankMeta other) : this() {
       id_ = other.id_;
+      slug_ = other.slug_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -296,6 +297,32 @@ namespace Blitzkit {
       id_ = null;
     }
 
+    /// <summary>Field number for the "slug" field.</summary>
+    public const int SlugFieldNumber = 2;
+    private readonly static string SlugDefaultValue = "";
+
+    private string slug_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Slug {
+      get { return slug_ ?? SlugDefaultValue; }
+      set {
+        slug_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+    /// <summary>Gets whether the "slug" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasSlug {
+      get { return slug_ != null; }
+    }
+    /// <summary>Clears the value of the "slug" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearSlug() {
+      slug_ = null;
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -312,6 +339,7 @@ namespace Blitzkit {
         return true;
       }
       if (Id != other.Id) return false;
+      if (Slug != other.Slug) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -320,6 +348,7 @@ namespace Blitzkit {
     public override int GetHashCode() {
       int hash = 1;
       if (HasId) hash ^= Id.GetHashCode();
+      if (HasSlug) hash ^= Slug.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -342,6 +371,10 @@ namespace Blitzkit {
         output.WriteRawTag(10);
         output.WriteString(Id);
       }
+      if (HasSlug) {
+        output.WriteRawTag(18);
+        output.WriteString(Slug);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -356,6 +389,10 @@ namespace Blitzkit {
         output.WriteRawTag(10);
         output.WriteString(Id);
       }
+      if (HasSlug) {
+        output.WriteRawTag(18);
+        output.WriteString(Slug);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -368,6 +405,9 @@ namespace Blitzkit {
       int size = 0;
       if (HasId) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Id);
+      }
+      if (HasSlug) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Slug);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -383,6 +423,9 @@ namespace Blitzkit {
       }
       if (other.HasId) {
         Id = other.Id;
+      }
+      if (other.HasSlug) {
+        Slug = other.Slug;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -407,6 +450,10 @@ namespace Blitzkit {
             Id = input.ReadString();
             break;
           }
+          case 18: {
+            Slug = input.ReadString();
+            break;
+          }
         }
       }
     #endif
@@ -428,6 +475,10 @@ namespace Blitzkit {
             break;
           case 10: {
             Id = input.ReadString();
+            break;
+          }
+          case 18: {
+            Slug = input.ReadString();
             break;
           }
         }

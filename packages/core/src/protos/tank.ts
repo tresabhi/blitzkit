@@ -12,12 +12,11 @@ export const protobufPackage = "blitzkit";
 
 export interface Tank {
   id: string;
-  slug: string;
   name: I18n;
 }
 
 function createBaseTank(): Tank {
-  return { id: "", slug: "", name: createBaseI18n() };
+  return { id: "", name: createBaseI18n() };
 }
 
 export const Tank: MessageFns<Tank> = {
@@ -25,11 +24,8 @@ export const Tank: MessageFns<Tank> = {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.slug !== "") {
-      writer.uint32(18).string(message.slug);
-    }
     if (message.name !== undefined) {
-      I18n.encode(message.name, writer.uint32(26).fork()).join();
+      I18n.encode(message.name, writer.uint32(18).fork()).join();
     }
     return writer;
   },
@@ -54,14 +50,6 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.slug = reader.string();
-          continue;
-        }
-        case 3: {
-          if (tag !== 26) {
-            break;
-          }
-
           message.name = I18n.decode(reader, reader.uint32());
           continue;
         }
@@ -77,7 +65,6 @@ export const Tank: MessageFns<Tank> = {
   fromJSON(object: any): Tank {
     return {
       id: globalThis.String(assertSet("Tank.id", object.id)),
-      slug: globalThis.String(assertSet("Tank.slug", object.slug)),
       name: I18n.fromJSON(assertSet("Tank.name", object.name)),
     };
   },
@@ -86,9 +73,6 @@ export const Tank: MessageFns<Tank> = {
     const obj: any = {};
     if (message.id !== "") {
       obj.id = message.id;
-    }
-    if (message.slug !== "") {
-      obj.slug = message.slug;
     }
     if (message.name !== undefined) {
       obj.name = I18n.toJSON(message.name);
@@ -102,7 +86,6 @@ export const Tank: MessageFns<Tank> = {
   fromPartial<I extends Exact<DeepPartial<Tank>, I>>(object: I): Tank {
     const message = createBaseTank();
     message.id = object.id ?? "";
-    message.slug = object.slug ?? "";
     message.name = (object.name !== undefined && object.name !== null)
       ? I18n.fromPartial(object.name)
       : createBaseI18n();

@@ -6,6 +6,5 @@ package blitzkit;
 
 message Tank {
   required string id = 1;
-  required string slug = 2;
-  required I18n name = 3;
+  required I18n name = 2;
 }

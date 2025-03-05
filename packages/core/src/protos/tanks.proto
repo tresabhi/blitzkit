@@ -8,4 +8,5 @@ message Tanks {
 
 message TankMeta {
   required string id = 1;
+  required string slug = 2;
 }

@@ -15,6 +15,7 @@ export interface Tanks {
 
 export interface TankMeta {
   id: string;
+  slug: string;
 }
 
 function createBaseTanks(): Tanks {
@@ -76,13 +77,16 @@ export const Tanks: MessageFns<Tanks> = {
 };
 
 function createBaseTankMeta(): TankMeta {
-  return { id: "" };
+  return { id: "", slug: "" };
 }
 
 export const TankMeta: MessageFns<TankMeta> = {
   encode(message: TankMeta, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
+    }
+    if (message.slug !== "") {
+      writer.uint32(18).string(message.slug);
     }
     return writer;
   },
@@ -102,6 +106,14 @@ export const TankMeta: MessageFns<TankMeta> = {
           message.id = reader.string();
           continue;
         }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.slug = reader.string();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -112,13 +124,19 @@ export const TankMeta: MessageFns<TankMeta> = {
   },
 
   fromJSON(object: any): TankMeta {
-    return { id: globalThis.String(assertSet("TankMeta.id", object.id)) };
+    return {
+      id: globalThis.String(assertSet("TankMeta.id", object.id)),
+      slug: globalThis.String(assertSet("TankMeta.slug", object.slug)),
+    };
   },
 
   toJSON(message: TankMeta): unknown {
     const obj: any = {};
     if (message.id !== "") {
       obj.id = message.id;
+    }
+    if (message.slug !== "") {
+      obj.slug = message.slug;
     }
     return obj;
   },
@@ -129,6 +147,7 @@ export const TankMeta: MessageFns<TankMeta> = {
   fromPartial<I extends Exact<DeepPartial<TankMeta>, I>>(object: I): TankMeta {
     const message = createBaseTankMeta();
     message.id = object.id ?? "";
+    message.slug = object.slug ?? "";
     return message;
   },
 };
