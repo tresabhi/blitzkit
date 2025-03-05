@@ -1,27 +1,27 @@
 {
   "test": {
     "default": "тест",
-    "long": "Это длинная тестовая строка. Вы, ДОЛЖНО быть, никогда не увидите этого в интерфейсе. Мой любимый фрукт — %s1, потому что у него цвет %s2. Он мне так нравится, что я повторю его название 3 раза! %s1! %s1! %s1! Еще раз, это %s2, а не %s3.",
-    "fox": "Съешь же ещё этих мягких французских булок, да выпей чаю."
+    "long": "Это длинная тестовая строка. Вы НИКОГДА не должны видеть её в пользовательском интерфейсе. Мой любимый фрукт - %s1, потому что его цвет %s2. Он мне так нравится, что я произнесу его имя 3 раза! %s1! %s1! %s1! И ещё раз, это %s2, а не %s3.",
+    "fox": "Это длинная тестовая строка. Вы НИКОГДА не должны видеть её в пользовательском интерфейсе. Мой любимый фрукт - %s1, потому что его цвет %s2. Он мне так нравится, что я произнесу его имя 3 раза! %s1! %s1! %s1! И ещё раз, это %s2, а не %s3."
   },
   "common": {
     "units": {
       "m": "%s1м",
       "mm": "%s1мм",
       "deg": "%s1°",
-      "hp": "%s1оп",
+      "hp": "%s1hp",
       "x": "x%s1"
     },
     "gun_types": {
       "auto_loader": "Барабан",
       "auto_reloader": "Барабан с дозарядкой",
-      "regular": "Стандартное"
+      "regular": "Цикличный"
     },
     "shells": {
       "ap": "ББ",
-      "apcr": "КС",
+      "apcr": "БП",
       "heat": "КС",
-      "he": "ФС"
+      "he": "ОФ"
     },
     "player_count_period": {
       "total": "Всего",
@@ -36,7 +36,7 @@
       "local": "dev",
       "dev": "бета",
       "opentest": "открытый тест",
-      "preview": "превью"
+      "preview": "предварительный просмотр"
     },
     "locales": {
       "en": "Английский",
@@ -86,14 +86,14 @@
       "other": "Сборная нация"
     },
     "nations_adjectives": {
-      "ussr": "Советский",
-      "germany": "Немецкий",
-      "usa": "Американский",
-      "china": "Китайский",
-      "uk": "Великобританский",
-      "france": "Французский",
-      "japan": "Японский",
-      "european": "Европейский",
+      "ussr": "СССР",
+      "germany": "Германии",
+      "usa": "США",
+      "china": "Китая",
+      "uk": "Великобритании",
+      "france": "Франции",
+      "japan": "Японии",
+      "european": "Сборной Европы",
       "other": "Сборной нации"
     },
     "tank_class_short": {
@@ -118,8 +118,8 @@
     },
     "tree_type": {
       "-1": "неизвестно",
-      "0": "Дерево танков",
-      "1": "Премиальный",
+      "0": "Исследуемый",
+      "1": "Премиумный",
       "2": "Коллекционный"
     },
     "regions": {
@@ -135,7 +135,7 @@
       }
     },
     "leagues": {
-      "diamond": "Алмазная",
+      "diamond": "Диамантовая",
       "platinum": "Платиновая",
       "gold": "Золотая",
       "silver": "Серебряная",
@@ -183,15 +183,15 @@
   "bot": {
     "common": {
       "errors": {
-        "clan_not_found": "# Не удалось найти клан\nНе найден «%s». Попробуйте выбрать клан из результатов поиска.",
-        "player_not_found": "# Не удалось найти пользователя\nЯ не могу найти пользователя «%s». Попробуйте выбрать пользователя из результатов поиска, введя правильное имя пользователя или используя команду «/link».",
-        "player_not_linked": "# Используйте «/link», чтобы начать\nЯ не знаю, кто ты, но можешь мне сказать сегодня!",
-        "tank_name_not_found": "# Танк не найден\nНе удалось найти танк по названию «%s».",
-        "tank_id_not_found": "# Танк не найден\nНе удалось найти танк по ID «%s». Попробуйте ввести название танка вместо числа.",
+        "clan_not_found": "# Не удалось найти клан\nНе найден «%s1». Попробуйте выбрать клан из результатов поиска.",
+        "player_not_found": "# Не удалось найти пользователя\nНе удалось найти пользователя «%s1». Попробуйте выбрать пользователя из результатов поиска, введя правильное имя пользователя или используя команду «/link».",
+        "player_not_linked": "# Используйте «/link», чтобы начать\nЯ не знаю, кто ты, но давай познакомимся сегодня!",
+        "tank_name_not_found": "# Танк не найден\nНе удалось найти танк по названию «%s1».",
+        "tank_id_not_found": "# Танк не найден\nНе удалось найти танк по ID «%s1». Попробуйте ввести название танка вместо числа.",
         "no_tank_stats": "# Статистика танка недоступна\nУ этого игрока нет доступной статистики. Возможно, это не тот игрок, которого вы ищете.",
-        "get_help": "Помочь Discord серверу",
-        "uncaught_error": "# BlitzKit столкнулся с ошибкой!\nНам так жаль об этом. Не стесняйтесь [присоединиться к официальному серверу Discord](https://discord.gg/nDt7AjGJQH), чтобы получить помощь.",
-        "preview": "# Эта команда находится в предварительном просмотре\n\nВы можете получить доступ к этой команде только на [официальном сервере Discord] (https://discord.gg/nDt7AjGJQH). Команда скоро станет общедоступной.",
+        "get_help": "Получить помощь",
+        "uncaught_error": "# BlitzKit столкнулся с ошибкой!\nНам очень жаль. Не стесняйтесь и [присоединяйтесь к официальному серверу Discord](https://discord.gg/nDt7AjGJQH), чтобы получить помощь.",
+        "preview": "# Эта команда находится в тестируется\n\nВы можете получить доступ к этой команде только на [официальном сервере Discord] (https://discord.gg/nDt7AjGJQH). Команда скоро станет общедоступной.",
         "query_too_small": "# Ваш поисковой запрос слишком короткий\nДлина вашего запроса должна составлять не менее 3 символов.",
         "query_too_long": "# Ваш поисковой запрос слишком длинный\nДлина вашего запроса должна составлять не более 100 символов."
       },
@@ -236,12 +236,12 @@
           "description": "Собственный диапазон",
           "options": {
             "start": {
-              "name": "начало",
-              "description": "Начать через несколько дней с сегодняшнего дня"
+              "name": "начать",
+              "description": "Начать через N дней с сегодняшнего дня"
             },
             "end": {
               "name": "конец",
-              "description": "Закончить через несколько дней с сегодняшнего дня"
+              "description": "Закончить через N дней с сегодняшнего дня"
             }
           }
         }
@@ -257,7 +257,7 @@
         },
         "username": {
           "name": "ник",
-          "description": "Blitz никнейм игрока"
+          "description": "Ник игрока в Blitz"
         },
         "filters": {
           "nation": {
@@ -341,12 +341,12 @@
         "description": "Список ресурсов для исследования ветки",
         "options": {
           "target_tank": {
-            "name": "целевой-танк",
-            "description": "Конечный танк исследования ветки"
+            "name": "желаемый танк",
+            "description": "Желаемый танк ветки исследования"
           },
           "starting_tank": {
             "name": "стартовый-танк",
-            "description": "Стартовый танк в ветке (назначен автоматически, если не предусмотрен)"
+            "description": "Стартовый танк в ветке (назначен автоматически, если не установлен)"
           }
         },
         "body": {
@@ -356,7 +356,7 @@
           "upgrades": "Улучшения: %s",
           "purchase": "Покупка: %s",
           "equipment": "Снаряжение: %s",
-          "estimation": "# Это приблизительная оценка!\n\nВ этот список могут входить уже исследованные танки из-за неточной информации, предоставляемой Wargaming. Попробуйте указать «стартовый танк» в строке при использовании команды, если сможете."
+          "estimation": "# Это приблизительная оценка!\n\nВ этот список могут входить уже исследованные танки из-за неточной информации, предоставляемой Wargaming. Попробуйте указать «стартовый-танк» в строке при использовании команды, если сможете."
         },
         "errors": {
           "non_tech_tree": "# %s отсутствует в дереве танков\n\nВы не можете исследовать премиум / коллекционный танк.",
@@ -368,7 +368,7 @@
         }
       },
       "about": {
-        "name": "о-нас",
+        "name": "о-боте",
         "description": "Вся необходимая информация о боте",
         "subcommands": {
           "commands": {
@@ -390,17 +390,17 @@
           },
           "timezones": {
             "name": "часовой-пояс",
-            "description": "Как BlitzKit вводит и использует ваш часовой пояс"
+            "description": "Как BlitzKit определяет и использует ваш часовой пояс"
           },
           "credits": {
-            "name": "кредиты",
+            "name": "авторы",
             "description": "Люди, которые помогли BlitzKit"
           }
         }
       },
       "breakdown": {
-        "name": "разбивка",
-        "description": "Разбивка периода по сыгранным танкам",
+        "name": "распределение",
+        "description": "Статистика игр за период с распределением по танкам",
         "body": {
           "total": "Всего",
           "battles": "Боёв",
@@ -412,7 +412,7 @@
       },
       "debug": {
         "name": "отладка",
-        "description": "Отладочная информация о боте",
+        "description": "Сведения для отладки",
         "body": {
           "title": "# Отладка",
           "version": "Версия",
@@ -424,7 +424,7 @@
         }
       },
       "evolution": {
-        "name": "изменение",
+        "name": "изменения",
         "description": "Изменения статистики",
         "groups": {
           "player": {
@@ -453,7 +453,7 @@
       },
       "full_stats": {
         "name": "полная-статистика",
-        "description": "Полная статистика в игре",
+        "description": "Полная игровая статистика",
         "body": {
           "cards": {
             "games": {
@@ -533,8 +533,8 @@
         "description": "Статистика рейтингов боёв",
         "subcommands": {
           "neighbors": {
-            "name": "соседние",
-            "description": "Соседние игроки в таблице лидеров"
+            "name": "ближайшие",
+            "description": "Ближайшие игроки в таблице лидеров"
           },
           "league": {
             "name": "лига",
@@ -544,7 +544,7 @@
         "options": {
           "limit": {
             "name": "лимит",
-            "description": "Сколько отображаемых соседних (по умолчанию: %s)"
+            "description": "Количество отображаемых ближайших игроков (по умолчанию: %s)"
           },
           "season": {
             "name": "сезон",
@@ -563,7 +563,7 @@
           "no_participation": "# %s не играл в рейтинг в сезоне %s\n\nЭтот игрок не участвовал в этом сезоне или не получил прошлую калибровку.",
           "no_ongoing_season": "# Нет текущего сезона\n\nВ данный момент нет рейтингового сезона.",
           "deleted_player": "Удалено %s",
-          "neighbors": "Рейтинг соседних",
+          "neighbors": "Рейтинг ближайших игроков",
           "more": "+ ещё %s"
         }
       },
@@ -727,7 +727,7 @@
         }
       },
       "warnings": {
-        "test": "Танки на тестировании могут быть изменены и не могут отражать конечный продукт."
+        "test": "Танки на тестировании могут быть изменены и могут сильно отличатся при появлении в игре."
       }
     },
     "home": {
@@ -746,16 +746,16 @@
     },
     "tools": {
       "tankopedia": {
-        "name": "Такнопедия",
-        "button": "Найти",
+        "name": "Танкопедия",
+        "button": "Поиск танков",
         "description": "Танковая энциклопедия Blitz",
         "seo_description": "Статистика, броня и многое другое по всем танкам World of Tanks Blitz",
-        "tank_seo_title": "%s1- %s3 %s4 %s2 уровня | Танкопедия %s5 | World of Tanks Blitz (WoTB)",
-        "tank_seo_description": "%s1 armor, statistics, equipment, provisions, and more. %s2 DPM, %s3hp alpha, %s4mm penetration, %s5kph top speed, %s6hp health.",
+        "tank_seo_title": "%s1 - %s4 %s3 %s2 уровня | Танкопедия %s5 | World of Tanks Blitz (WoTB)",
+        "tank_seo_description": "%s1 броня, статистика, оборудование, снабжение и многое другое. %s2 УВМ, %s3hp альфа, %s4mm пробитие, %s5км/ч лучшая скорость, %s6hp здоровье.",
         "sandbox": {
           "poses": {
-            "hull_down": "Hull down",
-            "face_hug": "Face hug",
+            "hull_down": "За холмом",
+            "face_hug": "В упор",
             "default": "По умолчанию"
           },
           "settings": {
@@ -828,7 +828,7 @@
             "button": "Поменять",
             "title": "Поменять танк"
           },
-          "vanilla": "Vanilla",
+          "vanilla": "Без модов",
           "opentest": "Открытый тест",
           "full_name": "Полное название",
           "nation": "Нация",
@@ -838,7 +838,7 @@
           "dev_id": "DEV: ID",
           "purchase": "Стоимость покупки",
           "restoration": "Цена восстановления",
-          "sale": "Цена прожажи",
+          "sale": "Цена продажи",
           "research": "Необходимо опыта"
         },
         "tech_tree": {
@@ -853,14 +853,14 @@
         "review": {
           "title": "Видеообзоры",
           "disclaimer": "BlitzKit не несёт ответственности за видеообзоры.",
-          "join": "Apply to %s1 YouTuber program"
+          "join": "Предложить ютубера для программы %s1"
         },
         "configuration": {
           "title": "Конфигурация",
           "modules": {
             "title": "Модули",
             "stock": "Сток",
-            "upgrade": "Upgrade"
+            "upgrade": "Топ"
           },
           "equipment": {
             "title": "Оборудование",
@@ -871,9 +871,9 @@
             "clear": "Очистить"
           },
           "consumables": {
-            "title": "Расходники",
+            "title": "Снаряжение",
             "clear": "Очистить",
-            "info": "Жёлтые расходники не влияют на характеристики."
+            "info": "Жёлтое снаряжение не влияет на характеристики."
           },
           "skills": {
             "title": "Навыки экипажа",
@@ -1027,7 +1027,7 @@
           },
           "modules": {
             "stock": "Сток",
-            "upgrade": "Upgrade"
+            "upgrade": "Топ"
           },
           "provisions": {
             "clear": "Очистить"
@@ -1068,7 +1068,7 @@
             "hits": "Уничтожен",
             "damage_ratio": "Коэф. урона",
             "damage_taken": "Получено урона",
-            "capture_points": "Cap points"
+            "capture_points": "Ограничительные точки"
           }
         }
       },
@@ -1087,27 +1087,27 @@
         "name": "Сессия",
         "button": "Найти",
         "description": "Статистика сеанса игры",
-        "seo_description": "Track your stats in real time as you play World of Tanks Blitz",
+        "seo_description": "Отслеживайте свою статистику в реальном времени во время игры World of Tanks Blitz",
         "search": {
-          "lookup": "Look up a player to get started",
+          "lookup": "Искать игрока, чтобы начать",
           "hint": "Поиск игроков...",
           "searching": "Поиск...",
           "no_results": "Игроков не найдено"
         },
         "controls": {
-          "title": "Tracking %s1",
-          "subtitle": "Since %s1",
+          "title": "Отслеживание %s1",
+          "subtitle": "Начиная с %s1",
           "reset": "Сброс",
           "change": "Изменить"
         },
         "no_cc": {
-          "title": "You're attempting to track a CC account",
-          "body": "CC (community contributor) accounts do not have public tank statistics. We are in the process of adding embeds for CC accounts, stay tuned.",
+          "title": "Вы пытаетесь отследить аккаунт контребьютера",
+          "body": "Учетные записи контрибьютеров не имеют публичной статистики танков. Мы находимся в процессе добавления вставки для аккаунтов контрибьютеров, оставайтесь с нами.",
           "alright": "Принять"
         },
         "no_battles": {
           "title": "Нет боёв",
-          "hint": "Go ahead and play a game"
+          "hint": "Идите вперед и поиграйте в игру"
         },
         "table": {
           "tank": "Танк",
@@ -1119,7 +1119,7 @@
         "name": "Тир-лист",
         "button": "Ранжировать",
         "description": "Ранжирование танков Blitz",
-        "seo_description": "Explore tier lists ranking tanks from best to worst, based on player ratings and statistical performance in World of Tanks Blitz",
+        "seo_description": "Изучите списки уровней, в которых танки ранжируются от лучших к худшим на основе рейтингов игроков и статистических показателей в World of Tanks Blitz",
         "buttons": {
           "reset": "Сброс",
           "share": "Поделиться"
@@ -1129,26 +1129,26 @@
         "name": "Встройки",
         "button": "Создать",
         "description": "Встраиваемые элементы для стримов",
-        "seo_description": "Create embeds for streaming World of Tanks Blitz with extreme customization",
-        "coming_soon": "More embeds coming soon.",
-        "suggest": "Suggest ideas.",
+        "seo_description": "Создать вставки для стримов по World of Tanks Blitz с невероятной кастомизации",
+        "coming_soon": "Скоро появятся новые встраиваемые элементы.",
+        "suggest": "Предложить идеи.",
         "preview": {
-          "title": "Example preview",
-          "upload": "Upload test background"
+          "title": "Предпросмотр",
+          "upload": "Загрузить фон для теста"
         },
         "configuration": {
           "import": {
             "title": "Импорт",
-            "description": "Paste your current URL if you have one already to import your settings",
-            "hint": "Paste URL...",
+            "description": "Вставьте свой текущий URL, если он у вас уже есть, чтобы импортировать свои настройки",
+            "hint": "Вставить URL...",
             "apply": "Применить",
-            "idiot_title": "Invalid URL",
-            "idiot_description": "Try pasting the URL that BlitzKit previously generated, you silly goose!",
-            "idiot_button": "Okay, my bad"
+            "idiot_title": "Недопустимый URL",
+            "idiot_description": "Попробуй вставить URL, который ранее сгенерировал BlitzKit, глупый ты гусь!",
+            "idiot_button": "Ладно, виноват"
           },
           "export": {
-            "title": "Export",
-            "description": "Copy all properties for you streaming software",
+            "title": "Экспорт",
+            "description": "Скопируйте все свойства для вашего приложения для стриминга",
             "generate": {
               "button": "Сгенерировать URL",
               "title": "Сгенерировать URL",
@@ -1156,7 +1156,7 @@
               "cancel": "Отмена",
               "success": {
                 "title": "Скопировать URL",
-                "info": "Generated the URL for %s1. The embed will start tracking as soon as the URL is pasted. Reset at any time by right-clicking on PC or long-pressing on mobile and then selecting \"Reset\".",
+                "info": "Сгенерирован URL для %s1. Встройка начнет отслеживание, как только URL будет вставлен. Можно сбросить, щелкнув правой кнопкой мыши на ПК или долгим нажатием на мобильном телефоне и выбором «Сброс».",
                 "back": "Назад",
                 "copy": "Скопировать URL"
               }
@@ -1169,57 +1169,57 @@
           "customize": {
             "title": "Настроить",
             "reset": "Сброс",
-            "description": "Bells and whistles of your embed"
+            "description": "Навороты для вашей встройки"
           }
         },
         "types": {
           "breakdown": {
-            "name": "Breakdown",
+            "name": "Разбивка",
             "options": {
               "width": "Ширина",
               "height": "Высота",
-              "showTotal": "Show total",
-              "listGap": "List gap",
-              "listMaxTanks": "Max tanks",
-              "cardRadius": "Card radius",
-              "cardHeaderBackgroundColor": "Card header background color",
-              "cardHeaderPadding": "Card header padding",
-              "cardTitle": "Card title",
-              "cardTitleTypeColor": "Card title type color",
-              "cardTitleClassIcon": "Card title class icon",
-              "cardBodyBackgroundColor": "Card body background color",
-              "cardBodyPadding": "Card body padding",
-              "columnGap": "Column gap",
-              "columnValue": "Column value",
-              "columnLabel": "Column label",
-              "column1": "Column 1",
-              "column2": "Column 2",
-              "column3": "Column 3",
-              "column4": "Column 4",
-              "column1CustomLabel": "Column 1 label",
-              "column2CustomLabel": "Column 2 label",
-              "column3CustomLabel": "Column 3 label"
+              "showTotal": "Показать «Общая»",
+              "listGap": "Разрыв",
+              "listMaxTanks": "Число танков",
+              "cardRadius": "Радиус карточки",
+              "cardHeaderBackgroundColor": "Цвет фона заголовка карточки",
+              "cardHeaderPadding": "Отступ в заголовке",
+              "cardTitle": "Заголовок карточки",
+              "cardTitleTypeColor": "Цвет по типу в заголовке",
+              "cardTitleClassIcon": "Иконка класса в заголовке",
+              "cardBodyBackgroundColor": "Цвет фона карточки",
+              "cardBodyPadding": "Отступ в карточке",
+              "columnGap": "Разрыв столбцов",
+              "columnValue": "Значение столбца",
+              "columnLabel": "Название столбца",
+              "column1": "Столбец 1",
+              "column2": "Столбец 2",
+              "column3": "Столбец 3",
+              "column4": "Столбец 4",
+              "column1CustomLabel": "Название столбца 1",
+              "column2CustomLabel": "Название столбца 2",
+              "column3CustomLabel": "Название столбца 3"
             }
           }
         }
       },
       "charts": {
-        "name": "Charts",
-        "button": "Nerd out",
-        "description": "Lots of graphs",
-        "seo_description": "Charts and graphs on anything and everything about tanks, players, and events in World of Tanks Blitz"
+        "name": "Таблицы",
+        "button": "Ботаник вне игры",
+        "description": "Множество графиков",
+        "seo_description": "Таблицы и графики обо всем, что касается танков, игроков и событий в World of Tanks Blitz"
       },
       "rating": {
         "name": "Рейтинг",
         "button": "Посмотреть таблицу лидеров",
         "description": "Полный таблица лидеров",
-        "seo_description": "Live and archived full rating leaderboard for World of Tanks Blitz"
+        "seo_description": "Полная рейтинговая таблица лидеров World of Tanks Blitz в реальном времени и в архиве"
       },
       "discord": {
         "name": "Discord-бот",
         "button": "Установить",
         "description": "Статистика в Discord",
-        "seo_description": "Get stats right in Discord with BlitzKit's Discord bot"
+        "seo_description": "Получите статистику прямо в Discord с помощью бота Discord BlitzKit"
       },
       "more": {
         "name": "Дальше больше",
@@ -1229,21 +1229,21 @@
       },
       "players": {
         "name": "Игроки",
-        "button": "Lookup player",
-        "description": "Periodical player statistics",
-        "seo_description": "Periodical player statistics in World of Tanks Blitz"
+        "button": "Поиск игрока",
+        "description": "Периодическая статистика игроков",
+        "seo_description": "Периодическая статистика игроков в World of Tanks Blitz"
       },
       "home": {
         "name": "Главная",
         "button": "Начать",
-        "description": "Get started with BlitzKit",
-        "seo_description": "Get started with BlitzKit"
+        "description": "Начните с BlitzKit",
+        "seo_description": "Начните с BlitzKit"
       },
       "blitz_analysis": {
         "name": "BlitzAnalysis[]",
         "button": "Анализируй",
         "description": "Богатая статистика",
-        "seo_description": "Rich historic average stats in World of Tanks Blitz"
+        "seo_description": "Богатые статистика по World of Tanks Blitz"
       },
       "blitz_insider": {
         "name": "Blitz Insider",
