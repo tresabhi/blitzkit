@@ -18,7 +18,7 @@ const { locale } = Astro.params;
 const strings = getStrings(locale);
 const toolStrings =
   strings.website.tools[
-    (tool.stringsId??tool.id ) as keyof typeof strings.website.tools
+    (tool.stringsId ?? tool.id) as keyof typeof strings.website.tools
   ];
 ---
 
@@ -66,7 +66,7 @@ const toolStrings =
     {locale}
     className="link"
     underline="none"
-    href={disabled ? '#' : (tool.href ?? `/tools/${tool.id}`)}
+    href={disabled ? '#' : (tool.href ?? `/${tool.id}`)}
     target={tool.href ? '_blank' : undefined}
   >
     <Box

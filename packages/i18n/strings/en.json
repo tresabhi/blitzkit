@@ -839,7 +839,7 @@
     },
 
     "tools": {
-      "tankopedia": {
+      "tanks": {
         "name": "Tankopedia",
         "button": "Find tanks",
         "description": "Blitz tank encyclopedia",

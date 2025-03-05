@@ -15,14 +15,14 @@ export interface Tool {
   branches?: string[];
 }
 
-export const tankopediaTool: Tool = {
-  id: 'tankopedia',
+export const tanksTool: Tool = {
+  id: 'tanks',
   image: 'D8j6GZx',
   button: {
     color: 'purple',
   },
   significant: true,
-  branches: ['main', 'dev', 'opentest', 'preview'],
+  branches: ['main', 'dev', 'opentest', 'preview', 'ue'],
 };
 
 // export const ratingTool: Tool = {
@@ -134,7 +134,7 @@ export const chartsTool: Tool = {
 };
 
 export const TOOLS: Tool[] = [
-  tankopediaTool,
+  tanksTool,
   compareTool,
   performanceTool,
   // chartsTool,

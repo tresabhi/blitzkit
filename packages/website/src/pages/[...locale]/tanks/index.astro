@@ -1,0 +1,21 @@
+---
+import { Link } from '@radix-ui/themes';
+import { PageWrapper } from '../../../components/PageWrapper';
+import { tanksTool } from '../../../constants/tools';
+import { awaitableTanks } from '../../../core/awaitables/tanks';
+import ToolLayout from '../../../layouts/ToolLayout.astro';
+
+export { getStaticPaths } from '../index.astro';
+
+const tanks = await awaitableTanks;
+---
+
+<ToolLayout tool={tanksTool}>
+  <PageWrapper>
+    {
+      tanks.tanks.map((tank) => (
+        <Link href={`./${tank.seo_id}`}>{tank.seo_id}</Link>
+      ))
+    }
+  </PageWrapper>
+</ToolLayout>
