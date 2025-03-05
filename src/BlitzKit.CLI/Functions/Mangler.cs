@@ -14,6 +14,7 @@ using CUE4Parse.UE4.Assets.Exports.StaticMesh;
 using CUE4Parse.UE4.Assets.Objects;
 using CUE4Parse.UE4.Objects.UObject;
 using CUE4Parse.UE4.Pak.Objects;
+using CUE4Parse.Utils;
 using Google.Protobuf;
 using Google.Protobuf.Collections;
 using Newtonsoft.Json.Linq;
@@ -77,7 +78,7 @@ namespace BlitzKit.CLI.Functions
       {
         var blitzLocale = locale.Blitz ?? locale.Locale;
         var url =
-          $"{Unpacker.WG_DLC_DOMAIN}/dlc/{Unpacker.CONTENT_GROUP}/ue_localizations/development/general/{blitzLocale}.yaml";
+          $"{Unpacker.WG_DLC_DOMAIN}/dlc/{Unpacker.CONTENT_GROUP}/ue_localizations/development/stuff/{blitzLocale}.yaml";
         var yaml = await client.GetStringAsync(url);
         var deserializer = new DeserializerBuilder().Build();
         var parsedYaml = deserializer.Deserialize<Dictionary<string, string>>(yaml);
@@ -89,7 +90,7 @@ namespace BlitzKit.CLI.Functions
     void MangleNations()
     {
       var dirs = provider.RootDirectory.GetDirectory("Blitz/Content/Tanks").Directories;
-      Tanks tanks = new();
+      List<Tank> tanksRaw = [];
 
       foreach (var dir in dirs)
       {
@@ -101,13 +102,93 @@ namespace BlitzKit.CLI.Functions
           // if (tankDir.Value.Name != "R90_IS_4")
           //   continue;
 
-          var tank = MangleTank(tankDir.Value);
-          TankMeta tankMeta = new() { Id = tank.Id, Slug = tank.Slug };
-          tanks.Tanks_.Add(tankMeta);
+          tanksRaw.Add(MangleTank(tankDir.Value));
         }
       }
 
+      DeduplicateSlugs(tanksRaw);
+
+      Tanks tanks = new();
+
+      foreach (var tank in tanksRaw)
+      {
+        TankMeta tankMeta = new() { Id = tank.Id, Slug = tank.Slug };
+        tanks.Tanks_.Add(tankMeta);
+      }
+
       changes.Add(new("definitions/tanks.pb", tanks.ToByteArray()));
+    }
+
+    void DeduplicateSlugs(List<Tank> tanks)
+    {
+      List<string> checkedSlugs = [];
+      Dictionary<string, List<Tank>> duplicates = [];
+
+      foreach (var tank in tanks)
+      {
+        if (checkedSlugs.Contains(tank.Slug))
+          continue;
+
+        checkedSlugs.Add(tank.Slug);
+
+        foreach (var otherTank in tanks)
+        {
+          if (otherTank.Slug.Equals(tank.Slug) && !otherTank.Id.Equals(tank.Id))
+          {
+            var thisDuplicates = duplicates.GetOrAdd(tank.Slug, () => [tank]);
+            thisDuplicates.Add(otherTank);
+          }
+        }
+      }
+
+      if (duplicates.Count > 0)
+      {
+        PrettyLog.Warn($"{duplicates.Count} duplicate slugs found, attempting strategies...");
+      }
+
+      foreach (var duplicate in duplicates)
+      {
+        Console.WriteLine($"{duplicate.Key}:");
+
+        foreach (var tank in duplicate.Value)
+        {
+          Console.WriteLine($"\t{tank.Id}");
+        }
+
+        if (duplicate.Value.Count != 2)
+        {
+          throw new Exception(
+            $"Found an unsupported {duplicate.Value.Count} duplicates for {duplicate.Key}"
+          );
+        }
+
+        if (duplicate.Value.Any(tank => tank.Id.EndsWith("TU")))
+        {
+          PrettyLog.Success("\tTutorial bot discrimination...");
+
+          var tutorialBot = duplicate.Value.First(tank => tank.Id.EndsWith("TU"));
+          tutorialBot.Slug += "-tu";
+        }
+        else
+        {
+          PrettyLog.Success("\tNation discrimination...");
+
+          foreach (var tank in duplicate.Value)
+          {
+            var match = Regex.Match(tank.Id, @"([a-zA-Z]+)\d+_");
+            var rawNation = match.Groups[1].Value;
+            var slugNation = rawNation.ToLowerInvariant();
+            tank.Slug += $"-{slugNation}";
+          }
+        }
+
+        foreach (var tank in duplicate.Value)
+        {
+          Console.WriteLine($"\t\t{tank.Slug}");
+        }
+
+        Console.WriteLine();
+      }
     }
 
     Tank MangleTank(VFS tankDir)
@@ -117,7 +198,7 @@ namespace BlitzKit.CLI.Functions
 
       var id = PropertyUtil.Get<FName>(pda, "TankId").Text;
 
-      var name = GetString($"{id}_SHORT_NAME");
+      var name = GetString($"TankEntity__{id.ToLowerInvariant()}__Short_Name");
 
       var slug = Diacritics.Remove(name.Locales["en"]).ToLower();
       slug = Regex.Replace(slug, "[^a-z0-9]", "-");
