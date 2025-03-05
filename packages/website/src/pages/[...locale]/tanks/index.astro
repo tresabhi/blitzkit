@@ -14,7 +14,7 @@ const tanks = await awaitableTanks;
   <PageWrapper>
     {
       tanks.tanks.map((tank) => (
-        <Link href={`./${tank.seo_id}`}>{tank.seo_id}</Link>
+        <Link href={`./${tank.slug}`}>{tank.slug}</Link>
       ))
     }
   </PageWrapper>

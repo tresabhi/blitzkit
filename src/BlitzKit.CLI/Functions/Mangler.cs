@@ -89,30 +89,22 @@ namespace BlitzKit.CLI.Functions
     void MangleNations()
     {
       var dirs = provider.RootDirectory.GetDirectory("Blitz/Content/Tanks").Directories;
+      Tanks tanks = new();
 
       foreach (var dir in dirs)
       {
         if (dir.Key == "TankStub")
           continue;
 
-        MangleNation(dir.Value);
-      }
-    }
+        foreach (var tankDir in dir.Value.Directories)
+        {
+          // if (tankDir.Value.Name != "R90_IS_4")
+          //   continue;
 
-    void MangleNation(VFS nation)
-    {
-      Tanks tanks = new();
-
-      foreach (var tankDir in nation.Directories)
-      {
-        // if (tankDir.Value.Name != "R90_IS_4")
-        //   continue;
-
-        var tank = MangleTank(tankDir.Value);
-
-        TankMeta tankMeta = new() { Id = tank.Id, Slug = tank.Slug };
-
-        tanks.Tanks_.Add(tankMeta);
+          var tank = MangleTank(tankDir.Value);
+          TankMeta tankMeta = new() { Id = tank.Id, Slug = tank.Slug };
+          tanks.Tanks_.Add(tankMeta);
+        }
       }
 
       changes.Add(new("definitions/tanks.pb", tanks.ToByteArray()));
