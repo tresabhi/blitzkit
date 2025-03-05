@@ -32,7 +32,7 @@ namespace BlitzKit.CLI.Functions
     {
       await FetchStrings();
       MangleNations();
-      // await BlitzKitAssets.CommitAssets("ue assets", changes);
+      await BlitzKitAssets.CommitAssets("ue assets", changes);
     }
 
     I18n GetString(string name)
@@ -127,20 +127,20 @@ namespace BlitzKit.CLI.Functions
 
       var name = GetString($"{id}_SHORT_NAME");
 
-      var seoId = Diacritics.Remove(name.Locales["en"]).ToLower();
-      seoId = Regex.Replace(seoId, "[^a-z0-9]", "-");
-      seoId = Regex.Replace(seoId, "--+", "-");
-      seoId = Regex.Replace(seoId, "-$", "");
+      var slug = Diacritics.Remove(name.Locales["en"]).ToLower();
+      slug = Regex.Replace(slug, "[^a-z0-9]", "-");
+      slug = Regex.Replace(slug, "--+", "-");
+      slug = Regex.Replace(slug, "-$", "");
 
       // MangleHull(id, pda);
 
-      Console.WriteLine(seoId);
+      Console.WriteLine(slug);
 
       Tank tank = new()
       {
         Id = id,
         Name = name,
-        SeoId = seoId,
+        Slug = slug,
       };
 
       changes.Add(new($"definitions/tanks/{id}.pb", tank.ToByteArray()));

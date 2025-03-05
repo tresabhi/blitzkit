@@ -12,12 +12,12 @@ export const protobufPackage = "blitzkit";
 
 export interface Tank {
   id: string;
-  seo_id: string;
+  slug: string;
   name: I18n;
 }
 
 function createBaseTank(): Tank {
-  return { id: "", seo_id: "", name: createBaseI18n() };
+  return { id: "", slug: "", name: createBaseI18n() };
 }
 
 export const Tank: MessageFns<Tank> = {
@@ -25,8 +25,8 @@ export const Tank: MessageFns<Tank> = {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.seo_id !== "") {
-      writer.uint32(18).string(message.seo_id);
+    if (message.slug !== "") {
+      writer.uint32(18).string(message.slug);
     }
     if (message.name !== undefined) {
       I18n.encode(message.name, writer.uint32(26).fork()).join();
@@ -54,7 +54,7 @@ export const Tank: MessageFns<Tank> = {
             break;
           }
 
-          message.seo_id = reader.string();
+          message.slug = reader.string();
           continue;
         }
         case 3: {
@@ -77,7 +77,7 @@ export const Tank: MessageFns<Tank> = {
   fromJSON(object: any): Tank {
     return {
       id: globalThis.String(assertSet("Tank.id", object.id)),
-      seo_id: globalThis.String(assertSet("Tank.seo_id", object.seo_id)),
+      slug: globalThis.String(assertSet("Tank.slug", object.slug)),
       name: I18n.fromJSON(assertSet("Tank.name", object.name)),
     };
   },
@@ -87,8 +87,8 @@ export const Tank: MessageFns<Tank> = {
     if (message.id !== "") {
       obj.id = message.id;
     }
-    if (message.seo_id !== "") {
-      obj.seo_id = message.seo_id;
+    if (message.slug !== "") {
+      obj.slug = message.slug;
     }
     if (message.name !== undefined) {
       obj.name = I18n.toJSON(message.name);
@@ -102,7 +102,7 @@ export const Tank: MessageFns<Tank> = {
   fromPartial<I extends Exact<DeepPartial<Tank>, I>>(object: I): Tank {
     const message = createBaseTank();
     message.id = object.id ?? "";
-    message.seo_id = object.seo_id ?? "";
+    message.slug = object.slug ?? "";
     message.name = (object.name !== undefined && object.name !== null)
       ? I18n.fromPartial(object.name)
       : createBaseI18n();

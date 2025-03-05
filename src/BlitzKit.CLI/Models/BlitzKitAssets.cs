@@ -13,7 +13,9 @@ namespace BlitzKit.CLI.Models
 
     public static async Task CommitAssets(string message, List<FileChange> changes)
     {
-      Console.WriteLine($"Committing \"{message}\"... with {changes.Count} proposed changes");
+      Console.WriteLine(
+        $"Committing \"{message}\"... with {changes.Count} proposed changes to the \"{Env.GetString("PUBLIC_ASSET_BRANCH")}\" branch"
+      );
 
       if (changes.Count == 0)
         return;
@@ -62,11 +64,7 @@ namespace BlitzKit.CLI.Models
             {
               var bytes = await response.Content.ReadAsByteArrayAsync();
 
-              // we discard blob if they're the same size; it's unlikely their
-              // contents will be different; I love playing russian roulette!
-              var equal =
-                bytes.Length == change.Content.Count || bytes.SequenceEqual([.. change.Content]);
-              if (!equal)
+              if (!bytes.SequenceEqual([.. change.Content]))
               {
                 var diff = change.Content.Count - bytes.Length;
 
