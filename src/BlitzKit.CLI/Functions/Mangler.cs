@@ -110,12 +110,7 @@ namespace BlitzKit.CLI.Functions
 
         var tank = MangleTank(tankDir.Value);
 
-        var slug = Diacritics.Remove(tank.Name.Locales["en"]).ToLower();
-        slug = Regex.Replace(slug, "[^a-z0-9]", "-");
-        slug = Regex.Replace(slug, "--+", "-");
-        slug = Regex.Replace(slug, "-$", "");
-
-        TankMeta tankMeta = new() { Id = tank.Id, Slug = slug };
+        TankMeta tankMeta = new() { Id = tank.Id, Slug = tank.Slug };
 
         tanks.Tanks_.Add(tankMeta);
       }
@@ -129,11 +124,24 @@ namespace BlitzKit.CLI.Functions
       var pda = provider.LoadObject($"{tankDir.Path}/{pdaName}.{pdaName}");
 
       var id = PropertyUtil.Get<FName>(pda, "TankId").Text;
+
       var name = GetString($"{id}_SHORT_NAME");
+
+      var slug = Diacritics.Remove(name.Locales["en"]).ToLower();
+      slug = Regex.Replace(slug, "[^a-z0-9]", "-");
+      slug = Regex.Replace(slug, "--+", "-");
+      slug = Regex.Replace(slug, "-$", "");
 
       // MangleHull(id, pda);
 
-      Tank tank = new() { Id = id, Name = name };
+      Console.WriteLine(slug);
+
+      Tank tank = new()
+      {
+        Id = id,
+        Name = name,
+        Slug = slug,
+      };
 
       changes.Add(new($"definitions/tanks/{id}.pb", tank.ToByteArray()));
 
