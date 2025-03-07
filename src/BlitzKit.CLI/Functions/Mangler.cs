@@ -1,9 +1,5 @@
-using System.Data;
-using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Text.Unicode;
-using System.Threading.Tasks;
 using Blitzkit;
 using BlitzKit.CLI.Models;
 using BlitzKit.CLI.Quicktype.Locales;
@@ -11,13 +7,11 @@ using BlitzKit.CLI.Utils;
 using CUE4Parse.UE4.Assets.Exports;
 using CUE4Parse.UE4.Assets.Exports.Engine;
 using CUE4Parse.UE4.Assets.Exports.StaticMesh;
+using CUE4Parse.UE4.Assets.Exports.Texture;
 using CUE4Parse.UE4.Assets.Objects;
 using CUE4Parse.UE4.Objects.UObject;
-using CUE4Parse.UE4.Pak.Objects;
 using CUE4Parse.Utils;
 using Google.Protobuf;
-using Google.Protobuf.Collections;
-using Newtonsoft.Json.Linq;
 using YamlDotNet.Serialization;
 
 namespace BlitzKit.CLI.Functions
@@ -99,8 +93,8 @@ namespace BlitzKit.CLI.Functions
 
         foreach (var tankDir in dir.Value.Directories)
         {
-          // if (tankDir.Value.Name != "R90_IS_4")
-          //   continue;
+          if (tankDir.Value.Name != "R90_IS_4")
+            continue;
 
           tanksRaw.Add(MangleTank(tankDir.Value));
         }
@@ -197,15 +191,14 @@ namespace BlitzKit.CLI.Functions
       var pda = provider.LoadObject($"{tankDir.Path}/{pdaName}.{pdaName}");
 
       var id = PropertyUtil.Get<FName>(pda, "TankId").Text;
-
       var name = GetString($"TankEntity__{id.ToLowerInvariant()}__Short_Name");
-
       var slug = Diacritics.Remove(name.Locales["en"]).ToLower();
       slug = Regex.Replace(slug, "[^a-z0-9]", "-");
       slug = Regex.Replace(slug, "--+", "-");
       slug = Regex.Replace(slug, "-$", "");
 
-      // MangleHull(id, pda);
+      // MangleHull(pda);
+      MangleIcon(pda);
 
       Tank tank = new()
       {
@@ -214,13 +207,24 @@ namespace BlitzKit.CLI.Functions
         Slug = slug,
       };
 
-      changes.Add(new($"definitions/tanks/{id}.pb", tank.ToByteArray()));
+      changes.Add(new($"tanks/{id}/meta.pb", tank.ToByteArray()));
 
       return tank;
     }
 
-    void MangleHull(string tankId, UObject pda)
+    void MangleIcon(UObject pda)
     {
+      var id = PropertyUtil.Get<FName>(pda, "TankId").Text;
+      var smallIcon = BlitzKitExporter.Texture2D(PropertyUtil.Get<UTexture2D>(pda, "SmallIcon"));
+      var bigIcon = BlitzKitExporter.Texture2D(PropertyUtil.Get<UTexture2D>(pda, "BigIcon"));
+
+      changes.Add(new($"tanks/{id}/icons/small.png", smallIcon));
+      changes.Add(new($"tanks/{id}/icons/big.png", bigIcon));
+    }
+
+    void MangleHull(UObject pda)
+    {
+      var id = PropertyUtil.Get<FName>(pda, "TankId").Text;
       var hulls = PropertyUtil.Get<UDataTable>(pda, "DT_Hulls");
       UDataTableUtility.TryGetDataTableRow(hulls, "hull", StringComparison.Ordinal, out var hull);
       var hullVisualData = PropertyUtil.Get<UObject>(hull, "VisualData");
@@ -228,7 +232,7 @@ namespace BlitzKit.CLI.Functions
       var hullCollision = PropertyUtil.Get<UStaticMesh>(hullMeshSettings, "CollisionMesh");
       MonoGltf hullCollisionGltf = new(hullCollision);
 
-      changes.Add(new($"tanks/{tankId}/collision/hull.glb", hullCollisionGltf.Write()));
+      changes.Add(new($"tanks/{id}/collision/hull.glb", hullCollisionGltf.Write()));
     }
   }
 }
