@@ -5,9 +5,9 @@
 // source: packages/core/src/protos/i18n.proto
 
 /* eslint-disable */
-import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
+import { BinaryReader, BinaryWriter } from '@bufbuild/protobuf/wire';
 
-export const protobufPackage = "blitzkit";
+export const protobufPackage = 'blitzkit';
 
 export interface I18n {
   locales: { [key: string]: string };
@@ -18,20 +18,27 @@ export interface I18n_LocalesEntry {
   value: string;
 }
 
-function createBaseI18n(): I18n {
+export function createBaseI18n(): I18n {
   return { locales: {} };
 }
 
 export const I18n: MessageFns<I18n> = {
-  encode(message: I18n, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+  encode(
+    message: I18n,
+    writer: BinaryWriter = new BinaryWriter(),
+  ): BinaryWriter {
     Object.entries(message.locales).forEach(([key, value]) => {
-      I18n_LocalesEntry.encode({ key: key as any, value }, writer.uint32(10).fork()).join();
+      I18n_LocalesEntry.encode(
+        { key: key as any, value },
+        writer.uint32(10).fork(),
+      ).join();
     });
     return writer;
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): I18n {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader =
+      input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseI18n();
     while (reader.pos < end) {
@@ -60,10 +67,13 @@ export const I18n: MessageFns<I18n> = {
   fromJSON(object: any): I18n {
     return {
       locales: isObject(object.locales)
-        ? Object.entries(object.locales).reduce<{ [key: string]: string }>((acc, [key, value]) => {
-          acc[key] = String(value);
-          return acc;
-        }, {})
+        ? Object.entries(object.locales).reduce<{ [key: string]: string }>(
+            (acc, [key, value]) => {
+              acc[key] = String(value);
+              return acc;
+            },
+            {},
+          )
         : {},
     };
   },
@@ -87,7 +97,9 @@ export const I18n: MessageFns<I18n> = {
   },
   fromPartial<I extends Exact<DeepPartial<I18n>, I>>(object: I): I18n {
     const message = createBaseI18n();
-    message.locales = Object.entries(object.locales ?? {}).reduce<{ [key: string]: string }>((acc, [key, value]) => {
+    message.locales = Object.entries(object.locales ?? {}).reduce<{
+      [key: string]: string;
+    }>((acc, [key, value]) => {
       if (value !== undefined) {
         acc[key] = globalThis.String(value);
       }
@@ -98,11 +110,14 @@ export const I18n: MessageFns<I18n> = {
 };
 
 function createBaseI18n_LocalesEntry(): I18n_LocalesEntry {
-  return { key: "", value: "" };
+  return { key: '', value: '' };
 }
 
 export const I18n_LocalesEntry: MessageFns<I18n_LocalesEntry> = {
-  encode(message: I18n_LocalesEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+  encode(
+    message: I18n_LocalesEntry,
+    writer: BinaryWriter = new BinaryWriter(),
+  ): BinaryWriter {
     if (message.key !== undefined) {
       writer.uint32(10).string(message.key);
     }
@@ -113,7 +128,8 @@ export const I18n_LocalesEntry: MessageFns<I18n_LocalesEntry> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): I18n_LocalesEntry {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader =
+      input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseI18n_LocalesEntry();
     while (reader.pos < end) {
@@ -146,8 +162,10 @@ export const I18n_LocalesEntry: MessageFns<I18n_LocalesEntry> = {
 
   fromJSON(object: any): I18n_LocalesEntry {
     return {
-      key: globalThis.String(assertSet("I18n_LocalesEntry.key", object.key)),
-      value: globalThis.String(assertSet("I18n_LocalesEntry.value", object.value)),
+      key: globalThis.String(assertSet('I18n_LocalesEntry.key', object.key)),
+      value: globalThis.String(
+        assertSet('I18n_LocalesEntry.value', object.value),
+      ),
     };
   },
 
@@ -162,32 +180,51 @@ export const I18n_LocalesEntry: MessageFns<I18n_LocalesEntry> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<I18n_LocalesEntry>, I>>(base?: I): I18n_LocalesEntry {
+  create<I extends Exact<DeepPartial<I18n_LocalesEntry>, I>>(
+    base?: I,
+  ): I18n_LocalesEntry {
     return I18n_LocalesEntry.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<I18n_LocalesEntry>, I>>(object: I): I18n_LocalesEntry {
+  fromPartial<I extends Exact<DeepPartial<I18n_LocalesEntry>, I>>(
+    object: I,
+  ): I18n_LocalesEntry {
     const message = createBaseI18n_LocalesEntry();
-    message.key = object.key ?? "";
-    message.value = object.value ?? "";
+    message.key = object.key ?? '';
+    message.value = object.value ?? '';
     return message;
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends { $case: string; value: unknown } ? { $case: T["$case"]; value?: DeepPartial<T["value"]> }
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>;
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends globalThis.Array<infer U>
+    ? globalThis.Array<DeepPartial<U>>
+    : T extends ReadonlyArray<infer U>
+      ? ReadonlyArray<DeepPartial<U>>
+      : T extends { $case: string; value: unknown }
+        ? { $case: T['$case']; value?: DeepPartial<T['value']> }
+        : T extends {}
+          ? { [K in keyof T]?: DeepPartial<T[K]> }
+          : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
+      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
+    };
 
 function isObject(value: any): boolean {
-  return typeof value === "object" && value !== null;
+  return typeof value === 'object' && value !== null;
 }
 
 function isSet(value: any): boolean {
