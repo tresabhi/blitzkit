@@ -77,6 +77,7 @@ namespace BlitzKit.CLI.Models
         }
         else
         {
+          Console.WriteLine($"🔵 {blobPath}");
           return;
         }
       }
