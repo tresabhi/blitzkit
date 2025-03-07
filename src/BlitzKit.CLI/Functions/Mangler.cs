@@ -20,14 +20,14 @@ namespace BlitzKit.CLI.Functions
   {
     readonly BlitzProvider provider = new(args.Contains("--depot"));
     Locales? locales;
-    readonly List<FileChange> changes = [];
     readonly Dictionary<string, Dictionary<string, string>> strings = [];
+    readonly AssetUploader assetUploader = new("mangled ue assets");
 
     public async Task Mangle()
     {
       await FetchStrings();
-      MangleNations();
-      await BlitzKitAssets.CommitAssets("ue assets", changes);
+      await MangleNations();
+      await assetUploader.Flush();
     }
 
     I18n GetString(string name)
@@ -64,7 +64,7 @@ namespace BlitzKit.CLI.Functions
     {
       using var client = new HttpClient();
       var text = File.ReadAllText("../../packages/i18n/locales.json");
-      this.locales =
+      locales =
         JsonSerializer.Deserialize<Locales>(text)
         ?? throw new Exception("Failed to deserialize locales");
 
@@ -81,7 +81,7 @@ namespace BlitzKit.CLI.Functions
       }
     }
 
-    void MangleNations()
+    async Task MangleNations()
     {
       var dirs = provider.RootDirectory.GetDirectory("Blitz/Content/Tanks").Directories;
       List<Tank> tanksRaw = [];
@@ -93,10 +93,11 @@ namespace BlitzKit.CLI.Functions
 
         foreach (var tankDir in dir.Value.Directories)
         {
-          if (tankDir.Value.Name != "R90_IS_4")
-            continue;
+          // if (tankDir.Value.Name != "R90_IS_4")
+          //   continue;
 
-          tanksRaw.Add(MangleTank(tankDir.Value));
+          var tank = await MangleTank(tankDir.Value);
+          tanksRaw.Add(tank);
         }
       }
 
@@ -110,7 +111,7 @@ namespace BlitzKit.CLI.Functions
         tanks.Tanks_.Add(tankMeta);
       }
 
-      changes.Add(new("definitions/tanks.pb", tanks.ToByteArray()));
+      await assetUploader.Add(new("definitions/tanks.pb", tanks.ToByteArray()));
     }
 
     void DeduplicateSlugs(List<Tank> tanks)
@@ -185,7 +186,7 @@ namespace BlitzKit.CLI.Functions
       }
     }
 
-    Tank MangleTank(VFS tankDir)
+    async Task<Tank> MangleTank(VFS tankDir)
     {
       var pdaName = $"PDA_{tankDir.Name}";
       var pda = provider.LoadObject($"{tankDir.Path}/{pdaName}.{pdaName}");
@@ -197,8 +198,8 @@ namespace BlitzKit.CLI.Functions
       slug = Regex.Replace(slug, "--+", "-");
       slug = Regex.Replace(slug, "-$", "");
 
-      // MangleHull(pda);
-      MangleIcon(pda);
+      await MangleHull(pda);
+      await MangleIcon(pda);
 
       Tank tank = new()
       {
@@ -207,22 +208,23 @@ namespace BlitzKit.CLI.Functions
         Slug = slug,
       };
 
-      changes.Add(new($"tanks/{id}/meta.pb", tank.ToByteArray()));
+      await assetUploader.Add(new($"tanks/{id}/meta.pb", tank.ToByteArray()));
 
       return tank;
     }
 
-    void MangleIcon(UObject pda)
+    async Task MangleIcon(UObject pda)
     {
       var id = PropertyUtil.Get<FName>(pda, "TankId").Text;
       var smallIcon = BlitzKitExporter.Texture2D(PropertyUtil.Get<UTexture2D>(pda, "SmallIcon"));
+      Console.WriteLine(id);
       var bigIcon = BlitzKitExporter.Texture2D(PropertyUtil.Get<UTexture2D>(pda, "BigIcon"));
 
-      changes.Add(new($"tanks/{id}/icons/small.png", smallIcon));
-      changes.Add(new($"tanks/{id}/icons/big.png", bigIcon));
+      await assetUploader.Add(new($"tanks/{id}/icons/small.png", smallIcon));
+      await assetUploader.Add(new($"tanks/{id}/icons/big.png", bigIcon));
     }
 
-    void MangleHull(UObject pda)
+    async Task MangleHull(UObject pda)
     {
       var id = PropertyUtil.Get<FName>(pda, "TankId").Text;
       var hulls = PropertyUtil.Get<UDataTable>(pda, "DT_Hulls");
@@ -232,7 +234,7 @@ namespace BlitzKit.CLI.Functions
       var hullCollision = PropertyUtil.Get<UStaticMesh>(hullMeshSettings, "CollisionMesh");
       MonoGltf hullCollisionGltf = new(hullCollision);
 
-      changes.Add(new($"tanks/{id}/collision/hull.glb", hullCollisionGltf.Write()));
+      await assetUploader.Add(new($"tanks/{id}/collision/hull.glb", hullCollisionGltf.Write()));
     }
   }
 }
