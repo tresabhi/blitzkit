@@ -27,5 +27,12 @@ namespace BlitzKit.CLI.Utils
       Console.WriteLine(message);
       Console.ResetColor();
     }
+
+    public static void Background(string message)
+    {
+      Console.ForegroundColor = ConsoleColor.DarkGray;
+      Console.WriteLine(message);
+      Console.ResetColor();
+    }
   }
 }

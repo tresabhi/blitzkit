@@ -35,7 +35,7 @@ namespace BlitzKit.CLI.Models
 
       if (response.StatusCode == HttpStatusCode.NotFound)
       {
-        Console.WriteLine(
+        PrettyLog.Background(
           $"🟢 (+{change.Content.Count.ToString("N0", Program.Culture)}B) {blobPath}"
         );
         changes.Add(change);
@@ -70,14 +70,14 @@ namespace BlitzKit.CLI.Models
 
         if (isDifferent)
         {
-          Console.WriteLine(
+          PrettyLog.Background(
             $"🟡 ({(deltaSize > 0 ? "+" : "")}{deltaSize.ToString("N0", Program.Culture)}B) {blobPath}"
           );
           changes.Add(change);
         }
         else
         {
-          Console.WriteLine($"🔵 {blobPath}");
+          PrettyLog.Background($"🔵 {blobPath}");
           return;
         }
       }
