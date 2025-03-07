@@ -216,12 +216,28 @@ namespace BlitzKit.CLI.Functions
     async Task MangleIcon(UObject pda)
     {
       var id = PropertyUtil.Get<FName>(pda, "TankId").Text;
-      var smallIcon = BlitzKitExporter.Texture2D(PropertyUtil.Get<UTexture2D>(pda, "SmallIcon"));
-      Console.WriteLine(id);
-      var bigIcon = BlitzKitExporter.Texture2D(PropertyUtil.Get<UTexture2D>(pda, "BigIcon"));
+      PropertyUtil.TryGet<UTexture2D>(pda, "SmallIcon", out var smallIconTexture);
+      PropertyUtil.TryGet<UTexture2D>(pda, "BigIcon", out var bigIconTexture);
 
-      await assetUploader.Add(new($"tanks/{id}/icons/small.png", smallIcon));
-      await assetUploader.Add(new($"tanks/{id}/icons/big.png", bigIcon));
+      if (smallIconTexture is null)
+      {
+        PrettyLog.Warn($"Small icon missing for {id}");
+      }
+      else
+      {
+        var smallIcon = BlitzKitExporter.Texture2D(smallIconTexture);
+        await assetUploader.Add(new($"tanks/{id}/icons/small.png", smallIcon));
+      }
+
+      if (bigIconTexture is null)
+      {
+        PrettyLog.Warn($"Big icon missing for {id}");
+      }
+      else
+      {
+        var bigIcon = BlitzKitExporter.Texture2D(bigIconTexture);
+        await assetUploader.Add(new($"tanks/{id}/icons/big.png", bigIcon));
+      }
     }
 
     async Task MangleHull(UObject pda)
