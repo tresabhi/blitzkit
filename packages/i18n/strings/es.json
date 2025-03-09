@@ -860,24 +860,24 @@
           "modules": {
             "title": "Modules",
             "stock": "Stock",
-            "upgrade": "Upgrade"
+            "upgrade": "Mejorar"
           },
           "equipment": {
-            "title": "Equipment",
-            "clear": "Clear"
+            "title": "Equipo",
+            "clear": "Limpiar"
           },
           "provisions": {
             "title": "Provisiones",
             "clear": "Limpiar"
           },
           "consumables": {
-            "title": "Consumables",
-            "clear": "Clear",
-            "info": "Yellow consumables do not affect the statistics."
+            "title": "Consumibles",
+            "clear": "Limpiar",
+            "info": "Consumibles amarillos no afectan las estadísticas."
           },
           "skills": {
             "title": "Crew skills",
-            "clear": "Clear",
+            "clear": "Limpiar",
             "maximize": "Maximize",
             "info": "Yellow skills only apply under special circumstances. Hold Space to quickly toggle between level 0 and 7."
           },
@@ -889,9 +889,9 @@
           "title": "Characteristics",
           "compare": {
             "label": "Compare against",
-            "class": "Tier %s1 %s2",
+            "class": "Nivel %s1 - %s2",
             "tier": "All of tier %s1",
-            "all": "All tanks"
+            "all": "Todos los tanques"
           },
           "values": {
             "shell_index": "Shell %s1",
@@ -930,18 +930,18 @@
             "dispersionTurretTraversing": "Turret traversing",
             "dispersionShooting": "Shooting",
             "dispersionGunDamaged": "Gun damaged",
-            "gunDepression": "Depression",
-            "gunElevation": "Elevation",
-            "gunFrontalDepression": "Frontal depression",
-            "gunFrontalElevation": "Frontal elevation",
-            "gunRearDepression": "Rear depression",
-            "gunRearElevation": "Rear elevation",
+            "gunDepression": "Depresión",
+            "gunElevation": "Elevación",
+            "gunFrontalDepression": "Depresión frontal",
+            "gunFrontalElevation": "Elevación frontal",
+            "gunRearDepression": "Depresión trasera",
+            "gunRearElevation": "Elevación trasera",
             "azimuthLeft": "Azimuth left",
             "azimuthRight": "Azimuth right",
-            "speedForwards": "Forwards",
-            "speedBackwards": "Backwards",
-            "hardTerrainCoefficient": "Hard",
-            "hardTerrainCoefficientRaw": "Hard",
+            "speedForwards": "Avance",
+            "speedBackwards": "Marcha atrás",
+            "hardTerrainCoefficient": "Duro",
+            "hardTerrainCoefficientRaw": "Duro",
             "mediumTerrainCoefficient": "Medio",
             "mediumTerrainCoefficientRaw": "Medio",
             "softTerrainCoefficient": "Suave",
@@ -1026,7 +1026,7 @@
             "maximize": "Maximizar"
           },
           "modules": {
-            "stock": "Stock",
+            "stock": "Base",
             "upgrade": "Mejorar"
           },
           "provisions": {
