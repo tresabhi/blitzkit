@@ -544,7 +544,7 @@
         "options": {
           "limit": {
             "name": "ліміт",
-            "description": "How many neighbors to display (default: %s1)"
+            "description": ""
           },
           "season": {
             "name": "season",
@@ -594,7 +594,7 @@
         }
       },
       "ping": {
-        "name": "ping",
+        "name": "",
         "description": "Check wether the bot is alive.",
         "body": {
           "pong": "Pong 🏓",
