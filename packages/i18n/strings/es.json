@@ -879,7 +879,7 @@
             "title": "Habilidades de tripulación",
             "clear": "Limpiar",
             "maximize": "Maximizar",
-            "info": "Las habilidades amarillas solo se aplican en circunstancias especiales. Mantenga el espacio para cambiar rápidamente entre los niveles 0 y 7."
+            "info": "Las habilidades en amarillo solo se aplican en circunstancias especiales. Mantenga el espacio para cambiar rápidamente entre los niveles 0 y 7."
           },
           "miscellaneous": {
             "title": "Misceláneo"
@@ -1119,7 +1119,7 @@
         "name": "Tier list",
         "button": "Rank tanks",
         "description": "Rank Blitz tanks",
-        "seo_description": "Explora las listas de clasificación de los tanques de mejor a peor, basándose en las calificaciones de los jugadores y el rendimiento estadístico en World of Tanks Blitz",
+        "seo_description": "Explora las listas de clasificación de los tanques de mejor a peor, basadas en las calificaciones de los jugadores y el rendimiento estadístico en World of Tanks Blitz",
         "buttons": {
           "reset": "Restablecer",
           "share": "Compartir"
