@@ -843,23 +843,23 @@
         },
         "tech_tree": {
           "title": "Árbol tecnológico",
-          "battle": "1 battle",
-          "battles": "%s1 battles",
-          "route": "Route %s1 of %s2"
+          "battle": "1 batalla",
+          "battles": "%s1 batallas",
+          "route": "Ruta %s1 de %s2"
         },
         "game_modes": {
-          "title": "Game mode abilities"
+          "title": "Habilidades del modo de juego"
         },
         "review": {
-          "title": "Review videos",
+          "title": "Vídeos de reseña",
           "disclaimer": "BlitzKit no respalda ningún vídeo de reseñas.",
-          "join": "Apply to %s1 YouTuber program"
+          "join": "Aplica para el programa de YouTube de %s1"
         },
         "configuration": {
           "title": "",
           "modules": {
-            "title": "Modules",
-            "stock": "Stock",
+            "title": "Módulos",
+            "stock": "Base",
             "upgrade": "Mejorar"
           },
           "equipment": {
@@ -876,60 +876,60 @@
             "info": "Consumibles amarillos no afectan las estadísticas."
           },
           "skills": {
-            "title": "Crew skills",
+            "title": "Habilidades de tripulación",
             "clear": "Limpiar",
-            "maximize": "Maximize",
-            "info": "Yellow skills only apply under special circumstances. Hold Space to quickly toggle between level 0 and 7."
+            "maximize": "Maximizar",
+            "info": "Las habilidades amarillas solo se aplican en circunstancias especiales. Mantenga el espacio para cambiar rápidamente entre los niveles 0 y 7."
           },
           "miscellaneous": {
             "title": "Misceláneo"
           }
         },
         "characteristics": {
-          "title": "Characteristics",
+          "title": "Características",
           "compare": {
-            "label": "Compare against",
+            "label": "Comparar con",
             "class": "Nivel %s1 - %s2",
-            "tier": "All of tier %s1",
+            "tier": "Todos de nivel %s1",
             "all": "Todos los tanques"
           },
           "values": {
-            "shell_index": "Shell %s1",
-            "at_distance": "At %s1m",
-            "at_distance_slider_label": "Distance",
-            "dispersion_at_distance": "Dispersion at %s1m",
-            "gun_flexibility": "Gun flexibility",
-            "speed": "Speed",
-            "terrain_coefficients": "Terrain coefficients",
-            "raw_terrain_coefficients": "Raw terrain coefficients",
-            "power_to_weight_ratio": "Power to weight ratio",
-            "hull_traverse_speed": "Hull traverse speed",
-            "camouflage": "Camouflage",
-            "reload": "Reload",
-            "crewCount": "Crew count",
+            "shell_index": "Proyectil %s1",
+            "at_distance": "A %s1m",
+            "at_distance_slider_label": "Distancia",
+            "dispersion_at_distance": "Dispersión a %s1m",
+            "gun_flexibility": "Flexibilidad del arma",
+            "speed": "Velocidad",
+            "terrain_coefficients": "Coeficientes de terreno",
+            "raw_terrain_coefficients": "Coeficientes de terreno en bruto",
+            "power_to_weight_ratio": "Relación peso-potencia",
+            "hull_traverse_speed": "Velocidad de rotación del casco",
+            "camouflage": "Camuflaje",
+            "reload": "Recarga",
+            "crewCount": "Cantidad de tripulantes",
             "shellNormalization": "Normalización",
             "shellRicochet": "Rebote",
             "dpm": "DPM",
             "dpmEffective": "Effective at 60s",
-            "shells": "Shells",
-            "mostOptimalShellIndex": "Most optimal shell",
-            "shellReloads": "Shell reloads",
-            "shellReload": "Shell reload",
+            "shells": "Proyectiles",
+            "mostOptimalShellIndex": "Proyectil más óptimo",
+            "shellReloads": "Tiempos de recarga",
+            "shellReload": "Tiempo de recarga",
             "intraClip": "Intra-clip",
             "caliber": "Calibre",
             "penetration": "Penetración",
             "damage": "Daño",
             "clipDamage": "Clipping potential",
-            "moduleDamage": "Module damage",
+            "moduleDamage": "Daño a módulos",
             "explosionRadius": "Radio de Explosión",
-            "shellVelocity": "Shell velocity",
-            "aimTime": "Aim time",
-            "dispersion": "Still",
-            "dispersionMoving": "Moving",
+            "shellVelocity": "Velocidad del proyectil",
+            "aimTime": "Tiempo de apuntado",
+            "dispersion": "Quieto",
+            "dispersionMoving": "En movimiento",
             "dispersionHullTraversing": "Hull traversing",
             "dispersionTurretTraversing": "Turret traversing",
-            "dispersionShooting": "Shooting",
-            "dispersionGunDamaged": "Gun damaged",
+            "dispersionShooting": "Disparando",
+            "dispersionGunDamaged": "Arma dañada",
             "gunDepression": "Depresión",
             "gunElevation": "Elevación",
             "gunFrontalDepression": "Depresión frontal",
@@ -1107,22 +1107,22 @@
         },
         "no_battles": {
           "title": "No battles",
-          "hint": "Go ahead and play a game"
+          "hint": "Sigue adelante y juega una partida"
         },
         "table": {
           "tank": "Tanque",
           "total": "Total",
-          "remove": "Remove"
+          "remove": "Remover"
         }
       },
       "tier_list": {
         "name": "Tier list",
         "button": "Rank tanks",
         "description": "Rank Blitz tanks",
-        "seo_description": "Explore tier lists ranking tanks from best to worst, based on player ratings and statistical performance in World of Tanks Blitz",
+        "seo_description": "Explora las listas de clasificación de los tanques de mejor a peor, basándose en las calificaciones de los jugadores y el rendimiento estadístico en World of Tanks Blitz",
         "buttons": {
           "reset": "Restablecer",
-          "share": "Share"
+          "share": "Compartir"
         }
       },
       "embed": {
@@ -1131,54 +1131,54 @@
         "description": "Embeds for streaming",
         "seo_description": "Create embeds for streaming World of Tanks Blitz with extreme customization",
         "coming_soon": "More embeds coming soon.",
-        "suggest": "Suggest ideas.",
+        "suggest": "Sugerir ideas.",
         "preview": {
           "title": "Example preview",
           "upload": "Upload test background"
         },
         "configuration": {
           "import": {
-            "title": "Import",
-            "description": "Paste your current URL if you have one already to import your settings",
-            "hint": "Paste URL...",
-            "apply": "Apply",
-            "idiot_title": "Invalid URL",
-            "idiot_description": "Try pasting the URL that BlitzKit previously generated, you silly goose!",
+            "title": "Importar",
+            "description": "Pega tu URL actual si ya tienes una para importar la configuración",
+            "hint": "Pegar URL...",
+            "apply": "Aplicar",
+            "idiot_title": "URL inválida",
+            "idiot_description": "Intenta pegar la URL que BlitzKit generó anteriormente, ¡Torpe!",
             "idiot_button": "Okay, my bad"
           },
           "export": {
-            "title": "Export",
-            "description": "Copy all properties for you streaming software",
+            "title": "Exportar",
+            "description": "Copiar todas las propiedades para tu software de streaming",
             "generate": {
-              "button": "Generate URL",
-              "title": "Generate URL",
-              "subtitle": "Search an account to track",
-              "cancel": "Cancel",
+              "button": "Generar URL",
+              "title": "Generar URL",
+              "subtitle": "Buscar una cuenta para seguir",
+              "cancel": "Cancelar",
               "success": {
-                "title": "Copy URL",
-                "info": "Generated the URL for %s1. The embed will start tracking as soon as the URL is pasted. Reset at any time by right-clicking on PC or long-pressing on mobile and then selecting \"Reset\".",
+                "title": "Copiar URL",
+                "info": "Se generó la URL para %s1. El embebido comenzará a rastrear tan pronto como se pegue. Restablece en cualquier momento haciendo clic derecho en PC o manteniendo presionado en móvil y luego seleccionando \"Restablecer\".",
                 "back": "Volver",
-                "copy": "Copy URL"
+                "copy": "Copiar URL"
               }
             },
-            "css": "Copy CSS",
-            "width": "Copy Width",
-            "height": "Copy Height",
+            "css": "Copiar CSS",
+            "width": "Copiar ancho",
+            "height": "Copiar altura",
             "framerate": "Copy Framerate"
           },
           "customize": {
-            "title": "Customize",
+            "title": "Personalizar",
             "reset": "Restablecer",
             "description": "Bells and whistles of your embed"
           }
         },
         "types": {
           "breakdown": {
-            "name": "Breakdown",
+            "name": "Desglose",
             "options": {
               "width": "Ancho",
               "height": "Altura",
-              "showTotal": "Show total",
+              "showTotal": "Mostrar total",
               "listGap": "List gap",
               "listMaxTanks": "Max tanks",
               "cardRadius": "Card radius",
@@ -1189,25 +1189,25 @@
               "cardTitleClassIcon": "Card title class icon",
               "cardBodyBackgroundColor": "Card body background color",
               "cardBodyPadding": "Card body padding",
-              "columnGap": "Column gap",
-              "columnValue": "Column value",
-              "columnLabel": "Column label",
-              "column1": "Column 1",
-              "column2": "Column 2",
-              "column3": "Column 3",
-              "column4": "Column 4",
-              "column1CustomLabel": "Column 1 label",
-              "column2CustomLabel": "Column 2 label",
-              "column3CustomLabel": "Column 3 label"
+              "columnGap": "Espacio entre columnas",
+              "columnValue": "Valor de columna",
+              "columnLabel": "Etiqueta de columna",
+              "column1": "Columna 1",
+              "column2": "Columna 2",
+              "column3": "Columna 3",
+              "column4": "Columna 4",
+              "column1CustomLabel": "Etiqueta de la columna 1",
+              "column2CustomLabel": "Etiqueta de la columna 2",
+              "column3CustomLabel": "Etiqueta de la columna 3"
             }
           }
         }
       },
       "charts": {
-        "name": "Charts",
+        "name": "Gráficos",
         "button": "Nerd out",
         "description": "Lots of graphs",
-        "seo_description": "Charts and graphs on anything and everything about tanks, players, and events in World of Tanks Blitz"
+        "seo_description": "Gráficos y tablas sobre todo lo relacionado con tanques, jugadores y eventos en World of Tanks Blitz"
       },
       "rating": {
         "name": "Rating",
@@ -1218,11 +1218,11 @@
       "discord": {
         "name": "Discord bot",
         "button": "Install now",
-        "description": "Stats right in Discord",
-        "seo_description": "Get stats right in Discord with BlitzKit's Discord bot"
+        "description": "Estadísticas en Discord",
+        "seo_description": "Obtén estadísticas en Discord con el bot de Discord de BlitzKit"
       },
       "more": {
-        "name": "More coming soon",
+        "name": "Más próximamente",
         "button": "Join Discord",
         "description": "What we're making",
         "seo_description": "What we're making with BlitzKit"
@@ -1241,7 +1241,7 @@
       },
       "blitz_analysis": {
         "name": "BlitzAnalysis[]",
-        "button": "Analyze now",
+        "button": "Analizar ahora",
         "description": "Rich historic average stats",
         "seo_description": "Rich historic average stats in World of Tanks Blitz"
       },
@@ -1253,19 +1253,19 @@
       }
     },
     "footer": {
-      "motto": "Everything World of Tanks Blitz",
-      "copyright": "Unaffiliated with Wargaming or any service",
+      "motto": "Todo sobre World of Tanks Blitz",
+      "copyright": "No afiliado con Wargaming u otros servicios",
       "about": {
         "title": "About",
         "credits": "Credits",
         "discord": "Discord",
         "github": "GitHub",
-        "patches": "Patches"
+        "patches": "Parches"
       },
       "legal": {
         "title": "Legal",
-        "privacy": "Privacy policy",
-        "terms": "Terms of service"
+        "privacy": "Política de Privacidad",
+        "terms": "Términos del servicio"
       }
     }
   }
