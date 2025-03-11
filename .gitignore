@@ -27,3 +27,4 @@ target
 /.vercel
 /.astro
 .vercel
+/src

@@ -41,6 +41,7 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
     const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
     const canvas = useRef<HTMLCanvasElement>(null);
     const hasImprovedVerticalStabilizer = useEquipment(122);
+    const hasDownImprovedVerticalStabilizer = useEquipment(124);
     const protagonistGun = Duel.use((state) => state.protagonist.gun);
     const protagonistTurret = Duel.use((state) => state.protagonist.turret);
     const mutateDuel = Duel.useMutation();
@@ -82,6 +83,7 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
                 gunModelDefinition.pitch,
                 turretModelDefinition.yaw,
                 hasImprovedVerticalStabilizer,
+                hasDownImprovedVerticalStabilizer,
               );
 
               modelTransformEvent.emit({ pitch, yaw });
