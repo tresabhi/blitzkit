@@ -716,7 +716,7 @@
               "label": "Сортировка",
               "fire": "Стрельба",
               "maneuverability": "Манёвренность",
-              "survivability": "Живучесть"
+              "survivability": "Выживаемость"
             },
             "direction": {
               "label": "Направление",
@@ -975,7 +975,7 @@
           }
         },
         "firepower": {
-          "title": "Огневая мощь"
+          "title": "Стрельба"
         },
         "crew": {
           "title": "Мастерство экипажа",
@@ -991,7 +991,7 @@
           "title": "Манёвренность"
         },
         "survivability": {
-          "title": "Живучесть"
+          "title": "Выживаемость"
         }
       },
       "compare": {

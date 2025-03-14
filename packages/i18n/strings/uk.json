@@ -86,14 +86,14 @@
       "other": "Збірна нація"
     },
     "nations_adjectives": {
-      "ussr": "Радянська",
-      "germany": "Німецька",
-      "usa": "Американська",
-      "china": "Китайська",
-      "uk": "Британська",
-      "france": "Французька",
-      "japan": "Японська",
-      "european": "Європейська",
+      "ussr": "Радянський",
+      "germany": "Німецький",
+      "usa": "Американський",
+      "china": "Китайський",
+      "uk": "Британський",
+      "france": "Французький",
+      "japan": "Японський",
+      "european": "Європейський",
       "other": "Гібрид"
     },
     "tank_class_short": {
@@ -544,7 +544,7 @@
         "options": {
           "limit": {
             "name": "ліміт",
-            "description": "How many neighbors to display (default: %s1)"
+            "description": ""
           },
           "season": {
             "name": "season",
@@ -594,7 +594,7 @@
         }
       },
       "ping": {
-        "name": "ping",
+        "name": "",
         "description": "Check wether the bot is alive.",
         "body": {
           "pong": "Pong 🏓",
