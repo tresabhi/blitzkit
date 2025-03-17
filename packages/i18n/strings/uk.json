@@ -363,8 +363,8 @@
           "tier_1": "# %s1 це рівень I\n\nТанки рівню I завжди відкриті для всіх гравців безкоштовно.",
           "already_researched": "# %s1 уже досліджено!\n\nСпробуйте забезпечити `starting-tank` коли використовуєте команду щоб подивитись підсумки гілки, яку ви вже дослідили.",
           "start_end_equal": "# %s1 було надано двічі\n\nПереконайся, що `starting-tank` та `target-tank` різні.",
-          "tanks_not_on_line": "# %s1 and %s2 are not on the same line\n\nMake sure `starting-tank` and `target-tank` are on the same tech-tree line.",
-          "unordered": "# %s1 higher tiered to %s2\n\nMake sure to provide %s3 as the `starting-tank` instead as it is the lower tiered tank."
+          "tanks_not_on_line": ".",
+          "unordered": ""
         }
       },
       "about": {
