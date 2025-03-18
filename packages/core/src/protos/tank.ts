@@ -5,10 +5,10 @@
 // source: packages/core/src/protos/tank.proto
 
 /* eslint-disable */
-import { BinaryReader, BinaryWriter } from '@bufbuild/protobuf/wire';
-import { I18n, createBaseI18n } from './i18n';
+import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
+import { I18n } from "./i18n";
 
-export const protobufPackage = 'blitzkit';
+export const protobufPackage = "blitzkit";
 
 export interface Tank {
   id: string;
@@ -17,18 +17,15 @@ export interface Tank {
 }
 
 function createBaseTank(): Tank {
-  return { id: '', slug: '', name: createBaseI18n() };
+  return { id: "", slug: "", name: createBaseI18n() };
 }
 
 export const Tank: MessageFns<Tank> = {
-  encode(
-    message: Tank,
-    writer: BinaryWriter = new BinaryWriter(),
-  ): BinaryWriter {
-    if (message.id !== '') {
+  encode(message: Tank, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.slug !== '') {
+    if (message.slug !== "") {
       writer.uint32(18).string(message.slug);
     }
     if (message.name !== undefined) {
@@ -38,8 +35,7 @@ export const Tank: MessageFns<Tank> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): Tank {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTank();
     while (reader.pos < end) {
@@ -80,18 +76,18 @@ export const Tank: MessageFns<Tank> = {
 
   fromJSON(object: any): Tank {
     return {
-      id: globalThis.String(assertSet('Tank.id', object.id)),
-      slug: globalThis.String(assertSet('Tank.slug', object.slug)),
-      name: I18n.fromJSON(assertSet('Tank.name', object.name)),
+      id: globalThis.String(assertSet("Tank.id", object.id)),
+      slug: globalThis.String(assertSet("Tank.slug", object.slug)),
+      name: I18n.fromJSON(assertSet("Tank.name", object.name)),
     };
   },
 
   toJSON(message: Tank): unknown {
     const obj: any = {};
-    if (message.id !== '') {
+    if (message.id !== "") {
       obj.id = message.id;
     }
-    if (message.slug !== '') {
+    if (message.slug !== "") {
       obj.slug = message.slug;
     }
     if (message.name !== undefined) {
@@ -105,43 +101,27 @@ export const Tank: MessageFns<Tank> = {
   },
   fromPartial<I extends Exact<DeepPartial<Tank>, I>>(object: I): Tank {
     const message = createBaseTank();
-    message.id = object.id ?? '';
-    message.slug = object.slug ?? '';
-    message.name =
-      object.name !== undefined && object.name !== null
-        ? I18n.fromPartial(object.name)
-        : createBaseI18n();
+    message.id = object.id ?? "";
+    message.slug = object.slug ?? "";
+    message.name = (object.name !== undefined && object.name !== null)
+      ? I18n.fromPartial(object.name)
+      : createBaseI18n();
     return message;
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends globalThis.Array<infer U>
-    ? globalThis.Array<DeepPartial<U>>
-    : T extends ReadonlyArray<infer U>
-      ? ReadonlyArray<DeepPartial<U>>
-      : T extends { $case: string; value: unknown }
-        ? { $case: T['$case']; value?: DeepPartial<T['value']> }
-        : T extends {}
-          ? { [K in keyof T]?: DeepPartial<T[K]> }
-          : Partial<T>;
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends { $case: string; value: unknown } ? { $case: T["$case"]; value?: DeepPartial<T["value"]> }
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
-      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
-    };
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

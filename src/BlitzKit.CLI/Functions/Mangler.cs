@@ -84,7 +84,7 @@ namespace BlitzKit.CLI.Functions
     async Task MangleNations()
     {
       var dirs = provider.RootDirectory.GetDirectory("Blitz/Content/Tanks").Directories;
-      List<Tank> tanksRaw = [];
+      TanksFull tanksFull = new();
 
       foreach (var dir in dirs)
       {
@@ -97,36 +97,36 @@ namespace BlitzKit.CLI.Functions
           //   continue;
 
           var tank = await MangleTank(tankDir.Value);
-          tanksRaw.Add(tank);
+          tanksFull.Tanks.Add(tank);
         }
       }
 
-      DeduplicateSlugs(tanksRaw);
-
+      DeduplicateSlugs(tanksFull);
       Tanks tanks = new();
 
-      foreach (var tank in tanksRaw)
+      foreach (var tank in tanksFull.Tanks)
       {
-        TankMeta tankMeta = new() { Id = tank.Id, Slug = tank.Slug };
-        tanks.Tanks_.Add(tankMeta);
+        tanks.Tanks_.Add(tank.Id);
+        await assetUploader.Add(new($"tanks/{tank.Id}/meta.pb", tank.ToByteArray()));
       }
 
       await assetUploader.Add(new("definitions/tanks.pb", tanks.ToByteArray()));
+      await assetUploader.Add(new("definitions/tanks-full.pb", tanksFull.ToByteArray()));
     }
 
-    void DeduplicateSlugs(List<Tank> tanks)
+    void DeduplicateSlugs(TanksFull tanksFull)
     {
       List<string> checkedSlugs = [];
       Dictionary<string, List<Tank>> duplicates = [];
 
-      foreach (var tank in tanks)
+      foreach (var tank in tanksFull.Tanks)
       {
         if (checkedSlugs.Contains(tank.Slug))
           continue;
 
         checkedSlugs.Add(tank.Slug);
 
-        foreach (var otherTank in tanks)
+        foreach (var otherTank in tanksFull.Tanks)
         {
           if (otherTank.Slug.Equals(tank.Slug) && !otherTank.Id.Equals(tank.Id))
           {
@@ -150,20 +150,14 @@ namespace BlitzKit.CLI.Functions
           Console.WriteLine($"\t{tank.Id}");
         }
 
-        if (duplicate.Value.Count != 2)
-        {
-          throw new Exception(
-            $"Found an unsupported {duplicate.Value.Count} duplicates for {duplicate.Key}"
-          );
-        }
-
-        if (duplicate.Value.Any(tank => tank.Id.EndsWith("TU")))
+        if (duplicate.Value.Count == 2 && duplicate.Value.Any(tank => tank.Id.EndsWith("TU")))
         {
           PrettyLog.Success("\tTutorial bot discrimination...");
 
           var tutorialBot = duplicate.Value.First(tank => tank.Id.EndsWith("TU"));
           tutorialBot.Slug += "-tu";
         }
+        // if (duplicate.Value.All((tank)=>duplicate.Value.All((otherTank)=>otherTank.Id == tank.Id || otherTank.Nation != tank.Nation)))
         else
         {
           PrettyLog.Success("\tNation discrimination...");
@@ -176,6 +170,10 @@ namespace BlitzKit.CLI.Functions
             tank.Slug += $"-{slugNation}";
           }
         }
+        // else
+        // {
+        //   throw new Exception("No applicable strategy found");
+        // }
 
         foreach (var tank in duplicate.Value)
         {
@@ -207,8 +205,6 @@ namespace BlitzKit.CLI.Functions
         Name = name,
         Slug = slug,
       };
-
-      await assetUploader.Add(new($"tanks/{id}/meta.pb", tank.ToByteArray()));
 
       return tank;
     }

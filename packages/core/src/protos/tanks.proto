@@ -1,12 +1,13 @@
 syntax = "proto2";
 
+import "packages/core/src/protos/tank.proto";
+
 package blitzkit;
 
 message Tanks {
-  repeated TankMeta tanks = 1;
+  repeated string tanks = 1;
 }
 
-message TankMeta {
-  required string id = 1;
-  required string slug = 2;
+message TanksFull {
+  repeated Tank tanks = 1;
 }

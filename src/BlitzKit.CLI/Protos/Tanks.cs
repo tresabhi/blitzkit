@@ -25,13 +25,14 @@ namespace Blitzkit {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CiRwYWNrYWdlcy9jb3JlL3NyYy9wcm90b3MvdGFua3MucHJvdG8SCGJsaXR6",
-            "a2l0IioKBVRhbmtzEiEKBXRhbmtzGAEgAygLMhIuYmxpdHpraXQuVGFua01l",
-            "dGEiJAoIVGFua01ldGESCgoCaWQYASACKAkSDAoEc2x1ZxgCIAIoCQ=="));
+            "a2l0GiNwYWNrYWdlcy9jb3JlL3NyYy9wcm90b3MvdGFuay5wcm90byIWCgVU",
+            "YW5rcxINCgV0YW5rcxgBIAMoCSIqCglUYW5rc0Z1bGwSHQoFdGFua3MYASAD",
+            "KAsyDi5ibGl0emtpdC5UYW5r"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { },
+          new pbr::FileDescriptor[] { global::Blitzkit.TankReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Blitzkit.Tanks), global::Blitzkit.Tanks.Parser, new[]{ "Tanks_" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Blitzkit.TankMeta), global::Blitzkit.TankMeta.Parser, new[]{ "Id", "Slug" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Blitzkit.TanksFull), global::Blitzkit.TanksFull.Parser, new[]{ "Tanks" }, null, null, null, null)
           }));
     }
     #endregion
@@ -85,12 +86,12 @@ namespace Blitzkit {
 
     /// <summary>Field number for the "tanks" field.</summary>
     public const int Tanks_FieldNumber = 1;
-    private static readonly pb::FieldCodec<global::Blitzkit.TankMeta> _repeated_tanks_codec
-        = pb::FieldCodec.ForMessage(10, global::Blitzkit.TankMeta.Parser);
-    private readonly pbc::RepeatedField<global::Blitzkit.TankMeta> tanks_ = new pbc::RepeatedField<global::Blitzkit.TankMeta>();
+    private static readonly pb::FieldCodec<string> _repeated_tanks_codec
+        = pb::FieldCodec.ForString(10);
+    private readonly pbc::RepeatedField<string> tanks_ = new pbc::RepeatedField<string>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Blitzkit.TankMeta> Tanks_ {
+    public pbc::RepeatedField<string> Tanks_ {
       get { return tanks_; }
     }
 
@@ -226,16 +227,16 @@ namespace Blitzkit {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class TankMeta : pb::IMessage<TankMeta>
+  public sealed partial class TanksFull : pb::IMessage<TanksFull>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<TankMeta> _parser = new pb::MessageParser<TankMeta>(() => new TankMeta());
+    private static readonly pb::MessageParser<TanksFull> _parser = new pb::MessageParser<TanksFull>(() => new TanksFull());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<TankMeta> Parser { get { return _parser; } }
+    public static pb::MessageParser<TanksFull> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -251,7 +252,7 @@ namespace Blitzkit {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public TankMeta() {
+    public TanksFull() {
       OnConstruction();
     }
 
@@ -259,87 +260,44 @@ namespace Blitzkit {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public TankMeta(TankMeta other) : this() {
-      id_ = other.id_;
-      slug_ = other.slug_;
+    public TanksFull(TanksFull other) : this() {
+      tanks_ = other.tanks_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public TankMeta Clone() {
-      return new TankMeta(this);
+    public TanksFull Clone() {
+      return new TanksFull(this);
     }
 
-    /// <summary>Field number for the "id" field.</summary>
-    public const int IdFieldNumber = 1;
-    private readonly static string IdDefaultValue = "";
-
-    private string id_;
+    /// <summary>Field number for the "tanks" field.</summary>
+    public const int TanksFieldNumber = 1;
+    private static readonly pb::FieldCodec<global::Blitzkit.Tank> _repeated_tanks_codec
+        = pb::FieldCodec.ForMessage(10, global::Blitzkit.Tank.Parser);
+    private readonly pbc::RepeatedField<global::Blitzkit.Tank> tanks_ = new pbc::RepeatedField<global::Blitzkit.Tank>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string Id {
-      get { return id_ ?? IdDefaultValue; }
-      set {
-        id_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-    /// <summary>Gets whether the "id" field is set</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool HasId {
-      get { return id_ != null; }
-    }
-    /// <summary>Clears the value of the "id" field</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void ClearId() {
-      id_ = null;
-    }
-
-    /// <summary>Field number for the "slug" field.</summary>
-    public const int SlugFieldNumber = 2;
-    private readonly static string SlugDefaultValue = "";
-
-    private string slug_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string Slug {
-      get { return slug_ ?? SlugDefaultValue; }
-      set {
-        slug_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-    /// <summary>Gets whether the "slug" field is set</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool HasSlug {
-      get { return slug_ != null; }
-    }
-    /// <summary>Clears the value of the "slug" field</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void ClearSlug() {
-      slug_ = null;
+    public pbc::RepeatedField<global::Blitzkit.Tank> Tanks {
+      get { return tanks_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as TankMeta);
+      return Equals(other as TanksFull);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(TankMeta other) {
+    public bool Equals(TanksFull other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (Id != other.Id) return false;
-      if (Slug != other.Slug) return false;
+      if(!tanks_.Equals(other.tanks_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -347,8 +305,7 @@ namespace Blitzkit {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (HasId) hash ^= Id.GetHashCode();
-      if (HasSlug) hash ^= Slug.GetHashCode();
+      hash ^= tanks_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -367,14 +324,7 @@ namespace Blitzkit {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (HasId) {
-        output.WriteRawTag(10);
-        output.WriteString(Id);
-      }
-      if (HasSlug) {
-        output.WriteRawTag(18);
-        output.WriteString(Slug);
-      }
+      tanks_.WriteTo(output, _repeated_tanks_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -385,14 +335,7 @@ namespace Blitzkit {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (HasId) {
-        output.WriteRawTag(10);
-        output.WriteString(Id);
-      }
-      if (HasSlug) {
-        output.WriteRawTag(18);
-        output.WriteString(Slug);
-      }
+      tanks_.WriteTo(ref output, _repeated_tanks_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -403,12 +346,7 @@ namespace Blitzkit {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (HasId) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Id);
-      }
-      if (HasSlug) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Slug);
-      }
+      size += tanks_.CalculateSize(_repeated_tanks_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -417,16 +355,11 @@ namespace Blitzkit {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(TankMeta other) {
+    public void MergeFrom(TanksFull other) {
       if (other == null) {
         return;
       }
-      if (other.HasId) {
-        Id = other.Id;
-      }
-      if (other.HasSlug) {
-        Slug = other.Slug;
-      }
+      tanks_.Add(other.tanks_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -447,11 +380,7 @@ namespace Blitzkit {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
-            Id = input.ReadString();
-            break;
-          }
-          case 18: {
-            Slug = input.ReadString();
+            tanks_.AddEntriesFrom(input, _repeated_tanks_codec);
             break;
           }
         }
@@ -474,11 +403,7 @@ namespace Blitzkit {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 10: {
-            Id = input.ReadString();
-            break;
-          }
-          case 18: {
-            Slug = input.ReadString();
+            tanks_.AddEntriesFrom(ref input, _repeated_tanks_codec);
             break;
           }
         }
