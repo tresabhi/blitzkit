@@ -41,10 +41,6 @@ namespace BlitzKit.CLI.Models
         );
         changes.Add(change);
       }
-      else if (devMinimizeChecks)
-      {
-        return;
-      }
       else if (response.StatusCode == HttpStatusCode.OK)
       {
         int deltaSize;

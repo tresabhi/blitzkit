@@ -196,8 +196,8 @@ namespace BlitzKit.CLI.Functions
       slug = Regex.Replace(slug, "--+", "-");
       slug = Regex.Replace(slug, "-$", "");
 
-      await MangleHull(pda);
-      await MangleIcon(pda);
+      // await MangleHull(pda);
+      // await MangleIcon(pda);
 
       Tank tank = new()
       {
