@@ -26,8 +26,10 @@ export async function fetchTankNames() {
         searchableName: tank.name_full ?? tank.name,
         searchableNameDeburr,
         camouflages: tank.camouflages
-          ?.map((id) => camouflageDefinitions.camouflages[id]?.name)
+          ?.map((id) => SUPPORTED_LOCALES.map((locale) => camouflageDefinitions.camouflages[id]?.name.locales[locale]))
+          .flat()
           .filter(Boolean)
+          .map(deburr)
           .join(' '),
         treeType: tank.type,
       };

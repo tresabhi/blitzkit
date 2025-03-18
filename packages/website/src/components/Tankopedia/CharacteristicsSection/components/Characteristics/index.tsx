@@ -107,6 +107,7 @@ export function Characteristics() {
   const hasSupercharger = useEquipment(107);
   const hasCalibratedShells = useEquipment(103);
   const hasImprovedVerticalStabilizer = useEquipment(122);
+  const hasDownImprovedVerticalStabilizer = useEquipment(124);
   const penetrationCoefficient = coefficient([
     hasCalibratedShells,
     resolvePenetrationCoefficient(true, shell.type) - 1,
@@ -129,9 +130,10 @@ export function Characteristics() {
         gunModelDefinition.pitch,
         turretModelDefinition.yaw,
         hasImprovedVerticalStabilizer,
+        hasDownImprovedVerticalStabilizer,
       );
     });
-  }, [hasImprovedVerticalStabilizer]);
+  }, [hasImprovedVerticalStabilizer, hasDownImprovedVerticalStabilizer]);
 
   return (
     <Flex

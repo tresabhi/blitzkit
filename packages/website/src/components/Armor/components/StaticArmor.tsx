@@ -180,6 +180,11 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
               duel.protagonist.tank.equipment_preset,
               duel.protagonist.equipmentMatrix,
             );
+            const hasDownImprovedVerticalStabilizer = await hasEquipment(
+              124,
+              duel.protagonist.tank.equipment_preset,
+              duel.protagonist.equipmentMatrix,
+            );
             const boundingRect = canvas.getBoundingClientRect();
 
             delta.set(event.clientX, event.clientY).sub(position);
@@ -191,6 +196,7 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
               gunModelDefinition.pitch,
               turretModelDefinition.yaw,
               hasImprovedVerticalStabilizer,
+              hasDownImprovedVerticalStabilizer,
             );
             modelTransformEvent.emit({ pitch, yaw });
           }
@@ -275,6 +281,11 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
                 duel.protagonist.tank.equipment_preset,
                 duel.protagonist.equipmentMatrix,
               );
+              const hasDownImprovedVerticalStabilizer = await hasEquipment(
+                124,
+                duel.protagonist.tank.equipment_preset,
+                duel.protagonist.equipmentMatrix,
+              );
               const boundingRect = canvas.getBoundingClientRect();
               delta.set(event.clientX, event.clientY).sub(position);
               position.set(event.clientX, event.clientY);
@@ -285,6 +296,7 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
                 gunModelDefinition.pitch,
                 turretModelDefinition.yaw,
                 hasImprovedVerticalStabilizer,
+                hasDownImprovedVerticalStabilizer,
               );
               modelTransformEvent.emit({ pitch, yaw });
             }
@@ -357,6 +369,11 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
                 duel.protagonist.tank.equipment_preset,
                 duel.protagonist.equipmentMatrix,
               );
+              const hasDownImprovedVerticalStabilizer = await hasEquipment(
+                124,
+                duel.protagonist.tank.equipment_preset,
+                duel.protagonist.equipmentMatrix,
+              );
               const boundingRect = canvas.getBoundingClientRect();
               delta.set(event.clientX, event.clientY).sub(position);
               position.set(event.clientX, event.clientY);
@@ -367,6 +384,7 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
                 gunModelDefinition.pitch,
                 turretModelDefinition.yaw,
                 hasImprovedVerticalStabilizer,
+                hasDownImprovedVerticalStabilizer,
               );
               modelTransformEvent.emit({ pitch, yaw });
             }

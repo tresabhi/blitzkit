@@ -118,6 +118,11 @@ export function Controls({ naked }: ControlsProps) {
         duel.protagonist.tank.equipment_preset,
         duel.protagonist.equipmentMatrix,
       );
+      const hasDownImprovedVerticalStabilizer = await hasEquipment(
+        124,
+        duel.protagonist.tank.equipment_preset,
+        duel.protagonist.equipmentMatrix,
+      );
 
       switch (event) {
         case Pose.HullDown: {
@@ -127,6 +132,7 @@ export function Controls({ naked }: ControlsProps) {
             protagonistGunModelDefinition.pitch,
             protagonistTurretModelDefinition.yaw,
             hasImprovedVerticalStabilizer,
+            hasDownImprovedVerticalStabilizer,
           );
 
           camera.position
@@ -159,6 +165,7 @@ export function Controls({ naked }: ControlsProps) {
             protagonistGunModelDefinition.pitch,
             protagonistTurretModelDefinition.yaw,
             hasImprovedVerticalStabilizer,
+            hasDownImprovedVerticalStabilizer,
           );
 
           camera.position
