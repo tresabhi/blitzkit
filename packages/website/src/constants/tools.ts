@@ -133,6 +133,14 @@ export const chartsTool: Tool = {
   branches: ['main', 'dev', 'opentest', 'preview'],
 };
 
+export const apiTool: Tool = {
+  id: 'api',
+  button: {
+    color: 'indigo',
+  },
+  image: '0bWE5hC',
+};
+
 export const TOOLS: Tool[] = [
   tanksTool,
   compareTool,
@@ -142,5 +150,6 @@ export const TOOLS: Tool[] = [
   sessionTool,
   tierListTool,
   embedTool,
+  apiTool,
   // ratingTool,
 ];

@@ -5,34 +5,42 @@
 // source: packages/core/src/protos/legacy_consumable_definitions.proto
 
 /* eslint-disable */
-import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
-import { I18nString } from "./legacy_i18n";
+import { BinaryReader, BinaryWriter } from '@bufbuild/protobuf/wire';
+import { I18nString, createBaseI18nString } from './legacy_i18n';
 
-export const protobufPackage = "blitzkit";
+export const protobufPackage = 'blitzkit';
 
 export enum ConsumableTankCategoryFilterCategory {
   CLIP = 0,
 }
 
-export function consumableTankCategoryFilterCategoryFromJSON(object: any): ConsumableTankCategoryFilterCategory {
+export function consumableTankCategoryFilterCategoryFromJSON(
+  object: any,
+): ConsumableTankCategoryFilterCategory {
   switch (object) {
     case 0:
-    case "CONSUMABLE_TANK_CATEGORY_FILTER_CATEGORY_CLIP":
+    case 'CONSUMABLE_TANK_CATEGORY_FILTER_CATEGORY_CLIP':
       return ConsumableTankCategoryFilterCategory.CLIP;
     default:
       throw new globalThis.Error(
-        "Unrecognized enum value " + object + " for enum ConsumableTankCategoryFilterCategory",
+        'Unrecognized enum value ' +
+          object +
+          ' for enum ConsumableTankCategoryFilterCategory',
       );
   }
 }
 
-export function consumableTankCategoryFilterCategoryToJSON(object: ConsumableTankCategoryFilterCategory): string {
+export function consumableTankCategoryFilterCategoryToJSON(
+  object: ConsumableTankCategoryFilterCategory,
+): string {
   switch (object) {
     case ConsumableTankCategoryFilterCategory.CLIP:
-      return "CONSUMABLE_TANK_CATEGORY_FILTER_CATEGORY_CLIP";
+      return 'CONSUMABLE_TANK_CATEGORY_FILTER_CATEGORY_CLIP';
     default:
       throw new globalThis.Error(
-        "Unrecognized enum value " + object + " for enum ConsumableTankCategoryFilterCategory",
+        'Unrecognized enum value ' +
+          object +
+          ' for enum ConsumableTankCategoryFilterCategory',
       );
   }
 }
@@ -58,10 +66,10 @@ export interface Consumable {
 
 export interface ConsumableTankFilter {
   filter_type?:
-    | { $case: "tiers"; value: ConsumableTankTierFilter }
-    | { $case: "ids"; value: ConsumableTankIdsFilter }
-    | { $case: "categories"; value: ConsumableTankCategoryFilter }
-    | { $case: "nations"; value: ConsumableTankNationFilter }
+    | { $case: 'tiers'; value: ConsumableTankTierFilter }
+    | { $case: 'ids'; value: ConsumableTankIdsFilter }
+    | { $case: 'categories'; value: ConsumableTankCategoryFilter }
+    | { $case: 'nations'; value: ConsumableTankNationFilter }
     | undefined;
 }
 
@@ -87,15 +95,25 @@ function createBaseConsumableDefinitions(): ConsumableDefinitions {
 }
 
 export const ConsumableDefinitions: MessageFns<ConsumableDefinitions> = {
-  encode(message: ConsumableDefinitions, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+  encode(
+    message: ConsumableDefinitions,
+    writer: BinaryWriter = new BinaryWriter(),
+  ): BinaryWriter {
     Object.entries(message.consumables).forEach(([key, value]) => {
-      ConsumableDefinitions_ConsumablesEntry.encode({ key: key as any, value }, writer.uint32(10).fork()).join();
+      ConsumableDefinitions_ConsumablesEntry.encode(
+        { key: key as any, value },
+        writer.uint32(10).fork(),
+      ).join();
     });
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ConsumableDefinitions {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(
+    input: BinaryReader | Uint8Array,
+    length?: number,
+  ): ConsumableDefinitions {
+    const reader =
+      input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseConsumableDefinitions();
     while (reader.pos < end) {
@@ -106,7 +124,10 @@ export const ConsumableDefinitions: MessageFns<ConsumableDefinitions> = {
             break;
           }
 
-          const entry1 = ConsumableDefinitions_ConsumablesEntry.decode(reader, reader.uint32());
+          const entry1 = ConsumableDefinitions_ConsumablesEntry.decode(
+            reader,
+            reader.uint32(),
+          );
           if (entry1.value !== undefined) {
             message.consumables[entry1.key] = entry1.value;
           }
@@ -124,10 +145,12 @@ export const ConsumableDefinitions: MessageFns<ConsumableDefinitions> = {
   fromJSON(object: any): ConsumableDefinitions {
     return {
       consumables: isObject(object.consumables)
-        ? Object.entries(object.consumables).reduce<{ [key: number]: Consumable }>((acc, [key, value]) => {
-          acc[globalThis.Number(key)] = Consumable.fromJSON(value);
-          return acc;
-        }, {})
+        ? Object.entries(object.consumables).reduce<{
+            [key: number]: Consumable;
+          }>((acc, [key, value]) => {
+            acc[globalThis.Number(key)] = Consumable.fromJSON(value);
+            return acc;
+          }, {})
         : {},
     };
   },
@@ -146,20 +169,23 @@ export const ConsumableDefinitions: MessageFns<ConsumableDefinitions> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ConsumableDefinitions>, I>>(base?: I): ConsumableDefinitions {
+  create<I extends Exact<DeepPartial<ConsumableDefinitions>, I>>(
+    base?: I,
+  ): ConsumableDefinitions {
     return ConsumableDefinitions.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ConsumableDefinitions>, I>>(object: I): ConsumableDefinitions {
+  fromPartial<I extends Exact<DeepPartial<ConsumableDefinitions>, I>>(
+    object: I,
+  ): ConsumableDefinitions {
     const message = createBaseConsumableDefinitions();
-    message.consumables = Object.entries(object.consumables ?? {}).reduce<{ [key: number]: Consumable }>(
-      (acc, [key, value]) => {
-        if (value !== undefined) {
-          acc[globalThis.Number(key)] = Consumable.fromPartial(value);
-        }
-        return acc;
-      },
-      {},
-    );
+    message.consumables = Object.entries(object.consumables ?? {}).reduce<{
+      [key: number]: Consumable;
+    }>((acc, [key, value]) => {
+      if (value !== undefined) {
+        acc[globalThis.Number(key)] = Consumable.fromPartial(value);
+      }
+      return acc;
+    }, {});
     return message;
   },
 };
@@ -168,83 +194,101 @@ function createBaseConsumableDefinitions_ConsumablesEntry(): ConsumableDefinitio
   return { key: 0, value: createBaseConsumable() };
 }
 
-export const ConsumableDefinitions_ConsumablesEntry: MessageFns<ConsumableDefinitions_ConsumablesEntry> = {
-  encode(message: ConsumableDefinitions_ConsumablesEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.key !== undefined) {
-      writer.uint32(8).uint32(message.key);
-    }
-    if (message.value !== undefined) {
-      Consumable.encode(message.value, writer.uint32(18).fork()).join();
-    }
-    return writer;
-  },
-
-  decode(input: BinaryReader | Uint8Array, length?: number): ConsumableDefinitions_ConsumablesEntry {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseConsumableDefinitions_ConsumablesEntry();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1: {
-          if (tag !== 8) {
-            break;
-          }
-
-          message.key = reader.uint32();
-          continue;
-        }
-        case 2: {
-          if (tag !== 18) {
-            break;
-          }
-
-          message.value = Consumable.decode(reader, reader.uint32());
-          continue;
-        }
+export const ConsumableDefinitions_ConsumablesEntry: MessageFns<ConsumableDefinitions_ConsumablesEntry> =
+  {
+    encode(
+      message: ConsumableDefinitions_ConsumablesEntry,
+      writer: BinaryWriter = new BinaryWriter(),
+    ): BinaryWriter {
+      if (message.key !== undefined) {
+        writer.uint32(8).uint32(message.key);
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
+      if (message.value !== undefined) {
+        Consumable.encode(message.value, writer.uint32(18).fork()).join();
       }
-      reader.skip(tag & 7);
-    }
-    return message;
-  },
+      return writer;
+    },
 
-  fromJSON(object: any): ConsumableDefinitions_ConsumablesEntry {
-    return {
-      key: globalThis.Number(assertSet("ConsumableDefinitions_ConsumablesEntry.key", object.key)),
-      value: Consumable.fromJSON(assertSet("ConsumableDefinitions_ConsumablesEntry.value", object.value)),
-    };
-  },
+    decode(
+      input: BinaryReader | Uint8Array,
+      length?: number,
+    ): ConsumableDefinitions_ConsumablesEntry {
+      const reader =
+        input instanceof BinaryReader ? input : new BinaryReader(input);
+      let end = length === undefined ? reader.len : reader.pos + length;
+      const message = createBaseConsumableDefinitions_ConsumablesEntry();
+      while (reader.pos < end) {
+        const tag = reader.uint32();
+        switch (tag >>> 3) {
+          case 1: {
+            if (tag !== 8) {
+              break;
+            }
 
-  toJSON(message: ConsumableDefinitions_ConsumablesEntry): unknown {
-    const obj: any = {};
-    if (message.key !== undefined) {
-      obj.key = Math.round(message.key);
-    }
-    if (message.value !== undefined) {
-      obj.value = Consumable.toJSON(message.value);
-    }
-    return obj;
-  },
+            message.key = reader.uint32();
+            continue;
+          }
+          case 2: {
+            if (tag !== 18) {
+              break;
+            }
 
-  create<I extends Exact<DeepPartial<ConsumableDefinitions_ConsumablesEntry>, I>>(
-    base?: I,
-  ): ConsumableDefinitions_ConsumablesEntry {
-    return ConsumableDefinitions_ConsumablesEntry.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<ConsumableDefinitions_ConsumablesEntry>, I>>(
-    object: I,
-  ): ConsumableDefinitions_ConsumablesEntry {
-    const message = createBaseConsumableDefinitions_ConsumablesEntry();
-    message.key = object.key ?? 0;
-    message.value = (object.value !== undefined && object.value !== null)
-      ? Consumable.fromPartial(object.value)
-      : undefined;
-    return message;
-  },
-};
+            message.value = Consumable.decode(reader, reader.uint32());
+            continue;
+          }
+        }
+        if ((tag & 7) === 4 || tag === 0) {
+          break;
+        }
+        reader.skip(tag & 7);
+      }
+      return message;
+    },
+
+    fromJSON(object: any): ConsumableDefinitions_ConsumablesEntry {
+      return {
+        key: globalThis.Number(
+          assertSet('ConsumableDefinitions_ConsumablesEntry.key', object.key),
+        ),
+        value: Consumable.fromJSON(
+          assertSet(
+            'ConsumableDefinitions_ConsumablesEntry.value',
+            object.value,
+          ),
+        ),
+      };
+    },
+
+    toJSON(message: ConsumableDefinitions_ConsumablesEntry): unknown {
+      const obj: any = {};
+      if (message.key !== undefined) {
+        obj.key = Math.round(message.key);
+      }
+      if (message.value !== undefined) {
+        obj.value = Consumable.toJSON(message.value);
+      }
+      return obj;
+    },
+
+    create<
+      I extends Exact<DeepPartial<ConsumableDefinitions_ConsumablesEntry>, I>,
+    >(base?: I): ConsumableDefinitions_ConsumablesEntry {
+      return ConsumableDefinitions_ConsumablesEntry.fromPartial(
+        base ?? ({} as any),
+      );
+    },
+    fromPartial<
+      I extends Exact<DeepPartial<ConsumableDefinitions_ConsumablesEntry>, I>,
+    >(object: I): ConsumableDefinitions_ConsumablesEntry {
+      const message = createBaseConsumableDefinitions_ConsumablesEntry();
+      message.key = object.key ?? 0;
+      message.value =
+        object.value !== undefined && object.value !== null
+          ? Consumable.fromPartial(object.value)
+          : undefined;
+      return message;
+    },
+  };
 
 function createBaseConsumable(): Consumable {
   return {
@@ -259,7 +303,10 @@ function createBaseConsumable(): Consumable {
 }
 
 export const Consumable: MessageFns<Consumable> = {
-  encode(message: Consumable, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+  encode(
+    message: Consumable,
+    writer: BinaryWriter = new BinaryWriter(),
+  ): BinaryWriter {
     if (message.id !== 0) {
       writer.uint32(8).uint32(message.id);
     }
@@ -285,7 +332,8 @@ export const Consumable: MessageFns<Consumable> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): Consumable {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader =
+      input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseConsumable();
     while (reader.pos < end) {
@@ -336,7 +384,9 @@ export const Consumable: MessageFns<Consumable> = {
             break;
           }
 
-          message.include.push(ConsumableTankFilter.decode(reader, reader.uint32()));
+          message.include.push(
+            ConsumableTankFilter.decode(reader, reader.uint32()),
+          );
           continue;
         }
         case 7: {
@@ -344,7 +394,9 @@ export const Consumable: MessageFns<Consumable> = {
             break;
           }
 
-          message.exclude.push(ConsumableTankFilter.decode(reader, reader.uint32()));
+          message.exclude.push(
+            ConsumableTankFilter.decode(reader, reader.uint32()),
+          );
           continue;
         }
       }
@@ -358,11 +410,17 @@ export const Consumable: MessageFns<Consumable> = {
 
   fromJSON(object: any): Consumable {
     return {
-      id: globalThis.Number(assertSet("Consumable.id", object.id)),
-      name: I18nString.fromJSON(assertSet("Consumable.name", object.name)),
-      cooldown: globalThis.Number(assertSet("Consumable.cooldown", object.cooldown)),
-      duration: isSet(object.duration) ? globalThis.Number(object.duration) : undefined,
-      game_mode_exclusive: globalThis.Boolean(assertSet("Consumable.game_mode_exclusive", object.game_mode_exclusive)),
+      id: globalThis.Number(assertSet('Consumable.id', object.id)),
+      name: I18nString.fromJSON(assertSet('Consumable.name', object.name)),
+      cooldown: globalThis.Number(
+        assertSet('Consumable.cooldown', object.cooldown),
+      ),
+      duration: isSet(object.duration)
+        ? globalThis.Number(object.duration)
+        : undefined,
+      game_mode_exclusive: globalThis.Boolean(
+        assertSet('Consumable.game_mode_exclusive', object.game_mode_exclusive),
+      ),
       include: globalThis.Array.isArray(object?.include)
         ? object.include.map((e: any) => ConsumableTankFilter.fromJSON(e))
         : [],
@@ -401,17 +459,22 @@ export const Consumable: MessageFns<Consumable> = {
   create<I extends Exact<DeepPartial<Consumable>, I>>(base?: I): Consumable {
     return Consumable.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<Consumable>, I>>(object: I): Consumable {
+  fromPartial<I extends Exact<DeepPartial<Consumable>, I>>(
+    object: I,
+  ): Consumable {
     const message = createBaseConsumable();
     message.id = object.id ?? 0;
-    message.name = (object.name !== undefined && object.name !== null)
-      ? I18nString.fromPartial(object.name)
-      : createBaseI18nString();
+    message.name =
+      object.name !== undefined && object.name !== null
+        ? I18nString.fromPartial(object.name)
+        : createBaseI18nString();
     message.cooldown = object.cooldown ?? 0;
     message.duration = object.duration ?? undefined;
     message.game_mode_exclusive = object.game_mode_exclusive ?? false;
-    message.include = object.include?.map((e) => ConsumableTankFilter.fromPartial(e)) || [];
-    message.exclude = object.exclude?.map((e) => ConsumableTankFilter.fromPartial(e)) || [];
+    message.include =
+      object.include?.map((e) => ConsumableTankFilter.fromPartial(e)) || [];
+    message.exclude =
+      object.exclude?.map((e) => ConsumableTankFilter.fromPartial(e)) || [];
     return message;
   },
 };
@@ -421,26 +484,45 @@ function createBaseConsumableTankFilter(): ConsumableTankFilter {
 }
 
 export const ConsumableTankFilter: MessageFns<ConsumableTankFilter> = {
-  encode(message: ConsumableTankFilter, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+  encode(
+    message: ConsumableTankFilter,
+    writer: BinaryWriter = new BinaryWriter(),
+  ): BinaryWriter {
     switch (message.filter_type?.$case) {
-      case "tiers":
-        ConsumableTankTierFilter.encode(message.filter_type.value, writer.uint32(10).fork()).join();
+      case 'tiers':
+        ConsumableTankTierFilter.encode(
+          message.filter_type.value,
+          writer.uint32(10).fork(),
+        ).join();
         break;
-      case "ids":
-        ConsumableTankIdsFilter.encode(message.filter_type.value, writer.uint32(18).fork()).join();
+      case 'ids':
+        ConsumableTankIdsFilter.encode(
+          message.filter_type.value,
+          writer.uint32(18).fork(),
+        ).join();
         break;
-      case "categories":
-        ConsumableTankCategoryFilter.encode(message.filter_type.value, writer.uint32(26).fork()).join();
+      case 'categories':
+        ConsumableTankCategoryFilter.encode(
+          message.filter_type.value,
+          writer.uint32(26).fork(),
+        ).join();
         break;
-      case "nations":
-        ConsumableTankNationFilter.encode(message.filter_type.value, writer.uint32(34).fork()).join();
+      case 'nations':
+        ConsumableTankNationFilter.encode(
+          message.filter_type.value,
+          writer.uint32(34).fork(),
+        ).join();
         break;
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ConsumableTankFilter {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(
+    input: BinaryReader | Uint8Array,
+    length?: number,
+  ): ConsumableTankFilter {
+    const reader =
+      input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseConsumableTankFilter();
     while (reader.pos < end) {
@@ -451,7 +533,10 @@ export const ConsumableTankFilter: MessageFns<ConsumableTankFilter> = {
             break;
           }
 
-          message.filter_type = { $case: "tiers", value: ConsumableTankTierFilter.decode(reader, reader.uint32()) };
+          message.filter_type = {
+            $case: 'tiers',
+            value: ConsumableTankTierFilter.decode(reader, reader.uint32()),
+          };
           continue;
         }
         case 2: {
@@ -459,7 +544,10 @@ export const ConsumableTankFilter: MessageFns<ConsumableTankFilter> = {
             break;
           }
 
-          message.filter_type = { $case: "ids", value: ConsumableTankIdsFilter.decode(reader, reader.uint32()) };
+          message.filter_type = {
+            $case: 'ids',
+            value: ConsumableTankIdsFilter.decode(reader, reader.uint32()),
+          };
           continue;
         }
         case 3: {
@@ -468,7 +556,7 @@ export const ConsumableTankFilter: MessageFns<ConsumableTankFilter> = {
           }
 
           message.filter_type = {
-            $case: "categories",
+            $case: 'categories',
             value: ConsumableTankCategoryFilter.decode(reader, reader.uint32()),
           };
           continue;
@@ -478,7 +566,10 @@ export const ConsumableTankFilter: MessageFns<ConsumableTankFilter> = {
             break;
           }
 
-          message.filter_type = { $case: "nations", value: ConsumableTankNationFilter.decode(reader, reader.uint32()) };
+          message.filter_type = {
+            $case: 'nations',
+            value: ConsumableTankNationFilter.decode(reader, reader.uint32()),
+          };
           continue;
         }
       }
@@ -493,70 +584,98 @@ export const ConsumableTankFilter: MessageFns<ConsumableTankFilter> = {
   fromJSON(object: any): ConsumableTankFilter {
     return {
       filter_type: isSet(object.tiers)
-        ? { $case: "tiers", value: ConsumableTankTierFilter.fromJSON(object.tiers) }
+        ? {
+            $case: 'tiers',
+            value: ConsumableTankTierFilter.fromJSON(object.tiers),
+          }
         : isSet(object.ids)
-        ? { $case: "ids", value: ConsumableTankIdsFilter.fromJSON(object.ids) }
-        : isSet(object.categories)
-        ? { $case: "categories", value: ConsumableTankCategoryFilter.fromJSON(object.categories) }
-        : isSet(object.nations)
-        ? { $case: "nations", value: ConsumableTankNationFilter.fromJSON(object.nations) }
-        : undefined,
+          ? {
+              $case: 'ids',
+              value: ConsumableTankIdsFilter.fromJSON(object.ids),
+            }
+          : isSet(object.categories)
+            ? {
+                $case: 'categories',
+                value: ConsumableTankCategoryFilter.fromJSON(object.categories),
+              }
+            : isSet(object.nations)
+              ? {
+                  $case: 'nations',
+                  value: ConsumableTankNationFilter.fromJSON(object.nations),
+                }
+              : undefined,
     };
   },
 
   toJSON(message: ConsumableTankFilter): unknown {
     const obj: any = {};
-    if (message.filter_type?.$case === "tiers") {
+    if (message.filter_type?.$case === 'tiers') {
       obj.tiers = ConsumableTankTierFilter.toJSON(message.filter_type.value);
     }
-    if (message.filter_type?.$case === "ids") {
+    if (message.filter_type?.$case === 'ids') {
       obj.ids = ConsumableTankIdsFilter.toJSON(message.filter_type.value);
     }
-    if (message.filter_type?.$case === "categories") {
-      obj.categories = ConsumableTankCategoryFilter.toJSON(message.filter_type.value);
+    if (message.filter_type?.$case === 'categories') {
+      obj.categories = ConsumableTankCategoryFilter.toJSON(
+        message.filter_type.value,
+      );
     }
-    if (message.filter_type?.$case === "nations") {
-      obj.nations = ConsumableTankNationFilter.toJSON(message.filter_type.value);
+    if (message.filter_type?.$case === 'nations') {
+      obj.nations = ConsumableTankNationFilter.toJSON(
+        message.filter_type.value,
+      );
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ConsumableTankFilter>, I>>(base?: I): ConsumableTankFilter {
+  create<I extends Exact<DeepPartial<ConsumableTankFilter>, I>>(
+    base?: I,
+  ): ConsumableTankFilter {
     return ConsumableTankFilter.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ConsumableTankFilter>, I>>(object: I): ConsumableTankFilter {
+  fromPartial<I extends Exact<DeepPartial<ConsumableTankFilter>, I>>(
+    object: I,
+  ): ConsumableTankFilter {
     const message = createBaseConsumableTankFilter();
     if (
-      object.filter_type?.$case === "tiers" &&
-      object.filter_type?.value !== undefined &&
-      object.filter_type?.value !== null
-    ) {
-      message.filter_type = { $case: "tiers", value: ConsumableTankTierFilter.fromPartial(object.filter_type.value) };
-    }
-    if (
-      object.filter_type?.$case === "ids" &&
-      object.filter_type?.value !== undefined &&
-      object.filter_type?.value !== null
-    ) {
-      message.filter_type = { $case: "ids", value: ConsumableTankIdsFilter.fromPartial(object.filter_type.value) };
-    }
-    if (
-      object.filter_type?.$case === "categories" &&
+      object.filter_type?.$case === 'tiers' &&
       object.filter_type?.value !== undefined &&
       object.filter_type?.value !== null
     ) {
       message.filter_type = {
-        $case: "categories",
-        value: ConsumableTankCategoryFilter.fromPartial(object.filter_type.value),
+        $case: 'tiers',
+        value: ConsumableTankTierFilter.fromPartial(object.filter_type.value),
       };
     }
     if (
-      object.filter_type?.$case === "nations" &&
+      object.filter_type?.$case === 'ids' &&
       object.filter_type?.value !== undefined &&
       object.filter_type?.value !== null
     ) {
       message.filter_type = {
-        $case: "nations",
+        $case: 'ids',
+        value: ConsumableTankIdsFilter.fromPartial(object.filter_type.value),
+      };
+    }
+    if (
+      object.filter_type?.$case === 'categories' &&
+      object.filter_type?.value !== undefined &&
+      object.filter_type?.value !== null
+    ) {
+      message.filter_type = {
+        $case: 'categories',
+        value: ConsumableTankCategoryFilter.fromPartial(
+          object.filter_type.value,
+        ),
+      };
+    }
+    if (
+      object.filter_type?.$case === 'nations' &&
+      object.filter_type?.value !== undefined &&
+      object.filter_type?.value !== null
+    ) {
+      message.filter_type = {
+        $case: 'nations',
         value: ConsumableTankNationFilter.fromPartial(object.filter_type.value),
       };
     }
@@ -569,7 +688,10 @@ function createBaseConsumableTankTierFilter(): ConsumableTankTierFilter {
 }
 
 export const ConsumableTankTierFilter: MessageFns<ConsumableTankTierFilter> = {
-  encode(message: ConsumableTankTierFilter, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+  encode(
+    message: ConsumableTankTierFilter,
+    writer: BinaryWriter = new BinaryWriter(),
+  ): BinaryWriter {
     if (message.min !== 0) {
       writer.uint32(8).uint32(message.min);
     }
@@ -579,8 +701,12 @@ export const ConsumableTankTierFilter: MessageFns<ConsumableTankTierFilter> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ConsumableTankTierFilter {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(
+    input: BinaryReader | Uint8Array,
+    length?: number,
+  ): ConsumableTankTierFilter {
+    const reader =
+      input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseConsumableTankTierFilter();
     while (reader.pos < end) {
@@ -613,8 +739,12 @@ export const ConsumableTankTierFilter: MessageFns<ConsumableTankTierFilter> = {
 
   fromJSON(object: any): ConsumableTankTierFilter {
     return {
-      min: globalThis.Number(assertSet("ConsumableTankTierFilter.min", object.min)),
-      max: globalThis.Number(assertSet("ConsumableTankTierFilter.max", object.max)),
+      min: globalThis.Number(
+        assertSet('ConsumableTankTierFilter.min', object.min),
+      ),
+      max: globalThis.Number(
+        assertSet('ConsumableTankTierFilter.max', object.max),
+      ),
     };
   },
 
@@ -629,10 +759,14 @@ export const ConsumableTankTierFilter: MessageFns<ConsumableTankTierFilter> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ConsumableTankTierFilter>, I>>(base?: I): ConsumableTankTierFilter {
+  create<I extends Exact<DeepPartial<ConsumableTankTierFilter>, I>>(
+    base?: I,
+  ): ConsumableTankTierFilter {
     return ConsumableTankTierFilter.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ConsumableTankTierFilter>, I>>(object: I): ConsumableTankTierFilter {
+  fromPartial<I extends Exact<DeepPartial<ConsumableTankTierFilter>, I>>(
+    object: I,
+  ): ConsumableTankTierFilter {
     const message = createBaseConsumableTankTierFilter();
     message.min = object.min ?? 0;
     message.max = object.max ?? 0;
@@ -645,7 +779,10 @@ function createBaseConsumableTankIdsFilter(): ConsumableTankIdsFilter {
 }
 
 export const ConsumableTankIdsFilter: MessageFns<ConsumableTankIdsFilter> = {
-  encode(message: ConsumableTankIdsFilter, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+  encode(
+    message: ConsumableTankIdsFilter,
+    writer: BinaryWriter = new BinaryWriter(),
+  ): BinaryWriter {
     writer.uint32(10).fork();
     for (const v of message.ids) {
       writer.uint32(v);
@@ -654,8 +791,12 @@ export const ConsumableTankIdsFilter: MessageFns<ConsumableTankIdsFilter> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ConsumableTankIdsFilter {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(
+    input: BinaryReader | Uint8Array,
+    length?: number,
+  ): ConsumableTankIdsFilter {
+    const reader =
+      input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseConsumableTankIdsFilter();
     while (reader.pos < end) {
@@ -689,7 +830,11 @@ export const ConsumableTankIdsFilter: MessageFns<ConsumableTankIdsFilter> = {
   },
 
   fromJSON(object: any): ConsumableTankIdsFilter {
-    return { ids: globalThis.Array.isArray(object?.ids) ? object.ids.map((e: any) => globalThis.Number(e)) : [] };
+    return {
+      ids: globalThis.Array.isArray(object?.ids)
+        ? object.ids.map((e: any) => globalThis.Number(e))
+        : [],
+    };
   },
 
   toJSON(message: ConsumableTankIdsFilter): unknown {
@@ -700,10 +845,14 @@ export const ConsumableTankIdsFilter: MessageFns<ConsumableTankIdsFilter> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ConsumableTankIdsFilter>, I>>(base?: I): ConsumableTankIdsFilter {
+  create<I extends Exact<DeepPartial<ConsumableTankIdsFilter>, I>>(
+    base?: I,
+  ): ConsumableTankIdsFilter {
     return ConsumableTankIdsFilter.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ConsumableTankIdsFilter>, I>>(object: I): ConsumableTankIdsFilter {
+  fromPartial<I extends Exact<DeepPartial<ConsumableTankIdsFilter>, I>>(
+    object: I,
+  ): ConsumableTankIdsFilter {
     const message = createBaseConsumableTankIdsFilter();
     message.ids = object.ids?.map((e) => e) || [];
     return message;
@@ -714,151 +863,196 @@ function createBaseConsumableTankCategoryFilter(): ConsumableTankCategoryFilter 
   return { categories: [] };
 }
 
-export const ConsumableTankCategoryFilter: MessageFns<ConsumableTankCategoryFilter> = {
-  encode(message: ConsumableTankCategoryFilter, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    writer.uint32(10).fork();
-    for (const v of message.categories) {
-      writer.int32(v);
-    }
-    writer.join();
-    return writer;
-  },
+export const ConsumableTankCategoryFilter: MessageFns<ConsumableTankCategoryFilter> =
+  {
+    encode(
+      message: ConsumableTankCategoryFilter,
+      writer: BinaryWriter = new BinaryWriter(),
+    ): BinaryWriter {
+      writer.uint32(10).fork();
+      for (const v of message.categories) {
+        writer.int32(v);
+      }
+      writer.join();
+      return writer;
+    },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ConsumableTankCategoryFilter {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseConsumableTankCategoryFilter();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1: {
-          if (tag === 8) {
-            message.categories.push(reader.int32() as any);
-
-            continue;
-          }
-
-          if (tag === 10) {
-            const end2 = reader.uint32() + reader.pos;
-            while (reader.pos < end2) {
+    decode(
+      input: BinaryReader | Uint8Array,
+      length?: number,
+    ): ConsumableTankCategoryFilter {
+      const reader =
+        input instanceof BinaryReader ? input : new BinaryReader(input);
+      let end = length === undefined ? reader.len : reader.pos + length;
+      const message = createBaseConsumableTankCategoryFilter();
+      while (reader.pos < end) {
+        const tag = reader.uint32();
+        switch (tag >>> 3) {
+          case 1: {
+            if (tag === 8) {
               message.categories.push(reader.int32() as any);
+
+              continue;
             }
 
-            continue;
-          }
+            if (tag === 10) {
+              const end2 = reader.uint32() + reader.pos;
+              while (reader.pos < end2) {
+                message.categories.push(reader.int32() as any);
+              }
 
+              continue;
+            }
+
+            break;
+          }
+        }
+        if ((tag & 7) === 4 || tag === 0) {
           break;
         }
+        reader.skip(tag & 7);
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
+      return message;
+    },
+
+    fromJSON(object: any): ConsumableTankCategoryFilter {
+      return {
+        categories: globalThis.Array.isArray(object?.categories)
+          ? object.categories.map((e: any) =>
+              consumableTankCategoryFilterCategoryFromJSON(e),
+            )
+          : [],
+      };
+    },
+
+    toJSON(message: ConsumableTankCategoryFilter): unknown {
+      const obj: any = {};
+      if (message.categories?.length) {
+        obj.categories = message.categories.map((e) =>
+          consumableTankCategoryFilterCategoryToJSON(e),
+        );
       }
-      reader.skip(tag & 7);
-    }
-    return message;
-  },
+      return obj;
+    },
 
-  fromJSON(object: any): ConsumableTankCategoryFilter {
-    return {
-      categories: globalThis.Array.isArray(object?.categories)
-        ? object.categories.map((e: any) => consumableTankCategoryFilterCategoryFromJSON(e))
-        : [],
-    };
-  },
-
-  toJSON(message: ConsumableTankCategoryFilter): unknown {
-    const obj: any = {};
-    if (message.categories?.length) {
-      obj.categories = message.categories.map((e) => consumableTankCategoryFilterCategoryToJSON(e));
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<ConsumableTankCategoryFilter>, I>>(base?: I): ConsumableTankCategoryFilter {
-    return ConsumableTankCategoryFilter.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<ConsumableTankCategoryFilter>, I>>(object: I): ConsumableTankCategoryFilter {
-    const message = createBaseConsumableTankCategoryFilter();
-    message.categories = object.categories?.map((e) => e) || [];
-    return message;
-  },
-};
+    create<I extends Exact<DeepPartial<ConsumableTankCategoryFilter>, I>>(
+      base?: I,
+    ): ConsumableTankCategoryFilter {
+      return ConsumableTankCategoryFilter.fromPartial(base ?? ({} as any));
+    },
+    fromPartial<I extends Exact<DeepPartial<ConsumableTankCategoryFilter>, I>>(
+      object: I,
+    ): ConsumableTankCategoryFilter {
+      const message = createBaseConsumableTankCategoryFilter();
+      message.categories = object.categories?.map((e) => e) || [];
+      return message;
+    },
+  };
 
 function createBaseConsumableTankNationFilter(): ConsumableTankNationFilter {
   return { nations: [] };
 }
 
-export const ConsumableTankNationFilter: MessageFns<ConsumableTankNationFilter> = {
-  encode(message: ConsumableTankNationFilter, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    for (const v of message.nations) {
-      writer.uint32(10).string(v!);
-    }
-    return writer;
-  },
+export const ConsumableTankNationFilter: MessageFns<ConsumableTankNationFilter> =
+  {
+    encode(
+      message: ConsumableTankNationFilter,
+      writer: BinaryWriter = new BinaryWriter(),
+    ): BinaryWriter {
+      for (const v of message.nations) {
+        writer.uint32(10).string(v!);
+      }
+      return writer;
+    },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ConsumableTankNationFilter {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseConsumableTankNationFilter();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1: {
-          if (tag !== 10) {
-            break;
+    decode(
+      input: BinaryReader | Uint8Array,
+      length?: number,
+    ): ConsumableTankNationFilter {
+      const reader =
+        input instanceof BinaryReader ? input : new BinaryReader(input);
+      let end = length === undefined ? reader.len : reader.pos + length;
+      const message = createBaseConsumableTankNationFilter();
+      while (reader.pos < end) {
+        const tag = reader.uint32();
+        switch (tag >>> 3) {
+          case 1: {
+            if (tag !== 10) {
+              break;
+            }
+
+            message.nations.push(reader.string());
+            continue;
           }
-
-          message.nations.push(reader.string());
-          continue;
         }
+        if ((tag & 7) === 4 || tag === 0) {
+          break;
+        }
+        reader.skip(tag & 7);
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
+      return message;
+    },
+
+    fromJSON(object: any): ConsumableTankNationFilter {
+      return {
+        nations: globalThis.Array.isArray(object?.nations)
+          ? object.nations.map((e: any) => globalThis.String(e))
+          : [],
+      };
+    },
+
+    toJSON(message: ConsumableTankNationFilter): unknown {
+      const obj: any = {};
+      if (message.nations?.length) {
+        obj.nations = message.nations;
       }
-      reader.skip(tag & 7);
-    }
-    return message;
-  },
+      return obj;
+    },
 
-  fromJSON(object: any): ConsumableTankNationFilter {
-    return {
-      nations: globalThis.Array.isArray(object?.nations) ? object.nations.map((e: any) => globalThis.String(e)) : [],
-    };
-  },
+    create<I extends Exact<DeepPartial<ConsumableTankNationFilter>, I>>(
+      base?: I,
+    ): ConsumableTankNationFilter {
+      return ConsumableTankNationFilter.fromPartial(base ?? ({} as any));
+    },
+    fromPartial<I extends Exact<DeepPartial<ConsumableTankNationFilter>, I>>(
+      object: I,
+    ): ConsumableTankNationFilter {
+      const message = createBaseConsumableTankNationFilter();
+      message.nations = object.nations?.map((e) => e) || [];
+      return message;
+    },
+  };
 
-  toJSON(message: ConsumableTankNationFilter): unknown {
-    const obj: any = {};
-    if (message.nations?.length) {
-      obj.nations = message.nations;
-    }
-    return obj;
-  },
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-  create<I extends Exact<DeepPartial<ConsumableTankNationFilter>, I>>(base?: I): ConsumableTankNationFilter {
-    return ConsumableTankNationFilter.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<ConsumableTankNationFilter>, I>>(object: I): ConsumableTankNationFilter {
-    const message = createBaseConsumableTankNationFilter();
-    message.nations = object.nations?.map((e) => e) || [];
-    return message;
-  },
-};
-
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
-
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends { $case: string; value: unknown } ? { $case: T["$case"]; value?: DeepPartial<T["value"]> }
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>;
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends globalThis.Array<infer U>
+    ? globalThis.Array<DeepPartial<U>>
+    : T extends ReadonlyArray<infer U>
+      ? ReadonlyArray<DeepPartial<U>>
+      : T extends { $case: string; value: unknown }
+        ? { $case: T['$case']; value?: DeepPartial<T['value']> }
+        : T extends {}
+          ? { [K in keyof T]?: DeepPartial<T[K]> }
+          : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
+      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
+    };
 
 function isObject(value: any): boolean {
-  return typeof value === "object" && value !== null;
+  return typeof value === 'object' && value !== null;
 }
 
 function isSet(value: any): boolean {

@@ -1,0 +1,49 @@
+---
+import { Code, Flex, Link } from '@radix-ui/themes';
+import { PageWrapper } from '../../../components/PageWrapper';
+import { apiTool } from '../../../constants/tools';
+import ToolLayout from '../../../layouts/ToolLayout.astro';
+
+export { getStaticPaths } from '../index.astro';
+
+const regex = /\/\*\*\n(( \* .+\n)+.+)\n \*\/\nexport const GET/gm;
+const ROOT = '/src/pages/api/';
+const glob = import.meta.glob('/src/pages/api/**/*.ts', {
+  eager: true,
+  query: '?raw',
+  import: 'default',
+});
+const apis: {
+  path: string;
+  content: string;
+}[] = [];
+
+for (const rawPath in glob) {
+  const content = (glob[rawPath] as string).replaceAll('\r', '');
+  const regexExecution = regex.exec(content);
+
+  if (!regexExecution?.[1]) continue;
+
+  const comment = regexExecution[1].replaceAll(/^ \* /gm, '');
+
+  console.log();
+
+  const path = rawPath.replace(ROOT, '');
+
+  apis.push({ path, content });
+}
+---
+
+<ToolLayout tool={apiTool}>
+  <PageWrapper>
+    {
+      apis.map((api) => (
+        <Flex direction="column">
+          <Link href={api.path}>{api.path}</Link>
+
+          <Code>{api.content}</Code>
+        </Flex>
+      ))
+    }
+  </PageWrapper>
+</ToolLayout>

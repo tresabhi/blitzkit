@@ -839,6 +839,12 @@
     },
 
     "tools": {
+      "api": {
+        "name": "API",
+        "description": "BlitzKit API docs",
+        "seo_description": "Comprehensive documentation and detailed insights into BlitzKit's API, enabling developers to integrate and utilize advanced features for World of Tanks Blitz efficiently."
+      },
+
       "tanks": {
         "name": "Tankopedia",
         "button": "Find tanks",
