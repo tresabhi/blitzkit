@@ -1,8 +1,10 @@
 ---
 import { Code, Flex, Heading, Separator } from '@radix-ui/themes';
+import type { GetStaticPaths, GetStaticPathsOptions } from 'astro';
 import { PageWrapper } from '../../../components/PageWrapper';
 import { apiTool } from '../../../constants/tools';
 import ToolLayout from '../../../layouts/ToolLayout.astro';
+import { SlugsTable } from './_index';
 
 export { getStaticPaths } from '../index.astro';
 
@@ -12,27 +14,63 @@ interface Tag {
   description?: string;
 }
 
+export interface APIPath {
+  path: string;
+  content: string;
+  comment: string;
+  tags: Tag[];
+  slugs?: {
+    titles: string[];
+    groups: SlugGroup[];
+  };
+}
+
+type SlugGroup = Record<string, string | number | undefined>;
+
 const getDocsRegex = /\/\*\*\n(( \*(.+)?\n?)+)\n \*\/\nexport const GET/;
 const multiLineCommentPrefixRegex = /^ \* ?/gm;
 const tagRegex = /(@[^\s]+)(?:\s(.+))?/;
 const firstWordRegex = /(\S+)(?:\s(.+))?/;
 const ROOT = '/src/pages/api/';
-const glob = import.meta.glob('/src/pages/api/**/*.ts', {
+const globRaw = import.meta.glob('/src/pages/api/**/*.ts', {
   eager: true,
   query: '?raw',
   import: 'default',
-});
-let apis: {
-  path: string;
-  content: string;
-  comment: string;
-  tags: Tag[];
-}[] = [];
+}) as Record<string, string>;
+const globStaticPaths = import.meta.glob('/src/pages/api/**/*.ts', {
+  eager: true,
+  import: 'getStaticPaths',
+}) as Record<string, GetStaticPaths | undefined>;
+let apis: APIPath[] = [];
 
-for (const rawPath in glob) {
-  const content = (glob[rawPath] as string).replaceAll('\r', '');
+for (const rawPath in globRaw) {
+  const content = globRaw[rawPath].replaceAll('\r', '');
   const regexExecution = content.match(getDocsRegex);
   const commentRaw = regexExecution?.[1];
+  const getStaticPaths = globStaticPaths[rawPath];
+  let slugs: APIPath['slugs'] | undefined;
+
+  if (getStaticPaths) {
+    const staticPaths = await getStaticPaths(
+      undefined as unknown as GetStaticPathsOptions,
+    );
+
+    const titles = new Set<string>();
+
+    slugs = {
+      titles: [],
+      groups: [],
+    };
+
+    staticPaths.forEach((path) => {
+      Object.keys(path.params).forEach((key) => {
+        titles.add(key);
+      });
+      slugs!.groups.push(path.params);
+    });
+
+    slugs.titles = [...titles];
+  }
 
   if (!commentRaw) continue;
 
@@ -72,8 +110,7 @@ for (const rawPath in glob) {
   });
 
   comment = comment.trim();
-
-  apis.push({ path, content, comment, tags });
+  apis.push({ path, content, comment, tags, slugs });
 }
 
 apis.sort((a, b) => a.path.localeCompare(b.path));
@@ -125,6 +162,8 @@ apis.sort((a, b) => a.path.localeCompare(b.path));
                 </Flex>
               )}
             </Flex>
+
+            <SlugsTable client:load slugs={api.slugs} />
 
             {index < apis.length - 1 && (
               <Separator size="4" style={{ height: 0.5 }} />
