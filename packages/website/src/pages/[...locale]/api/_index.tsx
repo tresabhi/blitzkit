@@ -1,14 +1,16 @@
-import { Code, Link, Table } from '@radix-ui/themes';
+import { OpenInNewWindowIcon } from '@radix-ui/react-icons';
+import { Code, IconButton, Link, Table } from '@radix-ui/themes';
 import { useState } from 'react';
 import type { APIPath } from './index.astro';
 
 interface SlugsTableProps {
   slugs: APIPath['slugs'];
+  path: string;
 }
 
 const MAX_UNEXPANDED = 5;
 
-export function SlugsTable({ slugs }: SlugsTableProps) {
+export function SlugsTable({ slugs, path }: SlugsTableProps) {
   if (slugs === undefined) return null;
 
   const [expanded, setExpanded] = useState(false);
@@ -17,25 +19,29 @@ export function SlugsTable({ slugs }: SlugsTableProps) {
     <Table.Root variant="surface">
       <Table.Header>
         <Table.Row>
-          <Table.ColumnHeaderCell width="0">
-            <Code variant="ghost" color="gray">
-              #
-            </Code>
-          </Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell width="0">#</Table.ColumnHeaderCell>
 
           {slugs.titles.map((title) => (
             <Table.ColumnHeaderCell>
-              <Code variant="ghost" color="gray" highContrast>
-                {title}
-              </Code>
+              <Code variant="ghost">{title}</Code>
             </Table.ColumnHeaderCell>
           ))}
+
+          <Table.ColumnHeaderCell width="0">Test</Table.ColumnHeaderCell>
         </Table.Row>
       </Table.Header>
 
       <Table.Body>
         {slugs.groups.map((group, groupIndex) => {
           if (!expanded && groupIndex >= MAX_UNEXPANDED) return null;
+          let draftPath = path;
+
+          slugs.titles.forEach((title) => {
+            draftPath = draftPath.replace(
+              `[${title}]`,
+              `${group[title] ?? ''}`,
+            );
+          });
 
           return (
             <Table.Row>
@@ -52,12 +58,21 @@ export function SlugsTable({ slugs }: SlugsTableProps) {
                   </Code>
                 </Table.Cell>
               ))}
+
+              <Table.Cell>
+                <Link target="_blank" href={`/api/${draftPath}`}>
+                  <IconButton>
+                    <OpenInNewWindowIcon />
+                  </IconButton>
+                </Link>
+              </Table.Cell>
             </Table.Row>
           );
         })}
 
         <Table.Row style={{ position: 'relative' }}>
           <Table.Cell />
+
           <Link
             href="#"
             underline="always"

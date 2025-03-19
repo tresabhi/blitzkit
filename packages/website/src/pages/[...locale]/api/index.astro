@@ -1,5 +1,14 @@
 ---
-import { Code, Flex, Heading, Separator } from '@radix-ui/themes';
+import { OpenInNewWindowIcon } from '@radix-ui/react-icons';
+import {
+  Code,
+  Flex,
+  Heading,
+  Link,
+  Separator,
+  Text,
+  type CodeProps,
+} from '@radix-ui/themes';
 import type { GetStaticPaths, GetStaticPathsOptions } from 'astro';
 import { PageWrapper } from '../../../components/PageWrapper';
 import { apiTool } from '../../../constants/tools';
@@ -105,7 +114,7 @@ for (const rawPath in globRaw) {
         description,
       });
     } else {
-      comment += line;
+      comment += `${line}\n`;
     }
   });
 
@@ -117,53 +126,62 @@ apis.sort((a, b) => a.path.localeCompare(b.path));
 ---
 
 <ToolLayout tool={apiTool}>
-  <PageWrapper py="9">
+  <PageWrapper py="9" color="iris">
     <Flex direction="column" gap="6">
       {
         apis.map((api, index) => (
           <>
             <Flex direction="column" gap="5">
-              <Heading>
-                <Code variant="ghost" color="iris" highContrast>
-                  {api.path}
-                </Code>
-              </Heading>
-
-              <Code
-                color="gray"
-                variant="ghost"
-                highContrast
-                style={{ whiteSpace: 'pre-wrap' }}
+              <Link
+                href={api.slugs ? undefined : `/api/${api.path}`}
+                underline="always"
+                target="_blank"
               >
-                {api.comment}
-              </Code>
+                <Heading>
+                  <Flex align="center" gap="2">
+                    <Code variant="ghost">{api.path}</Code>
+
+                    {!api.slugs && (
+                      <OpenInNewWindowIcon width="1em" height="1em" />
+                    )}
+                  </Flex>
+                </Heading>
+              </Link>
+
+              <Text>{api.comment}</Text>
 
               {api.tags.length > 0 && (
                 <Flex direction="column" gap="2">
-                  {api.tags.map(({ tag, description, discriminator }) => (
-                    <Flex gap="2">
-                      <Code color="iris" variant="solid">
-                        {tag}
-                      </Code>
+                  {api.tags.map(({ tag, description, discriminator }) => {
+                    let color: CodeProps['color'] | undefined = undefined;
 
-                      {discriminator && (
-                        <Code color="gray" variant="solid" highContrast>
-                          {discriminator}
-                        </Code>
-                      )}
+                    switch (tag) {
+                      case '@warning':
+                        color = 'amber';
+                        break;
+                    }
 
-                      {description && (
-                        <Code mt="calc(1em / 8)" color="gray" variant="ghost">
-                          {description}
+                    return (
+                      <Flex gap="2">
+                        <Code variant="solid" color={color}>
+                          {tag}
                         </Code>
-                      )}
-                    </Flex>
-                  ))}
+
+                        {discriminator && (
+                          <Code color="gray" variant="solid" highContrast>
+                            {discriminator}
+                          </Code>
+                        )}
+
+                        {description && <Text color="gray">{description}</Text>}
+                      </Flex>
+                    );
+                  })}
                 </Flex>
               )}
             </Flex>
 
-            <SlugsTable client:load slugs={api.slugs} />
+            <SlugsTable path={api.path} client:load slugs={api.slugs} />
 
             {index < apis.length - 1 && (
               <Separator size="4" style={{ height: 0.5 }} />

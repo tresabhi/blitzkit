@@ -7,7 +7,10 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 /**
- * Returns the meta data on a tank which includes its modules, characteristics, ancestry, descendants, equipment, characteristics, etc. However, this does not include information on the tank model.
+ * Returns the meta data on a tank which includes its modules, characteristics,
+ * ancestry, descendants, equipment, characteristics, etc. However, this does
+ * not include information on the tank model. Use tanks/list.json to get all
+ * valid ids.
  *
  * @param avatar The avatar id.
  * @returns A webp image.

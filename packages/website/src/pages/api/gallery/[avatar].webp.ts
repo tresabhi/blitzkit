@@ -15,7 +15,8 @@ export const getStaticPaths = (async () => {
 const glossary = await fetchGlossary(DEFAULT_LOCALE);
 
 /**
- * Returns an in-game avatar image.
+ * Returns an in-game avatar image. Use gallery/list.json to get all valid ids.
+ * Not all ids may have images due to poor Wargaming CDNs.
  *
  * @param avatar The avatar id.
  * @returns A webp image.
