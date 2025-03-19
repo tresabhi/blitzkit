@@ -1,5 +1,5 @@
 ---
-import { Code, Flex, Heading, Link } from '@radix-ui/themes';
+import { Code, Flex, Heading, Separator } from '@radix-ui/themes';
 import { PageWrapper } from '../../../components/PageWrapper';
 import { apiTool } from '../../../constants/tools';
 import ToolLayout from '../../../layouts/ToolLayout.astro';
@@ -12,7 +12,7 @@ interface Tag {
   description?: string;
 }
 
-const getDocsRegex = /\/\*\*\n(( \*(.+)?\n?)+)\n \*\/\nexport const GET/gm;
+const getDocsRegex = /\/\*\*\n(( \*(.+)?\n?)+)\n \*\/\nexport const GET/;
 const multiLineCommentPrefixRegex = /^ \* ?/gm;
 const tagRegex = /(@[^\s]+)(?:\s(.+))?/;
 const firstWordRegex = /(\S+)(?:\s(.+))?/;
@@ -22,7 +22,7 @@ const glob = import.meta.glob('/src/pages/api/**/*.ts', {
   query: '?raw',
   import: 'default',
 });
-const apis: {
+let apis: {
   path: string;
   content: string;
   comment: string;
@@ -31,7 +31,7 @@ const apis: {
 
 for (const rawPath in glob) {
   const content = (glob[rawPath] as string).replaceAll('\r', '');
-  const regexExecution = getDocsRegex.exec(content);
+  const regexExecution = content.match(getDocsRegex);
   const commentRaw = regexExecution?.[1];
 
   if (!commentRaw) continue;
@@ -45,7 +45,7 @@ for (const rawPath in glob) {
 
   const tags: Tag[] = [];
   commentWithTags.split('\n').forEach((line) => {
-    const match = tagRegex.exec(line);
+    const match = line.match(tagRegex);
 
     if (match) {
       const tag = match[1];
@@ -54,7 +54,7 @@ for (const rawPath in glob) {
       let description: string | undefined;
 
       if (tag === '@param') {
-        const firstWordMatch = firstWordRegex.exec(descriptionRaw)!;
+        const firstWordMatch = descriptionRaw.match(firstWordRegex)!;
         discriminator = firstWordMatch[1];
         description = firstWordMatch[2];
       } else {
@@ -75,53 +75,63 @@ for (const rawPath in glob) {
 
   apis.push({ path, content, comment, tags });
 }
+
+apis.sort((a, b) => a.path.localeCompare(b.path));
 ---
 
 <ToolLayout tool={apiTool}>
   <PageWrapper py="9">
-    {
-      apis.map((api) => (
-        <Flex direction="column" gap="5">
-          <Link href={api.path}>
-            <Heading>
-              <Code variant="ghost">{api.path}</Code>
-            </Heading>
-          </Link>
+    <Flex direction="column" gap="6">
+      {
+        apis.map((api, index) => (
+          <>
+            <Flex direction="column" gap="5">
+              <Heading>
+                <Code variant="ghost" color="iris" highContrast>
+                  {api.path}
+                </Code>
+              </Heading>
 
-          <Code
-            color="gray"
-            variant="ghost"
-            highContrast
-            style={{ whiteSpace: 'pre-wrap' }}
-          >
-            {api.comment}
-          </Code>
+              <Code
+                color="gray"
+                variant="ghost"
+                highContrast
+                style={{ whiteSpace: 'pre-wrap' }}
+              >
+                {api.comment}
+              </Code>
 
-          {api.tags.length > 0 && (
-            <Flex direction="column" gap="2">
-              {api.tags.map(({ tag, description, discriminator }) => (
-                <Flex gap="2" align="center">
-                  <Code color="ruby" variant="solid">
-                    {tag}
-                  </Code>
+              {api.tags.length > 0 && (
+                <Flex direction="column" gap="2">
+                  {api.tags.map(({ tag, description, discriminator }) => (
+                    <Flex gap="2">
+                      <Code color="iris" variant="solid">
+                        {tag}
+                      </Code>
 
-                  {discriminator && (
-                    <Code color="gray" variant="solid" highContrast>
-                      {discriminator}
-                    </Code>
-                  )}
+                      {discriminator && (
+                        <Code color="gray" variant="solid" highContrast>
+                          {discriminator}
+                        </Code>
+                      )}
 
-                  {description && (
-                    <Code color="gray" variant="ghost">
-                      {description}
-                    </Code>
-                  )}
+                      {description && (
+                        <Code mt="calc(1em / 8)" color="gray" variant="ghost">
+                          {description}
+                        </Code>
+                      )}
+                    </Flex>
+                  ))}
                 </Flex>
-              ))}
+              )}
             </Flex>
-          )}
-        </Flex>
-      ))
-    }
+
+            {index < apis.length - 1 && (
+              <Separator size="4" style={{ height: 0.5 }} />
+            )}
+          </>
+        ))
+      }
+    </Flex>
   </PageWrapper>
 </ToolLayout>

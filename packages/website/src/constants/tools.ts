@@ -138,7 +138,7 @@ export const apiTool: Tool = {
   button: {
     color: 'indigo',
   },
-  image: '0bWE5hC',
+  image: 'dIfvWnV',
 };
 
 export const TOOLS: Tool[] = [
