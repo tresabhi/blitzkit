@@ -1,12 +1,21 @@
 ---
-import { Code, Flex, Link } from '@radix-ui/themes';
+import { Code, Flex, Heading, Link } from '@radix-ui/themes';
 import { PageWrapper } from '../../../components/PageWrapper';
 import { apiTool } from '../../../constants/tools';
 import ToolLayout from '../../../layouts/ToolLayout.astro';
 
 export { getStaticPaths } from '../index.astro';
 
-const regex = /\/\*\*\n(( \* .+\n)+.+)\n \*\/\nexport const GET/gm;
+interface Tag {
+  tag: string;
+  discriminator?: string;
+  description?: string;
+}
+
+const getDocsRegex = /\/\*\*\n(( \*(.+)?\n?)+)\n \*\/\nexport const GET/gm;
+const multiLineCommentPrefixRegex = /^ \* ?/gm;
+const tagRegex = /(@[^\s]+)(?:\s(.+))?/;
+const firstWordRegex = /(\S+)(?:\s(.+))?/;
 const ROOT = '/src/pages/api/';
 const glob = import.meta.glob('/src/pages/api/**/*.ts', {
   eager: true,
@@ -16,32 +25,101 @@ const glob = import.meta.glob('/src/pages/api/**/*.ts', {
 const apis: {
   path: string;
   content: string;
+  comment: string;
+  tags: Tag[];
 }[] = [];
 
 for (const rawPath in glob) {
   const content = (glob[rawPath] as string).replaceAll('\r', '');
-  const regexExecution = regex.exec(content);
+  const regexExecution = getDocsRegex.exec(content);
+  const commentRaw = regexExecution?.[1];
 
-  if (!regexExecution?.[1]) continue;
+  if (!commentRaw) continue;
 
-  const comment = regexExecution[1].replaceAll(/^ \* /gm, '');
+  const commentWithTags = commentRaw.replaceAll(
+    multiLineCommentPrefixRegex,
+    '',
+  );
+  const path = rawPath.replace(ROOT, '').replace('.ts', '');
+  let comment = '';
 
-  console.log();
+  const tags: Tag[] = [];
+  commentWithTags.split('\n').forEach((line) => {
+    const match = tagRegex.exec(line);
 
-  const path = rawPath.replace(ROOT, '');
+    if (match) {
+      const tag = match[1];
+      const descriptionRaw = match[2];
+      let discriminator: string | undefined;
+      let description: string | undefined;
 
-  apis.push({ path, content });
+      if (tag === '@param') {
+        const firstWordMatch = firstWordRegex.exec(descriptionRaw)!;
+        discriminator = firstWordMatch[1];
+        description = firstWordMatch[2];
+      } else {
+        description = descriptionRaw;
+      }
+
+      tags.push({
+        tag,
+        discriminator,
+        description,
+      });
+    } else {
+      comment += line;
+    }
+  });
+
+  comment = comment.trim();
+
+  apis.push({ path, content, comment, tags });
 }
 ---
 
 <ToolLayout tool={apiTool}>
-  <PageWrapper>
+  <PageWrapper py="9">
     {
       apis.map((api) => (
-        <Flex direction="column">
-          <Link href={api.path}>{api.path}</Link>
+        <Flex direction="column" gap="5">
+          <Link href={api.path}>
+            <Heading>
+              <Code variant="ghost">{api.path}</Code>
+            </Heading>
+          </Link>
 
-          <Code>{api.content}</Code>
+          <Code
+            color="gray"
+            variant="ghost"
+            highContrast
+            style={{ whiteSpace: 'pre-wrap' }}
+          >
+            {api.comment}
+          </Code>
+
+          {api.tags.length > 0 && (
+            <Flex direction="column" gap="2">
+              {api.tags.map(({ tag, description, discriminator }) => (
+                <Flex gap="2" align="center">
+                  <Code color="ruby" variant="solid">
+                    {tag}
+                  </Code>
+
+                  {discriminator && (
+                    <Code color="gray" variant="solid" highContrast>
+                      {discriminator}
+                    </Code>
+                  )}
+
+                  {description && (
+                    <Code color="gray" variant="ghost">
+                      {description}
+                    </Code>
+                  )}
+                </Flex>
+              ))}
+            </Flex>
+          )}
         </Flex>
       ))
     }

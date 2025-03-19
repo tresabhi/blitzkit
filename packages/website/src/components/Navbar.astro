@@ -140,7 +140,7 @@ const strings = getStrings(locale);
                 (branch) =>
                   branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
               );
-              const selected = Astro.url.pathname.includes(`/tools/${tool.id}`);
+              const selected = Astro.url.pathname.includes(`/${tool.id}`);
               const toolStrings =
                 strings.website.tools[
                   (tool.stringsId ??
@@ -157,7 +157,7 @@ const strings = getStrings(locale);
                     color="gray"
                     highContrast={selected}
                     size="2"
-                    href={`/tools/${tool.id}`}
+                    href={`/${tool.id}`}
                     underline={selected ? 'always' : 'hover'}
                   >
                     {toolStrings.name}
@@ -242,7 +242,7 @@ const strings = getStrings(locale);
               >
                 <LinkI18n
                   {locale}
-                  href={tool.id.length === 0 ? '/' : `/tools/${tool.id}`}
+                  href={tool.id.length === 0 ? '/' : `/${tool.id}`}
                   style={{
                     display: 'flex',
                     width: '100%',

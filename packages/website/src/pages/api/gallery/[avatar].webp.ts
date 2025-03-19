@@ -15,12 +15,10 @@ export const getStaticPaths = (async () => {
 const glossary = await fetchGlossary(DEFAULT_LOCALE);
 
 /**
- * Test comment.
- * Test comment.
- * Test comment.
- * Test comment.
- * Test comment.
- * Test comment.
+ * Returns an in-game avatar image.
+ *
+ * @param avatar The avatar id.
+ * @returns A webp image.
  */
 export const GET: APIRoute<{}, { avatar: string }> = async ({ params }) => {
   const image =
