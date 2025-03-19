@@ -1,6 +1,7 @@
 import { OpenInNewWindowIcon } from '@radix-ui/react-icons';
-import { Code, IconButton, Link, Table } from '@radix-ui/themes';
+import { Box, Code, IconButton, Link, Table } from '@radix-ui/themes';
 import { useState } from 'react';
+import { Var } from '../../../core/radix/var';
 import type { APIPath } from './index.astro';
 
 interface SlugsTableProps {
@@ -71,6 +72,19 @@ export function SlugsTable({ slugs, path }: SlugsTableProps) {
         })}
 
         <Table.Row style={{ position: 'relative' }}>
+          {!expanded && (
+            <Box
+              width="100%"
+              height="100%"
+              position="absolute"
+              top="0"
+              style={{
+                transform: 'translate(0, -100%)',
+                background: `linear-gradient(${Var('black-a1')}, ${Var('black-a5')})`,
+              }}
+            />
+          )}
+
           <Table.Cell />
 
           <Link

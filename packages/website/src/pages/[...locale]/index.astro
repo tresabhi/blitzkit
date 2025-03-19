@@ -10,6 +10,7 @@ import HomeHero from '../../components/HomeHero.astro';
 import { Plugs } from '../../components/Plugs';
 import ToolCard from '../../components/ToolCard.astro';
 import {
+  apiTool,
   compareTool,
   discordTool,
   embedTool,
@@ -102,10 +103,11 @@ export const getStaticPaths = (() => {
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         <ToolCard tool={embedTool} />
-        <ToolCard tool={moreTool} />
+        <ToolCard tool={apiTool} />
       </Flex>
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+        <ToolCard tool={moreTool} />
         <Box flexGrow="1" />
       </Flex>
 

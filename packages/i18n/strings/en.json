@@ -841,6 +841,7 @@
     "tools": {
       "api": {
         "name": "API",
+        "button": "Nerd out",
         "description": "BlitzKit API docs",
         "seo_description": "Comprehensive documentation and detailed insights into BlitzKit's API, enabling developers to integrate and utilize advanced features for World of Tanks Blitz efficiently."
       },

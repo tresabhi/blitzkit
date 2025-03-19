@@ -10,18 +10,7 @@ export type VarName =
   | `space-${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}`
   | `shadow-${1 | 2 | 3 | 4 | 5 | 6}`
   | `${RadixColor | 'accent' | 'gray'}-${
-      | 1
-      | 2
-      | 3
-      | 4
-      | 5
-      | 6
-      | 7
-      | 8
-      | 9
-      | 10
-      | 11
-      | 12
+      | `${'' | 'a'}${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12}`
       | 'surface'
       | 'indicator'
       | 'track'
