@@ -356,7 +356,7 @@ export function Modules() {
     <ConfigurationChildWrapper>
       <Flex gap="4" align="center">
         <Heading size="4">
-          {strings.website.tools.tankopedia.configuration.modules.title}
+          {strings.website.tools.tanks.configuration.modules.title}
         </Heading>
 
         {hasUpgrades && (
@@ -375,7 +375,7 @@ export function Modules() {
                 });
               }}
             >
-              {strings.website.tools.tankopedia.configuration.modules.stock}
+              {strings.website.tools.tanks.configuration.modules.stock}
             </Button>
             <Button
               variant="ghost"
@@ -393,7 +393,7 @@ export function Modules() {
                 });
               }}
             >
-              {strings.website.tools.tankopedia.configuration.modules.upgrade}
+              {strings.website.tools.tanks.configuration.modules.upgrade}
             </Button>
           </>
         )}

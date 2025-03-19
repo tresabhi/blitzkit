@@ -81,7 +81,7 @@ export function Body({ stats }: BodyProps) {
         <CompareRow stats={stats} value="dpm" decimals={0} />
         <CompareRow
           stats={stats}
-          name={strings.website.tools.tankopedia.characteristics.values.reload}
+          name={strings.website.tools.tanks.characteristics.values.reload}
           deltaType="lowerIsBetter"
           value={(stats) =>
             stats.shellReload ??

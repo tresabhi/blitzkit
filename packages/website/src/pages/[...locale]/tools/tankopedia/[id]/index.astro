@@ -11,10 +11,10 @@ import {
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
 import { DEFAULT_LOCALE, unwrapper } from '@blitzkit/i18n';
+import { literals } from '@blitzkit/i18n/src/literals';
 import type { GetStaticPaths } from 'astro';
 import { tankCharacteristics } from '../../../../../core/blitzkit/tankCharacteristics';
 import { getStrings } from '../../../../../core/i18n/getStrings';
-import { literals } from '@blitzkit/i18n/src/literals';
 import BaseLayout from '../../../../../layouts/BaseLayout.astro';
 import { genericDefaultEquipmentMatrix } from '../../../../../stores/duel/constants';
 import { getStaticPaths as parentGetStaticPaths } from '../index.astro';
@@ -45,7 +45,7 @@ const tank = tankDefinitions.tanks[id];
 const tankModelDefinition = tankModelDefinitions.models[tank.id];
 const name = tank.name_full ?? tank.name;
 const unwrap = unwrapper(locale);
-const title = literals(strings.website.tools.tankopedia.tank_seo_title, [
+const title = literals(strings.website.tools.tanks.tank_seo_title, [
   unwrap(name),
   TIER_ROMAN_NUMERALS[tank.tier],
   strings.common.nations_adjectives[
@@ -82,17 +82,14 @@ const characteristics = tankCharacteristics(
   },
   { equipmentDefinitions, provisionDefinitions, tankModelDefinition },
 );
-const description = literals(
-  strings.website.tools.tankopedia.tank_seo_description,
-  [
-    unwrap(name),
-    Math.round(characteristics.dpm).toLocaleString(locale),
-    Math.round(characteristics.damage).toLocaleString(locale),
-    Math.round(characteristics.penetration).toLocaleString(locale),
-    Math.round(characteristics.speedForwards).toLocaleString(locale),
-    Math.round(characteristics.health).toLocaleString(locale),
-  ],
-);
+const description = literals(strings.website.tools.tanks.tank_seo_description, [
+  unwrap(name),
+  Math.round(characteristics.dpm).toLocaleString(locale),
+  Math.round(characteristics.damage).toLocaleString(locale),
+  Math.round(characteristics.penetration).toLocaleString(locale),
+  Math.round(characteristics.speedForwards).toLocaleString(locale),
+  Math.round(characteristics.health).toLocaleString(locale),
+]);
 ---
 
 <title>{title}</title>

@@ -147,7 +147,7 @@ export function Characteristics() {
         <Flex direction="column" gap="2">
           <Flex align="center" gap="4">
             <Heading size="5">
-              {strings.website.tools.tankopedia.firepower.title}
+              {strings.website.tools.tanks.firepower.title}
             </Heading>
 
             <Flex>
@@ -189,9 +189,7 @@ export function Characteristics() {
             </Flex>
           </Flex>
           <Info
-            name={
-              strings.website.tools.tankopedia.characteristics.values.gunType
-            }
+            name={strings.website.tools.tanks.characteristics.values.gunType}
           >
             {strings.common.gun_types[gun.gun_type!.$case]}
           </Info>
@@ -218,7 +216,7 @@ export function Characteristics() {
               <Info
                 indent
                 name={
-                  strings.website.tools.tankopedia.characteristics.values
+                  strings.website.tools.tanks.characteristics.values
                     .mostOptimalShellIndex
                 }
               >
@@ -226,7 +224,7 @@ export function Characteristics() {
               </Info>
               <Info
                 name={
-                  strings.website.tools.tankopedia.characteristics.values
+                  strings.website.tools.tanks.characteristics.values
                     .shellReloads
                 }
                 unit="s"
@@ -237,7 +235,7 @@ export function Characteristics() {
                   key={index}
                   indent
                   name={literals(
-                    strings.website.tools.tankopedia.characteristics.values
+                    strings.website.tools.tanks.characteristics.values
                       .shell_index,
                     [`${index + 1}`],
                   )}
@@ -281,7 +279,7 @@ export function Characteristics() {
                 indent
                 decimals={0}
                 name={literals(
-                  strings.website.tools.tankopedia.characteristics.values
+                  strings.website.tools.tanks.characteristics.values
                     .at_distance,
                   [`${penetrationDistance}`],
                 )}
@@ -299,7 +297,7 @@ export function Characteristics() {
               <Flex align="center" gap="2" style={{ paddingLeft: 24 }}>
                 <Text color="gray">
                   {
-                    strings.website.tools.tankopedia.characteristics.values
+                    strings.website.tools.tanks.characteristics.values
                       .at_distance_slider_label
                   }
                 </Text>
@@ -404,7 +402,7 @@ export function Characteristics() {
           />
           <Info
             name={literals(
-              strings.website.tools.tankopedia.characteristics.values
+              strings.website.tools.tanks.characteristics.values
                 .dispersion_at_distance,
               ['100'],
             )}
@@ -459,8 +457,7 @@ export function Characteristics() {
           />
           <Info
             name={
-              strings.website.tools.tankopedia.characteristics.values
-                .gun_flexibility
+              strings.website.tools.tanks.characteristics.values.gun_flexibility
             }
             unit="°"
           />
@@ -528,9 +525,7 @@ export function Characteristics() {
 
         <Flex direction="column" gap="2">
           <Flex gap="2" align="center">
-            <Heading size="5">
-              {strings.website.tools.tankopedia.crew.title}
-            </Heading>
+            <Heading size="5">{strings.website.tools.tanks.crew.title}</Heading>
 
             <Popover.Root>
               <Popover.Trigger>
@@ -542,7 +537,7 @@ export function Characteristics() {
               <Popover.Content>
                 <Flex gap="1" align="center">
                   <AccessibilityIcon />
-                  <Text>{strings.website.tools.tankopedia.crew.info}</Text>
+                  <Text>{strings.website.tools.tanks.crew.info}</Text>
                 </Flex>
               </Popover.Content>
             </Popover.Root>
@@ -557,7 +552,7 @@ export function Characteristics() {
                   stats={stats}
                   key={`${member.type}-root`}
                   name={`${
-                    strings.website.tools.tankopedia.crew[
+                    strings.website.tools.tanks.crew[
                       CREW_MEMBER_NAMES[member.type]
                     ]
                   }${
@@ -591,7 +586,7 @@ export function Characteristics() {
                           {member.substitute
                             .map((sub, index) =>
                               index === 0
-                                ? strings.website.tools.tankopedia.crew[
+                                ? strings.website.tools.tanks.crew[
                                     CREW_MEMBER_NAMES[sub]
                                   ]
                                 : sub,
@@ -613,10 +608,10 @@ export function Characteristics() {
       <Flex direction="column" gap="8" style={{ flex: 1 }}>
         <Flex direction="column" gap="2">
           <Heading size="5">
-            {strings.website.tools.tankopedia.maneuverability.title}
+            {strings.website.tools.tanks.maneuverability.title}
           </Heading>
           <Info
-            name={strings.website.tools.tankopedia.characteristics.values.speed}
+            name={strings.website.tools.tanks.characteristics.values.speed}
             unit="kph"
           />
           <InfoWithDelta
@@ -641,7 +636,7 @@ export function Characteristics() {
           />
           <Info
             name={
-              strings.website.tools.tankopedia.characteristics.values
+              strings.website.tools.tanks.characteristics.values
                 .terrain_coefficients
             }
           />
@@ -668,7 +663,7 @@ export function Characteristics() {
           />
           <Info
             name={
-              strings.website.tools.tankopedia.characteristics.values
+              strings.website.tools.tanks.characteristics.values
                 .raw_terrain_coefficients
             }
             deltaType="lowerIsBetter"
@@ -699,7 +694,7 @@ export function Characteristics() {
           />
           <Info
             name={
-              strings.website.tools.tankopedia.characteristics.values
+              strings.website.tools.tanks.characteristics.values
                 .power_to_weight_ratio
             }
             unit="hp/tn"
@@ -730,7 +725,7 @@ export function Characteristics() {
           />
           <Info
             name={
-              strings.website.tools.tankopedia.characteristics.values
+              strings.website.tools.tanks.characteristics.values
                 .hull_traverse_speed
             }
             unit="°/s"
@@ -757,14 +752,12 @@ export function Characteristics() {
 
         <Flex direction="column" gap="2">
           <Heading size="5">
-            {strings.website.tools.tankopedia.survivability.title}
+            {strings.website.tools.tanks.survivability.title}
           </Heading>
           <InfoWithDelta value="health" stats={stats} unit="hp" decimals={0} />
           <InfoWithDelta
             stats={stats}
-            name={
-              strings.website.tools.tankopedia.characteristics.values.fireChance
-            }
+            name={strings.website.tools.tanks.characteristics.values.fireChance}
             unit="%"
             deltaType="lowerIsBetter"
             decimals={0}
@@ -777,9 +770,7 @@ export function Characteristics() {
             decimals={0}
           />
           <Info
-            name={
-              strings.website.tools.tankopedia.characteristics.values.camouflage
-            }
+            name={strings.website.tools.tanks.characteristics.values.camouflage}
             unit="%"
           />
           <InfoWithDelta
@@ -787,8 +778,7 @@ export function Characteristics() {
             stats={stats}
             indent
             name={
-              strings.website.tools.tankopedia.characteristics.values
-                .camouflageStill
+              strings.website.tools.tanks.characteristics.values.camouflageStill
             }
             decimals={2}
           />
@@ -797,7 +787,7 @@ export function Characteristics() {
             stats={stats}
             indent
             name={
-              strings.website.tools.tankopedia.characteristics.values
+              strings.website.tools.tanks.characteristics.values
                 .camouflageMoving
             }
             decimals={2}
@@ -806,7 +796,7 @@ export function Characteristics() {
             stats={stats}
             indent
             name={
-              strings.website.tools.tankopedia.characteristics.values
+              strings.website.tools.tanks.characteristics.values
                 .camouflageShootingStill
             }
             decimals={2}
@@ -816,7 +806,7 @@ export function Characteristics() {
             stats={stats}
             indent
             name={
-              strings.website.tools.tankopedia.characteristics.values
+              strings.website.tools.tanks.characteristics.values
                 .camouflageShootingMoving
             }
             decimals={2}
@@ -826,7 +816,7 @@ export function Characteristics() {
             stats={stats}
             indent
             name={
-              strings.website.tools.tankopedia.characteristics.values
+              strings.website.tools.tanks.characteristics.values
                 .camouflageCaughtOnFire
             }
             decimals={2}

@@ -23,11 +23,11 @@ export function CharacteristicsHeading() {
       direction="column"
     >
       <Heading mb="2">
-        {strings.website.tools.tankopedia.characteristics.title}
+        {strings.website.tools.tanks.characteristics.title}
       </Heading>
 
       <Text color="gray">
-        {strings.website.tools.tankopedia.characteristics.compare.label}
+        {strings.website.tools.tanks.characteristics.compare.label}
       </Text>
       <SegmentedControl.Root
         size={{ initial: '1', md: '2' }}
@@ -39,22 +39,18 @@ export function CharacteristicsHeading() {
         }}
       >
         <SegmentedControl.Item value={`${TankopediaRelativeAgainst.Class}`}>
-          {literals(
-            strings.website.tools.tankopedia.characteristics.compare.class,
-            [
-              TIER_ROMAN_NUMERALS[tank.tier],
-              strings.common.tank_class_short_plural_lowercase[tank.class],
-            ],
-          )}
+          {literals(strings.website.tools.tanks.characteristics.compare.class, [
+            TIER_ROMAN_NUMERALS[tank.tier],
+            strings.common.tank_class_short_plural_lowercase[tank.class],
+          ])}
         </SegmentedControl.Item>
         <SegmentedControl.Item value={`${TankopediaRelativeAgainst.Tier}`}>
-          {literals(
-            strings.website.tools.tankopedia.characteristics.compare.tier,
-            [TIER_ROMAN_NUMERALS[tank.tier]],
-          )}
+          {literals(strings.website.tools.tanks.characteristics.compare.tier, [
+            TIER_ROMAN_NUMERALS[tank.tier],
+          ])}
         </SegmentedControl.Item>
         <SegmentedControl.Item value={`${TankopediaRelativeAgainst.All}`}>
-          {strings.website.tools.tankopedia.characteristics.compare.all}
+          {strings.website.tools.tanks.characteristics.compare.all}
         </SegmentedControl.Item>
       </SegmentedControl.Root>
     </Flex>

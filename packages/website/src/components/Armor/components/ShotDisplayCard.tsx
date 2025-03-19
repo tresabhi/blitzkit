@@ -55,7 +55,7 @@ function LayerEntry({
 
           <Text size="2" color="gray">
             {literals(
-              strings.website.tools.tankopedia.sandbox.dynamic.shot_card.stats
+              strings.website.tools.tanks.sandbox.dynamic.shot_card.stats
                 .ricochet_loss,
               [Math.max(-100, -50 * layer.distance).toFixed(0)],
             )}
@@ -78,7 +78,7 @@ function LayerEntry({
             {literals(
               angle === undefined
                 ? strings.common.units.mm
-                : strings.website.tools.tankopedia.sandbox.dynamic.shot_card
+                : strings.website.tools.tanks.sandbox.dynamic.shot_card
                     .stats.thickness_and_angle,
               [
                 Math.round(layer.thicknessAngled).toLocaleString(locale),
@@ -89,7 +89,7 @@ function LayerEntry({
 
           <Text size="2" color="gray">
             {literals(
-              strings.website.tools.tankopedia.sandbox.dynamic.shot_card.stats
+              strings.website.tools.tanks.sandbox.dynamic.shot_card.stats
                 .nominal,
               [Math.round(layer.thickness).toLocaleString(locale)],
             )}
@@ -120,7 +120,7 @@ export function ShotDisplayCard({ shot, ...props }: ShotDisplayCardProps) {
         <Flex direction="column" gap="1">
           <Text color={inTitleColor} weight="bold">
             {literals(
-              strings.website.tools.tankopedia.sandbox.dynamic.shot_card.status[
+              strings.website.tools.tanks.sandbox.dynamic.shot_card.status[
                 shot.in.status
               ],
               [Math.round(shot.damage).toLocaleString(locale)],
@@ -130,7 +130,7 @@ export function ShotDisplayCard({ shot, ...props }: ShotDisplayCardProps) {
           <Flex direction="column">
             {shot.in.layers.map((layer, index) => {
               const layerName =
-                strings.website.tools.tankopedia.sandbox.dynamic.shot_card
+                strings.website.tools.tanks.sandbox.dynamic.shot_card
                   .element[
                   layer.type === ArmorType.External
                     ? layer.variant
@@ -186,7 +186,7 @@ export function ShotDisplayCard({ shot, ...props }: ShotDisplayCardProps) {
 
             <Text color={outTitleColor} weight="bold">
               {literals(
-                strings.website.tools.tankopedia.sandbox.dynamic.shot_card
+                strings.website.tools.tanks.sandbox.dynamic.shot_card
                   .status[shot.out.status],
                 [Math.round(shot.damage).toLocaleString(locale)],
               )}
@@ -195,7 +195,7 @@ export function ShotDisplayCard({ shot, ...props }: ShotDisplayCardProps) {
             <Flex direction="column">
               {shot.out.layers.map((layer, index) => {
                 const layerName =
-                  strings.website.tools.tankopedia.sandbox.dynamic.shot_card
+                  strings.website.tools.tanks.sandbox.dynamic.shot_card
                     .element[
                     layer.type === ArmorType.External
                       ? layer.variant

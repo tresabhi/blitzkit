@@ -52,7 +52,7 @@ export function CompareRow({
   const id = useRef(Math.random());
   const name =
     typeof props.value === 'string'
-      ? strings.website.tools.tankopedia.characteristics.values[props.value]
+      ? strings.website.tools.tanks.characteristics.values[props.value]
       : props.name;
 
   return (

@@ -60,7 +60,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
               ])}
             </Text>
             <Text size="1">
-              {strings.website.tools.tankopedia.sandbox.static.primary}
+              {strings.website.tools.tanks.sandbox.static.primary}
             </Text>
             <Text color="gray" size="1">
               {literals(strings.common.units.mm, ['0'])}
@@ -101,7 +101,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
               ])}
             </Text>
             <Text size="1">
-              {strings.website.tools.tankopedia.sandbox.static.spaced}
+              {strings.website.tools.tanks.sandbox.static.spaced}
             </Text>
             <Text color="gray" size="1">
               {literals(strings.common.units.mm, ['0'])}
@@ -135,7 +135,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
         >
           <Flex direction="column" align="end" justify="between">
             <Text size="1">
-              {strings.website.tools.tankopedia.sandbox.static.external}
+              {strings.website.tools.tanks.sandbox.static.external}
             </Text>
           </Flex>
 
@@ -168,7 +168,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
             }}
           >
             <Text size="1">
-              {strings.website.tools.tankopedia.sandbox.static.edit.label}
+              {strings.website.tools.tanks.sandbox.static.edit.label}
             </Text>
             <Checkbox size="2" checked={editStatic} />
           </Flex>
@@ -186,7 +186,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
           }}
         >
           <ReloadIcon />
-          {strings.website.tools.tankopedia.sandbox.static.edit.reset}
+          {strings.website.tools.tanks.sandbox.static.edit.reset}
         </Button>
       </Flex>
 

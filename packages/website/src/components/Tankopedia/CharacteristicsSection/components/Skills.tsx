@@ -22,7 +22,7 @@ export function Skills() {
       <Flex gap="4" align="center">
         <Flex gap="2" align="center">
           <Heading size="4">
-            {strings.website.tools.tankopedia.configuration.skills.title}
+            {strings.website.tools.tanks.configuration.skills.title}
           </Heading>
 
           <Popover.Root>
@@ -35,7 +35,7 @@ export function Skills() {
             <Popover.Content>
               <Flex direction="column" gap="2">
                 <Text>
-                  {strings.website.tools.tankopedia.configuration.skills.info}
+                  {strings.website.tools.tanks.configuration.skills.info}
                 </Text>
               </Flex>
             </Popover.Content>
@@ -53,7 +53,7 @@ export function Skills() {
             });
           }}
         >
-          {strings.website.tools.tankopedia.configuration.skills.clear}
+          {strings.website.tools.tanks.configuration.skills.clear}
         </Button>
         <Button
           variant="ghost"
@@ -65,7 +65,7 @@ export function Skills() {
             });
           }}
         >
-          {strings.website.tools.tankopedia.configuration.skills.maximize}
+          {strings.website.tools.tanks.configuration.skills.maximize}
         </Button>
       </Flex>
 

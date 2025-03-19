@@ -47,7 +47,7 @@ export function MetaSection() {
           <LinkI18n locale={locale} href="/tools/tankopedia">
             <Button variant="outline">
               <ChevronLeftIcon />
-              {strings.website.tools.tankopedia.meta.back}
+              {strings.website.tools.tanks.meta.back}
             </Button>
           </LinkI18n>
 
@@ -57,7 +57,7 @@ export function MetaSection() {
           >
             <Button variant="outline">
               <MixIcon />
-              {strings.website.tools.tankopedia.meta.compare}
+              {strings.website.tools.tanks.meta.compare}
             </Button>
           </LinkI18n>
 
@@ -73,8 +73,8 @@ export function MetaSection() {
                 <ScienceIcon height="1.25em" width="1.25em" />
                 {assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH) ===
                 'opentest'
-                  ? strings.website.tools.tankopedia.meta.vanilla
-                  : strings.website.tools.tankopedia.meta.opentest}
+                  ? strings.website.tools.tanks.meta.vanilla
+                  : strings.website.tools.tanks.meta.opentest}
               </Button>
             </Link>
           )}
@@ -83,13 +83,13 @@ export function MetaSection() {
             <Dialog.Trigger>
               <Button>
                 <UpdateIcon />
-                {strings.website.tools.tankopedia.meta.swap.button}
+                {strings.website.tools.tanks.meta.swap.button}
               </Button>
             </Dialog.Trigger>
 
             <Dialog.Content>
               <Dialog.Title>
-                {strings.website.tools.tankopedia.meta.swap.title}
+                {strings.website.tools.tanks.meta.swap.title}
               </Dialog.Title>
 
               <TankSearch
@@ -123,11 +123,11 @@ export function MetaSection() {
         >
           <Flex direction="column" width="100%">
             {protagonist.name_full && (
-              <Listing label={strings.website.tools.tankopedia.meta.full_name}>
+              <Listing label={strings.website.tools.tanks.meta.full_name}>
                 {unwrap(protagonist.name_full)}
               </Listing>
             )}
-            <Listing label={strings.website.tools.tankopedia.meta.nation}>
+            <Listing label={strings.website.tools.tanks.meta.nation}>
               <Flex align="center" gap="1">
                 <img
                   style={{ width: '1em', height: '1em' }}
@@ -141,17 +141,17 @@ export function MetaSection() {
                 }
               </Flex>
             </Listing>
-            <Listing label={strings.website.tools.tankopedia.meta.class}>
+            <Listing label={strings.website.tools.tanks.meta.class}>
               <Flex align="center" gap="1">
                 <ClassIcon width="1em" height="1em" />
                 {strings.common.tank_class_short[protagonist.class]}
               </Flex>
             </Listing>
-            <Listing label={strings.website.tools.tankopedia.meta.tier}>
+            <Listing label={strings.website.tools.tanks.meta.tier}>
               {TIER_ROMAN_NUMERALS[protagonist.tier]}
             </Listing>
             <Listing
-              label={strings.website.tools.tankopedia.meta.type}
+              label={strings.website.tools.tanks.meta.type}
               color={
                 protagonist.type === TankType.COLLECTOR
                   ? 'blue'
@@ -166,12 +166,12 @@ export function MetaSection() {
 
           <Flex direction="column" width="100%">
             {developerMode && (
-              <Listing label={strings.website.tools.tankopedia.meta.dev_id}>
+              <Listing label={strings.website.tools.tanks.meta.dev_id}>
                 <Code>{protagonist.id}</Code>
               </Listing>
             )}
             {protagonist.type === TankType.PREMIUM && (
-              <Listing label={strings.website.tools.tankopedia.meta.purchase}>
+              <Listing label={strings.website.tools.tanks.meta.purchase}>
                 <Flex align="center" gap="1">
                   {protagonist.price.value / 400}
                   <img
@@ -185,8 +185,8 @@ export function MetaSection() {
             <Listing
               label={
                 protagonist.type === TankType.RESEARCHABLE
-                  ? strings.website.tools.tankopedia.meta.purchase
-                  : strings.website.tools.tankopedia.meta.restoration
+                  ? strings.website.tools.tanks.meta.purchase
+                  : strings.website.tools.tanks.meta.restoration
               }
             >
               <Flex align="center" gap="1">
@@ -204,7 +204,7 @@ export function MetaSection() {
                 />
               </Flex>
             </Listing>
-            <Listing label={strings.website.tools.tankopedia.meta.sale}>
+            <Listing label={strings.website.tools.tanks.meta.sale}>
               <Flex align="center" gap="1">
                 {(protagonist.price.value / 2).toLocaleString(locale)}
                 <img
@@ -221,7 +221,7 @@ export function MetaSection() {
               </Flex>
             </Listing>
             {protagonist.research_cost && (
-              <Listing label={strings.website.tools.tankopedia.meta.research}>
+              <Listing label={strings.website.tools.tanks.meta.research}>
                 <Flex align="center" gap="1">
                   {(
                     protagonist.research_cost.research_cost_type!

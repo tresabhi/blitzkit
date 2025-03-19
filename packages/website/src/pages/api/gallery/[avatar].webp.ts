@@ -16,9 +16,9 @@ const glossary = await fetchGlossary(DEFAULT_LOCALE);
 
 /**
  * Returns an in-game avatar image. Use gallery/list.json to get all valid ids.
- * Not all ids may have images due to poor Wargaming CDNs. Some images may be
- * animated. Not all images share the same dimensions.
+ * Some images may be animated. Not all images share the same dimensions.
  *
+ * @warning Not all ids have images due to poor Wargaming CDN.
  * @param avatar The avatar id.
  * @returns A webp image.
  */

@@ -58,8 +58,8 @@ export function CustomShellButton() {
               <Flex align="center" justify="between" gap="4">
                 <Text>
                   {
-                    strings.website.tools.tankopedia.sandbox.dynamic
-                      .custom_shell.type
+                    strings.website.tools.tanks.sandbox.dynamic.custom_shell
+                      .type
                   }
                 </Text>
                 <Select.Root
@@ -124,8 +124,8 @@ export function CustomShellButton() {
               <Flex align="center" justify="between" gap="4">
                 <Text>
                   {
-                    strings.website.tools.tankopedia.sandbox.dynamic
-                      .custom_shell.caliber
+                    strings.website.tools.tanks.sandbox.dynamic.custom_shell
+                      .caliber
                   }
                 </Text>
                 <TextField.Root
@@ -159,8 +159,8 @@ export function CustomShellButton() {
               <Flex align="center" justify="between" gap="4">
                 <Text>
                   {
-                    strings.website.tools.tankopedia.sandbox.dynamic
-                      .custom_shell.penetration
+                    strings.website.tools.tanks.sandbox.dynamic.custom_shell
+                      .penetration
                   }
                 </Text>
                 <TextField.Root
@@ -198,8 +198,8 @@ export function CustomShellButton() {
                   <Flex align="center" justify="between" gap="4" py="1">
                     <Text>
                       {
-                        strings.website.tools.tankopedia.sandbox.dynamic
-                          .custom_shell.normalization
+                        strings.website.tools.tanks.sandbox.dynamic.custom_shell
+                          .normalization
                       }
                     </Text>
 
@@ -234,8 +234,8 @@ export function CustomShellButton() {
                   <Flex align="center" justify="between" gap="4" py="1">
                     <Text>
                       {
-                        strings.website.tools.tankopedia.sandbox.dynamic
-                          .custom_shell.ricochet
+                        strings.website.tools.tanks.sandbox.dynamic.custom_shell
+                          .ricochet
                       }
                     </Text>
 
@@ -297,8 +297,8 @@ export function CustomShellButton() {
               <Popover.Close>
                 <Button color="red" variant="outline">
                   {
-                    strings.website.tools.tankopedia.sandbox.dynamic
-                      .custom_shell.exit
+                    strings.website.tools.tanks.sandbox.dynamic.custom_shell
+                      .exit
                   }
                 </Button>
               </Popover.Close>
@@ -310,10 +310,7 @@ export function CustomShellButton() {
                   });
                 }}
               >
-                {
-                  strings.website.tools.tankopedia.sandbox.dynamic.custom_shell
-                    .reset
-                }
+                {strings.website.tools.tanks.sandbox.dynamic.custom_shell.reset}
               </Button>
             </Flex>
           </>

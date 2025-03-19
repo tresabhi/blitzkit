@@ -346,13 +346,13 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
             >
               <Checkbox checked={advancedHighlighting} />
               <Text color="gray" size="2">
-                {strings.website.tools.tankopedia.sandbox.dynamic.advanced}
+                {strings.website.tools.tanks.sandbox.dynamic.advanced}
               </Text>
             </Flex>
 
             <Flex align="center" gap="2">
               <Text color="gray" size="2">
-                {strings.website.tools.tankopedia.sandbox.dynamic.shooter}
+                {strings.website.tools.tanks.sandbox.dynamic.shooter}
               </Text>
               <Dialog.Root
                 open={antagonistSelectorOpen}
@@ -408,9 +408,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
             }}
           >
             <SegmentedControl.Item value={`${TankopediaDisplay.Model}`}>
-              <Tooltip
-                content={strings.website.tools.tankopedia.sandbox.model.name}
-              >
+              <Tooltip content={strings.website.tools.tanks.sandbox.model.name}>
                 <Flex height="100%" align="center">
                   <img src={imgur('jAdYf0m')} style={{ height: '1.25em' }} />
                 </Flex>
@@ -418,7 +416,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
             </SegmentedControl.Item>
             <SegmentedControl.Item value={`${TankopediaDisplay.DynamicArmor}`}>
               <Tooltip
-                content={strings.website.tools.tankopedia.sandbox.dynamic.name}
+                content={strings.website.tools.tanks.sandbox.dynamic.name}
               >
                 <Flex height="100%" align="center">
                   <img src={imgur('oe4Cq0g')} style={{ height: '1.25em' }} />
@@ -427,7 +425,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
             </SegmentedControl.Item>
             <SegmentedControl.Item value={`${TankopediaDisplay.StaticArmor}`}>
               <Tooltip
-                content={strings.website.tools.tankopedia.sandbox.static.name}
+                content={strings.website.tools.tanks.sandbox.static.name}
               >
                 <Flex height="100%" align="center">
                   <img src={imgur('VQ4uDno')} style={{ height: '1.25em' }} />
@@ -452,15 +450,15 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
 
             <DropdownMenu.Content>
               <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.HullDown)}>
-                {strings.website.tools.tankopedia.sandbox.poses.hull_down}
+                {strings.website.tools.tanks.sandbox.poses.hull_down}
               </DropdownMenu.Item>
 
               <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.FaceHug)}>
-                {strings.website.tools.tankopedia.sandbox.poses.face_hug}
+                {strings.website.tools.tanks.sandbox.poses.face_hug}
               </DropdownMenu.Item>
 
               <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.Default)}>
-                {strings.website.tools.tankopedia.sandbox.poses.default}
+                {strings.website.tools.tanks.sandbox.poses.default}
               </DropdownMenu.Item>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
@@ -476,7 +474,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
               {display === TankopediaDisplay.DynamicArmor && (
                 <>
                   <DropdownMenu.Label>
-                    {strings.website.tools.tankopedia.sandbox.settings.armor}
+                    {strings.website.tools.tanks.sandbox.settings.armor}
                   </DropdownMenu.Label>
 
                   <DropdownMenu.CheckboxItem
@@ -488,7 +486,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                     }}
                   >
                     {
-                      strings.website.tools.tankopedia.sandbox.settings
+                      strings.website.tools.tanks.sandbox.settings
                         .green_penetration
                     }
                   </DropdownMenu.CheckboxItem>
@@ -502,7 +500,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                     }}
                   >
                     {
-                      strings.website.tools.tankopedia.sandbox.settings
+                      strings.website.tools.tanks.sandbox.settings
                         .hide_model_under_armor
                     }
                   </DropdownMenu.CheckboxItem>
@@ -515,7 +513,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                       });
                     }}
                   >
-                    {strings.website.tools.tankopedia.sandbox.settings.opaque}
+                    {strings.website.tools.tanks.sandbox.settings.opaque}
                   </DropdownMenu.CheckboxItem>
 
                   {developerMode && (
@@ -528,7 +526,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                       }}
                     >
                       {
-                        strings.website.tools.tankopedia.sandbox.settings
+                        strings.website.tools.tanks.sandbox.settings
                           .dev_wireframe
                       }
                     </DropdownMenu.CheckboxItem>
@@ -537,7 +535,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
               )}
 
               <DropdownMenu.Label>
-                {strings.website.tools.tankopedia.sandbox.settings.environment}
+                {strings.website.tools.tanks.sandbox.settings.environment}
               </DropdownMenu.Label>
 
               <DropdownMenu.CheckboxItem
@@ -548,7 +546,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                   });
                 }}
               >
-                {strings.website.tools.tankopedia.sandbox.settings.show_grid}
+                {strings.website.tools.tanks.sandbox.settings.show_grid}
               </DropdownMenu.CheckboxItem>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
@@ -581,10 +579,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                     }}
                   >
                     <DownloadIcon />
-                    {
-                      strings.website.tools.tankopedia.sandbox.screenshot
-                        .download
-                    }
+                    {strings.website.tools.tanks.sandbox.screenshot.download}
                   </Button>
                 </Popover.Close>
                 <Popover.Close>
@@ -603,7 +598,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                     }}
                   >
                     <CopyIcon />
-                    {strings.website.tools.tankopedia.sandbox.screenshot.copy}
+                    {strings.website.tools.tanks.sandbox.screenshot.copy}
                   </Button>
                 </Popover.Close>
               </Flex>

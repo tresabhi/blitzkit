@@ -42,7 +42,7 @@ export function Consumables() {
       <Flex gap="4" align="center">
         <Flex gap="2" align="center">
           <Heading size="4">
-            {strings.website.tools.tankopedia.configuration.consumables.title}
+            {strings.website.tools.tanks.configuration.consumables.title}
           </Heading>
 
           <Popover.Root>
@@ -54,10 +54,7 @@ export function Consumables() {
 
             <Popover.Content>
               <Text>
-                {
-                  strings.website.tools.tankopedia.configuration.consumables
-                    .info
-                }
+                {strings.website.tools.tanks.configuration.consumables.info}
               </Text>
             </Popover.Content>
           </Popover.Root>
@@ -72,7 +69,7 @@ export function Consumables() {
             });
           }}
         >
-          {strings.website.tools.tankopedia.configuration.consumables.clear}
+          {strings.website.tools.tanks.configuration.consumables.clear}
         </Button>
       </Flex>
 

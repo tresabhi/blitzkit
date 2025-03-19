@@ -93,7 +93,7 @@ export function TechTreeSection({ skeleton }: MaybeSkeletonComponentProps) {
     >
       <Flex direction="column" align="center">
         <Heading size="6">
-          {strings.website.tools.tankopedia.tech_tree.title}
+          {strings.website.tools.tanks.tech_tree.title}
         </Heading>
 
         {master.tier > 1 && (
@@ -219,7 +219,7 @@ export function TechTreeSection({ skeleton }: MaybeSkeletonComponentProps) {
               <CaretLeftIcon />
             </IconButton>
             <Text>
-              {literals(strings.website.tools.tankopedia.tech_tree.route, [
+              {literals(strings.website.tools.tanks.tech_tree.route, [
                 `${lineIndex + 1}`,
                 `${lines.length}`,
               ])}

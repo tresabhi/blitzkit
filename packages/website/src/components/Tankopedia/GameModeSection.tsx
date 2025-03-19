@@ -22,9 +22,7 @@ export function GameModeSection() {
 
   return (
     <Flex direction="column" gap="4" align="center">
-      <Heading size="6">
-        {strings.website.tools.tankopedia.game_modes.title}
-      </Heading>
+      <Heading size="6">{strings.website.tools.tanks.game_modes.title}</Heading>
 
       <Flex justify="center" gap="4" wrap="wrap" px="4">
         {roles.map(([key, value]) => {

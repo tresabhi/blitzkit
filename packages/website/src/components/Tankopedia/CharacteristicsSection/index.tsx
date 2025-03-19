@@ -27,9 +27,7 @@ export function CharacteristicsSection() {
           maxWidth="21rem"
           align={{ initial: 'center', sm: 'start' }}
         >
-          <Heading>
-            {strings.website.tools.tankopedia.configuration.title}
-          </Heading>
+          <Heading>{strings.website.tools.tanks.configuration.title}</Heading>
           <Modules />
           <Equipment />
           <Provisions />

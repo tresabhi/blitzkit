@@ -21,7 +21,7 @@ export function Equipment() {
     <ConfigurationChildWrapper>
       <Flex gap="4" align="center">
         <Heading size="4">
-          {strings.website.tools.tankopedia.configuration.equipment.title}
+          {strings.website.tools.tanks.configuration.equipment.title}
         </Heading>
         <Button
           variant="ghost"
@@ -36,7 +36,7 @@ export function Equipment() {
             });
           }}
         >
-          {strings.website.tools.tankopedia.configuration.equipment.clear}
+          {strings.website.tools.tanks.configuration.equipment.clear}
         </Button>
       </Flex>
 

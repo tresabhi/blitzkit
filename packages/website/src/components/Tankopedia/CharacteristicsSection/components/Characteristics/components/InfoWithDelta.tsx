@@ -145,9 +145,7 @@ export function InfoWithDelta({
         name={
           'name' in props
             ? props.name
-            : strings.website.tools.tankopedia.characteristics.values[
-                props.value
-              ]
+            : strings.website.tools.tanks.characteristics.values[props.value]
         }
         delta={delta}
       >

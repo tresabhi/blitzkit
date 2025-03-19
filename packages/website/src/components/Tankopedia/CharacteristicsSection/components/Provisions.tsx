@@ -19,7 +19,7 @@ export function Provisions() {
     <ConfigurationChildWrapper>
       <Flex gap="4" align="center">
         <Heading size="4">
-          {strings.website.tools.tankopedia.configuration.provisions.title}
+          {strings.website.tools.tanks.configuration.provisions.title}
         </Heading>
         <Button
           variant="ghost"
@@ -30,7 +30,7 @@ export function Provisions() {
             });
           }}
         >
-          {strings.website.tools.tankopedia.configuration.provisions.clear}
+          {strings.website.tools.tanks.configuration.provisions.clear}
         </Button>
       </Flex>
 

@@ -132,11 +132,10 @@ export function Node({ id, highlight, nextIds, skeleton }: NodeProps) {
                 {skeleton && <Skeleton height="1em" width="4em" />}
                 {!skeleton &&
                   (games === 1
-                    ? strings.website.tools.tankopedia.tech_tree.battle
-                    : literals(
-                        strings.website.tools.tankopedia.tech_tree.battles,
-                        [`${games}`],
-                      ))}
+                    ? strings.website.tools.tanks.tech_tree.battle
+                    : literals(strings.website.tools.tanks.tech_tree.battles, [
+                        `${games}`,
+                      ]))}
               </Text>
             )}
           </Flex>

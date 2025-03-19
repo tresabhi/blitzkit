@@ -22,12 +22,10 @@ export function VideoSection({ skeleton }: MaybeSkeletonComponentProps) {
     <PageWrapper noFlex1 noMinHeight>
       <Flex direction="column" gap="6" align="center">
         <Flex direction="column" align="center">
-          <Heading size="6">
-            {strings.website.tools.tankopedia.review.title}
-          </Heading>
+          <Heading size="6">{strings.website.tools.tanks.review.title}</Heading>
 
           <Text color="gray">
-            {strings.website.tools.tankopedia.review.disclaimer}
+            {strings.website.tools.tanks.review.disclaimer}
           </Text>
         </Flex>
 
@@ -117,7 +115,7 @@ export function VideoSection({ skeleton }: MaybeSkeletonComponentProps) {
                   width: '9rem',
                 }}
               >
-                {literals(strings.website.tools.tankopedia.review.join, [
+                {literals(strings.website.tools.tanks.review.join, [
                   'BlitzKit',
                 ])}
               </Text>

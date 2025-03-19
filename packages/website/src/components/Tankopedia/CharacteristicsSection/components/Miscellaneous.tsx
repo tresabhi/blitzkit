@@ -17,7 +17,7 @@ export function Miscellaneous() {
   return (
     <ConfigurationChildWrapper>
       <Heading size="4">
-        {strings.website.tools.tankopedia.configuration.miscellaneous.title}
+        {strings.website.tools.tanks.configuration.miscellaneous.title}
       </Heading>
 
       <Flex gap="2" align="center">
