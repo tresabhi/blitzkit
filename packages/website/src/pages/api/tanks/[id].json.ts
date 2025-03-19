@@ -12,8 +12,8 @@ export const getStaticPaths = (async () => {
  * not include information on the tank model. Use tanks/list.json to get all
  * valid ids.
  *
- * @param avatar The avatar id.
- * @returns A webp image.
+ * @param id The tank id.
+ * @returns JSON.
  */
 export const GET: APIRoute<{}, { id: string }> = async ({ params }) => {
   const tank = await fetchTank(params.id);
