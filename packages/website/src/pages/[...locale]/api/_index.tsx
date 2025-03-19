@@ -61,7 +61,7 @@ export function SlugsTable({ slugs, path }: SlugsTableProps) {
 
               <Table.Cell>
                 <Link target="_blank" href={`/api/${draftPath}`}>
-                  <IconButton>
+                  <IconButton variant="surface">
                     <OpenInNewWindowIcon />
                   </IconButton>
                 </Link>
