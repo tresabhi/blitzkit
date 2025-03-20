@@ -48,15 +48,14 @@ const globRaw = import.meta.glob('/src/pages/api/**/*.ts', {
 }) as Record<string, string>;
 const globStaticPaths = import.meta.glob('/src/pages/api/**/*.ts', {
   eager: true,
-  import: 'getStaticPaths',
-}) as Record<string, GetStaticPaths | undefined>;
+}) as Record<string, { getStaticPaths?: GetStaticPaths }>;
 let apis: APIPath[] = [];
 
 for (const rawPath in globRaw) {
   const content = globRaw[rawPath].replaceAll('\r', '');
   const regexExecution = content.match(getDocsRegex);
   const commentRaw = regexExecution?.[1];
-  const getStaticPaths = globStaticPaths[rawPath];
+  const { getStaticPaths } = globStaticPaths[rawPath];
   let slugs: APIPath['slugs'] | undefined;
 
   if (getStaticPaths) {
