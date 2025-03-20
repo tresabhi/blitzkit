@@ -13,6 +13,7 @@ namespace BlitzKit.CLI.Models
     private static readonly int TIME_PER_BLOB = (int)Math.Pow(2, 4) * 10000;
     private static readonly int TIME_BETWEEN_BLOBS = (int)(60 * 60 * 1000 / 5000 / 0.9);
     private static readonly int MAX_TREE_SIZE = 7_000_000; // 7MB
+    private static readonly int MAX_FILE_COUNT = 64; // 7MB
     private static readonly bool devMinimizeChecks = Env.GetBool("DEV_MINIMIZE_ASSET_CHECKS");
 
     private readonly GitHubClient octokit = new(new ProductHeaderValue("MyAmazingApp"))
@@ -90,7 +91,7 @@ namespace BlitzKit.CLI.Models
       }
 
       // flush BEFORE going over limit
-      if (changesSize + change.Content.Count > MAX_TREE_SIZE)
+      if (changesSize + change.Content.Count > MAX_TREE_SIZE || changes.Count + 1 > MAX_FILE_COUNT)
       {
         Console.WriteLine("Flushing backlog...");
         await Flush();
