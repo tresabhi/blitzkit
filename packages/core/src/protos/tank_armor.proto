@@ -1,0 +1,23 @@
+syntax = "proto2";
+
+package blitzkit;
+
+message TankArmor {
+  // tank id
+  required string id = 1;
+  // key can only ever be "chassis", "hull", "turret", or "gun"
+  map<string, PenetrationGroup> groups = 4;
+}
+
+message PenetrationGroup {
+  // keys are mostly "armor_xyz" where xyz is an integer but sometimes can be
+  // things like "commander", "rightTrack", etc.
+  map<string, ArmorPlate> armors = 1;
+}
+
+message ArmorPlate {
+  // this is the thickness of the armor in millimeters
+  required float thickness = 1;
+  // this can be stuff like ArmorScreen which is spaced armor, FuelTank, etc.
+  required string type = 2;
+}

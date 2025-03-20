@@ -1,9 +1,11 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Blitzkit;
 using BlitzKit.CLI.Models;
 using BlitzKit.CLI.Quicktype.Locales;
 using BlitzKit.CLI.Utils;
+using CUE4Parse.MappingsProvider;
 using CUE4Parse.UE4.Assets.Exports;
 using CUE4Parse.UE4.Assets.Exports.Engine;
 using CUE4Parse.UE4.Assets.Exports.StaticMesh;
@@ -223,6 +225,7 @@ namespace BlitzKit.CLI.Functions
 
       // await MangleHull(pda);
       // await MangleIcon(pda);
+      await MangleArmor(pda);
 
       Tank tank = new()
       {
@@ -231,48 +234,52 @@ namespace BlitzKit.CLI.Functions
         Slug = slug,
       };
 
-      tank.PenetrationGroups.MergeFrom(MangleArmor(pda));
-
       return tank;
     }
 
-    MapField<string, PenetrationGroup> MangleArmor(UObject pda)
+    async Task MangleArmor(UObject pda)
     {
       var id = PropertyUtil.Get<FName>(pda, "TankId").Text;
-      MapField<string, PenetrationGroup> groups = [];
+      TankArmor tankArmor = new();
       var attributes = PropertyUtil.Get<UObject>(pda, "DA_Attributes");
       PropertyUtil.TryGet<UScriptMap>(attributes, "PenetrationGroups", out var penetrationGroups);
 
       if (penetrationGroups == null)
       {
-        PrettyLog.Warn($"Penetration groups missing for {id}; returning empty list");
-        return groups;
+        PrettyLog.Warn($"Penetration groups missing for {id}; creating empty list");
       }
-
-      foreach (var group in penetrationGroups.Properties)
+      else
       {
-        var rawName = ((FName)group.Key.GenericValue!).Text;
-        var name = PenetrationGroupNameMap[rawName];
-        var armors = PropertyUtil.Get<UScriptMap>(
-          group.Value!.GetValue<FStructFallback>()!,
-          "PenetrationGroups"
-        );
-        PenetrationGroup penetrationGroup = new();
-
-        foreach (var armorProperty in armors.Properties)
+        foreach (var group in penetrationGroups.Properties)
         {
-          var armorName = ((FName)armorProperty.Key.GenericValue!).Text;
-          var armorThickness = PropertyUtil.Get<float>(
-            armorProperty.Value!.GetValue<FStructFallback>()!,
-            "Armor"
+          var rawName = ((FName)group.Key.GenericValue!).Text;
+          var name = PenetrationGroupNameMap[rawName];
+          var armors = PropertyUtil.Get<UScriptMap>(
+            group.Value!.GetValue<FStructFallback>()!,
+            "PenetrationGroups"
           );
-          penetrationGroup.Armors[armorName] = armorThickness;
-        }
+          PenetrationGroup penetrationGroup = new();
 
-        groups[name] = penetrationGroup;
+          foreach (var armorProperty in armors.Properties)
+          {
+            var armorName = ((FName)armorProperty.Key.GenericValue!).Text;
+            var armorProperties = armorProperty.Value!.GetValue<FStructFallback>()!;
+            var thickness = PropertyUtil.Get<float>(armorProperties, "Armor");
+            var commonData = PropertyUtil.Get<FStructFallback>(armorProperties, "CommonData");
+            var rowName = PropertyUtil.Get<FName>(commonData, "RowName");
+
+            penetrationGroup.Armors[armorName] = new()
+            {
+              Thickness = thickness,
+              Type = rowName.Text,
+            };
+          }
+
+          tankArmor.Groups[name] = penetrationGroup;
+        }
       }
 
-      return groups;
+      await assetUploader.Add(new($"tanks/{id}/armor.pb", tankArmor.ToByteArray()));
     }
 
     async Task MangleIcon(UObject pda)

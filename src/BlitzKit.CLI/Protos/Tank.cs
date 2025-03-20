@@ -25,20 +25,13 @@ namespace Blitzkit {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CiNwYWNrYWdlcy9jb3JlL3NyYy9wcm90b3MvdGFuay5wcm90bxIIYmxpdHpr",
-            "aXQaI3BhY2thZ2VzL2NvcmUvc3JjL3Byb3Rvcy9pMThuLnByb3RvItcBCgRU",
-            "YW5rEgoKAmlkGAEgAigJEgwKBHNsdWcYAiACKAkSHAoEbmFtZRgDIAIoCzIO",
-            "LmJsaXR6a2l0LkkxOG4SQQoScGVuZXRyYXRpb25fZ3JvdXBzGAQgAygLMiUu",
-            "YmxpdHpraXQuVGFuay5QZW5ldHJhdGlvbkdyb3Vwc0VudHJ5GlQKFlBlbmV0",
-            "cmF0aW9uR3JvdXBzRW50cnkSCwoDa2V5GAEgASgJEikKBXZhbHVlGAIgASgL",
-            "MhouYmxpdHpraXQuUGVuZXRyYXRpb25Hcm91cDoCOAEieQoQUGVuZXRyYXRp",
-            "b25Hcm91cBI2CgZhcm1vcnMYASADKAsyJi5ibGl0emtpdC5QZW5ldHJhdGlv",
-            "bkdyb3VwLkFybW9yc0VudHJ5Gi0KC0FybW9yc0VudHJ5EgsKA2tleRgBIAEo",
-            "CRINCgV2YWx1ZRgCIAEoAjoCOAE="));
+            "aXQaI3BhY2thZ2VzL2NvcmUvc3JjL3Byb3Rvcy9pMThuLnByb3RvIj4KBFRh",
+            "bmsSCgoCaWQYASACKAkSDAoEc2x1ZxgCIAIoCRIcCgRuYW1lGAMgAigLMg4u",
+            "YmxpdHpraXQuSTE4bg=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Blitzkit.I18NReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Blitzkit.Tank), global::Blitzkit.Tank.Parser, new[]{ "Id", "Slug", "Name", "PenetrationGroups" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Blitzkit.PenetrationGroup), global::Blitzkit.PenetrationGroup.Parser, new[]{ "Armors" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, })
+            new pbr::GeneratedClrTypeInfo(typeof(global::Blitzkit.Tank), global::Blitzkit.Tank.Parser, new[]{ "Id", "Slug", "Name" }, null, null, null, null)
           }));
     }
     #endregion
@@ -83,7 +76,6 @@ namespace Blitzkit {
       id_ = other.id_;
       slug_ = other.slug_;
       name_ = other.name_ != null ? other.name_.Clone() : null;
-      penetrationGroups_ = other.penetrationGroups_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -157,20 +149,6 @@ namespace Blitzkit {
       }
     }
 
-    /// <summary>Field number for the "penetration_groups" field.</summary>
-    public const int PenetrationGroupsFieldNumber = 4;
-    private static readonly pbc::MapField<string, global::Blitzkit.PenetrationGroup>.Codec _map_penetrationGroups_codec
-        = new pbc::MapField<string, global::Blitzkit.PenetrationGroup>.Codec(pb::FieldCodec.ForString(10, ""), pb::FieldCodec.ForMessage(18, global::Blitzkit.PenetrationGroup.Parser), 34);
-    private readonly pbc::MapField<string, global::Blitzkit.PenetrationGroup> penetrationGroups_ = new pbc::MapField<string, global::Blitzkit.PenetrationGroup>();
-    /// <summary>
-    /// key can only ever be "chassis", "hull", "turret", or "gun"
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::MapField<string, global::Blitzkit.PenetrationGroup> PenetrationGroups {
-      get { return penetrationGroups_; }
-    }
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -189,7 +167,6 @@ namespace Blitzkit {
       if (Id != other.Id) return false;
       if (Slug != other.Slug) return false;
       if (!object.Equals(Name, other.Name)) return false;
-      if (!PenetrationGroups.Equals(other.PenetrationGroups)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -200,7 +177,6 @@ namespace Blitzkit {
       if (HasId) hash ^= Id.GetHashCode();
       if (HasSlug) hash ^= Slug.GetHashCode();
       if (name_ != null) hash ^= Name.GetHashCode();
-      hash ^= PenetrationGroups.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -231,7 +207,6 @@ namespace Blitzkit {
         output.WriteRawTag(26);
         output.WriteMessage(Name);
       }
-      penetrationGroups_.WriteTo(output, _map_penetrationGroups_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -254,7 +229,6 @@ namespace Blitzkit {
         output.WriteRawTag(26);
         output.WriteMessage(Name);
       }
-      penetrationGroups_.WriteTo(ref output, _map_penetrationGroups_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -274,7 +248,6 @@ namespace Blitzkit {
       if (name_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Name);
       }
-      size += penetrationGroups_.CalculateSize(_map_penetrationGroups_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -299,7 +272,6 @@ namespace Blitzkit {
         }
         Name.MergeFrom(other.Name);
       }
-      penetrationGroups_.MergeFrom(other.penetrationGroups_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -334,10 +306,6 @@ namespace Blitzkit {
             input.ReadMessage(Name);
             break;
           }
-          case 34: {
-            penetrationGroups_.AddEntriesFrom(input, _map_penetrationGroups_codec);
-            break;
-          }
         }
       }
     #endif
@@ -370,197 +338,6 @@ namespace Blitzkit {
               Name = new global::Blitzkit.I18n();
             }
             input.ReadMessage(Name);
-            break;
-          }
-          case 34: {
-            penetrationGroups_.AddEntriesFrom(ref input, _map_penetrationGroups_codec);
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
-  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class PenetrationGroup : pb::IMessage<PenetrationGroup>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<PenetrationGroup> _parser = new pb::MessageParser<PenetrationGroup>(() => new PenetrationGroup());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<PenetrationGroup> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Blitzkit.TankReflection.Descriptor.MessageTypes[1]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public PenetrationGroup() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public PenetrationGroup(PenetrationGroup other) : this() {
-      armors_ = other.armors_.Clone();
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public PenetrationGroup Clone() {
-      return new PenetrationGroup(this);
-    }
-
-    /// <summary>Field number for the "armors" field.</summary>
-    public const int ArmorsFieldNumber = 1;
-    private static readonly pbc::MapField<string, float>.Codec _map_armors_codec
-        = new pbc::MapField<string, float>.Codec(pb::FieldCodec.ForString(10, ""), pb::FieldCodec.ForFloat(21, 0F), 10);
-    private readonly pbc::MapField<string, float> armors_ = new pbc::MapField<string, float>();
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::MapField<string, float> Armors {
-      get { return armors_; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as PenetrationGroup);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(PenetrationGroup other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (!Armors.Equals(other.Armors)) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      hash ^= Armors.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      armors_.WriteTo(output, _map_armors_codec);
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      armors_.WriteTo(ref output, _map_armors_codec);
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      size += armors_.CalculateSize(_map_armors_codec);
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(PenetrationGroup other) {
-      if (other == null) {
-        return;
-      }
-      armors_.MergeFrom(other.armors_);
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            armors_.AddEntriesFrom(input, _map_armors_codec);
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 10: {
-            armors_.AddEntriesFrom(ref input, _map_armors_codec);
             break;
           }
         }

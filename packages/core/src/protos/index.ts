@@ -15,3 +15,4 @@ export * from './legacy_tank_definitions.ts';
 export * from './reviews.ts';
 export * from './tank.ts';
 export * from './tanks.ts';
+export * from './tank_armor.ts';

@@ -1,16 +1,13 @@
-import { asset } from '@blitzkit/core';
+import { Tank } from '@blitzkit/core';
 import { OrbitControls } from '@react-three/drei';
-import { Canvas, useLoader } from '@react-three/fiber';
-import { MeshBasicMaterial } from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { randInt } from 'three/src/math/MathUtils.js';
-import { jsxTree } from '../../../../core/blitzkit/jsxTree';
+import { Canvas } from '@react-three/fiber';
+import { ArmorGroup } from '../../../../components/ArmorGroup';
 
 interface PageProps {
-  id: string;
+  tank: Tank;
 }
 
-export function Page({ id }: PageProps) {
+export function Page({ tank }: PageProps) {
   return (
     <Canvas
       style={{
@@ -19,29 +16,7 @@ export function Page({ id }: PageProps) {
       }}
     >
       <OrbitControls />
-      <Model id={id} />
+      <ArmorGroup group="hull" tank={tank} />
     </Canvas>
   );
-}
-
-function Model({ id }: { id: string }) {
-  const gltf = useLoader(GLTFLoader, asset(`/tanks/${id}/collision/hull.glb`));
-
-  console.log(gltf);
-
-  return jsxTree(gltf.scene, {
-    mesh: (mesh) => ({
-      material: new MeshBasicMaterial({
-        color: `rgb(${randInt(0, 255)}, ${randInt(0, 255)}, ${randInt(
-          0,
-          255,
-        )})`,
-      }),
-      onClick: (event) => {
-        if (!(mesh.material instanceof MeshBasicMaterial)) return;
-        event.stopPropagation();
-        console.log(mesh.material.name)
-      },
-    }),
-  });
 }
