@@ -8,4 +8,12 @@ message Tank {
   required string id = 1;
   required string slug = 2;
   required I18n name = 3;
+  // key can only ever be "chassis", "hull", "turret", or "gun"
+  map<string, PenetrationGroup> penetration_groups = 4;
+}
+
+message PenetrationGroup {
+  // keys are mostly "armor_xyz" where xyz is an integer but sometimes can be
+  // things like "commander", "rightTrack", etc.
+  map<string, float> armors = 1;
 }

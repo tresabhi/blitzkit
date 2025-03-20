@@ -27,14 +27,21 @@ export function Page({ id }: PageProps) {
 function Model({ id }: { id: string }) {
   const gltf = useLoader(GLTFLoader, asset(`/tanks/${id}/collision/hull.glb`));
 
+  console.log(gltf);
+
   return jsxTree(gltf.scene, {
-    mesh: () => ({
+    mesh: (mesh) => ({
       material: new MeshBasicMaterial({
         color: `rgb(${randInt(0, 255)}, ${randInt(0, 255)}, ${randInt(
           0,
           255,
         )})`,
       }),
+      onClick: (event) => {
+        if (!(mesh.material instanceof MeshBasicMaterial)) return;
+        event.stopPropagation();
+        console.log(mesh.material.name)
+      },
     }),
   });
 }

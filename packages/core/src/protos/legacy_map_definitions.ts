@@ -5,10 +5,10 @@
 // source: packages/core/src/protos/legacy_map_definitions.proto
 
 /* eslint-disable */
-import { BinaryReader, BinaryWriter } from '@bufbuild/protobuf/wire';
-import { I18nString, createBaseI18nString } from './legacy_i18n';
+import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
+import { I18nString } from "./legacy_i18n";
 
-export const protobufPackage = 'blitzkit';
+export const protobufPackage = "blitzkit";
 
 export interface MapDefinitions {
   maps: { [key: number]: MapDefinition };
@@ -29,22 +29,15 @@ function createBaseMapDefinitions(): MapDefinitions {
 }
 
 export const MapDefinitions: MessageFns<MapDefinitions> = {
-  encode(
-    message: MapDefinitions,
-    writer: BinaryWriter = new BinaryWriter(),
-  ): BinaryWriter {
+  encode(message: MapDefinitions, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     Object.entries(message.maps).forEach(([key, value]) => {
-      MapDefinitions_MapsEntry.encode(
-        { key: key as any, value },
-        writer.uint32(10).fork(),
-      ).join();
+      MapDefinitions_MapsEntry.encode({ key: key as any, value }, writer.uint32(10).fork()).join();
     });
     return writer;
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): MapDefinitions {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMapDefinitions();
     while (reader.pos < end) {
@@ -55,10 +48,7 @@ export const MapDefinitions: MessageFns<MapDefinitions> = {
             break;
           }
 
-          const entry1 = MapDefinitions_MapsEntry.decode(
-            reader,
-            reader.uint32(),
-          );
+          const entry1 = MapDefinitions_MapsEntry.decode(reader, reader.uint32());
           if (entry1.value !== undefined) {
             message.maps[entry1.key] = entry1.value;
           }
@@ -76,13 +66,10 @@ export const MapDefinitions: MessageFns<MapDefinitions> = {
   fromJSON(object: any): MapDefinitions {
     return {
       maps: isObject(object.maps)
-        ? Object.entries(object.maps).reduce<{ [key: number]: MapDefinition }>(
-            (acc, [key, value]) => {
-              acc[globalThis.Number(key)] = MapDefinition.fromJSON(value);
-              return acc;
-            },
-            {},
-          )
+        ? Object.entries(object.maps).reduce<{ [key: number]: MapDefinition }>((acc, [key, value]) => {
+          acc[globalThis.Number(key)] = MapDefinition.fromJSON(value);
+          return acc;
+        }, {})
         : {},
     };
   },
@@ -101,18 +88,12 @@ export const MapDefinitions: MessageFns<MapDefinitions> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MapDefinitions>, I>>(
-    base?: I,
-  ): MapDefinitions {
+  create<I extends Exact<DeepPartial<MapDefinitions>, I>>(base?: I): MapDefinitions {
     return MapDefinitions.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MapDefinitions>, I>>(
-    object: I,
-  ): MapDefinitions {
+  fromPartial<I extends Exact<DeepPartial<MapDefinitions>, I>>(object: I): MapDefinitions {
     const message = createBaseMapDefinitions();
-    message.maps = Object.entries(object.maps ?? {}).reduce<{
-      [key: number]: MapDefinition;
-    }>((acc, [key, value]) => {
+    message.maps = Object.entries(object.maps ?? {}).reduce<{ [key: number]: MapDefinition }>((acc, [key, value]) => {
       if (value !== undefined) {
         acc[globalThis.Number(key)] = MapDefinition.fromPartial(value);
       }
@@ -127,10 +108,7 @@ function createBaseMapDefinitions_MapsEntry(): MapDefinitions_MapsEntry {
 }
 
 export const MapDefinitions_MapsEntry: MessageFns<MapDefinitions_MapsEntry> = {
-  encode(
-    message: MapDefinitions_MapsEntry,
-    writer: BinaryWriter = new BinaryWriter(),
-  ): BinaryWriter {
+  encode(message: MapDefinitions_MapsEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.key !== undefined) {
       writer.uint32(8).int32(message.key);
     }
@@ -140,12 +118,8 @@ export const MapDefinitions_MapsEntry: MessageFns<MapDefinitions_MapsEntry> = {
     return writer;
   },
 
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number,
-  ): MapDefinitions_MapsEntry {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): MapDefinitions_MapsEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMapDefinitions_MapsEntry();
     while (reader.pos < end) {
@@ -178,12 +152,8 @@ export const MapDefinitions_MapsEntry: MessageFns<MapDefinitions_MapsEntry> = {
 
   fromJSON(object: any): MapDefinitions_MapsEntry {
     return {
-      key: globalThis.Number(
-        assertSet('MapDefinitions_MapsEntry.key', object.key),
-      ),
-      value: MapDefinition.fromJSON(
-        assertSet('MapDefinitions_MapsEntry.value', object.value),
-      ),
+      key: globalThis.Number(assertSet("MapDefinitions_MapsEntry.key", object.key)),
+      value: MapDefinition.fromJSON(assertSet("MapDefinitions_MapsEntry.value", object.value)),
     };
   },
 
@@ -198,20 +168,15 @@ export const MapDefinitions_MapsEntry: MessageFns<MapDefinitions_MapsEntry> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MapDefinitions_MapsEntry>, I>>(
-    base?: I,
-  ): MapDefinitions_MapsEntry {
+  create<I extends Exact<DeepPartial<MapDefinitions_MapsEntry>, I>>(base?: I): MapDefinitions_MapsEntry {
     return MapDefinitions_MapsEntry.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MapDefinitions_MapsEntry>, I>>(
-    object: I,
-  ): MapDefinitions_MapsEntry {
+  fromPartial<I extends Exact<DeepPartial<MapDefinitions_MapsEntry>, I>>(object: I): MapDefinitions_MapsEntry {
     const message = createBaseMapDefinitions_MapsEntry();
     message.key = object.key ?? 0;
-    message.value =
-      object.value !== undefined && object.value !== null
-        ? MapDefinition.fromPartial(object.value)
-        : undefined;
+    message.value = (object.value !== undefined && object.value !== null)
+      ? MapDefinition.fromPartial(object.value)
+      : undefined;
     return message;
   },
 };
@@ -221,10 +186,7 @@ function createBaseMapDefinition(): MapDefinition {
 }
 
 export const MapDefinition: MessageFns<MapDefinition> = {
-  encode(
-    message: MapDefinition,
-    writer: BinaryWriter = new BinaryWriter(),
-  ): BinaryWriter {
+  encode(message: MapDefinition, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== 0) {
       writer.uint32(8).uint32(message.id);
     }
@@ -235,8 +197,7 @@ export const MapDefinition: MessageFns<MapDefinition> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): MapDefinition {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMapDefinition();
     while (reader.pos < end) {
@@ -269,8 +230,8 @@ export const MapDefinition: MessageFns<MapDefinition> = {
 
   fromJSON(object: any): MapDefinition {
     return {
-      id: globalThis.Number(assertSet('MapDefinition.id', object.id)),
-      name: I18nString.fromJSON(assertSet('MapDefinition.name', object.name)),
+      id: globalThis.Number(assertSet("MapDefinition.id", object.id)),
+      name: I18nString.fromJSON(assertSet("MapDefinition.name", object.name)),
     };
   },
 
@@ -285,54 +246,34 @@ export const MapDefinition: MessageFns<MapDefinition> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MapDefinition>, I>>(
-    base?: I,
-  ): MapDefinition {
+  create<I extends Exact<DeepPartial<MapDefinition>, I>>(base?: I): MapDefinition {
     return MapDefinition.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<MapDefinition>, I>>(
-    object: I,
-  ): MapDefinition {
+  fromPartial<I extends Exact<DeepPartial<MapDefinition>, I>>(object: I): MapDefinition {
     const message = createBaseMapDefinition();
     message.id = object.id ?? 0;
-    message.name =
-      object.name !== undefined && object.name !== null
-        ? I18nString.fromPartial(object.name)
-        : createBaseI18nString();
+    message.name = (object.name !== undefined && object.name !== null)
+      ? I18nString.fromPartial(object.name)
+      : createBaseI18nString();
     return message;
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends globalThis.Array<infer U>
-    ? globalThis.Array<DeepPartial<U>>
-    : T extends ReadonlyArray<infer U>
-      ? ReadonlyArray<DeepPartial<U>>
-      : T extends { $case: string; value: unknown }
-        ? { $case: T['$case']; value?: DeepPartial<T['value']> }
-        : T extends {}
-          ? { [K in keyof T]?: DeepPartial<T[K]> }
-          : Partial<T>;
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends { $case: string; value: unknown } ? { $case: T["$case"]; value?: DeepPartial<T["value"]> }
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
-      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
-    };
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function isObject(value: any): boolean {
-  return typeof value === 'object' && value !== null;
+  return typeof value === "object" && value !== null;
 }
 
 function isSet(value: any): boolean {

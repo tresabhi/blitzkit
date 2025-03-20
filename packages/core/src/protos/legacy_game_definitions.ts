@@ -5,10 +5,10 @@
 // source: packages/core/src/protos/legacy_game_definitions.proto
 
 /* eslint-disable */
-import { BinaryReader, BinaryWriter } from '@bufbuild/protobuf/wire';
-import { I18nString, createBaseI18nString } from './legacy_i18n';
+import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
+import { I18nString } from "./legacy_i18n";
 
-export const protobufPackage = 'blitzkit';
+export const protobufPackage = "blitzkit";
 
 export interface GameDefinitions {
   version: string;
@@ -37,38 +37,28 @@ export interface GameModeRole {
 }
 
 function createBaseGameDefinitions(): GameDefinitions {
-  return { version: '', nations: [], gameModes: {}, roles: {} };
+  return { version: "", nations: [], gameModes: {}, roles: {} };
 }
 
 export const GameDefinitions: MessageFns<GameDefinitions> = {
-  encode(
-    message: GameDefinitions,
-    writer: BinaryWriter = new BinaryWriter(),
-  ): BinaryWriter {
-    if (message.version !== '') {
+  encode(message: GameDefinitions, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.version !== "") {
       writer.uint32(10).string(message.version);
     }
     for (const v of message.nations) {
       writer.uint32(18).string(v!);
     }
     Object.entries(message.gameModes).forEach(([key, value]) => {
-      GameDefinitions_GameModesEntry.encode(
-        { key: key as any, value },
-        writer.uint32(26).fork(),
-      ).join();
+      GameDefinitions_GameModesEntry.encode({ key: key as any, value }, writer.uint32(26).fork()).join();
     });
     Object.entries(message.roles).forEach(([key, value]) => {
-      GameDefinitions_RolesEntry.encode(
-        { key: key as any, value },
-        writer.uint32(34).fork(),
-      ).join();
+      GameDefinitions_RolesEntry.encode({ key: key as any, value }, writer.uint32(34).fork()).join();
     });
     return writer;
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): GameDefinitions {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGameDefinitions();
     while (reader.pos < end) {
@@ -95,10 +85,7 @@ export const GameDefinitions: MessageFns<GameDefinitions> = {
             break;
           }
 
-          const entry3 = GameDefinitions_GameModesEntry.decode(
-            reader,
-            reader.uint32(),
-          );
+          const entry3 = GameDefinitions_GameModesEntry.decode(reader, reader.uint32());
           if (entry3.value !== undefined) {
             message.gameModes[entry3.key] = entry3.value;
           }
@@ -109,10 +96,7 @@ export const GameDefinitions: MessageFns<GameDefinitions> = {
             break;
           }
 
-          const entry4 = GameDefinitions_RolesEntry.decode(
-            reader,
-            reader.uint32(),
-          );
+          const entry4 = GameDefinitions_RolesEntry.decode(reader, reader.uint32());
           if (entry4.value !== undefined) {
             message.roles[entry4.key] = entry4.value;
           }
@@ -129,36 +113,26 @@ export const GameDefinitions: MessageFns<GameDefinitions> = {
 
   fromJSON(object: any): GameDefinitions {
     return {
-      version: globalThis.String(
-        assertSet('GameDefinitions.version', object.version),
-      ),
-      nations: globalThis.Array.isArray(object?.nations)
-        ? object.nations.map((e: any) => globalThis.String(e))
-        : [],
+      version: globalThis.String(assertSet("GameDefinitions.version", object.version)),
+      nations: globalThis.Array.isArray(object?.nations) ? object.nations.map((e: any) => globalThis.String(e)) : [],
       gameModes: isObject(object.gameModes)
-        ? Object.entries(object.gameModes).reduce<{ [key: number]: GameMode }>(
-            (acc, [key, value]) => {
-              acc[globalThis.Number(key)] = GameMode.fromJSON(value);
-              return acc;
-            },
-            {},
-          )
+        ? Object.entries(object.gameModes).reduce<{ [key: number]: GameMode }>((acc, [key, value]) => {
+          acc[globalThis.Number(key)] = GameMode.fromJSON(value);
+          return acc;
+        }, {})
         : {},
       roles: isObject(object.roles)
-        ? Object.entries(object.roles).reduce<{ [key: number]: GameModeRole }>(
-            (acc, [key, value]) => {
-              acc[globalThis.Number(key)] = GameModeRole.fromJSON(value);
-              return acc;
-            },
-            {},
-          )
+        ? Object.entries(object.roles).reduce<{ [key: number]: GameModeRole }>((acc, [key, value]) => {
+          acc[globalThis.Number(key)] = GameModeRole.fromJSON(value);
+          return acc;
+        }, {})
         : {},
     };
   },
 
   toJSON(message: GameDefinitions): unknown {
     const obj: any = {};
-    if (message.version !== '') {
+    if (message.version !== "") {
       obj.version = message.version;
     }
     if (message.nations?.length) {
@@ -185,28 +159,23 @@ export const GameDefinitions: MessageFns<GameDefinitions> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GameDefinitions>, I>>(
-    base?: I,
-  ): GameDefinitions {
+  create<I extends Exact<DeepPartial<GameDefinitions>, I>>(base?: I): GameDefinitions {
     return GameDefinitions.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<GameDefinitions>, I>>(
-    object: I,
-  ): GameDefinitions {
+  fromPartial<I extends Exact<DeepPartial<GameDefinitions>, I>>(object: I): GameDefinitions {
     const message = createBaseGameDefinitions();
-    message.version = object.version ?? '';
+    message.version = object.version ?? "";
     message.nations = object.nations?.map((e) => e) || [];
-    message.gameModes = Object.entries(object.gameModes ?? {}).reduce<{
-      [key: number]: GameMode;
-    }>((acc, [key, value]) => {
-      if (value !== undefined) {
-        acc[globalThis.Number(key)] = GameMode.fromPartial(value);
-      }
-      return acc;
-    }, {});
-    message.roles = Object.entries(object.roles ?? {}).reduce<{
-      [key: number]: GameModeRole;
-    }>((acc, [key, value]) => {
+    message.gameModes = Object.entries(object.gameModes ?? {}).reduce<{ [key: number]: GameMode }>(
+      (acc, [key, value]) => {
+        if (value !== undefined) {
+          acc[globalThis.Number(key)] = GameMode.fromPartial(value);
+        }
+        return acc;
+      },
+      {},
+    );
+    message.roles = Object.entries(object.roles ?? {}).reduce<{ [key: number]: GameModeRole }>((acc, [key, value]) => {
       if (value !== undefined) {
         acc[globalThis.Number(key)] = GameModeRole.fromPartial(value);
       }
@@ -220,201 +189,166 @@ function createBaseGameDefinitions_GameModesEntry(): GameDefinitions_GameModesEn
   return { key: 0, value: createBaseGameMode() };
 }
 
-export const GameDefinitions_GameModesEntry: MessageFns<GameDefinitions_GameModesEntry> =
-  {
-    encode(
-      message: GameDefinitions_GameModesEntry,
-      writer: BinaryWriter = new BinaryWriter(),
-    ): BinaryWriter {
-      if (message.key !== undefined) {
-        writer.uint32(8).uint32(message.key);
-      }
-      if (message.value !== undefined) {
-        GameMode.encode(message.value, writer.uint32(18).fork()).join();
-      }
-      return writer;
-    },
+export const GameDefinitions_GameModesEntry: MessageFns<GameDefinitions_GameModesEntry> = {
+  encode(message: GameDefinitions_GameModesEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== undefined) {
+      writer.uint32(8).uint32(message.key);
+    }
+    if (message.value !== undefined) {
+      GameMode.encode(message.value, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
 
-    decode(
-      input: BinaryReader | Uint8Array,
-      length?: number,
-    ): GameDefinitions_GameModesEntry {
-      const reader =
-        input instanceof BinaryReader ? input : new BinaryReader(input);
-      let end = length === undefined ? reader.len : reader.pos + length;
-      const message = createBaseGameDefinitions_GameModesEntry();
-      while (reader.pos < end) {
-        const tag = reader.uint32();
-        switch (tag >>> 3) {
-          case 1: {
-            if (tag !== 8) {
-              break;
-            }
-
-            message.key = reader.uint32();
-            continue;
+  decode(input: BinaryReader | Uint8Array, length?: number): GameDefinitions_GameModesEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGameDefinitions_GameModesEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
           }
-          case 2: {
-            if (tag !== 18) {
-              break;
-            }
 
-            message.value = GameMode.decode(reader, reader.uint32());
-            continue;
+          message.key = reader.uint32();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
           }
+
+          message.value = GameMode.decode(reader, reader.uint32());
+          continue;
         }
-        if ((tag & 7) === 4 || tag === 0) {
-          break;
-        }
-        reader.skip(tag & 7);
       }
-      return message;
-    },
-
-    fromJSON(object: any): GameDefinitions_GameModesEntry {
-      return {
-        key: globalThis.Number(
-          assertSet('GameDefinitions_GameModesEntry.key', object.key),
-        ),
-        value: GameMode.fromJSON(
-          assertSet('GameDefinitions_GameModesEntry.value', object.value),
-        ),
-      };
-    },
-
-    toJSON(message: GameDefinitions_GameModesEntry): unknown {
-      const obj: any = {};
-      if (message.key !== undefined) {
-        obj.key = Math.round(message.key);
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
       }
-      if (message.value !== undefined) {
-        obj.value = GameMode.toJSON(message.value);
-      }
-      return obj;
-    },
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
 
-    create<I extends Exact<DeepPartial<GameDefinitions_GameModesEntry>, I>>(
-      base?: I,
-    ): GameDefinitions_GameModesEntry {
-      return GameDefinitions_GameModesEntry.fromPartial(base ?? ({} as any));
-    },
-    fromPartial<
-      I extends Exact<DeepPartial<GameDefinitions_GameModesEntry>, I>,
-    >(object: I): GameDefinitions_GameModesEntry {
-      const message = createBaseGameDefinitions_GameModesEntry();
-      message.key = object.key ?? 0;
-      message.value =
-        object.value !== undefined && object.value !== null
-          ? GameMode.fromPartial(object.value)
-          : undefined;
-      return message;
-    },
-  };
+  fromJSON(object: any): GameDefinitions_GameModesEntry {
+    return {
+      key: globalThis.Number(assertSet("GameDefinitions_GameModesEntry.key", object.key)),
+      value: GameMode.fromJSON(assertSet("GameDefinitions_GameModesEntry.value", object.value)),
+    };
+  },
+
+  toJSON(message: GameDefinitions_GameModesEntry): unknown {
+    const obj: any = {};
+    if (message.key !== undefined) {
+      obj.key = Math.round(message.key);
+    }
+    if (message.value !== undefined) {
+      obj.value = GameMode.toJSON(message.value);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<GameDefinitions_GameModesEntry>, I>>(base?: I): GameDefinitions_GameModesEntry {
+    return GameDefinitions_GameModesEntry.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<GameDefinitions_GameModesEntry>, I>>(
+    object: I,
+  ): GameDefinitions_GameModesEntry {
+    const message = createBaseGameDefinitions_GameModesEntry();
+    message.key = object.key ?? 0;
+    message.value = (object.value !== undefined && object.value !== null)
+      ? GameMode.fromPartial(object.value)
+      : undefined;
+    return message;
+  },
+};
 
 function createBaseGameDefinitions_RolesEntry(): GameDefinitions_RolesEntry {
   return { key: 0, value: createBaseGameModeRole() };
 }
 
-export const GameDefinitions_RolesEntry: MessageFns<GameDefinitions_RolesEntry> =
-  {
-    encode(
-      message: GameDefinitions_RolesEntry,
-      writer: BinaryWriter = new BinaryWriter(),
-    ): BinaryWriter {
-      if (message.key !== undefined) {
-        writer.uint32(8).uint32(message.key);
-      }
-      if (message.value !== undefined) {
-        GameModeRole.encode(message.value, writer.uint32(18).fork()).join();
-      }
-      return writer;
-    },
+export const GameDefinitions_RolesEntry: MessageFns<GameDefinitions_RolesEntry> = {
+  encode(message: GameDefinitions_RolesEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== undefined) {
+      writer.uint32(8).uint32(message.key);
+    }
+    if (message.value !== undefined) {
+      GameModeRole.encode(message.value, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
 
-    decode(
-      input: BinaryReader | Uint8Array,
-      length?: number,
-    ): GameDefinitions_RolesEntry {
-      const reader =
-        input instanceof BinaryReader ? input : new BinaryReader(input);
-      let end = length === undefined ? reader.len : reader.pos + length;
-      const message = createBaseGameDefinitions_RolesEntry();
-      while (reader.pos < end) {
-        const tag = reader.uint32();
-        switch (tag >>> 3) {
-          case 1: {
-            if (tag !== 8) {
-              break;
-            }
-
-            message.key = reader.uint32();
-            continue;
+  decode(input: BinaryReader | Uint8Array, length?: number): GameDefinitions_RolesEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGameDefinitions_RolesEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
           }
-          case 2: {
-            if (tag !== 18) {
-              break;
-            }
 
-            message.value = GameModeRole.decode(reader, reader.uint32());
-            continue;
+          message.key = reader.uint32();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
           }
+
+          message.value = GameModeRole.decode(reader, reader.uint32());
+          continue;
         }
-        if ((tag & 7) === 4 || tag === 0) {
-          break;
-        }
-        reader.skip(tag & 7);
       }
-      return message;
-    },
-
-    fromJSON(object: any): GameDefinitions_RolesEntry {
-      return {
-        key: globalThis.Number(
-          assertSet('GameDefinitions_RolesEntry.key', object.key),
-        ),
-        value: GameModeRole.fromJSON(
-          assertSet('GameDefinitions_RolesEntry.value', object.value),
-        ),
-      };
-    },
-
-    toJSON(message: GameDefinitions_RolesEntry): unknown {
-      const obj: any = {};
-      if (message.key !== undefined) {
-        obj.key = Math.round(message.key);
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
       }
-      if (message.value !== undefined) {
-        obj.value = GameModeRole.toJSON(message.value);
-      }
-      return obj;
-    },
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
 
-    create<I extends Exact<DeepPartial<GameDefinitions_RolesEntry>, I>>(
-      base?: I,
-    ): GameDefinitions_RolesEntry {
-      return GameDefinitions_RolesEntry.fromPartial(base ?? ({} as any));
-    },
-    fromPartial<I extends Exact<DeepPartial<GameDefinitions_RolesEntry>, I>>(
-      object: I,
-    ): GameDefinitions_RolesEntry {
-      const message = createBaseGameDefinitions_RolesEntry();
-      message.key = object.key ?? 0;
-      message.value =
-        object.value !== undefined && object.value !== null
-          ? GameModeRole.fromPartial(object.value)
-          : undefined;
-      return message;
-    },
-  };
+  fromJSON(object: any): GameDefinitions_RolesEntry {
+    return {
+      key: globalThis.Number(assertSet("GameDefinitions_RolesEntry.key", object.key)),
+      value: GameModeRole.fromJSON(assertSet("GameDefinitions_RolesEntry.value", object.value)),
+    };
+  },
+
+  toJSON(message: GameDefinitions_RolesEntry): unknown {
+    const obj: any = {};
+    if (message.key !== undefined) {
+      obj.key = Math.round(message.key);
+    }
+    if (message.value !== undefined) {
+      obj.value = GameModeRole.toJSON(message.value);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<GameDefinitions_RolesEntry>, I>>(base?: I): GameDefinitions_RolesEntry {
+    return GameDefinitions_RolesEntry.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<GameDefinitions_RolesEntry>, I>>(object: I): GameDefinitions_RolesEntry {
+    const message = createBaseGameDefinitions_RolesEntry();
+    message.key = object.key ?? 0;
+    message.value = (object.value !== undefined && object.value !== null)
+      ? GameModeRole.fromPartial(object.value)
+      : undefined;
+    return message;
+  },
+};
 
 function createBaseGameMode(): GameMode {
   return { name: createBaseI18nString() };
 }
 
 export const GameMode: MessageFns<GameMode> = {
-  encode(
-    message: GameMode,
-    writer: BinaryWriter = new BinaryWriter(),
-  ): BinaryWriter {
+  encode(message: GameMode, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.name !== undefined) {
       I18nString.encode(message.name, writer.uint32(10).fork()).join();
     }
@@ -422,8 +356,7 @@ export const GameMode: MessageFns<GameMode> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): GameMode {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGameMode();
     while (reader.pos < end) {
@@ -447,9 +380,7 @@ export const GameMode: MessageFns<GameMode> = {
   },
 
   fromJSON(object: any): GameMode {
-    return {
-      name: I18nString.fromJSON(assertSet('GameMode.name', object.name)),
-    };
+    return { name: I18nString.fromJSON(assertSet("GameMode.name", object.name)) };
   },
 
   toJSON(message: GameMode): unknown {
@@ -465,10 +396,9 @@ export const GameMode: MessageFns<GameMode> = {
   },
   fromPartial<I extends Exact<DeepPartial<GameMode>, I>>(object: I): GameMode {
     const message = createBaseGameMode();
-    message.name =
-      object.name !== undefined && object.name !== null
-        ? I18nString.fromPartial(object.name)
-        : createBaseI18nString();
+    message.name = (object.name !== undefined && object.name !== null)
+      ? I18nString.fromPartial(object.name)
+      : createBaseI18nString();
     return message;
   },
 };
@@ -478,10 +408,7 @@ function createBaseGameModeRole(): GameModeRole {
 }
 
 export const GameModeRole: MessageFns<GameModeRole> = {
-  encode(
-    message: GameModeRole,
-    writer: BinaryWriter = new BinaryWriter(),
-  ): BinaryWriter {
+  encode(message: GameModeRole, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     writer.uint32(10).fork();
     for (const v of message.provisions) {
       writer.uint32(v);
@@ -496,8 +423,7 @@ export const GameModeRole: MessageFns<GameModeRole> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): GameModeRole {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGameModeRole();
     while (reader.pos < end) {
@@ -570,14 +496,10 @@ export const GameModeRole: MessageFns<GameModeRole> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GameModeRole>, I>>(
-    base?: I,
-  ): GameModeRole {
+  create<I extends Exact<DeepPartial<GameModeRole>, I>>(base?: I): GameModeRole {
     return GameModeRole.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<GameModeRole>, I>>(
-    object: I,
-  ): GameModeRole {
+  fromPartial<I extends Exact<DeepPartial<GameModeRole>, I>>(object: I): GameModeRole {
     const message = createBaseGameModeRole();
     message.provisions = object.provisions?.map((e) => e) || [];
     message.consumables = object.consumables?.map((e) => e) || [];
@@ -585,36 +507,21 @@ export const GameModeRole: MessageFns<GameModeRole> = {
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends globalThis.Array<infer U>
-    ? globalThis.Array<DeepPartial<U>>
-    : T extends ReadonlyArray<infer U>
-      ? ReadonlyArray<DeepPartial<U>>
-      : T extends { $case: string; value: unknown }
-        ? { $case: T['$case']; value?: DeepPartial<T['value']> }
-        : T extends {}
-          ? { [K in keyof T]?: DeepPartial<T[K]> }
-          : Partial<T>;
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends { $case: string; value: unknown } ? { $case: T["$case"]; value?: DeepPartial<T["value"]> }
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
-      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
-    };
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function isObject(value: any): boolean {
-  return typeof value === 'object' && value !== null;
+  return typeof value === "object" && value !== null;
 }
 
 function isSet(value: any): boolean {

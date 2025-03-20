@@ -5,11 +5,11 @@
 // source: packages/core/src/protos/legacy_provision_definitions.proto
 
 /* eslint-disable */
-import { BinaryReader, BinaryWriter } from '@bufbuild/protobuf/wire';
-import { ConsumableTankFilter } from './legacy_consumable_definitions';
-import { I18nString, createBaseI18nString } from './legacy_i18n';
+import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
+import { ConsumableTankFilter } from "./legacy_consumable_definitions";
+import { I18nString } from "./legacy_i18n";
 
-export const protobufPackage = 'blitzkit';
+export const protobufPackage = "blitzkit";
 
 export interface ProvisionDefinitions {
   provisions: { [key: number]: Provision };
@@ -34,25 +34,15 @@ function createBaseProvisionDefinitions(): ProvisionDefinitions {
 }
 
 export const ProvisionDefinitions: MessageFns<ProvisionDefinitions> = {
-  encode(
-    message: ProvisionDefinitions,
-    writer: BinaryWriter = new BinaryWriter(),
-  ): BinaryWriter {
+  encode(message: ProvisionDefinitions, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     Object.entries(message.provisions).forEach(([key, value]) => {
-      ProvisionDefinitions_ProvisionsEntry.encode(
-        { key: key as any, value },
-        writer.uint32(10).fork(),
-      ).join();
+      ProvisionDefinitions_ProvisionsEntry.encode({ key: key as any, value }, writer.uint32(10).fork()).join();
     });
     return writer;
   },
 
-  decode(
-    input: BinaryReader | Uint8Array,
-    length?: number,
-  ): ProvisionDefinitions {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+  decode(input: BinaryReader | Uint8Array, length?: number): ProvisionDefinitions {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseProvisionDefinitions();
     while (reader.pos < end) {
@@ -63,10 +53,7 @@ export const ProvisionDefinitions: MessageFns<ProvisionDefinitions> = {
             break;
           }
 
-          const entry1 = ProvisionDefinitions_ProvisionsEntry.decode(
-            reader,
-            reader.uint32(),
-          );
+          const entry1 = ProvisionDefinitions_ProvisionsEntry.decode(reader, reader.uint32());
           if (entry1.value !== undefined) {
             message.provisions[entry1.key] = entry1.value;
           }
@@ -84,12 +71,10 @@ export const ProvisionDefinitions: MessageFns<ProvisionDefinitions> = {
   fromJSON(object: any): ProvisionDefinitions {
     return {
       provisions: isObject(object.provisions)
-        ? Object.entries(object.provisions).reduce<{
-            [key: number]: Provision;
-          }>((acc, [key, value]) => {
-            acc[globalThis.Number(key)] = Provision.fromJSON(value);
-            return acc;
-          }, {})
+        ? Object.entries(object.provisions).reduce<{ [key: number]: Provision }>((acc, [key, value]) => {
+          acc[globalThis.Number(key)] = Provision.fromJSON(value);
+          return acc;
+        }, {})
         : {},
     };
   },
@@ -108,23 +93,20 @@ export const ProvisionDefinitions: MessageFns<ProvisionDefinitions> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ProvisionDefinitions>, I>>(
-    base?: I,
-  ): ProvisionDefinitions {
+  create<I extends Exact<DeepPartial<ProvisionDefinitions>, I>>(base?: I): ProvisionDefinitions {
     return ProvisionDefinitions.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<ProvisionDefinitions>, I>>(
-    object: I,
-  ): ProvisionDefinitions {
+  fromPartial<I extends Exact<DeepPartial<ProvisionDefinitions>, I>>(object: I): ProvisionDefinitions {
     const message = createBaseProvisionDefinitions();
-    message.provisions = Object.entries(object.provisions ?? {}).reduce<{
-      [key: number]: Provision;
-    }>((acc, [key, value]) => {
-      if (value !== undefined) {
-        acc[globalThis.Number(key)] = Provision.fromPartial(value);
-      }
-      return acc;
-    }, {});
+    message.provisions = Object.entries(object.provisions ?? {}).reduce<{ [key: number]: Provision }>(
+      (acc, [key, value]) => {
+        if (value !== undefined) {
+          acc[globalThis.Number(key)] = Provision.fromPartial(value);
+        }
+        return acc;
+      },
+      {},
+    );
     return message;
   },
 };
@@ -133,115 +115,90 @@ function createBaseProvisionDefinitions_ProvisionsEntry(): ProvisionDefinitions_
   return { key: 0, value: createBaseProvision() };
 }
 
-export const ProvisionDefinitions_ProvisionsEntry: MessageFns<ProvisionDefinitions_ProvisionsEntry> =
-  {
-    encode(
-      message: ProvisionDefinitions_ProvisionsEntry,
-      writer: BinaryWriter = new BinaryWriter(),
-    ): BinaryWriter {
-      if (message.key !== undefined) {
-        writer.uint32(8).uint32(message.key);
-      }
-      if (message.value !== undefined) {
-        Provision.encode(message.value, writer.uint32(18).fork()).join();
-      }
-      return writer;
-    },
+export const ProvisionDefinitions_ProvisionsEntry: MessageFns<ProvisionDefinitions_ProvisionsEntry> = {
+  encode(message: ProvisionDefinitions_ProvisionsEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== undefined) {
+      writer.uint32(8).uint32(message.key);
+    }
+    if (message.value !== undefined) {
+      Provision.encode(message.value, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
 
-    decode(
-      input: BinaryReader | Uint8Array,
-      length?: number,
-    ): ProvisionDefinitions_ProvisionsEntry {
-      const reader =
-        input instanceof BinaryReader ? input : new BinaryReader(input);
-      let end = length === undefined ? reader.len : reader.pos + length;
-      const message = createBaseProvisionDefinitions_ProvisionsEntry();
-      while (reader.pos < end) {
-        const tag = reader.uint32();
-        switch (tag >>> 3) {
-          case 1: {
-            if (tag !== 8) {
-              break;
-            }
-
-            message.key = reader.uint32();
-            continue;
+  decode(input: BinaryReader | Uint8Array, length?: number): ProvisionDefinitions_ProvisionsEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseProvisionDefinitions_ProvisionsEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
           }
-          case 2: {
-            if (tag !== 18) {
-              break;
-            }
 
-            message.value = Provision.decode(reader, reader.uint32());
-            continue;
+          message.key = reader.uint32();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
           }
+
+          message.value = Provision.decode(reader, reader.uint32());
+          continue;
         }
-        if ((tag & 7) === 4 || tag === 0) {
-          break;
-        }
-        reader.skip(tag & 7);
       }
-      return message;
-    },
-
-    fromJSON(object: any): ProvisionDefinitions_ProvisionsEntry {
-      return {
-        key: globalThis.Number(
-          assertSet('ProvisionDefinitions_ProvisionsEntry.key', object.key),
-        ),
-        value: Provision.fromJSON(
-          assertSet('ProvisionDefinitions_ProvisionsEntry.value', object.value),
-        ),
-      };
-    },
-
-    toJSON(message: ProvisionDefinitions_ProvisionsEntry): unknown {
-      const obj: any = {};
-      if (message.key !== undefined) {
-        obj.key = Math.round(message.key);
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
       }
-      if (message.value !== undefined) {
-        obj.value = Provision.toJSON(message.value);
-      }
-      return obj;
-    },
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
 
-    create<
-      I extends Exact<DeepPartial<ProvisionDefinitions_ProvisionsEntry>, I>,
-    >(base?: I): ProvisionDefinitions_ProvisionsEntry {
-      return ProvisionDefinitions_ProvisionsEntry.fromPartial(
-        base ?? ({} as any),
-      );
-    },
-    fromPartial<
-      I extends Exact<DeepPartial<ProvisionDefinitions_ProvisionsEntry>, I>,
-    >(object: I): ProvisionDefinitions_ProvisionsEntry {
-      const message = createBaseProvisionDefinitions_ProvisionsEntry();
-      message.key = object.key ?? 0;
-      message.value =
-        object.value !== undefined && object.value !== null
-          ? Provision.fromPartial(object.value)
-          : undefined;
-      return message;
-    },
-  };
+  fromJSON(object: any): ProvisionDefinitions_ProvisionsEntry {
+    return {
+      key: globalThis.Number(assertSet("ProvisionDefinitions_ProvisionsEntry.key", object.key)),
+      value: Provision.fromJSON(assertSet("ProvisionDefinitions_ProvisionsEntry.value", object.value)),
+    };
+  },
+
+  toJSON(message: ProvisionDefinitions_ProvisionsEntry): unknown {
+    const obj: any = {};
+    if (message.key !== undefined) {
+      obj.key = Math.round(message.key);
+    }
+    if (message.value !== undefined) {
+      obj.value = Provision.toJSON(message.value);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<ProvisionDefinitions_ProvisionsEntry>, I>>(
+    base?: I,
+  ): ProvisionDefinitions_ProvisionsEntry {
+    return ProvisionDefinitions_ProvisionsEntry.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<ProvisionDefinitions_ProvisionsEntry>, I>>(
+    object: I,
+  ): ProvisionDefinitions_ProvisionsEntry {
+    const message = createBaseProvisionDefinitions_ProvisionsEntry();
+    message.key = object.key ?? 0;
+    message.value = (object.value !== undefined && object.value !== null)
+      ? Provision.fromPartial(object.value)
+      : undefined;
+    return message;
+  },
+};
 
 function createBaseProvision(): Provision {
-  return {
-    id: 0,
-    name: createBaseI18nString(),
-    crew: undefined,
-    game_mode_exclusive: false,
-    include: [],
-    exclude: [],
-  };
+  return { id: 0, name: createBaseI18nString(), crew: undefined, game_mode_exclusive: false, include: [], exclude: [] };
 }
 
 export const Provision: MessageFns<Provision> = {
-  encode(
-    message: Provision,
-    writer: BinaryWriter = new BinaryWriter(),
-  ): BinaryWriter {
+  encode(message: Provision, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.id !== 0) {
       writer.uint32(8).uint32(message.id);
     }
@@ -264,8 +221,7 @@ export const Provision: MessageFns<Provision> = {
   },
 
   decode(input: BinaryReader | Uint8Array, length?: number): Provision {
-    const reader =
-      input instanceof BinaryReader ? input : new BinaryReader(input);
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseProvision();
     while (reader.pos < end) {
@@ -308,9 +264,7 @@ export const Provision: MessageFns<Provision> = {
             break;
           }
 
-          message.include.push(
-            ConsumableTankFilter.decode(reader, reader.uint32()),
-          );
+          message.include.push(ConsumableTankFilter.decode(reader, reader.uint32()));
           continue;
         }
         case 7: {
@@ -318,9 +272,7 @@ export const Provision: MessageFns<Provision> = {
             break;
           }
 
-          message.exclude.push(
-            ConsumableTankFilter.decode(reader, reader.uint32()),
-          );
+          message.exclude.push(ConsumableTankFilter.decode(reader, reader.uint32()));
           continue;
         }
       }
@@ -334,12 +286,10 @@ export const Provision: MessageFns<Provision> = {
 
   fromJSON(object: any): Provision {
     return {
-      id: globalThis.Number(assertSet('Provision.id', object.id)),
-      name: I18nString.fromJSON(assertSet('Provision.name', object.name)),
+      id: globalThis.Number(assertSet("Provision.id", object.id)),
+      name: I18nString.fromJSON(assertSet("Provision.name", object.name)),
       crew: isSet(object.crew) ? globalThis.Number(object.crew) : undefined,
-      game_mode_exclusive: globalThis.Boolean(
-        assertSet('Provision.game_mode_exclusive', object.game_mode_exclusive),
-      ),
+      game_mode_exclusive: globalThis.Boolean(assertSet("Provision.game_mode_exclusive", object.game_mode_exclusive)),
       include: globalThis.Array.isArray(object?.include)
         ? object.include.map((e: any) => ConsumableTankFilter.fromJSON(e))
         : [],
@@ -375,55 +325,35 @@ export const Provision: MessageFns<Provision> = {
   create<I extends Exact<DeepPartial<Provision>, I>>(base?: I): Provision {
     return Provision.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<Provision>, I>>(
-    object: I,
-  ): Provision {
+  fromPartial<I extends Exact<DeepPartial<Provision>, I>>(object: I): Provision {
     const message = createBaseProvision();
     message.id = object.id ?? 0;
-    message.name =
-      object.name !== undefined && object.name !== null
-        ? I18nString.fromPartial(object.name)
-        : createBaseI18nString();
+    message.name = (object.name !== undefined && object.name !== null)
+      ? I18nString.fromPartial(object.name)
+      : createBaseI18nString();
     message.crew = object.crew ?? undefined;
     message.game_mode_exclusive = object.game_mode_exclusive ?? false;
-    message.include =
-      object.include?.map((e) => ConsumableTankFilter.fromPartial(e)) || [];
-    message.exclude =
-      object.exclude?.map((e) => ConsumableTankFilter.fromPartial(e)) || [];
+    message.include = object.include?.map((e) => ConsumableTankFilter.fromPartial(e)) || [];
+    message.exclude = object.exclude?.map((e) => ConsumableTankFilter.fromPartial(e)) || [];
     return message;
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends globalThis.Array<infer U>
-    ? globalThis.Array<DeepPartial<U>>
-    : T extends ReadonlyArray<infer U>
-      ? ReadonlyArray<DeepPartial<U>>
-      : T extends { $case: string; value: unknown }
-        ? { $case: T['$case']; value?: DeepPartial<T['value']> }
-        : T extends {}
-          ? { [K in keyof T]?: DeepPartial<T[K]> }
-          : Partial<T>;
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends globalThis.Array<infer U> ? globalThis.Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends { $case: string; value: unknown } ? { $case: T["$case"]; value?: DeepPartial<T["value"]> }
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+  : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & {
-      [K in Exclude<keyof I, KeysOfUnion<P>>]: never;
-    };
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function isObject(value: any): boolean {
-  return typeof value === 'object' && value !== null;
+  return typeof value === "object" && value !== null;
 }
 
 function isSet(value: any): boolean {

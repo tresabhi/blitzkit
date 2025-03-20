@@ -9,15 +9,40 @@ using CUE4Parse.UE4.Assets.Exports.Engine;
 using CUE4Parse.UE4.Assets.Exports.StaticMesh;
 using CUE4Parse.UE4.Assets.Exports.Texture;
 using CUE4Parse.UE4.Assets.Objects;
+using CUE4Parse.UE4.Assets.Objects.Properties;
 using CUE4Parse.UE4.Objects.UObject;
 using CUE4Parse.Utils;
 using Google.Protobuf;
+using Google.Protobuf.Collections;
+using Org.BouncyCastle.Asn1.Misc;
 using YamlDotNet.Serialization;
 
 namespace BlitzKit.CLI.Functions
 {
-  public class Mangler(string[] args)
+  public partial class Mangler(string[] args)
   {
+    static readonly string PenetrationGroupNameMapPrefix =
+      "EMintSDKProtoData_BlitzStaticTankUpgradeSingleStage_PenetrationGroupUpgrade_TankPart";
+    static readonly Dictionary<string, string> PenetrationGroupNameMap = new Dictionary<
+      string,
+      string
+    >
+    {
+      { $"{PenetrationGroupNameMapPrefix}::TANK_PART_CHASSIS", "chassis" },
+      { $"{PenetrationGroupNameMapPrefix}::TANK_PART_HULL", "hull" },
+      { $"{PenetrationGroupNameMapPrefix}::TANK_PART_TURRET", "turret" },
+      { $"{PenetrationGroupNameMapPrefix}::TANK_PART_GUN", "gun" },
+    };
+
+    [GeneratedRegex("[^a-z0-9]")]
+    private static partial Regex NonAlphanumericRegex();
+
+    [GeneratedRegex("--+")]
+    private static partial Regex MultipleDashesRegex();
+
+    [GeneratedRegex("-$")]
+    private static partial Regex TrailingDashRegex();
+
     readonly BlitzProvider provider = new(args.Contains("--depot"));
     Locales? locales;
     readonly Dictionary<string, Dictionary<string, string>> strings = [];
@@ -192,9 +217,9 @@ namespace BlitzKit.CLI.Functions
       var id = PropertyUtil.Get<FName>(pda, "TankId").Text;
       var name = GetString($"TankEntity__{id.ToLowerInvariant()}__Short_Name");
       var slug = Diacritics.Remove(name.Locales["en"]).ToLower();
-      slug = Regex.Replace(slug, "[^a-z0-9]", "-");
-      slug = Regex.Replace(slug, "--+", "-");
-      slug = Regex.Replace(slug, "-$", "");
+      slug = NonAlphanumericRegex().Replace(slug, "-");
+      slug = MultipleDashesRegex().Replace(slug, "-");
+      slug = TrailingDashRegex().Replace(slug, "");
 
       // await MangleHull(pda);
       // await MangleIcon(pda);
@@ -206,7 +231,48 @@ namespace BlitzKit.CLI.Functions
         Slug = slug,
       };
 
+      tank.PenetrationGroups.MergeFrom(MangleArmor(pda));
+
       return tank;
+    }
+
+    MapField<string, PenetrationGroup> MangleArmor(UObject pda)
+    {
+      var id = PropertyUtil.Get<FName>(pda, "TankId").Text;
+      MapField<string, PenetrationGroup> groups = [];
+      var attributes = PropertyUtil.Get<UObject>(pda, "DA_Attributes");
+      PropertyUtil.TryGet<UScriptMap>(attributes, "PenetrationGroups", out var penetrationGroups);
+
+      if (penetrationGroups == null)
+      {
+        PrettyLog.Warn($"Penetration groups missing for {id}; returning empty list");
+        return groups;
+      }
+
+      foreach (var group in penetrationGroups.Properties)
+      {
+        var rawName = ((FName)group.Key.GenericValue!).Text;
+        var name = PenetrationGroupNameMap[rawName];
+        var armors = PropertyUtil.Get<UScriptMap>(
+          group.Value!.GetValue<FStructFallback>()!,
+          "PenetrationGroups"
+        );
+        PenetrationGroup penetrationGroup = new();
+
+        foreach (var armorProperty in armors.Properties)
+        {
+          var armorName = ((FName)armorProperty.Key.GenericValue!).Text;
+          var armorThickness = PropertyUtil.Get<float>(
+            armorProperty.Value!.GetValue<FStructFallback>()!,
+            "Armor"
+          );
+          penetrationGroup.Armors[armorName] = armorThickness;
+        }
+
+        groups[name] = penetrationGroup;
+      }
+
+      return groups;
     }
 
     async Task MangleIcon(UObject pda)

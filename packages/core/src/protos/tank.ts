@@ -6,7 +6,7 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
-import { I18n, createBaseI18n } from "./i18n";
+import { I18n } from "./i18n";
 
 export const protobufPackage = "blitzkit";
 
@@ -14,10 +14,26 @@ export interface Tank {
   id: string;
   slug: string;
   name: I18n;
+  /** key can only ever be "chassis", "hull", "turret", or "gun" */
+  penetration_groups: { [key: string]: PenetrationGroup };
+}
+
+export interface Tank_PenetrationGroupsEntry {
+  key: string;
+  value: PenetrationGroup | undefined;
+}
+
+export interface PenetrationGroup {
+  armors: { [key: string]: number };
+}
+
+export interface PenetrationGroup_ArmorsEntry {
+  key: string;
+  value: number;
 }
 
 function createBaseTank(): Tank {
-  return { id: "", slug: "", name: createBaseI18n() };
+  return { id: "", slug: "", name: createBaseI18n(), penetration_groups: {} };
 }
 
 export const Tank: MessageFns<Tank> = {
@@ -31,6 +47,9 @@ export const Tank: MessageFns<Tank> = {
     if (message.name !== undefined) {
       I18n.encode(message.name, writer.uint32(26).fork()).join();
     }
+    Object.entries(message.penetration_groups).forEach(([key, value]) => {
+      Tank_PenetrationGroupsEntry.encode({ key: key as any, value }, writer.uint32(34).fork()).join();
+    });
     return writer;
   },
 
@@ -65,6 +84,17 @@ export const Tank: MessageFns<Tank> = {
           message.name = I18n.decode(reader, reader.uint32());
           continue;
         }
+        case 4: {
+          if (tag !== 34) {
+            break;
+          }
+
+          const entry4 = Tank_PenetrationGroupsEntry.decode(reader, reader.uint32());
+          if (entry4.value !== undefined) {
+            message.penetration_groups[entry4.key] = entry4.value;
+          }
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -79,6 +109,12 @@ export const Tank: MessageFns<Tank> = {
       id: globalThis.String(assertSet("Tank.id", object.id)),
       slug: globalThis.String(assertSet("Tank.slug", object.slug)),
       name: I18n.fromJSON(assertSet("Tank.name", object.name)),
+      penetration_groups: isObject(object.penetration_groups)
+        ? Object.entries(object.penetration_groups).reduce<{ [key: string]: PenetrationGroup }>((acc, [key, value]) => {
+          acc[key] = PenetrationGroup.fromJSON(value);
+          return acc;
+        }, {})
+        : {},
     };
   },
 
@@ -93,6 +129,15 @@ export const Tank: MessageFns<Tank> = {
     if (message.name !== undefined) {
       obj.name = I18n.toJSON(message.name);
     }
+    if (message.penetration_groups) {
+      const entries = Object.entries(message.penetration_groups);
+      if (entries.length > 0) {
+        obj.penetration_groups = {};
+        entries.forEach(([k, v]) => {
+          obj.penetration_groups[k] = PenetrationGroup.toJSON(v);
+        });
+      }
+    }
     return obj;
   },
 
@@ -106,6 +151,247 @@ export const Tank: MessageFns<Tank> = {
     message.name = (object.name !== undefined && object.name !== null)
       ? I18n.fromPartial(object.name)
       : createBaseI18n();
+    message.penetration_groups = Object.entries(object.penetration_groups ?? {}).reduce<
+      { [key: string]: PenetrationGroup }
+    >((acc, [key, value]) => {
+      if (value !== undefined) {
+        acc[key] = PenetrationGroup.fromPartial(value);
+      }
+      return acc;
+    }, {});
+    return message;
+  },
+};
+
+function createBaseTank_PenetrationGroupsEntry(): Tank_PenetrationGroupsEntry {
+  return { key: "", value: createBasePenetrationGroup() };
+}
+
+export const Tank_PenetrationGroupsEntry: MessageFns<Tank_PenetrationGroupsEntry> = {
+  encode(message: Tank_PenetrationGroupsEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== undefined) {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== undefined) {
+      PenetrationGroup.encode(message.value, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): Tank_PenetrationGroupsEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTank_PenetrationGroupsEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.value = PenetrationGroup.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Tank_PenetrationGroupsEntry {
+    return {
+      key: globalThis.String(assertSet("Tank_PenetrationGroupsEntry.key", object.key)),
+      value: PenetrationGroup.fromJSON(assertSet("Tank_PenetrationGroupsEntry.value", object.value)),
+    };
+  },
+
+  toJSON(message: Tank_PenetrationGroupsEntry): unknown {
+    const obj: any = {};
+    if (message.key !== undefined) {
+      obj.key = message.key;
+    }
+    if (message.value !== undefined) {
+      obj.value = PenetrationGroup.toJSON(message.value);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<Tank_PenetrationGroupsEntry>, I>>(base?: I): Tank_PenetrationGroupsEntry {
+    return Tank_PenetrationGroupsEntry.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<Tank_PenetrationGroupsEntry>, I>>(object: I): Tank_PenetrationGroupsEntry {
+    const message = createBaseTank_PenetrationGroupsEntry();
+    message.key = object.key ?? "";
+    message.value = (object.value !== undefined && object.value !== null)
+      ? PenetrationGroup.fromPartial(object.value)
+      : undefined;
+    return message;
+  },
+};
+
+function createBasePenetrationGroup(): PenetrationGroup {
+  return { armors: {} };
+}
+
+export const PenetrationGroup: MessageFns<PenetrationGroup> = {
+  encode(message: PenetrationGroup, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    Object.entries(message.armors).forEach(([key, value]) => {
+      PenetrationGroup_ArmorsEntry.encode({ key: key as any, value }, writer.uint32(10).fork()).join();
+    });
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): PenetrationGroup {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePenetrationGroup();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          const entry1 = PenetrationGroup_ArmorsEntry.decode(reader, reader.uint32());
+          if (entry1.value !== undefined) {
+            message.armors[entry1.key] = entry1.value;
+          }
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): PenetrationGroup {
+    return {
+      armors: isObject(object.armors)
+        ? Object.entries(object.armors).reduce<{ [key: string]: number }>((acc, [key, value]) => {
+          acc[key] = Number(value);
+          return acc;
+        }, {})
+        : {},
+    };
+  },
+
+  toJSON(message: PenetrationGroup): unknown {
+    const obj: any = {};
+    if (message.armors) {
+      const entries = Object.entries(message.armors);
+      if (entries.length > 0) {
+        obj.armors = {};
+        entries.forEach(([k, v]) => {
+          obj.armors[k] = v;
+        });
+      }
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<PenetrationGroup>, I>>(base?: I): PenetrationGroup {
+    return PenetrationGroup.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<PenetrationGroup>, I>>(object: I): PenetrationGroup {
+    const message = createBasePenetrationGroup();
+    message.armors = Object.entries(object.armors ?? {}).reduce<{ [key: string]: number }>((acc, [key, value]) => {
+      if (value !== undefined) {
+        acc[key] = globalThis.Number(value);
+      }
+      return acc;
+    }, {});
+    return message;
+  },
+};
+
+function createBasePenetrationGroup_ArmorsEntry(): PenetrationGroup_ArmorsEntry {
+  return { key: "", value: 0 };
+}
+
+export const PenetrationGroup_ArmorsEntry: MessageFns<PenetrationGroup_ArmorsEntry> = {
+  encode(message: PenetrationGroup_ArmorsEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.key !== undefined) {
+      writer.uint32(10).string(message.key);
+    }
+    if (message.value !== undefined) {
+      writer.uint32(21).float(message.value);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): PenetrationGroup_ArmorsEntry {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBasePenetrationGroup_ArmorsEntry();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.key = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 21) {
+            break;
+          }
+
+          message.value = reader.float();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): PenetrationGroup_ArmorsEntry {
+    return {
+      key: globalThis.String(assertSet("PenetrationGroup_ArmorsEntry.key", object.key)),
+      value: globalThis.Number(assertSet("PenetrationGroup_ArmorsEntry.value", object.value)),
+    };
+  },
+
+  toJSON(message: PenetrationGroup_ArmorsEntry): unknown {
+    const obj: any = {};
+    if (message.key !== undefined) {
+      obj.key = message.key;
+    }
+    if (message.value !== undefined) {
+      obj.value = message.value;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<PenetrationGroup_ArmorsEntry>, I>>(base?: I): PenetrationGroup_ArmorsEntry {
+    return PenetrationGroup_ArmorsEntry.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<PenetrationGroup_ArmorsEntry>, I>>(object: I): PenetrationGroup_ArmorsEntry {
+    const message = createBasePenetrationGroup_ArmorsEntry();
+    message.key = object.key ?? "";
+    message.value = object.value ?? 0;
     return message;
   },
 };
@@ -122,6 +408,10 @@ export type DeepPartial<T> = T extends Builtin ? T
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+
+function isObject(value: any): boolean {
+  return typeof value === "object" && value !== null;
+}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
