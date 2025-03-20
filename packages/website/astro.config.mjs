@@ -20,6 +20,10 @@ export default defineConfig({
   outDir: '../../dist/website',
   prefetch: true,
 
+  build: {
+    concurrency: 4,
+  },
+
   integrations: [react(), sitemap()],
   vite: {
     resolve: {

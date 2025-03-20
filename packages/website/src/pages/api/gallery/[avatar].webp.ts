@@ -18,9 +18,9 @@ const glossary = await fetchGlossary(DEFAULT_LOCALE);
  * Returns an in-game avatar image. Use gallery/list.json to get all valid ids.
  * Some images may be animated. Not all images share the same dimensions.
  *
- * @warning Not all ids have images due to poor Wargaming CDN.
+ * @warning Not all ids have images due to lousy Wargaming CDN.
  * @param avatar The avatar id.
- * @returns A webp image.
+ * @returns WEBP.
  */
 export const GET: APIRoute<{}, { avatar: string }> = async ({ params }) => {
   const image =

@@ -9,7 +9,7 @@ interface SlugsTableProps {
   path: string;
 }
 
-const MAX_UNEXPANDED = 5;
+const MAX_UNEXPANDED = 3;
 
 export function SlugsTable({ slugs, path }: SlugsTableProps) {
   if (slugs === undefined) return null;
