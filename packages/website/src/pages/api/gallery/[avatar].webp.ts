@@ -2,6 +2,7 @@ import { imgur } from '@blitzkit/core';
 import { DEFAULT_LOCALE } from '@blitzkit/i18n';
 import type { APIRoute, GetStaticPaths } from 'astro';
 import { fetchGlossary } from '../../../core/blitz/fetchGlossary';
+import { blobMirror } from '../../../core/blitzkit/blobMirror';
 
 export const getStaticPaths = (async () => {
   const glossary = await fetchGlossary(DEFAULT_LOCALE);
@@ -23,15 +24,8 @@ const glossary = await fetchGlossary(DEFAULT_LOCALE);
  * @returns WEBP.
  */
 export const GET: APIRoute<{}, { avatar: string }> = async ({ params }) => {
-  const image =
+  return await blobMirror(
     glossary[`avatar_${params.avatar}`].image_url ??
-    imgur('uXBiK05', { format: 'jpeg' });
-
-  if (import.meta.env.MODE === 'development') {
-    return Response.redirect(image);
-  } else {
-    const response = await fetch(image);
-    const blob = await response.blob();
-    return new Response(blob, { headers: response.headers });
-  }
+      imgur('uXBiK05', { format: 'jpeg' }),
+  );
 };

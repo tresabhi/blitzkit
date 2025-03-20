@@ -1,24 +1,21 @@
 ---
-import { asset, fetchTank } from '@blitzkit/core';
+import { fetchTanksFull } from '@blitzkit/core';
 import { Box, Flex, Text } from '@radix-ui/themes';
 import { LinkI18n } from '../../../components/LinkI18n';
 import { PageWrapper } from '../../../components/PageWrapper';
 import { tanksTool } from '../../../constants/tools';
-import { awaitableTanks } from '../../../core/awaitables/tanks';
 import ToolLayout from '../../../layouts/ToolLayout.astro';
 
 export { getStaticPaths } from '../index.astro';
 
 const locale = Astro.params.locale;
-
-const tanks = await awaitableTanks;
-const fullTanks = await Promise.all(tanks.tanks.map(({ id }) => fetchTank(id)));
+const tanksFull = await fetchTanksFull();
 ---
 
 <ToolLayout tool={tanksTool}>
   <PageWrapper>
     {
-      fullTanks
+      tanksFull.tanks
         .sort((a, b) => a.slug.localeCompare(b.slug))
         .map((tank) => {
           return (
@@ -28,7 +25,7 @@ const fullTanks = await Promise.all(tanks.tanks.map(({ id }) => fetchTank(id)));
                   width="8rem"
                   height="6rem"
                   style={{
-                    backgroundImage: `url(${asset(`tanks/${tank.id}/icons/big.png`)})`,
+                    backgroundImage: `url(/api/tanks/${tank.id}/icons/big.png)`,
                     backgroundSize: '150%',
                     backgroundPosition: 'center',
                   }}
