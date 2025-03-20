@@ -1,15 +1,15 @@
 ---
 import type { GetStaticPaths } from 'astro';
-import { awaitableTanks } from '../../../../core/awaitables/tanks';
+import { awaitableTanksFull } from '../../../../core/awaitables/tanksFull';
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import { getStaticPaths as parentGetStaticPaths } from '../index.astro';
 import { Page } from './_index';
 
 export const getStaticPaths = (async () => {
-  const tanks = await awaitableTanks;
+  const tanksFull = await awaitableTanksFull;
   const parentPaths = parentGetStaticPaths();
 
-  return tanks.tanks
+  return tanksFull.tanks
     .map((tank) =>
       parentPaths.map((parent) => ({
         params: { ...parent.params, slug: tank.slug },

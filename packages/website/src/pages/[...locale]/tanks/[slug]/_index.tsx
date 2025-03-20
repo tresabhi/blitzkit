@@ -1,7 +1,10 @@
 import { asset } from '@blitzkit/core';
 import { OrbitControls } from '@react-three/drei';
 import { Canvas, useLoader } from '@react-three/fiber';
+import { MeshBasicMaterial } from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { randInt } from 'three/src/math/MathUtils.js';
+import { jsxTree } from '../../../../core/blitzkit/jsxTree';
 
 interface PageProps {
   id: string;
@@ -24,5 +27,14 @@ export function Page({ id }: PageProps) {
 function Model({ id }: { id: string }) {
   const gltf = useLoader(GLTFLoader, asset(`/tanks/${id}/collision/hull.glb`));
 
-  return <primitive object={gltf.scene} />;
+  return jsxTree(gltf.scene, {
+    mesh: () => ({
+      material: new MeshBasicMaterial({
+        color: `rgb(${randInt(0, 255)}, ${randInt(0, 255)}, ${randInt(
+          0,
+          255,
+        )})`,
+      }),
+    }),
+  });
 }

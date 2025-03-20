@@ -38,17 +38,12 @@ namespace BlitzKit.CLI.Models
       ExporterOptions options = new() { TextureFormat = ETextureFormat.Jpeg };
       staticMesh.TryConvert(out var convertedMesh);
       var lod =
-        convertedMesh.LODs.Find(lod => !lod.SkipLod) ?? throw new Exception("Failed to find lod0");
-
-      int sectionIndex = 0;
-      foreach (var section in lod.Sections.Value)
-      {
-        sectionIndex++;
-      }
+        convertedMesh.LODs.Find(lod => !lod.SkipLod) ?? throw new Exception("Failed to find lod0"); // first non-skippable lod is the highest quality
 
       MaterialBuilder emptyMaterial = new("empty_material");
       Dictionary<string, MaterialBuilder> namedMaterials = [];
 
+      int sectionIndex = 0;
       foreach (var section in lod.Sections.Value)
       {
         ConfiguredMeshBuilder meshBuilder = new($"{staticMesh.Name}_section_{sectionIndex}");
