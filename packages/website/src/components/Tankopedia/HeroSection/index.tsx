@@ -1,77 +1,70 @@
-import { TankType } from '@blitzkit/core';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
-import { times } from 'lodash-es';
-import { Suspense, useEffect, useMemo, useRef } from 'react';
+import { useRef } from 'react';
 import { NAVBAR_HEIGHT } from '../../../constants/navbar';
-import { awaitableTankDefinitions } from '../../../core/awaitables/tankDefinitions';
 import { Var } from '../../../core/radix/var';
 import { useFullScreen } from '../../../hooks/useFullScreen';
 import { useLocale } from '../../../hooks/useLocale';
 import { Duel } from '../../../stores/duel';
 import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
 import type { MaybeSkeletonComponentProps } from '../../../types/maybeSkeletonComponentProps';
-import type { ThicknessRange } from '../../Armor/components/StaticArmor';
-import { classIcons } from '../../ClassIcon';
-import { Options } from './components/Options';
-import { TankSandbox } from './components/TankSandbox';
 import { TankSandboxLoader } from './components/TankSandboxLoader';
 
-const tankDefinitions = await awaitableTankDefinitions;
-
 export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
+  const armor = TankopediaEphemeral.use((state) => state.armor);
   const { unwrap } = useLocale();
   const canvas = useRef<HTMLCanvasElement>(null);
   const isFullScreen = useFullScreen();
   const protagonist = Duel.use((state) => state.protagonist.tank);
-  const Icon = classIcons[protagonist.class];
-  const treeColor =
-    protagonist.type === TankType.COLLECTOR
-      ? 'blue'
-      : protagonist.type === TankType.PREMIUM
-        ? 'amber'
-        : undefined;
-  const thicknessRange = useMemo(() => {
-    const entries = Object.values(tankDefinitions.tanks);
-    const filtered = entries.filter(
-      (thisTank) => thisTank.tier === protagonist.tier,
-    );
-    const value =
-      (filtered.reduce((accumulator, thisTank) => {
-        return (
-          accumulator +
-          thisTank.turrets.at(-1)!.guns.at(-1)!.gun_type!.value.base.shells[0]
-            .penetration.near
-        );
-      }, 0) /
-        filtered.length) *
-      (3 / 4);
+  // const Icon = classIcons[protagonist.class];
+  // const treeColor =
+  //   protagonist.type === TankType.COLLECTOR
+  //     ? 'blue'
+  //     : protagonist.type === TankType.PREMIUM
+  //       ? 'amber'
+  //       : undefined;
+  // const thicknessRange = useMemo(() => {
+  //   const entries = Object.values(tankDefinitions.tanks);
+  //   const filtered = entries.filter(
+  //     (thisTank) => thisTank.tier === protagonist.tier,
+  //   );
+  //   const value =
+  //     (filtered.reduce((accumulator, thisTank) => {
+  //       return (
+  //         accumulator +
+  //         thisTank.turrets.at(-1)!.guns.at(-1)!.gun_type!.value.base.shells[0]
+  //           .penetration.near
+  //       );
+  //     }, 0) /
+  //       filtered.length) *
+  //     (3 / 4);
 
-    return { value } satisfies ThicknessRange;
-  }, [protagonist]);
-  const duelStore = Duel.useStore();
-  const mutateDuel = Duel.useMutation();
-  const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
+  //   return { value } satisfies ThicknessRange;
+  // }, [protagonist]);
+  const thicknessRange = { value: 300 };
+  // const duelStore = Duel.useStore();
+  // const mutateDuel = Duel.useMutation();
+  // const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
 
-  useEffect(() => {
-    function handleKeyDown(event: KeyboardEvent) {
-      const { shells } =
-        duelStore.getState().antagonist.gun.gun_type!.value.base;
+  // useEffect(() => {
+  //   function handleKeyDown(event: KeyboardEvent) {
+  //     const { shells } =
+  //       duelStore.getState().antagonist.gun.gun_type!.value.base;
 
-      times(3, (index) => {
-        if (event.key === `${index + 1}` && shells.length > index) {
-          mutateDuel((draft) => {
-            draft.antagonist.shell = shells[index];
-          });
-          mutateTankopediaEphemeral((draft) => {
-            draft.customShell = undefined;
-          });
-        }
-      });
-    }
+  //     times(3, (index) => {
+  //       if (event.key === `${index + 1}` && shells.length > index) {
+  //         mutateDuel((draft) => {
+  //           draft.antagonist.shell = shells[index];
+  //         });
+  //         mutateTankopediaEphemeral((draft) => {
+  //           draft.customShell = undefined;
+  //         });
+  //       }
+  //     });
+  //   }
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  //   window.addEventListener('keydown', handleKeyDown);
+  //   return () => window.removeEventListener('keydown', handleKeyDown);
+  // }, []);
 
   return (
     <Flex justify="center" style={{ backgroundColor: Var('color-surface') }}>
@@ -105,19 +98,19 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
           align={{ initial: 'center', md: 'start' }}
         >
           <Flex align="center" gap="3">
-            <Heading
+            {/* <Heading
               color={treeColor}
               trim="end"
               size={{ initial: '7', lg: '6' }}
             >
               <Icon width="1em" height="1em" />
-            </Heading>
+            </Heading> */}
 
             <Heading
               weight="bold"
               size={{ initial: '7', lg: '8' }}
               wrap="nowrap"
-              color={treeColor}
+              // color={treeColor}
             >
               {unwrap(protagonist.name)}
             </Heading>
@@ -144,12 +137,12 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
             <Box width="100%" height="100%">
               {skeleton && <TankSandboxLoader id={protagonist.id} />}
 
-              <Suspense fallback={<TankSandboxLoader id={protagonist.id} />}>
+              {/* <Suspense fallback={<TankSandboxLoader id={protagonist.id} />}>
                 <TankSandbox ref={canvas} thicknessRange={thicknessRange} />
-              </Suspense>
+              </Suspense> */}
             </Box>
 
-            <Options canvas={canvas} thicknessRange={thicknessRange} />
+            {/* <Options canvas={canvas} thicknessRange={thicknessRange} /> */}
           </Box>
         </Box>
       </Flex>

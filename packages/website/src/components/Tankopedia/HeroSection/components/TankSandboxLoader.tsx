@@ -1,9 +1,8 @@
-import { asset } from '@blitzkit/core';
-import { Flex, type FlexProps, Progress } from '@radix-ui/themes';
+import { Box, Flex, type FlexProps, Progress } from '@radix-ui/themes';
 import { useProgress } from '@react-three/drei';
 
 type TankSandboxLoaderProps = Omit<FlexProps, 'id'> & {
-  id: number;
+  id: string;
 };
 
 export function TankSandboxLoader({ id, ...props }: TankSandboxLoaderProps) {
@@ -11,9 +10,15 @@ export function TankSandboxLoader({ id, ...props }: TankSandboxLoaderProps) {
 
   return (
     <Flex width="100%" height="100%" align="center" justify="center" {...props}>
-      <img
-        src={asset(`icons/tanks/blitzkit/${id}.webp`)}
-        style={{ height: '75%', filter: 'blur(1rem)' }}
+      <Box
+        height="100%"
+        width="100%"
+        style={{
+          filter: 'blur(1rem)',
+          backgroundImage: `url(/api/tanks/${id}/icons/big.png)`,
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
       />
       <Progress
         size="3"

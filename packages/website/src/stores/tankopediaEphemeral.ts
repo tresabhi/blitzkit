@@ -1,7 +1,7 @@
 import {
   createDefaultSkills,
   ShellDefinition,
-  type ModelDefinition,
+  TankArmor,
 } from '@blitzkit/core';
 import type { Vector3 } from 'three';
 import { create } from 'zustand';
@@ -101,7 +101,7 @@ interface TankopediaEphemeral {
   skills: Record<string, number>;
   relativeAgainst: TankopediaRelativeAgainst;
   controlsEnabled: boolean;
-  model: ModelDefinition;
+  armor: TankArmor;
   editStatic: boolean;
   highlightArmor?: {
     editingPlate: boolean;
@@ -124,19 +124,17 @@ interface TankopediaEphemeral {
 
 const skillDefinitions = await awaitableSkillDefinitions;
 
-export const TankopediaEphemeral = createContextualStore(
-  (model: ModelDefinition) => {
-    return create<TankopediaEphemeral>()(
-      subscribeWithSelector<TankopediaEphemeral>(() => ({
-        shootingRangeZoom: ShootingRangeZoom.Arcade,
-        relativeAgainst: TankopediaRelativeAgainst.Class,
-        editStatic: false,
-        skills: createDefaultSkills(skillDefinitions),
-        model,
-        controlsEnabled: true,
-        xpMultiplier: 1,
-        display: TankopediaDisplay.Model,
-      })),
-    );
-  },
-);
+export const TankopediaEphemeral = createContextualStore((armor: TankArmor) => {
+  return create<TankopediaEphemeral>()(
+    subscribeWithSelector<TankopediaEphemeral>(() => ({
+      shootingRangeZoom: ShootingRangeZoom.Arcade,
+      relativeAgainst: TankopediaRelativeAgainst.Class,
+      editStatic: false,
+      skills: createDefaultSkills(skillDefinitions),
+      armor,
+      controlsEnabled: true,
+      xpMultiplier: 1,
+      display: TankopediaDisplay.Model,
+    })),
+  );
+});

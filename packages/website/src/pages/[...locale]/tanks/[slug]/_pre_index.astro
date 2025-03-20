@@ -1,0 +1,30 @@
+---
+import { fetchTank, fetchTankArmor } from '@blitzkit/core';
+import type { GetStaticPaths } from 'astro';
+import { awaitableTanksFull } from '../../../../core/awaitables/tanksFull';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { getStaticPaths as parentGetStaticPaths } from '../index.astro';
+import { Page } from './_pre_index';
+
+export const getStaticPaths = (async () => {
+  const tanksFull = await awaitableTanksFull;
+  const parentPaths = parentGetStaticPaths();
+
+  return tanksFull.tanks
+    .map((tank) =>
+      parentPaths.map((parent) => ({
+        params: { ...parent.params, slug: tank.slug },
+        props: { id: tank.id },
+      })),
+    )
+    .flat();
+}) satisfies GetStaticPaths;
+
+const { id } = Astro.props;
+const tank = await fetchTank(id);
+const armor = await fetchTankArmor(id);
+---
+
+<BaseLayout>
+  <Page {tank} {armor} client:load />
+</BaseLayout>

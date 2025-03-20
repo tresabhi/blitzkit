@@ -1,5 +1,6 @@
 ---
 import { fetchTank, fetchTankArmor } from '@blitzkit/core';
+import { DEFAULT_LOCALE } from '@blitzkit/i18n';
 import type { GetStaticPaths } from 'astro';
 import { awaitableTanksFull } from '../../../../core/awaitables/tanksFull';
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
@@ -20,11 +21,80 @@ export const getStaticPaths = (async () => {
     .flat();
 }) satisfies GetStaticPaths;
 
+const locale = Astro.params.locale ?? DEFAULT_LOCALE;
 const { id } = Astro.props;
 const tank = await fetchTank(id);
 const armor = await fetchTankArmor(id);
+
+// const strings = getStrings(locale);
+// const tankDefinitions = await fetchTankDefinitions();
+// const skillDefinitions = await fetchSkillDefinitions();
+// const provisionDefinitions = await fetchProvisionDefinitions();
+// const equipmentDefinitions = await fetchEquipmentDefinitions();
+// const tankModelDefinitions = await fetchModelDefinitions();
+// const tank = tankDefinitions.tanks[id];
+// const tankModelDefinition = tankModelDefinitions.models[tank.id];
+// const name = tank.name_full ?? tank.name;
+// const unwrap = unwrapper(locale);
+// const title = literals(strings.website.tools.tanks.tank_seo_title, [
+//   unwrap(name),
+//   TIER_ROMAN_NUMERALS[tank.tier],
+//   strings.common.nations_adjectives[
+//     tank.nation as keyof typeof strings.common.nations_adjectives
+//   ],
+//   strings.common.tank_class_short[tank.class],
+//   'BlitzKit',
+//   strings.common.nations[tank.nation as keyof typeof strings.common.nations],
+// ]);
+// const url = import.meta.env.SITE + Astro.url.pathname;
+// const icon = asset(`icons/tanks/big/${id}.webp`);
+// const turret = tank.turrets.at(-1)!;
+// const gun = turret.guns.at(-1)!;
+// const characteristics = tankCharacteristics(
+//   {
+//     tank,
+//     applyDynamicArmor: false,
+//     applyReactiveArmor: false,
+//     applySpallLiner: false,
+//     camouflage: true,
+//     consumables: [],
+//     crewSkills: createDefaultSkills(skillDefinitions),
+//     engine: tank.engines.at(-1)!,
+//     equipmentMatrix: genericDefaultEquipmentMatrix,
+//     turret,
+//     gun,
+//     provisions: createDefaultProvisions(tank, gun, provisionDefinitions),
+//     shell: gun.gun_type!.value.base.shells[0],
+//     stockEngine: tank.engines[0],
+//     stockGun: tank.turrets[0].guns[0],
+//     stockTurret: tank.turrets[0],
+//     stockTrack: tank.tracks[0],
+//     track: tank.tracks.at(-1)!,
+//   },
+//   { equipmentDefinitions, provisionDefinitions, tankModelDefinition },
+// );
+// const description = literals(strings.website.tools.tanks.tank_seo_description, [
+//   unwrap(name),
+//   Math.round(characteristics.dpm).toLocaleString(locale),
+//   Math.round(characteristics.damage).toLocaleString(locale),
+//   Math.round(characteristics.penetration).toLocaleString(locale),
+//   Math.round(characteristics.speedForwards).toLocaleString(locale),
+//   Math.round(characteristics.health).toLocaleString(locale),
+// ]);
 ---
 
+<!-- <title>{title}</title>
+<meta property="og:title" content={title} />
+<meta name="description" content={description} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={icon} />
+<meta property="og:url" content={url} />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image:src" content={icon} /> -->
 <BaseLayout>
-  <Page {tank} {armor} client:load />
+  <Page {tank} {armor} {locale} client:only="react">
+    <Page {tank} {armor} {locale} skeleton slot="fallback" />
+  </Page>
 </BaseLayout>

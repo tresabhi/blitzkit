@@ -1,26 +1,49 @@
 import { Tank, TankArmor } from '@blitzkit/core';
-import { Box } from '@radix-ui/themes';
-import { OrbitControls } from '@react-three/drei';
-import { Canvas } from '@react-three/fiber';
-import { ArmorGroup } from '../../../../components/ArmorGroup';
 import { PageWrapper } from '../../../../components/PageWrapper';
+import { HeroSection } from '../../../../components/Tankopedia/HeroSection';
+import {
+  LocaleProvider,
+  type LocaleAcceptorProps,
+} from '../../../../hooks/useLocale';
+import { App } from '../../../../stores/app';
+import { Duel } from '../../../../stores/duel';
+import { TankopediaEphemeral } from '../../../../stores/tankopediaEphemeral';
+import { TankopediaPersistent } from '../../../../stores/tankopediaPersistent';
+import type { MaybeSkeletonComponentProps } from '../../../../types/maybeSkeletonComponentProps';
 
-interface PageProps {
-  tank: Tank;
-  armor: TankArmor;
-}
+type PageProps = MaybeSkeletonComponentProps &
+  LocaleAcceptorProps & {
+    tank: Tank;
+    armor: TankArmor;
+  };
 
-export function Page({ tank, armor }: PageProps) {
+export function Page({ tank, armor, skeleton, locale }: PageProps) {
   return (
-    <PageWrapper p="0" maxWidth="unset">
-      <Box height="100%" width="100%" flexGrow="1" position="relative">
-        <Box position="absolute" top="0" left="0" width="100%" height="100%">
-          <Canvas>
-            <OrbitControls />
-            <ArmorGroup group="hull" tank={tank} armor={armor} />
-          </Canvas>
-        </Box>
-      </Box>
-    </PageWrapper>
+    <LocaleProvider locale={locale}>
+      <TankopediaEphemeral.Provider data={armor}>
+        <App.Provider>
+          <TankopediaPersistent.Provider>
+            <Duel.Provider
+              data={{
+                tank,
+                // provisionDefinitions,
+              }}
+            >
+              <PageWrapper p="0" maxWidth="unset" color="purple" gap="9" pb="9">
+                <HeroSection skeleton={skeleton} />
+                {/* <CalloutsSection /> */}
+                {/* <MetaSection /> */}
+                {/* {tank.type === TankType.RESEARCHABLE && !tank.deprecated && (
+                  <TechTreeSection skeleton={skeleton} />
+                )} */}
+                {/* <CharacteristicsSection /> */}
+                {/* <GameModeSection /> */}
+                {/* <VideoSection skeleton={skeleton} /> */}
+              </PageWrapper>
+            </Duel.Provider>
+          </TankopediaPersistent.Provider>
+        </App.Provider>
+      </TankopediaEphemeral.Provider>
+    </LocaleProvider>
   );
 }
