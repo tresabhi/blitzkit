@@ -3,10 +3,8 @@ syntax = "proto2";
 package blitzkit;
 
 message TankArmor {
-  // tank id
-  required string id = 1;
   // key can only ever be "chassis", "hull", "turret", or "gun"
-  map<string, PenetrationGroup> groups = 4;
+  map<string, PenetrationGroup> groups = 1;
 }
 
 message PenetrationGroup {

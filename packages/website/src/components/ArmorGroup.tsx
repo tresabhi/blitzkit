@@ -1,4 +1,4 @@
-import { asset, type Tank } from '@blitzkit/core';
+import { asset, TankArmor, type Tank } from '@blitzkit/core';
 import { useLoader } from '@react-three/fiber';
 import { Material, MeshBasicMaterial } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
@@ -7,10 +7,11 @@ import { jsxTree } from '../core/blitzkit/jsxTree';
 
 interface ArmorGroupProps {
   tank: Tank;
+  armor: TankArmor;
   group: string;
 }
 
-export function ArmorGroup({ tank, group }: ArmorGroupProps) {
+export function ArmorGroup({ tank, armor, group }: ArmorGroupProps) {
   const gltf = useLoader(
     GLTFLoader,
     asset(`/tanks/${tank.id}/collision/hull.glb`),
@@ -31,7 +32,7 @@ export function ArmorGroup({ tank, group }: ArmorGroupProps) {
           event.stopPropagation();
 
           const armorName = mesh.material.name;
-          const penetrationGroup = tank.penetration_groups[group];
+          const penetrationGroup = armor.groups[group];
           const thickness = penetrationGroup.armors[armorName];
 
           console.log(tank.id, armorName, penetrationGroup, thickness);

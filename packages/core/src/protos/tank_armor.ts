@@ -10,8 +10,6 @@ import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 export const protobufPackage = "blitzkit";
 
 export interface TankArmor {
-  /** tank id */
-  id: string;
   /** key can only ever be "chassis", "hull", "turret", or "gun" */
   groups: { [key: string]: PenetrationGroup };
 }
@@ -42,16 +40,13 @@ export interface ArmorPlate {
 }
 
 function createBaseTankArmor(): TankArmor {
-  return { id: "", groups: {} };
+  return { groups: {} };
 }
 
 export const TankArmor: MessageFns<TankArmor> = {
   encode(message: TankArmor, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== "") {
-      writer.uint32(10).string(message.id);
-    }
     Object.entries(message.groups).forEach(([key, value]) => {
-      TankArmor_GroupsEntry.encode({ key: key as any, value }, writer.uint32(34).fork()).join();
+      TankArmor_GroupsEntry.encode({ key: key as any, value }, writer.uint32(10).fork()).join();
     });
     return writer;
   },
@@ -68,17 +63,9 @@ export const TankArmor: MessageFns<TankArmor> = {
             break;
           }
 
-          message.id = reader.string();
-          continue;
-        }
-        case 4: {
-          if (tag !== 34) {
-            break;
-          }
-
-          const entry4 = TankArmor_GroupsEntry.decode(reader, reader.uint32());
-          if (entry4.value !== undefined) {
-            message.groups[entry4.key] = entry4.value;
+          const entry1 = TankArmor_GroupsEntry.decode(reader, reader.uint32());
+          if (entry1.value !== undefined) {
+            message.groups[entry1.key] = entry1.value;
           }
           continue;
         }
@@ -93,7 +80,6 @@ export const TankArmor: MessageFns<TankArmor> = {
 
   fromJSON(object: any): TankArmor {
     return {
-      id: globalThis.String(assertSet("TankArmor.id", object.id)),
       groups: isObject(object.groups)
         ? Object.entries(object.groups).reduce<{ [key: string]: PenetrationGroup }>((acc, [key, value]) => {
           acc[key] = PenetrationGroup.fromJSON(value);
@@ -105,9 +91,6 @@ export const TankArmor: MessageFns<TankArmor> = {
 
   toJSON(message: TankArmor): unknown {
     const obj: any = {};
-    if (message.id !== "") {
-      obj.id = message.id;
-    }
     if (message.groups) {
       const entries = Object.entries(message.groups);
       if (entries.length > 0) {
@@ -125,7 +108,6 @@ export const TankArmor: MessageFns<TankArmor> = {
   },
   fromPartial<I extends Exact<DeepPartial<TankArmor>, I>>(object: I): TankArmor {
     const message = createBaseTankArmor();
-    message.id = object.id ?? "";
     message.groups = Object.entries(object.groups ?? {}).reduce<{ [key: string]: PenetrationGroup }>(
       (acc, [key, value]) => {
         if (value !== undefined) {

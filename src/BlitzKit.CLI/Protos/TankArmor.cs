@@ -25,18 +25,18 @@ namespace Blitzkit {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "CilwYWNrYWdlcy9jb3JlL3NyYy9wcm90b3MvdGFua19hcm1vci5wcm90bxII",
-            "YmxpdHpraXQikwEKCVRhbmtBcm1vchIKCgJpZBgBIAIoCRIvCgZncm91cHMY",
-            "BCADKAsyHy5ibGl0emtpdC5UYW5rQXJtb3IuR3JvdXBzRW50cnkaSQoLR3Jv",
-            "dXBzRW50cnkSCwoDa2V5GAEgASgJEikKBXZhbHVlGAIgASgLMhouYmxpdHpr",
-            "aXQuUGVuZXRyYXRpb25Hcm91cDoCOAEijwEKEFBlbmV0cmF0aW9uR3JvdXAS",
-            "NgoGYXJtb3JzGAEgAygLMiYuYmxpdHpraXQuUGVuZXRyYXRpb25Hcm91cC5B",
-            "cm1vcnNFbnRyeRpDCgtBcm1vcnNFbnRyeRILCgNrZXkYASABKAkSIwoFdmFs",
-            "dWUYAiABKAsyFC5ibGl0emtpdC5Bcm1vclBsYXRlOgI4ASItCgpBcm1vclBs",
-            "YXRlEhEKCXRoaWNrbmVzcxgBIAIoAhIMCgR0eXBlGAIgAigJ"));
+            "YmxpdHpraXQihwEKCVRhbmtBcm1vchIvCgZncm91cHMYASADKAsyHy5ibGl0",
+            "emtpdC5UYW5rQXJtb3IuR3JvdXBzRW50cnkaSQoLR3JvdXBzRW50cnkSCwoD",
+            "a2V5GAEgASgJEikKBXZhbHVlGAIgASgLMhouYmxpdHpraXQuUGVuZXRyYXRp",
+            "b25Hcm91cDoCOAEijwEKEFBlbmV0cmF0aW9uR3JvdXASNgoGYXJtb3JzGAEg",
+            "AygLMiYuYmxpdHpraXQuUGVuZXRyYXRpb25Hcm91cC5Bcm1vcnNFbnRyeRpD",
+            "CgtBcm1vcnNFbnRyeRILCgNrZXkYASABKAkSIwoFdmFsdWUYAiABKAsyFC5i",
+            "bGl0emtpdC5Bcm1vclBsYXRlOgI4ASItCgpBcm1vclBsYXRlEhEKCXRoaWNr",
+            "bmVzcxgBIAIoAhIMCgR0eXBlGAIgAigJ"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Blitzkit.TankArmor), global::Blitzkit.TankArmor.Parser, new[]{ "Id", "Groups" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Blitzkit.TankArmor), global::Blitzkit.TankArmor.Parser, new[]{ "Groups" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::Blitzkit.PenetrationGroup), global::Blitzkit.PenetrationGroup.Parser, new[]{ "Armors" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::Blitzkit.ArmorPlate), global::Blitzkit.ArmorPlate.Parser, new[]{ "Thickness", "Type" }, null, null, null, null)
           }));
@@ -80,7 +80,6 @@ namespace Blitzkit {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public TankArmor(TankArmor other) : this() {
-      id_ = other.id_;
       groups_ = other.groups_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -91,39 +90,10 @@ namespace Blitzkit {
       return new TankArmor(this);
     }
 
-    /// <summary>Field number for the "id" field.</summary>
-    public const int IdFieldNumber = 1;
-    private readonly static string IdDefaultValue = "";
-
-    private string id_;
-    /// <summary>
-    /// tank id
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string Id {
-      get { return id_ ?? IdDefaultValue; }
-      set {
-        id_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-    /// <summary>Gets whether the "id" field is set</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool HasId {
-      get { return id_ != null; }
-    }
-    /// <summary>Clears the value of the "id" field</summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void ClearId() {
-      id_ = null;
-    }
-
     /// <summary>Field number for the "groups" field.</summary>
-    public const int GroupsFieldNumber = 4;
+    public const int GroupsFieldNumber = 1;
     private static readonly pbc::MapField<string, global::Blitzkit.PenetrationGroup>.Codec _map_groups_codec
-        = new pbc::MapField<string, global::Blitzkit.PenetrationGroup>.Codec(pb::FieldCodec.ForString(10, ""), pb::FieldCodec.ForMessage(18, global::Blitzkit.PenetrationGroup.Parser), 34);
+        = new pbc::MapField<string, global::Blitzkit.PenetrationGroup>.Codec(pb::FieldCodec.ForString(10, ""), pb::FieldCodec.ForMessage(18, global::Blitzkit.PenetrationGroup.Parser), 10);
     private readonly pbc::MapField<string, global::Blitzkit.PenetrationGroup> groups_ = new pbc::MapField<string, global::Blitzkit.PenetrationGroup>();
     /// <summary>
     /// key can only ever be "chassis", "hull", "turret", or "gun"
@@ -149,7 +119,6 @@ namespace Blitzkit {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (Id != other.Id) return false;
       if (!Groups.Equals(other.Groups)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -158,7 +127,6 @@ namespace Blitzkit {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (HasId) hash ^= Id.GetHashCode();
       hash ^= Groups.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -178,10 +146,6 @@ namespace Blitzkit {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (HasId) {
-        output.WriteRawTag(10);
-        output.WriteString(Id);
-      }
       groups_.WriteTo(output, _map_groups_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -193,10 +157,6 @@ namespace Blitzkit {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (HasId) {
-        output.WriteRawTag(10);
-        output.WriteString(Id);
-      }
       groups_.WriteTo(ref output, _map_groups_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -208,9 +168,6 @@ namespace Blitzkit {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (HasId) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Id);
-      }
       size += groups_.CalculateSize(_map_groups_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -223,9 +180,6 @@ namespace Blitzkit {
     public void MergeFrom(TankArmor other) {
       if (other == null) {
         return;
-      }
-      if (other.HasId) {
-        Id = other.Id;
       }
       groups_.MergeFrom(other.groups_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -248,10 +202,6 @@ namespace Blitzkit {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
-            Id = input.ReadString();
-            break;
-          }
-          case 34: {
             groups_.AddEntriesFrom(input, _map_groups_codec);
             break;
           }
@@ -275,10 +225,6 @@ namespace Blitzkit {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 10: {
-            Id = input.ReadString();
-            break;
-          }
-          case 34: {
             groups_.AddEntriesFrom(ref input, _map_groups_codec);
             break;
           }

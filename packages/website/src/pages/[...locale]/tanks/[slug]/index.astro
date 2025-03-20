@@ -1,5 +1,5 @@
 ---
-import { fetchTank } from '@blitzkit/core';
+import { fetchTank, fetchTankArmor } from '@blitzkit/core';
 import type { GetStaticPaths } from 'astro';
 import { awaitableTanksFull } from '../../../../core/awaitables/tanksFull';
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
@@ -22,8 +22,9 @@ export const getStaticPaths = (async () => {
 
 const { id } = Astro.props;
 const tank = await fetchTank(id);
+const armor = await fetchTankArmor(id);
 ---
 
 <BaseLayout>
-  <Page {tank} client:load />
+  <Page {tank} {armor} client:load />
 </BaseLayout>
