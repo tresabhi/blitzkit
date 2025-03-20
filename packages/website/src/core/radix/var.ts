@@ -2,7 +2,7 @@ import * as ColorsRaw from '@radix-ui/colors';
 
 type ExcludeSuffix<T> =
   T extends `${string}${'A' | `${'P3' | 'Dark'}${'' | 'A'}`}` ? never : T;
-type RadixColor = ExcludeSuffix<keyof typeof ColorsRaw>;
+type RadixColor = ExcludeSuffix<keyof typeof ColorsRaw> | 'black' | 'white';
 
 export type VarName =
   | `color-${'background' | `panel-${'solid' | 'translucent'}` | 'surface' | 'overlay'}`
