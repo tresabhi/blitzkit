@@ -17,21 +17,21 @@ namespace BlitzKit.CLI.Utils
     public static void Error(string message)
     {
       Console.ForegroundColor = ConsoleColor.Red;
-      Console.WriteLine($"[ERR ] {message}");
+      Console.WriteLine($"[EROR] {message}");
       Console.ResetColor();
     }
 
     public static void Success(string message)
     {
       Console.ForegroundColor = ConsoleColor.Green;
-      Console.WriteLine($"[OK  ] {message}");
+      Console.WriteLine($"[OKAY] {message}");
       Console.ResetColor();
     }
 
     public static void Background(string message)
     {
       Console.ForegroundColor = ConsoleColor.DarkGray;
-      Console.WriteLine($"[BG  ] {message}");
+      Console.WriteLine($"[BACK] {message}");
       Console.ResetColor();
     }
 
