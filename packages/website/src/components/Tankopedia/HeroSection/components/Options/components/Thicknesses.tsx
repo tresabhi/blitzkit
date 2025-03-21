@@ -4,27 +4,21 @@ import { Button, Checkbox, Flex, Text } from '@radix-ui/themes';
 import { useLocale } from '../../../../../../hooks/useLocale';
 import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
 import { TankopediaPersistent } from '../../../../../../stores/tankopediaPersistent';
-import type { ThicknessRange } from '../../../../../Armor/components/StaticArmor';
 
-interface ThicknessesProps {
-  thicknessRange: ThicknessRange;
-}
-
-export function Thicknesses({ thicknessRange }: ThicknessesProps) {
-  const showExternalModules = TankopediaPersistent.use(
-    (state) => state.showExternalModules,
+export function Thicknesses() {
+  const showModules = TankopediaPersistent.use((state) => state.showModules);
+  const showArmorScreen = TankopediaPersistent.use(
+    (state) => state.showArmorScreen,
   );
-  const showSpacedArmor = TankopediaPersistent.use(
-    (state) => state.showSpacedArmor,
-  );
-  const showPrimaryArmor = TankopediaPersistent.use(
-    (state) => state.showPrimaryArmor,
-  );
+  const showArmor = TankopediaPersistent.use((state) => state.showArmor);
   const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const editStatic = TankopediaEphemeral.use((state) => state.editStatic);
   const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
   const { strings } = useLocale();
+  const thicknessRange = TankopediaEphemeral.use(
+    (state) => state.thicknessRange,
+  );
 
   return (
     <Flex
@@ -41,10 +35,10 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
         <Flex
           height="64px"
           gap="2"
-          style={{ opacity: showPrimaryArmor ? 1 : 0.5, cursor: 'pointer' }}
+          style={{ opacity: showArmor ? 1 : 0.5, cursor: 'pointer' }}
           onClick={() => {
             mutateTankopediaPersistent((draft) => {
-              draft.showPrimaryArmor = !draft.showPrimaryArmor;
+              draft.showArmor = !draft.showArmor;
             });
             mutateTankopediaEphemeral((draft) => {
               draft.highlightArmor = undefined;
@@ -54,7 +48,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
           <Flex direction="column" align="end" justify="between">
             <Text color="gray" size="1">
               {literals(strings.common.units.mm, [
-                (thicknessRange.value * 1.5).toFixed(0),
+                (thicknessRange * 1.5).toFixed(0),
               ])}
             </Text>
             <Text size="1">
@@ -75,17 +69,17 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
               color: 'black',
             }}
           >
-            {showPrimaryArmor ? <EyeOpenIcon /> : <EyeClosedIcon />}
+            {showArmor ? <EyeOpenIcon /> : <EyeClosedIcon />}
           </Flex>
         </Flex>
 
         <Flex
           height="64px"
           gap="2"
-          style={{ opacity: showSpacedArmor ? 1 : 0.5, cursor: 'pointer' }}
+          style={{ opacity: showArmorScreen ? 1 : 0.5, cursor: 'pointer' }}
           onClick={() => {
             mutateTankopediaPersistent((draft) => {
-              draft.showSpacedArmor = !draft.showSpacedArmor;
+              draft.showArmorScreen = !draft.showArmorScreen;
             });
             mutateTankopediaEphemeral((draft) => {
               draft.highlightArmor = undefined;
@@ -94,9 +88,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
         >
           <Flex direction="column" align="end" justify="between">
             <Text color="gray" size="1">
-              {literals(strings.common.units.mm, [
-                thicknessRange.value.toFixed(0),
-              ])}
+              {literals(strings.common.units.mm, [thicknessRange.toFixed(0)])}
             </Text>
             <Text size="1">
               {strings.website.tools.tanks.sandbox.static.spaced}
@@ -115,16 +107,16 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
               background: `linear-gradient(rgb(32, 0, 225), rgb(255, 0, 255))`,
             }}
           >
-            {showSpacedArmor ? <EyeOpenIcon /> : <EyeClosedIcon />}
+            {showArmorScreen ? <EyeOpenIcon /> : <EyeClosedIcon />}
           </Flex>
         </Flex>
 
         <Flex
           gap="2"
-          style={{ opacity: showExternalModules ? 1 : 0.5, cursor: 'pointer' }}
+          style={{ opacity: showModules ? 1 : 0.5, cursor: 'pointer' }}
           onClick={() => {
             mutateTankopediaPersistent((draft) => {
-              draft.showExternalModules = !draft.showExternalModules;
+              draft.showModules = !draft.showModules;
             });
             mutateTankopediaEphemeral((draft) => {
               draft.highlightArmor = undefined;
@@ -148,7 +140,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
               color: 'black',
             }}
           >
-            {showExternalModules ? <EyeOpenIcon /> : <EyeClosedIcon />}
+            {showModules ? <EyeOpenIcon /> : <EyeClosedIcon />}
           </Flex>
         </Flex>
       </Flex>
@@ -179,7 +171,7 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
           onClick={() => {
             mutateTankopediaEphemeral((draft) => {
               draft.editStatic = false;
-              draft.model = tankopediaEphemeralStore.getInitialState().model;
+              draft.armor = tankopediaEphemeralStore.getInitialState().armor;
             });
           }}
         >

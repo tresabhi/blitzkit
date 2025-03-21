@@ -12,15 +12,13 @@ import {
 } from '../../../../../stores/tankopediaEphemeral';
 import { TankopediaPersistent } from '../../../../../stores/tankopediaPersistent';
 import { TankopediaDisplay } from '../../../../../stores/tankopediaPersistent/constants';
-import type { ThicknessRange } from '../../../../Armor/components/StaticArmor';
 import { Thicknesses } from './components/Thicknesses';
 
 interface OptionsProps {
-  thicknessRange: ThicknessRange;
   canvas: RefObject<HTMLCanvasElement>;
 }
 
-export function Options({ thicknessRange, canvas }: OptionsProps) {
+export function Options({ canvas }: OptionsProps) {
   const hasCustomShell = TankopediaEphemeral.use(
     (state) => state.customShell !== undefined,
   );
@@ -75,9 +73,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
         />
       )}
 
-      {display === TankopediaDisplay.StaticArmor && (
-        <Thicknesses thicknessRange={thicknessRange} />
-      )}
+      {display === TankopediaDisplay.StaticArmor && <Thicknesses />}
 
       {/* {display === TankopediaDisplay.DynamicArmor && (
         <Flex

@@ -14,9 +14,9 @@ export interface TankopediaPersistentStore {
   advancedHighlighting: boolean;
   showGrid: boolean;
   greenPenetration: boolean;
-  showSpacedArmor: boolean;
-  showExternalModules: boolean;
-  showPrimaryArmor: boolean;
+  showArmorScreen: boolean;
+  showModules: boolean;
+  showArmor: boolean;
   recentlyViewed: number[];
   hideTankModelUnderArmor: boolean;
 
@@ -36,9 +36,9 @@ export const TankopediaPersistent = createContextualStore(() =>
         advancedHighlighting: false,
         showGrid: true,
         greenPenetration: false,
-        showSpacedArmor: true,
-        showExternalModules: true,
-        showPrimaryArmor: true,
+        showArmorScreen: true,
+        showModules: true,
+        showArmor: true,
         recentlyViewed: [],
         sort: {
           by: 'meta.none',

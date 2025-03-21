@@ -20,7 +20,7 @@ type PageProps = MaybeSkeletonComponentProps &
 export function Page({ tank, armor, skeleton, locale }: PageProps) {
   return (
     <LocaleProvider locale={locale}>
-      <TankopediaEphemeral.Provider data={armor}>
+      <TankopediaEphemeral.Provider data={{ armor, thicknessRange: 193 }}>
         <App.Provider>
           <TankopediaPersistent.Provider>
             <Duel.Provider

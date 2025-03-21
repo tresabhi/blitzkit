@@ -96,6 +96,7 @@ export const SHOOTING_RANGE_ZOOM_COEFFICIENTS: Record<
 };
 
 interface TankopediaEphemeral {
+  thicknessRange: number;
   shot?: Shot;
   shootingRangeZoom: ShootingRangeZoom;
   skills: Record<string, number>;
@@ -124,17 +125,20 @@ interface TankopediaEphemeral {
 
 const skillDefinitions = await awaitableSkillDefinitions;
 
-export const TankopediaEphemeral = createContextualStore((armor: TankArmor) => {
-  return create<TankopediaEphemeral>()(
-    subscribeWithSelector<TankopediaEphemeral>(() => ({
-      shootingRangeZoom: ShootingRangeZoom.Arcade,
-      relativeAgainst: TankopediaRelativeAgainst.Class,
-      editStatic: false,
-      skills: createDefaultSkills(skillDefinitions),
-      armor,
-      controlsEnabled: true,
-      xpMultiplier: 1,
-      display: TankopediaDisplay.StaticArmor,
-    })),
-  );
-});
+export const TankopediaEphemeral = createContextualStore(
+  ({ armor, thicknessRange }: { armor: TankArmor; thicknessRange: number }) => {
+    return create<TankopediaEphemeral>()(
+      subscribeWithSelector<TankopediaEphemeral>(() => ({
+        thicknessRange,
+        shootingRangeZoom: ShootingRangeZoom.Arcade,
+        relativeAgainst: TankopediaRelativeAgainst.Class,
+        editStatic: false,
+        skills: createDefaultSkills(skillDefinitions),
+        armor,
+        controlsEnabled: true,
+        xpMultiplier: 1,
+        display: TankopediaDisplay.StaticArmor,
+      })),
+    );
+  },
+);

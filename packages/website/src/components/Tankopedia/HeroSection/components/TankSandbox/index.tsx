@@ -8,10 +8,7 @@ import { TankopediaDisplay } from '../../../../../stores/tankopediaPersistent/co
 import { Armor } from '../../../../Armor';
 import { ArmorPlateDisplay } from '../../../../Armor/components/ArmorPlateDisplay';
 import { ShotDisplay } from '../../../../Armor/components/ShotDisplay';
-import {
-  StaticArmor,
-  type ThicknessRange,
-} from '../../../../Armor/components/StaticArmor';
+import { StaticArmor } from '../../../../Armor/components/StaticArmor';
 import { AutoClear } from './components/AutoClear';
 import { Controls } from './components/Control';
 import { Lighting } from './components/Lighting';
@@ -20,12 +17,11 @@ import { SceneProps } from './components/SceneProps';
 import { TankModel } from './components/TankModel';
 
 interface TankSandboxProps {
-  thicknessRange: ThicknessRange;
   naked?: boolean;
 }
 
 export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
-  ({ thicknessRange, naked }, ref) => {
+  ({ naked }, ref) => {
     const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
     const canvas = useRef<HTMLCanvasElement>(null);
     // const hasImprovedVerticalStabilizer = useEquipment(122);
@@ -193,9 +189,7 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
 
         <Suspense fallback={<ModelLoader />}>
           {display === TankopediaDisplay.DynamicArmor && <Armor />}
-          {display === TankopediaDisplay.StaticArmor && (
-            <StaticArmor thicknessRange={thicknessRange} />
-          )}
+          {display === TankopediaDisplay.StaticArmor && <StaticArmor />}
           <Lighting />
         </Suspense>
       </Canvas>

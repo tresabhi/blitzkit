@@ -5,16 +5,13 @@ import { Color, Material, MeshBasicMaterial } from 'three';
 import { jsxTree } from '../../../core/blitzkit/jsxTree';
 import { Duel } from '../../../stores/duel';
 import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
-
-interface ArmorSceneProps {
-  thicknessRange: ThicknessRange;
-}
+import { StaticArmorSceneComponents } from './StaticArmorSceneComponents';
 
 export interface ThicknessRange {
   value: number;
 }
 
-export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
+export const StaticArmor = memo(() => {
   // const wrapper = useRef<Group>(null);
   // const turretContainer = useRef<Group>(null);
   // const gunContainer = useRef<Group>(null);
@@ -58,44 +55,11 @@ export const StaticArmor = memo<ArmorSceneProps>(({ thicknessRange }) => {
 
   // useTankTransform(track, turret, turretContainer, gunContainer);
 
-  const tank = Duel.use((state) => state.protagonist.tank);
-  const armor = TankopediaEphemeral.use((state) => state.armor);
-  const hullArmor = armor.groups.hull;
-  const hullGltf = useGLTF(asset(`tanks/${tank.id}/collision/hull.glb`));
 
   return (
     <group>
-      {jsxTree(hullGltf.scene, {
-        mesh(mesh) {
-          if (!(mesh.material instanceof Material)) {
-            return { visible: false };
-          }
-
-          const armorName = mesh.material.name;
-          const material = new MeshBasicMaterial({});
-          const armorPlate = hullArmor.armors[armorName];
-
-          switch (armorPlate.type) {
-            case 'Armor':
-              material.color = new Color('#ec6142');
-              material.transparent = true;
-              material.opacity = 0.5;
-              break;
-
-            case 'ArmorScreen':
-              material.color = new Color('#ff8dcc');
-              material.transparent = true;
-              material.opacity = 0.5;
-              break;
-
-            default:
-              material.color = new Color('#70b8ff');
-              break;
-          }
-
-          return { material };
-        },
-      })}
+      <StaticArmorSceneComponents group="hull" />
+      
     </group>
   );
 });

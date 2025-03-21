@@ -42,7 +42,6 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
 
   //   return { value } satisfies ThicknessRange;
   // }, [protagonist]);
-  const thicknessRange = { value: 300 };
   // const duelStore = Duel.useStore();
   // const mutateDuel = Duel.useMutation();
   // const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
@@ -140,11 +139,11 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
               {skeleton && <TankSandboxLoader id={protagonist.id} />}
 
               <Suspense fallback={<TankSandboxLoader id={protagonist.id} />}>
-                <TankSandbox ref={canvas} thicknessRange={thicknessRange} />
+                <TankSandbox ref={canvas} />
               </Suspense>
             </Box>
 
-            <Options canvas={canvas} thicknessRange={thicknessRange} />
+            <Options canvas={canvas} />
           </Box>
         </Box>
       </Flex>
