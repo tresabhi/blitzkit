@@ -1,39 +1,45 @@
 import { asset } from '@blitzkit/core';
 import { useGLTF } from '@react-three/drei';
-import { Color, Material, MeshStandardMaterial } from 'three';
+import {
+  Color,
+  LineBasicMaterial,
+  Material,
+  MeshStandardMaterial,
+} from 'three';
 import { clamp } from 'three/src/math/MathUtils.js';
 import { jsxTree } from '../../../core/blitzkit/jsxTree';
 import { Duel } from '../../../stores/duel';
 import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
 import { TankopediaPersistent } from '../../../stores/tankopediaPersistent';
 
-type StaticArmorSceneComponentsProps = {
+interface StaticArmorSceneComponentsProps {
   group: string;
-};
+}
 
-const unselectedColor = new Color(0x404040);
-const externalModuleColor = new Color(192 / 255, 192 / 255, 192 / 255);
+const moduleColor = new Color(192 / 255, 192 / 255, 192 / 255);
+const groupNameRegex = /([a-z]+)(_\d+)?/;
 
 export function StaticArmorSceneComponents({
   group,
 }: StaticArmorSceneComponentsProps) {
+  const tank = Duel.use((state) => state.protagonist.tank);
   const showModules = TankopediaPersistent.use((state) => state.showModules);
   const showArmorScreen = TankopediaPersistent.use(
     (state) => state.showArmorScreen,
   );
   const showArmor = TankopediaPersistent.use((state) => state.showArmor);
-  const tank = Duel.use((state) => state.protagonist.tank);
   const gltf = useGLTF(asset(`tanks/${tank.id}/collision/${group}.glb`));
   const armor = TankopediaEphemeral.use((state) => state.armor);
-  const groupArmor = armor.groups[group];
+  const groupName = group.match(groupNameRegex)![1];
+  const groupArmor = armor.groups[groupName];
   const thicknessRange = TankopediaEphemeral.use(
     (state) => state.thicknessRange,
   );
 
   return jsxTree(gltf.scene, {
-    mesh(mesh) {
+    mesh(mesh, props) {
       if (!(mesh.material instanceof Material)) {
-        return { visible: false };
+        return null;
       }
 
       const armorName = mesh.material.name;
@@ -44,216 +50,67 @@ export function StaticArmorSceneComponents({
 
       switch (armorPlate.type) {
         case 'Armor':
+          if (!showArmor) return null;
+
           if (x > 1) {
             material.color = new Color(clamp(2 - x, 0.5, 1), 0, 0);
           } else {
             material.color = new Color(-((1 - x) ** 2) + 1, -(x ** 2) + 1, 0);
           }
           material.opacity = 1;
-          material.visible = showArmor;
           break;
 
         case 'ArmorScreen':
+          if (!showArmorScreen) return null;
+
           material.color = new Color(
             clamp(1 - (7 / 8) * xClamped, 0, 1),
             0,
             clamp(1 - (1 / 8) * xClamped, 0, 1),
           );
           material.opacity = clamp(x + 1 / 2, 0, 1);
-          material.visible = showArmorScreen;
+
           break;
 
         default:
-          material.color = externalModuleColor;
-          material.opacity = 7 / 8;
-          material.depthWrite = false;
-          material.visible = showModules;
+          if (!showModules) return null;
+
+          material.color = moduleColor;
+          material.opacity = 1 / 2;
+
           break;
       }
+
+      const outlineMaterial = new LineBasicMaterial({
+        color: material.color.clone(),
+      });
+
+      switch (armorPlate.type) {
+        case 'Armor':
+          outlineMaterial.color.multiplyScalar(0.5);
+          break;
+
+        case 'ArmorScreen':
+          outlineMaterial.color.multiplyScalar(4);
+          break;
+
+        default:
+          outlineMaterial.color.multiplyScalar(0.5);
+          break;
+      }
+
       material.opacity = clamp(material.opacity, 0, 1);
       material.transparent = material.opacity < 1;
 
-      return { material };
+      return (
+        <>
+          <mesh {...props} material={material} />
+
+          <lineSegments material={outlineMaterial}>
+            <edgesGeometry args={[props.geometry, 45]} />
+          </lineSegments>
+        </>
+      );
     },
   });
-
-  // const mutateTankopediaEphemeralStore = TankopediaEphemeral.useMutation();
-  // const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
-  // const camera = useThree((state) => state.camera);
-  // const x = thickness / thicknessRange.value;
-  // const xClamped = clamp(x, 0, 1);
-  // let color: Color;
-  // let opacity: number;
-  // let depthWrite = true;
-  // switch (props.type) {
-  //   case ArmorType.Primary:
-  //     if (x > 1) {
-  //       color = new Color(clamp(2 - x, 0.5, 1), 0, 0);
-  //     } else {
-  //       color = new Color(-((1 - x) ** 2) + 1, -(x ** 2) + 1, 0);
-  //     }
-  //     opacity = 1;
-  //     break;
-  //   case ArmorType.Spaced:
-  //     color = new Color(
-  //       clamp(1 - (7 / 8) * xClamped, 0, 1),
-  //       0,
-  //       clamp(1 - (1 / 8) * xClamped, 0, 1),
-  //     );
-  //     opacity = clamp(x + 1 / 2, 0, 1);
-  //     break;
-  //   case ArmorType.External:
-  //     color = externalModuleColor;
-  //     opacity = 1 / 8;
-  //     depthWrite = false;
-  //     break;
-  // }
-  // opacity = clamp(opacity, 0, 1);
-  // const surfaceMaterial = useMemo(
-  //   () =>
-  //     new MeshStandardMaterial({
-  //       color,
-  //       opacity,
-  //       transparent: opacity < 1,
-  //       depthWrite,
-  //       ...(props.clip ? { clippingPlanes: [props.clip] } : {}),
-  //     }),
-  //   [thickness],
-  // );
-  // const outlineMaterial = useMemo(
-  //   () =>
-  //     new LineBasicMaterial({
-  //       color: color
-  //         .clone()
-  //         .multiplyScalar(props.type === ArmorType.Spaced ? 2 ** 2 : 2 ** -1),
-  //     }),
-  //   [thickness],
-  // );
-  // useEffect(() => {
-  //   function handleHighlightArmor(selectedName?: string) {
-  //     if (selectedName === undefined) {
-  //       // nothing selected, go back to defaults
-  //       surfaceMaterial.opacity = opacity;
-  //       surfaceMaterial.transparent = opacity < 1;
-  //       surfaceMaterial.color = color;
-  //       surfaceMaterial.depthWrite = props.type !== ArmorType.External;
-  //       surfaceMaterial.side = FrontSide;
-  //       outlineMaterial.visible = true;
-  //     } else if (
-  //       selectedName === name ||
-  //       (name.startsWith('chassis_') && selectedName.startsWith('chassis_')) ||
-  //       (name.startsWith('gun_') &&
-  //         selectedName.startsWith('gun_') &&
-  //         !name.includes('_armor_') &&
-  //         !selectedName.includes('_armor_'))
-  //     ) {
-  //       // this selected, stand out!
-  //       surfaceMaterial.opacity = 1;
-  //       surfaceMaterial.transparent = false;
-  //       surfaceMaterial.color = color;
-  //       surfaceMaterial.depthWrite = true;
-  //       surfaceMaterial.side = DoubleSide;
-  //       outlineMaterial.visible = true;
-  //     } else {
-  //       // something else selected, become background
-  //       surfaceMaterial.opacity = 1 / 4;
-  //       surfaceMaterial.transparent = true;
-  //       surfaceMaterial.color = unselectedColor;
-  //       surfaceMaterial.depthWrite = props.type !== ArmorType.External;
-  //       surfaceMaterial.side = FrontSide;
-  //       outlineMaterial.visible = false;
-  //     }
-  //     surfaceMaterial.needsUpdate = true;
-  //   }
-  //   const unsubscribes = [
-  //     tankopediaEphemeralStore.subscribe(
-  //       (state) => state.highlightArmor?.name,
-  //       handleHighlightArmor,
-  //     ),
-  //   ];
-  //   if (props.clip) {
-  //     /**
-  //      * hook inside an if statement?? don't panic! I assure you the clip prop
-  //      * never mutates :)
-  //      */
-  //     const { clip } = props;
-  //     const gunOrigin = unrotateDavaVector(props.gunOrigin.clone());
-  //     const neckOrigin = unrotateDavaVector(props.hullOrigin.clone()).add(
-  //       unrotateDavaVector(props.turretOrigin.clone()),
-  //     );
-  //     const barrelOrigin = neckOrigin.clone().add(gunOrigin);
-  //     const distanceToBarrel = clip.distanceToPoint(barrelOrigin);
-  //     const point = new Vector3();
-  //     function handleModelTransform(data: ModelTransformEventData) {
-  //       clip.normal
-  //         .set(0, 0, -1)
-  //         .applyAxisAngle(I_HAT, data.pitch)
-  //         .applyAxisAngle(J_HAT, data.yaw ?? 0);
-  //       clip.constant = 0;
-  //       point
-  //         .copy(gunOrigin)
-  //         .applyAxisAngle(J_HAT, data.yaw ?? 0)
-  //         .add(clip.normal.multiplyScalar(-distanceToBarrel))
-  //         .add(neckOrigin);
-  //       clip.normal.normalize();
-  //       clip.constant -= clip.distanceToPoint(point);
-  //     }
-  //     modelTransformEvent.on(handleModelTransform);
-  //     unsubscribes.push(() => modelTransformEvent.off(handleModelTransform));
-  //   }
-  //   return () => {
-  //     unsubscribes.forEach((unsubscribe) => unsubscribe());
-  //   };
-  // }, [thickness]);
-  // return (
-  //   <>
-  //     {jsxTree(node, {
-  //       mesh: {
-  //         material: surfaceMaterial,
-  //         onPointerDown,
-  //         userData: {
-  //           type: props.type,
-  //           variant: props.type === ArmorType.External ? props.variant : 'gun',
-  //           thickness,
-  //         } satisfies ArmorUserData,
-  //         onClick(event) {
-  //           if (discardClippingPlane(event.object, event.point)) return;
-  //           event.stopPropagation();
-  //           const { editStatic } = tankopediaEphemeralStore.getState();
-  //           const bounds = new Box3().setFromObject(event.object);
-  //           const point = bounds.min
-  //             .clone()
-  //             .add(bounds.max)
-  //             .divideScalar(2)
-  //             .setY(bounds.max.y);
-  //           const cameraNormal = camera.position.clone().sub(point).normalize();
-  //           const surfaceNormal = event
-  //             .normal!.clone()
-  //             .applyQuaternion(
-  //               event.object.getWorldQuaternion(new Quaternion()),
-  //             );
-  //           const angle = surfaceNormal.angleTo(cameraNormal);
-  //           const thicknessAngled = thickness / Math.sin(Math.PI / 2 - angle);
-  //           mutateTankopediaEphemeralStore((draft) => {
-  //             draft.highlightArmor = {
-  //               type: props.type,
-  //               name,
-  //               point,
-  //               thickness,
-  //               thicknessAngled,
-  //               angle,
-  //               color: `#${color.getHexString()}`,
-  //               editingPlate: editStatic,
-  //             };
-  //           });
-  //         },
-  //       },
-  //     })}
-  //     {node instanceof Mesh && (
-  //       <lineSegments material={outlineMaterial}>
-  //         <edgesGeometry args={[node.geometry, 45]} />
-  //       </lineSegments>
-  //     )}
-  //   </>
-  // );
 }

@@ -1,13 +1,16 @@
 import { OrbitControls } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { PerspectiveCamera } from 'three';
 import { OrbitControls as OrbitControlsClass } from 'three-stdlib';
 import { degToRad } from 'three/src/math/MathUtils.js';
 import { awaitableModelDefinitions } from '../../../../../../core/awaitables/modelDefinitions';
 import { Pose } from '../../../../../../core/blitzkit/pose';
 import { Duel } from '../../../../../../stores/duel';
-import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
+import {
+  SHOOTING_RANGE_ZOOM_COEFFICIENTS,
+  TankopediaEphemeral,
+} from '../../../../../../stores/tankopediaEphemeral';
 import { TankopediaDisplay } from '../../../../../../stores/tankopediaPersistent/constants';
 
 const poseDistances: Record<Pose, number> = {
@@ -80,11 +83,12 @@ export function Controls({ naked }: ControlsProps) {
   //   protagonistHullOrigin.y +
   //   protagonistTurretOrigin.y +
   //   protagonistGunOrigin.y;
-  // const inspectModeInitialPosition = [
-  //   -8,
-  //   gunHeight + (naked ? 10 : 4),
-  //   -13,
-  // ] as const;
+  const gunHeight = 2;
+  const inspectModeInitialPosition = [
+    -8,
+    gunHeight + (naked ? 10 : 4),
+    -13,
+  ] as const;
   // const protagonistGunOriginOnlyY = new Vector3(
   //   0,
   //   protagonistTurretModelDefinition.gun_origin.y,
@@ -206,131 +210,131 @@ export function Controls({ naked }: ControlsProps) {
   //   };
   // }, [camera, protagonistTank.id, antagonistTank.id]);
 
-  // useEffect(() => {
-  //   let isInitialIteration = true;
+  useEffect(() => {
+    let isInitialIteration = true;
 
-  //   function handleDisturbance() {
-  //     setAutoRotate(false);
-  //   }
+    function handleDisturbance() {
+      setAutoRotate(false);
+    }
 
-  //   function handleKeyDown(event: KeyboardEvent) {
-  //     if (display !== TankopediaDisplay.ShootingRange || event.repeat) return;
+    // function handleKeyDown(event: KeyboardEvent) {
+    //   if (display !== TankopediaDisplay.ShootingRange || event.repeat) return;
 
-  //     if (event.key === 'Shift') {
-  //       mutateTankopediaEphemeral((draft) => {
-  //         draft.shootingRangeZoom =
-  //           draft.shootingRangeZoom === ShootingRangeZoom.Arcade
-  //             ? ShootingRangeZoom.Zoom0
-  //             : ShootingRangeZoom.Arcade;
-  //       });
-  //     }
-  //   }
+    //   if (event.key === 'Shift') {
+    //     mutateTankopediaEphemeral((draft) => {
+    //       draft.shootingRangeZoom =
+    //         draft.shootingRangeZoom === ShootingRangeZoom.Arcade
+    //           ? ShootingRangeZoom.Zoom0
+    //           : ShootingRangeZoom.Arcade;
+    //     });
+    //   }
+    // }
 
-  //   function handleWheel(event: WheelEvent) {
-  //     if (display !== TankopediaDisplay.ShootingRange) return;
+    // function handleWheel(event: WheelEvent) {
+    //   if (display !== TankopediaDisplay.ShootingRange) return;
 
-  //     event.preventDefault();
+    //   event.preventDefault();
 
-  //     mutateTankopediaEphemeral((draft) => {
-  //       draft.shootingRangeZoom = clamp(
-  //         draft.shootingRangeZoom - Math.sign(event.deltaY),
-  //         ShootingRangeZoom.Arcade,
-  //         ShootingRangeZoom.Zoom2,
-  //       );
-  //     });
-  //   }
+    //   mutateTankopediaEphemeral((draft) => {
+    //     draft.shootingRangeZoom = clamp(
+    //       draft.shootingRangeZoom - Math.sign(event.deltaY),
+    //       ShootingRangeZoom.Arcade,
+    //       ShootingRangeZoom.Zoom2,
+    //     );
+    //   });
+    // }
 
-  //   function handleScroll(event: Event) {
-  //     if (display !== TankopediaDisplay.ShootingRange) return;
+    // function handleScroll(event: Event) {
+    //   if (display !== TankopediaDisplay.ShootingRange) return;
 
-  //     event.preventDefault();
-  //   }
+    //   event.preventDefault();
+    // }
 
-  //   poseEvent.on(handleDisturbance);
-  //   canvas.addEventListener('pointerdown', handleDisturbance);
-  //   window.addEventListener('keydown', handleKeyDown);
-  //   canvas.addEventListener('wheel', handleWheel);
-  //   document.body.addEventListener('scroll', handleScroll);
+    // poseEvent.on(handleDisturbance);
+    canvas.addEventListener('pointerdown', handleDisturbance);
+    // window.addEventListener('keydown', handleKeyDown);
+    // canvas.addEventListener('wheel', handleWheel);
+    // document.body.addEventListener('scroll', handleScroll);
 
-  //   function updateCamera() {
-  //     if (!orbitControls.current) return;
+    function updateCamera() {
+      if (!orbitControls.current) return;
 
-  //     orbitControls.current.rotateSpeed = 0.25;
+      orbitControls.current.rotateSpeed = 0.25;
 
-  //     if (display === TankopediaDisplay.ShootingRange) {
-  //       const { shootingRangeZoom } = tankopediaEphemeralStore.getState();
+      if (display === TankopediaDisplay.ShootingRange) {
+        const { shootingRangeZoom } = tankopediaEphemeralStore.getState();
 
-  //       orbitControls.current.enablePan = false;
-  //       orbitControls.current.enableZoom = false;
-  //       orbitControls.current.rotateSpeed *=
-  //         SHOOTING_RANGE_ZOOM_COEFFICIENTS[shootingRangeZoom];
-  //       camera.fov =
-  //         ARCADE_MODE_FOV * SHOOTING_RANGE_ZOOM_COEFFICIENTS[shootingRangeZoom];
+        orbitControls.current.enablePan = false;
+        orbitControls.current.enableZoom = false;
+        orbitControls.current.rotateSpeed *=
+          SHOOTING_RANGE_ZOOM_COEFFICIENTS[shootingRangeZoom];
+        camera.fov =
+          ARCADE_MODE_FOV * SHOOTING_RANGE_ZOOM_COEFFICIENTS[shootingRangeZoom];
 
-  //       if (shootingRangeZoom === ShootingRangeZoom.Arcade) {
-  //         orbitControls.current.target.set(0, gunHeight + 3, 0);
+        // if (shootingRangeZoom === ShootingRangeZoom.Arcade) {
+        //   orbitControls.current.target.set(0, gunHeight + 3, 0);
 
-  //         if (isInitialIteration) {
-  //           isInitialIteration = false;
-  //           camera.position.set(
-  //             0,
-  //             gunHeight + ARCADE_MODE_DISTANCE * Math.sin(ARCADE_MODE_ANGLE),
-  //             ARCADE_MODE_DISTANCE * Math.cos(ARCADE_MODE_ANGLE),
-  //           );
-  //         } else {
-  //           camera.position
-  //             .copy(aimTarget)
-  //             .sub(orbitControls.current.target)
-  //             .normalize()
-  //             .multiplyScalar(-ARCADE_MODE_DISTANCE)
-  //             .add(orbitControls.current.target);
-  //         }
-  //       } else {
-  //         orbitControls.current.target.copy(shellOrigin);
+        //   if (isInitialIteration) {
+        //     isInitialIteration = false;
+        //     camera.position.set(
+        //       0,
+        //       gunHeight + ARCADE_MODE_DISTANCE * Math.sin(ARCADE_MODE_ANGLE),
+        //       ARCADE_MODE_DISTANCE * Math.cos(ARCADE_MODE_ANGLE),
+        //     );
+        //   } else {
+        //     camera.position
+        //       .copy(aimTarget)
+        //       .sub(orbitControls.current.target)
+        //       .normalize()
+        //       .multiplyScalar(-ARCADE_MODE_DISTANCE)
+        //       .add(orbitControls.current.target);
+        //   }
+        // } else {
+        //   orbitControls.current.target.copy(shellOrigin);
 
-  //         camera.position
-  //           .copy(aimTarget)
-  //           .sub(shellOrigin)
-  //           .normalize()
-  //           .multiplyScalar(-Number.EPSILON)
-  //           .add(shellOrigin);
-  //       }
-  //     } else {
-  //       camera.position.set(...inspectModeInitialPosition);
-  //       orbitControls.current.target.set(0, gunHeight / (naked ? 4 : 2), 0);
-  //       orbitControls.current.enablePan = true;
-  //       orbitControls.current.enableZoom = true;
-  //       camera.fov = naked ? 20 : 25;
-  //     }
+        //   camera.position
+        //     .copy(aimTarget)
+        //     .sub(shellOrigin)
+        //     .normalize()
+        //     .multiplyScalar(-Number.EPSILON)
+        //     .add(shellOrigin);
+        // }
+      } else {
+        camera.position.set(...inspectModeInitialPosition);
+        orbitControls.current.target.set(0, gunHeight / (naked ? 4 : 2), 0);
+        orbitControls.current.enablePan = true;
+        orbitControls.current.enableZoom = true;
+        camera.fov = naked ? 20 : 25;
+      }
 
-  //     camera.updateProjectionMatrix();
-  //   }
+      camera.updateProjectionMatrix();
+    }
 
-  //   updateCamera();
+    updateCamera();
 
-  //   const unsubscribeDisplay = tankopediaEphemeralStore.subscribe(
-  //     (state) => state.display,
-  //     () => {
-  //       handleDisturbance();
-  //       updateCamera();
-  //     },
-  //   );
+    const unsubscribeDisplay = tankopediaEphemeralStore.subscribe(
+      (state) => state.display,
+      () => {
+        handleDisturbance();
+        updateCamera();
+      },
+    );
 
-  //   const unsubscribeShootingRangeZoom = tankopediaEphemeralStore.subscribe(
-  //     (state) => state.shootingRangeZoom,
-  //     updateCamera,
-  //   );
+    const unsubscribeShootingRangeZoom = tankopediaEphemeralStore.subscribe(
+      (state) => state.shootingRangeZoom,
+      updateCamera,
+    );
 
-  //   return () => {
-  //     canvas.removeEventListener('pointerdown', handleDisturbance);
-  //     poseEvent.off(handleDisturbance);
-  //     unsubscribeDisplay();
-  //     unsubscribeShootingRangeZoom();
-  //     window.removeEventListener('keydown', handleKeyDown);
-  //     canvas.removeEventListener('wheel', handleWheel);
-  //     document.body.removeEventListener('scroll', handleScroll);
-  //   };
-  // }, [display === TankopediaDisplay.ShootingRange]);
+    return () => {
+      canvas.removeEventListener('pointerdown', handleDisturbance);
+      // poseEvent.off(handleDisturbance);
+      unsubscribeDisplay();
+      unsubscribeShootingRangeZoom();
+      // window.removeEventListener('keydown', handleKeyDown);
+      // canvas.removeEventListener('wheel', handleWheel);
+      // document.body.removeEventListener('scroll', handleScroll);
+    };
+  }, [display === TankopediaDisplay.ShootingRange]);
 
   return (
     <OrbitControls

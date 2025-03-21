@@ -125,7 +125,7 @@ export function Thicknesses() {
         >
           <Flex direction="column" align="end" justify="between">
             <Text size="1">
-              {strings.website.tools.tanks.sandbox.static.external}
+              {strings.website.tools.tanks.sandbox.static.modules}
             </Text>
           </Flex>
 

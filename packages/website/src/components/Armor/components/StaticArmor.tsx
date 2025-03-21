@@ -1,10 +1,4 @@
-import { asset } from '@blitzkit/core';
-import { useGLTF } from '@react-three/drei';
 import { memo } from 'react';
-import { Color, Material, MeshBasicMaterial } from 'three';
-import { jsxTree } from '../../../core/blitzkit/jsxTree';
-import { Duel } from '../../../stores/duel';
-import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
 import { StaticArmorSceneComponents } from './StaticArmorSceneComponents';
 
 export interface ThicknessRange {
@@ -55,11 +49,16 @@ export const StaticArmor = memo(() => {
 
   // useTankTransform(track, turret, turretContainer, gunContainer);
 
-
   return (
     <group>
       <StaticArmorSceneComponents group="hull" />
-      
+      <StaticArmorSceneComponents group="chassis" />
+      <group position={[0.7, 1.6, 0]}>
+        <StaticArmorSceneComponents group="turret_01" />
+        <group position={[1, 0.36, 0]}>
+          <StaticArmorSceneComponents group="gun_01" />
+        </group>
+      </group>
     </group>
   );
 });

@@ -900,7 +900,7 @@
               "element": {
                 "primary": "Primary",
                 "spaced": "Spaced",
-                "external": "External",
+                "modules": "Modules",
                 "gap": "Gap",
                 "gun": "Gun",
                 "track": "Tracks"
@@ -922,7 +922,7 @@
             "name": "Static armor",
             "primary": "Primary",
             "spaced": "Spaced",
-            "external": "External",
+            "modules": "Modules",
             "edit": {
               "label": "Edit",
               "reset": "Reset"
