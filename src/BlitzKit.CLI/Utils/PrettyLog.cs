@@ -4,7 +4,7 @@ namespace BlitzKit.CLI.Utils
   {
     public static void Log(string message)
     {
-      Console.WriteLine($"[LOG] {message}");
+      Console.WriteLine($"[INFO] {message}");
     }
 
     public static void Warn(string message)
@@ -17,25 +17,26 @@ namespace BlitzKit.CLI.Utils
     public static void Error(string message)
     {
       Console.ForegroundColor = ConsoleColor.Red;
-      Console.WriteLine($"[ERROR] {message}");
+      Console.WriteLine($"[ERR ] {message}");
       Console.ResetColor();
     }
 
     public static void Success(string message)
     {
       Console.ForegroundColor = ConsoleColor.Green;
-      Console.WriteLine($"[SUCCESS] {message}");
+      Console.WriteLine($"[OK  ] {message}");
       Console.ResetColor();
     }
 
     public static void Background(string message)
     {
       Console.ForegroundColor = ConsoleColor.DarkGray;
-      Console.WriteLine($"[BACKGROUND] {message}");
+      Console.WriteLine($"[BG  ] {message}");
       Console.ResetColor();
     }
 
-    public static void Line() {
+    public static void Line()
+    {
       Console.WriteLine();
     }
   }
