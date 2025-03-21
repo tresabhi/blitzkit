@@ -1,7 +1,5 @@
-using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Net;
-using System.Threading.Tasks;
 using BlitzKit.CLI.Utils;
 using DotNetEnv;
 using Octokit;
@@ -10,7 +8,8 @@ namespace BlitzKit.CLI.Models
 {
   public class AssetUploader(string message)
   {
-    public required bool disabled;
+    public bool enabled = true;
+
     private static readonly int TIME_PER_BLOB = (int)Math.Pow(2, 4) * 10000;
     private static readonly int TIME_BETWEEN_BLOBS = (int)(60 * 60 * 1000 / 5000 / 0.9);
     private static readonly int MAX_TREE_SIZE = 7_000_000; // 7MB
@@ -31,7 +30,7 @@ namespace BlitzKit.CLI.Models
 
     public async Task Add(FileChange change)
     {
-      if (disabled)
+      if (!enabled)
       {
         return;
       }
@@ -107,7 +106,7 @@ namespace BlitzKit.CLI.Models
 
     public async Task Flush()
     {
-      if (disabled || changes.Count == 0)
+      if (!enabled || changes.Count == 0)
       {
         return;
       }
@@ -142,7 +141,7 @@ namespace BlitzKit.CLI.Models
 
             await Task.Delay((int)Math.Max(0, TIME_BETWEEN_BLOBS - stopwatch.ElapsedMilliseconds));
 
-            PrettyLog.Success($"Blobbed {change.Path} (+{stopwatch.ElapsedMilliseconds}ms)");
+            PrettyLog.Background($"Blobbed {change.Path} (+{stopwatch.ElapsedMilliseconds}ms)");
 
             newTree.Tree.Add(
               new()
