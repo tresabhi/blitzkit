@@ -13,6 +13,7 @@
     "build:averages": "bun --filter=@blitzkit/scripts run build:averages",
     "build:bot": "cd packages/scripts && bun run build:bot",
     "build:website": "bun build:prisma --no-hints && cd packages/website && bun run build",
+    "buildonly:website": "bun build:prisma --no-hints && cd packages/website && bun run buildonly",
     "build:prisma": "prisma generate",
     "build:sitemap": "bun scripts/sitemap.ts",
     "build:docs": "vitepress build docs",
