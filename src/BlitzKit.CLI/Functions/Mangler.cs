@@ -223,9 +223,9 @@ namespace BlitzKit.CLI.Functions
       slug = MultipleDashesRegex().Replace(slug, "-");
       slug = TrailingDashRegex().Replace(slug, "");
 
-      // await MangleHull(pda);
+      await MangleHull(pda);
       // await MangleIcon(pda);
-      await MangleArmor(pda);
+      // await MangleArmor(pda);
 
       Tank tank = new()
       {
@@ -312,14 +312,37 @@ namespace BlitzKit.CLI.Functions
     async Task MangleHull(UObject pda)
     {
       var id = PropertyUtil.Get<FName>(pda, "TankId").Text;
-      var hulls = PropertyUtil.Get<UDataTable>(pda, "DT_Hulls");
-      UDataTableUtility.TryGetDataTableRow(hulls, "hull", StringComparison.Ordinal, out var hull);
+
+      var hullsDt = PropertyUtil.Get<UDataTable>(pda, "DT_Hulls");
+      var chassisDt = PropertyUtil.Get<UDataTable>(pda, "DT_Chassis");
+
+      UDataTableUtility.TryGetDataTableRow(hullsDt, "hull", StringComparison.Ordinal, out var hull);
+      UDataTableUtility.TryGetDataTableRow(
+        chassisDt,
+        "chassis",
+        StringComparison.Ordinal,
+        out var chassis
+      );
+
       var hullVisualData = PropertyUtil.Get<UObject>(hull, "VisualData");
+      var chassisVisualData = PropertyUtil.Get<UObject>(chassis, "VisualData");
+
       var hullMeshSettings = PropertyUtil.Get<FStructFallback>(hullVisualData, "MeshSettings");
+      var chassisMeshSettings = PropertyUtil.Get<FStructFallback>(
+        chassisVisualData,
+        "MeshSettings"
+      );
+
       var hullCollision = PropertyUtil.Get<UStaticMesh>(hullMeshSettings, "CollisionMesh");
+      var chassisCollision = PropertyUtil.Get<UStaticMesh>(chassisMeshSettings, "CollisionMesh");
+
       MonoGltf hullCollisionGltf = new(hullCollision);
+      MonoGltf chassisCollisionGltf = new(chassisCollision);
 
       await assetUploader.Add(new($"tanks/{id}/collision/hull.glb", hullCollisionGltf.Write()));
+      await assetUploader.Add(
+        new($"tanks/{id}/collision/chassis.glb", chassisCollisionGltf.Write())
+      );
     }
   }
 }
