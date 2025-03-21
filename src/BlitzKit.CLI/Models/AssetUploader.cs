@@ -46,7 +46,6 @@ namespace BlitzKit.CLI.Models
         PrettyLog.Background(
           $"🟢 {blobPath} (+{change.Content.Count.ToString("N0", Program.Culture)}B)"
         );
-        changes.Add(change);
       }
       else if (response.StatusCode == HttpStatusCode.OK)
       {
@@ -81,7 +80,6 @@ namespace BlitzKit.CLI.Models
           PrettyLog.Background(
             $"🟡 {blobPath} ({(deltaSize > 0 ? "+" : "")}{deltaSize.ToString("N0", Program.Culture)}B)"
           );
-          changes.Add(change);
         }
         else
         {

@@ -1,22 +1,17 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Blitzkit;
 using BlitzKit.CLI.Models;
 using BlitzKit.CLI.Quicktype.Locales;
 using BlitzKit.CLI.Utils;
-using CUE4Parse.MappingsProvider;
 using CUE4Parse.UE4.Assets.Exports;
 using CUE4Parse.UE4.Assets.Exports.Engine;
 using CUE4Parse.UE4.Assets.Exports.StaticMesh;
 using CUE4Parse.UE4.Assets.Exports.Texture;
 using CUE4Parse.UE4.Assets.Objects;
-using CUE4Parse.UE4.Assets.Objects.Properties;
 using CUE4Parse.UE4.Objects.UObject;
 using CUE4Parse.Utils;
 using Google.Protobuf;
-using Google.Protobuf.Collections;
-using Org.BouncyCastle.Asn1.Misc;
 using YamlDotNet.Serialization;
 
 namespace BlitzKit.CLI.Functions
@@ -25,10 +20,7 @@ namespace BlitzKit.CLI.Functions
   {
     static readonly string PenetrationGroupNameMapPrefix =
       "EMintSDKProtoData_BlitzStaticTankUpgradeSingleStage_PenetrationGroupUpgrade_TankPart";
-    static readonly Dictionary<string, string> PenetrationGroupNameMap = new Dictionary<
-      string,
-      string
-    >
+    static readonly Dictionary<string, string> PenetrationGroupNameMap = new()
     {
       { $"{PenetrationGroupNameMapPrefix}::TANK_PART_CHASSIS", "chassis" },
       { $"{PenetrationGroupNameMapPrefix}::TANK_PART_HULL", "hull" },
