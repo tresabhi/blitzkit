@@ -18,28 +18,28 @@ export function QuickInputs() {
   const yawInput = useRef<HTMLInputElement>(null);
   const pitchInput = useRef<HTMLInputElement>(null);
   const tankModelDefinition = useTankModelDefinition();
-  const turretModelDefinition =
-    tankModelDefinition.turrets[protagonist.turret.id];
-  const gunModelDefinition =
-    turretModelDefinition.guns[protagonist.gun.gun_type!.value.base.id];
+  // const turretModelDefinition =
+  //   tankModelDefinition.turrets[protagonist.turret.id];
+  // const gunModelDefinition =
+  //   turretModelDefinition.guns[protagonist.gun.gun_type!.value.base.id];
   const initialGunPitch =
     tankModelDefinition.initial_turret_rotation?.pitch ?? 0;
   const hasImprovedVerticalStabilizer = useEquipment(122);
   const hasDownImprovedVerticalStabilizer = useEquipment(124);
 
-  useEffect(() => {
-    if (!yawInput.current) return;
+  // useEffect(() => {
+  //   if (!yawInput.current) return;
 
-    yawInput.current.value = radToDeg(protagonist.yaw).toFixed(1);
-  }, [protagonist.yaw]);
+  //   yawInput.current.value = radToDeg(protagonist.yaw).toFixed(1);
+  // }, [protagonist.yaw]);
 
-  useEffect(() => {
-    if (!pitchInput.current) return;
+  // useEffect(() => {
+  //   if (!pitchInput.current) return;
 
-    pitchInput.current.value = (
-      -radToDeg(protagonist.pitch) + initialGunPitch
-    ).toFixed(1);
-  }, [protagonist.pitch]);
+  //   pitchInput.current.value = (
+  //     -radToDeg(protagonist.pitch) + initialGunPitch
+  //   ).toFixed(1);
+  // }, [protagonist.pitch]);
 
   useEffect(() => {
     function handleTransformEvent({ pitch, yaw }: ModelTransformEventData) {

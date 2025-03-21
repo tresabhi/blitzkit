@@ -134,7 +134,7 @@ export const TankopediaEphemeral = createContextualStore((armor: TankArmor) => {
       armor,
       controlsEnabled: true,
       xpMultiplier: 1,
-      display: TankopediaDisplay.Model,
+      display: TankopediaDisplay.StaticArmor,
     })),
   );
 });

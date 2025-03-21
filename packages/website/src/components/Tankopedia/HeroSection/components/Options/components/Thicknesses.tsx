@@ -1,12 +1,10 @@
 import { literals } from '@blitzkit/i18n/src/literals';
 import { EyeClosedIcon, EyeOpenIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { Button, Checkbox, Flex, Text } from '@radix-ui/themes';
-import { Suspense } from 'react';
 import { useLocale } from '../../../../../../hooks/useLocale';
 import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
 import { TankopediaPersistent } from '../../../../../../stores/tankopediaPersistent';
 import type { ThicknessRange } from '../../../../../Armor/components/StaticArmor';
-import { DynamicArmorSwitcher } from './DynamicArmorSwitcher';
 
 interface ThicknessesProps {
   thicknessRange: ThicknessRange;
@@ -190,9 +188,9 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
         </Button>
       </Flex>
 
-      <Suspense>
+      {/* <Suspense>
         <DynamicArmorSwitcher />
-      </Suspense>
+      </Suspense> */}
     </Flex>
   );
 }

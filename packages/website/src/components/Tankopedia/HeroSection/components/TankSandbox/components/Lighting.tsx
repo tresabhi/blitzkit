@@ -2,19 +2,14 @@ import { Environment } from '@react-three/drei';
 import { times } from 'lodash-es';
 import { Euler } from 'three';
 import { degToRad } from 'three/src/math/MathUtils.js';
-import { useModel } from '../../../../../../hooks/useModel';
-import { Duel } from '../../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
 import { TankopediaDisplay } from '../../../../../../stores/tankopediaPersistent/constants';
 
 const LIGHTS_COUNT = 5;
 
 export function Lighting() {
-  const protagonist = Duel.use((state) => state.protagonist);
   const display = TankopediaEphemeral.use((state) => state.display);
-  const { hasPbr } = useModel(protagonist.tank.id);
-  const isBrighterLighting =
-    !hasPbr && display !== TankopediaDisplay.StaticArmor;
+  const isBrighterLighting = display !== TankopediaDisplay.StaticArmor;
 
   return (
     <>

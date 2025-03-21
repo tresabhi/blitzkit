@@ -1,5 +1,5 @@
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
-import { useRef } from 'react';
+import { Suspense, useRef } from 'react';
 import { NAVBAR_HEIGHT } from '../../../constants/navbar';
 import { Var } from '../../../core/radix/var';
 import { useFullScreen } from '../../../hooks/useFullScreen';
@@ -7,6 +7,8 @@ import { useLocale } from '../../../hooks/useLocale';
 import { Duel } from '../../../stores/duel';
 import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
 import type { MaybeSkeletonComponentProps } from '../../../types/maybeSkeletonComponentProps';
+import { Options } from './components/Options';
+import { TankSandbox } from './components/TankSandbox';
 import { TankSandboxLoader } from './components/TankSandboxLoader';
 
 export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
@@ -137,12 +139,12 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
             <Box width="100%" height="100%">
               {skeleton && <TankSandboxLoader id={protagonist.id} />}
 
-              {/* <Suspense fallback={<TankSandboxLoader id={protagonist.id} />}>
+              <Suspense fallback={<TankSandboxLoader id={protagonist.id} />}>
                 <TankSandbox ref={canvas} thicknessRange={thicknessRange} />
-              </Suspense> */}
+              </Suspense>
             </Box>
 
-            {/* <Options canvas={canvas} thicknessRange={thicknessRange} /> */}
+            <Options canvas={canvas} thicknessRange={thicknessRange} />
           </Box>
         </Box>
       </Flex>

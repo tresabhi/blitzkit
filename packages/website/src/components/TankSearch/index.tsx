@@ -3,6 +3,7 @@ import {
   normalizeBoundingBox,
   resolveDpm,
   SEARCH_KEYS,
+  Tank,
   unionBoundingBox,
   type TankDefinition,
 } from '@blitzkit/core';
@@ -35,8 +36,8 @@ import { MAX_RECENTLY_VIEWED } from './constants';
 
 type TankSearchProps = Omit<FlexProps, 'onSelect'> & {
   compact?: boolean;
-  onSelect?: (tank: TankDefinition) => void;
-  onSelectAll?: (tanks: TankDefinition[]) => void;
+  onSelect?: (tank: Tank) => void;
+  onSelectAll?: (tanks: Tank[]) => void;
 };
 
 const PREVIEW_COUNT = 20;

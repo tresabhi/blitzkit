@@ -1,37 +1,6 @@
-import {
-  asset,
-  imgur,
-  resolvePenetrationCoefficient,
-  TIER_ROMAN_NUMERALS,
-  uniqueGuns,
-} from '@blitzkit/core';
-import { literals } from '@blitzkit/i18n/src/literals';
-import {
-  CameraIcon,
-  CopyIcon,
-  DownloadIcon,
-  EnterFullScreenIcon,
-  ExitFullScreenIcon,
-  EyeOpenIcon,
-  GearIcon,
-} from '@radix-ui/react-icons';
-import {
-  Box,
-  Button,
-  Checkbox,
-  Dialog,
-  DropdownMenu,
-  Flex,
-  IconButton,
-  Popover,
-  SegmentedControl,
-  Tabs,
-  Text,
-  Tooltip,
-} from '@radix-ui/themes';
-import { Suspense, useState, type RefObject } from 'react';
-import { Pose, poseEvent } from '../../../../../core/blitzkit/pose';
-import { useEquipment } from '../../../../../hooks/useEquipment';
+import { imgur } from '@blitzkit/core';
+import { Box, Flex, SegmentedControl, Tooltip } from '@radix-ui/themes';
+import { useState, type RefObject } from 'react';
 import { useFullScreen } from '../../../../../hooks/useFullScreen';
 import { useFullscreenAvailability } from '../../../../../hooks/useFullscreenAvailability';
 import { useLocale } from '../../../../../hooks/useLocale';
@@ -44,12 +13,6 @@ import {
 import { TankopediaPersistent } from '../../../../../stores/tankopediaPersistent';
 import { TankopediaDisplay } from '../../../../../stores/tankopediaPersistent/constants';
 import type { ThicknessRange } from '../../../../Armor/components/StaticArmor';
-import { ModuleButton } from '../../../../ModuleButtons/ModuleButton';
-import { SmallTankIcon } from '../../../../SmallTankIcon';
-import { TankSearch } from '../../../../TankSearch';
-import { CustomShellButton } from './components/CustomShellButton';
-import { DynamicArmorSwitcher } from './components/DynamicArmorSwitcher';
-import { QuickInputs } from './components/QuickInputs';
 import { Thicknesses } from './components/Thicknesses';
 
 interface OptionsProps {
@@ -78,22 +41,22 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
   const fullScreenAvailable = useFullscreenAvailability();
   const developerMode = App.use((state) => state.developerMode);
   const protagonistTank = Duel.use((state) => state.protagonist.tank);
-  const antagonistGun = Duel.use((state) => state.antagonist.gun);
-  const antagonistShell = Duel.use((state) => state.antagonist.shell);
+  // const antagonistGun = Duel.use((state) => state.antagonist.gun);
+  // const antagonistShell = Duel.use((state) => state.antagonist.shell);
   const [antagonistSelectorOpen, setAntagonistSelectorOpen] = useState(false);
   const antagonistTank = Duel.use((state) => state.antagonist.tank);
-  const hasCalibratedShells = useEquipment(103, true);
+  // const hasCalibratedShells = useEquipment(103, true);
   const [tab, setTab] = useState('search');
   const mutateDuel = Duel.useMutation();
-  const hasEnhancedArmor = useEquipment(110);
-  const antagonistUniqueGuns = uniqueGuns(antagonistTank.turrets);
+  // const hasEnhancedArmor = useEquipment(110);
+  // const antagonistUniqueGuns = uniqueGuns(antagonistTank.turrets);
   const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const { strings, unwrap } = useLocale();
 
   return (
     <>
-      <QuickInputs />
+      {/* <QuickInputs /> */}
 
       {display === TankopediaDisplay.ShootingRange && (
         <Box
@@ -116,7 +79,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
         <Thicknesses thicknessRange={thicknessRange} />
       )}
 
-      {display === TankopediaDisplay.DynamicArmor && (
+      {/* {display === TankopediaDisplay.DynamicArmor && (
         <Flex
           gap="2"
           direction="column"
@@ -137,6 +100,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
               ])}
             </Text>
           )}
+
           {antagonistUniqueGuns.length > 1 && (
             <Popover.Root>
               <Popover.Trigger>
@@ -215,6 +179,8 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
               </Popover.Content>
             </Popover.Root>
           )}
+
+          
           <Flex
             direction="column"
             style={{
@@ -321,7 +287,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
             <DynamicArmorSwitcher />
           </Suspense>
         </Flex>
-      )}
+      )} */}
 
       <Flex
         direction="column"
@@ -331,7 +297,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
         left="50%"
         style={{ transform: 'translateX(-50%)' }}
       >
-        {display === TankopediaDisplay.DynamicArmor && (
+        {/* {display === TankopediaDisplay.DynamicArmor && (
           <>
             <Flex
               align="center"
@@ -380,13 +346,13 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                       onSelect={(tank) => {
                         mutateDuel((draft) => {
                           draft.antagonist.tank = tank;
-                          draft.antagonist.engine = tank.engines.at(-1)!;
-                          draft.antagonist.track = tank.tracks.at(-1)!;
-                          draft.antagonist.turret = tank.turrets.at(-1)!;
-                          draft.antagonist.gun =
-                            draft.antagonist.turret.guns.at(-1)!;
-                          draft.antagonist.shell =
-                            draft.antagonist.gun.gun_type!.value.base.shells[0];
+                          // draft.antagonist.engine = tank.engines.at(-1)!;
+                          // draft.antagonist.track = tank.tracks.at(-1)!;
+                          // draft.antagonist.turret = tank.turrets.at(-1)!;
+                          // draft.antagonist.gun =
+                          //   draft.antagonist.turret.guns.at(-1)!;
+                          // draft.antagonist.shell =
+                          //   draft.antagonist.gun.gun_type!.value.base.shells[0];
                         });
                         setAntagonistSelectorOpen(false);
                       }}
@@ -396,7 +362,8 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
               </Dialog.Root>
             </Flex>
           </>
-        )}
+        )} */}
+
         <Flex gap="3" align="center" mt="2">
           <SegmentedControl.Root
             value={`${display}`}
@@ -441,7 +408,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
             </SegmentedControl.Item> */}
           </SegmentedControl.Root>
 
-          <DropdownMenu.Root>
+          {/* <DropdownMenu.Root>
             <DropdownMenu.Trigger>
               <IconButton variant="ghost" color="gray">
                 <EyeOpenIcon />
@@ -461,9 +428,9 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                 {strings.website.tools.tanks.sandbox.poses.default}
               </DropdownMenu.Item>
             </DropdownMenu.Content>
-          </DropdownMenu.Root>
+          </DropdownMenu.Root> */}
 
-          <DropdownMenu.Root>
+          {/* <DropdownMenu.Root>
             <DropdownMenu.Trigger>
               <IconButton variant="ghost" color="gray">
                 <GearIcon />
@@ -549,9 +516,9 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                 {strings.website.tools.tanks.sandbox.settings.show_grid}
               </DropdownMenu.CheckboxItem>
             </DropdownMenu.Content>
-          </DropdownMenu.Root>
+          </DropdownMenu.Root> */}
 
-          <Popover.Root>
+          {/* <Popover.Root>
             <Popover.Trigger>
               <IconButton color="gray" variant="ghost">
                 <CameraIcon />
@@ -603,9 +570,9 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                 </Popover.Close>
               </Flex>
             </Popover.Content>
-          </Popover.Root>
+          </Popover.Root> */}
 
-          {fullScreenAvailable && (
+          {/* {fullScreenAvailable && (
             <IconButton
               color="gray"
               variant="ghost"
@@ -617,7 +584,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
             >
               {isFullScreen ? <ExitFullScreenIcon /> : <EnterFullScreenIcon />}
             </IconButton>
-          )}
+          )} */}
         </Flex>
       </Flex>
     </>

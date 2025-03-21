@@ -18,6 +18,8 @@ import { TankopediaDisplay } from '../../../../../../stores/tankopediaPersistent
 import { ModelTankWrapper } from '../../../../../Armor/components/ModelTankWrapper';
 
 export function TankModel() {
+  return null;
+
   const mutateDuel = Duel.useMutation();
   const duelStore = Duel.useStore();
   const protagonist = Duel.use((draft) => draft.protagonist);

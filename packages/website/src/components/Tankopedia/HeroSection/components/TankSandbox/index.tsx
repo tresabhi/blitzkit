@@ -1,19 +1,7 @@
 import { BLITZKIT_TANK_ICON_SIZE } from '@blitzkit/core';
 import { Canvas } from '@react-three/fiber';
-import {
-  forwardRef,
-  Suspense,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-} from 'react';
-import { applyPitchYawLimits } from '../../../../../core/blitz/applyPitchYawLimits';
-import { modelTransformEvent } from '../../../../../core/blitzkit/modelTransform';
-import { Pose, poseEvent } from '../../../../../core/blitzkit/pose';
-import { useEquipment } from '../../../../../hooks/useEquipment';
+import { forwardRef, Suspense, useImperativeHandle, useRef } from 'react';
 import { useOnScreen } from '../../../../../hooks/useOnScreen';
-import { useTankModelDefinition } from '../../../../../hooks/useTankModelDefinition';
-import { Duel } from '../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../stores/tankopediaEphemeral';
 import { TankopediaPersistent } from '../../../../../stores/tankopediaPersistent';
 import { TankopediaDisplay } from '../../../../../stores/tankopediaPersistent/constants';
@@ -40,16 +28,16 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
   ({ thicknessRange, naked }, ref) => {
     const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
     const canvas = useRef<HTMLCanvasElement>(null);
-    const hasImprovedVerticalStabilizer = useEquipment(122);
-    const hasDownImprovedVerticalStabilizer = useEquipment(124);
-    const protagonistGun = Duel.use((state) => state.protagonist.gun);
-    const protagonistTurret = Duel.use((state) => state.protagonist.turret);
-    const mutateDuel = Duel.useMutation();
-    const tankModelDefinition = useTankModelDefinition();
-    const turretModelDefinition =
-      tankModelDefinition.turrets[protagonistTurret.id];
-    const gunModelDefinition =
-      turretModelDefinition.guns[protagonistGun.gun_type!.value.base.id];
+    // const hasImprovedVerticalStabilizer = useEquipment(122);
+    // const hasDownImprovedVerticalStabilizer = useEquipment(124);
+    // const protagonistGun = Duel.use((state) => state.protagonist.gun);
+    // const protagonistTurret = Duel.use((state) => state.protagonist.turret);
+    // const mutateDuel = Duel.useMutation();
+    // const tankModelDefinition = useTankModelDefinition();
+    // const turretModelDefinition =
+    //   tankModelDefinition.turrets[protagonistTurret.id];
+    // const gunModelDefinition =
+    //   turretModelDefinition.guns[protagonistGun.gun_type!.value.base.id];
     const display = TankopediaEphemeral.use((state) => state.display);
     const hideTankModelUnderArmor = TankopediaPersistent.use(
       (state) => state.hideTankModelUnderArmor,
@@ -72,97 +60,97 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
       window.removeEventListener('pointerup', handlePointerUp);
     }
 
-    useEffect(() => {
-      function handlePoseEvent(pose: Pose) {
-        switch (pose) {
-          case Pose.HullDown: {
-            mutateDuel((draft) => {
-              const [pitch, yaw] = applyPitchYawLimits(
-                -Infinity,
-                0,
-                gunModelDefinition.pitch,
-                turretModelDefinition.yaw,
-                hasImprovedVerticalStabilizer,
-                hasDownImprovedVerticalStabilizer,
-              );
+    // useEffect(() => {
+    //   function handlePoseEvent(pose: Pose) {
+    //     switch (pose) {
+    //       case Pose.HullDown: {
+    //         mutateDuel((draft) => {
+    //           const [pitch, yaw] = applyPitchYawLimits(
+    //             -Infinity,
+    //             0,
+    //             gunModelDefinition.pitch,
+    //             turretModelDefinition.yaw,
+    //             hasImprovedVerticalStabilizer,
+    //             hasDownImprovedVerticalStabilizer,
+    //           );
 
-              modelTransformEvent.emit({ pitch, yaw });
-              draft.protagonist.pitch = pitch;
-              draft.protagonist.yaw = yaw;
-            });
+    //           modelTransformEvent.emit({ pitch, yaw });
+    //           draft.protagonist.pitch = pitch;
+    //           draft.protagonist.yaw = yaw;
+    //         });
 
-            break;
-          }
+    //         break;
+    //       }
 
-          case Pose.FaceHug: {
-            mutateDuel((draft) => {
-              const [pitch, yaw] = applyPitchYawLimits(
-                Infinity,
-                0,
-                gunModelDefinition.pitch,
-                turretModelDefinition.yaw,
-                hasImprovedVerticalStabilizer,
-              );
+    //       case Pose.FaceHug: {
+    //         mutateDuel((draft) => {
+    //           const [pitch, yaw] = applyPitchYawLimits(
+    //             Infinity,
+    //             0,
+    //             gunModelDefinition.pitch,
+    //             turretModelDefinition.yaw,
+    //             hasImprovedVerticalStabilizer,
+    //           );
 
-              modelTransformEvent.emit({ pitch, yaw });
-              draft.protagonist.pitch = pitch;
-              draft.protagonist.yaw = yaw;
-            });
+    //           modelTransformEvent.emit({ pitch, yaw });
+    //           draft.protagonist.pitch = pitch;
+    //           draft.protagonist.yaw = yaw;
+    //         });
 
-            break;
-          }
+    //         break;
+    //       }
 
-          case Pose.Default:
-            mutateDuel((draft) => {
-              const [pitch, yaw] = applyPitchYawLimits(
-                0,
-                0,
-                gunModelDefinition.pitch,
-                turretModelDefinition.yaw,
-                hasImprovedVerticalStabilizer,
-              );
+    //       case Pose.Default:
+    //         mutateDuel((draft) => {
+    //           const [pitch, yaw] = applyPitchYawLimits(
+    //             0,
+    //             0,
+    //             gunModelDefinition.pitch,
+    //             turretModelDefinition.yaw,
+    //             hasImprovedVerticalStabilizer,
+    //           );
 
-              modelTransformEvent.emit({ pitch, yaw });
-              draft.protagonist.pitch = pitch;
-              draft.protagonist.yaw = yaw;
-            });
+    //           modelTransformEvent.emit({ pitch, yaw });
+    //           draft.protagonist.pitch = pitch;
+    //           draft.protagonist.yaw = yaw;
+    //         });
 
-            break;
-        }
-      }
+    //         break;
+    //     }
+    //   }
 
-      poseEvent.on(handlePoseEvent);
+    //   poseEvent.on(handlePoseEvent);
 
-      return () => {
-        poseEvent.off(handlePoseEvent);
-      };
-    });
+    //   return () => {
+    //     poseEvent.off(handlePoseEvent);
+    //   };
+    // });
 
-    useEffect(() => {
-      mutateDuel((draft) => {
-        [draft.protagonist.pitch, draft.protagonist.yaw] = applyPitchYawLimits(
-          draft.protagonist.pitch,
-          draft.protagonist.yaw,
-          gunModelDefinition.pitch,
-          turretModelDefinition.yaw,
-          hasImprovedVerticalStabilizer,
-        );
-      });
-    }, [protagonistGun, protagonistTurret]);
+    // useEffect(() => {
+    //   mutateDuel((draft) => {
+    //     [draft.protagonist.pitch, draft.protagonist.yaw] = applyPitchYawLimits(
+    //       draft.protagonist.pitch,
+    //       draft.protagonist.yaw,
+    //       gunModelDefinition.pitch,
+    //       turretModelDefinition.yaw,
+    //       hasImprovedVerticalStabilizer,
+    //     );
+    //   });
+    // }, [protagonistGun, protagonistTurret]);
 
-    useEffect(() => {
-      if (display !== TankopediaDisplay.DynamicArmor) {
-        mutateTankopediaEphemeral((draft) => {
-          draft.shot = undefined;
-        });
-      }
+    // useEffect(() => {
+    //   if (display !== TankopediaDisplay.DynamicArmor) {
+    //     mutateTankopediaEphemeral((draft) => {
+    //       draft.shot = undefined;
+    //     });
+    //   }
 
-      if (display !== TankopediaDisplay.StaticArmor) {
-        mutateTankopediaEphemeral((draft) => {
-          draft.highlightArmor = undefined;
-        });
-      }
-    }, [display]);
+    //   if (display !== TankopediaDisplay.StaticArmor) {
+    //     mutateTankopediaEphemeral((draft) => {
+    //       draft.highlightArmor = undefined;
+    //     });
+    //   }
+    // }, [display]);
 
     return (
       <Canvas
