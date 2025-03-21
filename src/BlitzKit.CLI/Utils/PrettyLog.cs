@@ -2,42 +2,23 @@ namespace BlitzKit.CLI.Utils
 {
   public static class PrettyLog
   {
-    public static void Log(string message)
+    private static void Write(string prefix, string message, ConsoleColor color)
     {
-      Console.WriteLine($"[INFO] {message}");
-    }
-
-    public static void Warn(string message)
-    {
-      Console.ForegroundColor = ConsoleColor.Yellow;
-      Console.WriteLine($"[WARN] {message}");
+      Console.ForegroundColor = color;
+      Console.WriteLine($"[{prefix}] {message}");
       Console.ResetColor();
     }
 
-    public static void Error(string message)
-    {
-      Console.ForegroundColor = ConsoleColor.Red;
-      Console.WriteLine($"[EROR] {message}");
-      Console.ResetColor();
-    }
+    public static void Log(string message) => Write("INFO", message, ConsoleColor.White);
 
-    public static void Success(string message)
-    {
-      Console.ForegroundColor = ConsoleColor.Green;
-      Console.WriteLine($"[OKAY] {message}");
-      Console.ResetColor();
-    }
+    public static void Warn(string message) => Write("WARN", message, ConsoleColor.Yellow);
 
-    public static void Background(string message)
-    {
-      Console.ForegroundColor = ConsoleColor.DarkGray;
-      Console.WriteLine($"[BACK] {message}");
-      Console.ResetColor();
-    }
+    public static void Error(string message) => Write("ERRR", message, ConsoleColor.Red);
 
-    public static void Line()
-    {
-      Console.WriteLine();
-    }
+    public static void Success(string message) => Write("OKAY", message, ConsoleColor.Green);
+
+    public static void Background(string message) => Write("BACK", message, ConsoleColor.DarkGray);
+
+    public static void Line() => Console.WriteLine();
   }
 }
