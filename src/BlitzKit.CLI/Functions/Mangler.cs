@@ -48,7 +48,7 @@ namespace BlitzKit.CLI.Functions
     readonly BlitzProvider provider = new(args.Contains("--depot"));
     Locales? locales;
     readonly Dictionary<string, Dictionary<string, string>> strings = [];
-    readonly AssetUploader assetUploader = new("mangled ue assets") { disabled = false };
+    readonly AssetUploader assetUploader = new("mangled ue assets");
 
     public async Task Mangle()
     {
