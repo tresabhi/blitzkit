@@ -10,6 +10,7 @@ namespace BlitzKit.CLI.Models
 {
   public class AssetUploader(string message)
   {
+    public required bool disabled;
     private static readonly int TIME_PER_BLOB = (int)Math.Pow(2, 4) * 10000;
     private static readonly int TIME_BETWEEN_BLOBS = (int)(60 * 60 * 1000 / 5000 / 0.9);
     private static readonly int MAX_TREE_SIZE = 7_000_000; // 7MB
@@ -30,6 +31,11 @@ namespace BlitzKit.CLI.Models
 
     public async Task Add(FileChange change)
     {
+      if (disabled)
+      {
+        return;
+      }
+
       var blobPath = $"{repo}/{branch}/{change.Path}";
       HttpResponseMessage response = await httpClient.GetAsync(
         $"https://raw.githubusercontent.com/{blobPath}"
@@ -103,8 +109,10 @@ namespace BlitzKit.CLI.Models
 
     public async Task Flush()
     {
-      if (changes.Count == 0)
+      if (disabled || changes.Count == 0)
+      {
         return;
+      }
 
       var repoRawSplit = repo.Split('/');
       var owner = repoRawSplit[0];

@@ -36,6 +36,14 @@ namespace BlitzKit.CLI.Functions
       { $"{PenetrationGroupNameMapPrefix}::TANK_PART_GUN", "gun" },
     };
 
+    private static readonly List<string> CollisionDTs =
+    [
+      "DT_Chassis",
+      "DT_Hulls",
+      "DT_Turrets",
+      "DT_Guns",
+    ];
+
     [GeneratedRegex("[^a-z0-9]")]
     private static partial Regex NonAlphanumericRegex();
 
@@ -48,7 +56,7 @@ namespace BlitzKit.CLI.Functions
     readonly BlitzProvider provider = new(args.Contains("--depot"));
     Locales? locales;
     readonly Dictionary<string, Dictionary<string, string>> strings = [];
-    readonly AssetUploader assetUploader = new("mangled ue assets");
+    readonly AssetUploader assetUploader = new("mangled ue assets") { disabled = false };
 
     public async Task Mangle()
     {
@@ -121,6 +129,9 @@ namespace BlitzKit.CLI.Functions
         foreach (var tankDir in dir.Value.Directories)
         {
           // if (tankDir.Value.Name != "R90_IS_4")
+          //   continue;
+
+          // if (tankDir.Value.Name != "R81_IS_8")
           //   continue;
 
           var tank = await MangleTank(tankDir.Value);
@@ -223,7 +234,7 @@ namespace BlitzKit.CLI.Functions
       slug = MultipleDashesRegex().Replace(slug, "-");
       slug = TrailingDashRegex().Replace(slug, "");
 
-      await MangleHull(pda);
+      await MangleCollision(id, pda);
       // await MangleIcon(pda);
       // await MangleArmor(pda);
 
@@ -309,40 +320,34 @@ namespace BlitzKit.CLI.Functions
       }
     }
 
-    async Task MangleHull(UObject pda)
+    async Task MangleModuleCollision(string id, UDataTable dt)
     {
-      var id = PropertyUtil.Get<FName>(pda, "TankId").Text;
+      foreach (var row in dt.RowMap)
+      {
+        var moduleName = row.Key.Text;
+        var visualData = PropertyUtil.Get<UObject>(row.Value, "VisualData");
+        var meshSettings = PropertyUtil.Get<FStructFallback>(visualData, "MeshSettings");
 
-      var hullsDt = PropertyUtil.Get<UDataTable>(pda, "DT_Hulls");
-      var chassisDt = PropertyUtil.Get<UDataTable>(pda, "DT_Chassis");
+        if (PropertyUtil.TryGet<UStaticMesh>(meshSettings, "CollisionMesh", out var collision))
+        {
+          MonoGltf gltf = new(collision);
 
-      UDataTableUtility.TryGetDataTableRow(hullsDt, "hull", StringComparison.Ordinal, out var hull);
-      UDataTableUtility.TryGetDataTableRow(
-        chassisDt,
-        "chassis",
-        StringComparison.Ordinal,
-        out var chassis
-      );
+          await assetUploader.Add(new($"tanks/{id}/collision/{moduleName}.glb", gltf.Write()));
+        }
+        else
+        {
+          PrettyLog.Warn($"No collision mesh found for {id} {moduleName}; skipping...");
+        }
+        ;
+      }
+    }
 
-      var hullVisualData = PropertyUtil.Get<UObject>(hull, "VisualData");
-      var chassisVisualData = PropertyUtil.Get<UObject>(chassis, "VisualData");
-
-      var hullMeshSettings = PropertyUtil.Get<FStructFallback>(hullVisualData, "MeshSettings");
-      var chassisMeshSettings = PropertyUtil.Get<FStructFallback>(
-        chassisVisualData,
-        "MeshSettings"
-      );
-
-      var hullCollision = PropertyUtil.Get<UStaticMesh>(hullMeshSettings, "CollisionMesh");
-      var chassisCollision = PropertyUtil.Get<UStaticMesh>(chassisMeshSettings, "CollisionMesh");
-
-      MonoGltf hullCollisionGltf = new(hullCollision);
-      MonoGltf chassisCollisionGltf = new(chassisCollision);
-
-      await assetUploader.Add(new($"tanks/{id}/collision/hull.glb", hullCollisionGltf.Write()));
-      await assetUploader.Add(
-        new($"tanks/{id}/collision/chassis.glb", chassisCollisionGltf.Write())
-      );
+    async Task MangleCollision(string id, UObject pda)
+    {
+      foreach (var name in CollisionDTs)
+      {
+        await MangleModuleCollision(id, PropertyUtil.Get<UDataTable>(pda, name));
+      }
     }
   }
 }
