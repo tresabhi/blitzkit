@@ -99,7 +99,7 @@ namespace BlitzKit.CLI.Models
       // flush BEFORE going over limit
       if (changesSize + change.Content.Count > MAX_TREE_SIZE || changes.Count + 1 > MAX_FILE_COUNT)
       {
-        Console.WriteLine("Flushing backlog...");
+        PrettyLog.Log("Flushing backlog...");
         await Flush();
       }
 
@@ -144,7 +144,7 @@ namespace BlitzKit.CLI.Models
 
             await Task.Delay((int)Math.Max(0, TIME_BETWEEN_BLOBS - stopwatch.ElapsedMilliseconds));
 
-            Console.WriteLine($"blobbed {change.Path} (+{stopwatch.ElapsedMilliseconds}ms)");
+            PrettyLog.Success($"Blobbed {change.Path} (+{stopwatch.ElapsedMilliseconds}ms)");
 
             newTree.Tree.Add(
               new()

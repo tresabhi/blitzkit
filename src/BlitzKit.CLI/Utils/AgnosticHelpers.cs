@@ -51,13 +51,13 @@ namespace BlitzKit.CLI.Utils
 
       if (File.Exists(filePath))
       {
-        Console.WriteLine($"Oodle found at {filePath}; using that");
+        PrettyLog.Success($"Oodle found at {filePath}; using that");
         OodleHelper.Initialize(filePath);
 
         return;
       }
 
-      Console.WriteLine(
+      PrettyLog.Log(
         $"Oodle not found; downloading to {filePath} from {url} and extracting {entry}"
       );
 
@@ -106,11 +106,11 @@ namespace BlitzKit.CLI.Utils
 
       if (File.Exists(filePath))
       {
-        Console.WriteLine($"Zlib found at {filePath}; using that");
+        PrettyLog.Success($"Zlib found at {filePath}; using that");
       }
       else
       {
-        Console.WriteLine($"Zlib not found; downloading to {filePath} from {url}");
+        PrettyLog.Log($"Zlib not found; downloading to {filePath} from {url}");
         ZlibHelper.DownloadDll(filePath, url);
       }
 

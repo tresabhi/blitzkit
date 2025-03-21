@@ -56,7 +56,7 @@ namespace BlitzKit.CLI.Functions
 
       DlcManifest manifest = await FetchManifest(CONTENT_GROUP, contentBuildId);
 
-      Console.WriteLine($"Downloading {manifest.PakFiles.Count} containers...");
+      PrettyLog.Log($"Downloading {manifest.PakFiles.Count} containers...");
 
       int done = 0;
       foreach (var pakFile in manifest.PakFiles)
@@ -70,10 +70,10 @@ namespace BlitzKit.CLI.Functions
         File.WriteAllBytes(localContainerPath, bytes);
         done++;
 
-        Console.WriteLine($"Downloaded {done}/{manifest.PakFiles.Count} containers...");
+        PrettyLog.Log($"Downloaded {done}/{manifest.PakFiles.Count} containers...");
       }
 
-      Console.WriteLine("Moving pre-bundled containers...");
+      PrettyLog.Log("Moving pre-bundled containers...");
       foreach (
         var file in Directory.GetFiles(Path.Combine(TEMP_DEPOT_DIR, "Blitz/Content/Paks"), "*.pak")
       )
@@ -81,13 +81,13 @@ namespace BlitzKit.CLI.Functions
         File.Move(file, Path.Combine(CONTAINERS_PATH, Path.GetFileName(file)));
       }
 
-      Console.WriteLine("Deleting depot...");
+      PrettyLog.Log("Deleting depot...");
       Directory.Delete(TEMP_DEPOT_DIR, true);
     }
 
     public static async Task<DlcManifest> FetchManifest(string group, string build)
     {
-      Console.WriteLine($"Fetching manifest for group {group} and build {build}");
+      PrettyLog.Log($"Fetching manifest for group {group} and build {build}");
 
       string url =
         $"{WG_DLC_DOMAIN}/dlc/{group}/dlc/BuildManifest-{BUILD_MANIFEST_OS}-{build}.json";

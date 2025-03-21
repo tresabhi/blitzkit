@@ -181,11 +181,11 @@ namespace BlitzKit.CLI.Functions
 
       foreach (var duplicate in duplicates)
       {
-        Console.WriteLine($"{duplicate.Key}:");
+        PrettyLog.Log($"{duplicate.Key}:");
 
         foreach (var tank in duplicate.Value)
         {
-          Console.WriteLine($"\t{tank.Id}");
+          PrettyLog.Log($"\t{tank.Id}");
         }
 
         if (duplicate.Value.Count == 2 && duplicate.Value.Any(tank => tank.Id.EndsWith("TU")))
@@ -215,10 +215,10 @@ namespace BlitzKit.CLI.Functions
 
         foreach (var tank in duplicate.Value)
         {
-          Console.WriteLine($"\t\t{tank.Slug}");
+          PrettyLog.Log($"\t\t{tank.Slug}");
         }
 
-        Console.WriteLine();
+        PrettyLog.Line();
       }
     }
 
