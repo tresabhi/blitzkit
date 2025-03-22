@@ -1,7 +1,6 @@
 import { BLITZKIT_TANK_ICON_SIZE } from '@blitzkit/core';
 import { Canvas } from '@react-three/fiber';
 import { forwardRef, Suspense, useImperativeHandle, useRef } from 'react';
-import { Plane, Vector3 } from 'three';
 import { useOnScreen } from '../../../../../hooks/useOnScreen';
 import { TankopediaEphemeral } from '../../../../../stores/tankopediaEphemeral';
 import { TankopediaPersistent } from '../../../../../stores/tankopediaPersistent';
@@ -160,7 +159,7 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
             : 'never'
         }
         gl={{
-          clippingPlanes: [new Plane(new Vector3(0, 0, 1))],
+          // clippingPlanes: [new Plane(new Vector3(0, 0, 1))],
           localClippingEnabled: true,
           preserveDrawingBuffer: true,
         }}

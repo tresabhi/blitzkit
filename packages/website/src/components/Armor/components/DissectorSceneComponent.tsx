@@ -16,7 +16,8 @@ interface DissectorSceneComponentProps {
   group: string;
 }
 
-const armorColor = new Color().multiplyScalar(1 / 16);
+const armorColor = new Color().multiplyScalar(2 ** -8);
+const armorOutlineColor = armorColor.clone().multiplyScalar(2 ** 4.5);
 
 const moduleColor: Record<string, Color> = {
   Armor: armorColor,
@@ -38,10 +39,14 @@ const moduleColor: Record<string, Color> = {
   TurretRotator: new Color('blue'),
   Transmission: new Color('cyan'),
 };
-const moduleOutlineColor: Record<string, Color> = {};
+const moduleOutlineColor: Record<string, Color> = {
+  Armor: armorOutlineColor,
+  ArmorScreen: armorOutlineColor,
+};
 
 for (const key in moduleColor) {
-  moduleOutlineColor[key] = moduleColor[key].clone().multiplyScalar(4);
+  if (key in moduleOutlineColor) continue;
+  moduleOutlineColor[key] = moduleColor[key].clone().multiplyScalar(0.5);
 }
 
 export function DissectorSceneComponent({

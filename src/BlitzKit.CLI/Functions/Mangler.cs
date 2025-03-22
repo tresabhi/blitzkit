@@ -227,8 +227,8 @@ namespace BlitzKit.CLI.Functions
       slug = TrailingDashRegex().Replace(slug, "");
 
       await MangleCollision(id, pda);
-      // await MangleIcon(pda);
-      // await MangleArmor(pda);
+      await MangleIcon(pda);
+      await MangleArmor(pda);
 
       Tank tank = new()
       {

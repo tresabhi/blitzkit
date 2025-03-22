@@ -20,7 +20,7 @@ export function jsxTree(
       scale: node.scale,
     };
 
-    return mergers?.mesh?.(node, props) ?? <mesh {...props} />;
+    return mergers?.mesh ? mergers.mesh(node, props) : <mesh {...props} />;
   } else if (node instanceof Object3D) {
     const props = {
       key,
@@ -32,7 +32,7 @@ export function jsxTree(
       ),
     };
 
-    return mergers?.group?.(node, props) ?? <group {...props} />;
+    return mergers?.group ? mergers.group(node, props) : <group {...props} />;
   }
 
   return null;
