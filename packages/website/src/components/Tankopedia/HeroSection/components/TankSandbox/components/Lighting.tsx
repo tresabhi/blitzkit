@@ -20,7 +20,8 @@ export function Lighting() {
           environmentRotation={new Euler(0, degToRad(180), 0)}
         />
       )}
-      {display === TankopediaDisplay.StaticArmor && (
+      {(display === TankopediaDisplay.StaticArmor ||
+        display === TankopediaDisplay.Dissector) && (
         <Environment preset="lobby" />
       )}
       {display === TankopediaDisplay.ShootingRange && (

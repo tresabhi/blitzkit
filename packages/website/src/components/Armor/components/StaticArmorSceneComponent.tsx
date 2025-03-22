@@ -12,16 +12,16 @@ import { Duel } from '../../../stores/duel';
 import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
 import { TankopediaPersistent } from '../../../stores/tankopediaPersistent';
 
-interface StaticArmorSceneComponentsProps {
+interface StaticArmorSceneComponentsProp {
   group: string;
 }
 
 const moduleColor = new Color(192 / 255, 192 / 255, 192 / 255);
-const groupNameRegex = /([a-z]+)(_\d+)?/;
+export const groupNameRegex = /([a-z]+)(_\d+)?/;
 
-export function StaticArmorSceneComponents({
+export function StaticArmorSceneComponent({
   group,
-}: StaticArmorSceneComponentsProps) {
+}: StaticArmorSceneComponentsProp) {
   const tank = Duel.use((state) => state.protagonist.tank);
   const showModules = TankopediaPersistent.use((state) => state.showModules);
   const showArmorScreen = TankopediaPersistent.use(

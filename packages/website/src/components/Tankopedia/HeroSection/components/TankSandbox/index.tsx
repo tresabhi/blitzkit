@@ -1,12 +1,14 @@
 import { BLITZKIT_TANK_ICON_SIZE } from '@blitzkit/core';
 import { Canvas } from '@react-three/fiber';
 import { forwardRef, Suspense, useImperativeHandle, useRef } from 'react';
+import { Plane, Vector3 } from 'three';
 import { useOnScreen } from '../../../../../hooks/useOnScreen';
 import { TankopediaEphemeral } from '../../../../../stores/tankopediaEphemeral';
 import { TankopediaPersistent } from '../../../../../stores/tankopediaPersistent';
 import { TankopediaDisplay } from '../../../../../stores/tankopediaPersistent/constants';
 import { Armor } from '../../../../Armor';
 import { ArmorPlateDisplay } from '../../../../Armor/components/ArmorPlateDisplay';
+import { Dissector } from '../../../../Armor/components/Dissector';
 import { ShotDisplay } from '../../../../Armor/components/ShotDisplay';
 import { StaticArmor } from '../../../../Armor/components/StaticArmor';
 import { AutoClear } from './components/AutoClear';
@@ -158,7 +160,7 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
             : 'never'
         }
         gl={{
-          clippingPlanes: [],
+          clippingPlanes: [new Plane(new Vector3(0, 0, 1))],
           localClippingEnabled: true,
           preserveDrawingBuffer: true,
         }}
@@ -190,6 +192,7 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
         <Suspense fallback={<ModelLoader />}>
           {display === TankopediaDisplay.DynamicArmor && <Armor />}
           {display === TankopediaDisplay.StaticArmor && <StaticArmor />}
+          {display === TankopediaDisplay.Dissector && <Dissector />}
           <Lighting />
         </Suspense>
       </Canvas>
