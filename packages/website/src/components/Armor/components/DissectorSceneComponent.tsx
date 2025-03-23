@@ -1,15 +1,15 @@
 import { asset, J_HAT } from '@blitzkit/core';
 import {
-  amberDark,
   blueDark,
-  bronzeDark,
+  crimsonDark,
   indigoDark,
   mauveDark,
   orangeDark,
   plumDark,
-  redDark,
-  skyDark,
+  purpleDark,
   slateDark,
+  tomatoDark,
+  yellowDark,
 } from '@radix-ui/colors';
 import {
   Base,
@@ -25,6 +25,7 @@ import {
   DoubleSide,
   Group,
   LineBasicMaterial,
+  LineSegments,
   Material,
   MeshStandardMaterial,
   Plane,
@@ -58,16 +59,16 @@ const moduleColor: Record<string, Color> = {
   Gunner1: new Color(mauveDark.mauve11),
   Loader1: new Color(mauveDark.mauve11),
 
-  SurveyingDevice: new Color(plumDark.plum8),
-  Radio: new Color(slateDark.slate8),
+  SurveyingDevice: new Color(plumDark.plum7),
+  Radio: new Color(slateDark.slate7),
   Gun: new Color(blueDark.blue8),
-  FuelTank: new Color(orangeDark.orange8),
-  Engine: new Color(redDark.red8),
-  AmmoBay: new Color(amberDark.amber8),
-  LeftTrack: new Color(bronzeDark.bronze8),
-  RightTrack: new Color(bronzeDark.bronze8),
-  TurretRotator: new Color(indigoDark.indigo8),
-  Transmission: new Color(skyDark.sky8),
+  FuelTank: new Color(orangeDark.orange9),
+  Engine: new Color(crimsonDark.crimson8),
+  AmmoBay: new Color(yellowDark.yellow9),
+  LeftTrack: new Color(purpleDark.purple5),
+  RightTrack: new Color(purpleDark.purple5),
+  TurretRotator: new Color(indigoDark.indigo7),
+  Transmission: new Color(tomatoDark.tomato4),
 };
 const moduleOutlineColor: Record<string, Color> = {
   Armor: armorOutlineColor,
@@ -120,13 +121,14 @@ export function DissectorSceneComponent({
           clippingPlanes: isModule ? undefined : [clippingPlane.current],
         }),
       );
+      const outline = useRef<LineSegments>(null);
       const outlineMaterial = useRef(
         new LineBasicMaterial({
           transparent: !isModule,
           opacity: 2 ** -3,
           side: DoubleSide,
           color: moduleOutlineColor[armorPlate.type],
-          clippingPlanes: isModule ? undefined : [clippingPlane.current],
+          clippingPlanes: [clippingPlane.current],
         }),
       );
       const outlineMaterialInverse = useRef(
@@ -177,19 +179,31 @@ export function DissectorSceneComponent({
 
       if (isModule) {
         return (
-          <mesh material={material.current} ref={baseWrapper}>
-            <Geometry ref={csg}>
-              <Base geometry={props.geometry} />
+          <>
+            <mesh
+              material={material.current}
+              ref={baseWrapper}
+              onPointerDown={(event) => {
+                event.stopPropagation();
+              }}
+            >
+              <Geometry ref={csg}>
+                <Base geometry={props.geometry} />
 
-              <group rotation={[0, 0, 0]} ref={subtractionWrapper}>
-                <Subtraction position={[NEGATIVE_SIZE / 2, 0, 0]}>
-                  <boxGeometry
-                    args={[NEGATIVE_SIZE, NEGATIVE_SIZE, NEGATIVE_SIZE]}
-                  />
-                </Subtraction>
-              </group>
-            </Geometry>
-          </mesh>
+                <group rotation={[0, 0, 0]} ref={subtractionWrapper}>
+                  <Subtraction position={[NEGATIVE_SIZE / 2, 0, 0]}>
+                    <boxGeometry
+                      args={[NEGATIVE_SIZE, NEGATIVE_SIZE, NEGATIVE_SIZE]}
+                    />
+                  </Subtraction>
+                </group>
+              </Geometry>
+            </mesh>
+
+            <lineSegments ref={outline} material={outlineMaterial.current}>
+              <edgesGeometry args={[props.geometry, 45]} />
+            </lineSegments>
+          </>
         );
       }
 
