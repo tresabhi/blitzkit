@@ -1,12 +1,27 @@
 import { asset } from '@blitzkit/core';
+import {
+  Base,
+  Geometry,
+  Subtraction,
+  type CSGGeometryRef,
+} from '@react-three/csg';
 import { useGLTF } from '@react-three/drei';
+import { useEffect, useRef } from 'react';
+import type { Mesh } from 'three';
 import {
   Color,
   DoubleSide,
+  Group,
   LineBasicMaterial,
   Material,
   MeshStandardMaterial,
+  Vector3,
 } from 'three';
+import {
+  dissectEvent,
+  lastDissection,
+  type DissectEventData,
+} from '../../../core/blitzkit/dissect';
 import { jsxTree } from '../../../core/blitzkit/jsxTree';
 import { Duel } from '../../../stores/duel';
 import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
@@ -15,6 +30,8 @@ import { groupNameRegex } from './StaticArmorSceneComponent';
 interface DissectorSceneComponentProps {
   group: string;
 }
+
+const NEGATIVE_SIZE = 20;
 
 const armorColor = new Color().multiplyScalar(2 ** -8);
 const armorOutlineColor = armorColor.clone().multiplyScalar(2 ** 4.5);
@@ -60,12 +77,20 @@ export function DissectorSceneComponent({
 
   return jsxTree(gltf.scene, {
     mesh(mesh, props) {
+      const csg = useRef<CSGGeometryRef>(null);
+      const subtractionWrapper = useRef<Group>(null);
+      const baseWrapper = useRef<Mesh>(null);
+
       if (!(mesh.material instanceof Material)) {
         return null;
       }
 
       const armorName = mesh.material.name;
       const armorPlate = groupArmor.armors[armorName];
+
+      if (armorPlate.type === 'Armor' || armorPlate.type === 'ArmorScreen') {
+        return null;
+      }
 
       if (!(armorPlate.type in moduleColor)) {
         throw new TypeError(`Unhandled armor type: ${armorPlate.type}`);
@@ -79,14 +104,55 @@ export function DissectorSceneComponent({
         side: DoubleSide,
         color: moduleOutlineColor[armorPlate.type],
       });
+      const worldPosition = new Vector3();
+
+      useEffect(() => {
+        function handleDissectEvent(event: DissectEventData) {
+          if (
+            !subtractionWrapper.current ||
+            !csg.current ||
+            !baseWrapper.current
+          )
+            return;
+
+          baseWrapper.current.getWorldPosition(worldPosition);
+
+          subtractionWrapper.current.position
+            .copy(worldPosition)
+            .multiplyScalar(-1);
+          subtractionWrapper.current.rotation.y = event.rotation;
+          csg.current.update();
+        }
+
+        dissectEvent.on(handleDissectEvent);
+        handleDissectEvent(lastDissection);
+
+        return () => {
+          dissectEvent.off(handleDissectEvent);
+        };
+      }, []);
 
       return (
         <>
-          <mesh {...props} material={material} />
+          {/* <mesh {...props} material={material} /> */}
 
-          <lineSegments material={outlineMaterial}>
+          <mesh material={material} ref={baseWrapper}>
+            <Geometry ref={csg}>
+              <Base geometry={props.geometry}></Base>
+
+              <group rotation={[0, 0, 0]} ref={subtractionWrapper}>
+                <Subtraction position={[NEGATIVE_SIZE / 2, 0, 0]}>
+                  <boxGeometry
+                    args={[NEGATIVE_SIZE, NEGATIVE_SIZE, NEGATIVE_SIZE]}
+                  />
+                </Subtraction>
+              </group>
+            </Geometry>
+          </mesh>
+
+          {/* <lineSegments material={outlineMaterial}>
             <edgesGeometry args={[props.geometry, 45]} />
-          </lineSegments>
+          </lineSegments> */}
         </>
       );
     },

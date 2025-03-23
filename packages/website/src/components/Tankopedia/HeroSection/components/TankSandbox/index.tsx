@@ -152,11 +152,12 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
     return (
       <Canvas
         frameloop={
-          onScreen
-            ? display === TankopediaDisplay.ShootingRange
-              ? 'always'
-              : 'demand'
-            : 'never'
+          // onScreen
+          //   ? display === TankopediaDisplay.ShootingRange
+          //     ? 'always'
+          //     : 'demand'
+          //   : 'never'
+          'always'
         }
         gl={{
           // clippingPlanes: [new Plane(new Vector3(0, 0, 1))],
