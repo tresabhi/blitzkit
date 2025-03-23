@@ -8,11 +8,10 @@ export function jsxTree(
     mesh?: (mesh: Mesh, props: MeshProps) => ReactNode;
     group?: (object3d: Object3D, props: Object3DProps) => ReactNode;
   },
-  key?: string,
 ): ReactNode {
   if (node instanceof Mesh) {
     const props = {
-      key,
+      key: node.uuid,
       geometry: node.geometry,
       material: node.material,
       position: node.position,
@@ -23,13 +22,11 @@ export function jsxTree(
     return mergers?.mesh ? mergers.mesh(node, props) : <mesh {...props} />;
   } else if (node instanceof Object3D) {
     const props = {
-      key,
+      key: node.uuid,
       position: node.position,
       rotation: node.rotation,
       scale: node.scale,
-      children: node.children.map((child) =>
-        jsxTree(child, mergers, child.uuid),
-      ),
+      children: node.children.map((child) => jsxTree(child, mergers)),
     };
 
     return mergers?.group ? mergers.group(node, props) : <group {...props} />;

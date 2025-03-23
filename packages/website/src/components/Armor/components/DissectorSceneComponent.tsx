@@ -18,7 +18,7 @@ import {
   type CSGGeometryRef,
 } from '@react-three/csg';
 import { useGLTF } from '@react-three/drei';
-import { useEffect, useRef } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 import type { Mesh } from 'three';
 import {
   Color,
@@ -118,7 +118,7 @@ export function DissectorSceneComponent({
           opacity: 2 ** -1,
           side: DoubleSide,
           color: moduleColor[armorPlate.type],
-          clippingPlanes: isModule ? undefined : [clippingPlane.current],
+          clippingPlanes: isModule ? [] : [clippingPlane.current],
         }),
       );
       const outline = useRef<LineSegments>(null);
@@ -137,7 +137,7 @@ export function DissectorSceneComponent({
           opacity: 2 ** -6,
           side: DoubleSide,
           color: moduleOutlineColor[armorPlate.type],
-          clippingPlanes: isModule ? undefined : [clippingPlaneInverse.current],
+          clippingPlanes: isModule ? [] : [clippingPlaneInverse.current],
         }),
       );
       const worldPosition = new Vector3();
@@ -177,9 +177,13 @@ export function DissectorSceneComponent({
         };
       }, []);
 
-      if (isModule) {
-        return (
-          <>
+      return (
+        <Fragment key={props.key}>
+          <lineSegments ref={outline} material={outlineMaterial.current}>
+            <edgesGeometry args={[props.geometry, 45]} />
+          </lineSegments>
+
+          {isModule && (
             <mesh
               material={material.current}
               ref={baseWrapper}
@@ -199,23 +203,14 @@ export function DissectorSceneComponent({
                 </group>
               </Geometry>
             </mesh>
+          )}
 
-            <lineSegments ref={outline} material={outlineMaterial.current}>
+          {!isModule && (
+            <lineSegments material={outlineMaterialInverse.current}>
               <edgesGeometry args={[props.geometry, 45]} />
             </lineSegments>
-          </>
-        );
-      }
-
-      return (
-        <>
-          <lineSegments material={outlineMaterial.current}>
-            <edgesGeometry args={[props.geometry, 45]} />
-          </lineSegments>
-          <lineSegments material={outlineMaterialInverse.current}>
-            <edgesGeometry args={[props.geometry, 45]} />
-          </lineSegments>
-        </>
+          )}
+        </Fragment>
       );
     },
   });

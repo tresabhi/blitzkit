@@ -227,10 +227,11 @@ export function SceneProps() {
 
     dissectEvent.emit({
       rotation:
-        lastDissection.rotation + (4 * delta.current.x) / window.innerWidth,
-      // offset: 0,
+        lastDissection.rotation +
+        2 * Math.PI * (delta.current.x / window.innerWidth),
       offset: clamp(
-        lastDissection.offset + (4 * delta.current.y) / window.innerHeight,
+        lastDissection.offset +
+          GRID_SIZE * (delta.current.y / window.innerHeight),
         -5,
         5,
       ),
