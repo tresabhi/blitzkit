@@ -266,7 +266,7 @@ export function SceneProps() {
     return () => {
       dissectEvent.off(handleDissectEvent);
     };
-  }, []);
+  }, [display]);
 
   return (
     <>
@@ -275,37 +275,48 @@ export function SceneProps() {
           <mesh rotation={[-Math.PI / 2, 0, 0]}>
             <planeGeometry args={[GRID_SIZE, GRID_SIZE]} />
             <meshStandardMaterial
-              clippingPlanes={[clippingPlane.current]}
+              clippingPlanes={
+                display === TankopediaDisplay.Dissector
+                  ? [clippingPlane.current]
+                  : []
+              }
               map={gridTexture}
               transparent
             />
           </mesh>
 
-          <group ref={dissector}>
-            <mesh
-              position={[GRID_SIZE / 8, 0, 0]}
-              rotation={[-Math.PI / 2, 0, Math.PI / 2]}
-              onPointerDown={(event) => {
-                if (display !== TankopediaDisplay.Dissector) return;
+          {display === TankopediaDisplay.Dissector && (
+            <group ref={dissector}>
+              <mesh
+                position={[GRID_SIZE / 8, 0, 0]}
+                rotation={[-Math.PI / 2, 0, Math.PI / 2]}
+                onPointerDown={(event) => {
+                  if (
+                    display !== TankopediaDisplay.Dissector ||
+                    !dissector.current ||
+                    event.point.distanceTo(dissector.current.position) > 1.5
+                  )
+                    return;
 
-                event.stopPropagation();
+                  event.stopPropagation();
 
-                position.current.set(
-                  event.nativeEvent.clientX,
-                  event.nativeEvent.clientY,
-                );
-                mutateTankopediaEphemeral((draft) => {
-                  draft.controlsEnabled = false;
-                });
+                  position.current.set(
+                    event.nativeEvent.clientX,
+                    event.nativeEvent.clientY,
+                  );
+                  mutateTankopediaEphemeral((draft) => {
+                    draft.controlsEnabled = false;
+                  });
 
-                window.addEventListener('pointermove', handlePointerMove);
-                window.addEventListener('pointerup', handlePointerUp);
-              }}
-            >
-              <planeGeometry args={[GRID_SIZE / 2, GRID_SIZE / 4]} />
-              <meshStandardMaterial map={dragTexture} transparent />
-            </mesh>
-          </group>
+                  window.addEventListener('pointermove', handlePointerMove);
+                  window.addEventListener('pointerup', handlePointerUp);
+                }}
+              >
+                <planeGeometry args={[GRID_SIZE / 2, GRID_SIZE / 4]} />
+                <meshStandardMaterial map={dragTexture} transparent />
+              </mesh>
+            </group>
+          )}
         </>
       )}
 
