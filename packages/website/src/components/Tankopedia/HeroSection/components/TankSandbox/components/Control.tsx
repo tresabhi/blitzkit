@@ -85,9 +85,9 @@ export function Controls({ naked }: ControlsProps) {
   //   protagonistGunOrigin.y;
   const gunHeight = 2;
   const inspectModeInitialPosition = [
-    -8,
+    13,
     gunHeight + (naked ? 10 : 4),
-    -13,
+    -8,
   ] as const;
   // const protagonistGunOriginOnlyY = new Vector3(
   //   0,
@@ -99,116 +99,120 @@ export function Controls({ naked }: ControlsProps) {
   //   .add(protagonistTurretOrigin)
   //   .add(protagonistGunOriginOnlyY);
 
-  // useEffect(() => {
-  //   const unsubscribeTankopediaEphemeral = tankopediaEphemeralStore.subscribe(
-  //     (state) => state.controlsEnabled,
-  //     (enabled) => {
-  //       if (orbitControls.current) orbitControls.current.enabled = enabled;
-  //     },
-  //   );
+  useEffect(() => {
+    const unsubscribeTankopediaEphemeral = tankopediaEphemeralStore.subscribe(
+      (state) => state.controlsEnabled,
+      (enabled) => {
+        if (orbitControls.current) orbitControls.current.enabled = enabled;
+      },
+    );
 
-  //   async function handlePoseEvent(event: Pose) {
-  //     const duel = duelStore.getState();
-  //     const hasImprovedVerticalStabilizer = await hasEquipment(
-  //       122,
-  //       duel.protagonist.tank.equipment_preset,
-  //       duel.protagonist.equipmentMatrix,
-  //     );
-  //     const hasDownImprovedVerticalStabilizer = await hasEquipment(
-  //       124,
-  //       duel.protagonist.tank.equipment_preset,
-  //       duel.protagonist.equipmentMatrix,
-  //     );
+    // async function handlePoseEvent(event: Pose) {
+    //   const duel = duelStore.getState();
+    //   const hasImprovedVerticalStabilizer = await hasEquipment(
+    //     122,
+    //     duel.protagonist.tank.equipment_preset,
+    //     duel.protagonist.equipmentMatrix,
+    //   );
+    //   const hasDownImprovedVerticalStabilizer = await hasEquipment(
+    //     124,
+    //     duel.protagonist.tank.equipment_preset,
+    //     duel.protagonist.equipmentMatrix,
+    //   );
 
-  //     switch (event) {
-  //       case Pose.HullDown: {
-  //         const [pitch] = applyPitchYawLimits(
-  //           -Infinity,
-  //           0,
-  //           protagonistGunModelDefinition.pitch,
-  //           protagonistTurretModelDefinition.yaw,
-  //           hasImprovedVerticalStabilizer,
-  //           hasDownImprovedVerticalStabilizer,
-  //         );
+    //   switch (event) {
+    //     case Pose.HullDown: {
+    //       const [pitch] = applyPitchYawLimits(
+    //         -Infinity,
+    //         0,
+    //         protagonistGunModelDefinition.pitch,
+    //         protagonistTurretModelDefinition.yaw,
+    //         hasImprovedVerticalStabilizer,
+    //         hasDownImprovedVerticalStabilizer,
+    //       );
 
-  //         camera.position
-  //           .set(0, 0, 0)
-  //           .add(protagonistHullOrigin)
-  //           .add(protagonistTurretOrigin)
-  //           .add(protagonistGunOrigin)
-  //           .add(
-  //             new Vector3(
-  //               0,
-  //               poseDistances[event] * Math.sin(pitch),
-  //               poseDistances[event] * -Math.cos(pitch),
-  //             ),
-  //           );
-  //         camera.lookAt(
-  //           protagonistHullOrigin
-  //             .clone()
-  //             .add(protagonistTurretOrigin)
-  //             .add(protagonistGunOrigin),
-  //         );
-  //         orbitControls.current?.target.set(0, antagonistGunHeight, 0);
+    //       camera.position
+    //         .set(0, 0, 0)
+    //         .add(protagonistHullOrigin)
+    //         .add(protagonistTurretOrigin)
+    //         .add(protagonistGunOrigin)
+    //         .add(
+    //           new Vector3(
+    //             0,
+    //             poseDistances[event] * Math.sin(pitch),
+    //             poseDistances[event] * -Math.cos(pitch),
+    //           ),
+    //         );
+    //       camera.lookAt(
+    //         protagonistHullOrigin
+    //           .clone()
+    //           .add(protagonistTurretOrigin)
+    //           .add(protagonistGunOrigin),
+    //       );
+    //       orbitControls.current?.target.set(0, antagonistGunHeight, 0);
 
-  //         break;
-  //       }
+    //       break;
+    //     }
 
-  //       case Pose.FaceHug: {
-  //         const [pitch] = applyPitchYawLimits(
-  //           0,
-  //           0,
-  //           protagonistGunModelDefinition.pitch,
-  //           protagonistTurretModelDefinition.yaw,
-  //           hasImprovedVerticalStabilizer,
-  //           hasDownImprovedVerticalStabilizer,
-  //         );
+    //     case Pose.FaceHug: {
+    //       const [pitch] = applyPitchYawLimits(
+    //         0,
+    //         0,
+    //         protagonistGunModelDefinition.pitch,
+    //         protagonistTurretModelDefinition.yaw,
+    //         hasImprovedVerticalStabilizer,
+    //         hasDownImprovedVerticalStabilizer,
+    //       );
 
-  //         camera.position
-  //           .set(0, 0, 0)
-  //           .add(protagonistHullOrigin)
-  //           .add(protagonistTurretOrigin)
-  //           .add(protagonistGunOrigin)
-  //           .add(
-  //             new Vector3(
-  //               0,
-  //               poseDistances[event] * Math.sin(pitch),
-  //               poseDistances[event] * -Math.cos(pitch),
-  //             ),
-  //           );
-  //         orbitControls.current?.target
-  //           .set(0, 0, 0)
-  //           .add(protagonistHullOrigin)
-  //           .add(protagonistTurretOrigin)
-  //           .add(protagonistGunOrigin)
-  //           .add(
-  //             new Vector3(
-  //               0,
-  //               0.5 * poseDistances[event] * Math.sin(pitch),
-  //               0.5 * poseDistances[event] * -Math.cos(pitch),
-  //             ),
-  //           );
+    //       camera.position
+    //         .set(0, 0, 0)
+    //         .add(protagonistHullOrigin)
+    //         .add(protagonistTurretOrigin)
+    //         .add(protagonistGunOrigin)
+    //         .add(
+    //           new Vector3(
+    //             0,
+    //             poseDistances[event] * Math.sin(pitch),
+    //             poseDistances[event] * -Math.cos(pitch),
+    //           ),
+    //         );
+    //       orbitControls.current?.target
+    //         .set(0, 0, 0)
+    //         .add(protagonistHullOrigin)
+    //         .add(protagonistTurretOrigin)
+    //         .add(protagonistGunOrigin)
+    //         .add(
+    //           new Vector3(
+    //             0,
+    //             0.5 * poseDistances[event] * Math.sin(pitch),
+    //             0.5 * poseDistances[event] * -Math.cos(pitch),
+    //           ),
+    //         );
 
-  //         break;
-  //       }
+    //       break;
+    //     }
 
-  //       case Pose.Default: {
-  //         camera.position.set(...inspectModeInitialPosition);
-  //         orbitControls.current?.target.set(0, 1.25, 0);
-  //         break;
-  //       }
-  //     }
+    //     case Pose.Default: {
+    //       camera.position.set(...inspectModeInitialPosition);
+    //       orbitControls.current?.target.set(0, 1.25, 0);
+    //       break;
+    //     }
+    //   }
 
-  //     invalidate();
-  //   }
+    //   invalidate();
+    // }
 
-  //   poseEvent.on(handlePoseEvent);
+    // poseEvent.on(handlePoseEvent);
 
-  //   return () => {
-  //     unsubscribeTankopediaEphemeral();
-  //     poseEvent.off(handlePoseEvent);
-  //   };
-  // }, [camera, protagonistTank.id, antagonistTank.id]);
+    return () => {
+      unsubscribeTankopediaEphemeral();
+      // poseEvent.off(handlePoseEvent);
+    };
+  }, [
+    camera,
+    // protagonistTank.id,
+    // antagonistTank.id
+  ]);
 
   useEffect(() => {
     let isInitialIteration = true;

@@ -1,4 +1,16 @@
-import { asset } from '@blitzkit/core';
+import { asset, J_HAT } from '@blitzkit/core';
+import {
+  amberDark,
+  blueDark,
+  bronzeDark,
+  indigoDark,
+  mauveDark,
+  orangeDark,
+  plumDark,
+  redDark,
+  skyDark,
+  slateDark,
+} from '@radix-ui/colors';
 import {
   Base,
   Geometry,
@@ -15,6 +27,7 @@ import {
   LineBasicMaterial,
   Material,
   MeshStandardMaterial,
+  Plane,
   Vector3,
 } from 'three';
 import {
@@ -33,28 +46,28 @@ interface DissectorSceneComponentProps {
 
 const NEGATIVE_SIZE = 20;
 
-const armorColor = new Color().multiplyScalar(2 ** -8);
+const armorColor = new Color().multiplyScalar(2 ** -4);
 const armorOutlineColor = armorColor.clone().multiplyScalar(2 ** 4.5);
 
 const moduleColor: Record<string, Color> = {
   Armor: armorColor,
   ArmorScreen: armorColor,
 
-  Commander: new Color('white'),
-  Driver: new Color('white'),
-  Gunner1: new Color('white'),
-  Loader1: new Color('white'),
+  Commander: new Color(mauveDark.mauve11),
+  Driver: new Color(mauveDark.mauve11),
+  Gunner1: new Color(mauveDark.mauve11),
+  Loader1: new Color(mauveDark.mauve11),
 
-  SurveyingDevice: new Color('purple'),
-  Radio: new Color('indigo'),
-  Gun: new Color('pink'),
-  FuelTank: new Color('yellow'),
-  Engine: new Color('orange'),
-  AmmoBay: new Color('gold'),
-  LeftTrack: new Color('green'),
-  RightTrack: new Color('green'),
-  TurretRotator: new Color('blue'),
-  Transmission: new Color('cyan'),
+  SurveyingDevice: new Color(plumDark.plum8),
+  Radio: new Color(slateDark.slate8),
+  Gun: new Color(blueDark.blue8),
+  FuelTank: new Color(orangeDark.orange8),
+  Engine: new Color(redDark.red8),
+  AmmoBay: new Color(amberDark.amber8),
+  LeftTrack: new Color(bronzeDark.bronze8),
+  RightTrack: new Color(bronzeDark.bronze8),
+  TurretRotator: new Color(indigoDark.indigo8),
+  Transmission: new Color(skyDark.sky8),
 };
 const moduleOutlineColor: Record<string, Color> = {
   Armor: armorOutlineColor,
@@ -87,27 +100,56 @@ export function DissectorSceneComponent({
 
       const armorName = mesh.material.name;
       const armorPlate = groupArmor.armors[armorName];
-
-      if (armorPlate.type === 'Armor' || armorPlate.type === 'ArmorScreen') {
-        return null;
-      }
+      const isModule =
+        armorPlate.type !== 'Armor' && armorPlate.type !== 'ArmorScreen';
+      const isTrack =
+        armorPlate.type === 'LeftTrack' || armorPlate.type === 'RightTrack';
 
       if (!(armorPlate.type in moduleColor)) {
         throw new TypeError(`Unhandled armor type: ${armorPlate.type}`);
       }
 
-      const material = new MeshStandardMaterial({
-        side: DoubleSide,
-        color: moduleColor[armorPlate.type],
-      });
-      const outlineMaterial = new LineBasicMaterial({
-        side: DoubleSide,
-        color: moduleOutlineColor[armorPlate.type],
-      });
+      const clippingPlane = useRef(new Plane());
+      const clippingPlaneInverse = useRef(new Plane());
+      const material = useRef(
+        new MeshStandardMaterial({
+          transparent: isTrack,
+          opacity: 2 ** -1,
+          side: DoubleSide,
+          color: moduleColor[armorPlate.type],
+          clippingPlanes: isModule ? undefined : [clippingPlane.current],
+        }),
+      );
+      const outlineMaterial = useRef(
+        new LineBasicMaterial({
+          transparent: !isModule,
+          opacity: 2 ** -3,
+          side: DoubleSide,
+          color: moduleOutlineColor[armorPlate.type],
+          clippingPlanes: isModule ? undefined : [clippingPlane.current],
+        }),
+      );
+      const outlineMaterialInverse = useRef(
+        new LineBasicMaterial({
+          transparent: !isModule,
+          opacity: 2 ** -6,
+          side: DoubleSide,
+          color: moduleOutlineColor[armorPlate.type],
+          clippingPlanes: isModule ? undefined : [clippingPlaneInverse.current],
+        }),
+      );
       const worldPosition = new Vector3();
 
       useEffect(() => {
+        const offset = new Vector3();
+
         function handleDissectEvent(event: DissectEventData) {
+          clippingPlane.current.normal
+            .set(0, 0, 1)
+            .applyAxisAngle(J_HAT, event.rotation - Math.PI / 2);
+          clippingPlane.current.constant = event.offset;
+          clippingPlaneInverse.current.copy(clippingPlane.current).negate();
+
           if (
             !subtractionWrapper.current ||
             !csg.current ||
@@ -116,9 +158,10 @@ export function DissectorSceneComponent({
             return;
 
           baseWrapper.current.getWorldPosition(worldPosition);
-
+          offset.set(-event.offset, 0, 0).applyAxisAngle(J_HAT, event.rotation);
           subtractionWrapper.current.position
             .copy(worldPosition)
+            .add(offset)
             .multiplyScalar(-1);
           subtractionWrapper.current.rotation.y = event.rotation;
           csg.current.update();
@@ -132,13 +175,11 @@ export function DissectorSceneComponent({
         };
       }, []);
 
-      return (
-        <>
-          {/* <mesh {...props} material={material} /> */}
-
-          <mesh material={material} ref={baseWrapper}>
+      if (isModule) {
+        return (
+          <mesh material={material.current} ref={baseWrapper}>
             <Geometry ref={csg}>
-              <Base geometry={props.geometry}></Base>
+              <Base geometry={props.geometry} />
 
               <group rotation={[0, 0, 0]} ref={subtractionWrapper}>
                 <Subtraction position={[NEGATIVE_SIZE / 2, 0, 0]}>
@@ -149,10 +190,17 @@ export function DissectorSceneComponent({
               </group>
             </Geometry>
           </mesh>
+        );
+      }
 
-          {/* <lineSegments material={outlineMaterial}>
+      return (
+        <>
+          <lineSegments material={outlineMaterial.current}>
             <edgesGeometry args={[props.geometry, 45]} />
-          </lineSegments> */}
+          </lineSegments>
+          <lineSegments material={outlineMaterialInverse.current}>
+            <edgesGeometry args={[props.geometry, 45]} />
+          </lineSegments>
         </>
       );
     },

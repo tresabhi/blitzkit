@@ -1,33 +1,32 @@
-import { imgur } from '@blitzkit/core';
-import { useFrame, useLoader } from '@react-three/fiber';
-import { clamp } from 'lodash-es';
-import { useCallback, useRef } from 'react';
-import { MeshStandardMaterial, TextureLoader, Vector2 } from 'three';
-import { awaitableEquipmentDefinitions } from '../../../../../../../core/awaitables/equipmentDefinitions';
-import { awaitableModelDefinitions } from '../../../../../../../core/awaitables/modelDefinitions';
-import { awaitableProvisionDefinitions } from '../../../../../../../core/awaitables/provisionDefinitions';
+import { imgur, J_HAT } from '@blitzkit/core';
+import { useLoader } from '@react-three/fiber';
+import { useCallback, useEffect, useRef } from 'react';
+import { Group, Plane, TextureLoader, Vector2 } from 'three';
+import { clamp } from 'three/src/math/MathUtils.js';
 import {
   dissectEvent,
   lastDissection,
+  type DissectEventData,
 } from '../../../../../../../core/blitzkit/dissect';
 import { TankopediaEphemeral } from '../../../../../../../stores/tankopediaEphemeral';
 import { TankopediaDisplay } from '../../../../../../../stores/tankopediaPersistent/constants';
 
-const [modelDefinitions, equipmentDefinitions, provisionDefinitions] =
-  await Promise.all([
-    awaitableModelDefinitions,
-    awaitableEquipmentDefinitions,
-    awaitableProvisionDefinitions,
-  ]);
+// const [modelDefinitions, equipmentDefinitions, provisionDefinitions] =
+//   await Promise.all([
+//     awaitableModelDefinitions,
+//     awaitableEquipmentDefinitions,
+//     awaitableProvisionDefinitions,
+//   ]);
 
-const emptyVector = new Vector2();
+// const emptyVector = new Vector2();
+
+const GRID_SIZE = 10;
 
 export function SceneProps() {
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   // const targetCircleWrapper = useRef<Group>(null);
   // const clientTargetCircle = useRef<HTMLDivElement>(null);
   // const serverTargetCircle = useRef<HTMLDivElement>(null);
-  const material = useRef<MeshStandardMaterial>(null);
   // const playground = useRef<Group>(null);
 
   // let lastPitch = Duel.use((state) => state.protagonist.pitch);
@@ -90,18 +89,11 @@ export function SceneProps() {
   // let { dispersion } = characteristics;
   // const gunRotationSpeed = degToRad(characteristics.gunTraverseSpeed);
   // const mockTank = useLoader(GLTFLoader, asset(`3d/tanks/models/6929.glb`));
-  const texture = useLoader(
-    TextureLoader,
-    imgur(display === TankopediaDisplay.Dissector ? 'GgYPSVA' : 'C28Z8nU'),
-  );
-  texture.anisotropy = 2;
+  const gridTexture = useLoader(TextureLoader, imgur('iq0iOCJ'));
+  const dragTexture = useLoader(TextureLoader, imgur('Vi3xXsb'));
+  gridTexture.anisotropy = 2;
   // const path = new Vector3();
   // const direction = new Vector3();
-
-  useFrame(({ camera }) => {
-    if (!material.current) return;
-    material.current.opacity = clamp(0.5 * camera.position.y, 0, 1);
-  });
 
   // let lastTime = 0;
   // let DEBUG_disable = false;
@@ -225,15 +217,23 @@ export function SceneProps() {
   //   serverTargetCircle.current.style.height = targetCircleDotsSize;
   // });
 
-  const position = new Vector2();
-  const delta = new Vector2();
+  const dissector = useRef<Group>(null);
+  const position = useRef(new Vector2());
+  const delta = useRef(new Vector2());
+  const clippingPlane = useRef(new Plane());
   const handlePointerMove = useCallback((event: PointerEvent) => {
-    delta.set(event.clientX, event.clientY).sub(position);
-    position.set(event.clientX, event.clientY);
+    delta.current.set(event.clientX, event.clientY).sub(position.current);
+    position.current.set(event.clientX, event.clientY);
 
     dissectEvent.emit({
-      rotation: lastDissection.rotation + delta.x / window.innerWidth,
-      offset: lastDissection.offset,
+      rotation:
+        lastDissection.rotation + (4 * delta.current.x) / window.innerWidth,
+      // offset: 0,
+      offset: clamp(
+        lastDissection.offset + (4 * delta.current.y) / window.innerHeight,
+        -5,
+        5,
+      ),
     });
   }, []);
   const handlePointerUp = useCallback(() => {
@@ -245,26 +245,68 @@ export function SceneProps() {
     window.removeEventListener('pointerup', handlePointerUp);
   }, []);
 
+  useEffect(() => {
+    function handleDissectEvent(event: DissectEventData) {
+      clippingPlane.current.normal
+        .set(0, 0, 1)
+        .applyAxisAngle(J_HAT, event.rotation - Math.PI / 2);
+      clippingPlane.current.constant = event.offset;
+
+      if (!dissector.current) return;
+
+      dissector.current.rotation.set(0, event.rotation, 0);
+      dissector.current.position
+        .set(event.offset, 0, 0)
+        .applyAxisAngle(J_HAT, event.rotation);
+    }
+
+    dissectEvent.on(handleDissectEvent);
+    handleDissectEvent(lastDissection);
+
+    return () => {
+      dissectEvent.off(handleDissectEvent);
+    };
+  }, []);
+
   return (
     <>
       {display !== TankopediaDisplay.ShootingRange && (
-        <mesh
-          rotation={[-Math.PI / 2, 0, 0]}
-          onPointerDown={(event) => {
-            event.stopPropagation();
+        <>
+          <mesh rotation={[-Math.PI / 2, 0, 0]}>
+            <planeGeometry args={[GRID_SIZE, GRID_SIZE]} />
+            <meshStandardMaterial
+              clippingPlanes={[clippingPlane.current]}
+              map={gridTexture}
+              transparent
+            />
+          </mesh>
 
-            position.set(event.nativeEvent.clientX, event.nativeEvent.clientY);
-            mutateTankopediaEphemeral((draft) => {
-              draft.controlsEnabled = false;
-            });
+          <group ref={dissector}>
+            <mesh
+              position={[GRID_SIZE / 8, 0, 0]}
+              rotation={[-Math.PI / 2, 0, Math.PI / 2]}
+              onPointerDown={(event) => {
+                if (display !== TankopediaDisplay.Dissector) return;
 
-            window.addEventListener('pointermove', handlePointerMove);
-            window.addEventListener('pointerup', handlePointerUp);
-          }}
-        >
-          <planeGeometry args={[10, 10]} />
-          <meshStandardMaterial ref={material} map={texture} transparent />
-        </mesh>
+                event.stopPropagation();
+
+                position.current.set(
+                  event.nativeEvent.clientX,
+                  event.nativeEvent.clientY,
+                );
+                mutateTankopediaEphemeral((draft) => {
+                  draft.controlsEnabled = false;
+                });
+
+                window.addEventListener('pointermove', handlePointerMove);
+                window.addEventListener('pointerup', handlePointerUp);
+              }}
+            >
+              <planeGeometry args={[GRID_SIZE / 2, GRID_SIZE / 4]} />
+              <meshStandardMaterial map={dragTexture} transparent />
+            </mesh>
+          </group>
+        </>
       )}
 
       {/* {display === TankopediaDisplay.ShootingRange && (
