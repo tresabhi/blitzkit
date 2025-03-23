@@ -316,14 +316,6 @@ export function Controls({ naked }: ControlsProps) {
 
     updateCamera();
 
-    const unsubscribeDisplay = tankopediaEphemeralStore.subscribe(
-      (state) => state.display,
-      () => {
-        handleDisturbance();
-        updateCamera();
-      },
-    );
-
     const unsubscribeShootingRangeZoom = tankopediaEphemeralStore.subscribe(
       (state) => state.shootingRangeZoom,
       updateCamera,
@@ -332,7 +324,6 @@ export function Controls({ naked }: ControlsProps) {
     return () => {
       canvas.removeEventListener('pointerdown', handleDisturbance);
       // poseEvent.off(handleDisturbance);
-      unsubscribeDisplay();
       unsubscribeShootingRangeZoom();
       // window.removeEventListener('keydown', handleKeyDown);
       // canvas.removeEventListener('wheel', handleWheel);
