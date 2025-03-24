@@ -1,5 +1,6 @@
 import { EventManager } from '@blitzkit/core';
 import { degToRad } from 'three/src/math/MathUtils.js';
+import { lastModuleSelect, moduleSelectEvent } from './moduleSelect';
 
 export interface DissectEventData {
   rotation: number;
@@ -13,4 +14,7 @@ export const lastDissection: DissectEventData = {
   offset: 0.8,
 };
 
-dissectEvent.on((data) => Object.assign(lastDissection, data));
+dissectEvent.on((data) => {
+  if (lastModuleSelect.selected) moduleSelectEvent.emit({ selected: false });
+  Object.assign(lastDissection, data);
+});

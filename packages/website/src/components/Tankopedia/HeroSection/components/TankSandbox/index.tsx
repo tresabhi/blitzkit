@@ -1,6 +1,10 @@
 import { BLITZKIT_TANK_ICON_SIZE } from '@blitzkit/core';
 import { Canvas } from '@react-three/fiber';
 import { forwardRef, Suspense, useImperativeHandle, useRef } from 'react';
+import {
+  lastModuleSelect,
+  moduleSelectEvent,
+} from '../../../../../core/blitzkit/moduleSelect';
 import { useOnScreen } from '../../../../../hooks/useOnScreen';
 import { TankopediaEphemeral } from '../../../../../stores/tankopediaEphemeral';
 import { TankopediaPersistent } from '../../../../../stores/tankopediaPersistent';
@@ -172,6 +176,10 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
             draft.shot = undefined;
             draft.highlightArmor = undefined;
           });
+
+          if (lastModuleSelect.selected) {
+            moduleSelectEvent.emit({ selected: false });
+          }
         }}
         style={{
           userSelect: 'none',

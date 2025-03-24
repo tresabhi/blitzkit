@@ -18,9 +18,11 @@ import {
   type CSGGeometryRef,
 } from '@react-three/csg';
 import { useGLTF } from '@react-three/drei';
+import { useThree } from '@react-three/fiber';
 import { Fragment, useEffect, useRef } from 'react';
 import type { Mesh } from 'three';
 import {
+  Box3,
   Color,
   DoubleSide,
   Group,
@@ -37,6 +39,11 @@ import {
   type DissectEventData,
 } from '../../../core/blitzkit/dissect';
 import { jsxTree } from '../../../core/blitzkit/jsxTree';
+import {
+  lastModuleSelect,
+  moduleSelectEvent,
+  type ModuleSelectEventData,
+} from '../../../core/blitzkit/moduleSelect';
 import { Duel } from '../../../stores/duel';
 import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
 import { groupNameRegex } from './StaticArmorSceneComponent';
@@ -88,6 +95,7 @@ export function DissectorSceneComponent({
   const armor = TankopediaEphemeral.use((state) => state.armor);
   const groupName = group.match(groupNameRegex)![1];
   const groupArmor = armor.groups[groupName];
+  const camera = useThree((state) => state.camera);
 
   return jsxTree(gltf.scene, {
     mesh(mesh, props) {
@@ -115,7 +123,7 @@ export function DissectorSceneComponent({
       const material = useRef(
         new MeshStandardMaterial({
           transparent: isTrack,
-          opacity: 2 ** -1,
+          opacity: 2 ** -5,
           side: DoubleSide,
           color: moduleColor[armorPlate.type],
           clippingPlanes: isModule ? [] : [clippingPlane.current],
@@ -141,6 +149,8 @@ export function DissectorSceneComponent({
         }),
       );
       const worldPosition = new Vector3();
+      const boundsTop = new Vector3();
+      const bounds = new Box3();
 
       useEffect(() => {
         const offset = new Vector3();
@@ -169,11 +179,28 @@ export function DissectorSceneComponent({
           csg.current.update();
         }
 
+        function handleModuleSelectEvent(event: ModuleSelectEventData) {
+          if (!isModule) return;
+
+          const isThisComponentSelected =
+            event.selected &&
+            event.group === groupName &&
+            event.module === armorName;
+          const shouldBeVisible = !event.selected || isThisComponentSelected;
+
+          material.current.transparent = !shouldBeVisible;
+          outlineMaterial.current.transparent = !shouldBeVisible;
+        }
+
         dissectEvent.on(handleDissectEvent);
+        moduleSelectEvent.on(handleModuleSelectEvent);
+
         handleDissectEvent(lastDissection);
+        handleModuleSelectEvent(lastModuleSelect);
 
         return () => {
           dissectEvent.off(handleDissectEvent);
+          moduleSelectEvent.off(handleModuleSelectEvent);
         };
       }, []);
 
@@ -184,25 +211,44 @@ export function DissectorSceneComponent({
           </lineSegments>
 
           {isModule && (
-            <mesh
-              material={material.current}
-              ref={baseWrapper}
-              onPointerDown={(event) => {
-                event.stopPropagation();
-              }}
-            >
-              <Geometry ref={csg}>
-                <Base geometry={props.geometry} />
+            <>
+              <mesh
+                material={material.current}
+                ref={baseWrapper}
+                onClick={(event) => {
+                  if (!baseWrapper.current) return;
 
-                <group rotation={[0, 0, 0]} ref={subtractionWrapper}>
-                  <Subtraction position={[NEGATIVE_SIZE / 2, 0, 0]}>
-                    <boxGeometry
-                      args={[NEGATIVE_SIZE, NEGATIVE_SIZE, NEGATIVE_SIZE]}
-                    />
-                  </Subtraction>
-                </group>
-              </Geometry>
-            </mesh>
+                  const isAlreadySelected =
+                    lastModuleSelect.selected &&
+                    lastModuleSelect.group === groupName &&
+                    lastModuleSelect.module === armorName;
+
+                  if (!isAlreadySelected) {
+                    moduleSelectEvent.emit({
+                      selected: true,
+                      group: groupName,
+                      module: armorName,
+                      position: event.point.toArray(),
+                    });
+                  }
+                }}
+                onPointerDown={(event) => {
+                  event.stopPropagation();
+                }}
+              >
+                <Geometry ref={csg}>
+                  <Base geometry={props.geometry} />
+
+                  <group rotation={[0, 0, 0]} ref={subtractionWrapper}>
+                    <Subtraction position={[NEGATIVE_SIZE / 2, 0, 0]}>
+                      <boxGeometry
+                        args={[NEGATIVE_SIZE, NEGATIVE_SIZE, NEGATIVE_SIZE]}
+                      />
+                    </Subtraction>
+                  </group>
+                </Geometry>
+              </mesh>
+            </>
           )}
 
           {!isModule && (
