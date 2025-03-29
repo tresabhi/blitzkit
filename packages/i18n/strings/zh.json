@@ -754,7 +754,7 @@
         "tank_seo_description": "%s1-Tier %s2 %s3 %s4 | %s5 Tankopedia | 戰車世界閃擊戰 (WoTB)",
         "sandbox": {
           "poses": {
-            "hull_down": "坦克下部",
+            "hull_down": "戰車下部",
             "face_hug": "面部色调",
             "default": "預設"
           },
@@ -897,21 +897,21 @@
             "shell_index": "炮弹 %s1",
             "at_distance": "在 %s1m",
             "at_distance_slider_label": "距离",
-            "dispersion_at_distance": "%s1米的散射度",
+            "dispersion_at_distance": "%s1公尺擴散度",
             "gun_flexibility": "炮控灵活度",
             "speed": "速度",
             "terrain_coefficients": "地势系数",
             "raw_terrain_coefficients": "原始地形系数",
             "power_to_weight_ratio": "推重比",
             "hull_traverse_speed": "炮塔旋转速度",
-            "camouflage": "伪装",
+            "camouflage": "偽裝",
             "reload": "裝填",
             "crewCount": "乘员人数",
             "shellNormalization": "轉正",
             "shellRicochet": "跳彈",
-            "dpm": "每分钟伤害",
+            "dpm": "每分鍾傷害血量",
             "dpmEffective": "60秒内生效",
-            "shells": "炮弹 ",
+            "shells": "砲彈",
             "mostOptimalShellIndex": "最优炮弹",
             "shellReloads": "炮弹重装",
             "shellReload": "炮弹重装",
@@ -1040,19 +1040,19 @@
       "performance": {
         "name": "性能表现",
         "button": "查看坦克",
-        "description": "坦克性能统计",
-        "seo_description": "最好的坦克及其在世界坦克闪电战中的表现",
+        "description": "戰車性能統計",
+        "seo_description": "最好的戰車及其在戰車世界閃擊戰中的表現",
         "estimation": {
           "body": "基于 %s1个玩家的估计数据。更新 %s2 之前。",
-          "hours": "%s1 小时",
-          "minutes": "%s1 分钟"
+          "hours": "%s1 小時",
+          "minutes": "%s1 分鐘"
         },
         "player_count": {
           "label": "玩家数量"
         },
         "table": {
           "tanks": {
-            "header": "坦克",
+            "header": "戰車",
             "total": "全部"
           },
           "stats": {
@@ -1068,15 +1068,15 @@
             "hits": "命中數",
             "damage_ratio": "伤害效率",
             "damage_taken": "伤害值",
-            "capture_points": "占领值"
+            "capture_points": "佔領點數"
           }
         }
       },
       "gallery": {
-        "name": "图库",
-        "button": "浏览全部",
-        "description": "Blitz玩家头像",
-        "seo_description": "所有坦克闪电战玩家头像",
+        "name": "圖庫",
+        "button": "瀏覽所有",
+        "description": "Blitz 玩家頭像",
+        "seo_description": "所有戰車世界閃擊戰玩家頭像",
         "last_updated": "最後更新於 %s1",
         "search": {
           "hint": "搜尋頭像……",
@@ -1131,17 +1131,17 @@
         "description": "串流嵌入功能",
         "seo_description": "創建具有極高自訂化的《戰車世界：閃擊戰》串流嵌入功能",
         "coming_soon": "更多嵌入功能即將推出。",
-        "suggest": "建议与想法",
+        "suggest": "建議與想法。",
         "preview": {
-          "title": "示例预览",
-          "upload": "上传测试背景"
+          "title": "範例",
+          "upload": "上傳測試背景"
         },
         "configuration": {
           "import": {
-            "title": "导入",
+            "title": "導入",
             "description": "如果您已经有一个要导入您的设置，请粘贴您当前的 URL",
-            "hint": "粘贴链接...",
-            "apply": "应用",
+            "hint": "貼上 URL……",
+            "apply": "套用",
             "idiot_title": "無效的 URL",
             "idiot_description": "試著貼上 BlitzKit 先前生成的網址吧，你這隻傻鵝！",
             "idiot_button": "好吧，我的錯"
