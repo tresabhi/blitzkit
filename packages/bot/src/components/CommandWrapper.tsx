@@ -17,7 +17,6 @@ export function CommandWrapper({ children, fat }: CommandWrapperProps) {
         width: '100%',
         color: theme.colors.textHighContrast,
         position: 'relative',
-        background: theme.colors.appBackground1,
       }}
     >
       {children}

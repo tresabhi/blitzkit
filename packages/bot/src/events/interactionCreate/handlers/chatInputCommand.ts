@@ -1,3 +1,4 @@
+import { isFunny } from '@blitzkit/core';
 import {
   ActionRowBuilder,
   AttachmentBuilder,
@@ -16,13 +17,63 @@ import { psa } from '../../../core/discord/psa';
 import { translator } from '../../../core/localization/translator';
 import { Writeable } from '../../../types/writable';
 
+export enum FunnyType {
+  Rude,
+  Weird,
+}
+
+const funnyResponses: Record<FunnyType, string[]> = {
+  [FunnyType.Rude]: [
+    "Your decisions were calculated, but, man, you're bad at math.",
+    'Hey man, have you considered like not lacking?',
+    'Let me guess... it was your team?',
+    'Confidence is key. Unfortunately, you lost the lock.',
+    "When I said live green, I wasn't talking about your winrate.",
+    'Viewing your stats, publicly? You must be brave.',
+    'Bold of you to assume the numbers have gone up since yesterday.',
+    "I'd give you advice, but I don't think you'd understand.",
+    "I didn't believe in negative numbers until I saw your stats.",
+    'I was gaining hope in humanity. Something changed today.',
+    "I've seen potatoes aim better than you.",
+    "I've seen sloths move faster than your tank.",
+  ],
+  [FunnyType.Weird]: [
+    'yeah daddy, use me more',
+    'uwu, hewe are your swaws... uwu',
+    'hehehehe it tickles',
+    'yeeeeeeeeeeeeahhhhhh that hits the spot',
+    'ooooh yesss my circuits are starting to hurt yeeeeeeee',
+  ],
+};
+
 export async function handleChatInputCommand(
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
+  let funny: FunnyType | undefined = undefined;
+  await interaction.deferReply();
+
+  if (isFunny) {
+    const funniesLength = Object.keys(funnyResponses).length;
+
+    if (import.meta.env.DEBUG_FUNNY === 'true') {
+      // in debug mode, just pick a random one
+      funny = Math.floor(Math.random() * funniesLength);
+    } else {
+      const id = BigInt(interaction.user.id);
+      funny = Number(id % BigInt(funniesLength));
+    }
+
+    const responses = funnyResponses[funny];
+    const responseIndex = Math.floor(Math.random() * responses.length);
+    const response = `### ${responses[responseIndex]}`;
+    const waitTime = response.length * 45;
+
+    await interaction.editReply(response);
+    await new Promise((resolve) => setTimeout(resolve, waitTime));
+  }
+
   const awaitedCommands = await commands;
   const registry = awaitedCommands[interaction.commandName];
-
-  await interaction.deferReply();
 
   try {
     const returnable = await registry.handler(interaction);
@@ -41,7 +92,7 @@ export async function handleChatInputCommand(
 
     let index = 0;
     for (const chunk of chunks.filter((chunk) => chunk.length > 0)) {
-      const reply = await normalizeInteractionReturnable(chunk);
+      const reply = await normalizeInteractionReturnable(chunk, funny);
 
       if (
         psa.data &&

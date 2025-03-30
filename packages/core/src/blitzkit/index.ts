@@ -44,6 +44,7 @@ export * from './unwrapBlitzkitResponse';
 export * from './votes';
 // export * from './withCORSProxy';
 export * from './createDefaultProvisions';
+export * from './isFunny';
 export * from './metaSortTank';
 export * from './romanize';
 export * from './youtubers';
