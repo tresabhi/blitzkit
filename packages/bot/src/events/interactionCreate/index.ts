@@ -15,7 +15,6 @@ import {
   SlashCommandSubcommandsOnlyBuilder,
 } from 'discord.js';
 import { aboutCommand } from '../../commands/about';
-import { auctionCommand } from '../../commands/auction';
 import { breakdownCommand } from '../../commands/breakdown';
 import { debugCommand } from '../../commands/debug';
 import { evolutionCommand } from '../../commands/evolution';
@@ -80,7 +79,7 @@ interface CommandRegistryExplicit extends CommandRegistryBase {
 export type CommandRegistry = CommandRegistryImplicit | CommandRegistryExplicit;
 
 export const COMMANDS_RAW: Promise<CommandRegistry>[] = [
-  auctionCommand,
+  // auctionCommand,
   permissionsCommand,
   debugCommand,
   aboutCommand,
