@@ -2,6 +2,7 @@ import {
   createDefaultSkills,
   ShellDefinition,
   TankArmor,
+  TankModel,
 } from '@blitzkit/core';
 import type { Vector3 } from 'three';
 import { create } from 'zustand';
@@ -103,6 +104,7 @@ interface TankopediaEphemeral {
   relativeAgainst: TankopediaRelativeAgainst;
   controlsEnabled: boolean;
   armor: TankArmor;
+  model: TankModel;
   editStatic: boolean;
   highlightArmor?: {
     editingPlate: boolean;
@@ -126,7 +128,15 @@ interface TankopediaEphemeral {
 const skillDefinitions = await awaitableSkillDefinitions;
 
 export const TankopediaEphemeral = createContextualStore(
-  ({ armor, thicknessRange }: { armor: TankArmor; thicknessRange: number }) => {
+  ({
+    armor,
+    thicknessRange,
+    model,
+  }: {
+    armor: TankArmor;
+    thicknessRange: number;
+    model: TankModel;
+  }) => {
     return create<TankopediaEphemeral>()(
       subscribeWithSelector<TankopediaEphemeral>(() => ({
         thicknessRange,
@@ -135,6 +145,7 @@ export const TankopediaEphemeral = createContextualStore(
         editStatic: false,
         skills: createDefaultSkills(skillDefinitions),
         armor,
+        model,
         controlsEnabled: true,
         xpMultiplier: 1,
         display: TankopediaDisplay.StaticArmor,

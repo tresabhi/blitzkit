@@ -1,4 +1,4 @@
-import { Tank, TankArmor } from '@blitzkit/core';
+import { Tank, TankArmor, TankModel } from '@blitzkit/core';
 import { PageWrapper } from '../../../../components/PageWrapper';
 import { HeroSection } from '../../../../components/Tankopedia/HeroSection';
 import {
@@ -15,12 +15,15 @@ type PageProps = MaybeSkeletonComponentProps &
   LocaleAcceptorProps & {
     tank: Tank;
     armor: TankArmor;
+    model: TankModel;
   };
 
-export function Page({ tank, armor, skeleton, locale }: PageProps) {
+export function Page({ tank, armor, skeleton, locale, model }: PageProps) {
   return (
     <LocaleProvider locale={locale}>
-      <TankopediaEphemeral.Provider data={{ armor, thicknessRange: 193 }}>
+      <TankopediaEphemeral.Provider
+        data={{ armor, thicknessRange: 193, model }}
+      >
         <App.Provider>
           <TankopediaPersistent.Provider>
             <Duel.Provider

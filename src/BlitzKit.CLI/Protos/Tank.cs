@@ -32,13 +32,13 @@ namespace Blitzkit {
             "ay5HdW5zRW50cnkaQAoMVHVycmV0c0VudHJ5EgsKA2tleRgBIAEoCRIfCgV2",
             "YWx1ZRgCIAEoCzIQLmJsaXR6a2l0LlR1cnJldDoCOAEaOgoJR3Vuc0VudHJ5",
             "EgsKA2tleRgBIAEoCRIcCgV2YWx1ZRgCIAEoCzINLmJsaXR6a2l0Lkd1bjoC",
-            "OAEiCAoGVHVycmV0IgUKA0d1bg=="));
+            "OAEiFAoGVHVycmV0EgoKAmlkGAEgAigJIhEKA0d1bhIKCgJpZBgBIAIoCQ=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Blitzkit.UtilsReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Blitzkit.Tank), global::Blitzkit.Tank.Parser, new[]{ "Id", "Slug", "Name", "Turrets", "Guns" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, null, }),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Blitzkit.Turret), global::Blitzkit.Turret.Parser, null, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Blitzkit.Gun), global::Blitzkit.Gun.Parser, null, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Blitzkit.Turret), global::Blitzkit.Turret.Parser, new[]{ "Id" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Blitzkit.Gun), global::Blitzkit.Gun.Parser, new[]{ "Id" }, null, null, null, null)
           }));
     }
     #endregion
@@ -441,6 +441,7 @@ namespace Blitzkit {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public Turret(Turret other) : this() {
+      id_ = other.id_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -448,6 +449,32 @@ namespace Blitzkit {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public Turret Clone() {
       return new Turret(this);
+    }
+
+    /// <summary>Field number for the "id" field.</summary>
+    public const int IdFieldNumber = 1;
+    private readonly static string IdDefaultValue = "";
+
+    private string id_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Id {
+      get { return id_ ?? IdDefaultValue; }
+      set {
+        id_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+    /// <summary>Gets whether the "id" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasId {
+      get { return id_ != null; }
+    }
+    /// <summary>Clears the value of the "id" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearId() {
+      id_ = null;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -465,6 +492,7 @@ namespace Blitzkit {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (Id != other.Id) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -472,6 +500,7 @@ namespace Blitzkit {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
+      if (HasId) hash ^= Id.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -490,6 +519,10 @@ namespace Blitzkit {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
+      if (HasId) {
+        output.WriteRawTag(10);
+        output.WriteString(Id);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -500,6 +533,10 @@ namespace Blitzkit {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (HasId) {
+        output.WriteRawTag(10);
+        output.WriteString(Id);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -510,6 +547,9 @@ namespace Blitzkit {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
+      if (HasId) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Id);
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -521,6 +561,9 @@ namespace Blitzkit {
     public void MergeFrom(Turret other) {
       if (other == null) {
         return;
+      }
+      if (other.HasId) {
+        Id = other.Id;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -541,6 +584,10 @@ namespace Blitzkit {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
+          case 10: {
+            Id = input.ReadString();
+            break;
+          }
         }
       }
     #endif
@@ -560,6 +607,10 @@ namespace Blitzkit {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
+          case 10: {
+            Id = input.ReadString();
+            break;
+          }
         }
       }
     }
@@ -602,6 +653,7 @@ namespace Blitzkit {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public Gun(Gun other) : this() {
+      id_ = other.id_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -609,6 +661,32 @@ namespace Blitzkit {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public Gun Clone() {
       return new Gun(this);
+    }
+
+    /// <summary>Field number for the "id" field.</summary>
+    public const int IdFieldNumber = 1;
+    private readonly static string IdDefaultValue = "";
+
+    private string id_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Id {
+      get { return id_ ?? IdDefaultValue; }
+      set {
+        id_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+    /// <summary>Gets whether the "id" field is set</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool HasId {
+      get { return id_ != null; }
+    }
+    /// <summary>Clears the value of the "id" field</summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void ClearId() {
+      id_ = null;
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -626,6 +704,7 @@ namespace Blitzkit {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (Id != other.Id) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -633,6 +712,7 @@ namespace Blitzkit {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
+      if (HasId) hash ^= Id.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -651,6 +731,10 @@ namespace Blitzkit {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
+      if (HasId) {
+        output.WriteRawTag(10);
+        output.WriteString(Id);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -661,6 +745,10 @@ namespace Blitzkit {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (HasId) {
+        output.WriteRawTag(10);
+        output.WriteString(Id);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -671,6 +759,9 @@ namespace Blitzkit {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
+      if (HasId) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Id);
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -682,6 +773,9 @@ namespace Blitzkit {
     public void MergeFrom(Gun other) {
       if (other == null) {
         return;
+      }
+      if (other.HasId) {
+        Id = other.Id;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -702,6 +796,10 @@ namespace Blitzkit {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
+          case 10: {
+            Id = input.ReadString();
+            break;
+          }
         }
       }
     #endif
@@ -721,6 +819,10 @@ namespace Blitzkit {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
+          case 10: {
+            Id = input.ReadString();
+            break;
+          }
         }
       }
     }

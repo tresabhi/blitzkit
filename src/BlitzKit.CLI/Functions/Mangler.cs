@@ -330,14 +330,14 @@ namespace BlitzKit.CLI.Functions
           {
             case "DT_Turrets":
             {
-              Turret turret = new();
+              Turret turret = new() { Id = moduleName };
               tank.Turrets[moduleName] = turret;
               break;
             }
 
             case "DT_Guns":
             {
-              Gun gun = new();
+              Gun gun = new() { Id = moduleName };
               tank.Guns[moduleName] = gun;
               break;
             }

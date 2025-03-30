@@ -1,5 +1,5 @@
 ---
-import { fetchTank, fetchTankArmor } from '@blitzkit/core';
+import { fetchTank, fetchTankArmor, fetchTankModel } from '@blitzkit/core';
 import { DEFAULT_LOCALE } from '@blitzkit/i18n';
 import type { GetStaticPaths } from 'astro';
 import { awaitableTanksFull } from '../../../../core/awaitables/tanksFull';
@@ -25,6 +25,7 @@ const locale = Astro.params.locale ?? DEFAULT_LOCALE;
 const { id } = Astro.props;
 const tank = await fetchTank(id);
 const armor = await fetchTankArmor(id);
+const model = await fetchTankModel(id);
 
 // const strings = getStrings(locale);
 // const tankDefinitions = await fetchTankDefinitions();
@@ -94,7 +95,7 @@ const armor = await fetchTankArmor(id);
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:image:src" content={icon} /> -->
 <BaseLayout>
-  <Page {tank} {armor} {locale} client:only="react">
-    <Page {tank} {armor} {locale} skeleton slot="fallback" />
+  <Page {model} {tank} {armor} {locale} client:only="react">
+    <Page {model} {tank} {armor} {locale} skeleton slot="fallback" />
   </Page>
 </BaseLayout>

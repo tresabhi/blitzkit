@@ -29,9 +29,11 @@ export interface Tank_GunsEntry {
 }
 
 export interface Turret {
+  id: string;
 }
 
 export interface Gun {
+  id: string;
 }
 
 function createBaseTank(): Tank {
@@ -353,11 +355,14 @@ export const Tank_GunsEntry: MessageFns<Tank_GunsEntry> = {
 };
 
 function createBaseTurret(): Turret {
-  return {};
+  return { id: "" };
 }
 
 export const Turret: MessageFns<Turret> = {
-  encode(_: Turret, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+  encode(message: Turret, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
     return writer;
   },
 
@@ -368,6 +373,14 @@ export const Turret: MessageFns<Turret> = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -377,30 +390,37 @@ export const Turret: MessageFns<Turret> = {
     return message;
   },
 
-  fromJSON(_: any): Turret {
-    return {};
+  fromJSON(object: any): Turret {
+    return { id: globalThis.String(assertSet("Turret.id", object.id)) };
   },
 
-  toJSON(_: Turret): unknown {
+  toJSON(message: Turret): unknown {
     const obj: any = {};
+    if (message.id !== "") {
+      obj.id = message.id;
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<Turret>, I>>(base?: I): Turret {
     return Turret.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<Turret>, I>>(_: I): Turret {
+  fromPartial<I extends Exact<DeepPartial<Turret>, I>>(object: I): Turret {
     const message = createBaseTurret();
+    message.id = object.id ?? "";
     return message;
   },
 };
 
 function createBaseGun(): Gun {
-  return {};
+  return { id: "" };
 }
 
 export const Gun: MessageFns<Gun> = {
-  encode(_: Gun, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+  encode(message: Gun, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
     return writer;
   },
 
@@ -411,6 +431,14 @@ export const Gun: MessageFns<Gun> = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -420,20 +448,24 @@ export const Gun: MessageFns<Gun> = {
     return message;
   },
 
-  fromJSON(_: any): Gun {
-    return {};
+  fromJSON(object: any): Gun {
+    return { id: globalThis.String(assertSet("Gun.id", object.id)) };
   },
 
-  toJSON(_: Gun): unknown {
+  toJSON(message: Gun): unknown {
     const obj: any = {};
+    if (message.id !== "") {
+      obj.id = message.id;
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<Gun>, I>>(base?: I): Gun {
     return Gun.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<Gun>, I>>(_: I): Gun {
+  fromPartial<I extends Exact<DeepPartial<Gun>, I>>(object: I): Gun {
     const message = createBaseGun();
+    message.id = object.id ?? "";
     return message;
   },
 };

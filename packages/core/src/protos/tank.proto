@@ -13,7 +13,9 @@ message Tank {
 }
 
 message Turret {
+  required string id = 1;
 }
 
 message Gun {
+  required string id = 1;
 }

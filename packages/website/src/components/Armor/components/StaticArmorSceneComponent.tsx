@@ -44,6 +44,12 @@ export function StaticArmorSceneComponent({
 
       const armorName = mesh.material.name;
       const armorPlate = groupArmor.armors[armorName];
+
+      if (armorPlate === undefined) {
+        console.warn(`Missing armor: ${armorName}`);
+        return null;
+      }
+
       const x = armorPlate.thickness / thicknessRange;
       const xClamped = clamp(x, 0, 1);
       const material = new MeshStandardMaterial();

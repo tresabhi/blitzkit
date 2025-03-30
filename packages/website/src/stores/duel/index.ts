@@ -1,4 +1,4 @@
-import { Tank } from '@blitzkit/core';
+import { Gun, Tank, Turret } from '@blitzkit/core';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { tankToDuelMember } from '../../core/blitzkit/tankToDuelMember';
@@ -19,8 +19,8 @@ export type EquipmentMatrix = [
 export interface DuelMember {
   tank: Tank;
   // engine: EngineDefinition;
-  // turret: TurretDefinition;
-  // gun: GunDefinition;
+  turret: Turret;
+  gun: Gun;
   // shell: ShellDefinition;
   // track: TrackDefinition;
   // equipmentMatrix: EquipmentMatrix;
