@@ -28,6 +28,11 @@ namespace BlitzKit.CLI.Models
     private static readonly List<FileChange> changes = [];
     private int changesSize = 0;
 
+    public async Task Add(string blobPath, byte[] blob)
+    {
+      await Add(new(blobPath, blob));
+    }
+
     public async Task Add(FileChange change)
     {
       if (!enabled)

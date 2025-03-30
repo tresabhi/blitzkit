@@ -1,5 +1,4 @@
 // @ts-nocheck
-export * from './i18n.ts';
 export * from './legacy_average_definitions.ts';
 export * from './legacy_camouflage_definitions.ts';
 export * from './legacy_consumable_definitions.ts';
@@ -16,3 +15,5 @@ export * from './reviews.ts';
 export * from './tank.ts';
 export * from './tanks.ts';
 export * from './tank_armor.ts';
+export * from './tank_model.ts';
+export * from './utils.ts';

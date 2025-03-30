@@ -10,11 +10,13 @@ export const StaticArmor = memo(() => {
     <group>
       <StaticArmorSceneComponent group="hull" />
       <StaticArmorSceneComponent group="chassis" />
-      <group position={[0.7, 1.6, 0]}>
+
+      <group position={[65.92709 / 100, 155.5313 / 100, 0.022151405 / 100]}>
         <StaticArmorSceneComponent group="turret_01" />
-        <group position={[1, 0.36, 0]}>
-          <StaticArmorSceneComponent group="gun_01" />
-        </group>
+      </group>
+
+      <group position={[194.92838 / 100, 190.19179 / 100, 0.06545235 / 100]}>
+        <StaticArmorSceneComponent group="gun_01" />
       </group>
     </group>
   );

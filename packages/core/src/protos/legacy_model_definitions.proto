@@ -2,6 +2,8 @@ syntax = "proto2";
 
 package blitzkit;
 
+import "packages/core/src/protos/utils.proto";
+
 message ModelDefinitions {
   map<uint32, ModelDefinition> models = 1;
 }
@@ -18,12 +20,6 @@ message ModelDefinition {
 message Armor {
   map<uint32, float> thickness = 1;
   repeated uint32 spaced = 2;
-}
-
-message Vector3 {
-  required float x = 1;
-  required float y = 2;
-  required float z = 3;
 }
 
 message InitialTurretRotation {

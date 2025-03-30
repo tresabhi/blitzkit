@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+import "packages/core/src/protos/utils.proto";
+
+package blitzkit;
+
+message TankModel {
+  map<string, ModuleModel> modules = 1;
+}
+
+message ModuleModel {
+  required Vector3 translation = 2;
+}

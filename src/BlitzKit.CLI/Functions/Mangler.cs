@@ -9,6 +9,7 @@ using CUE4Parse.UE4.Assets.Exports.Engine;
 using CUE4Parse.UE4.Assets.Exports.StaticMesh;
 using CUE4Parse.UE4.Assets.Exports.Texture;
 using CUE4Parse.UE4.Assets.Objects;
+using CUE4Parse.UE4.Objects.Core.Math;
 using CUE4Parse.UE4.Objects.UObject;
 using CUE4Parse.Utils;
 using Google.Protobuf;
@@ -48,7 +49,7 @@ namespace BlitzKit.CLI.Functions
     readonly BlitzProvider provider = new(args.Contains("--depot"));
     Locales? locales;
     readonly Dictionary<string, Dictionary<string, string>> strings = [];
-    readonly AssetUploader assetUploader = new("mangled ue assets");
+    readonly AssetUploader assetUploader = new("mangled ue assets") { enabled = true };
 
     public async Task Mangle()
     {
@@ -137,11 +138,11 @@ namespace BlitzKit.CLI.Functions
       foreach (var tank in tanksFull.Tanks)
       {
         tanks.Tanks_.Add(tank.Id);
-        await assetUploader.Add(new($"tanks/{tank.Id}/meta.pb", tank.ToByteArray()));
+        await assetUploader.Add($"tanks/{tank.Id}/meta.pb", tank.ToByteArray());
       }
 
-      await assetUploader.Add(new("definitions/tanks.pb", tanks.ToByteArray()));
-      await assetUploader.Add(new("definitions/tanks-full.pb", tanksFull.ToByteArray()));
+      await assetUploader.Add("definitions/tanks.pb", tanks.ToByteArray());
+      await assetUploader.Add("definitions/tanks-full.pb", tanksFull.ToByteArray());
     }
 
     void DeduplicateSlugs(TanksFull tanksFull)
@@ -219,14 +220,13 @@ namespace BlitzKit.CLI.Functions
       var pdaName = $"PDA_{tankDir.Name}";
       var pda = provider.LoadObject($"{tankDir.Path}/{pdaName}.{pdaName}");
 
-      var id = PropertyUtil.Get<FName>(pda, "TankId").Text;
+      var id = pda.Get<FName>("TankId").Text;
       var name = GetString($"TankEntity__{id.ToLowerInvariant()}__Short_Name");
       var slug = Diacritics.Remove(name.Locales["en"]).ToLower();
       slug = NonAlphanumericRegex().Replace(slug, "-");
       slug = MultipleDashesRegex().Replace(slug, "-");
       slug = TrailingDashRegex().Replace(slug, "");
 
-      await MangleCollision(id, pda);
       await MangleIcon(pda);
       await MangleArmor(pda);
 
@@ -237,39 +237,35 @@ namespace BlitzKit.CLI.Functions
         Slug = slug,
       };
 
+      await MangleModules(tank, pda);
+
       return tank;
     }
 
     async Task MangleArmor(UObject pda)
     {
-      var id = PropertyUtil.Get<FName>(pda, "TankId").Text;
+      var id = pda.Get<FName>("TankId").Text;
       TankArmor tankArmor = new();
-      var attributes = PropertyUtil.Get<UObject>(pda, "DA_Attributes");
-      PropertyUtil.TryGet<UScriptMap>(attributes, "PenetrationGroups", out var penetrationGroups);
+      var attributes = pda.Get<UObject>("DA_Attributes");
 
-      if (penetrationGroups == null)
-      {
-        PrettyLog.Warn($"Penetration groups missing for {id}; creating empty list");
-      }
-      else
+      if (attributes.TryGet<UScriptMap>("PenetrationGroups", out var penetrationGroups))
       {
         foreach (var group in penetrationGroups.Properties)
         {
           var rawName = ((FName)group.Key.GenericValue!).Text;
           var name = PenetrationGroupNameMap[rawName];
-          var armors = PropertyUtil.Get<UScriptMap>(
-            group.Value!.GetValue<FStructFallback>()!,
-            "PenetrationGroups"
-          );
+          var armors = group
+            .Value!.GetValue<FStructFallback>()!
+            .Get<UScriptMap>("PenetrationGroups");
           PenetrationGroup penetrationGroup = new();
 
           foreach (var armorProperty in armors.Properties)
           {
             var armorName = ((FName)armorProperty.Key.GenericValue!).Text;
             var armorProperties = armorProperty.Value!.GetValue<FStructFallback>()!;
-            var thickness = PropertyUtil.Get<float>(armorProperties, "Armor");
-            var commonData = PropertyUtil.Get<FStructFallback>(armorProperties, "CommonData");
-            var rowName = PropertyUtil.Get<FName>(commonData, "RowName");
+            var thickness = armorProperties.Get<float>("Armor");
+            var commonData = armorProperties.Get<FStructFallback>("CommonData");
+            var rowName = commonData.Get<FName>("RowName");
 
             penetrationGroup.Armors[armorName] = new()
             {
@@ -281,65 +277,95 @@ namespace BlitzKit.CLI.Functions
           tankArmor.Groups[name] = penetrationGroup;
         }
       }
+      else
+      {
+        PrettyLog.Warn($"Penetration groups missing for {id}; creating empty list");
+      }
 
-      await assetUploader.Add(new($"tanks/{id}/armor.pb", tankArmor.ToByteArray()));
+      await assetUploader.Add($"tanks/{id}/armor.pb", tankArmor.ToByteArray());
     }
 
     async Task MangleIcon(UObject pda)
     {
-      var id = PropertyUtil.Get<FName>(pda, "TankId").Text;
-      PropertyUtil.TryGet<UTexture2D>(pda, "SmallIcon", out var smallIconTexture);
-      PropertyUtil.TryGet<UTexture2D>(pda, "BigIcon", out var bigIconTexture);
+      var id = pda.Get<FName>("TankId").Text;
 
-      if (smallIconTexture is null)
+      if (pda.TryGet<UTexture2D>("SmallIcon", out var smallIconTexture))
+      {
+        var smallIcon = BlitzKitExporter.Texture2D(smallIconTexture);
+        await assetUploader.Add($"tanks/{id}/icons/small.png", smallIcon);
+      }
+      else
       {
         PrettyLog.Warn($"Small icon missing for {id}");
       }
-      else
-      {
-        var smallIcon = BlitzKitExporter.Texture2D(smallIconTexture);
-        await assetUploader.Add(new($"tanks/{id}/icons/small.png", smallIcon));
-      }
 
-      if (bigIconTexture is null)
+      if (pda.TryGet<UTexture2D>("BigIcon", out var bigIconTexture))
+      {
+        var bigIcon = BlitzKitExporter.Texture2D(bigIconTexture);
+        await assetUploader.Add($"tanks/{id}/icons/big.png", bigIcon);
+      }
+      else
       {
         PrettyLog.Warn($"Big icon missing for {id}");
       }
-      else
-      {
-        var bigIcon = BlitzKitExporter.Texture2D(bigIconTexture);
-        await assetUploader.Add(new($"tanks/{id}/icons/big.png", bigIcon));
-      }
     }
 
-    async Task MangleModuleCollision(string id, UDataTable dt)
+    async Task MangleModules(Tank tank, UObject pda)
     {
-      foreach (var row in dt.RowMap)
+      TankModel tankModel = new();
+
+      foreach (var moduleType in CollisionDTs)
       {
-        var moduleName = row.Key.Text;
-        var visualData = PropertyUtil.Get<UObject>(row.Value, "VisualData");
-        var meshSettings = PropertyUtil.Get<FStructFallback>(visualData, "MeshSettings");
+        var dt = pda.Get<UDataTable>(moduleType);
 
-        if (PropertyUtil.TryGet<UStaticMesh>(meshSettings, "CollisionMesh", out var collision))
+        foreach (var row in dt.RowMap)
         {
-          MonoGltf gltf = new(collision);
+          var moduleName = row.Key.Text;
+          ModuleModel moduleModel = new();
+          var visualData = row.Value.Get<UObject>("VisualData");
+          var meshSettings = visualData.Get<FStructFallback>("MeshSettings");
+          var boneTransform = meshSettings.Get<FStructFallback>("BoneTransform");
 
-          await assetUploader.Add(new($"tanks/{id}/collision/{moduleName}.glb", gltf.Write()));
-        }
-        else
-        {
-          PrettyLog.Warn($"No collision mesh found for {id} {moduleName}; skipping...");
-        }
-        ;
-      }
-    }
+          switch (moduleType)
+          {
+            case "DT_Turrets":
+            {
+              Turret turret = new();
+              tank.Turrets[moduleName] = turret;
+              break;
+            }
 
-    async Task MangleCollision(string id, UObject pda)
-    {
-      foreach (var name in CollisionDTs)
-      {
-        await MangleModuleCollision(id, PropertyUtil.Get<UDataTable>(pda, name));
+            case "DT_Guns":
+            {
+              Gun gun = new();
+              tank.Guns[moduleName] = gun;
+              break;
+            }
+          }
+
+          if (boneTransform.TryGet<FVector>("Translation", out var translation))
+          {
+            moduleModel.Translation = BlitzKitExporter.Vector3(translation);
+          }
+
+          tankModel.Modules[moduleName] = moduleModel;
+
+          if (meshSettings.TryGet<UStaticMesh>("CollisionMesh", out var collision))
+          {
+            MonoGltf gltf = new(collision);
+
+            await assetUploader.Add(
+              new($"tanks/{tank.Id}/collision/{moduleName}.glb", gltf.Write())
+            );
+          }
+          else
+          {
+            PrettyLog.Warn($"No collision mesh found for {tank.Id} {moduleName}; skipping...");
+          }
+        }
       }
+
+      await assetUploader.Add($"tanks/{tank.Id}/model.pb", tankModel.ToByteArray());
     }
   }
 }

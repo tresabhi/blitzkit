@@ -1,6 +1,6 @@
 syntax = "proto2";
 
-import "packages/core/src/protos/i18n.proto";
+import "packages/core/src/protos/utils.proto";
 
 package blitzkit;
 
@@ -8,4 +8,12 @@ message Tank {
   required string id = 1;
   required string slug = 2;
   required I18n name = 3;
+  map<string, Turret> turrets = 4;
+  map<string, Gun> guns = 5;
+}
+
+message Turret {
+}
+
+message Gun {
 }

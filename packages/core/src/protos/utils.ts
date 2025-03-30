@@ -2,12 +2,18 @@
 // versions:
 //   protoc-gen-ts_proto  v2.2.2
 //   protoc               v5.28.2
-// source: packages/core/src/protos/i18n.proto
+// source: packages/core/src/protos/utils.proto
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 
 export const protobufPackage = "blitzkit";
+
+export interface Vector3 {
+  x: number;
+  y: number;
+  z: number;
+}
 
 export interface I18n {
   locales: { [key: string]: string };
@@ -17,6 +23,98 @@ export interface I18n_LocalesEntry {
   key: string;
   value: string;
 }
+
+export function createBaseVector3(): Vector3 {
+  return { x: 0, y: 0, z: 0 };
+}
+
+export const Vector3: MessageFns<Vector3> = {
+  encode(message: Vector3, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.x !== 0) {
+      writer.uint32(13).float(message.x);
+    }
+    if (message.y !== 0) {
+      writer.uint32(21).float(message.y);
+    }
+    if (message.z !== 0) {
+      writer.uint32(29).float(message.z);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): Vector3 {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseVector3();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 13) {
+            break;
+          }
+
+          message.x = reader.float();
+          continue;
+        }
+        case 2: {
+          if (tag !== 21) {
+            break;
+          }
+
+          message.y = reader.float();
+          continue;
+        }
+        case 3: {
+          if (tag !== 29) {
+            break;
+          }
+
+          message.z = reader.float();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Vector3 {
+    return {
+      x: globalThis.Number(assertSet("Vector3.x", object.x)),
+      y: globalThis.Number(assertSet("Vector3.y", object.y)),
+      z: globalThis.Number(assertSet("Vector3.z", object.z)),
+    };
+  },
+
+  toJSON(message: Vector3): unknown {
+    const obj: any = {};
+    if (message.x !== 0) {
+      obj.x = message.x;
+    }
+    if (message.y !== 0) {
+      obj.y = message.y;
+    }
+    if (message.z !== 0) {
+      obj.z = message.z;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<Vector3>, I>>(base?: I): Vector3 {
+    return Vector3.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<Vector3>, I>>(object: I): Vector3 {
+    const message = createBaseVector3();
+    message.x = object.x ?? 0;
+    message.y = object.y ?? 0;
+    message.z = object.z ?? 0;
+    return message;
+  },
+};
 
 export function createBaseI18n(): I18n {
   return { locales: {} };
