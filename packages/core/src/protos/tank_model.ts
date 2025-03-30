@@ -6,7 +6,7 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
-import { Vector3 } from "./utils";
+import { Vector3, createBaseVector3 } from "./utils";
 
 export const protobufPackage = "blitzkit";
 

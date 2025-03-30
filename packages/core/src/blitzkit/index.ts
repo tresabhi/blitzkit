@@ -48,6 +48,7 @@ export * from './metaSortTank';
 export * from './romanize';
 export * from './tank';
 export * from './tankArmor';
+export * from './tankModel';
 export * from './tanks';
 export * from './tanksFull';
 export * from './youtubers';
