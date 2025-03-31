@@ -5,8 +5,7 @@
         if (
           node.nodeType !== 3 ||
           !node.textContent ||
-          !(node instanceof HTMLElement) ||
-          node.classList.contains('no-funny')
+          (node as HTMLElement).classList?.contains('no-funny')
         )
           return;
 
