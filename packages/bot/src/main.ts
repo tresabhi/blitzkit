@@ -66,7 +66,7 @@ const interval = setInterval(async () => {
         for (const guild of client.guilds.cache.values()) {
           try {
             const botMember = await guild.members.fetch(client.user.id);
-            await botMember.setNickname(isFunny ? "No One's Kit" : 'BlitzKit');
+            await botMember.setNickname(isFunny ? 'FreakKit' : 'BlitzKit');
           } catch {}
         }
       },

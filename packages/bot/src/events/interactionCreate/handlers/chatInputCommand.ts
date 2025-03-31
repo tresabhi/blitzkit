@@ -17,56 +17,34 @@ import { psa } from '../../../core/discord/psa';
 import { translator } from '../../../core/localization/translator';
 import { Writeable } from '../../../types/writable';
 
-export enum FunnyType {
-  Rude,
-  Weird,
-}
-
-const funnyResponses: Record<FunnyType, string[]> = {
-  [FunnyType.Rude]: [
-    "Your decisions were calculated, but, man, you're bad at math.",
-    'Hey man, have you considered like not lacking?',
-    'Let me guess... it was your team?',
-    'Confidence is key. Unfortunately, you lost the lock.',
-    "When I said live green, I wasn't talking about your winrate.",
-    'Viewing your stats, publicly? You must be brave.',
-    'Bold of you to assume the numbers have gone up since yesterday.',
-    "I'd give you advice, but I don't think you'd understand.",
-    "I didn't believe in negative numbers until I saw your stats.",
-    'I was gaining hope in humanity. Something changed today.',
-    "I've seen potatoes aim better than you.",
-    "I've seen sloths move faster than your tank.",
-  ],
-  [FunnyType.Weird]: [
-    'yeah daddy, use me more',
-    'uwu, hewe are your swaws... uwu',
-    'hehehehe it tickles',
-    'yeeeeeeeeeeeeahhhhhh that hits the spot',
-    'ooooh yesss my circuits are starting to hurt yeeeeeeee',
-  ],
-};
+const funnyResponses = [
+  "your dwecisions were calculawed buw man, you're bad at math 🥀🥀",
+  'senpai, have you consiwered not lacking 😳',
+  'let shoow a guess cutie... it was your team? 🤬🤬🤬',
+  'confiwence is key. unforwunawely you lost whe lock 🔒💔',
+  "when they say live green, they dwn't mean your 🌳 winrate 🌳",
+  'daddy viewing your swats, hewe? you really are brawe 😎',
+  'no surrie! your numwers are swill 💔',
+  "i would giwe you awvice, you won'w understand 🥀🥀",
+  "i diwn'w beliewe in negawive numwers unwil i saw your stats 😳😳😳",
+  'yeah daddy, use me more 🤤',
+  'uwu, hewe are your swaws... uwu 😋😋😋',
+  'hehehehe it tickles 😻',
+  'yeeeeeeeeeeeeahhhhhh that hits the spot 😳',
+  'ooooh yesss my circuits are starting to hurt yeeeeeeee 💥',
+  'wawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawaw',
+  'https://tenor.com/tre3NETle2e.gif',
+];
 
 export async function handleChatInputCommand(
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
-  let funny: FunnyType | undefined = undefined;
   await interaction.deferReply();
 
-  if (isFunny) {
-    const funniesLength = Object.keys(funnyResponses).length;
-
-    if (import.meta.env.DEBUG_FUNNY === 'true') {
-      // in debug mode, just pick a random one
-      funny = Math.floor(Math.random() * funniesLength);
-    } else {
-      const id = BigInt(interaction.user.id);
-      funny = Number(id % BigInt(funniesLength));
-    }
-
-    const responses = funnyResponses[funny];
-    const responseIndex = Math.floor(Math.random() * responses.length);
-    const response = `### ${responses[responseIndex]}`;
-    const waitTime = response.length * 45;
+  if (isFunny()) {
+    const response =
+      funnyResponses[Math.floor(Math.random() * funnyResponses.length)];
+    const waitTime = response.length * 60;
 
     await interaction.editReply(response);
     await new Promise((resolve) => setTimeout(resolve, waitTime));
@@ -92,7 +70,7 @@ export async function handleChatInputCommand(
 
     let index = 0;
     for (const chunk of chunks.filter((chunk) => chunk.length > 0)) {
-      const reply = await normalizeInteractionReturnable(chunk, funny);
+      const reply = await normalizeInteractionReturnable(chunk);
 
       if (
         psa.data &&
