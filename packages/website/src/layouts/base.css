@@ -2,4 +2,48 @@
 
 body {
   margin: 0;
+  cursor:
+    url(https://i.imgur.com/MeQQWCX.png) 16 16,
+    auto;
+}
+
+* {
+  font-family: 'Schoolbell', cursive !important;
+}
+
+.radix-themes {
+  --gray-1: var(--crimson-5);
+  --gray-2: var(--crimson-5);
+  --gray-3: var(--crimson-5);
+  --gray-4: var(--crimson-6);
+  --gray-5: var(--crimson-6);
+  --gray-6: var(--crimson-7);
+  --gray-7: var(--crimson-7);
+  --gray-8: var(--crimson-8);
+  --gray-9: var(--crimson-9);
+  --gray-10: var(--crimson-10);
+  --gray-11: var(--crimson-11);
+  --gray-12: var(--crimson-12);
+}
+
+.star {
+  position: fixed;
+  color: yellow;
+  font-size: 20px;
+  pointer-events: none;
+  animation:
+    fade-out 0.6s ease-out forwards,
+    move-up 0.6s ease-out forwards;
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes move-up {
+  to {
+    transform: translateY(20px);
+  }
 }

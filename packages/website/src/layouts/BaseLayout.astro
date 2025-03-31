@@ -7,6 +7,7 @@ import Navbar from '../components/Navbar.astro';
 import Party3 from '../components/Party3.astro';
 import './base.css';
 import { DEFAULT_LOCALE } from '@blitzkit/i18n';
+import Funny from '../components/Funny.astro';
 
 export interface Props {
   noFooter?: boolean;
@@ -23,6 +24,10 @@ const locale = Astro.params.locale ?? DEFAULT_LOCALE;
     <link rel="icon" type="image/x-icon" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Schoolbell&display=swap"
+      rel="stylesheet"
+    />
 
     <Party3 />
 
@@ -55,6 +60,8 @@ const locale = Astro.params.locale ?? DEFAULT_LOCALE;
   </head>
 
   <body>
+    <Funny />
+
     <BlitzKitTheme>
       <Flex direction="column" minHeight="100vh">
         <Navbar />

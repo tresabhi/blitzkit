@@ -1,0 +1,43 @@
+<script>
+  function funnify() {
+    document.body.querySelectorAll('*').forEach((element) => {
+      element.childNodes.forEach((node) => {
+        if (
+          node.nodeType !== 3 ||
+          !node.textContent ||
+          !(node instanceof HTMLElement) ||
+          node.classList.contains('no-funny')
+        )
+          return;
+
+        node.textContent = node.textContent
+          .replaceAll(/[tdkqgp]/g, 'w')
+          .replaceAll(/[TDKQGP]/g, 'W');
+      });
+    });
+  }
+
+  funnify();
+  setInterval(funnify, 1000);
+
+  let mouseDown = false;
+
+  document.addEventListener('mousedown', () => (mouseDown = true));
+  document.addEventListener('mouseup', () => (mouseDown = false));
+
+  document.addEventListener('mousemove', (e) => {
+    if (mouseDown) return;
+
+    const star = document.createElement('div');
+    star.classList.add('star');
+    star.innerHTML = '⭐';
+    document.body.appendChild(star);
+
+    star.style.left = `${e.clientX}px`;
+    star.style.top = `${e.clientY}px`;
+
+    setTimeout(() => {
+      star.remove();
+    }, 600);
+  });
+</script>

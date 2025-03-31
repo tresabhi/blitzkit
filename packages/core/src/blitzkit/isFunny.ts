@@ -1,7 +1,7 @@
 const FUNNY_DATES: [number, number][] = [
-  // two days for april fools
   [4, 1],
   [4, 2],
+  [4, 3],
 ];
 
 export function isFunny() {
