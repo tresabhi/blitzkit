@@ -2,12 +2,7 @@
   function funnify() {
     document.body.querySelectorAll('*').forEach((element) => {
       element.childNodes.forEach((node) => {
-        if (
-          node.nodeType !== 3 ||
-          !node.textContent ||
-          (node as HTMLElement).classList?.contains('no-funny')
-        )
-          return;
+        if (node.nodeType !== 3 || !node.textContent) return;
 
         node.textContent = node.textContent
           .replaceAll(/[tdkqgp]/g, 'w')
