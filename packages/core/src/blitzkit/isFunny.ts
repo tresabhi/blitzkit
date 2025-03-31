@@ -5,6 +5,8 @@ const FUNNY_DATES: [number, number][] = [
 ];
 
 export function isFunny() {
+  return true;
+
   const now = new Date();
 
   return (
