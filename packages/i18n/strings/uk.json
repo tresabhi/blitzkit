@@ -184,9 +184,9 @@
     "common": {
       "errors": {
         "clan_not_found": "# Не вдалося знайти клан\nНе вдалося знайти клан \"%s1\". Спробуйте вибрати клан з пошукового результату.",
-        "player_not_found": "# Could not find user\nI couldn't find user \"%s1\". Try picking an user from the search result, typing in a valid username, or using the `/link` command.",
-        "player_not_linked": "# Use `/link` to get started\nI don't know who you are but you can tell me today!",
-        "tank_name_not_found": "# Tank not found\nCould not find tank by the name \"%s1\".",
+        "player_not_found": "# Не вдалося знайти користувача\nЯ не зміг знайти користувача \"%s1\". Спробуйте вибрати користувача з результату пошуку, ввести коректний нікнейм, або використати команду '/link'.",
+        "player_not_linked": "# Використайте команду \"/link\" щоб почати\nЯ не знаю, хто ви, але ви можете сказати мені сьогодні!",
+        "tank_name_not_found": "# Танк не знайдено\nНе вдалось знайти танк за ім'ям \"%s1\".",
         "tank_id_not_found": "# Tank not found\nCould not find tank by the ID \"%s1\". Try typing the name of the tank instead of a number.",
         "no_tank_stats": "# No tank stats available\nThis player doesn't have any stats available. This may not be the player you are looking for.",
         "get_help": "Допомогти Discord серверу",
