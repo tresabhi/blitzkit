@@ -22,7 +22,6 @@
     "start:bot": "bun dist/bot/main.js",
     "dev:docs": "vitepress dev docs",
     "dev:website": "cd packages/website && bun run dev",
-    "dev:api": "bun --filter=@blitzkit/api run dev",
     "setup:depotdownloader": "bun --filter=@blitzkit/scripts run setup:depotdownloader",
     "setup:patches": "bun --filter=@blitzkit/scripts run setup:patches",
     "start:website": "bun --filter=@blitzkit/website run start",
@@ -39,7 +38,9 @@
     "build:ids": "cd packages/scripts && bun build:ids",
     "prunestrings": "cd packages/scripts && bun prunestrings",
     "dev:cli:unpack": "cd src/BlitzKit.CLI && dotnet run unpack \"C:/Program Files (x86)/Steam/steamapps/common/World of Tanks Blitz Playtest\" --no-overwrite",
-    "mangle": "cd src/BlitzKit.CLI && dotnet run mangle"
+    "mangle": "cd src/BlitzKit.CLI && dotnet run mangle",
+    "api": "cd src/BlitzKit.CLI && dotnet run api",
+    "dev:api": "cd src/BlitzKit.CLI && dotnet watch run api"
   },
   "license": "MIT",
   "dependencies": {

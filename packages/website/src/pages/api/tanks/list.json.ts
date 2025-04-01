@@ -1,12 +1,9 @@
-import { fetchTanks } from '@blitzkit/core';
-import type { APIRoute } from 'astro';
+import { Tanks } from '@blitzkit/core';
+import { jsonMirror } from '../../../core/blitzkit/blobMirror';
 
 /**
- * Returns a list of all tank ids. There is no guarantee of order.
+ * Identical to tanks/list.pb but in JSON.
  *
  * @returns JSON.
  */
-export const GET: APIRoute = async () => {
-  const tanks = await fetchTanks();
-  return Response.json(tanks.tanks);
-};
+export const GET = jsonMirror('/tanks/list.pb', Tanks);

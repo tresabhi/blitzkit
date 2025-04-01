@@ -49,14 +49,70 @@ namespace BlitzKit.CLI.Functions
     readonly BlitzProvider provider = new(args.Contains("--depot"));
     Locales? locales;
     readonly Dictionary<string, Dictionary<string, string>> strings = [];
-    readonly AssetUploader assetUploader = new("mangled ue assets") { enabled = true };
 
-    public async Task Mangle()
+    public async Task<TanksFull> TanksFull()
+    {
+      var dirs = provider.RootDirectory.GetDirectory("Blitz/Content/Tanks").Directories;
+      TanksFull tanksFull = new();
+
+      foreach (var dir in dirs)
+      {
+        if (dir.Key == "TankStub")
+          continue;
+
+        foreach (var tankDir in dir.Value.Directories)
+        {
+          var tank = MangleTank(tankDir.Value);
+          tanksFull.Tanks.Add(tank);
+        }
+      }
+
+      DeduplicateSlugs(tanksFull);
+
+      return tanksFull;
+    }
+
+    Tank MangleTank(VFS tankDir)
+    {
+      var pdaName = $"PDA_{tankDir.Name}";
+      var pda = provider.LoadObject($"{tankDir.Path}/{pdaName}.{pdaName}");
+
+      var id = pda.Get<FName>("TankId").Text;
+      var name = GetString($"TankEntity__{id.ToLowerInvariant()}__Short_Name");
+      var slug = Diacritics.Remove(name.Locales["en"]).ToLower();
+      slug = NonAlphanumericRegex().Replace(slug, "-");
+      slug = MultipleDashesRegex().Replace(slug, "-");
+      slug = TrailingDashRegex().Replace(slug, "");
+
+      Tank tank = new()
+      {
+        Id = id,
+        Name = name,
+        Slug = slug,
+      };
+
+      return tank;
+    }
+
+    public async Task<Tanks> Tanks()
+    {
+      var tanksFull = await TanksFull();
+      Tanks tanks = new();
+
+      foreach (var tank in tanksFull.Tanks)
+      {
+        tanks.Tanks_.Add(tank.Id);
+      }
+
+      return tanks;
+    }
+
+    public async Task Initialize()
     {
       await FetchStrings();
-      await MangleNations();
-      await assetUploader.Flush();
     }
+
+    ///////////////////////////////////////////////////////////////////////////
 
     I18n GetString(string name)
     {
@@ -107,42 +163,6 @@ namespace BlitzKit.CLI.Functions
 
         strings[locale.Locale] = parsedYaml;
       }
-    }
-
-    async Task MangleNations()
-    {
-      var dirs = provider.RootDirectory.GetDirectory("Blitz/Content/Tanks").Directories;
-      TanksFull tanksFull = new();
-
-      foreach (var dir in dirs)
-      {
-        if (dir.Key == "TankStub")
-          continue;
-
-        foreach (var tankDir in dir.Value.Directories)
-        {
-          // if (tankDir.Value.Name != "R90_IS_4")
-          //   continue;
-
-          // if (tankDir.Value.Name != "R81_IS_8")
-          //   continue;
-
-          var tank = await MangleTank(tankDir.Value);
-          tanksFull.Tanks.Add(tank);
-        }
-      }
-
-      DeduplicateSlugs(tanksFull);
-      Tanks tanks = new();
-
-      foreach (var tank in tanksFull.Tanks)
-      {
-        tanks.Tanks_.Add(tank.Id);
-        await assetUploader.Add($"tanks/{tank.Id}/meta.pb", tank.ToByteArray());
-      }
-
-      await assetUploader.Add("definitions/tanks.pb", tanks.ToByteArray());
-      await assetUploader.Add("definitions/tanks-full.pb", tanksFull.ToByteArray());
     }
 
     void DeduplicateSlugs(TanksFull tanksFull)
@@ -215,33 +235,6 @@ namespace BlitzKit.CLI.Functions
       }
     }
 
-    async Task<Tank> MangleTank(VFS tankDir)
-    {
-      var pdaName = $"PDA_{tankDir.Name}";
-      var pda = provider.LoadObject($"{tankDir.Path}/{pdaName}.{pdaName}");
-
-      var id = pda.Get<FName>("TankId").Text;
-      var name = GetString($"TankEntity__{id.ToLowerInvariant()}__Short_Name");
-      var slug = Diacritics.Remove(name.Locales["en"]).ToLower();
-      slug = NonAlphanumericRegex().Replace(slug, "-");
-      slug = MultipleDashesRegex().Replace(slug, "-");
-      slug = TrailingDashRegex().Replace(slug, "");
-
-      await MangleIcon(pda);
-      await MangleArmor(pda);
-
-      Tank tank = new()
-      {
-        Id = id,
-        Name = name,
-        Slug = slug,
-      };
-
-      await MangleModules(tank, pda);
-
-      return tank;
-    }
-
     async Task MangleArmor(UObject pda)
     {
       var id = pda.Get<FName>("TankId").Text;
@@ -282,7 +275,7 @@ namespace BlitzKit.CLI.Functions
         PrettyLog.Warn($"Penetration groups missing for {id}; creating empty list");
       }
 
-      await assetUploader.Add($"tanks/{id}/armor.pb", tankArmor.ToByteArray());
+      // await assetUploader.Add($"tanks/{id}/armor.pb", tankArmor.ToByteArray());
     }
 
     async Task MangleIcon(UObject pda)
@@ -292,7 +285,7 @@ namespace BlitzKit.CLI.Functions
       if (pda.TryGet<UTexture2D>("SmallIcon", out var smallIconTexture))
       {
         var smallIcon = BlitzKitExporter.Texture2D(smallIconTexture);
-        await assetUploader.Add($"tanks/{id}/icons/small.png", smallIcon);
+        // await assetUploader.Add($"tanks/{id}/icons/small.png", smallIcon);
       }
       else
       {
@@ -302,7 +295,7 @@ namespace BlitzKit.CLI.Functions
       if (pda.TryGet<UTexture2D>("BigIcon", out var bigIconTexture))
       {
         var bigIcon = BlitzKitExporter.Texture2D(bigIconTexture);
-        await assetUploader.Add($"tanks/{id}/icons/big.png", bigIcon);
+        // await assetUploader.Add($"tanks/{id}/icons/big.png", bigIcon);
       }
       else
       {
@@ -354,9 +347,9 @@ namespace BlitzKit.CLI.Functions
           {
             MonoGltf gltf = new(collision);
 
-            await assetUploader.Add(
-              new($"tanks/{tank.Id}/collision/{moduleName}.glb", gltf.Write())
-            );
+            // await assetUploader.Add(
+            //   new($"tanks/{tank.Id}/collision/{moduleName}.glb", gltf.Write())
+            // );
           }
           else
           {
@@ -365,7 +358,7 @@ namespace BlitzKit.CLI.Functions
         }
       }
 
-      await assetUploader.Add($"tanks/{tank.Id}/model.pb", tankModel.ToByteArray());
+      // await assetUploader.Add($"tanks/{tank.Id}/model.pb", tankModel.ToByteArray());
     }
   }
 }
