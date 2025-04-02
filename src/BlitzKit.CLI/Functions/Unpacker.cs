@@ -1,20 +1,10 @@
 using System.Text;
 using System.Text.Json;
-using BlitzKit.CLI.Models;
 using BlitzKit.CLI.Quicktype.DLCManifest;
 using BlitzKit.CLI.Utils;
 using CUE4Parse.FileProvider;
-using CUE4Parse.FileProvider.Objects;
-using CUE4Parse.UE4.Pak;
 using CUE4Parse.UE4.Pak.Objects;
-using CUE4Parse.UE4.Readers;
 using CUE4Parse.UE4.Versions;
-using DotNet.Globbing;
-using System.Net.Http;
-using System.Threading;
-using System.IO;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 
 namespace BlitzKit.CLI.Functions
 {
@@ -25,7 +15,7 @@ namespace BlitzKit.CLI.Functions
     private const string TEMP_DEPOT_DIR = "../../temp/depot/";
     public const string WG_DLC_DOMAIN = "http://dl-wotblitz-gc.wargaming.net";
     private const string BUILD_MANIFEST_OS = "Windows";
-    private static readonly SemaphoreSlim semaphore = new(4); // Limit to 4 concurrent downloads
+    private static readonly SemaphoreSlim semaphore = new(8); // Limit to 4 concurrent downloads
 
     public static async Task Unpack(string[] args)
     {
@@ -68,13 +58,17 @@ namespace BlitzKit.CLI.Functions
       {
         var localContainerPath = Path.Combine(CONTAINERS_PATH, pakFile.FileName);
         var fullContainerURL = $"{WG_DLC_DOMAIN}/dlc/{CONTENT_GROUP}/dlc/{pakFile.RelativeUrl}";
-        downloadTasks.Add(DownloadFileAsync(client, fullContainerURL, localContainerPath, manifest.PakFiles.Count));
+        downloadTasks.Add(
+          DownloadFileAsync(client, fullContainerURL, localContainerPath, manifest.PakFiles.Count)
+        );
       }
 
       await Task.WhenAll(downloadTasks);
 
       PrettyLog.Log("Moving pre-bundled containers...");
-      foreach (var file in Directory.GetFiles(Path.Combine(TEMP_DEPOT_DIR, "Blitz/Content/Paks"), "*.pak"))
+      foreach (
+        var file in Directory.GetFiles(Path.Combine(TEMP_DEPOT_DIR, "Blitz/Content/Paks"), "*.pak")
+      )
       {
         File.Move(file, Path.Combine(CONTAINERS_PATH, Path.GetFileName(file)));
       }
@@ -83,16 +77,31 @@ namespace BlitzKit.CLI.Functions
       Directory.Delete(TEMP_DEPOT_DIR, true);
     }
 
-    private static async Task DownloadFileAsync(HttpClient client, string url, string localPath, int totalFiles)
+    private static async Task DownloadFileAsync(
+      HttpClient client,
+      string url,
+      string localPath,
+      int totalFiles
+    )
     {
       await semaphore.WaitAsync();
       try
       {
-        using HttpResponseMessage response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
+        using HttpResponseMessage response = await client.GetAsync(
+          url,
+          HttpCompletionOption.ResponseHeadersRead
+        );
         response.EnsureSuccessStatusCode();
 
         using Stream contentStream = await response.Content.ReadAsStreamAsync(),
-                      fileStream = new FileStream(localPath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
+          fileStream = new FileStream(
+            localPath,
+            FileMode.Create,
+            FileAccess.Write,
+            FileShare.None,
+            8192,
+            true
+          );
 
         await contentStream.CopyToAsync(fileStream);
         PrettyLog.Log($"Downloaded {Path.GetFileName(localPath)} ({totalFiles} total)");
@@ -111,11 +120,12 @@ namespace BlitzKit.CLI.Functions
     {
       PrettyLog.Log($"Fetching manifest for group {group} and build {build}");
 
-      string url = $"{WG_DLC_DOMAIN}/dlc/{group}/dlc/BuildManifest-{BUILD_MANIFEST_OS}-{build}.json";
+      string url =
+        $"{WG_DLC_DOMAIN}/dlc/{group}/dlc/BuildManifest-{BUILD_MANIFEST_OS}-{build}.json";
       using HttpClient client = new();
       string jsonString = await client.GetStringAsync(url);
       return JsonSerializer.Deserialize<DlcManifest>(jsonString)
-             ?? throw new Exception("Failed to deserialize manifest");
+        ?? throw new Exception("Failed to deserialize manifest");
     }
   }
 }

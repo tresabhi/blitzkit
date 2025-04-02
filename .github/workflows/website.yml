@@ -41,17 +41,25 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           submodules: recursive
           token: ${{ secrets.GH_TOKEN }}
 
-      - uses: oven-sh/setup-bun@v1
-      - uses: actions/configure-pages@v5
-      - uses: actions/setup-dotnet@v4
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v1
+
+      - name: Configure pages
+        uses: actions/configure-pages@v5
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0
-      - run: |
+
+      - name: Download Steam Depot
+        run: |
           mkdir -p temp
 
           echo "Downloading..."
@@ -67,11 +75,16 @@ jobs:
           echo "Download complete; files:"
           ls temp/depotDownloader
 
-      - run: bun install
-      - run: |
+      - name: Download dependencies
+        run: bun install
+
+      - name: Restore dependencies
+        run: |
           cd src/BlitzKit.CLI
           dotnet restore
-      - run: |
+
+      - name: Download client
+        run: |
           chmod +x temp/depotDownloader/DepotDownloader
           temp/depotDownloader/DepotDownloader \
             -username "${{ env.DEPOT_DOWNLOADER_USERNAME }}" \
@@ -82,11 +95,13 @@ jobs:
             -dir temp/depot \
             -filelist filelist.txt
 
-      - run: |
+      - name: Download containers
+        run: |
           cd src/BlitzKit.CLI
           dotnet run unpack ../../temp/depot
-      - run: bun run build:website
-      - run: |
+
+      - name: Run API and build website
+        run: |
           cd src/BlitzKit.CLI    
           dotnet run api --verbosepa & 
           SERVER_PID=$!
@@ -96,7 +111,8 @@ jobs:
 
           kill $SERVER_PID || true
 
-      - uses: actions/upload-pages-artifact@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: dist/website
 
