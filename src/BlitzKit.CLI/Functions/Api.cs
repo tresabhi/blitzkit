@@ -40,6 +40,11 @@ namespace BlitzKit.CLI.Functions
         (HttpContext context, string id) => Octet(context, mangler.Tank(id))
       );
 
+      app.MapGet(
+        "/tanks/{id}/icons/big.pb",
+        (HttpContext context, string id) => Octet(context, mangler.TankIconBig(id))
+      );
+
       app.Run();
     }
   }

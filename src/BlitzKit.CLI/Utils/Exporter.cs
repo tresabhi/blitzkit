@@ -1,8 +1,8 @@
 using Blitzkit;
 using CUE4Parse_Conversion.Textures;
 using CUE4Parse.UE4.Assets.Exports.Texture;
-using CUE4Parse.UE4.Assets.Objects;
 using CUE4Parse.UE4.Objects.Core.Math;
+using SkiaSharp;
 
 namespace BlitzKit.CLI.Utils
 {
@@ -14,7 +14,7 @@ namespace BlitzKit.CLI.Utils
     {
       return texture
         .Decode(ETexturePlatform.DesktopMobile)!
-        .Encode(ETextureFormat.Png, 100)
+        .Encode(SKEncodedImageFormat.Webp, 100)
         .ToArray();
     }
 
