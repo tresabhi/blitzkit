@@ -1,7 +1,6 @@
 import { fetchPB, type MessageFns } from '@blitzkit/core';
-import type { APIRoute } from 'astro';
 
-export async function blobMirror(url: string) {
+export async function blobProxy(url: string) {
   if (import.meta.env.MODE === 'development') {
     return Response.redirect(url);
   } else {
@@ -11,16 +10,23 @@ export async function blobMirror(url: string) {
   }
 }
 
-export function apiMirror(path: string) {
-  const get: APIRoute = () => blobMirror(`http://localhost:5000${path}`);
-  return get;
+export function apiBlobProxy(path: string) {
+  return blobProxy(`http://localhost:5000${path}`);
 }
 
-export function jsonMirror<Type>(path: string, message: MessageFns<Type>) {
-  const get: APIRoute = async () => {
-    return new Response(
-      JSON.stringify(await fetchPB(`http://localhost:5000${path}`, message)),
-    );
-  };
-  return get;
+export function apiBlobProxyCurry(path: string) {
+  return () => apiBlobProxy(path);
+}
+
+export async function jsonMirror<Type>(
+  path: string,
+  message: MessageFns<Type>,
+) {
+  return new Response(
+    JSON.stringify(await fetchPB(`http://localhost:5000${path}`, message)),
+  );
+}
+
+export function jsonMirrorCurry<Type>(path: string, message: MessageFns<Type>) {
+  return () => jsonMirror(path, message);
 }

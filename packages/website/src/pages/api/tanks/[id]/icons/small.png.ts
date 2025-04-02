@@ -1,6 +1,6 @@
 import { asset } from '@blitzkit/core';
 import type { APIRoute } from 'astro';
-import { blobMirror } from '../../../../../core/blitzkit/blobMirror';
+import { blobProxy } from '../../../../../core/blitzkit/blobMirror';
 
 export { getStaticPaths } from '../meta.json';
 
@@ -11,5 +11,5 @@ export { getStaticPaths } from '../meta.json';
  * @returns PNG.
  */
 export const GET: APIRoute<{}, { id: string }> = async ({ params }) => {
-  return await blobMirror(asset(`/tanks/${params.id}/icons/small.png`));
+  return await blobProxy(asset(`/tanks/${params.id}/icons/small.png`));
 };

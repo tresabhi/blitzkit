@@ -49,11 +49,21 @@ namespace BlitzKit.CLI.Functions
     readonly BlitzProvider provider = new(args.Contains("--depot"));
     Locales? locales;
     readonly Dictionary<string, Dictionary<string, string>> strings = [];
+    TanksFull tanksFull = null!;
 
-    public async Task<TanksFull> TanksFull()
+    public async Task Initialize()
     {
+      await FetchStrings();
+      tanksFull = TanksFull();
+    }
+
+    public TanksFull TanksFull()
+    {
+      if (tanksFull != null)
+        return tanksFull;
+
       var dirs = provider.RootDirectory.GetDirectory("Blitz/Content/Tanks").Directories;
-      TanksFull tanksFull = new();
+      tanksFull = new();
 
       foreach (var dir in dirs)
       {
@@ -62,7 +72,7 @@ namespace BlitzKit.CLI.Functions
 
         foreach (var tankDir in dir.Value.Directories)
         {
-          var tank = MangleTank(tankDir.Value);
+          var tank = Tank(tankDir.Value);
           tanksFull.Tanks.Add(tank);
         }
       }
@@ -72,7 +82,25 @@ namespace BlitzKit.CLI.Functions
       return tanksFull;
     }
 
-    Tank MangleTank(VFS tankDir)
+    public Tanks Tanks()
+    {
+      var tanksFull = TanksFull();
+      Tanks tanks = new();
+
+      foreach (var tank in tanksFull.Tanks)
+      {
+        tanks.Tanks_.Add(tank.Id);
+      }
+
+      return tanks;
+    }
+
+    public Tank Tank(string id)
+    {
+      return tanksFull.Tanks.First(tank => tank.Id == id);
+    }
+
+    Tank Tank(VFS tankDir)
     {
       var pdaName = $"PDA_{tankDir.Name}";
       var pda = provider.LoadObject($"{tankDir.Path}/{pdaName}.{pdaName}");
@@ -92,24 +120,6 @@ namespace BlitzKit.CLI.Functions
       };
 
       return tank;
-    }
-
-    public async Task<Tanks> Tanks()
-    {
-      var tanksFull = await TanksFull();
-      Tanks tanks = new();
-
-      foreach (var tank in tanksFull.Tanks)
-      {
-        tanks.Tanks_.Add(tank.Id);
-      }
-
-      return tanks;
-    }
-
-    public async Task Initialize()
-    {
-      await FetchStrings();
     }
 
     ///////////////////////////////////////////////////////////////////////////

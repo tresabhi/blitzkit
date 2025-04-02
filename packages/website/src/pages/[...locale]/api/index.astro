@@ -1,6 +1,7 @@
 ---
-import { OpenInNewWindowIcon } from '@radix-ui/react-icons';
+import { RocketIcon } from '@radix-ui/react-icons';
 import {
+  Button,
   Code,
   Flex,
   Heading,
@@ -10,10 +11,11 @@ import {
   type CodeProps,
 } from '@radix-ui/themes';
 import type { GetStaticPaths, GetStaticPathsOptions } from 'astro';
+import { readFile } from 'fs/promises';
 import { PageWrapper } from '../../../components/PageWrapper';
 import { apiTool } from '../../../constants/tools';
 import ToolLayout from '../../../layouts/ToolLayout.astro';
-import { SlugsTable } from './_index';
+import { Schema, SlugsTable } from './_index';
 
 export { getStaticPaths } from '../index.astro';
 
@@ -31,6 +33,10 @@ export interface APIPath {
   slugs?: {
     titles: string[];
     groups: SlugGroup[];
+  };
+  schema?: {
+    name: string;
+    content: string;
   };
 }
 
@@ -88,9 +94,11 @@ for (const rawPath in globRaw) {
   );
   const path = rawPath.replace(ROOT, '').replace('.ts', '');
   let comment = '';
+  let schema: APIPath['schema'];
 
   const tags: Tag[] = [];
-  commentWithTags.split('\n').forEach((line) => {
+
+  for (const line of commentWithTags.split('\n')) {
     const match = line.match(tagRegex);
 
     if (match) {
@@ -103,6 +111,16 @@ for (const rawPath in globRaw) {
         const firstWordMatch = descriptionRaw.match(firstWordRegex)!;
         discriminator = firstWordMatch[1];
         description = firstWordMatch[2];
+      } else if (tag === '@proto') {
+        const firstWordMatch = descriptionRaw.match(firstWordRegex)!;
+        const fileName = firstWordMatch[1];
+        const buffer = await readFile(
+          `../../packages/core/src/protos/${fileName}.proto`,
+        );
+        const content = buffer.toString();
+
+        schema = { name: fileName, content };
+        discriminator = firstWordMatch[1];
       } else {
         description = descriptionRaw;
       }
@@ -115,10 +133,10 @@ for (const rawPath in globRaw) {
     } else {
       comment += `${line}\n`;
     }
-  });
+  }
 
   comment = comment.trim();
-  apis.push({ path, content, comment, tags, slugs });
+  apis.push({ path, content, comment, tags, slugs, schema });
 }
 
 apis.sort((a, b) => a.path.localeCompare(b.path));
@@ -131,21 +149,35 @@ apis.sort((a, b) => a.path.localeCompare(b.path));
         apis.map((api, index) => (
           <>
             <Flex direction="column" gap="5">
-              <Link
-                href={api.slugs ? undefined : `/api/${api.path}`}
-                underline="always"
-                target="_blank"
-              >
+              <Flex align="center" justify="between">
                 <Heading>
-                  <Flex align="center" gap="2">
-                    <Code variant="ghost">{api.path}</Code>
-
-                    {!api.slugs && (
-                      <OpenInNewWindowIcon width="1em" height="1em" />
-                    )}
-                  </Flex>
+                  <Code variant="ghost">{api.path}</Code>
                 </Heading>
-              </Link>
+
+                <Flex justify="end" gap="2">
+                  {api.schema && (
+                    <Schema
+                      client:load
+                      schema={api.schema.content}
+                      name={api.schema.name}
+                    />
+                  )}
+
+                  {!api.slugs && (
+                    <Link
+                      href={`/api/${api.path}`}
+                      underline="always"
+                      target="_blank"
+                    >
+                      <Button color="amber">
+                        Test <RocketIcon />
+                      </Button>
+                    </Link>
+                  )}
+
+                  <SlugsTable client:load path={api.path} slugs={api.slugs} />
+                </Flex>
+              </Flex>
 
               <Text>{api.comment}</Text>
 
@@ -180,11 +212,7 @@ apis.sort((a, b) => a.path.localeCompare(b.path));
               )}
             </Flex>
 
-            <SlugsTable path={api.path} client:load slugs={api.slugs} />
-
-            {index < apis.length - 1 && (
-              <Separator size="4" style={{ height: 0.5 }} />
-            )}
+            {index < apis.length - 1 && <Separator size="4" />}
           </>
         ))
       }

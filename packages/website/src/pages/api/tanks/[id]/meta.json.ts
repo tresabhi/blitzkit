@@ -1,5 +1,6 @@
-import { fetchTank, fetchTanks } from '@blitzkit/core';
+import { fetchTanks, Tank } from '@blitzkit/core';
 import type { APIRoute, GetStaticPaths } from 'astro';
+import { jsonMirror } from '../../../../core/blitzkit/blobMirror';
 
 export const getStaticPaths = (async () => {
   const tanks = await fetchTanks();
@@ -7,15 +8,10 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 /**
- * Returns the meta data on a tank which includes its modules, characteristics,
- * ancestry, descendants, equipment, characteristics, etc. However, this does
- * not include information on the tank model. Use tanks/list.json to get all
- * valid ids.
+ * Identical to tanks/[id]/meta.pb but in JSON.
  *
  * @param id The tank id.
  * @returns JSON.
  */
-export const GET: APIRoute<{}, { id: string }> = async ({ params }) => {
-  const tank = await fetchTank(params.id);
-  return Response.json(tank);
-};
+export const GET: APIRoute<{}, { id: string }> = ({ params }) =>
+  jsonMirror(`/tanks/${params.id}.pb`, Tank);

@@ -1,7 +1,21 @@
-import { OpenInNewWindowIcon } from '@radix-ui/react-icons';
-import { Box, Code, IconButton, Link, Table } from '@radix-ui/themes';
-import { useState } from 'react';
-import { Var } from '../../../core/radix/var';
+import { assertSecret } from '@blitzkit/core';
+import {
+  FileTextIcon,
+  OpenInNewWindowIcon,
+  RocketIcon,
+} from '@radix-ui/react-icons';
+import {
+  Button,
+  Code,
+  Dialog,
+  Flex,
+  IconButton,
+  Inset,
+  Link,
+  Separator,
+  Table,
+} from '@radix-ui/themes';
+import { BlitzKitTheme } from '../../../components/BlitzKitTheme';
 import type { APIPath } from './index.astro';
 
 interface SlugsTableProps {
@@ -9,13 +23,12 @@ interface SlugsTableProps {
   path: string;
 }
 
-const MAX_UNEXPANDED = 3;
+interface TableRootProps {
+  slugs: NonNullable<APIPath['slugs']>;
+  path: string;
+}
 
-export function SlugsTable({ slugs, path }: SlugsTableProps) {
-  if (slugs === undefined) return null;
-
-  const [expanded, setExpanded] = useState(false);
-
+function TableRoot({ slugs, path }: TableRootProps) {
   return (
     <Table.Root variant="surface">
       <Table.Header>
@@ -34,7 +47,6 @@ export function SlugsTable({ slugs, path }: SlugsTableProps) {
 
       <Table.Body>
         {slugs.groups.map((group, groupIndex) => {
-          if (!expanded && groupIndex >= MAX_UNEXPANDED) return null;
           let draftPath = path;
 
           slugs.titles.forEach((title) => {
@@ -60,53 +72,84 @@ export function SlugsTable({ slugs, path }: SlugsTableProps) {
                 </Table.Cell>
               ))}
 
-              <Table.Cell>
+              <Table.Cell align="right">
                 <Link target="_blank" href={`/api/${draftPath}`}>
-                  <IconButton variant="surface">
-                    <OpenInNewWindowIcon />
+                  <IconButton variant="solid">
+                    <RocketIcon />
                   </IconButton>
                 </Link>
               </Table.Cell>
             </Table.Row>
           );
         })}
-
-        <Table.Row style={{ position: 'relative' }}>
-          {!expanded && (
-            <Box
-              width="100%"
-              height="100%"
-              position="absolute"
-              top="0"
-              style={{
-                transform: 'translate(0, -100%)',
-                background: `linear-gradient(${Var('black-a1')}, ${Var('black-a5')})`,
-              }}
-            />
-          )}
-
-          <Table.Cell />
-
-          <Link
-            href="#"
-            underline="always"
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-            }}
-            onClick={(event) => {
-              event.preventDefault();
-              setExpanded((state) => !state);
-            }}
-          >
-            {expanded
-              ? 'Show less'
-              : `View all ${slugs.groups.length.toLocaleString('en')} slugs`}
-          </Link>
-        </Table.Row>
       </Table.Body>
     </Table.Root>
+  );
+}
+
+export function SlugsTable({ slugs, path }: SlugsTableProps) {
+  if (slugs === undefined) return null;
+
+  return (
+    <BlitzKitTheme>
+      <Dialog.Root>
+        <Dialog.Trigger>
+          <Button color="amber">
+            Slugs <OpenInNewWindowIcon />
+          </Button>
+        </Dialog.Trigger>
+
+        <Dialog.Content>
+          <Inset>
+            <TableRoot slugs={slugs} path={path} />
+          </Inset>
+        </Dialog.Content>
+      </Dialog.Root>
+    </BlitzKitTheme>
+  );
+}
+
+interface SchemaProps {
+  schema: string;
+  name: string;
+}
+
+export function Schema({ schema, name }: SchemaProps) {
+  return (
+    <BlitzKitTheme>
+      <Dialog.Root>
+        <Dialog.Trigger>
+          <Button color="amber" variant="outline">
+            Schema <FileTextIcon />
+          </Button>
+        </Dialog.Trigger>
+
+        <Dialog.Content>
+          <Flex direction="column" gap="5">
+            <Link
+              target="_blank"
+              href={`https://github.com/${assertSecret(
+                import.meta.env.PUBLIC_REPO,
+              )}/blob/${assertSecret(
+                import.meta.env.PUBLIC_BRANCH,
+              )}/packages/core/src/protos/${name}.proto`}
+            >
+              <Code>{name}.proto</Code> on GitHub <OpenInNewWindowIcon />
+            </Link>
+
+            <Separator size="4" />
+
+            <Code
+              color="gray"
+              highContrast
+              variant="ghost"
+              style={{ whiteSpace: 'pre' }}
+            >
+              {schema}
+            </Code>
+          </Flex>
+        </Dialog.Content>
+      </Dialog.Root>
+    </BlitzKitTheme>
   );
 }
