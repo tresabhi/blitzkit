@@ -19,21 +19,23 @@ import { Writeable } from '../../../types/writable';
 
 const funnyResponses = [
   "your dwecisions were calculawed buw man, you're bad at math 🥀🥀",
-  'senpai, have you consiwered not lacking 😳',
-  'let shoow a guess cutie... it was your team? 🤬🤬🤬',
+  'have you consiwered not lacking 😳',
+  'lemme guess... it was your team? 🤬🤬🤬',
   'confiwence is key. unforwunawely you lost whe lock 🔒💔',
   "when they say live green, they dwn't mean your 🌳 winrate 🌳",
-  'daddy viewing your swats, hewe? you really are brawe 😎',
-  'no surrie! your numwers are swill 💔',
+  'viewing your swats, hewe? you really are brawe 😎',
+  'no surrie! your numwers are still no bueno 💔💔💔',
   "i would giwe you awvice, you won'w understand 🥀🥀",
   "i diwn'w beliewe in negawive numwers unwil i saw your stats 😳😳😳",
-  'yeah daddy, use me more 🤤',
-  'uwu, hewe are your swaws... uwu 😋😋😋',
-  'hehehehe it tickles 😻',
-  'yeeeeeeeeeeeeahhhhhh that hits the spot 😳',
-  'ooooh yesss my circuits are starting to hurt yeeeeeeee 💥',
   'wawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawaw',
   'https://tenor.com/tre3NETle2e.gif',
+  'https://tenor.com/bVWoA.gif',
+  'https://tenor.com/bARFp.gif',
+  'https://tenor.com/jDFYXtzM27i.gif',
+  'https://tenor.com/dZ6MB62R32r.gif',
+  'https://tenor.com/bqOZf.gif',
+  'https://tenor.com/tD2TjXsmGVx.gif',
+  'https://tenor.com/bya9M.gif',
 ];
 
 export async function handleChatInputCommand(
