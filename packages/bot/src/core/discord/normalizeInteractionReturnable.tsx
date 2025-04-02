@@ -1,4 +1,3 @@
-import { imgur, isFunny } from '@blitzkit/core';
 import {
   ActionRowBuilder,
   AttachmentBuilder,
@@ -9,7 +8,6 @@ import {
   MessageEditOptions,
 } from 'discord.js';
 import { InteractionReturnable } from '../../events/interactionCreate';
-import { theme } from '../../stitches.config';
 import { Writeable } from '../../types/writable';
 import { jsxToPngThreaded } from '../blitzkit/jsxToPngThreaded';
 import { RenderConfiguration } from '../blitzkit/renderConfiguration';
@@ -48,78 +46,7 @@ export async function normalizeInteractionReturnable(
       } else if (item === null) {
         return;
       } else {
-        let jsx: JSX.Element;
-
-        if (isFunny()) {
-          const angle = (Math.random() * 2 - 1) * 10;
-          jsx = (
-            <div
-              style={{
-                display: 'flex',
-                transform: `rotate(${angle}deg)`,
-                backgroundColor: theme.colors.appBackground1,
-                position: 'relative',
-              }}
-            >
-              {item}
-
-              <img
-                src={imgur('MWEny5u')}
-                style={{
-                  display: 'block',
-                  position: 'absolute',
-                  top: 250,
-                  left: '10%',
-                  width: 100,
-                  transform: 'translateY(-50%)',
-                  backgroundSize: 'contain',
-                  backgroundRepeat: 'no-repeat',
-                  zIndex: 3,
-                }}
-              />
-
-              <img
-                src={imgur('SboPMXY')}
-                style={{
-                  position: 'absolute',
-                  top: 280,
-                  width: 80,
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                }}
-              />
-
-              <img
-                src={imgur('MWEny5u')}
-                style={{
-                  display: 'block',
-                  position: 'absolute',
-                  top: 250,
-                  right: '10%',
-                  width: 100,
-                  transform: 'translateY(-50%)',
-                  backgroundSize: 'contain',
-                  backgroundRepeat: 'no-repeat',
-                  zIndex: 3,
-                }}
-              />
-            </div>
-          );
-        } else {
-          jsx = (
-            <div
-              style={{
-                display: 'flex',
-                position: 'relative',
-                backgroundColor: theme.colors.appBackground1,
-              }}
-            >
-              {item}
-            </div>
-          );
-        }
-
-        const image = await jsxToPngThreaded(jsx, renderConfiguration);
+        const image = await jsxToPngThreaded(item, renderConfiguration);
         images.push([index, image]);
       }
     }),

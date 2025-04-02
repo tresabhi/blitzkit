@@ -1,4 +1,3 @@
-import { isFunny } from '@blitzkit/core';
 import {
   ActionRowBuilder,
   AttachmentBuilder,
@@ -17,40 +16,10 @@ import { psa } from '../../../core/discord/psa';
 import { translator } from '../../../core/localization/translator';
 import { Writeable } from '../../../types/writable';
 
-const funnyResponses = [
-  "your dwecisions were calculawed buw man, you're bad at math 🥀🥀",
-  'have you consiwered not lacking 😳',
-  'lemme guess... it was your team? 🤬🤬🤬',
-  'confiwence is key. unforwunawely you lost whe lock 🔒💔',
-  "when they say live green, they dwn't mean your 🌳 winrate 🌳",
-  'viewing your swats, hewe? you really are brawe 😎',
-  'no surrie! your numwers are still no bueno 💔💔💔',
-  "i would giwe you awvice, you won'w understand 🥀🥀",
-  "i diwn'w beliewe in negawive numwers unwil i saw your stats 😳😳😳",
-  'wawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawawaw',
-  'https://tenor.com/tre3NETle2e.gif',
-  'https://tenor.com/bVWoA.gif',
-  'https://tenor.com/bARFp.gif',
-  'https://tenor.com/jDFYXtzM27i.gif',
-  'https://tenor.com/dZ6MB62R32r.gif',
-  'https://tenor.com/bqOZf.gif',
-  'https://tenor.com/tD2TjXsmGVx.gif',
-  'https://tenor.com/bya9M.gif',
-];
-
 export async function handleChatInputCommand(
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
   await interaction.deferReply();
-
-  if (isFunny()) {
-    const response =
-      funnyResponses[Math.floor(Math.random() * funnyResponses.length)];
-    const waitTime = response.length * 60;
-
-    await interaction.editReply(response);
-    await new Promise((resolve) => setTimeout(resolve, waitTime));
-  }
 
   const awaitedCommands = await commands;
   const registry = awaitedCommands[interaction.commandName];

@@ -2,7 +2,7 @@
 import { assertSecret } from '@blitzkit/core';
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from '@blitzkit/i18n';
 import { literals } from '@blitzkit/i18n/src/literals';
-import { Box, Flex, Heading, Link, Quote } from '@radix-ui/themes';
+import { Box, Flex, Heading, Link } from '@radix-ui/themes';
 import type { GetStaticPaths } from 'astro';
 import { AesonPlug } from '../../components/AesonPlug';
 import { HomeLocaleSwitcher } from '../../components/Home/HomeLocaleSwitcher';
@@ -44,20 +44,6 @@ export const getStaticPaths = (() => {
 
 <BaseLayout>
   <HomeHero />
-
-  <Flex justify="center" pt="6" px="8">
-    <Flex flexGrow="1" maxWidth="32rem" justify="center">
-      <Quote
-        className="no-funny"
-        style={{
-          fontSize: '1.3em',
-        }}
-      >
-        It has come to our attention that tanks are very harsh objects. To even
-        it out, we made the website a pretty pretty princess {'<'}3
-      </Quote>
-    </Flex>
-  </Flex>
 
   <HomeLocaleSwitcher {locale} client:load />
 
