@@ -56,7 +56,9 @@ export const getStaticPaths = (() => {
       flexGrow="1"
     >
       <HomeLocaleSwitcher {locale} client:load />
-      <DiscordPlug {locale} />
+      <DiscordPlug {locale} client:only="react">
+        <DiscordPlug {locale} skeleton slot="fallback" />
+      </DiscordPlug>
     </Flex>
   </Flex>
 

@@ -5,6 +5,8 @@ import { times } from 'lodash-es';
 import { getStrings } from '../../core/i18n/getStrings';
 import { Var } from '../../core/radix/var';
 import type { LocaleAcceptorProps } from '../../hooks/useLocale';
+import type { MaybeSkeletonComponentProps } from '../../types/maybeSkeletonComponentProps';
+import { InlineSkeleton } from '../InlineSkeleton';
 import './index.css';
 
 export interface DiscordWidget {
@@ -57,21 +59,31 @@ const columns = times(COLUMN_COUNT, (index) => {
   return filteredMembers.slice(start, end);
 });
 
-function Member({ id, avatar_url, username, status }: Member) {
+function Member({
+  id,
+  avatar_url,
+  username,
+  status,
+  skeleton,
+}: Member & MaybeSkeletonComponentProps) {
   let statusColor: string;
 
-  switch (status) {
-    case Status.DND:
-      statusColor = Var('red-9');
-      break;
+  if (skeleton) {
+    statusColor = Var('gray-9');
+  } else {
+    switch (status) {
+      case Status.DND:
+        statusColor = Var('red-9');
+        break;
 
-    case Status.Idle:
-      statusColor = Var('amber-9');
-      break;
+      case Status.Idle:
+        statusColor = Var('amber-9');
+        break;
 
-    case Status.Online:
-      statusColor = Var('jade-9');
-      break;
+      case Status.Online:
+        statusColor = Var('jade-9');
+        break;
+    }
   }
 
   return (
@@ -85,13 +97,25 @@ function Member({ id, avatar_url, username, status }: Member) {
       }}
       color="gray"
     >
-      <Flex key={id} align="center" gap="2" flexShrink="0">
+      <Flex key={id} align="center" gap="2" flexShrink="0" width="8rem">
         <Box width="1.5em" height="1.5em" flexShrink="0" position="relative">
-          <img
-            src={avatar_url}
-            alt={`${username} profile picture`}
-            style={{ width: '100%', height: '100%', borderRadius: '50%' }}
-          />
+          {!skeleton && (
+            <img
+              src={avatar_url}
+              alt={`${username} profile picture`}
+              style={{ width: '100%', height: '100%', borderRadius: '50%' }}
+            />
+          )}
+          {skeleton && (
+            <Box
+              style={{
+                width: '100%',
+                height: '100%',
+                borderRadius: '50%',
+                background: Var('gray-6'),
+              }}
+            />
+          )}
 
           <Box
             width="0.5em"
@@ -103,19 +127,23 @@ function Member({ id, avatar_url, username, status }: Member) {
           />
         </Box>
 
-        {username}
+        {skeleton && <InlineSkeleton style={{ flex: 1 }} />}
+        {!skeleton && username}
       </Flex>
     </Text>
   );
 }
 
-function Scroller({ index }: { index: number }) {
+function Scroller({
+  index,
+  skeleton,
+}: { index: number } & MaybeSkeletonComponentProps) {
   return (
     <Flex gap="6" className={`scroller-${index}`} pt="2">
       {columns.map((column) => (
         <Flex direction="column" gap="2">
           {column.map((member) => (
-            <Member key={member.id} {...member} />
+            <Member skeleton={skeleton} key={member.id} {...member} />
           ))}
         </Flex>
       ))}
@@ -123,7 +151,10 @@ function Scroller({ index }: { index: number }) {
   );
 }
 
-export function DiscordPlug({ locale }: LocaleAcceptorProps) {
+export function DiscordPlug({
+  locale,
+  skeleton,
+}: LocaleAcceptorProps & MaybeSkeletonComponentProps) {
   const strings = getStrings(locale);
 
   return (
@@ -162,8 +193,8 @@ export function DiscordPlug({ locale }: LocaleAcceptorProps) {
                 transform: 'rotateX(60deg) rotateZ(-20deg)',
               }}
             >
-              <Scroller index={0} />
-              <Scroller index={1} />
+              <Scroller skeleton={skeleton} index={0} />
+              <Scroller skeleton={skeleton} index={1} />
             </Flex>
           </Box>
 
