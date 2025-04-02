@@ -107,7 +107,7 @@ jobs:
           SERVER_PID=$!
 
           cd ../..
-          bun run build:website
+          bun run buildonly:website
 
           kill $SERVER_PID || true
 
