@@ -19,7 +19,7 @@ concurrency:
 env:
   PUBLIC_WARGAMING_APPLICATION_ID: ${{ secrets.PUBLIC_WARGAMING_APPLICATION_ID }}
   PUBLIC_ASSET_REPO: ${{ secrets.PUBLIC_ASSET_REPO }}
-  PUBLIC_ASSET_BRANCH: ${{ secrets.PUBLIC_ASSET_BRANCH }}
+  # PUBLIC_ASSET_BRANCH: ${{ secrets.PUBLIC_ASSET_BRANCH }}
   PUBLIC_PROMOTE_OPENTEST: ${{ secrets.PUBLIC_PROMOTE_OPENTEST }}
   ALLOW_ROBOTS: true
   WOTB_GLOSSARY: ${{ secrets.WOTB_GLOSSARY }}
@@ -28,6 +28,13 @@ env:
   GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
   WOTB_GLOSSARY_DOMAIN: ${{ secrets.WOTB_GLOSSARY_DOMAIN }}
   WOTB_GLOSSARY_PATH: ${{ secrets.WOTB_GLOSSARY_PATH }}
+  DEPOT_DOWNLOADER_USERNAME: ${{ secrets.DEPOT_DOWNLOADER_USERNAME }}
+  DEPOT_DOWNLOADER_PASSWORD: ${{ secrets.DEPOT_DOWNLOADER_PASSWORD }}
+  STEAM_OS: windows
+  STEAM_APP: 3341250
+  STEAM_DEPOT: 3341251
+  PUBLIC_ASSET_BRANCH: ue
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
 jobs:
   build:
@@ -41,15 +48,55 @@ jobs:
 
       - uses: oven-sh/setup-bun@v1
       - uses: actions/configure-pages@v5
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0
+      - run: |
+          mkdir -p temp
 
-      - name: Install dependencies
-        run: bun install
+          echo "Downloading..."
+          DOWNLOAD_URL=$(curl -s https://api.github.com/repos/SteamRE/DepotDownloader/releases/latest | \
+            grep -i "linux-x64" | \
+            grep "browser_download_url" | \
+            cut -d '"' -f 4)
+          curl -L "$DOWNLOAD_URL" -o temp/depotDownloader.zip
 
-      - name: Build website
-        run: bun run build:website
+          echo "Unzipping..."
+          unzip temp/depotDownloader.zip -d temp/depotDownloader
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+          echo "Download complete; files:"
+          ls temp/depotDownloader
+
+      - run: bun install
+      - run: |
+          cd src/BlitzKit.CLI
+          dotnet restore
+      - run: |
+          chmod +x temp/depotDownloader/DepotDownloader
+          temp/depotDownloader/DepotDownloader \
+            -username "${{ env.DEPOT_DOWNLOADER_USERNAME }}" \
+            -password "${{ env.DEPOT_DOWNLOADER_PASSWORD }}" \
+            -os ${{ env.STEAM_OS }} \
+            -app ${{ env.STEAM_APP }} \
+            -depot ${{ env.STEAM_DEPOT }} \
+            -dir temp/depot \
+            -filelist filelist.txt
+
+      - run: |
+          cd src/BlitzKit.CLI
+          dotnet run unpack ../../temp/depot
+      - run: bun run build:website
+      - run: |
+          cd src/BlitzKit.CLI    
+          dotnet run api --verbosepa & 
+          SERVER_PID=$!
+
+          cd ../..
+          bun run build:website
+
+          kill $SERVER_PID || true
+
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: dist/website
 
