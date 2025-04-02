@@ -13,7 +13,7 @@ export function BlitzKitTheme({
 }: BlitzKitThemeProps) {
   return (
     <Theme
-      style={{ minHeight: 'unset', ...style }}
+      style={{ minHeight: 'unset', display: 'contents', ...style }}
       className={`blitzkit-theme ${className}`}
       grayColor="mauve"
       appearance="dark"

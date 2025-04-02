@@ -5,6 +5,7 @@ import { literals } from '@blitzkit/i18n/src/literals';
 import { Box, Flex, Heading, Link } from '@radix-ui/themes';
 import type { GetStaticPaths } from 'astro';
 import { AesonPlug } from '../../components/AesonPlug';
+import { DiscordPlug } from '../../components/Discord';
 import { HomeLocaleSwitcher } from '../../components/Home/HomeLocaleSwitcher';
 import HomeHero from '../../components/HomeHero.astro';
 import { HomePageHotTanks } from '../../components/HomePageHotTanks';
@@ -45,7 +46,19 @@ export const getStaticPaths = (() => {
 <BaseLayout>
   <HomeHero />
 
-  <HomeLocaleSwitcher {locale} client:load />
+  <Flex justify="center" py="6" px="4" justify="center">
+    <Flex
+      wrap="wrap"
+      justify="between"
+      maxWidth="64rem"
+      gap="6"
+      align="center"
+      flexGrow="1"
+    >
+      <HomeLocaleSwitcher {locale} client:load />
+      <DiscordPlug {locale} />
+    </Flex>
+  </Flex>
 
   {
     locale !== DEFAULT_LOCALE && (

@@ -824,6 +824,12 @@
     },
 
     "home": {
+      "discord": {
+        "join_short": "Join cool people!",
+        "join_long": "Join super duper cool people!",
+        "action": "Discord"
+      },
+
       "hero": {
         "credit": "By %s1 ❤️"
       },
