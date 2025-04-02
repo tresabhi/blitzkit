@@ -2,33 +2,34 @@
 // versions:
 //   protoc-gen-ts_proto  v2.2.2
 //   protoc               v5.28.2
-// source: packages/core/src/protos/tanks.proto
+// source: packages/core/src/protos/tanks_full.proto
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
+import { Tank } from "./tank";
 
 export const protobufPackage = "blitzkit";
 
-export interface Tanks {
-  tanks: string[];
+export interface TanksFull {
+  tanks: Tank[];
 }
 
-function createBaseTanks(): Tanks {
+function createBaseTanksFull(): TanksFull {
   return { tanks: [] };
 }
 
-export const Tanks: MessageFns<Tanks> = {
-  encode(message: Tanks, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const TanksFull: MessageFns<TanksFull> = {
+  encode(message: TanksFull, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     for (const v of message.tanks) {
-      writer.uint32(10).string(v!);
+      Tank.encode(v!, writer.uint32(10).fork()).join();
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): Tanks {
+  decode(input: BinaryReader | Uint8Array, length?: number): TanksFull {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseTanks();
+    const message = createBaseTanksFull();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -37,7 +38,7 @@ export const Tanks: MessageFns<Tanks> = {
             break;
           }
 
-          message.tanks.push(reader.string());
+          message.tanks.push(Tank.decode(reader, reader.uint32()));
           continue;
         }
       }
@@ -49,24 +50,24 @@ export const Tanks: MessageFns<Tanks> = {
     return message;
   },
 
-  fromJSON(object: any): Tanks {
-    return { tanks: globalThis.Array.isArray(object?.tanks) ? object.tanks.map((e: any) => globalThis.String(e)) : [] };
+  fromJSON(object: any): TanksFull {
+    return { tanks: globalThis.Array.isArray(object?.tanks) ? object.tanks.map((e: any) => Tank.fromJSON(e)) : [] };
   },
 
-  toJSON(message: Tanks): unknown {
+  toJSON(message: TanksFull): unknown {
     const obj: any = {};
     if (message.tanks?.length) {
-      obj.tanks = message.tanks;
+      obj.tanks = message.tanks.map((e) => Tank.toJSON(e));
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<Tanks>, I>>(base?: I): Tanks {
-    return Tanks.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<TanksFull>, I>>(base?: I): TanksFull {
+    return TanksFull.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<Tanks>, I>>(object: I): Tanks {
-    const message = createBaseTanks();
-    message.tanks = object.tanks?.map((e) => e) || [];
+  fromPartial<I extends Exact<DeepPartial<TanksFull>, I>>(object: I): TanksFull {
+    const message = createBaseTanksFull();
+    message.tanks = object.tanks?.map((e) => Tank.fromPartial(e)) || [];
     return message;
   },
 };
