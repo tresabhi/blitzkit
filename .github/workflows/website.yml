@@ -35,6 +35,8 @@ env:
   STEAM_DEPOT: 3341251
   PUBLIC_ASSET_BRANCH: ue
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
 jobs:
   build:
@@ -129,3 +131,35 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  deploy-vercel:
+    if: ${{ github.ref != 'refs/heads/main' }}
+    name: Deploy to Vercel
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: Preview
+      url: ${{ steps.url.outputs.url }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v1
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: .vercel/output/
+
+      - name: Install Vercel CLI
+        run: bun install --global vercel
+
+      - name: Deploy Project Artifacts to Vercel
+        shell: bash
+        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} | tee deploy.log
+
+      - name: Set preview url
+        id: url
+        run: echo "url=$(tail -1 deploy.log)">> $GITHUB_OUTPUT
