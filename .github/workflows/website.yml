@@ -105,7 +105,7 @@ jobs:
       - name: Run API and build website
         run: |
           cd src/BlitzKit.CLI    
-          dotnet run api --verbosepa & 
+          dotnet run api --depot --verbosepa & 
           SERVER_PID=$!
 
           cd ../..
