@@ -21,7 +21,7 @@ export default defineConfig({
   prefetch: true,
 
   build: {
-    concurrency: 4,
+    concurrency: 8,
   },
 
   integrations: [react(), sitemap()],
