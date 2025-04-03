@@ -140,8 +140,8 @@ function Scroller({
 }: { index: number } & MaybeSkeletonComponentProps) {
   return (
     <Flex gap="6" className={`scroller-${index}`} pt="2">
-      {columns.map((column) => (
-        <Flex direction="column" gap="2">
+      {columns.map((column, index) => (
+        <Flex direction="column" gap="2" key={index}>
           {column.map((member) => (
             <Member skeleton={skeleton} key={member.id} {...member} />
           ))}
