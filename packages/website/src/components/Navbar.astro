@@ -73,161 +73,161 @@ const strings = getStrings(locale);
 >
   <Flex
     width="100%"
-    maxWidth="80rem"
     p={{ initial: '4', sm: '3' }}
-    gap="4"
     direction="column"
-    style={{
-      backgroundColor: Var('gray-1'),
-    }}
+    align="center"
+    style={{ backgroundColor: Var('gray-1') }}
   >
-    <Flex align="center">
-      <LinkI18n
-        {locale}
-        color="gray"
-        highContrast
-        href="/"
-        underline="hover"
-        weight="medium"
-      >
-        <Flex align="center" gap="1">
-          BlitzKit
+    <Flex gap="4" direction="column" maxWidth="80rem" width="100%">
+      <Flex align="center">
+        <LinkI18n
+          {locale}
+          color="gray"
+          highContrast
+          href="/"
+          underline="hover"
+          weight="medium"
+        >
+          <Flex align="center" gap="1">
+            BlitzKit
+            {
+              isBranchNamed && (
+                <Code color="gray" size="1" variant="outline">
+                  {branchName}
+                </Code>
+              )
+            }
+          </Flex>
+        </LinkI18n>
+
+        <Box flexGrow="1" />
+
+        <Flex
+          align="center"
+          gap={{ initial: '4', md: '6' }}
+          display={{ initial: 'none', sm: 'flex' }}
+          justify="center"
+          className="tools"
+        >
           {
-            isBranchNamed && (
-              <Code color="gray" size="1" variant="outline">
-                {branchName}
-              </Code>
-            )
+            toolsFiltered.map((tool, index) => {
+              const unavailableOnBranch = tool.branches?.every(
+                (branch) =>
+                  branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
+              );
+              const selected = Astro.url.pathname.includes(`/tools/${tool.id}`);
+              const toolStrings =
+                strings.website.tools[
+                  (tool.stringsId ??
+                    tool.id) as keyof typeof strings.website.tools
+                ];
+
+              if (unavailableOnBranch) return null;
+
+              return (
+                <LinkI18n
+                  {locale}
+                  weight={selected ? 'medium' : 'regular'}
+                  color="gray"
+                  highContrast={selected}
+                  size="2"
+                  href={`/tools/${tool.id}`}
+                  underline="hover"
+                >
+                  {toolStrings.name}
+                </LinkI18n>
+              );
+            })
           }
         </Flex>
-      </LinkI18n>
 
-      <Box flexGrow="1" />
+        <Box flexGrow="1" />
+
+        <Flex align="center" gap="4">
+          <Link
+            style={{ display: 'flex', alignContent: 'center' }}
+            color="gray"
+            href="https://discord.gg/nDt7AjGJQH"
+            underline="none"
+            target="_blank"
+          >
+            <DiscordLogoIcon width="1em" height="1em" />
+          </Link>
+
+          <LinkI18n
+            {locale}
+            style={{ display: 'flex', alignContent: 'center' }}
+            color="gray"
+            href="/settings"
+            underline="none"
+          >
+            <GearIcon width="1em" height="1em" />
+          </LinkI18n>
+
+          <!-- <NavbarAccount client:idle /> -->
+
+          <Flex align="center" display={{ initial: 'flex', sm: 'none' }}>
+            <IconButton variant="ghost" color="gray" className="hamburger">
+              <Cross1Icon data-expanded />
+              <HamburgerMenuIcon data-closed />
+            </IconButton>
+          </Flex>
+        </Flex>
+      </Flex>
 
       <Flex
-        align="center"
-        gap={{ initial: '4', md: '6' }}
-        display={{ initial: 'none', sm: 'flex' }}
-        justify="center"
-        className="tools"
+        direction="column"
+        data-expanded
+        gap="3"
+        display={{ initial: 'flex', sm: 'none' }}
       >
         {
-          toolsFiltered.map((tool, index) => {
+          toolsFiltered.map((tool) => {
             const unavailableOnBranch = tool.branches?.every(
               (branch) =>
                 branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
             );
-            const selected = Astro.url.pathname.includes(`/tools/${tool.id}`);
+
+            if (unavailableOnBranch) return null;
+
             const toolStrings =
               strings.website.tools[
                 (tool.stringsId ??
                   tool.id) as keyof typeof strings.website.tools
               ];
 
-            if (unavailableOnBranch) return null;
-
             return (
-              <LinkI18n
-                {locale}
-                weight={selected ? 'medium' : 'regular'}
+              <Link
                 color="gray"
-                highContrast={selected}
-                size="2"
+                highContrast
+                style={{ display: 'contents' }}
                 href={`/tools/${tool.id}`}
-                underline="hover"
               >
-                {toolStrings.name}
-              </LinkI18n>
+                <Box
+                  style={{
+                    borderRadius: Var('radius-2'),
+                    backgroundImage: `url(${imgur(tool.image, { format: 'jpeg', size: ImgurSize.LargeThumbnail })})`,
+                    backgroundSize: '200%',
+                    backgroundPosition: 'right center',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <Flex
+                    py="4"
+                    justify="end"
+                    flexGrow="1"
+                    style={{
+                      background: `linear-gradient(90deg, transparent, ${Var('gray-1')})`,
+                    }}
+                  >
+                    {toolStrings.name}
+                  </Flex>
+                </Box>
+              </Link>
             );
           })
         }
       </Flex>
-
-      <Box flexGrow="1" />
-
-      <Flex align="center" gap="4">
-        <Link
-          style={{ display: 'flex', alignContent: 'center' }}
-          color="gray"
-          href="https://discord.gg/nDt7AjGJQH"
-          underline="none"
-          target="_blank"
-        >
-          <DiscordLogoIcon width="1em" height="1em" />
-        </Link>
-
-        <LinkI18n
-          {locale}
-          style={{ display: 'flex', alignContent: 'center' }}
-          color="gray"
-          href="/settings"
-          underline="none"
-        >
-          <GearIcon width="1em" height="1em" />
-        </LinkI18n>
-
-        <!-- <NavbarAccount client:idle /> -->
-
-        <Flex align="center" display={{ initial: 'flex', sm: 'none' }}>
-          <IconButton variant="ghost" color="gray" className="hamburger">
-            <Cross1Icon data-expanded />
-            <HamburgerMenuIcon data-closed />
-          </IconButton>
-        </Flex>
-      </Flex>
-    </Flex>
-
-    <Flex
-      direction="column"
-      data-expanded
-      gap="3"
-      display={{ initial: 'flex', sm: 'none' }}
-    >
-      {
-        toolsFiltered.map((tool) => {
-          const unavailableOnBranch = tool.branches?.every(
-            (branch) =>
-              branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
-          );
-
-          if (unavailableOnBranch) return null;
-
-          const toolStrings =
-            strings.website.tools[
-              (tool.stringsId ?? tool.id) as keyof typeof strings.website.tools
-            ];
-
-          return (
-            <Link
-              color="gray"
-              highContrast
-              style={{ display: 'contents' }}
-              href={`/tools/${tool.id}`}
-            >
-              <Box
-                style={{
-                  borderRadius: Var('radius-2'),
-                  backgroundImage: `url(${imgur(tool.image, { format: 'jpeg', size: ImgurSize.LargeThumbnail })})`,
-                  backgroundSize: '200%',
-                  backgroundPosition: 'right center',
-                  overflow: 'hidden',
-                }}
-              >
-                <Flex
-                  py="4"
-                  justify="end"
-                  flexGrow="1"
-                  style={{
-                    background: `linear-gradient(90deg, transparent, ${Var('gray-1')})`,
-                  }}
-                >
-                  {toolStrings.name}
-                </Flex>
-              </Box>
-            </Link>
-          );
-        })
-      }
     </Flex>
   </Flex>
 

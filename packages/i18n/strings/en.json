@@ -844,6 +844,13 @@
       "seo_description": "Tools for everything World of Tanks Blitz"
     },
 
+    "docs": {
+      "patches": {
+        "name": "BlitzKit Changelogs",
+        "seo_description": "Changelogs for BlitzKit Discord bot and website"
+      }
+    },
+
     "tools": {
       "tankopedia": {
         "name": "Tankopedia",

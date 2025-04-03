@@ -1,4 +1,5 @@
 ---
+import { AstroSeo } from '@astrolib/seo';
 import type { GetStaticPaths } from 'astro';
 import { capitalize } from 'lodash-es';
 import { embedConfigurations } from '../../../../../constants/embeds';
@@ -21,10 +22,24 @@ export const getStaticPaths = (() => {
     .flat();
 }) satisfies GetStaticPaths;
 
+const name = capitalize(Astro.params.embed);
+const title = `BlitzKit - ${name} embed`;
+const description = `BlitzKit ${name} embeds for streaming World of Tanks Blitz with extreme customization`;
 const { locale } = Astro.params;
 ---
 
-<title>BlitzKit - {capitalize(Astro.params.embed)} embed</title>
+<AstroSeo
+  title={title}
+  description={description}
+  canonical={Astro.url.href}
+  openGraph={{
+    url: Astro.url.href,
+    title,
+    description,
+    site_name: 'BlitzKit',
+  }}
+  twitter={{ cardType: 'summary_large_image' }}
+/>
 
 <style is:global>
   @keyframes fade-out-border {

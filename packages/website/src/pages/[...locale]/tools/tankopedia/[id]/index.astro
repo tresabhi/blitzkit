@@ -1,4 +1,5 @@
 ---
+import { AstroSeo } from '@astrolib/seo';
 import {
   asset,
   createDefaultProvisions,
@@ -11,10 +12,10 @@ import {
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
 import { DEFAULT_LOCALE, unwrapper } from '@blitzkit/i18n';
+import { literals } from '@blitzkit/i18n/src/literals';
 import type { GetStaticPaths } from 'astro';
 import { tankCharacteristics } from '../../../../../core/blitzkit/tankCharacteristics';
 import { getStrings } from '../../../../../core/i18n/getStrings';
-import { literals } from '@blitzkit/i18n/src/literals';
 import BaseLayout from '../../../../../layouts/BaseLayout.astro';
 import { genericDefaultEquipmentMatrix } from '../../../../../stores/duel/constants';
 import { getStaticPaths as parentGetStaticPaths } from '../index.astro';
@@ -95,12 +96,12 @@ const description = literals(
 );
 ---
 
-<title>{title}</title>
-<meta property="og:title" content={title} />
-<meta name="description" content={description} />
-<meta property="og:description" content={description} />
-<meta property="og:image" content={icon} />
-<meta property="og:url" content={url} />
+<AstroSeo
+  {title}
+  {description}
+  openGraph={{ title, description, images: [{ url: icon }], url }}
+/>
+
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:card" content="summary" />

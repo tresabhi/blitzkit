@@ -1,4 +1,5 @@
 ---
+import { AstroSeo } from '@astrolib/seo';
 import type { GetStaticPaths } from 'astro';
 import { readFile } from 'fs/promises';
 import BaseLayout from '../../../../../layouts/BaseLayout.astro';
@@ -7,7 +8,6 @@ import { Page } from './_index';
 
 export const getStaticPaths = (async () => {
   const parentPaths = parentGetStaticPaths();
-
   const ROOT = '../../../../../../../../docs/';
   const files = import.meta.glob('../../../../../../../../docs/**/*.md', {
     eager: true,
@@ -40,7 +40,18 @@ const { content } = Astro.props;
 const title = content.split('\n')[0].replace('# ', '');
 ---
 
-<title>{title}</title>
+<AstroSeo
+  title={title}
+  description={title}
+  canonical={Astro.url.href}
+  openGraph={{
+    url: Astro.url.href,
+    title,
+    description: title,
+    site_name: 'BlitzKit',
+  }}
+  twitter={{ cardType: 'summary_large_image' }}
+/>
 
 <BaseLayout>
   <Page content={content} />
