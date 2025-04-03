@@ -18,27 +18,12 @@ import {
 } from '@radix-ui/colors';
 import { createBorderStyles, createColors, createSpaces } from 'bepaint';
 
-const funnyColors = {
-  pink1: crimsonDark.crimson5,
-  pink2: crimsonDark.crimson5,
-  pink3: crimsonDark.crimson5,
-  pink4: crimsonDark.crimson6,
-  pink5: crimsonDark.crimson6,
-  pink6: crimsonDark.crimson7,
-  pink7: crimsonDark.crimson7,
-  pink8: crimsonDark.crimson8,
-  pink9: crimsonDark.crimson9,
-  pink10: crimsonDark.crimson10,
-  pink11: crimsonDark.crimson11,
-  pink12: crimsonDark.crimson12,
-};
-
 // this isn't really a stitches config, but the object is compliant
 export const theme = {
   spaces: createSpaces(),
 
   colors: {
-    ...createColors(funnyColors),
+    ...createColors(mauveDark),
     ...createColors(slateDarkA, 'alpha'),
     ...createColors(slate, 'light'),
 
