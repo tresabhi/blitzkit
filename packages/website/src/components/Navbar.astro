@@ -10,21 +10,16 @@ import {
   Box,
   Code,
   Flex,
-  Grid,
   IconButton,
-  Link,
-  ScrollArea,
-  Separator,
-  Text,
+  Link
 } from '@radix-ui/themes';
+import { TOOLS } from '../constants/tools';
 import { resolveBranchName } from '../core/blitzkit/branches';
-import { homeTool, TOOLS } from '../constants/tools';
-import { LinkI18n } from './LinkI18n';
 import { getStrings } from '../core/i18n/getStrings';
 import { Var } from '../core/radix/var';
+import { LinkI18n } from './LinkI18n';
 
 const toolsFiltered = TOOLS.filter((tool) => !('href' in tool));
-const tools = [homeTool, ...toolsFiltered];
 const { locale } = Astro.params;
 const branchName = resolveBranchName(locale);
 const isBranchNamed = branchName !== undefined;

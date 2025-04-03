@@ -4,6 +4,7 @@ import partytown from '@astrojs/partytown';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import { SUPPORTED_LOCALES } from '@blitzkit/i18n';
+import compressor from 'astro-compressor';
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
@@ -21,7 +22,7 @@ export default defineConfig({
   outDir: '../../dist/website',
   prefetch: true,
 
-  integrations: [react(), sitemap(), partytown()],
+  integrations: [react(), sitemap(), partytown(), compressor()],
   vite: {
     resolve: {
       alias: {
