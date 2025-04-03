@@ -10,6 +10,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/partytown": "^2.1.4",
     "@blitzkit/core": "workspace:*",
     "@blitzkit/i18n": "workspace:*",
     "@nanostores/persistent": "^0.10.2",
