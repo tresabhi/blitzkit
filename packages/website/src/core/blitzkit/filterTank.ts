@@ -22,6 +22,27 @@ export function filterTank(filters: TankFilters, tank: TankDefinition) {
       (filters.gunType.includes('auto_reloader') &&
         tank.turrets.some((turret) =>
           turret.guns.some((gun) => gun.gun_type!.$case === 'auto_reloader'),
-        )))
+        ))) &&
+    (filters.shells[0] === null ||
+      tank.turrets.some((turret) =>
+        turret.guns.some(
+          (gun) =>
+            gun.gun_type!.value.base.shells[0]?.type === filters.shells[0],
+        ),
+      )) &&
+    (filters.shells[1] === null ||
+      tank.turrets.some((turret) =>
+        turret.guns.some(
+          (gun) =>
+            gun.gun_type!.value.base.shells[1]?.type === filters.shells[1],
+        ),
+      )) &&
+    (filters.shells[2] === null ||
+      tank.turrets.some((turret) =>
+        turret.guns.some(
+          (gun) =>
+            gun.gun_type!.value.base.shells[2]?.type === filters.shells[2],
+        ),
+      ))
   );
 }

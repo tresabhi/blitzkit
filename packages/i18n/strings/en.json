@@ -756,6 +756,7 @@
       },
 
       "tank_search": {
+        "clear_filters": "Clear",
         "search_bar_hint": "Search tanks...",
         "recent": "Recently viewed",
         "select_all": "Select all",
