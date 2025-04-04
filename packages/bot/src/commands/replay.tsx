@@ -6,6 +6,7 @@ import {
   tankIcon,
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
+import { Locale } from 'discord.js';
 import { clamp } from 'lodash-es';
 import { CommandWrapper } from '../components/CommandWrapper';
 import { TitleBar } from '../components/TitleBar';
@@ -18,6 +19,7 @@ import { RenderConfiguration } from '../core/blitzkit/renderConfiguration';
 import { blitzStarsTankAverages } from '../core/blitzstars/tankAverages';
 import { buttonLink } from '../core/discord/buttonLink';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
+import { translator } from '../core/localization/translator';
 import { CommandRegistry } from '../events/interactionCreate';
 import { theme } from '../stitches.config';
 
@@ -218,11 +220,13 @@ function stat(value: string | number, flex = 2) {
 }
 
 async function playerListing(
+  locale: Locale,
   player: WotInspectorReplayPlayerData,
   protagonistTeam: boolean,
   winningTeam: number,
   recordingPlayer = false,
 ) {
+  const { unwrap } = translator(locale);
   const awaitedTankAverages = await blitzStarsTankAverages;
   const awaitedTankDefinitions = await tankDefinitions;
   const tank = awaitedTankDefinitions.tanks[player.vehicle_descr];
@@ -275,7 +279,7 @@ async function playerListing(
         }}
       >
         <img
-          alt={tank.name}
+          alt={unwrap(tank.name)}
           src={await iconPng(tankIcon(tank.id))}
           style={{
             width: 32,
@@ -312,7 +316,7 @@ async function playerListing(
                 fontSize: 16,
               }}
             >
-              {tank.name}
+              {unwrap(tank.name)}
             </span>
           </div>
 
@@ -530,6 +534,7 @@ export const replayCommand = new Promise<CommandRegistry>((resolve) => {
                   )
                   .map((player) =>
                     playerListing(
+                      interaction.locale,
                       player,
                       true,
                       replayData.winner_team,
@@ -553,7 +558,12 @@ export const replayCommand = new Promise<CommandRegistry>((resolve) => {
                 players
                   .filter((player) => player.team === antagonistTeamId)
                   .map((player) =>
-                    playerListing(player, false, replayData.winner_team),
+                    playerListing(
+                      interaction.locale,
+                      player,
+                      false,
+                      replayData.winner_team,
+                    ),
                   ),
               )}
             </div>

@@ -7,6 +7,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { ConsumableTankFilter } from "./consumable_definitions";
+import { I18nString, createBaseI18nString } from "./i18n";
 
 export const protobufPackage = "blitzkit";
 
@@ -21,7 +22,7 @@ export interface ProvisionDefinitions_ProvisionsEntry {
 
 export interface Provision {
   id: number;
-  name: string;
+  name: I18nString;
   crew?: number | undefined;
   game_mode_exclusive: boolean;
   include: ConsumableTankFilter[];
@@ -187,13 +188,13 @@ export const ProvisionDefinitions_ProvisionsEntry: MessageFns<ProvisionDefinitio
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? Provision.fromPartial(object.value)
-      : createBaseProvision();
+      : undefined;
     return message;
   },
 };
 
 function createBaseProvision(): Provision {
-  return { id: 0, name: "", crew: undefined, game_mode_exclusive: false, include: [], exclude: [] };
+  return { id: 0, name: createBaseI18nString(), crew: undefined, game_mode_exclusive: false, include: [], exclude: [] };
 }
 
 export const Provision: MessageFns<Provision> = {
@@ -201,8 +202,8 @@ export const Provision: MessageFns<Provision> = {
     if (message.id !== 0) {
       writer.uint32(8).uint32(message.id);
     }
-    if (message.name !== "") {
-      writer.uint32(18).string(message.name);
+    if (message.name !== undefined) {
+      I18nString.encode(message.name, writer.uint32(18).fork()).join();
     }
     if (message.crew !== undefined && message.crew !== undefined) {
       writer.uint32(29).float(message.crew);
@@ -239,7 +240,7 @@ export const Provision: MessageFns<Provision> = {
             break;
           }
 
-          message.name = reader.string();
+          message.name = I18nString.decode(reader, reader.uint32());
           continue;
         }
         case 3: {
@@ -286,7 +287,7 @@ export const Provision: MessageFns<Provision> = {
   fromJSON(object: any): Provision {
     return {
       id: globalThis.Number(assertSet("Provision.id", object.id)),
-      name: globalThis.String(assertSet("Provision.name", object.name)),
+      name: I18nString.fromJSON(assertSet("Provision.name", object.name)),
       crew: isSet(object.crew) ? globalThis.Number(object.crew) : undefined,
       game_mode_exclusive: globalThis.Boolean(assertSet("Provision.game_mode_exclusive", object.game_mode_exclusive)),
       include: globalThis.Array.isArray(object?.include)
@@ -303,8 +304,8 @@ export const Provision: MessageFns<Provision> = {
     if (message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.name !== "") {
-      obj.name = message.name;
+    if (message.name !== undefined) {
+      obj.name = I18nString.toJSON(message.name);
     }
     if (message.crew !== undefined && message.crew !== undefined) {
       obj.crew = message.crew;
@@ -327,7 +328,9 @@ export const Provision: MessageFns<Provision> = {
   fromPartial<I extends Exact<DeepPartial<Provision>, I>>(object: I): Provision {
     const message = createBaseProvision();
     message.id = object.id ?? 0;
-    message.name = object.name ?? "";
+    message.name = (object.name !== undefined && object.name !== null)
+      ? I18nString.fromPartial(object.name)
+      : createBaseI18nString();
     message.crew = object.crew ?? undefined;
     message.game_mode_exclusive = object.game_mode_exclusive ?? false;
     message.include = object.include?.map((e) => ConsumableTankFilter.fromPartial(e)) || [];

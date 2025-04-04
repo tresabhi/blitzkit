@@ -9,6 +9,7 @@ import {
 } from '@radix-ui/themes';
 import { useRef, useState } from 'react';
 import { parse } from 'urlon';
+import { useLocale } from '../../hooks/useLocale';
 import { EmbedState } from '../../stores/embedState';
 
 export function Import() {
@@ -16,12 +17,15 @@ export function Import() {
   const [showInvalidURLPrompt, setShowInvalidURLPrompt] = useState(false);
   const [showConfirmation, setConfirmation] = useState(false);
   const mutateEmbedState = EmbedState.useMutation();
+  const { strings } = useLocale();
 
   return (
     <>
-      <Heading>Import</Heading>
+      <Heading>
+        {strings.website.tools.embed.configuration.import.title}
+      </Heading>
       <Text size="2" color="gray" mb="2">
-        Paste your current URL if you have one already to import your settings
+        {strings.website.tools.embed.configuration.import.description}
       </Text>
 
       <AlertDialog.Root
@@ -29,15 +33,18 @@ export function Import() {
         onOpenChange={setShowInvalidURLPrompt}
       >
         <AlertDialog.Content>
-          <AlertDialog.Title>Invalid URL</AlertDialog.Title>
+          <AlertDialog.Title>
+            {strings.website.tools.embed.configuration.import.idiot_title}
+          </AlertDialog.Title>
           <AlertDialog.Description>
-            Try pasting the URL that BlitzKit previously generated, you silly
-            goose!
+            {strings.website.tools.embed.configuration.import.idiot_description}
           </AlertDialog.Description>
 
           <Flex gap="3" mt="4" justify="end">
             <AlertDialog.Cancel>
-              <Button>Okay, my bad</Button>
+              <Button>
+                {strings.website.tools.embed.configuration.import.idiot_button}
+              </Button>
             </AlertDialog.Cancel>
           </Flex>
         </AlertDialog.Content>
@@ -46,7 +53,7 @@ export function Import() {
       <Flex gap="2" mb="6">
         <TextField.Root
           ref={importInput}
-          placeholder="Paste URL..."
+          placeholder={strings.website.tools.embed.configuration.import.hint}
           style={{ flex: 1 }}
         />
         <Tooltip content="Applied!" open={showConfirmation}>
@@ -72,7 +79,7 @@ export function Import() {
               }
             }}
           >
-            Apply
+            {strings.website.tools.embed.configuration.import.apply}
           </Button>
         </Tooltip>
       </Flex>

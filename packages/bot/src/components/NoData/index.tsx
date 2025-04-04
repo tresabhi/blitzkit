@@ -12,7 +12,7 @@ interface NoDataProps {
 }
 
 export function NoData({ type, locale }: NoDataProps) {
-  const { translate } = translator(locale);
+  const { strings } = translator(locale);
 
   return (
     <div
@@ -23,7 +23,7 @@ export function NoData({ type, locale }: NoDataProps) {
       }}
     >
       <span style={{ fontSize: 16, color: theme.colors.textLowContrast }}>
-        {translate(`bot.common.no_data.${type}`)}
+        {strings.bot.common.no_data[type]}
       </span>
     </div>
   );

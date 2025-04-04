@@ -14,6 +14,7 @@ import {
   RatingLeaderboard,
   Region,
 } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n';
 import {
   APIApplicationCommandOptionChoice,
   Locale,
@@ -54,28 +55,32 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
     );
 
     function addOptions(option: SlashCommandSubcommandBuilder) {
-      const { t, translate } = translator(Locale.EnglishUS);
+      const { strings } = translator(Locale.EnglishUS);
 
       return option
         .addIntegerOption((option) =>
           option
-            .setName(t`bot.commands.rating_leaderboard.options.limit`)
+            .setName(strings.bot.commands.rating_leaderboard.options.limit.name)
             .setNameLocalizations(
               localizationObject(
-                'bot.commands.rating_leaderboard.options.limit',
+                (strings) =>
+                  strings.bot.commands.rating_leaderboard.options.limit.name,
                 undefined,
                 true,
               ),
             )
             .setDescription(
-              translate(
-                'bot.commands.rating_leaderboard.options.limit.description',
+              literals(
+                strings.bot.commands.rating_leaderboard.options.limit
+                  .description,
                 [`${DEFAULT_LIMIT}`],
               ),
             )
             .setDescriptionLocalizations(
               localizationObject(
-                'bot.commands.rating_leaderboard.options.limit.description',
+                (strings) =>
+                  strings.bot.commands.rating_leaderboard.options.limit
+                    .description,
                 [`${DEFAULT_LIMIT}`],
               ),
             )
@@ -85,22 +90,26 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
         )
         .addStringOption((option) =>
           option
-            .setName(t`bot.commands.rating_leaderboard.options.season`)
+            .setName(
+              strings.bot.commands.rating_leaderboard.options.season.name,
+            )
             .setNameLocalizations(
               localizationObject(
-                'bot.commands.rating_leaderboard.options.season',
+                (strings) =>
+                  strings.bot.commands.rating_leaderboard.options.season.name,
                 undefined,
                 true,
               ),
             )
             .setDescription(
-              translate(
-                'bot.commands.rating_leaderboard.options.season.description',
-              ),
+              strings.bot.commands.rating_leaderboard.options.season
+                .description,
             )
             .setDescriptionLocalizations(
               localizationObject(
-                'bot.commands.rating_leaderboard.options.season.description',
+                (strings) =>
+                  strings.bot.commands.rating_leaderboard.options.season
+                    .description,
               ),
             )
             .setRequired(false)
@@ -112,15 +121,18 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
 
                   return {
                     name: current
-                      ? translate(
-                          'bot.commands.rating_leaderboard.options.season.choices.current',
+                      ? literals(
+                          strings.bot.commands.rating_leaderboard.options.season
+                            .choices.current,
                           [`${number}`],
                         )
                       : `${number}`,
                     value: `${number}`,
                     name_localizations: current
                       ? localizationObject(
-                          'bot.commands.rating_leaderboard.options.season.choices.current',
+                          (strings) =>
+                            strings.bot.commands.rating_leaderboard.options
+                              .season.choices.current,
                           [`${number}`],
                         )
                       : undefined,
@@ -145,35 +157,45 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
           modify(option: SlashCommandSubcommandBuilder) {
             option
               .addStringOption((option) => {
-                const { t, translate } = translator(Locale.EnglishUS);
+                const { strings } = translator(Locale.EnglishUS);
 
                 return option
-                  .setName(t`bot.commands.rating_leaderboard.options.league`)
+                  .setName(
+                    strings.bot.commands.rating_leaderboard.options.league.name,
+                  )
                   .setNameLocalizations(
                     localizationObject(
-                      'bot.commands.rating_leaderboard.options.league',
+                      (strings) =>
+                        strings.bot.commands.rating_leaderboard.options.league
+                          .name,
                       undefined,
                       true,
                     ),
                   )
                   .setDescription(
-                    translate(
-                      'bot.commands.rating_leaderboard.options.league.description',
-                    ),
+                    strings.bot.commands.rating_leaderboard.options.league
+                      .description,
                   )
                   .setDescriptionLocalizations(
                     localizationObject(
-                      'bot.commands.rating_leaderboard.options.league.description',
+                      (strings) =>
+                        strings.bot.commands.rating_leaderboard.options.league
+                          .description,
                     ),
                   )
                   .addChoices(
                     ...LEAGUES.map(
                       ({ name }, value) =>
                         ({
-                          name: translate(`common.leagues.${name}`),
+                          name: (
+                            strings.common.leagues as Record<string, string>
+                          )[name],
                           value: `${value}`,
                           name_localizations: localizationObject(
-                            `common.leagues.${name}`,
+                            (strings) =>
+                              (
+                                strings.common.leagues as Record<string, string>
+                              )[name],
                           ),
                         }) satisfies APIApplicationCommandOptionChoice<string>,
                     ),
@@ -189,7 +211,7 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
       // BIG TODO: title seems to be in english
 
       async handler(interaction) {
-        const { t, translate } = translator(interaction.locale);
+        const { strings } = translator(interaction.locale);
         const subcommand = interaction.options.getSubcommand(true) as
           | 'league'
           | 'neighbors';
@@ -223,7 +245,8 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
             regionRatingInfo !== null &&
             regionRatingInfo.detail !== undefined
           ) {
-            return t`bot.commands.rating_leaderboard.body.no_ongoing_season`;
+            return strings.bot.commands.rating_leaderboard.body
+              .no_ongoing_season;
           }
 
           const result = isCurrentSeason
@@ -268,8 +291,9 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
                         clan: clanData[player.id]?.clan?.tag,
                         nickname:
                           clanData[index]?.account_name ??
-                          translate(
-                            'bot.commands.rating_leaderboard.body.deleted_player',
+                          literals(
+                            strings.bot.commands.rating_leaderboard.body
+                              .deleted_player,
                             [`${player.id}`],
                           ),
                       }) satisfies SimplifiedPlayer,
@@ -289,12 +313,14 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
               : regionRatingInfo.count) - result[result.length - 1].position;
           titleName = `${
             leagueInfo
-              ? translate(`common.leagues.${LEAGUES[leagueInfo.index].name}`)
+              ? (strings.common.leagues as Record<string, string>)[
+                  LEAGUES[leagueInfo.index].name
+                ]
               : ''
-          } - ${translate(`common.regions.short.${region}`)}`;
+          } - ${strings.common.regions.short[region]}`;
           titleImage = imgur(leagueInfo.icon);
-          titleDescription = translate(
-            'bot.commands.rating_leaderboard.body.top_players',
+          titleDescription = literals(
+            strings.bot.commands.rating_leaderboard.body.top_players,
             [`${limit}`],
           );
         } else {
@@ -307,7 +333,8 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
             regionRatingInfo !== null &&
             regionRatingInfo.detail !== undefined
           ) {
-            return t`bot.commands.rating_leaderboard.body.no_ongoing_season`;
+            return strings.bot.commands.rating_leaderboard.body
+              .no_ongoing_season;
           }
 
           const accountInfo = await getAccountInfo(region, id);
@@ -334,8 +361,9 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
 
                   if (playerIndex === -1) {
                     throw new UserError(
-                      translate(
-                        'bot.commands.rating_leaderboard.body.no_participation',
+                      literals(
+                        strings.bot.commands.rating_leaderboard.body
+                          .no_participation,
                         [markdownEscape(accountInfo.nickname), `${season}`],
                       ),
                     );
@@ -373,7 +401,8 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
             ? `https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clan.emblem_set_id}.png`
             : undefined;
           titleName = neighbors ? accountInfo.nickname : '';
-          titleDescription = t`bot.commands.rating_leaderboard.body.neighbors`;
+          titleDescription =
+            strings.bot.commands.rating_leaderboard.body.neighbors;
           playersAfter =
             (regionRatingInfo === null
               ? archivedLeaderboard.version!.value.entries.length
@@ -422,8 +451,8 @@ export const ratingLeaderboardCommand = new Promise<CommandRegistry>(
                 {items}
                 {playersAfter > 0 && (
                   <Leaderboard.Gap
-                    message={translate(
-                      'bot.commands.rating_leaderboard.body.more',
+                    message={literals(
+                      strings.bot.commands.rating_leaderboard.body.more,
                       [`${playersAfter.toLocaleString(interaction.locale)}`],
                     )}
                   />

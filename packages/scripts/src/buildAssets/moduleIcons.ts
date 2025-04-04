@@ -12,10 +12,10 @@ export async function moduleIcons() {
     (await readdir(`${DATA}/Gfx/UI/ModulesTechTree`))
       .filter(
         (file) =>
-          !file.endsWith('@2x.packed.webp.dvpl') && file.startsWith('vehicle'),
+          !file.endsWith('@2x.packed.webp') && file.startsWith('vehicle'),
       )
       .map(async (file) => {
-        const nameRaw = file.match(/vehicle(.+)\.packed\.webp\.dvpl/)![1];
+        const nameRaw = file.match(/vehicle(.+)\.packed\.webp/)![1];
         const name = nameRaw[0].toLowerCase() + nameRaw.slice(1);
         const content = await sharp(
           await readDVPLFile(`${DATA}/Gfx/UI/ModulesTechTree/${file}`),

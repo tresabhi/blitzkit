@@ -7,6 +7,7 @@ import { Table } from '@radix-ui/themes';
 import { memo, useCallback } from 'react';
 import { awaitableAverageDefinitions } from '../../core/awaitables/averageDefinitions';
 import { useAveragesExclusionRatio } from '../../hooks/useAveragesExclusionRatio';
+import { useLocale } from '../../hooks/useLocale';
 import { TankPerformanceEphemeral } from '../../stores/tankPerformanceEphemeral';
 import { StickyRowHeaderCell } from '../StickyRowHeaderCell';
 
@@ -25,6 +26,7 @@ export const Total = memo<TotalProps>(
     const playerCountPeriod = TankPerformanceEphemeral.use(
       (state) => state.playerCountPeriod,
     );
+    const { strings, locale } = useLocale();
     const ratio = useAveragesExclusionRatio();
     const sum = useCallback(
       (slice: (tank: BlitzkitStats) => number) => {
@@ -54,20 +56,23 @@ export const Total = memo<TotalProps>(
     return (
       <Table.Row>
         <StickyRowHeaderCell style={{ overflow: 'hidden', display: 'flex' }}>
-          Total
+          {strings.website.tools.performance.table.tanks.total}
         </StickyRowHeaderCell>
         <Table.Cell align="center">{(winrate * 100).toFixed(1)}%</Table.Cell>
         <Table.Cell align="center">
-          {formatCompact(ratio * averageDefinitions.samples[playerCountPeriod])}
+          {formatCompact(
+            locale,
+            ratio * averageDefinitions.samples[playerCountPeriod],
+          )}
         </Table.Cell>
         <Table.Cell align="center">
-          {Math.round(damage).toLocaleString()}
+          {Math.round(damage).toLocaleString(locale)}
         </Table.Cell>
         <Table.Cell align="center">
           {Math.round(survival * 100).toFixed(1)}%
         </Table.Cell>
         <Table.Cell align="center">
-          {Math.round(xp).toLocaleString()}
+          {Math.round(xp).toLocaleString(locale)}
         </Table.Cell>
         <Table.Cell align="center">{kills.toFixed(2)}</Table.Cell>
         <Table.Cell align="center">{spots.toFixed(2)}</Table.Cell>
@@ -76,7 +81,7 @@ export const Total = memo<TotalProps>(
         <Table.Cell align="center">{hits.toFixed(1)}</Table.Cell>
         <Table.Cell align="center">{damageRatio.toFixed(2)}</Table.Cell>
         <Table.Cell align="center">
-          {Math.round(damageReceived).toLocaleString()}
+          {Math.round(damageReceived).toLocaleString(locale)}
         </Table.Cell>
         <Table.Cell align="center">{capturePoints.toFixed(2)}</Table.Cell>
       </Table.Row>

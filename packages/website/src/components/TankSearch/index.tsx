@@ -2,9 +2,11 @@ import {
   metaSortTank,
   normalizeBoundingBox,
   resolveDpm,
+  SEARCH_KEYS,
   unionBoundingBox,
   type TankDefinition,
 } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n/src/literals';
 import { useStore } from '@nanostores/react';
 import { Callout, Flex, Link, Text, type FlexProps } from '@radix-ui/themes';
 import fuzzysort from 'fuzzysort';
@@ -16,12 +18,10 @@ import { awaitableTankDefinitions } from '../../core/awaitables/tankDefinitions'
 import { awaitableTankNames } from '../../core/awaitables/tankNames';
 import { filterTank } from '../../core/blitzkit/filterTank';
 import { resolveReload } from '../../core/blitzkit/resolveReload';
+import { useLocale } from '../../hooks/useLocale';
 import { $tankFilters } from '../../stores/tankFilters';
 import { TankopediaPersistent } from '../../stores/tankopediaPersistent';
-import {
-  SORT_NAMES,
-  SORT_UNITS,
-} from '../../stores/tankopediaPersistent/constants';
+import { SORT_UNITS } from '../../stores/tankopediaPersistent/constants';
 import { $tankopediaSort } from '../../stores/tankopediaSort';
 import { ExperimentIcon } from '../ExperimentIcon';
 import { TankSearchCard } from './components/Card';
@@ -52,6 +52,7 @@ const [gameDefinitions, modelDefinitions, tankDefinitions, tankNames] =
 
 export const TankSearch = memo<TankSearchProps>(
   ({ compact, onSelect, onSelectAll, ...props }) => {
+    const { strings, locale } = useLocale();
     const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
     const awaitedTanksDefinitionsArray = Object.values(tankDefinitions.tanks);
     const tankFilters = useStore($tankFilters);
@@ -410,7 +411,7 @@ export const TankSearch = memo<TankSearchProps>(
           : sorted.reverse();
       } else {
         const searchedRaw = fuzzysort.go(tankFilters.search, tankNames, {
-          keys: ['searchableName', 'searchableNameDeburr', 'camouflages'],
+          keys: SEARCH_KEYS,
         });
         const searchedTanks = searchedRaw.map(
           (result) => tankDefinitions.tanks[result.obj.id],
@@ -438,8 +439,11 @@ export const TankSearch = memo<TankSearchProps>(
         <Flex mt="2" gap="1" align="center" justify="center" direction="column">
           <Flex gap="2">
             <Text color="gray">
-              {tanksFiltered.length} tank
-              {tanksFiltered.length === 1 ? '' : 's'}
+              {tanksFiltered.length === 1
+                ? strings.website.common.tank_search.count_singular
+                : literals(strings.website.common.tank_search.count_plural, [
+                    `${tanksFiltered.length.toLocaleString(locale)}`,
+                  ])}
             </Text>
 
             {onSelectAll && (
@@ -453,18 +457,22 @@ export const TankSearch = memo<TankSearchProps>(
                     draft.recentlyViewed = uniq([
                       ...tanksFiltered.map(({ id }) => id),
                       ...draft.recentlyViewed,
-                    ]).slice(0, MAX_RECENTLY_VIEWED);
+                    ])
+                      .filter((id) => id in tankDefinitions.tanks)
+                      .slice(0, MAX_RECENTLY_VIEWED);
                   });
                 }}
               >
-                Select all
+                {strings.website.common.tank_search.select_all}
               </Link>
             )}
           </Flex>
 
           {tankopediaSort.by !== 'meta.none' && (
             <Text color="gray">
-              Sorting by {SORT_NAMES[tankopediaSort.by]}
+              {literals(strings.website.common.tank_search.sorting_by, [
+                strings.website.common.tank_search.sort[tankopediaSort.by],
+              ])}
               {SORT_UNITS[tankopediaSort.by] === undefined
                 ? ''
                 : ` (${SORT_UNITS[tankopediaSort.by]})`}
@@ -480,8 +488,7 @@ export const TankSearch = memo<TankSearchProps>(
                 <ExperimentIcon style={{ width: '1em', height: '1em' }} />
               </Callout.Icon>
               <Callout.Text>
-                Tanks in testing are subject to change and may not represent the
-                final product.
+                {strings.website.common.warnings.test}
               </Callout.Text>
             </Callout.Root>
           </Flex>

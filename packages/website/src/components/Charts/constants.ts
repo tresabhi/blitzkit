@@ -1,1 +1,0 @@
-export const FIRST_AVERAGES_ENTRY = 19925;

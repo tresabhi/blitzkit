@@ -19,12 +19,15 @@ import {
 } from '@radix-ui/themes';
 import { resolveBranchName } from '../core/blitzkit/branches';
 import { homeTool, TOOLS } from '../constants/tools';
-import { NavbarAccount } from './NavbarAccount';
+import { LinkI18n } from './LinkI18n';
+import { getStrings } from '../core/i18n/getStrings';
 
 const toolsFiltered = TOOLS.filter((tool) => !('href' in tool));
 const tools = [homeTool, ...toolsFiltered];
-const branchName = resolveBranchName();
+const { locale } = Astro.params;
+const branchName = resolveBranchName(locale);
 const isBranchNamed = branchName !== undefined;
+const strings = getStrings(locale);
 ---
 
 <style>
@@ -108,7 +111,8 @@ const isBranchNamed = branchName !== undefined;
   <Flex className="expander" data-expanded="false" direction="column" gap="2">
     <Flex justify="center">
       <Flex flexGrow="1" maxWidth="1024px" p="3" align="center">
-        <Link
+        <LinkI18n
+          {locale}
           color="gray"
           highContrast
           href="/"
@@ -125,7 +129,7 @@ const isBranchNamed = branchName !== undefined;
               )
             }
           </Flex>
-        </Link>
+        </LinkI18n>
 
         <Box flexGrow="1" />
 
@@ -136,24 +140,28 @@ const isBranchNamed = branchName !== undefined;
                 (branch) =>
                   branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
               );
-              const selected = Astro.url.pathname.startsWith(
-                `/tools/${tool.id}`,
-              );
+              const selected = Astro.url.pathname.includes(`/tools/${tool.id}`);
+              const toolStrings =
+                strings.website.tools[
+                  (tool.stringsId ??
+                    tool.id) as keyof typeof strings.website.tools
+                ];
 
               if (unavailableOnBranch) return null;
 
               return (
-                <Fragment key={tool.title}>
+                <Fragment key={tool.id}>
                   {index > 0 && <Separator orientation="vertical" size="1" />}
-                  <Link
+                  <LinkI18n
+                    {locale}
                     color="gray"
                     highContrast={selected}
                     size="2"
                     href={`/tools/${tool.id}`}
                     underline={selected ? 'always' : 'hover'}
                   >
-                    {tool.title}
-                  </Link>
+                    {toolStrings.name}
+                  </LinkI18n>
                 </Fragment>
               );
             })
@@ -173,16 +181,17 @@ const isBranchNamed = branchName !== undefined;
             <DiscordLogoIcon />
           </Link>
 
-          <Link
+          <LinkI18n
+            {locale}
             style={{ display: 'flex', alignContent: 'center' }}
             color="gray"
             href="/settings"
             underline="none"
           >
             <GearIcon />
-          </Link>
+          </LinkI18n>
 
-          <NavbarAccount client:idle />
+          <!-- <NavbarAccount client:idle /> -->
 
           <IconButton variant="ghost" color="gray" className="hamburger">
             <Cross1Icon data-expanded />
@@ -207,6 +216,11 @@ const isBranchNamed = branchName !== undefined;
               (branch) =>
                 branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
             );
+            const toolStrings =
+              strings.website.tools[
+                (tool.stringsId ??
+                  tool.id) as keyof typeof strings.website.tools
+              ];
 
             if (unavailableOnBranch) return null;
 
@@ -226,7 +240,8 @@ const isBranchNamed = branchName !== undefined;
                   aspectRatio: '2 / 1',
                 }}
               >
-                <Link
+                <LinkI18n
+                  {locale}
                   href={tool.id.length === 0 ? '/' : `/tools/${tool.id}`}
                   style={{
                     display: 'flex',
@@ -259,9 +274,9 @@ const isBranchNamed = branchName !== undefined;
                       WebkitBackdropFilter: 'blur(4rem)',
                     }}
                   >
-                    <Text>{tool.title}</Text>
+                    <Text>{toolStrings.name}</Text>
                   </Flex>
-                </Link>
+                </LinkI18n>
               </Flex>
             );
           })

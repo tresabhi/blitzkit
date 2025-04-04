@@ -1,4 +1,5 @@
 import { Flex, Heading } from '@radix-ui/themes';
+import { useLocale } from '../../../hooks/useLocale';
 import { Characteristics } from './components/Characteristics';
 import { CharacteristicsHeading } from './components/Characteristics/components/Heading';
 import { Consumables } from './components/Consumables';
@@ -9,6 +10,8 @@ import { Provisions } from './components/Provisions';
 import { Skills } from './components/Skills';
 
 export function CharacteristicsSection() {
+  const { strings } = useLocale();
+
   return (
     <Flex mt="4" px="4" style={{ boxSizing: 'border-box' }} gap="6">
       <Flex
@@ -24,7 +27,9 @@ export function CharacteristicsSection() {
           maxWidth="21rem"
           align={{ initial: 'center', sm: 'start' }}
         >
-          <Heading>Configuration</Heading>
+          <Heading>
+            {strings.website.tools.tankopedia.configuration.title}
+          </Heading>
           <Modules />
           <Equipment />
           <Provisions />

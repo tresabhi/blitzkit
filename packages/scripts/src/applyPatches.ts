@@ -9,7 +9,7 @@ import { DATA } from './buildAssets/constants';
 import { readYAMLDVPL } from './core/blitz/readYAMLDVPL';
 import { writeDVPL } from './core/blitz/writeDVPL';
 
-const versionTextFile = await readStringDVPL(`${DATA}/version.txt.dvpl`);
+const versionTextFile = await readStringDVPL(`${DATA}/version.txt`);
 const currentVersion = versionTextFile
   .split(' ')[0]
   .split('.')
@@ -45,19 +45,27 @@ while (true) {
       files.length,
     );
 
-    await Promise.all(
-      files.map(async ({ path, data }) => {
-        const { dir } = parsePath(path);
+    for (const { path, data } of files) {
+      console.log(`Patching "${path}"...`);
 
+      const { dir } = parsePath(path);
+
+      try {
         await mkdir(`${DATA}/${dir}`, { recursive: true });
-        await writeFile(
-          `${DATA}/${path}.dvpl`,
-          new Uint8Array(writeDVPL(Buffer.from(data))),
-        );
+      } catch (error) {
+        console.warn(`Failed to make directory "${dir}"`);
+      }
 
-        bar.tick();
-      }),
-    );
+      const isDvpl = path.endsWith('.dvpl');
+      const buffer = Buffer.from(data);
+
+      await writeFile(
+        `${DATA}/${path}${isDvpl ? '' : '.dvpl'}`,
+        new Uint8Array(isDvpl ? buffer : writeDVPL(buffer)),
+      );
+
+      bar.tick();
+    }
 
     if ('dynamicContentLocalizationsDir' in data) {
       console.log('Found dynamic content localizations; patching...');
@@ -69,13 +77,13 @@ while (true) {
       );
       const newStrings = parseYaml(await localizationsResponse.text());
       const oldStrings = await readYAMLDVPL<Record<string, string>>(
-        `${DATA}/Strings/en.yaml.dvpl`,
+        `${DATA}/Strings/en.yaml`,
       );
       const patchedStrings = { ...oldStrings, ...newStrings };
       const patchedContent = stringifyYaml(patchedStrings);
 
       await writeFile(
-        `${DATA}/Strings/en.yaml.dvpl`,
+        `${DATA}/Strings/en.yaml`,
         new Uint8Array(writeDVPL(Buffer.from(patchedContent))),
       );
     }

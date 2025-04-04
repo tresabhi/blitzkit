@@ -10,10 +10,12 @@
     "build:reviews": "bun src/reviews.ts",
     "build:ids": "bun src/discoverIds.ts",
     "build:bot": "bun src/buildBot.ts",
-    "build:ratingleaderboard": "bun src/buildRatingLeaderboard.ts"
+    "build:ratingleaderboard": "bun src/buildRatingLeaderboard.ts",
+    "prunestrings": "bun src/pruneStrings.ts"
   },
   "dependencies": {
     "@blitzkit/core": "workspace:*",
+    "@blitzkit/i18n": "workspace:*",
     "@gltf-transform/core": "^4.0.10",
     "@gltf-transform/extensions": "^4.0.10",
     "@gltf-transform/functions": "^4.0.10",

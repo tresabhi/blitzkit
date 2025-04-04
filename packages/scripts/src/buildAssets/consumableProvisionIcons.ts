@@ -34,21 +34,19 @@ export async function consumableProvisionIcons() {
   const styleSheets = await Promise.all(
     styles.map(async (path) =>
       Object.values(
-        (await readYAMLDVPL<Mappings>(`${DATA}/${path}.dvpl`)).StyleSheets,
+        (await readYAMLDVPL<Mappings>(`${DATA}/${path}`)).StyleSheets,
       ),
     ),
   ).then((array) => array.flat());
 
   for (const match of (
     await readStringDVPL(
-      `${DATA}/XML/item_defs/vehicles/common/consumables/list.xml.dvpl`,
+      `${DATA}/XML/item_defs/vehicles/common/consumables/list.xml`,
     )
   ).matchAll(listItemsPattern)) {
     const consumablesCommon = await readXMLDVPL<{
       root: ConsumablesCommon;
-    }>(
-      `${DATA}/XML/item_defs/vehicles/common/consumables/${match[1]}.xml.dvpl`,
-    );
+    }>(`${DATA}/XML/item_defs/vehicles/common/consumables/${match[1]}.xml`);
 
     await Promise.all(
       Object.values(consumablesCommon.root).map(async (consumable) => {
@@ -70,9 +68,9 @@ export async function consumableProvisionIcons() {
           .replace('.psd', '')
           .replace('.txt', '');
 
-        if (existsSync(`${DATA}/${configPath}.packed.webp.dvpl`)) {
+        if (existsSync(`${DATA}/${configPath}.packed.webp`)) {
           const image = sharp(
-            await readDVPLFile(`${DATA}/${configPath}.packed.webp.dvpl`),
+            await readDVPLFile(`${DATA}/${configPath}.packed.webp`),
           );
           const content = await image.trim({ threshold: 100 }).toBuffer();
 
@@ -83,10 +81,10 @@ export async function consumableProvisionIcons() {
         } else {
           const consumablesTexture = sharp(
             await readDVPLFile(
-              `${`${DATA}/${configPath}`.split('/').slice(0, -1).join('/')}/texture0.packed.webp.dvpl`,
+              `${`${DATA}/${configPath}`.split('/').slice(0, -1).join('/')}/texture0.packed.webp`,
             ),
           );
-          const sizes = (await readStringDVPL(`${DATA}/${configPath}.txt.dvpl`))
+          const sizes = (await readStringDVPL(`${DATA}/${configPath}.txt`))
             .split('\n')[4]
             .split(' ')
             .map(Number);
@@ -111,12 +109,12 @@ export async function consumableProvisionIcons() {
 
   for (const match of (
     await readStringDVPL(
-      `${DATA}/XML/item_defs/vehicles/common/provisions/list.xml.dvpl`,
+      `${DATA}/XML/item_defs/vehicles/common/provisions/list.xml`,
     )
   ).matchAll(listItemsPattern)) {
     const provisionsCommon = await readXMLDVPL<{
       root: ProvisionsCommon;
-    }>(`${DATA}/XML/item_defs/vehicles/common/provisions/${match[1]}.xml.dvpl`);
+    }>(`${DATA}/XML/item_defs/vehicles/common/provisions/${match[1]}.xml`);
     await Promise.all(
       Object.values(provisionsCommon.root).map(async (provision) => {
         const styleSheet = styleSheets.find((styleSheet) =>
@@ -137,9 +135,9 @@ export async function consumableProvisionIcons() {
           .replace('.psd', '')
           .replace('.txt', '');
 
-        if (existsSync(`${DATA}/${configPath}.packed.webp.dvpl`)) {
+        if (existsSync(`${DATA}/${configPath}.packed.webp`)) {
           const image = sharp(
-            await readDVPLFile(`${DATA}/${configPath}.packed.webp.dvpl`),
+            await readDVPLFile(`${DATA}/${configPath}.packed.webp`),
           );
           const content = await image.trim({ threshold: 100 }).toBuffer();
 
@@ -150,10 +148,10 @@ export async function consumableProvisionIcons() {
         } else {
           const provisionsTexture = sharp(
             await readDVPLFile(
-              `${`${DATA}/${configPath}`.split('/').slice(0, -1).join('/')}/texture0.packed.webp.dvpl`,
+              `${`${DATA}/${configPath}`.split('/').slice(0, -1).join('/')}/texture0.packed.webp`,
             ),
           );
-          const sizes = (await readStringDVPL(`${DATA}/${configPath}.txt.dvpl`))
+          const sizes = (await readStringDVPL(`${DATA}/${configPath}.txt`))
             .split('\n')[4]
             .split(' ')
             .map(Number);

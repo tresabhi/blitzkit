@@ -2,9 +2,18 @@
 
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
+import { SUPPORTED_LOCALES } from '@blitzkit/i18n';
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
+  i18n: {
+    defaultLocale: 'en',
+    locales: [...SUPPORTED_LOCALES],
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
+
   devToolbar: { enabled: false },
   output: 'static',
   site: 'https://blitzkit.app',

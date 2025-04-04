@@ -17,11 +17,12 @@ import {
   Flex,
   Heading,
   IconButton,
-  Link,
   Text,
 } from '@radix-ui/themes';
 import { awaitableTankDefinitions } from '../../../../core/awaitables/tankDefinitions';
+import { useLocale } from '../../../../hooks/useLocale';
 import { Duel } from '../../../../stores/duel';
+import { LinkI18n } from '../../../LinkI18n';
 import { ConfigurationChildWrapper } from './ConfigurationChildWrapper';
 
 type ModuleDefinition =
@@ -63,6 +64,8 @@ function ModuleButton({
   onClick: () => void;
 }) {
   const isTank = unlock.type === ModuleType.VEHICLE;
+  const { locale } = useLocale();
+
   const button = (
     <IconButton
       size="4"
@@ -100,7 +103,7 @@ function ModuleButton({
           gap={isTank ? '1' : undefined}
         >
           <Text size="1" color="gray">
-            {formatCompact(unlock.cost.value)}
+            {formatCompact(locale, unlock.cost.value)}
           </Text>
 
           <img
@@ -132,7 +135,9 @@ function ModuleButton({
   );
 
   return isTank ? (
-    <Link href={`/tools/tankopedia/${unlock.id}`}>{button}</Link>
+    <LinkI18n locale={locale} href={`/tools/tankopedia/${unlock.id}`}>
+      {button}
+    </LinkI18n>
   ) : (
     button
   );
@@ -160,6 +165,7 @@ export function Modules() {
   const topGun = topTurret.guns.at(-1)!;
   const topEngine = tank.engines.at(-1)!;
   const topTrack = tank.tracks.at(-1)!;
+  const { strings } = useLocale();
 
   function setByUnlock(unlock: Unlock) {
     mutateDuel((draft) => {
@@ -349,7 +355,9 @@ export function Modules() {
   return (
     <ConfigurationChildWrapper>
       <Flex gap="4" align="center">
-        <Heading size="4">Modules</Heading>
+        <Heading size="4">
+          {strings.website.tools.tankopedia.configuration.modules.title}
+        </Heading>
 
         {hasUpgrades && (
           <>
@@ -367,7 +375,7 @@ export function Modules() {
                 });
               }}
             >
-              Stock
+              {strings.website.tools.tankopedia.configuration.modules.stock}
             </Button>
             <Button
               variant="ghost"
@@ -385,7 +393,7 @@ export function Modules() {
                 });
               }}
             >
-              Upgrade
+              {strings.website.tools.tankopedia.configuration.modules.upgrade}
             </Button>
           </>
         )}

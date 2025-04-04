@@ -20,7 +20,7 @@ export async function tankArmors() {
   await Promise.all(
     nations.map(async (nation) => {
       const tanks = await readXMLDVPL<{ root: VehicleDefinitionList }>(
-        `${DATA}/XML/item_defs/vehicles/${nation}/list.xml.dvpl`,
+        `${DATA}/XML/item_defs/vehicles/${nation}/list.xml`,
       );
 
       await Promise.all(

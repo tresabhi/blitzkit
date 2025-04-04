@@ -3,6 +3,7 @@ import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import { awaitableConsumableDefinitions } from '../../core/awaitables/consumableDefinitions';
 import { awaitableGameDefinitions } from '../../core/awaitables/gameDefinitions';
 import { awaitableProvisionDefinitions } from '../../core/awaitables/provisionDefinitions';
+import { useLocale } from '../../hooks/useLocale';
 import { Duel } from '../../stores/duel';
 
 const [gameDefinitions, consumableDefinitions, provisionDefinitions] =
@@ -13,6 +14,7 @@ const [gameDefinitions, consumableDefinitions, provisionDefinitions] =
   ]);
 
 export function GameModeSection() {
+  const { unwrap, strings } = useLocale();
   const tank = Duel.use((state) => state.protagonist.tank);
   const roles = Object.entries(tank.roles);
 
@@ -20,7 +22,9 @@ export function GameModeSection() {
 
   return (
     <Flex direction="column" gap="4" align="center">
-      <Heading size="6">Game mode abilities</Heading>
+      <Heading size="6">
+        {strings.website.tools.tankopedia.game_modes.title}
+      </Heading>
 
       <Flex justify="center" gap="4" wrap="wrap" px="4">
         {roles.map(([key, value]) => {
@@ -67,7 +71,7 @@ export function GameModeSection() {
                 justify="center"
               >
                 <Text size="4" weight="bold">
-                  {gameMode.name}
+                  {unwrap(gameMode.name)}
                 </Text>
 
                 <Flex direction="column">
@@ -84,9 +88,9 @@ export function GameModeSection() {
                               objectFit: 'contain',
                             }}
                             src={asset(`icons/provisions/${id}.webp`)}
-                            alt={provisions.name}
+                            alt={unwrap(provisions.name)}
                           />
-                          {provisions.name}
+                          {unwrap(provisions.name)}
                         </Flex>
                       </Text>
                     );
@@ -104,9 +108,9 @@ export function GameModeSection() {
                               objectFit: 'contain',
                             }}
                             src={asset(`icons/consumables/${id}.webp`)}
-                            alt={consumable.name}
+                            alt={unwrap(consumable.name)}
                           />
-                          {consumable.name}
+                          {unwrap(consumable.name)}
                         </Flex>
                       </Text>
                     );

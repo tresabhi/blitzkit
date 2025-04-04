@@ -5,6 +5,7 @@ import {
   TIER_ROMAN_NUMERALS,
   uniqueGuns,
 } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n/src/literals';
 import {
   CameraIcon,
   CopyIcon,
@@ -33,6 +34,7 @@ import { Pose, poseEvent } from '../../../../../core/blitzkit/pose';
 import { useEquipment } from '../../../../../hooks/useEquipment';
 import { useFullScreen } from '../../../../../hooks/useFullScreen';
 import { useFullscreenAvailability } from '../../../../../hooks/useFullscreenAvailability';
+import { useLocale } from '../../../../../hooks/useLocale';
 import { App } from '../../../../../stores/app';
 import { Duel } from '../../../../../stores/duel';
 import {
@@ -87,6 +89,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
   const antagonistUniqueGuns = uniqueGuns(antagonistTank.turrets);
   const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
+  const { strings, unwrap } = useLocale();
 
   return (
     <>
@@ -124,13 +127,14 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
         >
           {!hasCustomShell && (
             <Text color="gray" size={{ initial: '1', sm: '2' }}>
-              {(
-                resolvePenetrationCoefficient(
-                  hasCalibratedShells,
-                  antagonistShell.type,
-                ) * antagonistShell.penetration.near
-              ).toFixed(0)}
-              mm
+              {literals(strings.common.units.mm, [
+                (
+                  resolvePenetrationCoefficient(
+                    hasCalibratedShells,
+                    antagonistShell.type,
+                  ) * antagonistShell.penetration.near
+                ).toFixed(0),
+              ])}
             </Text>
           )}
           {antagonistUniqueGuns.length > 1 && (
@@ -198,10 +202,11 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                         }
                         secondaryDiscriminator={
                           <Text style={{ fontSize: '0.75em' }}>
-                            {Math.round(
-                              gun.gun_type!.value.base.shells[0].caliber,
-                            )}
-                            mm
+                            {literals(strings.common.units.mm, [
+                              gun.gun_type!.value.base.shells[0].caliber.toFixed(
+                                0,
+                              ),
+                            ])}
                           </Text>
                         }
                       />
@@ -239,7 +244,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                 }}
               >
                 <img
-                  alt={thisShell.name}
+                  alt={unwrap(thisShell.name)}
                   src={asset(`icons/shells/${thisShell.icon}.webp`)}
                   style={{
                     width: '50%',
@@ -341,13 +346,13 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
             >
               <Checkbox checked={advancedHighlighting} />
               <Text color="gray" size="2">
-                Advanced highlighting
+                {strings.website.tools.tankopedia.sandbox.dynamic.advanced}
               </Text>
             </Flex>
 
             <Flex align="center" gap="2">
               <Text color="gray" size="2">
-                Shooter:
+                {strings.website.tools.tankopedia.sandbox.dynamic.shooter}
               </Text>
               <Dialog.Root
                 open={antagonistSelectorOpen}
@@ -357,7 +362,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                   <Button variant="ghost">
                     <Flex gap="2" align="center">
                       <SmallTankIcon id={antagonistTank.id} size={16} />
-                      {antagonistTank.name}
+                      {unwrap(antagonistTank.name)}
                     </Flex>
                   </Button>
                 </Dialog.Trigger>
@@ -403,21 +408,27 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
             }}
           >
             <SegmentedControl.Item value={`${TankopediaDisplay.Model}`}>
-              <Tooltip content="Model">
+              <Tooltip
+                content={strings.website.tools.tankopedia.sandbox.model.name}
+              >
                 <Flex height="100%" align="center">
                   <img src={imgur('jAdYf0m')} style={{ height: '1.25em' }} />
                 </Flex>
               </Tooltip>
             </SegmentedControl.Item>
             <SegmentedControl.Item value={`${TankopediaDisplay.DynamicArmor}`}>
-              <Tooltip content="Dynamic armor">
+              <Tooltip
+                content={strings.website.tools.tankopedia.sandbox.dynamic.name}
+              >
                 <Flex height="100%" align="center">
                   <img src={imgur('oe4Cq0g')} style={{ height: '1.25em' }} />
                 </Flex>
               </Tooltip>
             </SegmentedControl.Item>
             <SegmentedControl.Item value={`${TankopediaDisplay.StaticArmor}`}>
-              <Tooltip content="Static armor">
+              <Tooltip
+                content={strings.website.tools.tankopedia.sandbox.static.name}
+              >
                 <Flex height="100%" align="center">
                   <img src={imgur('VQ4uDno')} style={{ height: '1.25em' }} />
                 </Flex>
@@ -441,15 +452,15 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
 
             <DropdownMenu.Content>
               <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.HullDown)}>
-                Hull down
+                {strings.website.tools.tankopedia.sandbox.poses.hull_down}
               </DropdownMenu.Item>
 
               <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.FaceHug)}>
-                Face hug
+                {strings.website.tools.tankopedia.sandbox.poses.face_hug}
               </DropdownMenu.Item>
 
               <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.Default)}>
-                Default
+                {strings.website.tools.tankopedia.sandbox.poses.default}
               </DropdownMenu.Item>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
@@ -464,7 +475,9 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
             <DropdownMenu.Content>
               {display === TankopediaDisplay.DynamicArmor && (
                 <>
-                  <DropdownMenu.Label>Armor</DropdownMenu.Label>
+                  <DropdownMenu.Label>
+                    {strings.website.tools.tankopedia.sandbox.settings.armor}
+                  </DropdownMenu.Label>
 
                   <DropdownMenu.CheckboxItem
                     checked={greenPenetration}
@@ -474,7 +487,10 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                       });
                     }}
                   >
-                    Green penetration
+                    {
+                      strings.website.tools.tankopedia.sandbox.settings
+                        .green_penetration
+                    }
                   </DropdownMenu.CheckboxItem>
 
                   <DropdownMenu.CheckboxItem
@@ -485,7 +501,10 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                       });
                     }}
                   >
-                    Hide tank model under armor
+                    {
+                      strings.website.tools.tankopedia.sandbox.settings
+                        .hide_model_under_armor
+                    }
                   </DropdownMenu.CheckboxItem>
 
                   <DropdownMenu.CheckboxItem
@@ -496,7 +515,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                       });
                     }}
                   >
-                    Opaque
+                    {strings.website.tools.tankopedia.sandbox.settings.opaque}
                   </DropdownMenu.CheckboxItem>
 
                   {developerMode && (
@@ -508,13 +527,18 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                         });
                       }}
                     >
-                      <b>DEV:</b> Wireframe
+                      {
+                        strings.website.tools.tankopedia.sandbox.settings
+                          .dev_wireframe
+                      }
                     </DropdownMenu.CheckboxItem>
                   )}
                 </>
               )}
 
-              <DropdownMenu.Label>Environment</DropdownMenu.Label>
+              <DropdownMenu.Label>
+                {strings.website.tools.tankopedia.sandbox.settings.environment}
+              </DropdownMenu.Label>
 
               <DropdownMenu.CheckboxItem
                 checked={showGrid}
@@ -524,7 +548,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                   });
                 }}
               >
-                Show grid
+                {strings.website.tools.tankopedia.sandbox.settings.show_grid}
               </DropdownMenu.CheckboxItem>
             </DropdownMenu.Content>
           </DropdownMenu.Root>
@@ -557,7 +581,10 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                     }}
                   >
                     <DownloadIcon />
-                    Download
+                    {
+                      strings.website.tools.tankopedia.sandbox.screenshot
+                        .download
+                    }
                   </Button>
                 </Popover.Close>
                 <Popover.Close>
@@ -576,7 +603,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                     }}
                   >
                     <CopyIcon />
-                    Copy
+                    {strings.website.tools.tankopedia.sandbox.screenshot.copy}
                   </Button>
                 </Popover.Close>
               </Flex>

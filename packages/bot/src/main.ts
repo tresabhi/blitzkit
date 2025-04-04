@@ -1,10 +1,3 @@
-// import { assertSecret, EventManager } from '@blitzkit/core';
-// import { ActivityType, ShardingManager } from 'discord.js';
-// import {
-//   discoveredIdsDefinitions,
-//   tankDefinitions,
-// } from './core/blitzkit/nonBlockingPromises';
-
 import { assertSecret } from '@blitzkit/core';
 import { ActivityType, ShardingManager } from 'discord.js';
 import {
@@ -36,7 +29,6 @@ const interval = setInterval(async () => {
     let users = 0;
 
     for (const [, shard] of shards) {
-      // wtf is this typing bro???
       const guilds = (await shard.fetchClientValue('guilds.cache')) as any;
 
       servers += guilds.length;
@@ -53,7 +45,7 @@ const interval = setInterval(async () => {
     const usernames = awaitedDiscoveredIdsDefinitions.count;
 
     manager.broadcastEval(
-      (client, { servers, users, channels, tanks, usernames }) => {
+      async (client, { servers, users, channels, tanks, usernames }) => {
         const bios = [
           `Living in ${servers.toLocaleString()} servers`,
           `Serving ${users.toLocaleString()} users`,
@@ -70,6 +62,13 @@ const interval = setInterval(async () => {
             },
           ],
         });
+
+        for (const guild of client.guilds.cache.values()) {
+          try {
+            const botMember = await guild.members.fetch(client.user.id);
+            await botMember.setNickname('BlitzKit');
+          } catch {}
+        }
       },
       { context: { servers, channels, users, tanks, usernames } },
     );

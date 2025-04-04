@@ -15,7 +15,6 @@ import {
   SlashCommandSubcommandsOnlyBuilder,
 } from 'discord.js';
 import { aboutCommand } from '../../commands/about';
-import { auctionCommand } from '../../commands/auction';
 import { breakdownCommand } from '../../commands/breakdown';
 import { debugCommand } from '../../commands/debug';
 import { evolutionCommand } from '../../commands/evolution';
@@ -64,20 +63,23 @@ interface CommandRegistryBase {
   autocomplete?: (interaction: AutocompleteInteraction<CacheType>) => void;
   button?: (interaction: ButtonInteraction<CacheType>) => InteractionReturnable;
 }
+
 interface CommandRegistryImplicit extends CommandRegistryBase {
   handlesInteraction: true;
   handler: (interaction: ChatInputCommandInteraction<CacheType>) => void;
 }
+
 interface CommandRegistryExplicit extends CommandRegistryBase {
   handlesInteraction?: false;
   handler: (
     interaction: ChatInputCommandInteraction<CacheType>,
   ) => InteractionReturnable;
 }
+
 export type CommandRegistry = CommandRegistryImplicit | CommandRegistryExplicit;
 
 export const COMMANDS_RAW: Promise<CommandRegistry>[] = [
-  auctionCommand,
+  // auctionCommand,
   permissionsCommand,
   debugCommand,
   aboutCommand,
@@ -107,10 +109,8 @@ export const commands = Promise.allSettled(COMMANDS_RAW).then((rawCommands) => {
           `Command ${index} failed to load; skipping...`,
           registry.reason,
         );
-
         return commands;
       }
-
       return { ...commands, [registry.value.command.name]: registry.value };
     },
     {},

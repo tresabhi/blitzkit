@@ -9,6 +9,7 @@ import {
   getRatingNeighbors,
   imgur,
 } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n';
 import { SlashCommandSubcommandBuilder } from 'discord.js';
 import markdownEscape from 'markdown-escape';
 import { Glow } from '../components/AllStatsOverview/components/HeroStat/components/Glow';
@@ -53,7 +54,7 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
       const subcommand = interaction.options.getSubcommand(true) as
         | 'season'
         | 'today';
-      const { t, translate } = translator(interaction.locale);
+      const { strings } = translator(interaction.locale);
       const { id, region } = await resolvePlayerFromCommand(interaction);
       const clan = (await getClanAccountInfo(region, id, ['clan']))?.clan;
       const clanImage = clan ? emblemURL(clan.emblem_set_id) : undefined;
@@ -89,7 +90,7 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
       const statsB2Array = (await getRatingNeighbors(region, id, 0)).neighbors;
 
       if (statsB2Array === undefined) {
-        return translate('bot.commands.rating.errors.no_participation', [
+        return literals(strings.bot.commands.rating.errors.no_participation, [
           markdownEscape(accountInfo.nickname),
         ]);
       }
@@ -98,10 +99,10 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
       const league = getLeagueFromScore(statsB2.score);
 
       if (!statsA) {
-        return t`bot.commands.rating.errors.unrecorded_stats`;
+        return strings.bot.commands.rating.errors.unrecorded_stats;
       }
       if (!statsB1) {
-        return translate('bot.commands.rating.errors.no_participation', [
+        return literals(strings.bot.commands.rating.errors.no_participation, [
           markdownEscape(accountInfo.nickname),
         ]);
       }
@@ -139,9 +140,9 @@ export const ratingCommand = new Promise<CommandRegistry>((resolve) => {
           <TitleBar
             title={accountInfo.nickname}
             image={clanImage}
-            description={`${translate(
-              `bot.commands.rating.body.subtitle.${subcommand}`,
-            )} • ${new Date().toLocaleDateString(interaction.locale)}`}
+            description={`${
+              strings.bot.commands.rating.body.subtitle[subcommand]
+            } • ${new Date().toLocaleDateString(interaction.locale)}`}
           />
 
           <div

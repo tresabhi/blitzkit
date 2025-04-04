@@ -1,0 +1,1272 @@
+{
+  "test": {
+    "default": "測試",
+    "long": "这是一个测试用长字符串。你不会再用户界面中看见这些。我最喜欢的水果是%s1因为它的颜色是%s2。我如此喜欢它以至于我会把它的名字念3次！%s1！%s1！%s1！重申一次，它是%s2而不是%s3。",
+    "fox": "褐色的狐狸迅速地跳过那只懒狗"
+  },
+  "common": {
+    "units": {
+      "m": "%s公尺",
+      "mm": "%s毫米",
+      "deg": "%s1度",
+      "hp": "%s生命值",
+      "x": "x%s1"
+    },
+    "gun_types": {
+      "auto_loader": "彈夾型戰車",
+      "auto_reloader": "自動裝填",
+      "regular": "單發"
+    },
+    "shells": {
+      "ap": "穿甲彈",
+      "apcr": "硬式複合穿甲彈",
+      "heat": "反戰車高爆彈",
+      "he": "高爆彈"
+    },
+    "player_count_period": {
+      "total": "全部",
+      "d_120": "過去120天",
+      "d_90": "過去90天",
+      "d_60": "過去60天",
+      "d_30": "過去一個月",
+      "d_7": "過去一週",
+      "d_1": "昨日"
+    },
+    "branches": {
+      "local": "開發人員",
+      "dev": "測試版",
+      "opentest": "開放測試",
+      "preview": "預覽"
+    },
+    "locales": {
+      "en": "英文",
+      "es": "西班牙文",
+      "pt": "葡萄牙文",
+      "ru": "俄文",
+      "uk": "乌克兰文",
+      "zh": "中文",
+      "ja": "日文",
+      "fr": "法文",
+      "pl": "波兰文"
+    },
+    "wn8_percentile": {
+      "0": "非常差",
+      "1": "差",
+      "2": "較差",
+      "3": "平均",
+      "4": "高於平均",
+      "5": "好",
+      "6": "非常好",
+      "7": "很好",
+      "8": "極品",
+      "9": "超強勢玩家"
+    },
+    "bkni_percentile": {
+      "0": "Super malum",
+      "1": "Malum",
+      "2": "非常差",
+      "3": "差",
+      "4": "低於平均",
+      "5": "平均",
+      "6": "高於平均",
+      "7": "好",
+      "8": "非常好",
+      "9": "極品",
+      "10": "超级强势玩家"
+    },
+    "nations": {
+      "ussr": "苏联 (S系)",
+      "germany": "德國",
+      "usa": "美國。",
+      "china": "中國",
+      "uk": "英國。",
+      "france": "法國",
+      "japan": "日本",
+      "european": "歐洲國家",
+      "other": "混合型國家"
+    },
+    "nations_adjectives": {
+      "ussr": "蘇聯。",
+      "germany": "德國",
+      "usa": "美國。",
+      "china": "中國",
+      "uk": "英國。",
+      "france": "法國",
+      "japan": "日本",
+      "european": "歐洲的",
+      "other": "混合型國家"
+    },
+    "tank_class_short": {
+      "-1": "未識別",
+      "0": "輕型戰車",
+      "1": "中型戰車",
+      "2": "重型戰車",
+      "3": "驅逐戰車"
+    },
+    "tank_class_short_plural_lowercase": {
+      "0": "輕型戰車",
+      "1": "中型戰車",
+      "2": "重型戰車",
+      "3": "驅逐戰車"
+    },
+    "tank_class_medium": {
+      "-1": "未識別",
+      "0": "輕型戰車",
+      "1": "中型戰車",
+      "2": "重型戰車",
+      "3": "驅逐戰車"
+    },
+    "tree_type": {
+      "-1": "未識別",
+      "0": "科技樹",
+      "1": "加值戰車",
+      "2": "收藏家戰車"
+    },
+    "regions": {
+      "normal": {
+        "com": "北美",
+        "eu": "歐洲",
+        "asia": "亞太地區"
+      },
+      "short": {
+        "com": "北美",
+        "eu": "歐洲",
+        "asia": "亞太地區"
+      }
+    },
+    "leagues": {
+      "diamond": "鑽石",
+      "platinum": "白金",
+      "gold": "黃金",
+      "silver": "白銀",
+      "bronze": "青銅"
+    },
+    "composite_stats": {
+      "normalized_damage_dealt": "傷害",
+      "normalized_damage_received": "受到的傷害",
+      "normalized_deaths": "陣亡比",
+      "normalized_frags": "擊殺數",
+      "normalized_hits": "命中數",
+      "normalized_losses": "戰敗率",
+      "normalized_misses": "未命中數",
+      "normalized_shots": "射擊次數",
+      "normalized_spotted": "偵查次數",
+      "normalized_survived_battles": "存活率",
+      "normalized_win_and_survived": "存活勝利率",
+      "normalized_wins": "勝率",
+      "normalized_xp": "經驗值",
+      "normalized_battle_life_time": "戰鬥時間",
+      "cumulative_accuracy": "命中率",
+      "cumulative_battles": "戰鬥場次",
+      "cumulative_capture_points": "總佔領點數",
+      "cumulative_damage_dealt": "總傷害",
+      "cumulative_damage_ratio": "傷害比",
+      "cumulative_damage_received": "總承受的傷害",
+      "cumulative_deaths": "總陣亡數",
+      "cumulative_dropped_capture_points": "總阻止的佔領點數",
+      "cumulative_frags": "總擊殺數",
+      "cumulative_hits": "總命中數",
+      "cumulative_inaccuracy": "未命中率",
+      "cumulative_kills_to_death_ratio": "擊殺陣亡比",
+      "cumulative_losses": "戰敗",
+      "cumulative_misses": "總未命中數",
+      "cumulative_shots": "總射擊數",
+      "cumulative_spotted": "總偵查敵人數",
+      "cumulative_survived_battles": "存活場次",
+      "cumulative_win_and_survived": "勝利與存活場次",
+      "cumulative_wins": "勝利",
+      "cumulative_xp": "總經驗",
+      "cumulative_wn8": "玩家表現評分",
+      "cumulative_battle_life_time": "總戰鬥時間"
+    }
+  },
+  "bot": {
+    "common": {
+      "errors": {
+        "clan_not_found": "# 找不到公會\n找不到\"%s1\"。請嘗試從搜尋結果中選擇一個公會。",
+        "player_not_found": "# 找不到玩家\n無法找到玩家 \"%s1\"。 嘗試從搜尋結果中選擇玩家，或輸入一個有效的玩家名稱或 \"/link\" 命令。",
+        "player_not_linked": "# 使用 `/link` 來開始\n我不知道你是誰，但你今天可以告訴我！",
+        "tank_name_not_found": "# 找不到戰車\n找不到名為 \"%s1 \"的戰車。",
+        "tank_id_not_found": "# 找不到戰車\n無法找到ID為 \"%s1\"的戰車。 請嘗試輸入戰車的名稱而不是數字。",
+        "no_tank_stats": "# 没有這輛戰車的資料\n這個玩家沒有可用資料。這可能不是你要找的玩家。",
+        "get_help": "Discord的协助服务器",
+        "uncaught_error": "# BlitzKit 發生錯誤！\n我們對此感到抱歉。請加入[官方Discord](https://discord.gg/nDt7AjGJQH)，以方便幫助你解決問題。",
+        "preview": "# 此命令處於預覽\n\n您只能在[官方Discord伺服器](https://discord.gg/nDt7AjGJQH)訪問此命令。該命令將很快可用。",
+        "query_too_small": "# 搜尋內容過短\n您的搜尋必需至少包含 3 個字元。",
+        "query_too_long": "# 搜尋內容過長\n您搜尋的內容必須少於 100 個字元。"
+      },
+      "wn8": {
+        "name": "玩家表現評分",
+        "types": {
+          "very_bad": "非常差",
+          "bad": "差",
+          "below_average": "低於平均",
+          "average": "平均",
+          "above_average": "高於平均",
+          "good": "好",
+          "very_good": "非常好",
+          "great": "很好",
+          "unicum": "極品",
+          "super_unicum": "超強勢玩家"
+        }
+      },
+      "subcommands": {
+        "today": {
+          "name": "今日",
+          "description": "今日："
+        },
+        "30": {
+          "name": "30",
+          "description": "30 天"
+        },
+        "60": {
+          "name": "60",
+          "description": "60 天"
+        },
+        "90": {
+          "name": "90",
+          "description": "90 天"
+        },
+        "career": {
+          "name": "生涯",
+          "description": "玩家資料"
+        },
+        "custom": {
+          "name": "自定",
+          "description": "自定範圍",
+          "options": {
+            "start": {
+              "name": "開始",
+              "description": "從今天起算的天數前開始"
+            },
+            "end": {
+              "name": "結束",
+              "description": "從今天起算的天數前結束"
+            }
+          }
+        }
+      },
+      "options": {
+        "clan": {
+          "name": "公會",
+          "description": "公會名稱或標籤"
+        },
+        "tank": {
+          "name": "戰車",
+          "description": "要獲取統計資料的戰車"
+        },
+        "username": {
+          "name": "使用者名稱",
+          "description": "玩家的閃擊戰暱稱"
+        },
+        "filters": {
+          "nation": {
+            "name": "國別",
+            "description": "國別"
+          },
+          "class": {
+            "name": "分類",
+            "description": "戰車類別"
+          },
+          "type": {
+            "name": "戰車類型",
+            "description": "戰車類型"
+          }
+        },
+        "region": {
+          "name": "所在地區",
+          "description": "地區"
+        },
+        "tier": {
+          "name": "等級",
+          "description": "等级",
+          "choices": {
+            "tier": "%s1- %s2 级"
+          }
+        }
+      },
+      "periods": {
+        "career": "玩家資料",
+        "today": "今日：",
+        "days": "%s1 天",
+        "custom": "%s1 - %s2 天"
+      },
+      "filters": {
+        "none": "無篩選器",
+        "tier": "等級 %s1"
+      },
+      "no_data": {
+        "battles_in_period": "在這段時間裡沒有參與任何戰鬥",
+        "battles_in_season": "在這個賽季中沒有戰鬥記錄",
+        "players_in_period": "這段時間內沒有玩家",
+        "tanks_found": "找不到戰車"
+      },
+      "buttons": {
+        "refresh": "重新整理"
+      },
+      "hero_stats": {
+        "battles": "戰鬥場次",
+        "winrate": "勝率",
+        "damage": "傷害",
+        "damage_ratio": "傷害比",
+        "tier": "等級",
+        "survival": "生存性",
+        "accuracy": "命中率",
+        "kills": "擊殺數"
+      }
+    },
+    "commands": {
+      "auction": {
+        "name": "拍賣",
+        "description": "目前拍賣中的戰車",
+        "body": {
+          "title": "Blitz 拍賣活動",
+          "subtitle": "%s1 可用 • 下一個價格 %s2\n現在出價： %s3",
+          "next": "下一個價格: %s1",
+          "available": "可用: %s1 / %s2"
+        },
+        "errors": {
+          "no_auction": "# 目前没有正在進行的拍賣\n\n拍賣中沒有可供購買的戰車。 如果您認為這是一個錯誤，請在[官方的 Discord伺服器](https://discord.gg/nDt7AjGJQH)中報告這個問題。"
+        },
+        "actions": {
+          "bid": "立即購買"
+        }
+      },
+      "replay": {
+        "name": "重播",
+        "description": "顯示重播結果"
+      },
+      "research": {
+        "name": "研發",
+        "description": "列出研發線路的花費",
+        "options": {
+          "target_tank": {
+            "name": "目標戰車",
+            "description": "科技樹裡最後的待研發戰車"
+          },
+          "starting_tank": {
+            "name": "起始戰車",
+            "description": "科技樹中起始戰車(如果未提供則自動推定)"
+          }
+        },
+        "body": {
+          "subtitle": "研發",
+          "total": "全部",
+          "research": "研發： %s1",
+          "upgrades": "升級：%s1",
+          "purchase": "購買: %s1",
+          "equipment": "裝備: %s1",
+          "estimation": "# 這是一個估計值！\n\n這個列表可能包含已經研發過的戰車，因為 Warming 提供了不正確的資料。 如果您可以，請嘗試從列表中提供一個 \"起始戰車\" 。"
+        },
+        "errors": {
+          "non_tech_tree": "#%s1不在科技樹裡\n\n你不能研究一個 加值/收藏家 戰車。",
+          "tier_1": "”%s1“是一級戰車\n\n一級戰車是可免費解鎖的。",
+          "already_researched": "%s1 是研發完成的\n\n當在使用命令查看您已研發過的線路總數時請嘗試提供“起始戰車”。",
+          "start_end_equal": "%s1 是研發完成的\n\n當在使用命令查看您已研發過的線路總數時請嘗試提供“起始戰車”。",
+          "tanks_not_on_line": "”%s1“和 \"%s2\" 不在同一個科技樹中\n\n請確認”起始戰車“和 \"目標戰車\" 為同一科技樹。",
+          "unordered": "# %s1高到 %s2\n\n請務必提供 %s3 作爲起始戰車，而不是低階戰車。"
+        }
+      },
+      "about": {
+        "name": "關於",
+        "description": "所有你需要的機器人資訊",
+        "subcommands": {
+          "commands": {
+            "name": "技能",
+            "description": "所有技能及其描述列表",
+            "body": "# 技能\n\nBlitzKit 提供了以下技能：\n\n"
+          },
+          "embeds": {
+            "name": "嵌入",
+            "description": "嵌入如何運作"
+          },
+          "introduction": {
+            "name": "介紹",
+            "description": "關於此機器人"
+          },
+          "invite": {
+            "name": "邀請",
+            "description": "如何邀請機器人"
+          },
+          "timezones": {
+            "name": "時區",
+            "description": "BlitzKit 如何判斷並使用你的時區"
+          },
+          "credits": {
+            "name": "積分",
+            "description": "誰幫助過 BlitzKit"
+          }
+        }
+      },
+      "breakdown": {
+        "name": "詳細資訊",
+        "description": "特定時期的戰車使用詳細資料",
+        "body": {
+          "total": "全部",
+          "battles": "戰鬥場次",
+          "wn8": "玩家表現評分",
+          "winrate": "勝率",
+          "damage": "傷害",
+          "unknown_tank": "未知戰車 %s1"
+        }
+      },
+      "debug": {
+        "name": "偵錯",
+        "description": "機器人偵錯資訊",
+        "body": {
+          "title": "# 偵錯\n\n",
+          "version": "版本",
+          "shard": {
+            "label": "碎片",
+            "default": "預設"
+          },
+          "uptime": "運行時間"
+        }
+      },
+      "evolution": {
+        "name": "演變",
+        "description": "統計資料的演變",
+        "groups": {
+          "player": {
+            "name": "玩家",
+            "description": "玩家統計資料"
+          },
+          "tank": {
+            "name": "戰車",
+            "description": "戰車統計資料"
+          }
+        }
+      },
+      "inactive": {
+        "name": "不活躍",
+        "description": "列出所有在公會中且活躍度低於某個閾值的玩家",
+        "options": {
+          "threshold": {
+            "name": "閾值",
+            "description": "未上線天數 (預設: %s1 天)"
+          }
+        },
+        "body": {
+          "subtitle": "%s1+ 天内未活動",
+          "listing": "%s1 天"
+        }
+      },
+      "full_stats": {
+        "name": "完整統計資料",
+        "description": "遊戲內完整統計資料",
+        "body": {
+          "cards": {
+            "games": {
+              "title": "遊玩次數",
+              "winrate": "勝率",
+              "battles": "戰鬥場次",
+              "wins_losses": "勝利/戰敗"
+            },
+            "efficiency": {
+              "title": "效率",
+              "wn8": "玩家表現評分",
+              "survival": "生存性",
+              "accuracy": "命中率"
+            },
+            "lethality": {
+              "title": "致命傷害",
+              "average_damage": "平均傷害",
+              "damage_per_tier": "各等級傷害",
+              "damage_ratio": "傷害比",
+              "average_kills": "平均擊毀"
+            },
+            "miscellaneous": {
+              "title": "雜項",
+              "average_tier": "平均等級",
+              "average_spots": "平均偵查",
+              "average_xp": "平均經驗",
+              "kills_to_death_ratio": "擊殺陣亡比"
+            }
+          }
+        }
+      },
+      "link": {
+        "name": "連結",
+        "description": "連結你的 Blitz 和 Discord 帳戶",
+        "body": {
+          "accounts_linked": "帳號已連結",
+          "no_role_permissions": {
+            "title": "%s1 驗證失敗",
+            "description": "我没有管理者權限。"
+          }
+        },
+        "embed": {
+          "title": "帳號不正確？",
+          "description": "再次使用此命令，從搜尋結果中選擇一個用戶。"
+        }
+      },
+      "search_clans": {
+        "name": "搜尋-公會資料",
+        "description": "搜尋-公會資料",
+        "options": {
+          "limit": {
+            "name": "限制",
+            "description": "公會結果的最大數量 (預設： %s1)"
+          }
+        },
+        "body": {
+          "title": "公會搜尋 %s1 在區域 %s2",
+          "no_results": "没有找到該公會"
+        }
+      },
+      "search_players": {
+        "name": "搜尋玩家",
+        "description": "搜尋玩家",
+        "options": {
+          "limit": {
+            "name": "限制",
+            "description": "最大玩家結果數 (預設: %s1)"
+          }
+        },
+        "body": {
+          "title": "玩家在區域 %s2 中搜尋 %s1",
+          "no_results": "未找到玩家"
+        }
+      },
+      "rating_leaderboard": {
+        "name": "評價排行榜",
+        "description": "評價戰鬥統計資料",
+        "subcommands": {
+          "neighbors": {
+            "name": "附近的",
+            "description": "排行榜上附近的玩家"
+          },
+          "league": {
+            "name": "聯盟",
+            "description": "聯盟的頂尖玩家"
+          }
+        },
+        "options": {
+          "limit": {
+            "name": "限制",
+            "description": "顯示附近有多少玩家(預設: %s1)"
+          },
+          "season": {
+            "name": "賽季",
+            "description": "賽季數 (預設：目前)",
+            "choices": {
+              "current": "%s1 (目前)"
+            }
+          },
+          "league": {
+            "name": "聯盟",
+            "description": "要顯示的聯賽"
+          }
+        },
+        "body": {
+          "top_players": "前 %s1玩家",
+          "no_participation": "# %s1 在賽季 %s2進行過評價戰鬥\n\n該玩家没有參加本賽季或没有獲得過去的校準。",
+          "no_ongoing_season": "# 没有進行中的賽季\n\n目前没有賽季季。",
+          "deleted_player": "刪除 %s1",
+          "neighbors": "對鄰居進行評分",
+          "more": "+ 增加 %s1"
+        }
+      },
+      "today": {
+        "name": "今日",
+        "description": "今天玩過的戰車和統計資料"
+      },
+      "stats": {
+        "name": "統計資料",
+        "description": "一段時間內快速統計"
+      },
+      "owned_tanks": {
+        "name": "已擁有的戰車",
+        "description": "在一個等級中顯示所有已擁有的戰車",
+        "body": {
+          "title": "# %s1所擁有的 %s2階戰車\n\n"
+        }
+      },
+      "permissions": {
+        "name": "權限",
+        "description": "檢查機器人是否擁有運作所需的權限",
+        "body": {
+          "title": "# 權限\n\n%s1",
+          "view_channels": "查看頻道：需要找到重新整理按鈕使用的訊息",
+          "read_message_history": "讀取歷史訊息: 需要找到訊息以重新整理",
+          "attach_files": "附加文件：需要將圖像添加到基於圖像的命令",
+          "external_emojis": "外部表情：需要添加國家旗幟和戰車類別"
+        }
+      },
+      "ping": {
+        "name": "連線延遲",
+        "description": "檢查機器人處於活動狀態。",
+        "body": {
+          "pong": "桌球拍",
+          "pong_with_time": "桌球拍-%s1ms"
+        },
+        "subcommands": {
+          "blitzkit": {
+            "name": "blitzkit",
+            "description": "BlitzKit 的 Ping 值"
+          },
+          "wotb": {
+            "name": "戰車世界閃擊戰",
+            "description": "戰車世界閃擊戰的 Ping 值"
+          }
+        }
+      },
+      "player_info": {
+        "name": "玩家資訊",
+        "description": "玩家基本資訊",
+        "body": {
+          "title": "%s1的資訊",
+          "nickname": "暱稱",
+          "battles": "戰鬥場次",
+          "winrate": "勝率",
+          "account_id": "帳號 ID",
+          "created": "已創建",
+          "last_battle": "最後戰鬥"
+        }
+      },
+      "rating": {
+        "name": "评级战斗",
+        "description": "評價戰鬥統計資料",
+        "subcommands": {
+          "today": {
+            "name": "今日",
+            "description": "今日評價統計資料"
+          },
+          "season": {
+            "name": "賽季",
+            "description": "本賽季評價統計資料"
+          }
+        },
+        "body": {
+          "subtitle": {
+            "today": "今日評價統計資料",
+            "season": "本賽季評價統計資料"
+          }
+        },
+        "errors": {
+          "no_participation": "# %s1 未完成評價\n該玩家未參與本賽季的評價戰鬥。",
+          "unrecorded_stats": "# 統計資料目前無法使用\n\nWargaming 可能暫停了伺服器。 如果有連續的賽季，統計資料可能在24小時内提供。"
+        }
+      }
+    }
+  },
+  "website": {
+    "settings": {
+      "dev_mode": "開發人員模式",
+      "language": "語言"
+    },
+    "common": {
+      "player_search": {
+        "hint": "搜尋玩家……",
+        "no_results": "沒有結果",
+        "searching": "搜尋中……"
+      },
+      "copy_button": {
+        "copied": "已複製！"
+      },
+      "tank_search": {
+        "search_bar_hint": "搜尋戰車....",
+        "recent": "最近查看",
+        "select_all": "選擇全部",
+        "count_singular": "1 台戰車",
+        "count_plural": "%s1戰車",
+        "sorting_by": "按 %s1 排序",
+        "no_tanks_found": {
+          "body": "找不到戰車。",
+          "search_again": "請嘗試重新搜尋。",
+          "clear_filters": "請嘗試重置篩選器。"
+        },
+        "sort": {
+          "meta.none": "無",
+          "survivability.health": "生命值",
+          "survivability.viewRange": "偵查範圍",
+          "survivability.camouflageStill": "静止中隐蔽值",
+          "survivability.camouflageMoving": "移動中隐蔽值",
+          "survivability.camouflageShooting": "射擊隐蔽值",
+          "survivability.volume": "體積",
+          "survivability.length": "長度",
+          "fire.dpm": "標準砲彈 每分鐘傷害血量",
+          "fire.dpmPremium": "加值砲彈 每分鐘傷害血量",
+          "fire.reload": "裝填",
+          "fire.caliber": "口徑",
+          "fire.standardPenetration": "標準砲彈穿透力",
+          "fire.premiumPenetration": "加值砲彈穿透力",
+          "fire.damage": "殺傷力",
+          "fire.moduleDamage": "模組傷害值",
+          "fire.shellVelocity": "砲彈飛行速度",
+          "fire.shellRange": "最大射程",
+          "fire.shellCapacity": "攜彈量",
+          "fire.aimTime": "瞄準時間",
+          "fire.dispersionStill": "一百公尺擴散度",
+          "fire.dispersionMoving": "移動時擴散度",
+          "fire.gunDepression": "俯角",
+          "fire.gunElevation": "仰角",
+          "maneuverability.forwardsSpeed": "最高前進速度",
+          "maneuverability.backwardsSpeed": "倒退速度",
+          "maneuverability.power": "功率",
+          "maneuverability.powerToWeight": "推重比",
+          "maneuverability.weight": "重量",
+          "maneuverability.traverseSpeed": "轉速"
+        },
+        "sort_dropdown": {
+          "label": "排序",
+          "groups": {
+            "sort": {
+              "no_sort": "未排序",
+              "label": "排序依據",
+              "fire": "開火",
+              "maneuverability": "機動性",
+              "survivability": "生存能力"
+            },
+            "direction": {
+              "label": "轉向",
+              "ascending": "爬升",
+              "descending": "下坡"
+            }
+          }
+        }
+      },
+      "warnings": {
+        "test": "測試中的戰車可能會發生變化，並不代表最終結果。"
+      }
+    },
+    "home": {
+      "hero": {
+        "credit": "由 %s1 製作❤️"
+      },
+      "hot_tanks": {
+        "title": "受歡迎的戰車",
+        "subtitle": "過去 %s1 天"
+      },
+      "other_projects": {
+        "title": "其他酷炫的專案"
+      },
+      "help_translate": "請幫忙將 %s1 翻譯成 %s2！",
+      "seo_description": "戰車世界閃擊戰 全方位工具"
+    },
+    "tools": {
+      "tankopedia": {
+        "name": "戰車百科",
+        "button": "尋找戰車",
+        "description": "閃擊戰戰車百科全書",
+        "seo_description": "世界坦克布莱茨坦克坦克世界闪击战的所有坦克的统计数字、装甲和更多",
+        "tank_seo_title": "%s1-Tier %s2 %s3 %s4 | %s5 Tankopedia | 戰車世界閃擊戰 (WoTB)",
+        "tank_seo_description": "%s1-Tier %s2 %s3 %s4 | %s5 Tankopedia | 戰車世界閃擊戰 (WoTB)",
+        "sandbox": {
+          "poses": {
+            "hull_down": "戰車下部",
+            "face_hug": "面部色调",
+            "default": "預設"
+          },
+          "settings": {
+            "armor": "裝甲",
+            "green_penetration": "击穿概率",
+            "hide_model_under_armor": "隐藏装甲下的模型",
+            "opaque": "不透明",
+            "dev_wireframe": "设备：线程",
+            "environment": "环境",
+            "show_grid": "显示网格"
+          },
+          "screenshot": {
+            "download": "下載",
+            "copy": "複製"
+          },
+          "model": {
+            "name": "模型"
+          },
+          "dynamic": {
+            "name": "動態裝甲",
+            "custom_shell": {
+              "type": "戰車類型",
+              "caliber": "口徑",
+              "penetration": "穿深",
+              "normalization": "轉正",
+              "ricochet": "跳彈",
+              "explosion_radius": "爆炸半徑",
+              "exit": "退出",
+              "reset": "重置"
+            },
+            "advanced": "進階高亮顯示",
+            "shooter": "主視角射擊者：",
+            "shot_card": {
+              "element": {
+                "primary": "主裝甲",
+                "spaced": "間隙裝甲",
+                "external": "外部模組",
+                "gap": "空隙",
+                "gun": "主炮",
+                "track": "履帶"
+              },
+              "status": {
+                "penetration": "%s生命值 擊穿",
+                "blocked": "阻擋傷害",
+                "ricochet": "跳彈",
+                "splash": "%s生命值 爆炸範圍"
+              },
+              "stats": {
+                "thickness_and_angle": "等效%s毫米 %s2度",
+                "nominal": "%s毫米 裝甲厚度",
+                "ricochet_loss": "%s1%機率擊穿"
+              }
+            }
+          },
+          "static": {
+            "name": "静態裝甲",
+            "primary": "主裝甲",
+            "spaced": "間隙裝甲",
+            "external": "外部模組",
+            "edit": {
+              "label": "編輯",
+              "reset": "重置"
+            }
+          }
+        },
+        "meta": {
+          "back": "返回",
+          "compare": "比較",
+          "swap": {
+            "button": "調換",
+            "title": "調換戰車"
+          },
+          "vanilla": "原版",
+          "opentest": "開放測試",
+          "full_name": "全名",
+          "nation": "國別",
+          "class": "戰車分類",
+          "tier": "等級",
+          "type": "戰車類型",
+          "dev_id": "開發人員ID",
+          "purchase": "購買價格",
+          "restoration": "恢復戰車價格",
+          "sale": "出售價格",
+          "research": "研發所需經驗"
+        },
+        "tech_tree": {
+          "title": "科技樹",
+          "battle": "一場比賽",
+          "battles": "%s1場比賽",
+          "route": "路線 %s1 的 %s2"
+        },
+        "game_modes": {
+          "title": "路線 %s1 的 %s2"
+        },
+        "review": {
+          "title": "重播影片",
+          "disclaimer": "BlitzKit 不支援任何影片重播。",
+          "join": "应用到 %s1 YouTuber程序"
+        },
+        "configuration": {
+          "title": "配置設定",
+          "modules": {
+            "title": "功能模組",
+            "stock": "庫存",
+            "upgrade": "升級"
+          },
+          "equipment": {
+            "title": "裝備",
+            "clear": "清除"
+          },
+          "provisions": {
+            "title": "補給品",
+            "clear": "清除"
+          },
+          "consumables": {
+            "title": "消耗品",
+            "clear": "清除",
+            "info": "黄色消耗品不影响统计数据"
+          },
+          "skills": {
+            "title": "乘員技能",
+            "clear": "清除",
+            "maximize": "最大化",
+            "info": "黄色技能只适用于特殊情况。按空格键可在0到7级之间快速切换。"
+          },
+          "miscellaneous": {
+            "title": "雜項"
+          }
+        },
+        "characteristics": {
+          "title": "属性",
+          "compare": {
+            "label": "比较",
+            "class": "%s1 %s2 级",
+            "tier": "所有级别 %s1",
+            "all": "所有坦克"
+          },
+          "values": {
+            "shell_index": "炮弹 %s1",
+            "at_distance": "在 %s1m",
+            "at_distance_slider_label": "距离",
+            "dispersion_at_distance": "%s1公尺擴散度",
+            "gun_flexibility": "炮控灵活度",
+            "speed": "速度",
+            "terrain_coefficients": "地势系数",
+            "raw_terrain_coefficients": "原始地形系数",
+            "power_to_weight_ratio": "推重比",
+            "hull_traverse_speed": "炮塔旋转速度",
+            "camouflage": "偽裝",
+            "reload": "裝填",
+            "crewCount": "乘员人数",
+            "shellNormalization": "轉正",
+            "shellRicochet": "跳彈",
+            "dpm": "每分鍾傷害血量",
+            "dpmEffective": "60秒内生效",
+            "shells": "砲彈",
+            "mostOptimalShellIndex": "最优炮弹",
+            "shellReloads": "炮弹重装",
+            "shellReload": "炮弹重装",
+            "intraClip": "内置素材",
+            "caliber": "口徑",
+            "penetration": "穿深",
+            "damage": "傷害",
+            "clipDamage": "爬坡性能",
+            "moduleDamage": "模組傷害",
+            "explosionRadius": "爆炸半徑",
+            "shellVelocity": "砲彈飛行速度",
+            "aimTime": "瞄準時間",
+            "dispersion": "静止時",
+            "dispersionMoving": "移動時",
+            "dispersionHullTraversing": "車身轉向時",
+            "dispersionTurretTraversing": "炮塔轉向時",
+            "dispersionShooting": "开火时",
+            "dispersionGunDamaged": "主炮損壞",
+            "gunDepression": "俯角",
+            "gunElevation": "仰角",
+            "gunFrontalDepression": "車輛前部俯角",
+            "gunFrontalElevation": "車輛前部仰角",
+            "gunRearDepression": "車輛後部俯角",
+            "gunRearElevation": "車輛後部俯角",
+            "azimuthLeft": "左射界",
+            "azimuthRight": "右射界",
+            "speedForwards": "前進最高速度",
+            "speedBackwards": "后退",
+            "hardTerrainCoefficient": "坚硬的",
+            "hardTerrainCoefficientRaw": "坚硬的",
+            "mediumTerrainCoefficient": "中型戰車",
+            "mediumTerrainCoefficientRaw": "中型戰車",
+            "softTerrainCoefficient": "柔软的",
+            "softTerrainCoefficientRaw": "軟的",
+            "enginePower": "引擎功率",
+            "powerToWeightRatioHardTerrain": "硬的",
+            "powerToWeightRatioMediumTerrain": "中型戰車",
+            "powerToWeightRatioSoftTerrain": "柔软的",
+            "weight": "重量",
+            "turretTraverseSpeed": "炮塔迴轉速度",
+            "gunTraverseSpeed": "炮塔旋转速度",
+            "hullTraverseHardTerrain": "坚硬的",
+            "hullTraverseMediumTerrain": "中型戰車",
+            "hullTraverseSoftTerrain": "柔软的",
+            "health": "生命值",
+            "fireChance": "着火概率",
+            "viewRange": "可視範圍",
+            "camouflageStill": "靜止時",
+            "camouflageMoving": "移動時",
+            "camouflageShootingStill": "静止時",
+            "camouflageShootingMoving": "移動時",
+            "camouflageCaughtOnFire": "被击中",
+            "width": "宽度",
+            "height": "高度",
+            "length": "長度",
+            "volume": "體積",
+            "shellRange": "射程",
+            "shellCapacity": "彈藥容量",
+            "gunType": "炮管類型",
+            "penetrationAt250m": "兩百五十公尺處的穿透力"
+          }
+        },
+        "firepower": {
+          "title": "火力"
+        },
+        "crew": {
+          "title": "乘員訓練",
+          "info": "代表車組成員可以擔任的其他角色。",
+          "count": "乘員人數",
+          "commander": "車長",
+          "gunner": "炮手",
+          "driver": "駕駛員",
+          "radioman": "無線電操作員",
+          "loader": "裝填手"
+        },
+        "maneuverability": {
+          "title": "機動性"
+        },
+        "survivability": {
+          "title": "生存性"
+        }
+      },
+      "compare": {
+        "name": "比較",
+        "button": "戰車比較",
+        "description": "比較戰車統計資料",
+        "seo_description": "比較《戰車世界：閃擊戰》中的戰車統計資料和裝備配置",
+        "actions": {
+          "add": {
+            "button": "增加...",
+            "title": "增加戰車",
+            "description": "選擇要加入比較的戰車"
+          },
+          "clear": "清除",
+          "deltas": {
+            "none": "無變化",
+            "percentage": "百分比",
+            "absolute": "絕對"
+          }
+        },
+        "no_tanks": {
+          "title": "未選擇戰車",
+          "body": "按下 Add 按鈕來開始"
+        },
+        "table": {
+          "equipment": {
+            "clear": "清除",
+            "apply_to_all": "套用所有"
+          },
+          "skills": {
+            "clear": "清空",
+            "maximize": "最大化"
+          },
+          "modules": {
+            "stock": "库存量",
+            "upgrade": "升级"
+          },
+          "provisions": {
+            "clear": "清空"
+          },
+          "consumables": {
+            "clear": "清空"
+          }
+        }
+      },
+      "performance": {
+        "name": "性能表现",
+        "button": "查看坦克",
+        "description": "戰車性能統計",
+        "seo_description": "最好的戰車及其在戰車世界閃擊戰中的表現",
+        "estimation": {
+          "body": "基于 %s1个玩家的估计数据。更新 %s2 之前。",
+          "hours": "%s1 小時",
+          "minutes": "%s1 分鐘"
+        },
+        "player_count": {
+          "label": "玩家数量"
+        },
+        "table": {
+          "tanks": {
+            "header": "戰車",
+            "total": "全部"
+          },
+          "stats": {
+            "winrate": "勝率",
+            "players": "玩家",
+            "damage": "傷害",
+            "survival": "生存性",
+            "xp": "經驗值",
+            "kills": "擊殺數",
+            "spots": "被敵方偵查次數",
+            "accuracy": "命中率",
+            "shots": "開火次數",
+            "hits": "命中數",
+            "damage_ratio": "伤害效率",
+            "damage_taken": "伤害值",
+            "capture_points": "佔領點數"
+          }
+        }
+      },
+      "gallery": {
+        "name": "圖庫",
+        "button": "瀏覽所有",
+        "description": "Blitz 玩家頭像",
+        "seo_description": "所有戰車世界閃擊戰玩家頭像",
+        "last_updated": "最後更新於 %s1",
+        "search": {
+          "hint": "搜尋頭像……",
+          "results": "%s1 頭像"
+        }
+      },
+      "session": {
+        "name": "場次",
+        "button": "開始追蹤",
+        "description": "即時場次統計",
+        "seo_description": "在遊玩 戰車世界閃擊戰 時，實時追蹤你的統計數據",
+        "search": {
+          "lookup": "查詢玩家以開始使用",
+          "hint": "搜尋玩家……",
+          "searching": "搜尋中……",
+          "no_results": "找不到玩家"
+        },
+        "controls": {
+          "title": "追蹤 %s1",
+          "subtitle": "起始於 %s1",
+          "reset": "重置",
+          "change": "變更"
+        },
+        "no_cc": {
+          "title": "你正在嘗試追蹤一個 CC 帳號",
+          "body": "CC（社群貢獻者）帳號沒有公開的戰車統計數據。我們正在為 CC 帳號添加嵌入功能，敬請期待。",
+          "alright": "好的"
+        },
+        "no_battles": {
+          "title": "沒有戰鬥",
+          "hint": "開始遊戲吧"
+        },
+        "table": {
+          "tank": "戰車",
+          "total": "全部",
+          "remove": "移除"
+        }
+      },
+      "tier_list": {
+        "name": "階級列表",
+        "button": "排名戰車",
+        "description": "戰車世界閃擊戰 戰車等級排名",
+        "seo_description": "探索根據玩家評分和統計表現，從最佳到最差排名的《戰車世界：閃擊戰》戰車等級列表",
+        "buttons": {
+          "reset": "重置",
+          "share": "分享"
+        }
+      },
+      "embed": {
+        "name": "嵌入",
+        "button": "現在創建",
+        "description": "串流嵌入功能",
+        "seo_description": "創建具有極高自訂化的《戰車世界：閃擊戰》串流嵌入功能",
+        "coming_soon": "更多嵌入功能即將推出。",
+        "suggest": "建議與想法。",
+        "preview": {
+          "title": "範例",
+          "upload": "上傳測試背景"
+        },
+        "configuration": {
+          "import": {
+            "title": "導入",
+            "description": "如果您已经有一个要导入您的设置，请粘贴您当前的 URL",
+            "hint": "貼上 URL……",
+            "apply": "套用",
+            "idiot_title": "無效的 URL",
+            "idiot_description": "試著貼上 BlitzKit 先前生成的網址吧，你這隻傻鵝！",
+            "idiot_button": "好吧，我的錯"
+          },
+          "export": {
+            "title": "匯出",
+            "description": "為你的串流軟體複製所有屬性",
+            "generate": {
+              "button": "生成網址",
+              "title": "生成網址",
+              "subtitle": "搜尋帳號以進行追蹤",
+              "cancel": "取消",
+              "success": {
+                "title": "複製 URL",
+                "info": "已為 %s1 生成網址。當網址貼上後，嵌入功能將開始追蹤。您可以隨時點擊右鍵 \"PC\" 或長按 \"手機\" 並選擇「重設」來重置。",
+                "back": "返回",
+                "copy": "複製 URL"
+              }
+            },
+            "css": "複製 CSS",
+            "width": "複製寬度",
+            "height": "複製高度",
+            "framerate": "複製幀率"
+          },
+          "customize": {
+            "title": "自訂",
+            "reset": "重置",
+            "description": "嵌入內容的各項附加內容"
+          }
+        },
+        "types": {
+          "breakdown": {
+            "name": "詳細分析",
+            "options": {
+              "width": "寬度",
+              "height": "高度",
+              "showTotal": "顯示總和",
+              "listGap": "項目間隔",
+              "listMaxTanks": "最多戰車數量",
+              "cardRadius": "資訊卡半徑",
+              "cardHeaderBackgroundColor": "資訊卡標題背景顏色",
+              "cardHeaderPadding": "資訊卡標題內間距",
+              "cardTitle": "資訊卡標題",
+              "cardTitleTypeColor": "資訊卡標題形式顏色",
+              "cardTitleClassIcon": "資訊卡標題類別圖示",
+              "cardBodyBackgroundColor": "資訊卡本體背景顏色",
+              "cardBodyPadding": "資訊卡內容區間距",
+              "columnGap": "欄位間距",
+              "columnValue": "欄位值",
+              "columnLabel": "欄位標籤",
+              "column1": "欄位1",
+              "column2": "欄位2",
+              "column3": "欄位3",
+              "column4": "欄位4",
+              "column1CustomLabel": "欄位1標籤",
+              "column2CustomLabel": "欄位2標籤",
+              "column3CustomLabel": "欄位3標籤"
+            }
+          }
+        }
+      },
+      "charts": {
+        "name": "圖表",
+        "button": "瘋狂研究",
+        "description": "大量圖標",
+        "seo_description": "有關 戰車世界閃擊戰 戰車、玩家與事件的各種圖表與圖形"
+      },
+      "rating": {
+        "name": "評價戰鬥",
+        "button": "查看排行榜",
+        "description": "完整評價戰鬥排行榜",
+        "seo_description": "《戰車世界：閃擊戰》即時與歷史完整評分排行榜"
+      },
+      "discord": {
+        "name": "Discord 機器人",
+        "button": "現在安裝",
+        "description": "直接在 Discord 上查看統計資料",
+        "seo_description": "透過 BlitzKit 的 Discord 機器人，直接在 Discord 上獲取統計資料"
+      },
+      "more": {
+        "name": "更多內容即將推出",
+        "button": "加入我們的 Discord",
+        "description": "我們正在製作的內容",
+        "seo_description": "我們正在與 BlitzKit 一起製作的內容"
+      },
+      "players": {
+        "name": "玩家",
+        "button": "查詢玩家",
+        "description": "定期玩家統計",
+        "seo_description": "戰車世界閃擊戰 定期玩家統計"
+      },
+      "home": {
+        "name": "首頁",
+        "button": "開始使用",
+        "description": "開始使用 BlitzKit",
+        "seo_description": "開始使用 BlitzKit"
+      },
+      "blitz_analysis": {
+        "name": "閃擊戰分析",
+        "button": "現在分析",
+        "description": "豐富的歷史平均統計資料",
+        "seo_description": "戰車世界閃擊戰中的歷史平均統計資料"
+      },
+      "blitz_insider": {
+        "name": "閃擊戰內部",
+        "button": "今日探索",
+        "description": "遊戲內場次統計",
+        "seo_description": "戰車世界閃擊戰內的遊戲場次統計"
+      }
+    },
+    "footer": {
+      "motto": "戰車世界閃擊戰全方位資訊",
+      "copyright": "本網站與 Wargaming 戰遊網 或任何服務無關",
+      "about": {
+        "title": "關於",
+        "credits": "製作名單",
+        "discord": "Discord",
+        "github": "GitHub",
+        "patches": "修補更新"
+      },
+      "legal": {
+        "title": "法律資訊",
+        "privacy": "隐私条款",
+        "terms": "服务条款"
+      }
+    }
+  }
+}

@@ -11,7 +11,7 @@ export interface CompareEphemeral {
   members: CompareMember[];
   sorting?: {
     direction: 'ascending' | 'descending';
-    by: string;
+    by: number;
   };
 }
 

@@ -11,10 +11,10 @@ export async function gameModeBanners() {
 
   const changes: FileChange[] = [];
   const gameTypeSelectorStyles = await readYAMLDVPL<SquadBattleTypeStyles>(
-    `${DATA}/UI/Screens/Lobby/Hangar/GameTypeSelector.yaml.dvpl`,
+    `${DATA}/UI/Screens/Lobby/Hangar/GameTypeSelector.yaml`,
   );
   const squadBattleTypeStyles = await readYAMLDVPL<SquadBattleTypeStyles>(
-    `${DATA}/UI/Screens3/Lobby/Hangar/Squad/SquadBattleType.yaml.dvpl`,
+    `${DATA}/UI/Screens3/Lobby/Hangar/Squad/SquadBattleType.yaml`,
   );
   const bannerMatches: { name: string; path: string }[] = [];
 
@@ -38,7 +38,7 @@ export async function gameModeBanners() {
     }
 
     const content = await sharp(
-      await readDVPLFile(`${DATA}${path}.packed.webp.dvpl`),
+      await readDVPLFile(`${DATA}${path}.packed.webp`),
     )
       .trim({ background: { r: 0, g: 0, b: 0, alpha: 0 } })
       .toBuffer();

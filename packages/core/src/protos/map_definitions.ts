@@ -6,6 +6,7 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
+import { I18nString, createBaseI18nString } from "./i18n";
 
 export const protobufPackage = "blitzkit";
 
@@ -20,7 +21,7 @@ export interface MapDefinitions_MapsEntry {
 
 export interface MapDefinition {
   id: number;
-  name: string;
+  name: I18nString;
 }
 
 function createBaseMapDefinitions(): MapDefinitions {
@@ -175,13 +176,13 @@ export const MapDefinitions_MapsEntry: MessageFns<MapDefinitions_MapsEntry> = {
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? MapDefinition.fromPartial(object.value)
-      : createBaseMapDefinition();
+      : undefined;
     return message;
   },
 };
 
 function createBaseMapDefinition(): MapDefinition {
-  return { id: 0, name: "" };
+  return { id: 0, name: createBaseI18nString() };
 }
 
 export const MapDefinition: MessageFns<MapDefinition> = {
@@ -189,8 +190,8 @@ export const MapDefinition: MessageFns<MapDefinition> = {
     if (message.id !== 0) {
       writer.uint32(8).uint32(message.id);
     }
-    if (message.name !== "") {
-      writer.uint32(18).string(message.name);
+    if (message.name !== undefined) {
+      I18nString.encode(message.name, writer.uint32(18).fork()).join();
     }
     return writer;
   },
@@ -215,7 +216,7 @@ export const MapDefinition: MessageFns<MapDefinition> = {
             break;
           }
 
-          message.name = reader.string();
+          message.name = I18nString.decode(reader, reader.uint32());
           continue;
         }
       }
@@ -230,7 +231,7 @@ export const MapDefinition: MessageFns<MapDefinition> = {
   fromJSON(object: any): MapDefinition {
     return {
       id: globalThis.Number(assertSet("MapDefinition.id", object.id)),
-      name: globalThis.String(assertSet("MapDefinition.name", object.name)),
+      name: I18nString.fromJSON(assertSet("MapDefinition.name", object.name)),
     };
   },
 
@@ -239,8 +240,8 @@ export const MapDefinition: MessageFns<MapDefinition> = {
     if (message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.name !== "") {
-      obj.name = message.name;
+    if (message.name !== undefined) {
+      obj.name = I18nString.toJSON(message.name);
     }
     return obj;
   },
@@ -251,7 +252,9 @@ export const MapDefinition: MessageFns<MapDefinition> = {
   fromPartial<I extends Exact<DeepPartial<MapDefinition>, I>>(object: I): MapDefinition {
     const message = createBaseMapDefinition();
     message.id = object.id ?? 0;
-    message.name = object.name ?? "";
+    message.name = (object.name !== undefined && object.name !== null)
+      ? I18nString.fromPartial(object.name)
+      : createBaseI18nString();
     return message;
   },
 };

@@ -51,7 +51,7 @@ export function Tanks({ skeleton }: MaybeSkeletonComponentProps) {
           (a, b) =>
             sort.direction * (a.mu.hits / a.mu.shots - b.mu.hits / b.mu.shots),
         );
-      case 'capturePoints':
+      case 'capture_points':
         return averageDefinitionsArray.sort(
           (a, b) =>
             sort.direction *
@@ -65,14 +65,14 @@ export function Tanks({ skeleton }: MaybeSkeletonComponentProps) {
             (a.mu.damage_dealt / a.mu.battles -
               b.mu.damage_dealt / b.mu.battles),
         );
-      case 'damageRatio':
+      case 'damage_ratio':
         return averageDefinitionsArray.sort(
           (a, b) =>
             sort.direction *
             (a.mu.damage_dealt / a.mu.damage_received -
               b.mu.damage_dealt / b.mu.damage_received),
         );
-      case 'damageTaken':
+      case 'damage_taken':
         return averageDefinitionsArray.sort(
           (a, b) =>
             sort.direction *

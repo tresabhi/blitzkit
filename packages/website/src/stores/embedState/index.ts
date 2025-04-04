@@ -94,8 +94,8 @@ export type EmbedConfigItem = (
       type: EmbedItemType.Enum;
       default: string;
       options: {
-        label: string;
         value: string;
+        locales: Record<string, string>;
       }[];
     }
 ) & {

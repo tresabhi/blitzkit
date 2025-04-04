@@ -8,7 +8,7 @@ import {
   sumCompositeStats,
   type IndividualTankStats,
 } from '@blitzkit/core';
-import strings from '@blitzkit/core/lang/en.json';
+import { STRINGS } from '@blitzkit/i18n';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { ContextMenu } from '@radix-ui/themes';
 import { useEffect, useMemo, useState } from 'react';
@@ -20,8 +20,13 @@ import { useEmbedStateCurry } from '../../stores/embedState/utilities';
 import { BreakdownEmbedCard, BreakdownEmbedWrapper } from '../TanksEmbed';
 
 export const compositeStatsKeysOptions = compositeStatsKeys.map((value) => ({
-  label: strings.common.composite_stats[value],
   value,
+  locales: Object.entries(STRINGS).reduce((accumulator, [locale, strings]) => {
+    return {
+      ...accumulator,
+      [locale]: strings.common.composite_stats[value],
+    };
+  }, {}),
 }));
 
 const [tankDefinitions, averageDefinitions] = await Promise.all([

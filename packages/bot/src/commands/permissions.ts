@@ -1,3 +1,4 @@
+import { literals } from '@blitzkit/i18n';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { translator } from '../core/localization/translator';
 import { CommandRegistry } from '../events/interactionCreate';
@@ -7,26 +8,26 @@ export const permissionsCommand = new Promise<CommandRegistry>((resolve) => {
     command: createLocalizedCommand('permissions'),
 
     async handler(interaction) {
-      const { t, translate } = translator(interaction.locale);
+      const { strings } = translator(interaction.locale);
       // friday the 13th permissions easter egg
       const isFridayThe13th =
         new Date().getDay() === 5 && new Date().getDate() === 13;
       const permissions = [
         [
           interaction.appPermissions?.has('ViewChannel'),
-          t`bot.commands.permissions.body.view_channels`,
+          strings.bot.commands.permissions.body.view_channels,
         ],
         [
           interaction.appPermissions?.has('ReadMessageHistory'),
-          t`bot.commands.permissions.body.read_message_history`,
+          strings.bot.commands.permissions.body.read_message_history,
         ],
         [
           interaction.appPermissions?.has('AttachFiles'),
-          t`bot.commands.permissions.body.attach_files`,
+          strings.bot.commands.permissions.body.attach_files,
         ],
         [
           interaction.appPermissions?.has('UseExternalEmojis'),
-          t`bot.commands.permissions.body.external_emojis`,
+          strings.bot.commands.permissions.body.external_emojis,
         ],
       ];
       const body = permissions
@@ -39,7 +40,7 @@ export const permissionsCommand = new Promise<CommandRegistry>((resolve) => {
         })
         .join('\n');
 
-      return translate('bot.commands.permissions.body.title', [body]);
+      return literals(strings.bot.commands.permissions.body.title, [body]);
     },
   });
 });

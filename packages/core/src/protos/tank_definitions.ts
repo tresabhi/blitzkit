@@ -6,6 +6,7 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
+import { I18nString, createBaseI18nString } from "./i18n";
 
 export const protobufPackage = "blitzkit";
 
@@ -261,7 +262,6 @@ export interface TankDefinitions_TanksEntry {
 export interface TankDefinition {
   id: number;
   roles: { [key: number]: number };
-  description?: string | undefined;
   fixed_camouflage: boolean;
   camouflages: number[];
   ancestors: number[];
@@ -269,8 +269,8 @@ export interface TankDefinition {
   crew: Crew[];
   health: number;
   nation: string;
-  name: string;
-  name_full?: string | undefined;
+  name: I18nString;
+  name_full?: I18nString | undefined;
   type: TankType;
   max_consumables: number;
   max_provisions: number;
@@ -317,7 +317,7 @@ export interface TankPrice {
 export interface TrackDefinition {
   id: number;
   tier: number;
-  name: string;
+  name: I18nString;
   weight: number;
   traverse_speed: number;
   research_cost?: ResearchCost | undefined;
@@ -331,7 +331,7 @@ export interface TrackDefinition {
 
 export interface EngineDefinition {
   id: number;
-  name: string;
+  name: I18nString;
   research_cost?: ResearchCost | undefined;
   tier: number;
   fire_chance: number;
@@ -346,7 +346,7 @@ export interface TurretDefinition {
   view_range: number;
   traverse_speed: number;
   research_cost?: ResearchCost | undefined;
-  name: string;
+  name: I18nString;
   tier: number;
   weight: number;
   guns: GunDefinition[];
@@ -397,7 +397,7 @@ export interface GunDefinitionBase {
   rotation_speed: number;
   research_cost?: ResearchCost | undefined;
   weight: number;
-  name: string;
+  name: I18nString;
   tier: number;
   shells: ShellDefinition[];
   camouflage_loss: number;
@@ -412,7 +412,7 @@ export interface GunDefinitionBase {
 
 export interface ShellDefinition {
   id: number;
-  name: string;
+  name: I18nString;
   velocity: number;
   armor_damage: number;
   module_damage: number;
@@ -603,7 +603,7 @@ export const TankDefinitions_TanksEntry: MessageFns<TankDefinitions_TanksEntry> 
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? TankDefinition.fromPartial(object.value)
-      : createBaseTankDefinition();
+      : undefined;
     return message;
   },
 };
@@ -612,7 +612,6 @@ function createBaseTankDefinition(): TankDefinition {
   return {
     id: 0,
     roles: {},
-    description: undefined,
     fixed_camouflage: false,
     camouflages: [],
     ancestors: [],
@@ -620,7 +619,7 @@ function createBaseTankDefinition(): TankDefinition {
     crew: [],
     health: 0,
     nation: "",
-    name: "",
+    name: createBaseI18nString(),
     name_full: undefined,
     type: 0,
     max_consumables: 0,
@@ -652,9 +651,6 @@ export const TankDefinition: MessageFns<TankDefinition> = {
     Object.entries(message.roles).forEach(([key, value]) => {
       TankDefinition_RolesEntry.encode({ key: key as any, value }, writer.uint32(18).fork()).join();
     });
-    if (message.description !== undefined && message.description !== undefined) {
-      writer.uint32(26).string(message.description);
-    }
     if (message.fixed_camouflage !== false) {
       writer.uint32(32).bool(message.fixed_camouflage);
     }
@@ -682,11 +678,11 @@ export const TankDefinition: MessageFns<TankDefinition> = {
     if (message.nation !== "") {
       writer.uint32(82).string(message.nation);
     }
-    if (message.name !== "") {
-      writer.uint32(90).string(message.name);
+    if (message.name !== undefined) {
+      I18nString.encode(message.name, writer.uint32(90).fork()).join();
     }
-    if (message.name_full !== undefined && message.name_full !== undefined) {
-      writer.uint32(98).string(message.name_full);
+    if (message.name_full !== undefined) {
+      I18nString.encode(message.name_full, writer.uint32(98).fork()).join();
     }
     if (message.type !== 0) {
       writer.uint32(104).int32(message.type);
@@ -772,14 +768,6 @@ export const TankDefinition: MessageFns<TankDefinition> = {
           if (entry2.value !== undefined) {
             message.roles[entry2.key] = entry2.value;
           }
-          continue;
-        }
-        case 3: {
-          if (tag !== 26) {
-            break;
-          }
-
-          message.description = reader.string();
           continue;
         }
         case 4: {
@@ -873,7 +861,7 @@ export const TankDefinition: MessageFns<TankDefinition> = {
             break;
           }
 
-          message.name = reader.string();
+          message.name = I18nString.decode(reader, reader.uint32());
           continue;
         }
         case 12: {
@@ -881,7 +869,7 @@ export const TankDefinition: MessageFns<TankDefinition> = {
             break;
           }
 
-          message.name_full = reader.string();
+          message.name_full = I18nString.decode(reader, reader.uint32());
           continue;
         }
         case 13: {
@@ -1054,7 +1042,6 @@ export const TankDefinition: MessageFns<TankDefinition> = {
           return acc;
         }, {})
         : {},
-      description: isSet(object.description) ? globalThis.String(object.description) : undefined,
       fixed_camouflage: globalThis.Boolean(assertSet("TankDefinition.fixed_camouflage", object.fixed_camouflage)),
       camouflages: globalThis.Array.isArray(object?.camouflages)
         ? object.camouflages.map((e: any) => globalThis.Number(e))
@@ -1068,8 +1055,8 @@ export const TankDefinition: MessageFns<TankDefinition> = {
       crew: globalThis.Array.isArray(object?.crew) ? object.crew.map((e: any) => Crew.fromJSON(e)) : [],
       health: globalThis.Number(assertSet("TankDefinition.health", object.health)),
       nation: globalThis.String(assertSet("TankDefinition.nation", object.nation)),
-      name: globalThis.String(assertSet("TankDefinition.name", object.name)),
-      name_full: isSet(object.name_full) ? globalThis.String(object.name_full) : undefined,
+      name: I18nString.fromJSON(assertSet("TankDefinition.name", object.name)),
+      name_full: isSet(object.name_full) ? I18nString.fromJSON(object.name_full) : undefined,
       type: tankTypeFromJSON(assertSet("TankDefinition.type", object.type)),
       max_consumables: globalThis.Number(assertSet("TankDefinition.max_consumables", object.max_consumables)),
       max_provisions: globalThis.Number(assertSet("TankDefinition.max_provisions", object.max_provisions)),
@@ -1112,9 +1099,6 @@ export const TankDefinition: MessageFns<TankDefinition> = {
         });
       }
     }
-    if (message.description !== undefined && message.description !== undefined) {
-      obj.description = message.description;
-    }
     if (message.fixed_camouflage !== false) {
       obj.fixed_camouflage = message.fixed_camouflage;
     }
@@ -1136,11 +1120,11 @@ export const TankDefinition: MessageFns<TankDefinition> = {
     if (message.nation !== "") {
       obj.nation = message.nation;
     }
-    if (message.name !== "") {
-      obj.name = message.name;
+    if (message.name !== undefined) {
+      obj.name = I18nString.toJSON(message.name);
     }
-    if (message.name_full !== undefined && message.name_full !== undefined) {
-      obj.name_full = message.name_full;
+    if (message.name_full !== undefined) {
+      obj.name_full = I18nString.toJSON(message.name_full);
     }
     if (message.type !== 0) {
       obj.type = tankTypeToJSON(message.type);
@@ -1214,7 +1198,6 @@ export const TankDefinition: MessageFns<TankDefinition> = {
       }
       return acc;
     }, {});
-    message.description = object.description ?? undefined;
     message.fixed_camouflage = object.fixed_camouflage ?? false;
     message.camouflages = object.camouflages?.map((e) => e) || [];
     message.ancestors = object.ancestors?.map((e) => e) || [];
@@ -1222,8 +1205,12 @@ export const TankDefinition: MessageFns<TankDefinition> = {
     message.crew = object.crew?.map((e) => Crew.fromPartial(e)) || [];
     message.health = object.health ?? 0;
     message.nation = object.nation ?? "";
-    message.name = object.name ?? "";
-    message.name_full = object.name_full ?? undefined;
+    message.name = (object.name !== undefined && object.name !== null)
+      ? I18nString.fromPartial(object.name)
+      : createBaseI18nString();
+    message.name_full = (object.name_full !== undefined && object.name_full !== null)
+      ? I18nString.fromPartial(object.name_full)
+      : undefined;
     message.type = object.type ?? 0;
     message.max_consumables = object.max_consumables ?? 0;
     message.max_provisions = object.max_provisions ?? 0;
@@ -1582,7 +1569,7 @@ function createBaseTrackDefinition(): TrackDefinition {
   return {
     id: 0,
     tier: 0,
-    name: "",
+    name: createBaseI18nString(),
     weight: 0,
     traverse_speed: 0,
     research_cost: undefined,
@@ -1603,8 +1590,8 @@ export const TrackDefinition: MessageFns<TrackDefinition> = {
     if (message.tier !== 0) {
       writer.uint32(16).uint32(message.tier);
     }
-    if (message.name !== "") {
-      writer.uint32(26).string(message.name);
+    if (message.name !== undefined) {
+      I18nString.encode(message.name, writer.uint32(26).fork()).join();
     }
     if (message.weight !== 0) {
       writer.uint32(32).uint32(message.weight);
@@ -1664,7 +1651,7 @@ export const TrackDefinition: MessageFns<TrackDefinition> = {
             break;
           }
 
-          message.name = reader.string();
+          message.name = I18nString.decode(reader, reader.uint32());
           continue;
         }
         case 4: {
@@ -1752,7 +1739,7 @@ export const TrackDefinition: MessageFns<TrackDefinition> = {
     return {
       id: globalThis.Number(assertSet("TrackDefinition.id", object.id)),
       tier: globalThis.Number(assertSet("TrackDefinition.tier", object.tier)),
-      name: globalThis.String(assertSet("TrackDefinition.name", object.name)),
+      name: I18nString.fromJSON(assertSet("TrackDefinition.name", object.name)),
       weight: globalThis.Number(assertSet("TrackDefinition.weight", object.weight)),
       traverse_speed: globalThis.Number(assertSet("TrackDefinition.traverse_speed", object.traverse_speed)),
       research_cost: isSet(object.research_cost) ? ResearchCost.fromJSON(object.research_cost) : undefined,
@@ -1775,8 +1762,8 @@ export const TrackDefinition: MessageFns<TrackDefinition> = {
     if (message.tier !== 0) {
       obj.tier = Math.round(message.tier);
     }
-    if (message.name !== "") {
-      obj.name = message.name;
+    if (message.name !== undefined) {
+      obj.name = I18nString.toJSON(message.name);
     }
     if (message.weight !== 0) {
       obj.weight = Math.round(message.weight);
@@ -1815,7 +1802,9 @@ export const TrackDefinition: MessageFns<TrackDefinition> = {
     const message = createBaseTrackDefinition();
     message.id = object.id ?? 0;
     message.tier = object.tier ?? 0;
-    message.name = object.name ?? "";
+    message.name = (object.name !== undefined && object.name !== null)
+      ? I18nString.fromPartial(object.name)
+      : createBaseI18nString();
     message.weight = object.weight ?? 0;
     message.traverse_speed = object.traverse_speed ?? 0;
     message.research_cost = (object.research_cost !== undefined && object.research_cost !== null)
@@ -1832,7 +1821,16 @@ export const TrackDefinition: MessageFns<TrackDefinition> = {
 };
 
 function createBaseEngineDefinition(): EngineDefinition {
-  return { id: 0, name: "", research_cost: undefined, tier: 0, fire_chance: 0, power: 0, weight: 0, unlocks: [] };
+  return {
+    id: 0,
+    name: createBaseI18nString(),
+    research_cost: undefined,
+    tier: 0,
+    fire_chance: 0,
+    power: 0,
+    weight: 0,
+    unlocks: [],
+  };
 }
 
 export const EngineDefinition: MessageFns<EngineDefinition> = {
@@ -1840,8 +1838,8 @@ export const EngineDefinition: MessageFns<EngineDefinition> = {
     if (message.id !== 0) {
       writer.uint32(8).uint32(message.id);
     }
-    if (message.name !== "") {
-      writer.uint32(18).string(message.name);
+    if (message.name !== undefined) {
+      I18nString.encode(message.name, writer.uint32(18).fork()).join();
     }
     if (message.research_cost !== undefined) {
       ResearchCost.encode(message.research_cost, writer.uint32(26).fork()).join();
@@ -1884,7 +1882,7 @@ export const EngineDefinition: MessageFns<EngineDefinition> = {
             break;
           }
 
-          message.name = reader.string();
+          message.name = I18nString.decode(reader, reader.uint32());
           continue;
         }
         case 3: {
@@ -1947,7 +1945,7 @@ export const EngineDefinition: MessageFns<EngineDefinition> = {
   fromJSON(object: any): EngineDefinition {
     return {
       id: globalThis.Number(assertSet("EngineDefinition.id", object.id)),
-      name: globalThis.String(assertSet("EngineDefinition.name", object.name)),
+      name: I18nString.fromJSON(assertSet("EngineDefinition.name", object.name)),
       research_cost: isSet(object.research_cost) ? ResearchCost.fromJSON(object.research_cost) : undefined,
       tier: globalThis.Number(assertSet("EngineDefinition.tier", object.tier)),
       fire_chance: globalThis.Number(assertSet("EngineDefinition.fire_chance", object.fire_chance)),
@@ -1962,8 +1960,8 @@ export const EngineDefinition: MessageFns<EngineDefinition> = {
     if (message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.name !== "") {
-      obj.name = message.name;
+    if (message.name !== undefined) {
+      obj.name = I18nString.toJSON(message.name);
     }
     if (message.research_cost !== undefined) {
       obj.research_cost = ResearchCost.toJSON(message.research_cost);
@@ -1992,7 +1990,9 @@ export const EngineDefinition: MessageFns<EngineDefinition> = {
   fromPartial<I extends Exact<DeepPartial<EngineDefinition>, I>>(object: I): EngineDefinition {
     const message = createBaseEngineDefinition();
     message.id = object.id ?? 0;
-    message.name = object.name ?? "";
+    message.name = (object.name !== undefined && object.name !== null)
+      ? I18nString.fromPartial(object.name)
+      : createBaseI18nString();
     message.research_cost = (object.research_cost !== undefined && object.research_cost !== null)
       ? ResearchCost.fromPartial(object.research_cost)
       : undefined;
@@ -2012,7 +2012,7 @@ function createBaseTurretDefinition(): TurretDefinition {
     view_range: 0,
     traverse_speed: 0,
     research_cost: undefined,
-    name: "",
+    name: createBaseI18nString(),
     tier: 0,
     weight: 0,
     guns: [],
@@ -2037,8 +2037,8 @@ export const TurretDefinition: MessageFns<TurretDefinition> = {
     if (message.research_cost !== undefined) {
       ResearchCost.encode(message.research_cost, writer.uint32(42).fork()).join();
     }
-    if (message.name !== "") {
-      writer.uint32(50).string(message.name);
+    if (message.name !== undefined) {
+      I18nString.encode(message.name, writer.uint32(50).fork()).join();
     }
     if (message.tier !== 0) {
       writer.uint32(56).uint32(message.tier);
@@ -2107,7 +2107,7 @@ export const TurretDefinition: MessageFns<TurretDefinition> = {
             break;
           }
 
-          message.name = reader.string();
+          message.name = I18nString.decode(reader, reader.uint32());
           continue;
         }
         case 7: {
@@ -2158,7 +2158,7 @@ export const TurretDefinition: MessageFns<TurretDefinition> = {
       view_range: globalThis.Number(assertSet("TurretDefinition.view_range", object.view_range)),
       traverse_speed: globalThis.Number(assertSet("TurretDefinition.traverse_speed", object.traverse_speed)),
       research_cost: isSet(object.research_cost) ? ResearchCost.fromJSON(object.research_cost) : undefined,
-      name: globalThis.String(assertSet("TurretDefinition.name", object.name)),
+      name: I18nString.fromJSON(assertSet("TurretDefinition.name", object.name)),
       tier: globalThis.Number(assertSet("TurretDefinition.tier", object.tier)),
       weight: globalThis.Number(assertSet("TurretDefinition.weight", object.weight)),
       guns: globalThis.Array.isArray(object?.guns) ? object.guns.map((e: any) => GunDefinition.fromJSON(e)) : [],
@@ -2183,8 +2183,8 @@ export const TurretDefinition: MessageFns<TurretDefinition> = {
     if (message.research_cost !== undefined) {
       obj.research_cost = ResearchCost.toJSON(message.research_cost);
     }
-    if (message.name !== "") {
-      obj.name = message.name;
+    if (message.name !== undefined) {
+      obj.name = I18nString.toJSON(message.name);
     }
     if (message.tier !== 0) {
       obj.tier = Math.round(message.tier);
@@ -2213,7 +2213,9 @@ export const TurretDefinition: MessageFns<TurretDefinition> = {
     message.research_cost = (object.research_cost !== undefined && object.research_cost !== null)
       ? ResearchCost.fromPartial(object.research_cost)
       : undefined;
-    message.name = object.name ?? "";
+    message.name = (object.name !== undefined && object.name !== null)
+      ? I18nString.fromPartial(object.name)
+      : createBaseI18nString();
     message.tier = object.tier ?? 0;
     message.weight = object.weight ?? 0;
     message.guns = object.guns?.map((e) => GunDefinition.fromPartial(e)) || [];
@@ -2858,7 +2860,7 @@ function createBaseGunDefinitionBase(): GunDefinitionBase {
     rotation_speed: 0,
     research_cost: undefined,
     weight: 0,
-    name: "",
+    name: createBaseI18nString(),
     tier: 0,
     shells: [],
     camouflage_loss: 0,
@@ -2886,8 +2888,8 @@ export const GunDefinitionBase: MessageFns<GunDefinitionBase> = {
     if (message.weight !== 0) {
       writer.uint32(32).uint32(message.weight);
     }
-    if (message.name !== "") {
-      writer.uint32(42).string(message.name);
+    if (message.name !== undefined) {
+      I18nString.encode(message.name, writer.uint32(42).fork()).join();
     }
     if (message.tier !== 0) {
       writer.uint32(48).uint32(message.tier);
@@ -2966,7 +2968,7 @@ export const GunDefinitionBase: MessageFns<GunDefinitionBase> = {
             break;
           }
 
-          message.name = reader.string();
+          message.name = I18nString.decode(reader, reader.uint32());
           continue;
         }
         case 6: {
@@ -3064,7 +3066,7 @@ export const GunDefinitionBase: MessageFns<GunDefinitionBase> = {
       rotation_speed: globalThis.Number(assertSet("GunDefinitionBase.rotation_speed", object.rotation_speed)),
       research_cost: isSet(object.research_cost) ? ResearchCost.fromJSON(object.research_cost) : undefined,
       weight: globalThis.Number(assertSet("GunDefinitionBase.weight", object.weight)),
-      name: globalThis.String(assertSet("GunDefinitionBase.name", object.name)),
+      name: I18nString.fromJSON(assertSet("GunDefinitionBase.name", object.name)),
       tier: globalThis.Number(assertSet("GunDefinitionBase.tier", object.tier)),
       shells: globalThis.Array.isArray(object?.shells)
         ? object.shells.map((e: any) => ShellDefinition.fromJSON(e))
@@ -3098,8 +3100,8 @@ export const GunDefinitionBase: MessageFns<GunDefinitionBase> = {
     if (message.weight !== 0) {
       obj.weight = Math.round(message.weight);
     }
-    if (message.name !== "") {
-      obj.name = message.name;
+    if (message.name !== undefined) {
+      obj.name = I18nString.toJSON(message.name);
     }
     if (message.tier !== 0) {
       obj.tier = Math.round(message.tier);
@@ -3145,7 +3147,9 @@ export const GunDefinitionBase: MessageFns<GunDefinitionBase> = {
       ? ResearchCost.fromPartial(object.research_cost)
       : undefined;
     message.weight = object.weight ?? 0;
-    message.name = object.name ?? "";
+    message.name = (object.name !== undefined && object.name !== null)
+      ? I18nString.fromPartial(object.name)
+      : createBaseI18nString();
     message.tier = object.tier ?? 0;
     message.shells = object.shells?.map((e) => ShellDefinition.fromPartial(e)) || [];
     message.camouflage_loss = object.camouflage_loss ?? 0;
@@ -3163,7 +3167,7 @@ export const GunDefinitionBase: MessageFns<GunDefinitionBase> = {
 function createBaseShellDefinition(): ShellDefinition {
   return {
     id: 0,
-    name: "",
+    name: createBaseI18nString(),
     velocity: 0,
     armor_damage: 0,
     module_damage: 0,
@@ -3183,8 +3187,8 @@ export const ShellDefinition: MessageFns<ShellDefinition> = {
     if (message.id !== 0) {
       writer.uint32(8).uint32(message.id);
     }
-    if (message.name !== "") {
-      writer.uint32(18).string(message.name);
+    if (message.name !== undefined) {
+      I18nString.encode(message.name, writer.uint32(18).fork()).join();
     }
     if (message.velocity !== 0) {
       writer.uint32(24).uint32(message.velocity);
@@ -3242,7 +3246,7 @@ export const ShellDefinition: MessageFns<ShellDefinition> = {
             break;
           }
 
-          message.name = reader.string();
+          message.name = I18nString.decode(reader, reader.uint32());
           continue;
         }
         case 3: {
@@ -3345,7 +3349,7 @@ export const ShellDefinition: MessageFns<ShellDefinition> = {
   fromJSON(object: any): ShellDefinition {
     return {
       id: globalThis.Number(assertSet("ShellDefinition.id", object.id)),
-      name: globalThis.String(assertSet("ShellDefinition.name", object.name)),
+      name: I18nString.fromJSON(assertSet("ShellDefinition.name", object.name)),
       velocity: globalThis.Number(assertSet("ShellDefinition.velocity", object.velocity)),
       armor_damage: globalThis.Number(assertSet("ShellDefinition.armor_damage", object.armor_damage)),
       module_damage: globalThis.Number(assertSet("ShellDefinition.module_damage", object.module_damage)),
@@ -3365,8 +3369,8 @@ export const ShellDefinition: MessageFns<ShellDefinition> = {
     if (message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.name !== "") {
-      obj.name = message.name;
+    if (message.name !== undefined) {
+      obj.name = I18nString.toJSON(message.name);
     }
     if (message.velocity !== 0) {
       obj.velocity = Math.round(message.velocity);
@@ -3410,7 +3414,9 @@ export const ShellDefinition: MessageFns<ShellDefinition> = {
   fromPartial<I extends Exact<DeepPartial<ShellDefinition>, I>>(object: I): ShellDefinition {
     const message = createBaseShellDefinition();
     message.id = object.id ?? 0;
-    message.name = object.name ?? "";
+    message.name = (object.name !== undefined && object.name !== null)
+      ? I18nString.fromPartial(object.name)
+      : createBaseI18nString();
     message.velocity = object.velocity ?? 0;
     message.armor_damage = object.armor_damage ?? 0;
     message.module_damage = object.module_damage ?? 0;

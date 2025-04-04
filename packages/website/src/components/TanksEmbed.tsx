@@ -6,13 +6,14 @@ import {
   type CompositeStats,
   type CompositeStatsKey,
 } from '@blitzkit/core';
-import strings from '@blitzkit/core/lang/en.json';
+import strings from '@blitzkit/i18n/strings/en.json';
 import { amberDark, blueDark } from '@radix-ui/colors';
 import { Flex, Text, type FlexProps } from '@radix-ui/themes';
 import { times } from 'lodash-es';
 import type { ReactNode } from 'react';
 import { breakdownConfig } from '../constants/embeds';
 import { toRadiusVar } from '../core/radix/utils';
+import { useLocale } from '../hooks/useLocale';
 import { useEmbedStateCurry } from '../stores/embedState/utilities';
 import { ClassHeavy } from './ClassIcon/components/ClassHeavy';
 import { ClassLight } from './ClassIcon/components/ClassLight';
@@ -52,6 +53,7 @@ export function BreakdownEmbedCard({
 }: BreakdownEmbedCardProps) {
   const { useEmbedState, useRichText } =
     useEmbedStateCurry<typeof breakdownConfig>();
+  const { unwrap } = useLocale();
 
   return (
     <Flex
@@ -111,7 +113,7 @@ export function BreakdownEmbedCard({
               ? 'Total'
               : tank === undefined
                 ? `Unknown tank`
-                : tank.name}
+                : unwrap(tank.name)}
           </Flex>
         </Text>
       </Flex>

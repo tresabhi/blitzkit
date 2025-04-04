@@ -109,6 +109,7 @@ export function tankCharacteristics(
   const hasEngineAccelerator = equipment(117);
   const hasCamouflageNet = equipment(115);
   const hasImprovedVerticalStabilizer = equipment(122);
+  const hasDownImprovedVerticalStabilizer = equipment(124);
   const hasImprovedSuspension = equipment(123);
 
   const hasTungsten = consumable(45);
@@ -425,7 +426,8 @@ export function tankCharacteristics(
   const gunDepression =
     gunModelDefinition.pitch.max +
     gunDefaultPitch +
-    (hasImprovedVerticalStabilizer ? 3 : 0);
+    (hasImprovedVerticalStabilizer ? 3 : 0) +
+    (hasDownImprovedVerticalStabilizer ? 3 : 0);
   const gunElevation =
     -gunModelDefinition.pitch.min -
     gunDefaultPitch +

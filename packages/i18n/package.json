@@ -1,0 +1,10 @@
+{
+  "name": "@blitzkit/i18n",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "dependencies": {
+    "ts-deepmerge": "^7.0.2"
+  },
+  "devDependencies": {}
+}

@@ -1,0 +1,139 @@
+---
+import { assertSecret } from '@blitzkit/core';
+import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from '@blitzkit/i18n';
+import { literals } from '@blitzkit/i18n/src/literals';
+import { Box, Flex, Heading, Link } from '@radix-ui/themes';
+import type { GetStaticPaths } from 'astro';
+import { AesonPlug } from '../../components/AesonPlug';
+import { HomeLocaleSwitcher } from '../../components/Home/HomeLocaleSwitcher';
+import HomeHero from '../../components/HomeHero.astro';
+import { HomePageHotTanks } from '../../components/HomePageHotTanks';
+import { Plugs } from '../../components/Plugs';
+import ToolCard from '../../components/ToolCard.astro';
+import {
+  compareTool,
+  discordTool,
+  embedTool,
+  galleryTool,
+  moreTool,
+  performanceTool,
+  sessionTool,
+  tankopediaTool,
+  tierListTool,
+} from '../../constants/tools';
+import { getStrings } from '../../core/i18n/getStrings';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const PUBLIC_ASSET_BRANCH = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
+const MODE = assertSecret(import.meta.env.MODE);
+const locale = Astro.params.locale ?? DEFAULT_LOCALE;
+const strings = getStrings(Astro.params.locale);
+
+export const getStaticPaths = (() => {
+  return [
+    ...SUPPORTED_LOCALES.filter((locale) => locale !== DEFAULT_LOCALE).map(
+      (locale) => ({ params: { locale } }),
+    ),
+    { params: { locale: undefined } },
+  ];
+}) satisfies GetStaticPaths;
+---
+
+<title>BlitzKit</title>
+<meta name="description" content={strings.website.home.seo_description} />
+
+<BaseLayout>
+  <HomeHero />
+
+  <HomeLocaleSwitcher {locale} client:load />
+
+  {
+    locale !== DEFAULT_LOCALE && (
+      <Flex justify="center" mb="4">
+        <Link
+          href="https://crowdin.com/project/blitzkrieg"
+          target="_blank"
+          underline="always"
+        >
+          {literals(strings.website.home.help_translate, [
+            'BlitzKit',
+            strings.common.locales[locale],
+          ])}
+        </Link>
+      </Flex>
+    )
+  }
+
+  <Plugs client:idle />
+
+  {
+    PUBLIC_ASSET_BRANCH === 'preview' && (
+      <Flex justify="center" my="8" px="4">
+        <AesonPlug />
+      </Flex>
+    )
+  }
+
+  <Flex p="4" justify="center" gap="4" mt="3">
+    <Flex maxWidth="64rem" flexGrow="1" gap="4" direction="column">
+      <ToolCard tool={tankopediaTool} />
+
+      {
+        (PUBLIC_ASSET_BRANCH === 'main' || MODE === 'development') && (
+          <HomePageHotTanks {locale} />
+        )
+      }
+
+      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+        {/* <ToolCard tool={playerStatsTool} /> */}
+        <ToolCard tool={compareTool} />
+        <ToolCard tool={performanceTool} />
+      </Flex>
+
+      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+        <!-- <ToolCard tool={chartsTool} /> -->
+        <ToolCard tool={galleryTool} />
+        <ToolCard tool={sessionTool} />
+      </Flex>
+
+      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+        <ToolCard tool={discordTool} />
+        <ToolCard tool={tierListTool} />
+      </Flex>
+
+      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+        <ToolCard tool={embedTool} />
+        <ToolCard tool={moreTool} />
+      </Flex>
+
+      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+        <Box flexGrow="1" />
+      </Flex>
+
+      <Heading align="center" mt="6"
+        >{strings.website.home.other_projects.title}</Heading
+      >
+
+      <Flex gap="4" mb="6" direction={{ initial: 'column', sm: 'row' }}>
+        <ToolCard
+          tool={{
+            button: { color: 'blue' },
+            id: 'blitz_analysis',
+            image: 'j76YXGl',
+            href: 'https://blitzanalysiz.com/',
+          }}
+        />
+        <ToolCard
+          tool={{
+            button: { color: 'purple', highContrast: true },
+            image: 'zYrrYbR',
+            id: 'blitz_insider',
+            href: 'https://discord.gg/UjWf9eGgtR',
+          }}
+        />
+      </Flex>
+    </Flex>
+  </Flex>
+
+  <div style={{ flex: 1 }}></div>
+</BaseLayout>

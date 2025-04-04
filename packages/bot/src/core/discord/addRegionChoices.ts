@@ -8,25 +8,31 @@ import { translator } from '../localization/translator';
 import { localizationObject } from './localizationObject';
 
 export function addRegionChoices(option: SlashCommandStringOption) {
-  const { t, translate } = translator(Locale.EnglishUS);
+  const { strings } = translator(Locale.EnglishUS);
 
   return option
-    .setName(t`bot.common.options.region`)
+    .setName(strings.bot.common.options.region.name)
     .setNameLocalizations(
-      localizationObject('bot.common.options.region', undefined, true),
+      localizationObject(
+        (strings) => strings.bot.common.options.region.name,
+        undefined,
+        true,
+      ),
     )
-    .setDescription(t`bot.common.options.region.description`)
+    .setDescription(strings.bot.common.options.region.description)
     .setDescriptionLocalizations(
-      localizationObject('bot.common.options.region.description'),
+      localizationObject(
+        (strings) => strings.bot.common.options.region.description,
+      ),
     )
     .addChoices(
       ...REGIONS.map(
         (region) =>
           ({
             value: region,
-            name: translate(`common.regions.normal.${region}`),
+            name: strings.common.regions.normal[region],
             name_localizations: localizationObject(
-              `common.regions.normal.${region}`,
+              (strings) => strings.common.regions.normal[region],
             ),
           }) satisfies APIApplicationCommandOptionChoice,
       ),

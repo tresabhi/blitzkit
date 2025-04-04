@@ -6,6 +6,7 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
+import { I18nString, createBaseI18nString } from "./i18n";
 
 export const protobufPackage = "blitzkit";
 
@@ -47,7 +48,7 @@ export interface ConsumableDefinitions_ConsumablesEntry {
 
 export interface Consumable {
   id: number;
-  name: string;
+  name: I18nString;
   cooldown: number;
   duration?: number | undefined;
   game_mode_exclusive: boolean;
@@ -240,13 +241,21 @@ export const ConsumableDefinitions_ConsumablesEntry: MessageFns<ConsumableDefini
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? Consumable.fromPartial(object.value)
-      : createBaseConsumable();
+      : undefined;
     return message;
   },
 };
 
 function createBaseConsumable(): Consumable {
-  return { id: 0, name: "", cooldown: 0, duration: undefined, game_mode_exclusive: false, include: [], exclude: [] };
+  return {
+    id: 0,
+    name: createBaseI18nString(),
+    cooldown: 0,
+    duration: undefined,
+    game_mode_exclusive: false,
+    include: [],
+    exclude: [],
+  };
 }
 
 export const Consumable: MessageFns<Consumable> = {
@@ -254,8 +263,8 @@ export const Consumable: MessageFns<Consumable> = {
     if (message.id !== 0) {
       writer.uint32(8).uint32(message.id);
     }
-    if (message.name !== "") {
-      writer.uint32(18).string(message.name);
+    if (message.name !== undefined) {
+      I18nString.encode(message.name, writer.uint32(18).fork()).join();
     }
     if (message.cooldown !== 0) {
       writer.uint32(24).uint32(message.cooldown);
@@ -295,7 +304,7 @@ export const Consumable: MessageFns<Consumable> = {
             break;
           }
 
-          message.name = reader.string();
+          message.name = I18nString.decode(reader, reader.uint32());
           continue;
         }
         case 3: {
@@ -350,7 +359,7 @@ export const Consumable: MessageFns<Consumable> = {
   fromJSON(object: any): Consumable {
     return {
       id: globalThis.Number(assertSet("Consumable.id", object.id)),
-      name: globalThis.String(assertSet("Consumable.name", object.name)),
+      name: I18nString.fromJSON(assertSet("Consumable.name", object.name)),
       cooldown: globalThis.Number(assertSet("Consumable.cooldown", object.cooldown)),
       duration: isSet(object.duration) ? globalThis.Number(object.duration) : undefined,
       game_mode_exclusive: globalThis.Boolean(assertSet("Consumable.game_mode_exclusive", object.game_mode_exclusive)),
@@ -368,8 +377,8 @@ export const Consumable: MessageFns<Consumable> = {
     if (message.id !== 0) {
       obj.id = Math.round(message.id);
     }
-    if (message.name !== "") {
-      obj.name = message.name;
+    if (message.name !== undefined) {
+      obj.name = I18nString.toJSON(message.name);
     }
     if (message.cooldown !== 0) {
       obj.cooldown = Math.round(message.cooldown);
@@ -395,7 +404,9 @@ export const Consumable: MessageFns<Consumable> = {
   fromPartial<I extends Exact<DeepPartial<Consumable>, I>>(object: I): Consumable {
     const message = createBaseConsumable();
     message.id = object.id ?? 0;
-    message.name = object.name ?? "";
+    message.name = (object.name !== undefined && object.name !== null)
+      ? I18nString.fromPartial(object.name)
+      : createBaseI18nString();
     message.cooldown = object.cooldown ?? 0;
     message.duration = object.duration ?? undefined;
     message.game_mode_exclusive = object.game_mode_exclusive ?? false;

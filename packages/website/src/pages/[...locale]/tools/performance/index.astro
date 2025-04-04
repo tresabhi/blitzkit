@@ -1,0 +1,18 @@
+---
+import ToolOpenGraph from '../../../../components/ToolOpenGraph.astro';
+import { performanceTool } from '../../../../constants/tools';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { Page } from './_index';
+
+export { getStaticPaths } from '../../index.astro';
+
+const { locale } = Astro.params;
+---
+
+<ToolOpenGraph tool={performanceTool} />
+
+<BaseLayout noFooter>
+  <Page client:only="react" {locale}>
+    <Page skeleton slot="fallback" {locale} />
+  </Page>
+</BaseLayout>

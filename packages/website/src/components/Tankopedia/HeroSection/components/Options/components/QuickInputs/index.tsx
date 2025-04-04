@@ -25,6 +25,7 @@ export function QuickInputs() {
   const initialGunPitch =
     tankModelDefinition.initial_turret_rotation?.pitch ?? 0;
   const hasImprovedVerticalStabilizer = useEquipment(122);
+  const hasDownImprovedVerticalStabilizer = useEquipment(124);
 
   useEffect(() => {
     if (!yawInput.current) return;
@@ -92,6 +93,7 @@ export function QuickInputs() {
             gunModelDefinition.pitch,
             turretModelDefinition.yaw,
             hasImprovedVerticalStabilizer,
+            hasDownImprovedVerticalStabilizer,
           );
           modelTransformEvent.emit({ pitch, yaw });
           mutateDuel((state) => {
@@ -133,6 +135,7 @@ export function QuickInputs() {
             gunModelDefinition.pitch,
             turretModelDefinition.yaw,
             hasImprovedVerticalStabilizer,
+            hasDownImprovedVerticalStabilizer,
           );
           modelTransformEvent.emit({ pitch, yaw });
           mutateDuel((state) => {

@@ -1,10 +1,16 @@
 ---
 import { assertSecret, fetchGameDefinitions } from '@blitzkit/core';
-import { Code, Flex, Heading, Link, Text } from '@radix-ui/themes';
+import { DEFAULT_LOCALE } from '@blitzkit/i18n';
+import { Box, Code, Flex, Heading, Link, Text } from '@radix-ui/themes';
 import packageJson from '../../../../package.json';
+import { getStrings } from '../core/i18n/getStrings';
+import { LinkI18n } from './LinkI18n';
+import { LocaleSwitcherThemeWrapper } from './LocaleSwitcher';
 
 const gameDefinitions = await fetchGameDefinitions();
 const PUBLIC_ASSET_BRANCH = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
+const locale = Astro.params.locale ?? DEFAULT_LOCALE;
+const strings = getStrings(locale);
 ---
 
 <style>
@@ -32,10 +38,14 @@ const PUBLIC_ASSET_BRANCH = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
       }}
     >
       <Heading>BlitzKit</Heading>
-      <Text color="gray">Everything World of Tanks Blitz</Text>
+      <Text color="gray">{strings.website.footer.motto}</Text>
       <Text size="1" color="gray">
-        Unaffiliated with Wargaming or any service
+        {strings.website.footer.copyright}
       </Text>
+
+      <Box mt="2">
+        <LocaleSwitcherThemeWrapper {locale} client:load />
+      </Box>
     </Flex>
 
     <Flex
@@ -61,7 +71,7 @@ const PUBLIC_ASSET_BRANCH = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
           sm: 'auto',
         }}
       >
-        <Heading size="3">About</Heading>
+        <Heading size="3">{strings.website.footer.about.title}</Heading>
         <Flex
           direction="column"
           align={{
@@ -69,22 +79,26 @@ const PUBLIC_ASSET_BRANCH = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
             sm: 'start',
           }}
         >
-          <Link href="/docs/about/credits" color="gray"> Credits </Link>
+          <LinkI18n {locale} href="/docs/about/credits" color="gray">
+            {strings.website.footer.about.credits}
+          </LinkI18n>
           <Link
             href="https://discord.gg/nDt7AjGJQH"
             target="_blank"
             color="gray"
           >
-            Discord
+            {strings.website.footer.about.discord}
           </Link>
           <Link
             href="https://github.com/tresabhi/blitzkit"
             target="_blank"
             color="gray"
           >
-            GitHub
+            {strings.website.footer.about.github}
           </Link>
-          <Link href="/docs/patches" color="gray"> Patches </Link>
+          <LinkI18n {locale} href="/docs/patches" color="gray">
+            {strings.website.footer.about.patches}
+          </LinkI18n>
         </Flex>
       </Flex>
 
@@ -100,14 +114,14 @@ const PUBLIC_ASSET_BRANCH = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
           sm: 'auto',
         }}
       >
-        <Heading size="3">Legal</Heading>
+        <Heading size="3">{strings.website.footer.legal.title}</Heading>
         <Flex direction="column">
-          <Link href="/docs/legal/privacy-policy" color="gray">
-            Privacy policy
-          </Link>
-          <Link href="/docs/legal/terms-of-service" color="gray">
-            Terms of service
-          </Link>
+          <LinkI18n {locale} href="/docs/legal/privacy-policy" color="gray">
+            {strings.website.footer.legal.privacy}
+          </LinkI18n>
+          <LinkI18n {locale} href="/docs/legal/terms-of-service" color="gray">
+            {strings.website.footer.legal.terms}
+          </LinkI18n>
         </Flex>
       </Flex>
     </Flex>
@@ -119,7 +133,7 @@ const PUBLIC_ASSET_BRANCH = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
       {
         PUBLIC_ASSET_BRANCH !== 'preview' && (
           <Text size="2" color="gray">
-            WoT Blitz
+            WoTB
           </Text>
         )
       }
@@ -144,7 +158,7 @@ const PUBLIC_ASSET_BRANCH = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
   </Flex>
 
   <Flex gap="2" align="center" display={{ initial: 'none', sm: 'flex' }}>
-    <Text size="2" color="gray"> BlitzKit </Text>
+    <Text size="2" color="gray">BlitzKit</Text>
     <Code size="2" color="gray">
       {packageJson.version}
     </Code>
@@ -153,7 +167,7 @@ const PUBLIC_ASSET_BRANCH = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
       PUBLIC_ASSET_BRANCH !== 'preview' && (
         <>
           <Text size="2" color="gray">
-            WoT Blitz
+            WoTB
           </Text>
           <Code size="2" color="gray">
             {gameDefinitions.version}
@@ -162,7 +176,7 @@ const PUBLIC_ASSET_BRANCH = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
       )
     }
 
-    <Text size="2" color="gray"> CDN </Text>
+    <Text size="2" color="gray">CDN</Text>
     <Code size="2" color="gray">
       {PUBLIC_ASSET_BRANCH}
     </Code>

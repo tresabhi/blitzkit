@@ -1,15 +1,16 @@
-import { fetchTankNames, TankType } from '@blitzkit/core';
+import { fetchTankNames, SEARCH_KEYS, TankType } from '@blitzkit/core';
 import {
   ApplicationCommandOptionChoiceData,
   AutocompleteInteraction,
   CacheType,
 } from 'discord.js';
 import { go } from 'fuzzysort';
+import { tankNames } from '../blitzkit/nonBlockingPromises';
+import { translator } from '../localization/translator';
 import {
   DISCORD_CHOICES_MAX_NAME_SIZE,
   OVERFLOW_SUFFIX,
 } from './autocompleteClan/constants';
-import { tankNames } from '../blitzkit/nonBlockingPromises';
 
 export const tankNamesTechTreeOnly = fetchTankNames().then((names) =>
   names.filter((tank) => tank.treeType === TankType.RESEARCHABLE),
@@ -20,6 +21,7 @@ export async function autocompleteTanks(
   techTreeOnly = false,
   fields = ['tank'],
 ) {
+  const { unwrap } = translator(interaction.locale);
   const focusedOption = interaction.options.getFocused(true);
   if (!fields.includes(focusedOption.name)) return;
 
@@ -29,19 +31,16 @@ export async function autocompleteTanks(
           go(
             focusedOption.value,
             await (techTreeOnly ? tankNamesTechTreeOnly : tankNames),
-            {
-              keys: ['searchableName', 'searchableNameDeburr', 'camouflages'],
-              limit: 10,
-            },
+            { keys: SEARCH_KEYS, limit: 10 },
           ).map(async (item) => {
-            let name = item.obj.searchableName;
+            let name = unwrap(item.obj.searchableName);
 
             if (name.length > DISCORD_CHOICES_MAX_NAME_SIZE) {
               const overSize = name.length - DISCORD_CHOICES_MAX_NAME_SIZE;
 
-              name = `${item.obj.searchableName.slice(
+              name = `${unwrap(item.obj.searchableName).slice(
                 0,
-                item.obj.searchableName.length -
+                unwrap(item.obj.searchableName).length -
                   overSize -
                   OVERFLOW_SUFFIX.length,
               )}${OVERFLOW_SUFFIX}`;

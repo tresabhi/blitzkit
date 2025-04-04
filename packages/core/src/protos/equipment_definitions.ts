@@ -6,6 +6,7 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
+import { I18nString, createBaseI18nString } from "./i18n";
 
 export const protobufPackage = "blitzkit";
 
@@ -25,8 +26,8 @@ export interface EquipmentDefinitions_EquipmentsEntry {
 }
 
 export interface Equipment {
-  name: string;
-  description: string;
+  name: I18nString;
+  description: I18nString;
 }
 
 export interface EquipmentPreset {
@@ -235,7 +236,7 @@ export const EquipmentDefinitions_PresetsEntry: MessageFns<EquipmentDefinitions_
     message.key = object.key ?? "";
     message.value = (object.value !== undefined && object.value !== null)
       ? EquipmentPreset.fromPartial(object.value)
-      : createBaseEquipmentPreset();
+      : undefined;
     return message;
   },
 };
@@ -317,22 +318,22 @@ export const EquipmentDefinitions_EquipmentsEntry: MessageFns<EquipmentDefinitio
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? Equipment.fromPartial(object.value)
-      : createBaseEquipment();
+      : undefined;
     return message;
   },
 };
 
 function createBaseEquipment(): Equipment {
-  return { name: "", description: "" };
+  return { name: createBaseI18nString(), description: createBaseI18nString() };
 }
 
 export const Equipment: MessageFns<Equipment> = {
   encode(message: Equipment, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.name !== "") {
-      writer.uint32(10).string(message.name);
+    if (message.name !== undefined) {
+      I18nString.encode(message.name, writer.uint32(10).fork()).join();
     }
-    if (message.description !== "") {
-      writer.uint32(18).string(message.description);
+    if (message.description !== undefined) {
+      I18nString.encode(message.description, writer.uint32(18).fork()).join();
     }
     return writer;
   },
@@ -349,7 +350,7 @@ export const Equipment: MessageFns<Equipment> = {
             break;
           }
 
-          message.name = reader.string();
+          message.name = I18nString.decode(reader, reader.uint32());
           continue;
         }
         case 2: {
@@ -357,7 +358,7 @@ export const Equipment: MessageFns<Equipment> = {
             break;
           }
 
-          message.description = reader.string();
+          message.description = I18nString.decode(reader, reader.uint32());
           continue;
         }
       }
@@ -371,18 +372,18 @@ export const Equipment: MessageFns<Equipment> = {
 
   fromJSON(object: any): Equipment {
     return {
-      name: globalThis.String(assertSet("Equipment.name", object.name)),
-      description: globalThis.String(assertSet("Equipment.description", object.description)),
+      name: I18nString.fromJSON(assertSet("Equipment.name", object.name)),
+      description: I18nString.fromJSON(assertSet("Equipment.description", object.description)),
     };
   },
 
   toJSON(message: Equipment): unknown {
     const obj: any = {};
-    if (message.name !== "") {
-      obj.name = message.name;
+    if (message.name !== undefined) {
+      obj.name = I18nString.toJSON(message.name);
     }
-    if (message.description !== "") {
-      obj.description = message.description;
+    if (message.description !== undefined) {
+      obj.description = I18nString.toJSON(message.description);
     }
     return obj;
   },
@@ -392,8 +393,12 @@ export const Equipment: MessageFns<Equipment> = {
   },
   fromPartial<I extends Exact<DeepPartial<Equipment>, I>>(object: I): Equipment {
     const message = createBaseEquipment();
-    message.name = object.name ?? "";
-    message.description = object.description ?? "";
+    message.name = (object.name !== undefined && object.name !== null)
+      ? I18nString.fromPartial(object.name)
+      : createBaseI18nString();
+    message.description = (object.description !== undefined && object.description !== null)
+      ? I18nString.fromPartial(object.description)
+      : createBaseI18nString();
     return message;
   },
 };

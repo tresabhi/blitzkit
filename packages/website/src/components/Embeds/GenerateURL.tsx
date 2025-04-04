@@ -3,7 +3,7 @@ import {
   type AccountListItem,
   type AccountListWithServer,
 } from '@blitzkit/core';
-import strings from '@blitzkit/core/lang/en.json';
+import { literals } from '@blitzkit/i18n/src/literals';
 import { CaretLeftIcon, Link2Icon, PersonIcon } from '@radix-ui/react-icons';
 import {
   Badge,
@@ -19,6 +19,7 @@ import { debounce } from 'lodash-es';
 import { useCallback, useRef, useState } from 'react';
 import { stringify } from 'urlon';
 import type { embedConfigurations } from '../../constants/embeds';
+import { useLocale } from '../../hooks/useLocale';
 import { EmbedState, type EmbedStateStore } from '../../stores/embedState';
 import { CopyButton } from '../CopyButton';
 
@@ -34,6 +35,7 @@ export function GenerateURL({ embed }: GenerateURLProps) {
   const input = useRef<HTMLInputElement>(null);
   const [searching, setSearching] = useState(false);
   const [results, setResults] = useState<AccountListWithServer>([]);
+  const { strings } = useLocale();
   const performSearch = useCallback(
     debounce(async () => {
       if (!input.current) return;
@@ -72,20 +74,27 @@ export function GenerateURL({ embed }: GenerateURLProps) {
         <Dialog.Trigger>
           <Button>
             <Link2Icon />
-            Generate URL
+            {strings.website.tools.embed.configuration.export.generate.button}
           </Button>
         </Dialog.Trigger>
 
         <Dialog.Content width="fit-content">
           <Flex direction="column" gap="1">
-            <Heading size="5">Generate URL</Heading>
-            <Text color="gray">Search an account to track</Text>
+            <Heading size="5">
+              {strings.website.tools.embed.configuration.export.generate.title}
+            </Heading>
+            <Text color="gray">
+              {
+                strings.website.tools.embed.configuration.export.generate
+                  .subtitle
+              }
+            </Text>
           </Flex>
 
           <TextField.Root
             mt="4"
             style={{ width: '20rem' }}
-            placeholder="Search players..."
+            placeholder={strings.website.common.player_search.hint}
             ref={input}
             onChange={handleChange}
           >
@@ -98,12 +107,14 @@ export function GenerateURL({ embed }: GenerateURLProps) {
             {searching && (
               <Text color="gray">
                 <Flex align="center" gap="2">
-                  <Spinner /> Searching
+                  <Spinner /> {strings.website.common.player_search.searching}
                 </Flex>
               </Text>
             )}
             {!searching && results.length === 0 && (
-              <Text color="gray">No results</Text>
+              <Text color="gray">
+                {strings.website.common.player_search.no_results}
+              </Text>
             )}
 
             {!searching && results.length > 0 && (
@@ -131,7 +142,7 @@ export function GenerateURL({ embed }: GenerateURLProps) {
 
           <Dialog.Close>
             <Button color="red" variant="outline" style={{ width: '100%' }}>
-              Cancel
+              {strings.website.tools.embed.configuration.export.generate.cancel}
             </Button>
           </Dialog.Close>
         </Dialog.Content>
@@ -140,12 +151,18 @@ export function GenerateURL({ embed }: GenerateURLProps) {
       <Dialog.Root open={copyDialogOpen} onOpenChange={setCopyDialogOpen}>
         <Dialog.Content style={{ width: 'fit-content' }}>
           <Flex direction="column" gap="1">
-            <Heading size="5">Copy URL</Heading>
+            <Heading size="5">
+              {
+                strings.website.tools.embed.configuration.export.generate
+                  .success.title
+              }
+            </Heading>
             <Text color="gray">
-              Generated the URL for {copyUser?.nickname}. The embed will start
-              tracking as soon as the URL is pasted. Reset at any time by
-              right-clicking on PC or long-pressing on mobile and then selecting
-              "Reset".
+              {literals(
+                strings.website.tools.embed.configuration.export.generate
+                  .success.info,
+                [`${copyUser?.nickname}`],
+              )}
             </Text>
           </Flex>
 
@@ -158,7 +175,11 @@ export function GenerateURL({ embed }: GenerateURLProps) {
                 setSearchDialogOpen(true);
               }}
             >
-              <CaretLeftIcon /> Back
+              <CaretLeftIcon />{' '}
+              {
+                strings.website.tools.embed.configuration.export.generate
+                  .success.back
+              }
             </Button>
             <CopyButton
               style={{ flex: 1 }}
@@ -186,7 +207,11 @@ export function GenerateURL({ embed }: GenerateURLProps) {
                 return `${location.origin}/tools/embed/${embed}/host?${searchParams.toString()}`;
               }}
             >
-              <Link2Icon /> Copy URL
+              <Link2Icon />{' '}
+              {
+                strings.website.tools.embed.configuration.export.generate
+                  .success.copy
+              }
             </CopyButton>
           </Flex>
         </Dialog.Content>

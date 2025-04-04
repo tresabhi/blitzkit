@@ -1,4 +1,5 @@
 import { imgur, ShellType } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n/src/literals';
 import {
   Button,
   Flex,
@@ -11,6 +12,7 @@ import {
 } from '@radix-ui/themes';
 import { throttle } from 'lodash-es';
 import { type ChangeEvent } from 'react';
+import { useLocale } from '../../../../../../hooks/useLocale';
 import { Duel } from '../../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
 
@@ -19,6 +21,7 @@ export function CustomShellButton() {
   const gun = Duel.use((state) => state.protagonist.gun);
   const antagonistShell = Duel.use((state) => state.antagonist.shell);
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
+  const { strings } = useLocale();
 
   return (
     <Popover.Root
@@ -49,13 +52,16 @@ export function CustomShellButton() {
       </Popover.Trigger>
 
       <Popover.Content>
-        {/* <Popover.Title>Custom shell</Popover.Title> */}
-
         {customShell && (
           <>
             <Flex direction="column" gap="2">
               <Flex align="center" justify="between" gap="4">
-                <Text>Type</Text>
+                <Text>
+                  {
+                    strings.website.tools.tankopedia.sandbox.dynamic
+                      .custom_shell.type
+                  }
+                </Text>
                 <Select.Root
                   value={`${customShell.type}`}
                   onValueChange={(value) => {
@@ -99,16 +105,29 @@ export function CustomShellButton() {
                   <Select.Trigger />
 
                   <Select.Content>
-                    <Select.Item value={`${ShellType.AP}`}>AP</Select.Item>
-                    <Select.Item value={`${ShellType.APCR}`}>APCR</Select.Item>
-                    <Select.Item value={`${ShellType.HEAT}`}>HEAT</Select.Item>
-                    <Select.Item value={`${ShellType.HE}`}>HE</Select.Item>
+                    <Select.Item value={`${ShellType.AP}`}>
+                      {strings.common.shells.ap}
+                    </Select.Item>
+                    <Select.Item value={`${ShellType.APCR}`}>
+                      {strings.common.shells.apcr}
+                    </Select.Item>
+                    <Select.Item value={`${ShellType.HEAT}`}>
+                      {strings.common.shells.heat}
+                    </Select.Item>
+                    <Select.Item value={`${ShellType.HE}`}>
+                      {strings.common.shells.he}
+                    </Select.Item>
                   </Select.Content>
                 </Select.Root>
               </Flex>
 
               <Flex align="center" justify="between" gap="4">
-                <Text>Caliber</Text>
+                <Text>
+                  {
+                    strings.website.tools.tankopedia.sandbox.dynamic
+                      .custom_shell.caliber
+                  }
+                </Text>
                 <TextField.Root
                   style={{ maxWidth: '6rem' }}
                   defaultValue={customShell.caliber}
@@ -131,12 +150,19 @@ export function CustomShellButton() {
                     }
                   }}
                 >
-                  <TextField.Slot side="right">mm</TextField.Slot>
+                  <TextField.Slot side="right">
+                    {literals(strings.common.units.mm, [''])}
+                  </TextField.Slot>
                 </TextField.Root>
               </Flex>
 
               <Flex align="center" justify="between" gap="4">
-                <Text>Penetration</Text>
+                <Text>
+                  {
+                    strings.website.tools.tankopedia.sandbox.dynamic
+                      .custom_shell.penetration
+                  }
+                </Text>
                 <TextField.Root
                   style={{ maxWidth: '6rem' }}
                   defaultValue={customShell.penetration.near}
@@ -160,7 +186,9 @@ export function CustomShellButton() {
                     }
                   }}
                 >
-                  <TextField.Slot side="right">mm</TextField.Slot>
+                  <TextField.Slot side="right">
+                    {literals(strings.common.units.mm, [''])}
+                  </TextField.Slot>
                 </TextField.Root>
               </Flex>
 
@@ -168,7 +196,12 @@ export function CustomShellButton() {
                 customShell.type === ShellType.APCR) && (
                 <>
                   <Flex align="center" justify="between" gap="4" py="1">
-                    <Text>Normalization</Text>
+                    <Text>
+                      {
+                        strings.website.tools.tankopedia.sandbox.dynamic
+                          .custom_shell.normalization
+                      }
+                    </Text>
 
                     <Flex
                       align="center"
@@ -178,7 +211,9 @@ export function CustomShellButton() {
                       minWidth="8rem"
                     >
                       <Text color="gray">
-                        {Math.round(customShell.normalization ?? 0)}°
+                        {literals(strings.common.units.deg, [
+                          (customShell.normalization ?? 0).toFixed(0),
+                        ])}
                       </Text>
                       <Slider
                         min={0}
@@ -197,11 +232,18 @@ export function CustomShellButton() {
                   </Flex>
 
                   <Flex align="center" justify="between" gap="4" py="1">
-                    <Text>Ricochet</Text>
+                    <Text>
+                      {
+                        strings.website.tools.tankopedia.sandbox.dynamic
+                          .custom_shell.ricochet
+                      }
+                    </Text>
 
                     <Flex align="center" gap="2" flexGrow="1" maxWidth="15rem">
                       <Text color="gray">
-                        {Math.round(customShell.ricochet ?? 90)}°
+                        {literals(strings.common.units.deg, [
+                          (customShell.ricochet ?? 90).toFixed(0),
+                        ])}
                       </Text>
                       <Slider
                         min={0}
@@ -254,7 +296,10 @@ export function CustomShellButton() {
             <Flex justify="end" mt="6" gap="2">
               <Popover.Close>
                 <Button color="red" variant="outline">
-                  Exit
+                  {
+                    strings.website.tools.tankopedia.sandbox.dynamic
+                      .custom_shell.exit
+                  }
                 </Button>
               </Popover.Close>
               <Button
@@ -265,7 +310,10 @@ export function CustomShellButton() {
                   });
                 }}
               >
-                Reset
+                {
+                  strings.website.tools.tankopedia.sandbox.dynamic.custom_shell
+                    .reset
+                }
               </Button>
             </Flex>
           </>

@@ -1,5 +1,5 @@
 import { Slider } from '@radix-ui/themes';
-import type { EmbedPreviewControllerProps } from '../../pages/tools/embed/[embed]/_index';
+import type { EmbedPreviewControllerProps } from '../../pages/[...locale]/tools/embed/[embed]/_index';
 import { EmbedState, type RadixSizeWithout0 } from '../../stores/embedState';
 
 export function SizeWithout0({ configKey }: EmbedPreviewControllerProps) {

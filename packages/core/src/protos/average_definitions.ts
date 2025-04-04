@@ -251,7 +251,7 @@ export const AverageDefinitions_AveragesEntry: MessageFns<AverageDefinitions_Ave
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? AverageDefinitionsEntry.fromPartial(object.value)
-      : createBaseAverageDefinitionsEntry();
+      : undefined;
     return message;
   },
 };

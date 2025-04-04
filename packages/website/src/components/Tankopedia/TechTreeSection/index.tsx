@@ -1,8 +1,10 @@
 import { asset, imgur, TankType } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n/src/literals';
 import { CaretLeftIcon, CaretRightIcon, PlusIcon } from '@radix-ui/react-icons';
 import { Flex, Heading, IconButton, ScrollArea, Text } from '@radix-ui/themes';
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { awaitableTankDefinitions } from '../../../core/awaitables/tankDefinitions';
+import { useLocale } from '../../../hooks/useLocale';
 import { Duel } from '../../../stores/duel';
 import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
 import type { MaybeSkeletonComponentProps } from '../../../types/maybeSkeletonComponentProps';
@@ -16,6 +18,7 @@ const tankDefinitions = await awaitableTankDefinitions;
 export const XP_MULTIPLIERS = [1, 2, 3, 4, 5, 10];
 
 export function TechTreeSection({ skeleton }: MaybeSkeletonComponentProps) {
+  const { locale, strings } = useLocale();
   const master = Duel.use((state) => state.protagonist.tank);
   const xpMultiplier = TankopediaEphemeral.use((state) => state.xpMultiplier);
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
@@ -89,7 +92,9 @@ export function TechTreeSection({ skeleton }: MaybeSkeletonComponentProps) {
       py="6"
     >
       <Flex direction="column" align="center">
-        <Heading size="6">Tech tree</Heading>
+        <Heading size="6">
+          {strings.website.tools.tankopedia.tech_tree.title}
+        </Heading>
 
         {master.tier > 1 && (
           <Flex gap="4" align="center">
@@ -105,7 +110,7 @@ export function TechTreeSection({ skeleton }: MaybeSkeletonComponentProps) {
                     objectPosition: 'center',
                   }}
                 />
-                {Math.round(totalXp / xpMultiplier).toLocaleString()}
+                {Math.round(totalXp / xpMultiplier).toLocaleString(locale)}
               </Flex>
             </Text>
 
@@ -121,7 +126,7 @@ export function TechTreeSection({ skeleton }: MaybeSkeletonComponentProps) {
                     objectPosition: 'center',
                   }}
                 />
-                {totalCredits.toLocaleString()}
+                {totalCredits.toLocaleString(locale)}
               </Flex>
             </Text>
           </Flex>
@@ -154,7 +159,7 @@ export function TechTreeSection({ skeleton }: MaybeSkeletonComponentProps) {
                 pl="1"
               >
                 <Text size="2">
-                  x<b>{multiplier}</b>
+                  {literals(strings.common.units.x, [`${multiplier}`])}
                 </Text>
               </Flex>
             );
@@ -214,7 +219,10 @@ export function TechTreeSection({ skeleton }: MaybeSkeletonComponentProps) {
               <CaretLeftIcon />
             </IconButton>
             <Text>
-              Route {lineIndex + 1} of {lines.length}
+              {literals(strings.website.tools.tankopedia.tech_tree.route, [
+                `${lineIndex + 1}`,
+                `${lines.length}`,
+              ])}
             </Text>
             <IconButton
               size="2"

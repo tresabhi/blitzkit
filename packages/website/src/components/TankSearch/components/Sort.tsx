@@ -1,308 +1,122 @@
 import { useStore } from '@nanostores/react';
 import { CaretDownIcon } from '@radix-ui/react-icons';
 import { Button, DropdownMenu } from '@radix-ui/themes';
-import type { TankopediaSortDirection } from '../../../stores/tankopediaPersistent';
+import { useLocale } from '../../../hooks/useLocale';
+import type {
+  TankopediaSortBy,
+  TankopediaSortDirection,
+} from '../../../stores/tankopediaPersistent';
 import { $tankopediaSort } from '../../../stores/tankopediaSort';
+
+interface ItemProps {
+  by: TankopediaSortBy;
+}
+
+interface ItemProps {
+  by: TankopediaSortBy;
+}
+
+function Item({ by }: ItemProps) {
+  const { strings } = useLocale();
+  const tankopediaSort = useStore($tankopediaSort);
+
+  return (
+    <DropdownMenu.CheckboxItem
+      checked={tankopediaSort.by === by}
+      onClick={() => {
+        $tankopediaSort.setKey('by', by);
+      }}
+    >
+      {strings.website.common.tank_search.sort[by]}
+    </DropdownMenu.CheckboxItem>
+  );
+}
 
 export function Sort() {
   const tankopediaSort = useStore($tankopediaSort);
+  const { strings } = useLocale();
 
   return (
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger>
         <Button variant="surface" color="gray">
-          Sort
+          {strings.website.common.tank_search.sort_dropdown.label}
           <CaretDownIcon />
         </Button>
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Content align="end">
-        <DropdownMenu.CheckboxItem
-          checked={tankopediaSort.by === 'meta.none'}
-          onClick={() => {
-            // mutateTankopediaSort((draft) => {
-            //   draft.by = 'meta.none';
-            // });
-            $tankopediaSort.setKey('by', 'meta.none');
-          }}
-        >
-          No sort
-        </DropdownMenu.CheckboxItem>
+        <DropdownMenu.Label>
+          {strings.website.common.tank_search.sort_dropdown.groups.sort.label}
+        </DropdownMenu.Label>
 
-        <DropdownMenu.Label>Sort by</DropdownMenu.Label>
+        <Item by="meta.none" />
 
         <DropdownMenu.Sub>
-          <DropdownMenu.SubTrigger>Fire</DropdownMenu.SubTrigger>
+          <DropdownMenu.SubTrigger>
+            {strings.website.common.tank_search.sort_dropdown.groups.sort.fire}
+          </DropdownMenu.SubTrigger>
           <DropdownMenu.SubContent>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'fire.dpm'}
-              onClick={() => {
-                // mutateTankopediaSort((draft) => {
-                //   draft.by = 'fire.dpm';
-                // });
-                $tankopediaSort.setKey('by', 'fire.dpm');
-              }}
-            >
-              Standard DPM
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'fire.dpmPremium'}
-              onClick={() => {
-                // mutateTankopediaSort((draft) => {
-                //   draft.by = 'fire.dpmPremium';
-                // });
-                $tankopediaSort.setKey('by', 'fire.dpmPremium');
-              }}
-            >
-              Premium DPM
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'fire.reload'}
-              onClick={() => {
-                // mutateTankopediaSort((draft) => {
-                //   draft.by = 'fire.reload';
-                // });
-                $tankopediaSort.setKey('by', 'fire.reload');
-              }}
-            >
-              Reload
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'fire.caliber'}
-              onClick={() => {
-                // mutateTankopediaSort((draft) => {
-                //   draft.by = 'fire.caliber';
-                // });
-                $tankopediaSort.setKey('by', 'fire.caliber');
-              }}
-            >
-              Caliber
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'fire.standardPenetration'}
-              onClick={() => {
-                // mutateTankopediaSort((draft) => {
-                //   draft.by = 'fire.standardPenetration';
-                // });
-                $tankopediaSort.setKey('by', 'fire.standardPenetration');
-              }}
-            >
-              Standard penetration
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'fire.premiumPenetration'}
-              onClick={() => {
-                // mutateTankopediaSort((draft) => {
-                //   draft.by = 'fire.premiumPenetration';
-                // });
-                $tankopediaSort.setKey('by', 'fire.premiumPenetration');
-              }}
-            >
-              Premium penetration
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'fire.damage'}
-              onClick={() => {
-                $tankopediaSort.setKey('by', 'fire.damage');
-              }}
-            >
-              Damage
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'fire.moduleDamage'}
-              onClick={() => {
-                $tankopediaSort.setKey('by', 'fire.moduleDamage');
-              }}
-            >
-              Module damage
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'fire.shellVelocity'}
-              onClick={() => {
-                $tankopediaSort.setKey('by', 'fire.shellVelocity');
-              }}
-            >
-              Shell velocity
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'fire.shellRange'}
-              onClick={() => {
-                $tankopediaSort.setKey('by', 'fire.shellRange');
-              }}
-            >
-              Shell range
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'fire.shellCapacity'}
-              onClick={() => {
-                $tankopediaSort.setKey('by', 'fire.shellCapacity');
-              }}
-            >
-              Shell capacity
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'fire.aimTime'}
-              onClick={() => {
-                $tankopediaSort.setKey('by', 'fire.aimTime');
-              }}
-            >
-              Aim time
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'fire.dispersionStill'}
-              onClick={() => {
-                $tankopediaSort.setKey('by', 'fire.dispersionStill');
-              }}
-            >
-              Dispersion still
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'fire.dispersionMoving'}
-              onClick={() => {
-                $tankopediaSort.setKey('by', 'fire.dispersionMoving');
-              }}
-            >
-              Dispersion moving
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'fire.gunDepression'}
-              onClick={() => {
-                $tankopediaSort.setKey('by', 'fire.gunDepression');
-              }}
-            >
-              Gun depression
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'fire.gunElevation'}
-              onClick={() => {
-                $tankopediaSort.setKey('by', 'fire.gunElevation');
-              }}
-            >
-              Gun elevation
-            </DropdownMenu.CheckboxItem>
+            <Item by="fire.dpm" />
+            <Item by="fire.dpmPremium" />
+            <Item by="fire.reload" />
+            <Item by="fire.caliber" />
+            <Item by="fire.standardPenetration" />
+            <Item by="fire.premiumPenetration" />
+            <Item by="fire.damage" />
+            <Item by="fire.moduleDamage" />
+            <Item by="fire.shellVelocity" />
+            <Item by="fire.shellRange" />
+            <Item by="fire.shellCapacity" />
+            <Item by="fire.aimTime" />
+            <Item by="fire.dispersionStill" />
+            <Item by="fire.dispersionMoving" />
+            <Item by="fire.gunDepression" />
+            <Item by="fire.gunElevation" />
           </DropdownMenu.SubContent>
         </DropdownMenu.Sub>
 
         <DropdownMenu.Sub>
-          <DropdownMenu.SubTrigger>Maneuverability</DropdownMenu.SubTrigger>
+          <DropdownMenu.SubTrigger>
+            {
+              strings.website.common.tank_search.sort_dropdown.groups.sort
+                .maneuverability
+            }
+          </DropdownMenu.SubTrigger>
           <DropdownMenu.SubContent>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'maneuverability.forwardsSpeed'}
-              onClick={() => {
-                $tankopediaSort.setKey('by', 'maneuverability.forwardsSpeed');
-              }}
-            >
-              Forwards speed
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'maneuverability.backwardsSpeed'}
-              onClick={() => {
-                $tankopediaSort.setKey('by', 'maneuverability.backwardsSpeed');
-              }}
-            >
-              Backwards speed
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'maneuverability.power'}
-              onClick={() => {
-                $tankopediaSort.setKey('by', 'maneuverability.power');
-              }}
-            >
-              Power
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'maneuverability.powerToWeight'}
-              onClick={() => {
-                $tankopediaSort.setKey('by', 'maneuverability.powerToWeight');
-              }}
-            >
-              Power to weight
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'maneuverability.weight'}
-              onClick={() => {
-                $tankopediaSort.setKey('by', 'maneuverability.weight');
-              }}
-            >
-              Weight
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'maneuverability.traverseSpeed'}
-              onClick={() => {
-                $tankopediaSort.setKey('by', 'maneuverability.traverseSpeed');
-              }}
-            >
-              Traverse speed
-            </DropdownMenu.CheckboxItem>
+            <Item by="maneuverability.forwardsSpeed" />
+            <Item by="maneuverability.backwardsSpeed" />
+            <Item by="maneuverability.power" />
+            <Item by="maneuverability.powerToWeight" />
+            <Item by="maneuverability.weight" />
+            <Item by="maneuverability.traverseSpeed" />
           </DropdownMenu.SubContent>
         </DropdownMenu.Sub>
 
         <DropdownMenu.Sub>
-          <DropdownMenu.SubTrigger>Survivability</DropdownMenu.SubTrigger>
+          <DropdownMenu.SubTrigger>
+            {
+              strings.website.common.tank_search.sort_dropdown.groups.sort
+                .survivability
+            }
+          </DropdownMenu.SubTrigger>
           <DropdownMenu.SubContent>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'survivability.health'}
-              onClick={() => {
-                $tankopediaSort.setKey('by', 'survivability.health');
-              }}
-            >
-              Health
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'survivability.viewRange'}
-              onClick={() => {
-                $tankopediaSort.setKey('by', 'survivability.viewRange');
-              }}
-            >
-              View range
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'survivability.camouflageStill'}
-              onClick={() => {
-                $tankopediaSort.setKey('by', 'survivability.camouflageStill');
-              }}
-            >
-              Camouflage
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'survivability.camouflageMoving'}
-              onClick={() => {
-                $tankopediaSort.setKey('by', 'survivability.camouflageMoving');
-              }}
-            >
-              Camouflage moving
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'survivability.camouflageShooting'}
-              onClick={() => {
-                $tankopediaSort.setKey(
-                  'by',
-                  'survivability.camouflageShooting',
-                );
-              }}
-            >
-              Camouflage shooting
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'survivability.volume'}
-              onClick={() => {
-                $tankopediaSort.setKey('by', 'survivability.volume');
-              }}
-            >
-              Volume
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              checked={tankopediaSort.by === 'survivability.length'}
-              onClick={() => {
-                $tankopediaSort.setKey('by', 'survivability.length');
-              }}
-            >
-              Length
-            </DropdownMenu.CheckboxItem>
+            <Item by="survivability.health" />
+            <Item by="survivability.viewRange" />
+            <Item by="survivability.camouflageStill" />
+            <Item by="survivability.camouflageMoving" />
+            <Item by="survivability.camouflageShooting" />
+            <Item by="survivability.volume" />
+            <Item by="survivability.length" />
           </DropdownMenu.SubContent>
         </DropdownMenu.Sub>
 
-        <DropdownMenu.Label>Direction</DropdownMenu.Label>
+        <DropdownMenu.Label>
+          {
+            strings.website.common.tank_search.sort_dropdown.groups.direction
+              .label
+          }
+        </DropdownMenu.Label>
         <DropdownMenu.RadioGroup
           value={tankopediaSort.direction}
           onValueChange={(value) => {
@@ -313,10 +127,16 @@ export function Sort() {
           }}
         >
           <DropdownMenu.RadioItem value="ascending">
-            Ascending
+            {
+              strings.website.common.tank_search.sort_dropdown.groups.direction
+                .ascending
+            }
           </DropdownMenu.RadioItem>
           <DropdownMenu.RadioItem value="descending">
-            Descending
+            {
+              strings.website.common.tank_search.sort_dropdown.groups.direction
+                .descending
+            }
           </DropdownMenu.RadioItem>
         </DropdownMenu.RadioGroup>
       </DropdownMenu.Content>

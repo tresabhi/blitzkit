@@ -11,17 +11,17 @@ export const debugCommand = new Promise<CommandRegistry>((resolve) => {
     command: createLocalizedCommand('debug'),
 
     async handler(interaction) {
-      const { t } = translator(interaction.locale);
+      const { strings } = translator(interaction.locale);
       const currentTime = new Date().getTime();
       const uptime = currentTime - executionStart;
       const list = [
-        [t`bot.commands.debug.body.version`, packageJSON.version],
+        [strings.bot.commands.debug.body.version, packageJSON.version],
         [
-          t`bot.commands.debug.body.shard`,
-          client.shard?.ids[0] ?? t`bot.commands.debug.body.shard.default`,
+          strings.bot.commands.debug.body.shard.label,
+          client.shard?.ids[0] ?? strings.bot.commands.debug.body.shard.default,
         ],
         [
-          t`bot.commands.debug.body.uptime`,
+          strings.bot.commands.debug.body.uptime,
           `${Math.floor((uptime / 1000 / 60 / 60) % 24)}h ${Math.floor(
             (uptime / 1000 / 60) % 60,
           )}m ${Math.floor((uptime / 1000) % 60)}s ${Math.floor(
@@ -29,7 +29,7 @@ export const debugCommand = new Promise<CommandRegistry>((resolve) => {
           )}ms`,
         ],
       ];
-      return t`bot.commands.debug.body.title${list
+      return `${strings.bot.commands.debug.body.title}${list
         .map(([key, value]) => `- ${key}: ${value}`)
         .join('\n')}`;
     },

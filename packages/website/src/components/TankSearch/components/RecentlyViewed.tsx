@@ -3,6 +3,7 @@ import { Flex, Separator, Text } from '@radix-ui/themes';
 import { isEqual } from 'lodash-es';
 import { useMemo } from 'react';
 import { awaitableTankDefinitions } from '../../../core/awaitables/tankDefinitions';
+import { useLocale } from '../../../hooks/useLocale';
 import { $tankFilters, initialTankFilters } from '../../../stores/tankFilters';
 import { TankopediaPersistent } from '../../../stores/tankopediaPersistent';
 import { $tankopediaSort } from '../../../stores/tankopediaSort';
@@ -15,7 +16,9 @@ export function RecentlyViewed() {
   const tankopediaPersistentStore = TankopediaPersistent.useStore();
   const filters = useStore($tankFilters);
   // non-reactive because it is a little weird that it updates instantly even before the page loads
-  const recentlyViewed = tankopediaPersistentStore.getState().recentlyViewed;
+  const recentlyViewed = tankopediaPersistentStore
+    .getState()
+    .recentlyViewed.filter((id) => id in tankDefinitions.tanks);
   const sort = useStore($tankopediaSort);
   const hasFilters = useMemo(
     () =>
@@ -27,6 +30,7 @@ export function RecentlyViewed() {
       }),
     [filters],
   );
+  const { strings } = useLocale();
 
   if (recentlyViewed.length === 0 || sort.by !== 'meta.none' || hasFilters) {
     return null;
@@ -35,7 +39,7 @@ export function RecentlyViewed() {
   return (
     <Flex direction="column" gap="2" mt="2" mb="6">
       <Text color="gray" align="center">
-        Recently viewed
+        {strings.website.common.tank_search.recent}
       </Text>
       <TankCardWrapper>
         {recentlyViewed.map((id) => (

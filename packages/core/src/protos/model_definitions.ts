@@ -265,7 +265,7 @@ export const ModelDefinitions_ModelsEntry: MessageFns<ModelDefinitions_ModelsEnt
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? ModelDefinition.fromPartial(object.value)
-      : createBaseModelDefinition();
+      : undefined;
     return message;
   },
 };
@@ -545,7 +545,7 @@ export const ModelDefinition_TurretsEntry: MessageFns<ModelDefinition_TurretsEnt
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? TurretModelDefinition.fromPartial(object.value)
-      : createBaseTurretModelDefinition();
+      : undefined;
     return message;
   },
 };
@@ -623,7 +623,7 @@ export const ModelDefinition_TracksEntry: MessageFns<ModelDefinition_TracksEntry
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? TrackModelDefinition.fromPartial(object.value)
-      : createBaseTrackModelDefinition();
+      : undefined;
     return message;
   },
 };
@@ -1248,7 +1248,7 @@ export const TurretModelDefinition_GunsEntry: MessageFns<TurretModelDefinition_G
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? GunModelDefinition.fromPartial(object.value)
-      : createBaseGunModelDefinition();
+      : undefined;
     return message;
   },
 };

@@ -3,16 +3,22 @@ import { translator } from '../localization/translator';
 import { localizationObject } from './localizationObject';
 
 export function addTankChoices(option: SlashCommandStringOption) {
-  const { translate } = translator(Locale.EnglishUS);
+  const { strings } = translator(Locale.EnglishUS);
 
   return option
-    .setName(translate('bot.common.options.tank'))
+    .setName(strings.bot.common.options.tank.name)
     .setNameLocalizations(
-      localizationObject('bot.common.options.tank', undefined, true),
+      localizationObject(
+        (strings) => strings.bot.common.options.tank.name,
+        undefined,
+        true,
+      ),
     )
-    .setDescription(translate('bot.common.options.tank.description'))
+    .setDescription(strings.bot.common.options.tank.description)
     .setDescriptionLocalizations(
-      localizationObject('bot.common.options.tank.description'),
+      localizationObject(
+        (strings) => strings.bot.common.options.tank.description,
+      ),
     )
     .setAutocomplete(true)
     .setRequired(true);

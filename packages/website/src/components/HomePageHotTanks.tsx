@@ -1,8 +1,14 @@
 import { assertSecret } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n/src/literals';
 import { EyeOpenIcon } from '@radix-ui/react-icons';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import { google } from 'googleapis';
 import { awaitableTankDefinitions } from '../core/awaitables/tankDefinitions';
+import {
+  LocaleProvider,
+  useLocale,
+  type LocaleAcceptorProps,
+} from '../hooks/useLocale';
 import { TankopediaPersistent } from '../stores/tankopediaPersistent';
 import { TankCard } from './TankCard';
 
@@ -63,22 +69,26 @@ const hotTanks = report.data.rows
     views,
   }));
 
-export function HomePageHotTanks() {
+export function HomePageHotTanks({ locale }: LocaleAcceptorProps) {
   return (
-    <TankopediaPersistent.Provider>
-      <Content />
-    </TankopediaPersistent.Provider>
+    <LocaleProvider locale={locale}>
+      <TankopediaPersistent.Provider>
+        <Content />
+      </TankopediaPersistent.Provider>
+    </LocaleProvider>
   );
 }
 
 function Content() {
+  const { locale, strings } = useLocale();
+
   return (
     <Flex direction="column" pt="4" pb="8">
       <Heading align="center" size="5">
-        Popular tanks
+        {strings.website.home.hot_tanks.title}
       </Heading>
       <Text color="gray" align="center" mb="5" size="2">
-        Last 7 days
+        {literals(strings.website.home.hot_tanks.subtitle, ['7'])}
       </Text>
 
       <Flex justify="center" gap="4" wrap="wrap">
@@ -89,7 +99,7 @@ function Content() {
               discriminator={
                 <Flex align="center" gap="1" justify="center">
                   <EyeOpenIcon />
-                  {Math.round(row.views * (30 / 7)).toLocaleString('en-US')}
+                  {Math.round(row.views * (30 / 7)).toLocaleString(locale)}
                 </Flex>
               }
             />

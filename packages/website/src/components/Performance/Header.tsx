@@ -4,21 +4,23 @@ import {
   CaretUpIcon,
 } from '@radix-ui/react-icons';
 import { Button, Flex, Table } from '@radix-ui/themes';
+import { useLocale } from '../../hooks/useLocale';
 import { TankPerformanceSort } from '../../stores/tankPerformanceSort';
-import {
-  TankPerformanceSortTypeNames,
-  TankPerformanceSortTypeNamesArray,
-} from '../../stores/tankPerformanceSort/constants';
+import { TankPerformanceSortTypeNamesArray } from '../../stores/tankPerformanceSort/constants';
 import { StickyColumnHeaderCell } from '../StickyColumnHeaderCell';
 
 export function Header() {
   const sort = TankPerformanceSort.use();
   const store = TankPerformanceSort.useStore();
+  const { strings } = useLocale();
 
   return (
     <Table.Header>
       <Table.Row align="center">
-        <StickyColumnHeaderCell>Tank</StickyColumnHeaderCell>
+        <StickyColumnHeaderCell>
+          {strings.website.tools.performance.table.tanks.header}
+        </StickyColumnHeaderCell>
+
         {TankPerformanceSortTypeNamesArray.map((type) => {
           const isSelected = sort.type === type;
 
@@ -42,7 +44,7 @@ export function Header() {
                     }
                   }}
                 >
-                  {TankPerformanceSortTypeNames[type]}
+                  {strings.website.tools.performance.table.stats[type]}
 
                   {!isSelected && <CaretSortIcon />}
                   {isSelected && (

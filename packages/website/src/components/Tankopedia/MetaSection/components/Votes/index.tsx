@@ -1,6 +1,7 @@
 import { formatCompact } from '@blitzkit/core';
 import { Flex, Heading, Skeleton, Text } from '@radix-ui/themes';
 import { memo } from 'react';
+import { useLocale } from '../../../../../hooks/useLocale';
 import { useTankVotes } from '../../../../../hooks/useTankVotes';
 import { App } from '../../../../../stores/app';
 import { Duel } from '../../../../../stores/duel';
@@ -13,13 +14,14 @@ export const Votes = memo(
     const id = Duel.use((state) => state.protagonist.tank.id);
     const votes = useTankVotes(id);
     const wargaming = App.use((state) => state.logins.wargaming);
+    const { locale } = useLocale();
 
     return (
       <Flex direction="column" gap="3">
         <Flex justify="between" align="center">
           <Heading size="4">
             {!votes && <Skeleton height="1em" width="4rem" />}
-            {votes && formatCompact(votes.votes)}{' '}
+            {votes && formatCompact(locale, votes.votes)}{' '}
             {votes && (votes.votes > 1 ? 'votes' : 'vote')}
           </Heading>
 

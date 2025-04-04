@@ -1,4 +1,5 @@
 import { Flex, Link, Text } from '@radix-ui/themes';
+import { useLocale } from '../../../hooks/useLocale';
 import { $tankFilters, initialTankFilters } from '../../../stores/tankFilters';
 
 interface NoResultsProps {
@@ -6,10 +7,12 @@ interface NoResultsProps {
 }
 
 export function NoResults({ type = 'filters' }: NoResultsProps) {
+  const { strings } = useLocale();
+
   return (
     <Flex flexGrow="1" align="center" justify="center">
       <Text color="gray">
-        No tanks found.{' '}
+        {strings.website.common.tank_search.no_tanks_found.body}{' '}
         <Link
           href="#"
           underline="always"
@@ -18,9 +21,10 @@ export function NoResults({ type = 'filters' }: NoResultsProps) {
             $tankFilters.set(initialTankFilters);
           }}
         >
-          {type === 'filters' ? 'Try clearing filters' : 'Try searching again'}
+          {type === 'filters'
+            ? strings.website.common.tank_search.no_tanks_found.clear_filters
+            : strings.website.common.tank_search.no_tanks_found.search_again}
         </Link>
-        .
       </Text>
     </Flex>
   );

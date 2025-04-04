@@ -1,6 +1,7 @@
 import { TIER_ROMAN_NUMERALS } from '@blitzkit/core';
-import strings from '@blitzkit/core/lang/en.json';
+import { literals } from '@blitzkit/i18n/src/literals';
 import { Flex, Heading, SegmentedControl, Text } from '@radix-ui/themes';
+import { useLocale } from '../../../../../../hooks/useLocale';
 import { Duel } from '../../../../../../stores/duel';
 import {
   TankopediaEphemeral,
@@ -13,6 +14,7 @@ export function CharacteristicsHeading() {
   );
   const tank = Duel.use((state) => state.protagonist.tank);
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
+  const { strings } = useLocale();
 
   return (
     <Flex
@@ -20,9 +22,13 @@ export function CharacteristicsHeading() {
       gap="2"
       direction="column"
     >
-      <Heading mb="2">Characteristics</Heading>
+      <Heading mb="2">
+        {strings.website.tools.tankopedia.characteristics.title}
+      </Heading>
 
-      <Text color="gray">Compare against</Text>
+      <Text color="gray">
+        {strings.website.tools.tankopedia.characteristics.compare.label}
+      </Text>
       <SegmentedControl.Root
         size={{ initial: '1', md: '2' }}
         value={`${relativeAgainst}`}
@@ -33,14 +39,22 @@ export function CharacteristicsHeading() {
         }}
       >
         <SegmentedControl.Item value={`${TankopediaRelativeAgainst.Class}`}>
-          Tier {TIER_ROMAN_NUMERALS[tank.tier]}{' '}
-          {strings.common.tank_class_short_plural_lowercase[tank.class]}
+          {literals(
+            strings.website.tools.tankopedia.characteristics.compare.class,
+            [
+              TIER_ROMAN_NUMERALS[tank.tier],
+              strings.common.tank_class_short_plural_lowercase[tank.class],
+            ],
+          )}
         </SegmentedControl.Item>
         <SegmentedControl.Item value={`${TankopediaRelativeAgainst.Tier}`}>
-          All of tier {TIER_ROMAN_NUMERALS[tank.tier]}
+          {literals(
+            strings.website.tools.tankopedia.characteristics.compare.tier,
+            [TIER_ROMAN_NUMERALS[tank.tier]],
+          )}
         </SegmentedControl.Item>
         <SegmentedControl.Item value={`${TankopediaRelativeAgainst.All}`}>
-          All tanks
+          {strings.website.tools.tankopedia.characteristics.compare.all}
         </SegmentedControl.Item>
       </SegmentedControl.Root>
     </Flex>

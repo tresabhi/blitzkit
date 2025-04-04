@@ -23,7 +23,7 @@ export const theme = {
   spaces: createSpaces(),
 
   colors: {
-    ...createColors(slateDark),
+    ...createColors(mauveDark),
     ...createColors(slateDarkA, 'alpha'),
     ...createColors(slate, 'light'),
 

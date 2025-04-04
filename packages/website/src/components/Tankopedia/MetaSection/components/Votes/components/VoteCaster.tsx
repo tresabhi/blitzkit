@@ -9,6 +9,7 @@ import {
   Text,
 } from '@radix-ui/themes';
 import { useState } from 'react';
+import { useLocale } from '../../../../../../hooks/useLocale';
 import { App } from '../../../../../../stores/app';
 import { Duel } from '../../../../../../stores/duel';
 import { Stars } from '../../Stars';
@@ -24,6 +25,7 @@ export function VoteCaster() {
   const [postVote, setPostVote] = useState<boolean | null>(null);
   // true = open, false = closed, null = casting
   const [showDialogue, setShowDialogue] = useState<boolean | null>(false);
+  const { unwrap } = useLocale();
 
   return (
     <>
@@ -35,7 +37,7 @@ export function VoteCaster() {
         </Dialog.Trigger>
 
         <Dialog.Content maxWidth="23rem">
-          <Dialog.Title>Voting for {tank.name}</Dialog.Title>
+          <Dialog.Title>Voting for {unwrap(tank.name)}</Dialog.Title>
 
           <Flex direction="column" mt="4">
             <Flex align="center" justify="between">

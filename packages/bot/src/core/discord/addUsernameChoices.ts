@@ -3,16 +3,22 @@ import { translator } from '../localization/translator';
 import { localizationObject } from './localizationObject';
 
 export function addUsernameChoices(option: SlashCommandStringOption) {
-  const { t } = translator(Locale.EnglishUS);
+  const { strings } = translator(Locale.EnglishUS);
 
   return option
-    .setName(t`bot.common.options.username`)
+    .setName(strings.bot.common.options.username.name)
     .setNameLocalizations(
-      localizationObject('bot.common.options.username', undefined, true),
+      localizationObject(
+        (strings) => strings.bot.common.options.username.name,
+        undefined,
+        true,
+      ),
     )
-    .setDescription(t`bot.common.options.username.description`)
+    .setDescription(strings.bot.common.options.username.description)
     .setDescriptionLocalizations(
-      localizationObject('bot.common.options.username.description'),
+      localizationObject(
+        (strings) => strings.bot.common.options.username.description,
+      ),
     )
     .setAutocomplete(true);
 }

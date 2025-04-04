@@ -53,7 +53,7 @@ export async function tankIcons() {
   await Promise.all(
     nations.map(async (nation) => {
       const tanks = await readXMLDVPL<{ root: VehicleDefinitionList }>(
-        `${DATA}/XML/item_defs/vehicles/${nation}/list.xml.dvpl`,
+        `${DATA}/XML/item_defs/vehicles/${nation}/list.xml`,
       );
 
       await Promise.all(
@@ -63,14 +63,14 @@ export async function tankIcons() {
           const nationVehicleId = tank.id;
           const id = (nationVehicleId << 8) + (NATION_IDS[nation] << 4) + 1;
           const parameters = await readYAMLDVPL<TankParameters>(
-            `${DATA}/3d/Tanks/Parameters/${nation}/${tankKey}.yaml.dvpl`,
+            `${DATA}/3d/Tanks/Parameters/${nation}/${tankKey}.yaml`,
           );
           const smallPath = `${DATA}/${parameters.resourcesPath.smallIconPath
             .replace(/~res:\//, '')
-            .replace(/\..+/, '')}.packed.webp.dvpl`;
+            .replace(/\..+/, '')}.packed.webp`;
           const bigPath = `${DATA}/${parameters.resourcesPath.bigIconPath
             .replace(/~res:\//, '')
-            .replace(/\..+/, '')}.packed.webp.dvpl`;
+            .replace(/\..+/, '')}.packed.webp`;
           const big = await sharp(await readDVPLFile(bigPath))
             .trim()
             .toBuffer();

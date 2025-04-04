@@ -1,4 +1,5 @@
 import { getAccountInfo, getClanInfo } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n';
 import { Locale } from 'discord.js';
 import { CommandWrapper } from '../components/CommandWrapper';
 import { GenericStats } from '../components/GenericStats';
@@ -19,30 +20,31 @@ export const inactiveCommand = new Promise<CommandRegistry>((resolve) => {
     command: createLocalizedCommand('inactive')
       .addStringOption(addClanChoices)
       .addNumberOption((option) => {
-        const { translate } = translator(Locale.EnglishUS);
+        const { strings } = translator(Locale.EnglishUS);
 
         return option
           .setName('threshold')
           .setNameLocalizations(
             localizationObject(
-              'bot.commands.inactive.options.threshold',
+              (strings) => strings.bot.commands.inactive.options.threshold.name,
               undefined,
               true,
             ),
           )
           .setDescription(
-            translate('bot.commands.inactive.options.threshold.description'),
+            strings.bot.commands.inactive.options.threshold.description,
           )
           .setDescriptionLocalizations(
             localizationObject(
-              'bot.commands.inactive.options.threshold.description',
+              (strings) =>
+                strings.bot.commands.inactive.options.threshold.description,
             ),
           )
           .setMinValue(0);
       }),
 
     async handler(interaction) {
-      const { translate } = translator(interaction.locale);
+      const { strings } = translator(interaction.locale);
       const { region, id } = await resolveClanFromCommand(interaction);
       const threshold =
         interaction.options.getNumber('threshold')! ?? DEFAULT_THRESHOLD;
@@ -63,7 +65,7 @@ export const inactiveCommand = new Promise<CommandRegistry>((resolve) => {
           ([name, days]) =>
             [
               name,
-              translate('bot.commands.inactive.body.listing', [
+              literals(strings.bot.commands.inactive.body.listing, [
                 days.toFixed(0),
               ]),
             ] as [string, string],
@@ -75,9 +77,10 @@ export const inactiveCommand = new Promise<CommandRegistry>((resolve) => {
           <TitleBar
             title={clanInfo.name}
             image={`https://wotblitz-gc.gcdn.co/icons/clanEmblems1x/clan-icon-v2-${clanInfo.emblem_set_id}.png`}
-            description={`${translate('bot.commands.inactive.body.subtitle', [
-              `${threshold}`,
-            ])} • ${new Date().toLocaleDateString(interaction.locale)}`}
+            description={`${literals(
+              strings.bot.commands.inactive.body.subtitle,
+              [`${threshold}`],
+            )} • ${new Date().toLocaleDateString(interaction.locale)}`}
           />
 
           {!hasInactiveMembers && (

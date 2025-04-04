@@ -1,9 +1,11 @@
 import { assertSecret, REGIONS } from '@blitzkit/core';
-import strings from '@blitzkit/core/lang/en.json';
 import { Button, type ButtonProps, Dialog, Flex, Link } from '@radix-ui/themes';
+import { useLocale } from '../hooks/useLocale';
 import { WargamingIcon } from './WargamingIcon';
 
 export function WargamingLoginButton({ children, ...props }: ButtonProps) {
+  const { strings } = useLocale();
+
   return (
     <Dialog.Root>
       <Dialog.Trigger>

@@ -3,16 +3,22 @@ import { translator } from '../localization/translator';
 import { localizationObject } from './localizationObject';
 
 export function addClanChoices(option: SlashCommandStringOption) {
-  const { translate } = translator(Locale.EnglishUS);
+  const { strings } = translator(Locale.EnglishUS);
 
   return option
     .setName('clan')
     .setNameLocalizations(
-      localizationObject('bot.common.options.clan', undefined, true),
+      localizationObject(
+        (strings) => strings.bot.common.options.clan.name,
+        undefined,
+        true,
+      ),
     )
-    .setDescription(translate('bot.common.options.clan.description'))
+    .setDescription(strings.bot.common.options.clan.description)
     .setDescriptionLocalizations(
-      localizationObject('bot.common.options.clan.description'),
+      localizationObject(
+        (strings) => strings.bot.common.options.clan.description,
+      ),
     )
     .setAutocomplete(true)
     .setMinLength(2)

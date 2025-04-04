@@ -1,7 +1,7 @@
 ---
 import { assertSecret } from '@blitzkit/core';
 import type { GetStaticPaths } from 'astro';
-import { getStaticPaths as tankopediaGetStaticPaths } from '../../../../tools/tankopedia/[id]/index.astro';
+import { getStaticPaths as tankopediaGetStaticPaths } from '../../../../[...locale]/tools/tankopedia/[id]/index.astro';
 import { Page } from './_index';
 
 export const getStaticPaths = (async () => {

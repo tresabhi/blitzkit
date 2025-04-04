@@ -1,14 +1,16 @@
-import { DEFAULT_LOCALE, SupportedLocale } from '@blitzkit/core';
+import { DEFAULT_LOCALE, SupportedLocale } from '@blitzkit/i18n';
 import { Locale } from 'discord.js';
 
 const SUPPORTED_LOCALES_DISCORD_MAP: Record<SupportedLocale, Locale> = {
   en: Locale.EnglishUS,
   es: Locale.SpanishES,
-  hr: Locale.Croatian,
   pt: Locale.PortugueseBR,
   ru: Locale.Russian,
   uk: Locale.Ukrainian,
   zh: Locale.ChineseCN,
+  fr: Locale.French,
+  ja: Locale.Japanese,
+  pl: Locale.Polish,
 };
 
 export const SUPPORTED_LOCALES_DISCORD_MAP_INVERSE = Object.fromEntries(

@@ -185,6 +185,11 @@ export function TankModel() {
               duel.protagonist.tank.equipment_preset,
               duel.protagonist.equipmentMatrix,
             );
+            const hasDownImprovedVerticalStabilizer = await hasEquipment(
+              124,
+              duel.protagonist.tank.equipment_preset,
+              duel.protagonist.equipmentMatrix,
+            );
             const boundingRect = canvas.getBoundingClientRect();
 
             delta.set(event.clientX, event.clientY).sub(position);
@@ -196,6 +201,7 @@ export function TankModel() {
               gunModelDefinition.pitch,
               turretModelDefinition.yaw,
               hasImprovedVerticalStabilizer,
+              hasDownImprovedVerticalStabilizer,
             );
             modelTransformEvent.emit({ pitch, yaw });
           }
@@ -287,6 +293,11 @@ export function TankModel() {
                 duel.protagonist.tank.equipment_preset,
                 duel.protagonist.equipmentMatrix,
               );
+              const hasDownImprovedVerticalStabilizer = await hasEquipment(
+                124,
+                duel.protagonist.tank.equipment_preset,
+                duel.protagonist.equipmentMatrix,
+              );
               const boundingRect = canvas.getBoundingClientRect();
               delta.set(event.clientX, event.clientY).sub(position);
               position.set(event.clientX, event.clientY);
@@ -297,6 +308,7 @@ export function TankModel() {
                 gunModelDefinition.pitch,
                 turretModelDefinition.yaw,
                 hasImprovedVerticalStabilizer,
+                hasDownImprovedVerticalStabilizer,
               );
               modelTransformEvent.emit({ pitch, yaw });
             }

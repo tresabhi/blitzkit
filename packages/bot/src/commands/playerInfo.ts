@@ -1,4 +1,5 @@
 import { getAccountInfo } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n';
 import markdownEscape from 'markdown-escape';
 import { addUsernameChoices } from '../core/discord/addUsernameChoices';
 import { autocompleteUsername } from '../core/discord/autocompleteUsername';
@@ -15,27 +16,27 @@ export const playerInfoCommand = new Promise<CommandRegistry>((resolve) => {
       createLocalizedCommand('player-info').addStringOption(addUsernameChoices),
 
     async handler(interaction) {
-      const { t, translate } = translator(interaction.locale);
+      const { strings } = translator(interaction.locale);
       const account = await resolvePlayerFromCommand(interaction);
       const { id, region: region } = account;
       const accountInfo = await getAccountInfo(region, id);
 
       return embedInfo(
-        translate('bot.commands.player_info.body.title', [
+        literals(strings.bot.commands.player_info.body.title, [
           markdownEscape(accountInfo.nickname),
         ]),
 
         markdownTable([
           [
-            t`bot.commands.player_info.body.nickname`,
+            strings.bot.commands.player_info.body.nickname,
             `${accountInfo.nickname}`,
           ],
           [
-            t`bot.commands.player_info.body.battles`,
+            strings.bot.commands.player_info.body.battles,
             `${accountInfo.statistics.all.battles}`,
           ],
           [
-            t`bot.commands.player_info.body.winrate`,
+            strings.bot.commands.player_info.body.winrate,
             `${(
               100 *
               (accountInfo.statistics.all.wins /
@@ -44,17 +45,17 @@ export const playerInfoCommand = new Promise<CommandRegistry>((resolve) => {
           ],
           [],
           [
-            t`bot.commands.player_info.body.account_id`,
+            strings.bot.commands.player_info.body.account_id,
             `${accountInfo.account_id}`,
           ],
           [
-            t`bot.commands.player_info.body.created`,
+            strings.bot.commands.player_info.body.created,
             new Date(accountInfo.created_at * 1000).toLocaleDateString(
               interaction.locale,
             ),
           ],
           [
-            t`bot.commands.player_info.body.last_battle`,
+            strings.bot.commands.player_info.body.last_battle,
             new Date(accountInfo.last_battle_time * 1000).toLocaleDateString(
               interaction.locale,
             ),

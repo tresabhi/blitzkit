@@ -6,29 +6,18 @@ import Footer from '../components/Footer.astro';
 import Navbar from '../components/Navbar.astro';
 import Party3 from '../components/Party3.astro';
 import './base.css';
+import { DEFAULT_LOCALE } from '@blitzkit/i18n';
 
 export interface Props {
   noFooter?: boolean;
 }
 
 const { noFooter } = Astro.props;
-const { pathname } = Astro.url;
-const isRoot = pathname === '/';
+const locale = Astro.params.locale ?? DEFAULT_LOCALE;
 ---
 
-<html lang="en">
+<html lang={locale}>
   <head>
-    {
-      isRoot && (
-        <>
-          <title>BlitzKit</title>
-          <meta
-            name="description"
-            content="🎉 Tools for everything World of Tanks Blitz"
-          />
-        </>
-      )
-    }
     <meta property="og:site_name" content="BlitzKit" />
     <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="/favicon.png" />
@@ -36,6 +25,32 @@ const isRoot = pathname === '/';
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <Party3 />
+
+    <script>
+      import { SUPPORTED_LOCALES } from '@blitzkit/i18n';
+      import { getBestLocale } from '../core/i18n/getBestLocale';
+      const isAPI = window.location.pathname.startsWith('/api');
+      const isI18nPath = SUPPORTED_LOCALES.some((locale) =>
+        window.location.pathname.startsWith(`/${locale}`),
+      );
+      const bestLocale = getBestLocale();
+      const currentPathLocale = SUPPORTED_LOCALES.find((locale) =>
+        window.location.pathname.startsWith(`/${locale}`),
+      );
+
+      if (
+        !isAPI && // not an api, duh!
+        localStorage.getItem('preferred-locale') !== null && // no preference, so probably google's crawler
+        bestLocale !== currentPathLocale // we need to redirect
+      ) {
+        window.location.pathname = isI18nPath
+          ? window.location.pathname.replace(
+              `/${currentPathLocale}`,
+              bestLocale === undefined ? '' : `/${bestLocale}`,
+            )
+          : `/${bestLocale}${window.location.pathname}`;
+      }
+    </script>
   </head>
 
   <body>
@@ -43,7 +58,7 @@ const isRoot = pathname === '/';
       <Flex direction="column" minHeight="100vh">
         <Navbar />
 
-        <Checks client:only="react" />
+        <Checks {locale} client:only="react" />
 
         <slot />
 

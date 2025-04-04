@@ -1,0 +1,1272 @@
+{
+  "test": {
+    "default": "teste",
+    "long": "Esta é uma sequência de testes longa. Você NUNCA DEVE ver isto na UI. Minha fruta favorita é %s1 porque tem a cor de %s2. Eu gosto tanto dela que vou dizer o nome dela 3 vezes! %s1! %s1! %s1! Mais uma vez, é %s2, não %s3.",
+    "fox": "A ágil raposa castanha salta por cima do cão preguiçoso."
+  },
+  "common": {
+    "units": {
+      "m": "%s1m",
+      "mm": "%s1mm",
+      "deg": "%s1°",
+      "hp": "%s1hp",
+      "x": "x%s1"
+    },
+    "gun_types": {
+      "auto_loader": "Autocarregador",
+      "auto_reloader": "Autorrecarregador",
+      "regular": "Regular"
+    },
+    "shells": {
+      "ap": "AP",
+      "apcr": "APCR",
+      "heat": "HEAT",
+      "he": "HE"
+    },
+    "player_count_period": {
+      "total": "Total",
+      "d_120": "Últimos 120 dias",
+      "d_90": "Últimos 90 dias",
+      "d_60": "Últimos 60 dias",
+      "d_30": "Último mês",
+      "d_7": "Última semana",
+      "d_1": "Ontem"
+    },
+    "branches": {
+      "local": "dev",
+      "dev": "beta",
+      "opentest": "testeaberto",
+      "preview": "visualização"
+    },
+    "locales": {
+      "en": "Inglês",
+      "es": "Espanhol",
+      "pt": "Português",
+      "ru": "Russo",
+      "uk": "Ucraniano",
+      "zh": "Chinês",
+      "ja": "Japonês",
+      "fr": "Francês",
+      "pl": "Polonês"
+    },
+    "wn8_percentile": {
+      "0": "Muito ruim",
+      "1": "Ruim",
+      "2": "Abaixo da média",
+      "3": "Na média",
+      "4": "Acima da média",
+      "5": "Bom",
+      "6": "Muito bom",
+      "7": "Ótimo",
+      "8": "Unicum",
+      "9": "Super unicum"
+    },
+    "bkni_percentile": {
+      "0": "Super malum",
+      "1": "Malum",
+      "2": "Muito ruim",
+      "3": "Ruim",
+      "4": "Abaixo da média",
+      "5": "Na média",
+      "6": "Acima da média",
+      "7": "Bom",
+      "8": "Muito bom",
+      "9": "Excelente",
+      "10": "Super unicum"
+    },
+    "nations": {
+      "ussr": "U.R.S.S.",
+      "germany": "Alemanha",
+      "usa": "E.U.A.",
+      "china": "China",
+      "uk": "Reino Unido",
+      "france": "França",
+      "japan": "Japão",
+      "european": "Nação Europeia",
+      "other": "Nação Híbrida"
+    },
+    "nations_adjectives": {
+      "ussr": "U.R.S.S.",
+      "germany": "Alemão",
+      "usa": "E.U.A.",
+      "china": "Chinês",
+      "uk": "Reino Unido",
+      "france": "Francês",
+      "japan": "Japonês",
+      "european": "Europeu",
+      "other": "Híbrido"
+    },
+    "tank_class_short": {
+      "-1": "Não reconhecido",
+      "0": "Leve",
+      "1": "Médio",
+      "2": "Pesado",
+      "3": "Caça-tanques"
+    },
+    "tank_class_short_plural_lowercase": {
+      "0": "leves",
+      "1": "médios",
+      "2": "pesados",
+      "3": "Caça-tanques"
+    },
+    "tank_class_medium": {
+      "-1": "não reconhecido",
+      "0": "Leve",
+      "1": "Médio",
+      "2": "Pesado",
+      "3": "Caça-tanque"
+    },
+    "tree_type": {
+      "-1": "não reconhecido",
+      "0": "Árvore Tecnológica",
+      "1": "Premium",
+      "2": "Colecionador"
+    },
+    "regions": {
+      "normal": {
+        "com": "América do Norte",
+        "eu": "Europa",
+        "asia": "Ásia-Pacífico"
+      },
+      "short": {
+        "com": "NA",
+        "eu": "EU",
+        "asia": "APAC"
+      }
+    },
+    "leagues": {
+      "diamond": "Diamante",
+      "platinum": "Platina",
+      "gold": "Ouro",
+      "silver": "Prata",
+      "bronze": "Bronze"
+    },
+    "composite_stats": {
+      "normalized_damage_dealt": "Dano",
+      "normalized_damage_received": "Dano recebido",
+      "normalized_deaths": "Taxa de mortes",
+      "normalized_frags": "Abates",
+      "normalized_hits": "Acertos",
+      "normalized_losses": "Taxa de derrota",
+      "normalized_misses": "Tiros errados",
+      "normalized_shots": "Disparos",
+      "normalized_spotted": "Detecções",
+      "normalized_survived_battles": "Taxa de sobrevivência",
+      "normalized_win_and_survived": "Taxa de sobrevivência e vitórias",
+      "normalized_wins": "Taxa de vitória",
+      "normalized_xp": "EXP",
+      "normalized_battle_life_time": "Tempo em batalha",
+      "cumulative_accuracy": "Precisão",
+      "cumulative_battles": "Batalhas",
+      "cumulative_capture_points": "Total de pontos de captura",
+      "cumulative_damage_dealt": "Dano total",
+      "cumulative_damage_ratio": "Razão entre dano dado e recebido",
+      "cumulative_damage_received": "Dano total recebido",
+      "cumulative_deaths": "Total de mortes",
+      "cumulative_dropped_capture_points": "Total de pontos de captura perdidos",
+      "cumulative_frags": "Total de abates",
+      "cumulative_hits": "Total de acertos",
+      "cumulative_inaccuracy": "Imprecisão",
+      "cumulative_kills_to_death_ratio": "Razão entre abates e mortes",
+      "cumulative_losses": "Derrotas",
+      "cumulative_misses": "Total de tiros errados",
+      "cumulative_shots": "Total de disparos",
+      "cumulative_spotted": "Total de detecções",
+      "cumulative_survived_battles": "Batalhas sobrevividas",
+      "cumulative_win_and_survived": "Batalhas ganhas e sobrevividas",
+      "cumulative_wins": "Vitórias",
+      "cumulative_xp": "EXP total",
+      "cumulative_wn8": "WN8",
+      "cumulative_battle_life_time": "Tempo de batalha total"
+    }
+  },
+  "bot": {
+    "common": {
+      "errors": {
+        "clan_not_found": "# Não foi possível encontrar o clã\nNão foi possível encontrar \"%s1\". Tente selecionar um clã do resultado de pesquisa.",
+        "player_not_found": "# Não foi possível encontrar o usuário\nEu não consegui encontrar o usuário \"%s1\". Tente escolher um usuário do resultado de pesquisa, digitando um nome de usuário válido, ou usando o comando `/link`.",
+        "player_not_linked": "Digite \"/link\" para começar.\nEu posso não saber quem é você, mas pode-me dizer hoje sobre isso!",
+        "tank_name_not_found": "# Tanque não encontrado\nNão foi possível encontrar um tanque pelo nome \"%s1\".",
+        "tank_id_not_found": "# Tanque não encontrado\nNão foi possível encontrar o tanque pelo ID \"%s1\". Tente digitar o nome do tanque ao invés de um número.",
+        "no_tank_stats": "# Nenhuma estatística de tanques disponível\nEsse jogador não tem as suas estatísticas disponíveis. Talvez esse pode não ser o jogador que procura.",
+        "get_help": "Servidor de Ajuda no Discord",
+        "uncaught_error": "# O BlitzKit apresentou um erro!\nSentimos muito por isso. Sinta-se a vontade para [entrar no servidor oficial no Discord]\n(https://discord.gg/nDt7AjGJQH) para conseguir ajuda.",
+        "preview": "# Este comando está na pré-visualização\n\nVocê só pode acessar este comando no [servidor oficial do Discord](https://discord.gg/nDt7AjGJQH). O comando estará geralmente disponível em breve.",
+        "query_too_small": "# Sua pesquisa é muito curta\nSua pesquisa deve ter pelo menos 3 caracteres.",
+        "query_too_long": "# Sua pesquisa é muito longa\nSua pesquisa deve ter no máximo 100 caracteres."
+      },
+      "wn8": {
+        "name": "WN8",
+        "types": {
+          "very_bad": "Muito ruim",
+          "bad": "Ruim",
+          "below_average": "Abaixo da média",
+          "average": "Na média",
+          "above_average": "Acima da média",
+          "good": "Bom",
+          "very_good": "Muito bom",
+          "great": "Ótimo",
+          "unicum": "Unicum",
+          "super_unicum": "Super unicum"
+        }
+      },
+      "subcommands": {
+        "today": {
+          "name": "hoje",
+          "description": "Hoje"
+        },
+        "30": {
+          "name": "30",
+          "description": "30 dias"
+        },
+        "60": {
+          "name": "60",
+          "description": "60 dias"
+        },
+        "90": {
+          "name": "90",
+          "description": "90 dias"
+        },
+        "career": {
+          "name": "carreira",
+          "description": "Carreira"
+        },
+        "custom": {
+          "name": "personalizado",
+          "description": "Intervalo personalizado",
+          "options": {
+            "start": {
+              "name": "iniciar",
+              "description": "Iniciar em número de dias atrás a partir de hoje"
+            },
+            "end": {
+              "name": "terminar",
+              "description": "Termina em número de dias atrás a partir de hoje"
+            }
+          }
+        }
+      },
+      "options": {
+        "clan": {
+          "name": "clã",
+          "description": "O nome ou tag do clã"
+        },
+        "tank": {
+          "name": "tanque",
+          "description": "O tanque para obter estatísticas para"
+        },
+        "username": {
+          "name": "nome de usuário",
+          "description": "O nome de usuário Blitz do jogador"
+        },
+        "filters": {
+          "nation": {
+            "name": "nação",
+            "description": "Nação"
+          },
+          "class": {
+            "name": "classe",
+            "description": "Classe"
+          },
+          "type": {
+            "name": "tipo",
+            "description": "Tipo"
+          }
+        },
+        "region": {
+          "name": "região",
+          "description": "Região"
+        },
+        "tier": {
+          "name": "nível",
+          "description": "Nível",
+          "choices": {
+            "tier": "Nível %s1 - %s2"
+          }
+        }
+      },
+      "periods": {
+        "career": "Carreira",
+        "today": "Hoje",
+        "days": "%s1 dias",
+        "custom": "%s1 - %s2 dias"
+      },
+      "filters": {
+        "none": "Sem filtros",
+        "tier": "Nível %s1"
+      },
+      "no_data": {
+        "battles_in_period": "Não há batalhas jogadas neste período",
+        "battles_in_season": "Não há batalhas jogadas nesta temporada",
+        "players_in_period": "Nenhum jogador neste período",
+        "tanks_found": "Nenhum tanque encontrado"
+      },
+      "buttons": {
+        "refresh": "Atualizar"
+      },
+      "hero_stats": {
+        "battles": "Batalhas",
+        "winrate": "Taxa de vitória",
+        "damage": "Dano",
+        "damage_ratio": "Razão entre dano dado e recebido",
+        "tier": "Nível",
+        "survival": "Sobrevivência",
+        "accuracy": "Precisão",
+        "kills": "Abates"
+      }
+    },
+    "commands": {
+      "auction": {
+        "name": "leilão",
+        "description": "Tanques disponíveis agora mesmo no leilão",
+        "body": {
+          "title": "Leilão Blitz",
+          "subtitle": "%s1 disponível • próximos preços %s2 oferta agora: %s3",
+          "next": "Próximo preço: %s1",
+          "available": "Disponível: %s1 / %s2"
+        },
+        "errors": {
+          "no_auction": "# Nenhum leilão em curso\n\nNo momento, não há tanques disponíveis para compra no leilão. Se você acha que isso é um erro, relate esta discrepância no [servidor oficial do Discord](https://discord.gg/nDt7AjGJQH)."
+        },
+        "actions": {
+          "bid": "Ofertar agora"
+        }
+      },
+      "replay": {
+        "name": "replay",
+        "description": "Exibir resultados de replays"
+      },
+      "research": {
+        "name": "pesquisa",
+        "description": "Liste as despesas na pesquisa de uma linha",
+        "options": {
+          "target_tank": {
+            "name": "tanque-alvo",
+            "description": "O último tanque para pesquisar na linha"
+          },
+          "starting_tank": {
+            "name": "tanque-inicial",
+            "description": "O tanque inicial na linha (inferido automaticamente se não fornecido)"
+          }
+        },
+        "body": {
+          "subtitle": "Pesquisa",
+          "total": "Total",
+          "research": "Pesquisa: %s1",
+          "upgrades": "Melhorias: %s1",
+          "purchase": "Compra: %s1",
+          "equipment": "Equipamento: %s1",
+          "estimation": "# Esta é uma estimativa!\n\nEsta lista pode incluir tanques já pesquisados devido à informação imprecisa que a Wargaming fornece. Tente fornecer um `tanque-inicial` da linha ao usar o comando, se puder."
+        },
+        "errors": {
+          "non_tech_tree": "# %s1 não está na árvore tecnológica\n\nVocê não pode pesquisar um tanque premium/colecionador.",
+          "tier_1": "# %s1 é um nível I\n\nOs tanques de nível I sempre são desbloqueados gratuitamente para todos os jogadores.",
+          "already_researched": "# %s1 já foi pesquisado\n\nTente fornecer um `tanque-inicial` ao usar o comando para ver os totais de uma linha que você já pesquisou.",
+          "start_end_equal": "# %s1 foi fornecido duas vezes\n\nCertifique-se de que `tanque-inicial` e `tanque-alvo` são diferentes.",
+          "tanks_not_on_line": "# %s1 e %s2 não estão na mesma linha\n\nCertifique-se de que `tanque-inicial` e `tanque-alvo` estão na mesma linha tecnológica.",
+          "unordered": "# %s1 de nível mais alto para %s2\n\nCertifique-se de fornecer %s3 como o `tanque-inicial` em vez disso, pois é o tanque de nível inferior."
+        }
+      },
+      "about": {
+        "name": "sobre",
+        "description": "Todas as informações que você precisa sobre o bot",
+        "subcommands": {
+          "commands": {
+            "name": "comandos",
+            "description": "Lista de todos os comandos e suas descrições",
+            "body": "# Comandos\n\nBlitzKit oferece os seguintes comandos:\n"
+          },
+          "embeds": {
+            "name": "incorporar",
+            "description": "Como incorporações funcionam"
+          },
+          "introduction": {
+            "name": "Introdução",
+            "description": "Sobre o bot"
+          },
+          "invite": {
+            "name": "convite",
+            "description": "Como convidar o bot"
+          },
+          "timezones": {
+            "name": "fusos horários",
+            "description": "Como o BlitzKit inferi e usa seu fuso horário"
+          },
+          "credits": {
+            "name": "créditos",
+            "description": "Pessoas que ajudaram BlitzKit"
+          }
+        }
+      },
+      "breakdown": {
+        "name": "divisão",
+        "description": "Análise de um período por tanques jogados",
+        "body": {
+          "total": "Total",
+          "battles": "Batalhas",
+          "wn8": "WN8",
+          "winrate": "Taxa de vitória",
+          "damage": "Dano",
+          "unknown_tank": "Tanque desconhecido %s1"
+        }
+      },
+      "debug": {
+        "name": "depuração",
+        "description": "Depurar informações sobre o bot",
+        "body": {
+          "title": "# Depuração\n",
+          "version": "Versão",
+          "shard": {
+            "label": "Fragmento",
+            "default": "padrão"
+          },
+          "uptime": "Tempo de atividade"
+        }
+      },
+      "evolution": {
+        "name": "evolução",
+        "description": "Evolução das estatísticas",
+        "groups": {
+          "player": {
+            "name": "jogador",
+            "description": "Estatísticas do Jogador"
+          },
+          "tank": {
+            "name": "tanque",
+            "description": "Estatísticas do tanque"
+          }
+        }
+      },
+      "inactive": {
+        "name": "inativo",
+        "description": "Liste todos os jogadores inativos em um clã acima de um limite",
+        "options": {
+          "threshold": {
+            "name": "limite",
+            "description": "O número de dias inativos (padrão: %s1 dias)"
+          }
+        },
+        "body": {
+          "subtitle": "Inativo por %s1+ dias",
+          "listing": "%s1 dias"
+        }
+      },
+      "full_stats": {
+        "name": "estatísticas-completas",
+        "description": "Estatísticas completas dentro do jogo",
+        "body": {
+          "cards": {
+            "games": {
+              "title": "Jogos",
+              "winrate": "Taxa de vitória",
+              "battles": "Batalhas",
+              "wins_losses": "Vitórias / Derrotas"
+            },
+            "efficiency": {
+              "title": "Eficiência",
+              "wn8": "WN8",
+              "survival": "Sobrevivência",
+              "accuracy": "Precisão"
+            },
+            "lethality": {
+              "title": "Letalidade",
+              "average_damage": "Dano médio",
+              "damage_per_tier": "Dano por nível",
+              "damage_ratio": "Razão entre dano dado e recebido",
+              "average_kills": "Média de abates"
+            },
+            "miscellaneous": {
+              "title": "Diversos",
+              "average_tier": "Nível médio",
+              "average_spots": "Média de detecções",
+              "average_xp": "EXP Médio",
+              "kills_to_death_ratio": "Razão entre abates e mortes"
+            }
+          }
+        }
+      },
+      "link": {
+        "name": "link",
+        "description": "Conecte sua conta Blitz e Discord",
+        "body": {
+          "accounts_linked": "Contas vinculadas",
+          "no_role_permissions": {
+            "title": "%s1 falhou ao verificar",
+            "description": "Eu não tenho permissão para gerenciar funções."
+          }
+        },
+        "embed": {
+          "title": "Conta incorreta?",
+          "description": "Use o comando novamente e selecione um nome de usuário dos resultados da pesquisa."
+        }
+      },
+      "search_clans": {
+        "name": "procurar-clãs",
+        "description": "Procurar clãs",
+        "options": {
+          "limit": {
+            "name": "limite",
+            "description": "O número máximo de resultados do clã (padrão: %s1)"
+          }
+        },
+        "body": {
+          "title": "Pesquisa do clã para %s1 na região %s2",
+          "no_results": "Nenhum clã encontrado"
+        }
+      },
+      "search_players": {
+        "name": "pesquisa-jogadores",
+        "description": "Procurar jogadores",
+        "options": {
+          "limit": {
+            "name": "limite",
+            "description": "O número máximo de resultados do jogador (padrão: %s1)"
+          }
+        },
+        "body": {
+          "title": "Busca de jogador para %s1 na região %s2",
+          "no_results": "Nenhum jogador encontrado"
+        }
+      },
+      "rating_leaderboard": {
+        "name": "classificação-tabela de classificação",
+        "description": "Estatísticas de batalhas de classificação",
+        "subcommands": {
+          "neighbors": {
+            "name": "vizinhos",
+            "description": "Jogadores vizinhos na tabela de classificação"
+          },
+          "league": {
+            "name": "Liga",
+            "description": "Melhores jogadores de uma liga"
+          }
+        },
+        "options": {
+          "limit": {
+            "name": "limite",
+            "description": "Quantos vizinhos exibir (padrão: %s1)"
+          },
+          "season": {
+            "name": "temporada",
+            "description": "Número da temporada (padrão: atual)",
+            "choices": {
+              "current": "%s1 (atual)"
+            }
+          },
+          "league": {
+            "name": "Liga",
+            "description": "A liga para exibir"
+          }
+        },
+        "body": {
+          "top_players": "Melhores %s1 jogadores",
+          "no_participation": "# %s1 não jogou classificação na temporada %s2\n\nEste jogador não participou nesta temporada ou não passou da calibração.",
+          "no_ongoing_season": "# Nenhuma temporada em andamento\n\nNão há uma temporada de classificação em execução no momento.",
+          "deleted_player": "Excluído %s1",
+          "neighbors": "Classificação de vizinhos",
+          "more": "+ %s1 mais"
+        }
+      },
+      "today": {
+        "name": "hoje",
+        "description": "Tanques jogados hoje e estatísticas"
+      },
+      "stats": {
+        "name": "estatísticas",
+        "description": "Estatísticas rápidas para um período"
+      },
+      "owned_tanks": {
+        "name": "tanques-possuídos",
+        "description": "Mostra todos os tanques possuídos em um nível",
+        "body": {
+          "title": "# %s1's possuía nível %s2 tanques\n\n"
+        }
+      },
+      "permissions": {
+        "name": "Permissões",
+        "description": "Verifica se o bot tem as permissões necessárias para funcionar",
+        "body": {
+          "title": "# Permissões\n\n%s1",
+          "view_channels": "Ver canais: necessário para encontrar a mensagem em que o botão atualizar foi usado",
+          "read_message_history": "Histórico de mensagens lidas: necessário para encontrar a mensagem para atualizar",
+          "attach_files": "Anexar arquivos: necessário para adicionar imagens a comandos baseados em imagens",
+          "external_emojis": "Emojis externos: necessário para adicionar bandeiras nacionais e emojis de classe de tanque"
+        }
+      },
+      "ping": {
+        "name": "ping",
+        "description": "Verifique se o bot está vivo.",
+        "body": {
+          "pong": "Pong 🏓",
+          "pong_with_time": "Pong 🏓 - %s1ms"
+        },
+        "subcommands": {
+          "blitzkit": {
+            "name": "blitzkit",
+            "description": "Ping BlitzKit"
+          },
+          "wotb": {
+            "name": "wotb",
+            "description": "Ping World of Tanks Blitz"
+          }
+        }
+      },
+      "player_info": {
+        "name": "informação do jogador",
+        "description": "Informações básicas sobre um jogador",
+        "body": {
+          "title": "%s1's informações",
+          "nickname": "Apelido",
+          "battles": "Batalhas",
+          "winrate": "Taxa de vitória",
+          "account_id": "ID da conta",
+          "created": "Criado",
+          "last_battle": "Última batalha"
+        }
+      },
+      "rating": {
+        "name": "classificação",
+        "description": "Estatísticas de jogador de classificação",
+        "subcommands": {
+          "today": {
+            "name": "hoje",
+            "description": "Estatísticas de classificação hoje"
+          },
+          "season": {
+            "name": "temporada",
+            "description": "Estatísticas de classificação desta temporada"
+          }
+        },
+        "body": {
+          "subtitle": {
+            "today": "Estatísticas de classificação hoje",
+            "season": "Estatísticas de classificação desta temporada"
+          }
+        },
+        "errors": {
+          "no_participation": "# %s1 não jogou classificação\n\nEste jogador não participou do modo de classificação nesta temporada.",
+          "unrecorded_stats": "# Estatísticas atualmente indisponível\n\nWargaming pode estar no momento, enfrentando tempo de inatividade do servidor. Se houver uma temporada em curso, as estatísticas deverão ser disponibilizadas dentro de 24 horas."
+        }
+      }
+    }
+  },
+  "website": {
+    "settings": {
+      "dev_mode": "Modo de desenvolvimento",
+      "language": "Idioma"
+    },
+    "common": {
+      "player_search": {
+        "hint": "Procurar jogadores...",
+        "no_results": "Sem resultados",
+        "searching": "Pesquisando..."
+      },
+      "copy_button": {
+        "copied": "Copiado!"
+      },
+      "tank_search": {
+        "search_bar_hint": "Procurar tanques...",
+        "recent": "Visto recentemente",
+        "select_all": "Selecionar todos",
+        "count_singular": "1 tanque",
+        "count_plural": "%s1 tanques",
+        "sorting_by": "Ordenando por %s1",
+        "no_tanks_found": {
+          "body": "Nenhum tanque encontrado.",
+          "search_again": "Tente pesquisar novamente.",
+          "clear_filters": "Tente limpar os filtros."
+        },
+        "sort": {
+          "meta.none": "nenhum",
+          "survivability.health": "vida",
+          "survivability.viewRange": "alcance de visão",
+          "survivability.camouflageStill": "camuflagem quando estacionário",
+          "survivability.camouflageMoving": "camuflagem em movimento",
+          "survivability.camouflageShooting": "camuflagem ao disparar",
+          "survivability.volume": "volume",
+          "survivability.length": "comprimento",
+          "fire.dpm": "DPM padrão",
+          "fire.dpmPremium": "DPM premium",
+          "fire.reload": "recarga",
+          "fire.caliber": "calibre",
+          "fire.standardPenetration": "penetração padrão",
+          "fire.premiumPenetration": "penetração premium",
+          "fire.damage": "dano",
+          "fire.moduleDamage": "dano a módulos",
+          "fire.shellVelocity": "velocidade do projétil",
+          "fire.shellRange": "alcance de projétil",
+          "fire.shellCapacity": "capacidade de projéteis",
+          "fire.aimTime": "tempo de mira",
+          "fire.dispersionStill": "dispersão quando estacionário",
+          "fire.dispersionMoving": "dispersão em movimento",
+          "fire.gunDepression": "depressão da arma",
+          "fire.gunElevation": "elevação da arma",
+          "maneuverability.forwardsSpeed": "velocidade frontal",
+          "maneuverability.backwardsSpeed": "velocidade de ré",
+          "maneuverability.power": "potência",
+          "maneuverability.powerToWeight": "relação peso/potência",
+          "maneuverability.weight": "peso",
+          "maneuverability.traverseSpeed": "taxa de rotação"
+        },
+        "sort_dropdown": {
+          "label": "Ordenar",
+          "groups": {
+            "sort": {
+              "no_sort": "Sem ordenação",
+              "label": "Ordenar por",
+              "fire": "Fogo",
+              "maneuverability": "Manobrabilidade",
+              "survivability": "Capacidade de sobrevivência"
+            },
+            "direction": {
+              "label": "Direção",
+              "ascending": "Ascendente",
+              "descending": "Descendente"
+            }
+          }
+        }
+      },
+      "warnings": {
+        "test": "Os tanques em testes estão sujeitos a alterações e não podem representar o produto final."
+      }
+    },
+    "home": {
+      "hero": {
+        "credit": "Por %s1 ❤️"
+      },
+      "hot_tanks": {
+        "title": "Tanques populares",
+        "subtitle": "Últimos %s1 dias"
+      },
+      "other_projects": {
+        "title": "Outros projetos legais"
+      },
+      "help_translate": "Por favor, ajude a traduzir %s1 para %s2!",
+      "seo_description": "Ferramentas para tudo World of Tanks Blitz"
+    },
+    "tools": {
+      "tankopedia": {
+        "name": "Tanquepedia",
+        "button": "Encontrar tanques",
+        "description": "Blitz enciclopédia de tanques",
+        "seo_description": "Estatísticas, blindagem, e mais para todos os tanques de Wolrd of Tanks Blitz",
+        "tank_seo_title": "%s1 - Nível %s2 %s3 %s4 | %s5 Tanquepedia | World of Tanks Blitz (WoTB)",
+        "tank_seo_description": "%s1 blindagem, estatísticas, equipamentos, provisões e mais. %s2 DPM, %s3hp alfa, %s4mm de penetração, %s5km/h velocidade máxima, %s6hp vida.",
+        "sandbox": {
+          "poses": {
+            "hull_down": "Casco para baixo",
+            "face_hug": "Abraço facial",
+            "default": "Padrão"
+          },
+          "settings": {
+            "armor": "Blindagem",
+            "green_penetration": "Penetração verde",
+            "hide_model_under_armor": "Ocultar modelo sob blindagem",
+            "opaque": "Opaco",
+            "dev_wireframe": "DEV: wireframe",
+            "environment": "Ambiente",
+            "show_grid": "Exibir grade"
+          },
+          "screenshot": {
+            "download": "Download",
+            "copy": "Copiar"
+          },
+          "model": {
+            "name": "Modelo"
+          },
+          "dynamic": {
+            "name": "Blindagem dinâmica",
+            "custom_shell": {
+              "type": "Tipo",
+              "caliber": "Calibre",
+              "penetration": "Penetração",
+              "normalization": "Normalização",
+              "ricochet": "Ricochete",
+              "explosion_radius": "Raio de Explosão",
+              "exit": "Sair",
+              "reset": "Restaurar"
+            },
+            "advanced": "Realce avançado",
+            "shooter": "Atirador:",
+            "shot_card": {
+              "element": {
+                "primary": "Primário",
+                "spaced": "Espaçado",
+                "external": "Externo",
+                "gap": "Lacuna",
+                "gun": "Arma",
+                "track": "Esteiras"
+              },
+              "status": {
+                "penetration": "%s1HP penetração",
+                "blocked": "Bloqueado",
+                "ricochet": "Ricochete",
+                "splash": "%s1hp respingo"
+              },
+              "stats": {
+                "thickness_and_angle": "%s1mm %s2°",
+                "nominal": "%s1mm nominal",
+                "ricochet_loss": "%s1% penetração"
+              }
+            }
+          },
+          "static": {
+            "name": "Blindagem estática",
+            "primary": "Primário",
+            "spaced": "Espaçada",
+            "external": "Externa",
+            "edit": {
+              "label": "Editar",
+              "reset": "Redefinir"
+            }
+          }
+        },
+        "meta": {
+          "back": "Voltar",
+          "compare": "Comparar",
+          "swap": {
+            "button": "Trocar",
+            "title": "Trocar tanques"
+          },
+          "vanilla": "Padrão",
+          "opentest": "TesteAberto",
+          "full_name": "Nome completo",
+          "nation": "Nação",
+          "class": "Classe",
+          "tier": "Nível",
+          "type": "Tipo",
+          "dev_id": "DEV: ID",
+          "purchase": "Preço de compra",
+          "restoration": "Preço de recuperação",
+          "sale": "Preço de venda",
+          "research": "EXP de pesquisa"
+        },
+        "tech_tree": {
+          "title": "Árvore tecnológica",
+          "battle": "1 batalha",
+          "battles": "%s1 batalhas",
+          "route": "Rota %s1 de %s2"
+        },
+        "game_modes": {
+          "title": "Habilidades do modo de jogo"
+        },
+        "review": {
+          "title": "Vídeos de análise",
+          "disclaimer": "BlitzKit não aprova nenhum vídeo de análise.",
+          "join": "Candidate-se para %s1 um programa YouTuber"
+        },
+        "configuration": {
+          "title": "Configuração",
+          "modules": {
+            "title": "Módulos",
+            "stock": "Padrão",
+            "upgrade": "Melhorar"
+          },
+          "equipment": {
+            "title": "Equipamento",
+            "clear": "Limpar"
+          },
+          "provisions": {
+            "title": "Provisões",
+            "clear": "Limpar"
+          },
+          "consumables": {
+            "title": "Consumíveis",
+            "clear": "Limpar",
+            "info": "Os consumíveis amarelos não afetam as estatísticas."
+          },
+          "skills": {
+            "title": "Habilidades da tripulação",
+            "clear": "Limpar",
+            "maximize": "Maximizar",
+            "info": "As habilidades amarelas só se aplicam em circunstâncias especiais. Segure Espaço para alternar rapidamente entre o nível 0 e 7."
+          },
+          "miscellaneous": {
+            "title": "Diversos"
+          }
+        },
+        "characteristics": {
+          "title": "Características",
+          "compare": {
+            "label": "Comparar com",
+            "class": "Nível %s1 %s2",
+            "tier": "Tudo de nível %s1",
+            "all": "Todos os tanques"
+          },
+          "values": {
+            "shell_index": "Projétil %s1",
+            "at_distance": "À %s1m",
+            "at_distance_slider_label": "Distância",
+            "dispersion_at_distance": "Dispersão à %s1m",
+            "gun_flexibility": "Flexibilidade da arma",
+            "speed": "Velocidade",
+            "terrain_coefficients": "Coeficientes do terreno",
+            "raw_terrain_coefficients": "Coeficientes brutos do terreno",
+            "power_to_weight_ratio": "Taxa de peso para potência",
+            "hull_traverse_speed": "Taxa de rotação do casco",
+            "camouflage": "Camuflagem",
+            "reload": "Recarga",
+            "crewCount": "Quantidade de tripulantes",
+            "shellNormalization": "Normalização",
+            "shellRicochet": "Ricochete",
+            "dpm": "DPM",
+            "dpmEffective": "Efetivo aos 60s",
+            "shells": "Projéteis",
+            "mostOptimalShellIndex": "Projétil mais ideal",
+            "shellReloads": "Recarga de projétil",
+            "shellReload": "Recarregamento de projétil",
+            "intraClip": "Intra-clipe",
+            "caliber": "Calibre",
+            "penetration": "Penetração",
+            "damage": "Dano",
+            "clipDamage": "Potencial de clipe",
+            "moduleDamage": "Dano a módulos",
+            "explosionRadius": "Raio de Explosão",
+            "shellVelocity": "Velocidade do projétil",
+            "aimTime": "Tempo de mira",
+            "dispersion": "Parado",
+            "dispersionMoving": "Em movimento",
+            "dispersionHullTraversing": "Deslocamento de casco",
+            "dispersionTurretTraversing": "Deslocamento de torre",
+            "dispersionShooting": "Disparando",
+            "dispersionGunDamaged": "Arma danificada",
+            "gunDepression": "Depressão",
+            "gunElevation": "Elevação",
+            "gunFrontalDepression": "Depressão Frontal",
+            "gunFrontalElevation": "Elevação frontal",
+            "gunRearDepression": "Depressão traseira",
+            "gunRearElevation": "Elevação traseira",
+            "azimuthLeft": "Azimute à esquerda",
+            "azimuthRight": "Azimute à direita",
+            "speedForwards": "Para frente",
+            "speedBackwards": "Para trás",
+            "hardTerrainCoefficient": "Difícil",
+            "hardTerrainCoefficientRaw": "Difícil",
+            "mediumTerrainCoefficient": "Médio",
+            "mediumTerrainCoefficientRaw": "Médio",
+            "softTerrainCoefficient": "Macio",
+            "softTerrainCoefficientRaw": "Macio",
+            "enginePower": "Potência do motor",
+            "powerToWeightRatioHardTerrain": "Difícil",
+            "powerToWeightRatioMediumTerrain": "Médio",
+            "powerToWeightRatioSoftTerrain": "Macio",
+            "weight": "Peso",
+            "turretTraverseSpeed": "Taxa de rotação da torreta",
+            "gunTraverseSpeed": "Taxa de rotação da arma",
+            "hullTraverseHardTerrain": "Difícil",
+            "hullTraverseMediumTerrain": "Médio",
+            "hullTraverseSoftTerrain": "Macio",
+            "health": "Vida",
+            "fireChance": "Chance de incêndio",
+            "viewRange": "Alcance de visão",
+            "camouflageStill": "Parado",
+            "camouflageMoving": "Em movimento",
+            "camouflageShootingStill": "Parado",
+            "camouflageShootingMoving": "Em movimento",
+            "camouflageCaughtOnFire": "Preso em chamas",
+            "width": "Largura",
+            "height": "Altura",
+            "length": "Comprimento",
+            "volume": "Volume",
+            "shellRange": "Alcance de projétil",
+            "shellCapacity": "Capacidade de projéteis",
+            "gunType": "Tipo de arma",
+            "penetrationAt250m": "Penetração à 250m"
+          }
+        },
+        "firepower": {
+          "title": "Poder de fogo"
+        },
+        "crew": {
+          "title": "Treinamento da tripulação",
+          "info": "representa os outros papéis que um membro da tripulação pode assumir.",
+          "count": "Quantidade de tripulantes",
+          "commander": "Comandante",
+          "gunner": "Artilheiro",
+          "driver": "Motorista",
+          "radioman": "Radialista",
+          "loader": "Carregador"
+        },
+        "maneuverability": {
+          "title": "Manobrabilidade"
+        },
+        "survivability": {
+          "title": "Capacidade de sobrevivência"
+        }
+      },
+      "compare": {
+        "name": "Comparar",
+        "button": "Comparar tanques",
+        "description": "Comparar estatísticas de tanques",
+        "seo_description": "Compare estatísticas dos tanques e arsenais no World of Tanks Blitz",
+        "actions": {
+          "add": {
+            "button": "Adicionar",
+            "title": "Adicionar tanques",
+            "description": "Selecione tanques para adicionar à comparação"
+          },
+          "clear": "Limpar",
+          "deltas": {
+            "none": "Sem deltas",
+            "percentage": "Porcentagem",
+            "absolute": "Absoluto"
+          }
+        },
+        "no_tanks": {
+          "title": "Nenhum tanque selecionado",
+          "body": "Pressione o botão Adicionar para começar"
+        },
+        "table": {
+          "equipment": {
+            "clear": "Limpar",
+            "apply_to_all": "Aplicar a todos"
+          },
+          "skills": {
+            "clear": "Limpar",
+            "maximize": "Maximizar"
+          },
+          "modules": {
+            "stock": "Padrão",
+            "upgrade": "Melhorar"
+          },
+          "provisions": {
+            "clear": "Limpar"
+          },
+          "consumables": {
+            "clear": "Limpar"
+          }
+        }
+      },
+      "performance": {
+        "name": "Desempenho",
+        "button": "Ver tanques",
+        "description": "Estatísticas de desempenho do tanque",
+        "seo_description": "Melhores tanques e suas performances no World of Tanks Blitz",
+        "estimation": {
+          "body": "Estatísticas estimadas baseadas em %s1 jogadores. Atualizado %s2 atrás.",
+          "hours": "%s1 horas",
+          "minutes": "%s1 minutos"
+        },
+        "player_count": {
+          "label": "Número de jogadores"
+        },
+        "table": {
+          "tanks": {
+            "header": "Tanque",
+            "total": "Total"
+          },
+          "stats": {
+            "winrate": "Taxa de vitória",
+            "players": "Jogadores",
+            "damage": "Dano",
+            "survival": "Sobrevivência",
+            "xp": "EXP",
+            "kills": "Abates",
+            "spots": "Detecções",
+            "accuracy": "Precisão",
+            "shots": "Disparos",
+            "hits": "Acertos",
+            "damage_ratio": "Razão de dano",
+            "damage_taken": "Dano tomado",
+            "capture_points": "Pontos de captura"
+          }
+        }
+      },
+      "gallery": {
+        "name": "Galeria",
+        "button": "Procurar todos",
+        "description": "Avatares do jogador Blitz",
+        "seo_description": "Todos os avatares do jogador World of Tanks Blitz",
+        "last_updated": "Última atualização em %s1",
+        "search": {
+          "hint": "Procurar avatares...",
+          "results": "%s1 avatares"
+        }
+      },
+      "session": {
+        "name": "Sessão",
+        "button": "Iniciar rastreamento",
+        "description": "Estatísticas da temporada ao vivo",
+        "seo_description": "Registre suas estatísticas em tempo real enquanto você joga World of Tanks Blitz",
+        "search": {
+          "lookup": "Procure um jogador para começar",
+          "hint": "Procurar jogadores...",
+          "searching": "Pesquisando...",
+          "no_results": "Nenhum jogador encontrado"
+        },
+        "controls": {
+          "title": "Rastreando %s1",
+          "subtitle": "Desde %s1",
+          "reset": "Restaurar",
+          "change": "Mudança"
+        },
+        "no_cc": {
+          "title": "Não é possível acompanhar uma conta de Contribuidor da Comunidade (CC)",
+          "body": "Contas CC (colaborador da comunidade) não possuem estatísticas públicas de tanques. Estamos no processo de adicionar incorporações para contas CC, fique ligado.",
+          "alright": "Tudo bem"
+        },
+        "no_battles": {
+          "title": "Sem Batalhas",
+          "hint": "Vá em frente e jogue uma partida"
+        },
+        "table": {
+          "tank": "Tanque",
+          "total": "Total",
+          "remove": "Remover"
+        }
+      },
+      "tier_list": {
+        "name": "Tier list",
+        "button": "Ranque de tanques",
+        "description": "Ranque de tanques Blitz",
+        "seo_description": "Explore listas de classificação de tanques do melhor para o pior, baseado nas classificações dos jogadores e no desempenho estatístico em World of Tanks Blitz",
+        "buttons": {
+          "reset": "Restaurar",
+          "share": "Compartilhar"
+        }
+      },
+      "embed": {
+        "name": "Incorporar",
+        "button": "Crie agora",
+        "description": "Incorporações para streaming",
+        "seo_description": "Crie incorporações para streaming do World of Tanks Blitz com extrema personalização",
+        "coming_soon": "Mais incorporações vindo em breve.",
+        "suggest": "Sugira ideias.",
+        "preview": {
+          "title": "Pré-visualização de exemplo",
+          "upload": "Enviar fundo de teste"
+        },
+        "configuration": {
+          "import": {
+            "title": "Importar",
+            "description": "Cole sua URL atual se você já tiver uma para importar suas configurações",
+            "hint": "Colar URL...",
+            "apply": "Aplicar",
+            "idiot_title": "URL inválida",
+            "idiot_description": "Tente colar a URL que BlitzKit gerou anteriormente, seu ganso idiota!",
+            "idiot_button": "Okay, foi mal"
+          },
+          "export": {
+            "title": "Exportar",
+            "description": "Copiar todas as propriedades para seu software de streaming",
+            "generate": {
+              "button": "Gerar URL",
+              "title": "Gerar URL",
+              "subtitle": "Procure uma conta para acompanhar",
+              "cancel": "Cancelar",
+              "success": {
+                "title": "Copiar URL",
+                "info": "Gerou a URL para %s1. A incorporação começará a rastrear assim que a URL for colada. Redefina a qualquer momento clicando com o botão direito no PC ou pressionando longamente no celular e, em seguida, selecionando \"Redefinir\".",
+                "back": "Voltar",
+                "copy": "Copiar URL"
+              }
+            },
+            "css": "Copiar CSS",
+            "width": "Copiar Largura",
+            "height": "Copiar Altura",
+            "framerate": "Copiar Framerate"
+          },
+          "customize": {
+            "title": "Personalizar",
+            "reset": "Restaurar",
+            "description": "Sinos e assobios de sua incorporação"
+          }
+        },
+        "types": {
+          "breakdown": {
+            "name": "Divisão",
+            "options": {
+              "width": "Largura",
+              "height": "Altura",
+              "showTotal": "Exibir total",
+              "listGap": "Listar lacuna",
+              "listMaxTanks": "Máximo de tanques",
+              "cardRadius": "Raio do cartão",
+              "cardHeaderBackgroundColor": "Cor de fundo do cabeçalho do cartão",
+              "cardHeaderPadding": "Preenchimento do cabeçalho do cartão\n",
+              "cardTitle": "Título do cartão",
+              "cardTitleTypeColor": "Tipo de cor do título do cartão",
+              "cardTitleClassIcon": "Ícone de classe do título do cartão",
+              "cardBodyBackgroundColor": "Cor de fundo do corpo do cartão",
+              "cardBodyPadding": "Preenchimento do corpo do cartão",
+              "columnGap": "Lacuna da coluna",
+              "columnValue": "Valor da coluna",
+              "columnLabel": "Rótulo da coluna",
+              "column1": "Coluna 1",
+              "column2": "Coluna 2",
+              "column3": "Coluna 3",
+              "column4": "Coluna 4",
+              "column1CustomLabel": "Rótulo da coluna 1",
+              "column2CustomLabel": "Rótulo da coluna 2",
+              "column3CustomLabel": "Rótulo da coluna 3"
+            }
+          }
+        }
+      },
+      "charts": {
+        "name": "Gráfico",
+        "button": "Nerdice para fora",
+        "description": "Muitos gráficos",
+        "seo_description": "Tabelas e gráficos sobre qualquer coisa e tudo sobre tanques, jogadores e eventos em World of Tanks Blitz"
+      },
+      "rating": {
+        "name": "Classificação",
+        "button": "Ver tabela de classificação",
+        "description": "Classificação completa da tabela de classificação",
+        "seo_description": "Classificação completa ao vivo e arquivada para World of Tanks Blitz"
+      },
+      "discord": {
+        "name": "Bot do discord",
+        "button": "Instale agora",
+        "description": "Estatísticas diretamente no Discord",
+        "seo_description": "Obtenha estatísticas diretamente no Discord com o bot do Discord de BlitzKit"
+      },
+      "more": {
+        "name": "Mais em breve",
+        "button": "Juntar-se ao Discord",
+        "description": "O que estamos fazendo",
+        "seo_description": "O que estamos fazendo com BlitzKit"
+      },
+      "players": {
+        "name": "Jogadores",
+        "button": "Buscar jogador",
+        "description": "Estatísticas periódicas de jogadores",
+        "seo_description": "Estatísticas periódicas de jogadores em World of Tanks Blitz"
+      },
+      "home": {
+        "name": "Página Principal",
+        "button": "Introdução",
+        "description": "Comece com BlitzKit",
+        "seo_description": "Comece com BlitzKit"
+      },
+      "blitz_analysis": {
+        "name": "AnaliseBlitz[]",
+        "button": "Analise agora",
+        "description": "Estatísticas médias históricas ricas",
+        "seo_description": "Estatísticas médias históricas ricas no World of Tanks Blitz"
+      },
+      "blitz_insider": {
+        "name": "Assistente Blitz",
+        "button": "Descubra hoje",
+        "description": "Estatísticas da temporada dentro do jogo",
+        "seo_description": "Estatísticas da sessão no jogo World of Tanks Blitz"
+      }
+    },
+    "footer": {
+      "motto": "Tudo World of Tanks Blitz",
+      "copyright": "Não afiliado à Wargaming ou qualquer serviço",
+      "about": {
+        "title": "Sobre",
+        "credits": "Créditos",
+        "discord": "Discord",
+        "github": "GitHub",
+        "patches": "Atualizações"
+      },
+      "legal": {
+        "title": "Legal",
+        "privacy": "Política de privacidade",
+        "terms": "Termos de serviço"
+      }
+    }
+  }
+}

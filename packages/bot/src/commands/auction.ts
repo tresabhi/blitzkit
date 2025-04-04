@@ -3,17 +3,18 @@ import {
   Region,
   regionToRegionSubdomain,
 } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n';
 import { tankDefinitions } from '../core/blitzkit/nonBlockingPromises';
 import { chunkLines } from '../core/discord/chunkLines';
 import { createLocalizedCommand } from '../core/discord/createLocalizedCommand';
 import { translator } from '../core/localization/translator';
 import { CommandRegistry } from '../events/interactionCreate';
 
-interface Auction {
+type Auction = null | {
   count: number;
   has_next: boolean;
   results: Result[];
-}
+};
 
 type Result =
   | {
@@ -75,7 +76,7 @@ export const auctionCommand = new Promise<CommandRegistry>((resolve) => {
     command: createLocalizedCommand('auction'),
 
     async handler(interaction) {
-      const { t, translate } = translator(interaction.locale);
+      const { strings } = translator(interaction.locale);
       const awaitedTankDefinitions = await tankDefinitions;
       const region: Region = 'com';
       const pageSize = 80;
@@ -87,16 +88,16 @@ export const auctionCommand = new Promise<CommandRegistry>((resolve) => {
           pageSize
         }&type[]=vehicle&saleable=${saleable}`,
       ).then((response) => response.json() as Promise<Auction>);
-      const saleableTanks = data.results.filter((result) => result.available);
 
-      if (saleableTanks.length === 0) {
-        return t`bot.commands.auction.errors.no_auction`;
+      if (data === null) {
+        return strings.bot.commands.auction.errors.no_auction;
       }
 
+      const saleableTanks = data.results.filter((result) => result.available);
       const nextPricesTimestamp = saleableTanks[0].next_price_timestamp;
 
-      const title = `# ${t`bot.commands.auction.body.title`}`;
-      const subtitle = `${translate('bot.commands.auction.body.subtitle', [
+      const title = `# ${strings.bot.commands.auction.body.title}`;
+      const subtitle = `${literals(strings.bot.commands.auction.body.subtitle, [
         `${saleableTanks.length} / ${data.results.length}`,
         `<t:${nextPricesTimestamp}:R>`,
         '<https://wotblitz.com/auction/>',
@@ -112,15 +113,18 @@ export const auctionCommand = new Promise<CommandRegistry>((resolve) => {
         const next =
           data.next_price === null
             ? ''
-            : `\n-# ${translate('bot.commands.auction.body.next', [
+            : `\n-# ${literals(strings.bot.commands.auction.body.next, [
                 `<:gold:1317173197082333244> ${data.next_price.value.toLocaleString(
                   interaction.locale,
                 )}`,
               ])}`;
-        const available = translate('bot.commands.auction.body.available', [
-          data.current_count.toLocaleString(interaction.locale),
-          data.initial_count.toLocaleString(interaction.locale),
-        ]);
+        const available = literals(
+          strings.bot.commands.auction.body.available,
+          [
+            data.current_count.toLocaleString(interaction.locale),
+            data.initial_count.toLocaleString(interaction.locale),
+          ],
+        );
         const isOut = data.current_count === 0;
         const outString = isOut ? '~~' : '';
         const isLow = data.current_count <= WARNING_COUNT;

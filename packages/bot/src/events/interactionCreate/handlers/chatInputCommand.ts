@@ -8,21 +8,21 @@ import {
   InteractionReplyOptions,
 } from 'discord.js';
 import { InteractionRawReturnable, commands } from '..';
+import { UserError } from '../../../core/blitzkit/userError';
 import { buttonLink } from '../../../core/discord/buttonLink';
 import { embedWarning } from '../../../core/discord/embedWarning';
 import { normalizeInteractionReturnable } from '../../../core/discord/normalizeInteractionReturnable';
 import { psa } from '../../../core/discord/psa';
 import { translator } from '../../../core/localization/translator';
 import { Writeable } from '../../../types/writable';
-import { UserError } from '../../../core/blitzkit/userError';
 
 export async function handleChatInputCommand(
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
+  await interaction.deferReply();
+
   const awaitedCommands = await commands;
   const registry = awaitedCommands[interaction.commandName];
-
-  await interaction.deferReply();
 
   try {
     const returnable = await registry.handler(interaction);
@@ -126,16 +126,16 @@ export async function handleChatInputCommand(
       index++;
     }
   } catch (error) {
-    const { t } = translator(interaction.locale);
+    const { strings } = translator(interaction.locale);
+
     const components = [
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
-          .setLabel(t`bot.common.errors.get_help`)
+          .setLabel(strings.bot.common.errors.get_help)
           .setURL('https://discord.gg/nDt7AjGJQH')
           .setStyle(ButtonStyle.Link),
       ),
     ];
-
     if (error instanceof UserError) {
       interaction.editReply({
         content: error.message,
@@ -143,9 +143,8 @@ export async function handleChatInputCommand(
       });
     } else {
       console.error(interaction.commandName, error);
-
       interaction.editReply({
-        content: t`bot.common.errors.uncaught_error`,
+        content: strings.bot.common.errors.uncaught_error,
         components,
       });
     }

@@ -1,0 +1,50 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { capitalize } from 'lodash-es';
+import { embedConfigurations } from '../../../../../constants/embeds';
+import BaseLayout from '../../../../../layouts/BaseLayout.astro';
+import { getStaticPaths as parentGetStaticPaths } from '../index.astro';
+import { Page } from './_index';
+
+export const getStaticPaths = (() => {
+  const parentPaths = parentGetStaticPaths();
+
+  return Object.keys(embedConfigurations)
+    .map((embed) =>
+      parentPaths.map((parent) => ({
+        params: {
+          ...parent.params,
+          embed: embed as keyof typeof embedConfigurations,
+        },
+      })),
+    )
+    .flat();
+}) satisfies GetStaticPaths;
+
+const { locale } = Astro.params;
+---
+
+<title>BlitzKit - {capitalize(Astro.params.embed)} embed</title>
+
+<style is:global>
+  @keyframes fade-out-border {
+    from {
+      outline: 1rem solid #ff0000ff;
+    }
+    to {
+      outline: 0.75rem solid #ff000000;
+    }
+  }
+
+  .preview-container-animated {
+    animation: fade-out-border 0.5s linear;
+  }
+
+  .preview-container-animated:hover {
+    outline: 1rem solid #ff000080;
+  }
+</style>
+
+<BaseLayout>
+  <Page {locale} client:load embed={Astro.params.embed} />
+</BaseLayout>

@@ -2,6 +2,8 @@ syntax = "proto2";
 
 package blitzkit;
 
+import "packages/core/src/protos/i18n.proto";
+
 message GameDefinitions {
   required string version = 1;
   repeated string nations = 2;
@@ -10,7 +12,7 @@ message GameDefinitions {
 }
 
 message GameMode {
-  required string name = 1;
+  required I18nString name = 1;
 }
 
 message GameModeRole {

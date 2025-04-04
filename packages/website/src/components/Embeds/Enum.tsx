@@ -1,5 +1,6 @@
 import { Select } from '@radix-ui/themes';
-import type { EmbedPreviewControllerProps } from '../../pages/tools/embed/[embed]/_index';
+import { useLocale } from '../../hooks/useLocale';
+import type { EmbedPreviewControllerProps } from '../../pages/[...locale]/tools/embed/[embed]/_index';
 import { EmbedState } from '../../stores/embedState';
 import type {
   EmbedConfigItemType,
@@ -13,6 +14,7 @@ export function Enum({
   config: EmbedConfigItemType<EmbedItemType.Enum>;
 }) {
   const mutateEmbedState = EmbedState.useMutation();
+  const { locale } = useLocale();
 
   return (
     <Select.Root
@@ -27,7 +29,7 @@ export function Enum({
       <Select.Content>
         {config.options.map((option) => (
           <Select.Item key={option.value} value={option.value}>
-            {option.label}
+            {option.locales[locale]}
           </Select.Item>
         ))}
       </Select.Content>

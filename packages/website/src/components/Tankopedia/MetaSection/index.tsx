@@ -5,17 +5,18 @@ import {
   TankType,
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
-import strings from '@blitzkit/core/lang/en.json';
 import { ChevronLeftIcon, MixIcon, UpdateIcon } from '@radix-ui/react-icons';
 import { Button, Code, Dialog, Flex, Link } from '@radix-ui/themes';
 import { useState } from 'react';
 import { awaitableModelDefinitions } from '../../../core/awaitables/modelDefinitions';
 import { awaitableProvisionDefinitions } from '../../../core/awaitables/provisionDefinitions';
 import { tankToDuelMember } from '../../../core/blitzkit/tankToDuelMember';
+import { useLocale } from '../../../hooks/useLocale';
 import { App } from '../../../stores/app';
 import { Duel } from '../../../stores/duel';
 import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
 import { classIcons } from '../../ClassIcon';
+import { LinkI18n } from '../../LinkI18n';
 import { ScienceIcon } from '../../ScienceIcon';
 import { TankSearch } from '../../TankSearch';
 import { Listing } from './components/Listing';
@@ -37,24 +38,28 @@ export function MetaSection() {
   const mutateDuel = Duel.useMutation();
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const [showSwapDialog, setShowSwapDialog] = useState(false);
+  const { locale, strings, unwrap } = useLocale();
 
   return (
     <Flex justify="center" align="center">
       <Flex direction="column" align="center" gap="6">
         <Flex gap="2" wrap="wrap" justify="center" align="center">
-          <Link href="/tools/tankopedia">
+          <LinkI18n locale={locale} href="/tools/tankopedia">
             <Button variant="outline">
               <ChevronLeftIcon />
-              Back
+              {strings.website.tools.tankopedia.meta.back}
             </Button>
-          </Link>
+          </LinkI18n>
 
-          <Link href={`/tools/compare?tanks=${compareTanks.join('%2C')}`}>
+          <LinkI18n
+            locale={locale}
+            href={`/tools/compare?tanks=${compareTanks.join('%2C')}`}
+          >
             <Button variant="outline">
               <MixIcon />
-              Compare
+              {strings.website.tools.tankopedia.meta.compare}
             </Button>
-          </Link>
+          </LinkI18n>
 
           {assertSecret(import.meta.env.PUBLIC_PROMOTE_OPENTEST) === 'true' && (
             <Link
@@ -68,8 +73,8 @@ export function MetaSection() {
                 <ScienceIcon height="1.25em" width="1.25em" />
                 {assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH) ===
                 'opentest'
-                  ? 'Vanilla'
-                  : 'OpenTest'}
+                  ? strings.website.tools.tankopedia.meta.vanilla
+                  : strings.website.tools.tankopedia.meta.opentest}
               </Button>
             </Link>
           )}
@@ -78,12 +83,14 @@ export function MetaSection() {
             <Dialog.Trigger>
               <Button>
                 <UpdateIcon />
-                Swap
+                {strings.website.tools.tankopedia.meta.swap.button}
               </Button>
             </Dialog.Trigger>
 
             <Dialog.Content>
-              <Dialog.Title>Swap tanks</Dialog.Title>
+              <Dialog.Title>
+                {strings.website.tools.tankopedia.meta.swap.title}
+              </Dialog.Title>
 
               <TankSearch
                 compact
@@ -116,9 +123,11 @@ export function MetaSection() {
         >
           <Flex direction="column" width="100%">
             {protagonist.name_full && (
-              <Listing label="Full-name">{protagonist.name_full}</Listing>
+              <Listing label={strings.website.tools.tankopedia.meta.full_name}>
+                {unwrap(protagonist.name_full)}
+              </Listing>
             )}
-            <Listing label="Nation">
+            <Listing label={strings.website.tools.tankopedia.meta.nation}>
               <Flex align="center" gap="1">
                 <img
                   style={{ width: '1em', height: '1em' }}
@@ -132,17 +141,17 @@ export function MetaSection() {
                 }
               </Flex>
             </Listing>
-            <Listing label="Class">
+            <Listing label={strings.website.tools.tankopedia.meta.class}>
               <Flex align="center" gap="1">
                 <ClassIcon width="1em" height="1em" />
                 {strings.common.tank_class_short[protagonist.class]}
               </Flex>
             </Listing>
-            <Listing label="Tier">
+            <Listing label={strings.website.tools.tankopedia.meta.tier}>
               {TIER_ROMAN_NUMERALS[protagonist.tier]}
             </Listing>
             <Listing
-              label="Type"
+              label={strings.website.tools.tankopedia.meta.type}
               color={
                 protagonist.type === TankType.COLLECTOR
                   ? 'blue'
@@ -157,12 +166,12 @@ export function MetaSection() {
 
           <Flex direction="column" width="100%">
             {developerMode && (
-              <Listing label="DEV: ID">
+              <Listing label={strings.website.tools.tankopedia.meta.dev_id}>
                 <Code>{protagonist.id}</Code>
               </Listing>
             )}
             {protagonist.type === TankType.PREMIUM && (
-              <Listing label="Purchase price">
+              <Listing label={strings.website.tools.tankopedia.meta.purchase}>
                 <Flex align="center" gap="1">
                   {protagonist.price.value / 400}
                   <img
@@ -174,14 +183,14 @@ export function MetaSection() {
               </Listing>
             )}
             <Listing
-              label={`${
+              label={
                 protagonist.type === TankType.RESEARCHABLE
-                  ? 'Purchase'
-                  : 'Restoration'
-              } price`}
+                  ? strings.website.tools.tankopedia.meta.purchase
+                  : strings.website.tools.tankopedia.meta.restoration
+              }
             >
               <Flex align="center" gap="1">
-                {protagonist.price.value.toLocaleString()}
+                {protagonist.price.value.toLocaleString(locale)}
                 <img
                   style={{ width: '1em', height: '1em' }}
                   alt={TankPriceType[protagonist.price.type]}
@@ -195,9 +204,9 @@ export function MetaSection() {
                 />
               </Flex>
             </Listing>
-            <Listing label="Sale price">
+            <Listing label={strings.website.tools.tankopedia.meta.sale}>
               <Flex align="center" gap="1">
-                {(protagonist.price.value / 2).toLocaleString()}
+                {(protagonist.price.value / 2).toLocaleString(locale)}
                 <img
                   style={{ width: '1em', height: '1em' }}
                   alt={TankPriceType[protagonist.price.type]}
@@ -212,12 +221,12 @@ export function MetaSection() {
               </Flex>
             </Listing>
             {protagonist.research_cost && (
-              <Listing label="Research XP">
+              <Listing label={strings.website.tools.tankopedia.meta.research}>
                 <Flex align="center" gap="1">
                   {(
                     protagonist.research_cost.research_cost_type!
                       .value as number
-                  ).toLocaleString()}
+                  ).toLocaleString(locale)}
                   <img
                     style={{ width: '1em', height: '1em' }}
                     alt="xp"
@@ -228,8 +237,6 @@ export function MetaSection() {
             )}
           </Flex>
         </Flex>
-
-        {/* <Votes /> */}
       </Flex>
     </Flex>
   );

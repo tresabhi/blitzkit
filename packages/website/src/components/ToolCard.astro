@@ -1,8 +1,10 @@
 ---
 import { assertSecret, imgur, ImgurSize } from '@blitzkit/core';
 import { CaretRightIcon } from '@radix-ui/react-icons';
-import { Box, Button, Code, Flex, Heading, Link, Text } from '@radix-ui/themes';
+import { Box, Button, Code, Flex, Heading, Text } from '@radix-ui/themes';
 import type { Tool } from '../constants/tools';
+import { getStrings } from '../core/i18n/getStrings';
+import { LinkI18n } from './LinkI18n';
 
 interface Props {
   tool: Tool;
@@ -12,6 +14,12 @@ const { tool } = Astro.props;
 const disabled = tool.branches?.every(
   (branch) => branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
 );
+const { locale } = Astro.params;
+const strings = getStrings(locale);
+const toolStrings =
+  strings.website.tools[
+    (tool.stringsId??tool.id ) as keyof typeof strings.website.tools
+  ];
 ---
 
 <style>
@@ -54,7 +62,8 @@ const disabled = tool.branches?.every(
   flexGrow={tool.significant ? undefined : '1'}
   flexBasis={tool.significant ? undefined : { initial: undefined, sm: '0' }}
 >
-  <Link
+  <LinkI18n
+    {locale}
     className="link"
     underline="none"
     href={disabled ? '#' : (tool.href ?? `/tools/${tool.id}`)}
@@ -98,7 +107,7 @@ const disabled = tool.branches?.every(
           size={{ initial: '6', sm: tool.significant ? '7' : '5' }}
           weight="medium"
         >
-          {tool.title}
+          {toolStrings.name}
         </Heading>
         <Text
           align={{ initial: 'center', sm: 'left' }}
@@ -112,7 +121,7 @@ const disabled = tool.branches?.every(
                 <Code>{assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH)}</Code>
               </>
             ) : (
-              tool.description
+              toolStrings.description
             )
           }
         </Text>
@@ -129,11 +138,11 @@ const disabled = tool.branches?.every(
             color={tool.button.color}
             style={{ cursor: 'inherit' }}
           >
-            {tool.button.text}
+            {toolStrings.button}
             <CaretRightIcon />
           </Button>
         )
       }
     </Flex>
-  </Link>
+  </LinkI18n>
 </Flex>

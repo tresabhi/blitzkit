@@ -8,16 +8,16 @@ import { DATA } from './constants';
 
 export async function boosterIcons() {
   const boosterFiles = (await readdir(`${DATA}/Gfx/Shared/boosters`)).filter(
-    (file) => !file.endsWith('@2x.txt.dvpl') && !file.startsWith('texture0'),
+    (file) => !file.includes('@2x.txt') && !file.startsWith('texture0'),
   );
   const image = sharp(
-    await readDVPLFile(`${DATA}/Gfx/Shared/boosters/texture0.packed.webp.dvpl`),
+    await readDVPLFile(`${DATA}/Gfx/Shared/boosters/texture0.packed.webp`),
   );
   const changes: FileChange[] = [];
 
   await Promise.all(
     boosterFiles.map(async (file) => {
-      const name = file.match(/booster_(.+).txt.dvpl/)?.[1];
+      const name = file.match(/booster_(.+).txt/)?.[1];
 
       if (name === undefined) return;
 

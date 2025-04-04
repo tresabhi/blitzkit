@@ -1,5 +1,4 @@
-const numberFormat = Intl.NumberFormat('en', { notation: 'compact' });
-
-export function formatCompact(number: number) {
+export function formatCompact(locale: string, number: number) {
+  const numberFormat = Intl.NumberFormat(locale, { notation: 'compact' });
   return numberFormat.format(number);
 }
