@@ -7,9 +7,18 @@ import {
 } from '@blitzkit/core';
 import { useStore } from '@nanostores/react';
 import { ReloadIcon } from '@radix-ui/react-icons';
-import { Box, Button, Flex, IconButton, Popover, Text } from '@radix-ui/themes';
+import {
+  Box,
+  Button,
+  Flex,
+  IconButton,
+  Inset,
+  Popover,
+  Text,
+} from '@radix-ui/themes';
 import { times } from 'lodash-es';
 import { awaitableGameDefinitions } from '../../../core/awaitables/gameDefinitions';
+import { Var } from '../../../core/radix/var';
 import { useLocale } from '../../../hooks/useLocale';
 import {
   $tankFilters,
@@ -67,46 +76,43 @@ function ShellFilter({ index, premium }: { index: number; premium?: boolean }) {
       </Popover.Trigger>
 
       <Popover.Content>
-        <Flex
-          style={{
-            borderRadius: 'var(--radius-full)',
-            overflow: 'hidden',
-          }}
-        >
-          {Object.values(ShellType).map((shellType) => {
-            if (typeof shellType === 'string') return null;
+        <Inset>
+          <Flex>
+            {Object.values(ShellType).map((shellType) => {
+              if (typeof shellType === 'string') return null;
 
-            const selected = tankFilters.shells[index] === shellType;
+              const selected = tankFilters.shells[index] === shellType;
 
-            return (
-              <IconButton
-                value={`${shellType}`}
-                radius="none"
-                variant={selected ? 'solid' : 'soft'}
-                onClick={() => {
-                  const mutated = [
-                    tankFilters.shells[0],
-                    tankFilters.shells[1],
-                    tankFilters.shells[2],
-                  ] as TankFilters['shells'];
+              return (
+                <IconButton
+                  value={`${shellType}`}
+                  radius="none"
+                  variant={selected ? 'solid' : 'soft'}
+                  onClick={() => {
+                    const mutated = [
+                      tankFilters.shells[0],
+                      tankFilters.shells[1],
+                      tankFilters.shells[2],
+                    ] as TankFilters['shells'];
 
-                  mutated[index] = selected ? null : shellType;
+                    mutated[index] = selected ? null : shellType;
 
-                  $tankFilters.setKey('shells', mutated);
-                }}
-                highContrast={selected}
-                color={selected ? undefined : 'gray'}
-              >
-                <img
-                  src={asset(
-                    `icons/shells/${shellTypeIcons[shellType]}${premium ? '_premium' : ''}.webp`,
-                  )}
-                  style={{ width: '1em', height: '1em' }}
-                />
-              </IconButton>
-            );
-          })}
-        </Flex>
+                    $tankFilters.setKey('shells', mutated);
+                  }}
+                  highContrast={selected}
+                  color={selected ? undefined : 'gray'}
+                >
+                  <img
+                    src={asset(
+                      `icons/shells/${shellTypeIcons[shellType]}${premium ? '_premium' : ''}.webp`,
+                    )}
+                    style={{ width: '1em', height: '1em' }}
+                  />
+                </IconButton>
+              );
+            })}
+          </Flex>
+        </Inset>
       </Popover.Content>
     </Popover.Root>
   );
@@ -126,7 +132,6 @@ export function FilterControl({ compact }: FilterControlProps) {
       <Flex
         direction={compact ? 'row' : { initial: 'row', md: 'column' }}
         overflow="hidden"
-        gap={{ initial: '0', md: '1' }}
         style={{ borderRadius: 'var(--radius-5)' }}
       >
         <Flex direction={compact ? 'column' : { md: 'row', initial: 'column' }}>
@@ -157,6 +162,15 @@ export function FilterControl({ compact }: FilterControlProps) {
             );
           })}
         </Flex>
+
+        <Box
+          display={{ initial: 'none', md: 'block' }}
+          style={{
+            height: Var('space-1'),
+            backgroundColor: Var('gray-a3'),
+          }}
+        />
+
         <Flex direction={compact ? 'column' : { md: 'row', initial: 'column' }}>
           {times(5, (index) => {
             const tier = index + 6;
@@ -191,7 +205,6 @@ export function FilterControl({ compact }: FilterControlProps) {
         direction={compact ? 'row' : { initial: 'row', md: 'column' }}
         overflow="hidden"
         style={{ borderRadius: 'var(--radius-5)' }}
-        gap={{ initial: '0', md: '1' }}
       >
         <Flex direction={compact ? 'column' : { md: 'row', initial: 'column' }}>
           {gameDefinitions.nations
@@ -228,6 +241,15 @@ export function FilterControl({ compact }: FilterControlProps) {
               );
             })}
         </Flex>
+
+        <Box
+          display={{ initial: 'none', md: 'block' }}
+          style={{
+            height: Var('space-1'),
+            backgroundColor: Var('gray-a3'),
+          }}
+        />
+
         <Flex direction={compact ? 'column' : { md: 'row', initial: 'column' }}>
           {gameDefinitions.nations
             .slice(Math.ceil(gameDefinitions.nations.length / 2))
