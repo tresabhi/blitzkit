@@ -10,7 +10,7 @@ export async function readTexture(path: string, mutation?: TextureMutation) {
   const resolvedTexturePath = isDds
     ? ddsTexturePath
     : ddsTexturePath.replace('.dds', '.pvr');
-  const decompressedDvpl = await readDVPLFile(resolvedTexturePath);
+  const decompressedDvpl = await readDVPLFile(`${resolvedTexturePath}.dvpl`);
 
   const raw = isDds
     ? await new DdsReadStream(decompressedDvpl.buffer as ArrayBuffer).dds()
@@ -75,4 +75,5 @@ export async function readTexture(path: string, mutation?: TextureMutation) {
     default:
       return await sharp(raw.data, { raw }).jpeg().toBuffer();
   }
+
 }
