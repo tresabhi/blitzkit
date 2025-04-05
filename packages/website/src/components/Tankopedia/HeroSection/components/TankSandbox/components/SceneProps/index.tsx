@@ -1,4 +1,4 @@
-import { asset, I_HAT, imgur, J_HAT } from '@blitzkit/core';
+import { asset, I_HAT, J_HAT } from '@blitzkit/core';
 import { Html } from '@react-three/drei';
 import { useFrame, useLoader } from '@react-three/fiber';
 import { clamp } from 'lodash-es';
@@ -101,7 +101,7 @@ export function SceneProps() {
   let { dispersion } = characteristics;
   const gunRotationSpeed = degToRad(characteristics.gunTraverseSpeed);
   const mockTank = useLoader(GLTFLoader, asset(`3d/tanks/models/6929.glb`));
-  const texture = useLoader(TextureLoader, imgur('C28Z8nU'));
+  const texture = useLoader(TextureLoader, '/assets/images/3d/grid.png');
   const path = new Vector3();
   const direction = new Vector3();
   texture.anisotropy = 2;

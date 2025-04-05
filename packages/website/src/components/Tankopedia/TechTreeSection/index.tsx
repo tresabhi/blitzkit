@@ -1,4 +1,4 @@
-import { asset, imgur, TankType } from '@blitzkit/core';
+import { asset, TankType } from '@blitzkit/core';
 import { literals } from '@blitzkit/i18n/src/literals';
 import { CaretLeftIcon, CaretRightIcon, PlusIcon } from '@radix-ui/react-icons';
 import { Flex, Heading, IconButton, ScrollArea, Text } from '@radix-ui/themes';
@@ -140,7 +140,7 @@ export function TechTreeSection({ skeleton }: MaybeSkeletonComponentProps) {
               <Flex
                 key={multiplier}
                 style={{
-                  background: `url(${imgur('7hDltb4')})`,
+                  background: 'url(/assets/images/icons/xp-multiplier.png)',
                   backgroundSize: 'contain',
                   backgroundRepeat: 'no-repeat',
                   backgroundPosition: 'center',

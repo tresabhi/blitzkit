@@ -198,10 +198,9 @@ const strings = getStrings(locale);
                 <Box
                   style={{
                     borderRadius: Var('radius-2'),
-                    backgroundImage: `url(${imgur(tool.image, { format: 'jpeg', size: ImgurSize.LargeThumbnail })})`,
+                    backgroundImage: `url(/assets/images/tools/${tool.id}.webp)`,
                     backgroundSize: '200%',
                     backgroundPosition: 'right center',
-                    overflow: 'hidden',
                   }}
                 >
                   <Flex
@@ -227,6 +226,7 @@ const strings = getStrings(locale);
     data-expanded
     flexGrow="1"
     width="100%"
+    display={{ initial: 'block', sm: 'none' }}
     style={{
       backgroundColor: Var('black-a7'),
       backdropFilter: 'blur(0.5rem)',

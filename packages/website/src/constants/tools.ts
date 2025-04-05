@@ -4,7 +4,6 @@ import type { ComponentProps } from 'react';
 export interface Tool {
   id: string;
   stringsId?: string;
-  image: string;
   disabled?: boolean;
   href?: string;
   button: {
@@ -17,7 +16,6 @@ export interface Tool {
 
 export const tankopediaTool: Tool = {
   id: 'tankopedia',
-  image: 'D8j6GZx',
   button: {
     color: 'purple',
   },
@@ -36,7 +34,6 @@ export const tankopediaTool: Tool = {
 
 export const compareTool: Tool = {
   id: 'compare',
-  image: 'O6VNl6e',
   button: {
     color: 'crimson',
   },
@@ -46,7 +43,6 @@ export const compareTool: Tool = {
 export const sessionTool: Tool = {
   // TODO: rename to tracker
   id: 'session',
-  image: 'HdG9sTf',
   button: {
     color: 'blue',
   },
@@ -56,7 +52,6 @@ export const sessionTool: Tool = {
 export const discordTool: Tool = {
   id: 'discord',
   href: 'https://discord.com/application-directory/1097673957865443370',
-  image: '0bWE5hC',
   button: {
     color: 'indigo',
   },
@@ -65,7 +60,6 @@ export const discordTool: Tool = {
 export const moreTool: Tool = {
   id: 'more',
   href: 'https://discord.gg/nDt7AjGJQH',
-  image: '1nPm6VI',
   button: {
     color: 'plum',
   },
@@ -76,7 +70,6 @@ export const playersTool: Tool = {
   button: {
     color: 'blue',
   },
-  image: 'YelSOfT',
   href: '_', // TODO: remove this to re-enable link
   branches: ['main', 'dev'],
 };
@@ -86,7 +79,6 @@ export const performanceTool: Tool = {
   button: {
     color: 'jade',
   },
-  image: 'vOKFB03',
   branches: ['main', 'dev'],
 };
 
@@ -95,14 +87,12 @@ export const embedTool: Tool = {
   button: {
     color: 'red',
   },
-  image: 'Q0faRYg',
   branches: ['main', 'dev'],
 };
 
 export const homeTool: Tool = {
   id: 'home',
   button: { color: 'blue' },
-  image: 'rUPie9G',
 };
 
 export const galleryTool: Tool = {
@@ -110,7 +100,6 @@ export const galleryTool: Tool = {
   button: {
     color: 'gold',
   },
-  image: 'VhKlknk',
   branches: ['main', 'dev'],
 };
 
@@ -120,7 +109,6 @@ export const tierListTool: Tool = {
   button: {
     color: 'orange',
   },
-  image: 'oKKc8Xv',
   branches: ['main', 'dev', 'opentest', 'preview'],
 };
 
@@ -129,7 +117,6 @@ export const chartsTool: Tool = {
   button: {
     color: 'bronze',
   },
-  image: '6fhkljA',
   branches: ['main', 'dev', 'opentest', 'preview'],
 };
 

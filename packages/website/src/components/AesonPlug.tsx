@@ -1,4 +1,3 @@
-import { imgur } from '@blitzkit/core';
 import { Flex, Heading, Link, Text } from '@radix-ui/themes';
 import { Var } from '../core/radix/var';
 
@@ -18,7 +17,7 @@ export function AesonPlug() {
         }}
       >
         <img
-          src={imgur('akrxfFC')}
+          src="/assets/images/third-party/wotb-news.png"
           style={{ width: '6rem', height: '6rem', objectFit: 'cover' }}
         />
 

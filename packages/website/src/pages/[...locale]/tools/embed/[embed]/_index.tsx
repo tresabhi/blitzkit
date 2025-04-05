@@ -1,4 +1,3 @@
-import { imgur } from '@blitzkit/core';
 import {
   CodeIcon,
   HeightIcon,
@@ -63,7 +62,7 @@ function Content({ embed }: PageProps) {
   const embedStateStore = EmbedState.useStore();
   const config = embedConfigurations[embed] as EmbedConfig;
   const [backgroundImage, setBackgroundImage] = useState(
-    imgur('SO13zur', { format: 'jpeg' }),
+    '/assets/images/backgrounds/embed-default.webp',
   );
   const fileInput = useRef<HTMLInputElement>();
   const { strings } = useLocale();

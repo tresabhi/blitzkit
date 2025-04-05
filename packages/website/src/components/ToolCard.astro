@@ -1,5 +1,5 @@
 ---
-import { assertSecret, imgur, ImgurSize } from '@blitzkit/core';
+import { assertSecret } from '@blitzkit/core';
 import { CaretRightIcon } from '@radix-ui/react-icons';
 import { Box, Button, Code, Flex, Heading, Text } from '@radix-ui/themes';
 import type { Tool } from '../constants/tools';
@@ -18,7 +18,7 @@ const { locale } = Astro.params;
 const strings = getStrings(locale);
 const toolStrings =
   strings.website.tools[
-    (tool.stringsId??tool.id ) as keyof typeof strings.website.tools
+    (tool.stringsId ?? tool.id) as keyof typeof strings.website.tools
   ];
 ---
 
@@ -48,12 +48,7 @@ const toolStrings =
 </style>
 
 <Flex
-  style={{
-    backgroundImage: `url(${imgur(tool.image, {
-      format: 'jpeg',
-      size: ImgurSize.SmallThumbnail,
-    })})`,
-  }}
+  style={{ backgroundImage: `url(/assets/images/tools/${tool.id}.webp)` }}
   data-disabled={disabled}
   data-significant={tool.significant}
   className="container"
@@ -72,12 +67,7 @@ const toolStrings =
     <Box
       flexGrow="1"
       style={{
-        backgroundImage: `url(${imgur(tool.image, {
-          format: 'jpeg',
-          size: tool.significant
-            ? ImgurSize.HugeThumbnail
-            : ImgurSize.LargeThumbnail,
-        })})`,
+        backgroundImage: `url(/assets/images/tools/${tool.id}.webp)`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}

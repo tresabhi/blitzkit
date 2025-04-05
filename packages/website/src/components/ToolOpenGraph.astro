@@ -1,6 +1,5 @@
 ---
 import { AstroSeo } from '@astrolib/seo';
-import { imgur } from '@blitzkit/core';
 import { type Tool } from '../constants/tools';
 import { getStrings } from '../core/i18n/getStrings';
 
@@ -23,7 +22,9 @@ const toolStrings =
   canonical={Astro.url.href}
   openGraph={{
     url: Astro.url.href,
-    images: [{ url: imgur(tool.image) }],
+    images: [
+      { url: `${Astro.url.origin}/assets/images/tools/${tool.id}.webp` },
+    ],
     title: toolStrings.name,
     description: toolStrings.seo_description,
     site_name: 'BlitzKit',

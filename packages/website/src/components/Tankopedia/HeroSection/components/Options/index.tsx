@@ -1,6 +1,5 @@
 import {
   asset,
-  imgur,
   resolvePenetrationCoefficient,
   TIER_ROMAN_NUMERALS,
   uniqueGuns,
@@ -104,7 +103,7 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
           left="50%"
           style={{
             zIndex: 2,
-            backgroundImage: `url(${imgur('27Gwth4')})`,
+            backgroundImage: 'url(/assets/images/icons/aim-caret.png)',
             backgroundSize: 'contain',
             transform: 'translateX(-50%)',
             borderRadius: '50%',
@@ -412,7 +411,10 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                 content={strings.website.tools.tankopedia.sandbox.model.name}
               >
                 <Flex height="100%" align="center">
-                  <img src={imgur('jAdYf0m')} style={{ height: '1.25em' }} />
+                  <img
+                    src="/assets/images/icons/tankopedia-model.png"
+                    style={{ height: '1.25em' }}
+                  />
                 </Flex>
               </Tooltip>
             </SegmentedControl.Item>
@@ -421,7 +423,10 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                 content={strings.website.tools.tankopedia.sandbox.dynamic.name}
               >
                 <Flex height="100%" align="center">
-                  <img src={imgur('oe4Cq0g')} style={{ height: '1.25em' }} />
+                  <img
+                    src="/assets/images/icons/tankopedia-dynamic-armor.png"
+                    style={{ height: '1.25em' }}
+                  />
                 </Flex>
               </Tooltip>
             </SegmentedControl.Item>
@@ -430,14 +435,17 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
                 content={strings.website.tools.tankopedia.sandbox.static.name}
               >
                 <Flex height="100%" align="center">
-                  <img src={imgur('VQ4uDno')} style={{ height: '1.25em' }} />
+                  <img
+                    src="/assets/images/icons/tankopedia-static-armor.png"
+                    style={{ height: '1.25em' }}
+                  />
                 </Flex>
               </Tooltip>
             </SegmentedControl.Item>
             {/* <SegmentedControl.Item value={`${TankopediaDisplay.ShootingRange}`}>
               <Tooltip content="Shooting range">
                 <Flex height="100%" align="center">
-                  <img src={imgur('q8ZPfzG')} style={{ height: '1.25em' }} />
+                  <img src="/assets/images/icons/tankopedia-shooting-range.png" style={{ height: '1.25em' }} />
                 </Flex>
               </Tooltip>
             </SegmentedControl.Item> */}

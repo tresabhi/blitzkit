@@ -1,4 +1,3 @@
-import { imgur, ImgurSize } from '@blitzkit/core';
 import { Box, Flex, Link, Text } from '@radix-ui/themes';
 import { PreviewWrapper } from '../../../../components/Embeds/PreviewWrapper';
 import { LinkI18n } from '../../../../components/LinkI18n';
@@ -85,7 +84,8 @@ function Content() {
                   overflow="hidden"
                   position="relative"
                   style={{
-                    backgroundImage: `url(${imgur('SO13zur', { format: 'jpeg', size: ImgurSize.SmallThumbnail })})`,
+                    backgroundImage:
+                      'url(/assets/images/backgrounds/embed-default.webp)',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                   }}

@@ -1,4 +1,3 @@
-import { imgur } from '@blitzkit/core';
 import { Box, type BoxProps } from '@radix-ui/themes';
 import { forwardRef } from 'react';
 import { Var } from '../../../../../../../../core/radix/var';
@@ -56,7 +55,7 @@ export const TargetCircle = forwardRef<HTMLDivElement, TargetCircleProps>(
           top="50%"
           left="50%"
           style={{
-            backgroundImage: `url(${imgur('27Gwth4')})`,
+            backgroundImage: 'url(/assets/images/icons/aim-caret.png)',
             backgroundSize: 'contain',
             transform: 'translateX(-50%)',
             borderRadius: '50%',
