@@ -665,6 +665,7 @@
         "copied": "Copied!"
       },
       "tank_search": {
+        "clear_filters": "Clear",
         "search_bar_hint": "Search tanks...",
         "recent": "Recently viewed",
         "select_all": "Select all",
@@ -731,6 +732,11 @@
       }
     },
     "home": {
+      "discord": {
+        "join_short": "Join cool people!",
+        "join_long": "Join super duper cool people!",
+        "action": "Discord"
+      },
       "hero": {
         "credit": "By %s1 ❤️"
       },
@@ -743,6 +749,12 @@
       },
       "help_translate": "Please help translate %s1 to %s2!",
       "seo_description": "Tools for everything World of Tanks Blitz"
+    },
+    "docs": {
+      "patches": {
+        "name": "BlitzKit Changelogs",
+        "seo_description": "Changelogs for BlitzKit Discord bot and website"
+      }
     },
     "tools": {
       "tankopedia": {
