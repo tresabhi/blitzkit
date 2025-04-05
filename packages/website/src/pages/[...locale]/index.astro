@@ -78,12 +78,6 @@ export const getStaticPaths = (() => {
     <Flex maxWidth="64rem" flexGrow="1" gap="4" direction="column">
       <ToolCard tool={tankopediaTool} />
 
-      {
-        (PUBLIC_ASSET_BRANCH === 'main' || MODE === 'development') && (
-          <HomePageHotTanks {locale} />
-        )
-      }
-
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         {/* <ToolCard tool={playerStatsTool} /> */}
         <ToolCard tool={compareTool} />
