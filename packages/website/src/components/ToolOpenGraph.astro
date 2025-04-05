@@ -1,5 +1,5 @@
 ---
-import { imgur } from '@blitzkit/core';
+import { AstroSeo } from '@astrolib/seo';
 import { type Tool } from '../constants/tools';
 import { getStrings } from '../core/i18n/getStrings';
 
@@ -16,7 +16,18 @@ const toolStrings =
   ];
 ---
 
-<title>{toolStrings.name}</title>
-<meta property="og:image" content={imgur(tool.image)} />
-<meta name="description" content={toolStrings.seo_description} />
-<meta property="og:description" content={toolStrings.seo_description} />
+<AstroSeo
+  title={toolStrings.name}
+  description={toolStrings.seo_description}
+  canonical={Astro.url.href}
+  openGraph={{
+    url: Astro.url.href,
+    images: [
+      { url: `${Astro.url.origin}/assets/images/tools/${tool.id}.webp` },
+    ],
+    title: toolStrings.name,
+    description: toolStrings.seo_description,
+    site_name: 'BlitzKit',
+  }}
+  twitter={{ cardType: 'summary_large_image' }}
+/>

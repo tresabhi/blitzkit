@@ -1,8 +1,12 @@
 // @ts-check
 
+import partytown from '@astrojs/partytown';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import { SUPPORTED_LOCALES } from '@blitzkit/i18n';
+import playformCompress from '@playform/compress';
+import playformInline from '@playform/inline';
+import compressor from 'astro-compressor';
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
@@ -24,7 +28,15 @@ export default defineConfig({
     concurrency: 8,
   },
 
-  integrations: [react(), sitemap()],
+  integrations: [
+    react(),
+    sitemap(),
+    partytown(),
+    playformCompress(),
+    compressor(),
+    playformInline(),
+  ],
+
   vite: {
     resolve: {
       alias: {

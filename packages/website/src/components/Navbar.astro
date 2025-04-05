@@ -6,24 +6,14 @@ import {
   GearIcon,
   HamburgerMenuIcon,
 } from '@radix-ui/react-icons';
-import {
-  Box,
-  Code,
-  Flex,
-  Grid,
-  IconButton,
-  Link,
-  ScrollArea,
-  Separator,
-  Text,
-} from '@radix-ui/themes';
+import { Box, Code, Flex, IconButton, Link } from '@radix-ui/themes';
+import { TOOLS } from '../constants/tools';
 import { resolveBranchName } from '../core/blitzkit/branches';
-import { homeTool, TOOLS } from '../constants/tools';
-import { LinkI18n } from './LinkI18n';
 import { getStrings } from '../core/i18n/getStrings';
+import { Var } from '../core/radix/var';
+import { LinkI18n } from './LinkI18n';
 
 const toolsFiltered = TOOLS.filter((tool) => !('href' in tool));
-const tools = [homeTool, ...toolsFiltered];
 const { locale } = Astro.params;
 const branchName = resolveBranchName(locale);
 const isBranchNamed = branchName !== undefined;
@@ -31,93 +21,64 @@ const strings = getStrings(locale);
 ---
 
 <style>
-  .navbar {
-    height: var(--navbar-height);
-    top: 0;
-    z-index: 1;
-    position: sticky;
-  }
-
-  .expander {
-    --navbar-height: 48px;
-
-    /* overflow: hidden; */
-    transition-duration: 250ms;
-    width: 100%;
-    backdrop-filter: blur(4rem) brightness(0.75);
-    -webkit-backdrop-filter: blur(4rem) brightness(0.75);
-  }
-
-  .expander[data-expanded='false'] {
-    height: var(--navbar-height);
-  }
-
-  .expander[data-expanded='false'] *[data-expanded] {
+  .navbar[data-expanded='false'] *[data-expanded] {
     display: none;
   }
 
-  .expander[data-expanded='true'] {
-    height: 100vh;
+  .navbar[data-expanded='true'] {
+    height: 100%;
   }
 
-  .expander[data-expanded='true'] *[data-closed] {
+  .navbar[data-expanded='true'] *[data-closed] {
     display: none;
-  }
-
-  .expander div[data-radix-scroll-area-viewport] {
-    overflow-y: scroll !important;
-    overscroll-behavior: contain;
-  }
-
-  .hamburger {
-    display: inline-flex;
-  }
-
-  .tools {
-    display: none;
-  }
-
-  @media (min-width: 768px) {
-    .hamburger {
-      display: none;
-    }
-
-    .tools {
-      display: flex;
-    }
-
-    .expander {
-      max-height: var(--navbar-height) !important;
-    }
   }
 </style>
 
 <script>
-  const expander = document.querySelector<HTMLDivElement>('.expander');
+  const navbar = document.querySelector<HTMLDivElement>('.navbar');
   const hamburger = document.querySelector<HTMLButtonElement>('.hamburger');
 
-  expander?.addEventListener('click', () => {
-    expander.dataset.expanded = 'false';
+  navbar?.addEventListener('click', () => {
+    navbar.dataset.expanded = 'false';
   });
   hamburger?.addEventListener('click', (event) => {
-    if (!expander) return;
+    if (!navbar) return;
 
     event.stopPropagation();
-    expander.dataset.expanded = `${expander.dataset.expanded === 'false'}`;
+    navbar.dataset.expanded = `${navbar.dataset.expanded === 'false'}`;
   });
 </script>
 
-<Flex className="navbar">
-  <Flex className="expander" data-expanded="false" direction="column" gap="2">
-    <Flex justify="center">
-      <Flex flexGrow="1" maxWidth="1024px" p="3" align="center">
+<Box height={{ initial: '3.5rem', sm: '3rem' }} />
+
+<Flex
+  direction="column"
+  align="center"
+  data-expanded="false"
+  className="navbar"
+  width="100%"
+  top="0"
+  position="fixed"
+  style={{
+    zIndex: 1,
+  }}
+>
+  <Flex
+    width="100%"
+    p={{ initial: '4', sm: '3' }}
+    direction="column"
+    align="center"
+    style={{ backgroundColor: Var('gray-1') }}
+  >
+    <Flex gap="4" direction="column" maxWidth="80rem" width="100%">
+      <Flex align="center">
         <LinkI18n
           {locale}
           color="gray"
           highContrast
           href="/"
           underline="hover"
-          weight="bold"
+          weight="medium"
         >
           <Flex align="center" gap="1">
             BlitzKit
@@ -133,7 +94,13 @@ const strings = getStrings(locale);
 
         <Box flexGrow="1" />
 
-        <Flex align="center" gap="2" justify="center" className="tools">
+        <Flex
+          align="center"
+          gap={{ initial: '4', md: '6' }}
+          display={{ initial: 'none', sm: 'flex' }}
+          justify="center"
+          className="tools"
+        >
           {
             toolsFiltered.map((tool, index) => {
               const unavailableOnBranch = tool.branches?.every(
@@ -150,19 +117,17 @@ const strings = getStrings(locale);
               if (unavailableOnBranch) return null;
 
               return (
-                <Fragment key={tool.id}>
-                  {index > 0 && <Separator orientation="vertical" size="1" />}
-                  <LinkI18n
-                    {locale}
-                    color="gray"
-                    highContrast={selected}
-                    size="2"
-                    href={`/${tool.id}`}
-                    underline={selected ? 'always' : 'hover'}
-                  >
-                    {toolStrings.name}
-                  </LinkI18n>
-                </Fragment>
+                <LinkI18n
+                  {locale}
+                  weight={selected ? 'medium' : 'regular'}
+                  color="gray"
+                  highContrast={selected}
+                  size="2"
+                  href={`/${tool.id}`}
+                  underline="hover"
+                >
+                  {toolStrings.name}
+                </LinkI18n>
               );
             })
           }
@@ -170,7 +135,7 @@ const strings = getStrings(locale);
 
         <Box flexGrow="1" />
 
-        <Flex align="center" gap="3">
+        <Flex align="center" gap="4">
           <Link
             style={{ display: 'flex', alignContent: 'center' }}
             color="gray"
@@ -178,7 +143,7 @@ const strings = getStrings(locale);
             underline="none"
             target="_blank"
           >
-            <DiscordLogoIcon />
+            <DiscordLogoIcon width="1em" height="1em" />
           </Link>
 
           <LinkI18n
@@ -188,100 +153,84 @@ const strings = getStrings(locale);
             href="/settings"
             underline="none"
           >
-            <GearIcon />
+            <GearIcon width="1em" height="1em" />
           </LinkI18n>
 
           <!-- <NavbarAccount client:idle /> -->
 
-          <IconButton variant="ghost" color="gray" className="hamburger">
-            <Cross1Icon data-expanded />
-            <HamburgerMenuIcon data-closed />
-          </IconButton>
+          <Flex align="center" display={{ initial: 'flex', sm: 'none' }}>
+            <IconButton variant="ghost" color="gray" className="hamburger">
+              <Cross1Icon data-expanded />
+              <HamburgerMenuIcon data-closed />
+            </IconButton>
+          </Flex>
         </Flex>
       </Flex>
-    </Flex>
 
-    <ScrollArea scrollbars="vertical" style={{ height: '100%', width: '100%' }}>
-      <Grid
-        columns="repeat(auto-fill, minmax(12rem, 1fr))"
-        flow="dense"
-        gap="2"
-        width="100%"
-        p="3"
-        pt="0"
+      <Flex
+        direction="column"
+        data-expanded
+        gap="3"
+        display={{ initial: 'flex', sm: 'none' }}
       >
         {
-          tools.map((tool) => {
+          toolsFiltered.map((tool) => {
             const unavailableOnBranch = tool.branches?.every(
               (branch) =>
                 branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
             );
+
+            if (unavailableOnBranch) return null;
+
             const toolStrings =
               strings.website.tools[
                 (tool.stringsId ??
                   tool.id) as keyof typeof strings.website.tools
               ];
 
-            if (unavailableOnBranch) return null;
-
             return (
-              <Flex
-                key={tool.id}
-                style={{
-                  position: 'relative',
-                  borderRadius: 'var(--radius-2)',
-                  overflow: 'hidden',
-                  backgroundImage: `url(${imgur(tool.image, {
-                    format: 'jpeg',
-                    size: ImgurSize.MediumThumbnail,
-                  })})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  aspectRatio: '2 / 1',
-                }}
+              <Link
+                color="gray"
+                highContrast
+                style={{ display: 'contents' }}
+                href={`/tools/${tool.id}`}
               >
-                <LinkI18n
-                  {locale}
-                  href={tool.id.length === 0 ? '/' : `/${tool.id}`}
+                <Box
                   style={{
-                    display: 'flex',
-                    width: '100%',
-                    height: '100%',
-                    flexDirection: 'column',
-                    textDecoration: 'none',
-                    color: 'inherit',
+                    borderRadius: Var('radius-2'),
+                    backgroundImage: `url(/assets/images/tools/${tool.id}.webp)`,
+                    backgroundSize: '200%',
+                    backgroundPosition: 'right center',
                   }}
                 >
-                  <Box
+                  <Flex
+                    py="4"
+                    justify="end"
                     flexGrow="1"
                     style={{
-                      backgroundImage: `url(${imgur(tool.image, {
-                        format: 'jpeg',
-                        size: ImgurSize.MediumThumbnail,
-                      })})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center',
-                    }}
-                  />
-
-                  <Flex
-                    p="2"
-                    align="center"
-                    width="100%"
-                    style={{
-                      backgroundColor: 'var(--color-panel-translucent)',
-                      backdropFilter: 'blur(4rem)',
-                      WebkitBackdropFilter: 'blur(4rem)',
+                      background: `linear-gradient(90deg, transparent, ${Var('gray-1')})`,
                     }}
                   >
-                    <Text>{toolStrings.name}</Text>
+                    {toolStrings.name}
                   </Flex>
-                </LinkI18n>
-              </Flex>
+                </Box>
+              </Link>
             );
           })
         }
-      </Grid>
-    </ScrollArea>
+      </Flex>
+    </Flex>
   </Flex>
+
+  <Box
+    data-expanded
+    flexGrow="1"
+    width="100%"
+    display={{ initial: 'block', sm: 'none' }}
+    style={{
+      backgroundColor: Var('black-a7'),
+      backdropFilter: 'blur(0.5rem)',
+      WebkitBackdropFilter: 'blur(0.5rem)',
+    }}
+  />
 </Flex>

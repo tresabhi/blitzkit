@@ -37,6 +37,7 @@ env:
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  PUBLIC_DISCORD_SERVER_ID: ${{ secrets.PUBLIC_DISCORD_SERVER_ID }}
 
 jobs:
   build:

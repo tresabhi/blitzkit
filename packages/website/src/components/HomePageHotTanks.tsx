@@ -83,7 +83,7 @@ function Content() {
   const { locale, strings } = useLocale();
 
   return (
-    <Flex direction="column" pt="4" pb="8">
+    <Flex direction="column" pt="4" pb="6">
       <Heading align="center" size="5">
         {strings.website.home.hot_tanks.title}
       </Heading>

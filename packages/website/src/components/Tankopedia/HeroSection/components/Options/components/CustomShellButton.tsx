@@ -1,4 +1,4 @@
-import { imgur, ShellType } from '@blitzkit/core';
+import { ShellType } from '@blitzkit/core';
 import { literals } from '@blitzkit/i18n/src/literals';
 import {
   Button,
@@ -42,7 +42,7 @@ export function CustomShellButton() {
         >
           <img
             alt="custom shell"
-            src={imgur('j2CoXak')}
+            src="/assets/images/icons/custom-shell.png"
             style={{
               width: '50%',
               height: '50%',

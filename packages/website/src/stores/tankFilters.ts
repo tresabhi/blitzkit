@@ -1,4 +1,9 @@
-import type { GunDefinition, TankClass, TankType } from '@blitzkit/core';
+import type {
+  GunDefinition,
+  ShellType,
+  TankClass,
+  TankType,
+} from '@blitzkit/core';
 import { map } from 'nanostores';
 
 export type CaseType<T> = T extends {
@@ -16,6 +21,7 @@ export interface TankFilters {
   search?: string;
   searching: boolean;
   gunType: CaseType<GunDefinition>[];
+  shells: [ShellType | null, ShellType | null, ShellType | null];
 }
 
 export const initialTankFilters: TankFilters = {
@@ -27,6 +33,7 @@ export const initialTankFilters: TankFilters = {
   search: undefined,
   searching: false,
   gunType: [],
+  shells: [null, null, null],
 };
 
 export const $tankFilters = map<TankFilters>(initialTankFilters);

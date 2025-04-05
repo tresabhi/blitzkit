@@ -10,7 +10,14 @@ export function HomeLocaleSwitcher({
 }: LocaleAcceptorProps) {
   return (
     <BlitzKitTheme>
-      <Flex justify="center" mt="4" py="6" align="center" gap="3">
+      <Flex
+        flexGrow="2"
+        flexShrink="0"
+        justify="center"
+        mt="4"
+        align="center"
+        gap="3"
+      >
         <Text size="5" trim="end" color="gray">
           <GlobeIcon width="1em" height="1em" />
         </Text>

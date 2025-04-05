@@ -1,5 +1,8 @@
 import type { TankDefinition } from '@blitzkit/core';
+import { times } from 'lodash-es';
 import type { TankFilters } from '../../stores/tankFilters';
+
+const SHELLS = times(3, (index) => index);
 
 export function filterTank(filters: TankFilters, tank: TankDefinition) {
   return (
@@ -22,6 +25,17 @@ export function filterTank(filters: TankFilters, tank: TankDefinition) {
       (filters.gunType.includes('auto_reloader') &&
         tank.turrets.some((turret) =>
           turret.guns.some((gun) => gun.gun_type!.$case === 'auto_reloader'),
-        )))
+        ))) &&
+    tank.turrets.some((turret) =>
+      turret.guns.some((gun) =>
+        SHELLS.every(
+          (index) =>
+            filters.shells[index] === null ||
+            gun.gun_type!.value.base.shells[index] === undefined ||
+            gun.gun_type!.value.base.shells[index].type ===
+              filters.shells[index],
+        ),
+      ),
+    )
   );
 }

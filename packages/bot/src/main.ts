@@ -45,7 +45,7 @@ const interval = setInterval(async () => {
     const usernames = awaitedDiscoveredIdsDefinitions.count;
 
     manager.broadcastEval(
-      (client, { servers, users, channels, tanks, usernames }) => {
+      async (client, { servers, users, channels, tanks, usernames }) => {
         const bios = [
           `Living in ${servers.toLocaleString()} servers`,
           `Serving ${users.toLocaleString()} users`,
@@ -62,6 +62,13 @@ const interval = setInterval(async () => {
             },
           ],
         });
+
+        for (const guild of client.guilds.cache.values()) {
+          try {
+            const botMember = await guild.members.fetch(client.user.id);
+            await botMember.setNickname('BlitzKit');
+          } catch {}
+        }
       },
       { context: { servers, channels, users, tanks, usernames } },
     );

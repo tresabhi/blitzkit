@@ -9,7 +9,7 @@ export type VarName =
   | `radius-${1 | 2 | 3 | 4 | 5 | 6 | 'full'}`
   | `space-${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9}`
   | `shadow-${1 | 2 | 3 | 4 | 5 | 6}`
-  | `${RadixColor | 'accent' | 'gray'}-${
+  | `${RadixColor | 'accent' | 'gray' | 'black' | 'white'}-${
       | `${'' | 'a'}${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12}`
       | 'surface'
       | 'indicator'

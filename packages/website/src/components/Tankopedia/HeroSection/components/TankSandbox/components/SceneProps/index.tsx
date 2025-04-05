@@ -1,4 +1,4 @@
-import { imgur, J_HAT } from '@blitzkit/core';
+import { J_HAT } from '@blitzkit/core';
 import { useLoader } from '@react-three/fiber';
 import { useCallback, useEffect, useRef } from 'react';
 import { Group, Plane, TextureLoader, Vector2 } from 'three';
@@ -89,8 +89,11 @@ export function SceneProps() {
   // let { dispersion } = characteristics;
   // const gunRotationSpeed = degToRad(characteristics.gunTraverseSpeed);
   // const mockTank = useLoader(GLTFLoader, asset(`3d/tanks/models/6929.glb`));
-  const gridTexture = useLoader(TextureLoader, imgur('iq0iOCJ'));
-  const dragTexture = useLoader(TextureLoader, imgur('Vi3xXsb'));
+  const gridTexture = useLoader(TextureLoader, '/assets/images/3d/grid.png');
+  const dragTexture = useLoader(
+    TextureLoader,
+    '/assets/images/3d/drag-slicer.png',
+  );
   gridTexture.anisotropy = 2;
   // const path = new Vector3();
   // const direction = new Vector3();

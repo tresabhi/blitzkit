@@ -19,10 +19,10 @@ import { Writeable } from '../../../types/writable';
 export async function handleChatInputCommand(
   interaction: ChatInputCommandInteraction<CacheType>,
 ) {
+  await interaction.deferReply();
+
   const awaitedCommands = await commands;
   const registry = awaitedCommands[interaction.commandName];
-
-  await interaction.deferReply();
 
   try {
     const returnable = await registry.handler(interaction);

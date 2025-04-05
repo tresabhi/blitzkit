@@ -1,10 +1,12 @@
 ---
+import { AstroSeo } from '@astrolib/seo';
 import { assertSecret } from '@blitzkit/core';
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from '@blitzkit/i18n';
 import { literals } from '@blitzkit/i18n/src/literals';
 import { Box, Flex, Heading, Link } from '@radix-ui/themes';
 import type { GetStaticPaths } from 'astro';
 import { AesonPlug } from '../../components/AesonPlug';
+import { DiscordPlug } from '../../components/Discord';
 import { HomeLocaleSwitcher } from '../../components/Home/HomeLocaleSwitcher';
 import HomeHero from '../../components/HomeHero.astro';
 import { Plugs } from '../../components/Plugs';
@@ -39,13 +41,37 @@ export const getStaticPaths = (() => {
 }) satisfies GetStaticPaths;
 ---
 
-<title>BlitzKit</title>
-<meta name="description" content={strings.website.home.seo_description} />
+<AstroSeo
+  title="BlitzKit"
+  description={strings.website.home.seo_description}
+  canonical={Astro.url.href}
+  openGraph={{
+    url: Astro.url.href,
+    title: 'BlitzKit',
+    description: strings.website.home.seo_description,
+    site_name: 'BlitzKit',
+  }}
+  twitter={{ cardType: 'summary_large_image' }}
+/>
 
 <BaseLayout>
   <HomeHero />
 
-  <HomeLocaleSwitcher {locale} client:load />
+  <Flex justify="center" py="6" px="4" justify="center">
+    <Flex
+      wrap="wrap"
+      justify="between"
+      maxWidth="64rem"
+      gap="6"
+      align="center"
+      flexGrow="1"
+    >
+      <HomeLocaleSwitcher {locale} client:load />
+      <DiscordPlug {locale} client:only="react">
+        <DiscordPlug {locale} skeleton slot="fallback" />
+      </DiscordPlug>
+    </Flex>
+  </Flex>
 
   {
     locale !== DEFAULT_LOCALE && (
@@ -75,7 +101,7 @@ export const getStaticPaths = (() => {
   }
 
   <Flex p="4" justify="center" gap="4" mt="3">
-    <Flex maxWidth="64rem" flexGrow="1" gap="4" direction="column">
+    <Flex maxWidth="80rem" flexGrow="1" gap="4" direction="column">
       <ToolCard tool={tanksTool} />
 
       <!-- {
@@ -119,16 +145,16 @@ export const getStaticPaths = (() => {
         <ToolCard
           tool={{
             button: { color: 'blue' },
-            id: 'blitz_analysis',
-            image: 'j76YXGl',
+            id: 'blitz-analysis',
+            stringsId: 'blitz_analysis',
             href: 'https://blitzanalysiz.com/',
           }}
         />
         <ToolCard
           tool={{
             button: { color: 'purple', highContrast: true },
-            image: 'zYrrYbR',
-            id: 'blitz_insider',
+            id: 'blitz-insider',
+            stringsId: 'blitz_insider',
             href: 'https://discord.gg/UjWf9eGgtR',
           }}
         />

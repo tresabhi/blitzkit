@@ -15,7 +15,8 @@ export function localizationObject(
     (localizations, locale) => {
       const { strings } = translator(locale);
       const translation = literalsFunc(path(strings), literals);
-      const isValid = !strict || validNameRegex.test(translation);
+      const isValid =
+        (!strict || validNameRegex.test(translation)) && translation.length > 0;
 
       if (!isValid) {
         console.warn(
