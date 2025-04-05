@@ -36,7 +36,7 @@
       "local": "dev",
       "dev": "бета",
       "opentest": "открытый тест",
-      "preview": "предварительный просмотр"
+      "preview": "превью"
     },
     "locales": {
       "en": "Английский",
@@ -665,6 +665,7 @@
         "copied": "Скопировано!"
       },
       "tank_search": {
+        "clear_filters": "Очистить",
         "search_bar_hint": "Поиск танков...",
         "recent": "Недавние",
         "select_all": "Выбрать всё",
@@ -731,6 +732,11 @@
       }
     },
     "home": {
+      "discord": {
+        "join_short": "Join cool people!",
+        "join_long": "Join super duper cool people!",
+        "action": "Discord"
+      },
       "hero": {
         "credit": "От %s1 ❤️"
       },
@@ -743,6 +749,12 @@
       },
       "help_translate": "Пожалуйста, помогите перевести %s1 на %s2!",
       "seo_description": "Инструменты для World of Tanks Blitz"
+    },
+    "docs": {
+      "patches": {
+        "name": "BlitzKit Changelogs",
+        "seo_description": "Changelogs for BlitzKit Discord bot and website"
+      }
     },
     "tools": {
       "tankopedia": {
