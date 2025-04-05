@@ -665,6 +665,7 @@
         "copied": "Copiado!"
       },
       "tank_search": {
+        "clear_filters": "Limpar",
         "search_bar_hint": "Procurar tanques...",
         "recent": "Visto recentemente",
         "select_all": "Selecionar todos",
@@ -731,6 +732,11 @@
       }
     },
     "home": {
+      "discord": {
+        "join_short": "Join cool people!",
+        "join_long": "Join super duper cool people!",
+        "action": "Discord"
+      },
       "hero": {
         "credit": "Por %s1 ❤️"
       },
@@ -743,6 +749,12 @@
       },
       "help_translate": "Por favor, ajude a traduzir %s1 para %s2!",
       "seo_description": "Ferramentas para tudo World of Tanks Blitz"
+    },
+    "docs": {
+      "patches": {
+        "name": "BlitzKit Changelogs",
+        "seo_description": "Changelogs for BlitzKit Discord bot and website"
+      }
     },
     "tools": {
       "tankopedia": {
