@@ -665,6 +665,7 @@
         "copied": "Скопійовано!"
       },
       "tank_search": {
+        "clear_filters": "Clear",
         "search_bar_hint": "Шукайте техніку...",
         "recent": "Недавно переглянуті",
         "select_all": "Вибрати все",
@@ -731,6 +732,11 @@
       }
     },
     "home": {
+      "discord": {
+        "join_short": "Join cool people!",
+        "join_long": "Join super duper cool people!",
+        "action": "Discord"
+      },
       "hero": {
         "credit": "Зроблено %s1 ❤"
       },
@@ -743,6 +749,12 @@
       },
       "help_translate": "Будь ласка, допоможіть перекласти %s1 на %s2!",
       "seo_description": "Інструменти для всього, пов'язаного з WoT Blitz"
+    },
+    "docs": {
+      "patches": {
+        "name": "BlitzKit Changelogs",
+        "seo_description": "Changelogs for BlitzKit Discord bot and website"
+      }
     },
     "tools": {
       "tankopedia": {
