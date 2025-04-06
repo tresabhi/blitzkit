@@ -22,7 +22,6 @@ import { useThree } from '@react-three/fiber';
 import { Fragment, useEffect, useRef } from 'react';
 import type { Mesh } from 'three';
 import {
-  Box3,
   Color,
   DoubleSide,
   Group,
@@ -109,6 +108,12 @@ export function DissectorSceneComponent({
 
       const armorName = mesh.material.name;
       const armorPlate = groupArmor.armors[armorName];
+
+      if (armorPlate === undefined) {
+        console.warn(`Missing armor: ${armorName}`);
+        return null;
+      }
+
       const isModule =
         armorPlate.type !== 'Armor' && armorPlate.type !== 'ArmorScreen';
       const isTrack =
@@ -149,8 +154,6 @@ export function DissectorSceneComponent({
         }),
       );
       const worldPosition = new Vector3();
-      const boundsTop = new Vector3();
-      const bounds = new Box3();
 
       useEffect(() => {
         const offset = new Vector3();

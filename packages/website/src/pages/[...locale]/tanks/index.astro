@@ -1,5 +1,5 @@
 ---
-import { fetchTanksFull } from '@blitzkit/core';
+import { asset, fetchTanksFull } from '@blitzkit/core';
 import { Box, Flex, Text } from '@radix-ui/themes';
 import { LinkI18n } from '../../../components/LinkI18n';
 import { PageWrapper } from '../../../components/PageWrapper';
@@ -25,7 +25,7 @@ const tanksFull = await fetchTanksFull();
                   width="8rem"
                   height="6rem"
                   style={{
-                    backgroundImage: `url(/api/tanks/${tank.id}/icons/big.png)`,
+                    backgroundImage: `url(${asset(`tanks/${tank.id}/icons/big.webp`)})`,
                     backgroundSize: '150%',
                     backgroundPosition: 'center',
                   }}

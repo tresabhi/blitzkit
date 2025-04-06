@@ -409,18 +409,6 @@ export function Options({ canvas }: OptionsProps) {
               >
                 <Flex height="100%" align="center">
                   <img
-                    src="/assets/images/icons/tankopedia-static-armor.png"
-                    style={{ height: '1.25em' }}
-                  />
-                </Flex>
-              </Tooltip>
-            </SegmentedControl.Item>
-            <SegmentedControl.Item value={`${TankopediaDisplay.Dissector}`}>
-              <Tooltip
-                content={strings.website.tools.tanks.sandbox.dissector.name}
-              >
-                <Flex height="100%" align="center">
-                  <img
                     src="/assets/images/icons/tankopedia-dissector.png"
                     style={{ height: '1.25em' }}
                   />

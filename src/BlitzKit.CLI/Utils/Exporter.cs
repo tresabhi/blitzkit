@@ -14,7 +14,7 @@ namespace BlitzKit.CLI.Utils
     {
       return texture
         .Decode(ETexturePlatform.DesktopMobile)!
-        .Encode(SKEncodedImageFormat.Webp, 100)
+        .Encode(SKEncodedImageFormat.Webp, 80)
         .ToArray();
     }
 

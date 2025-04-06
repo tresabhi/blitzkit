@@ -22,10 +22,10 @@ namespace BlitzKit.CLI
           break;
         }
 
-        case "api":
+        case "mangle":
         {
-          Api api = new(args);
-          await api.Run();
+          Mangler mangler = new(args);
+          await mangler.Mangle();
           break;
         }
 

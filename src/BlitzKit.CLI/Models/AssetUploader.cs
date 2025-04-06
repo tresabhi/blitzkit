@@ -87,9 +87,9 @@ namespace BlitzKit.CLI.Models
         }
         else
         {
-          PrettyLog.Background(
-            $"🔵 {blobPath} ({change.Content.Count.ToString("N0", Program.Culture)}B)"
-          );
+          // PrettyLog.Background(
+          //   $"🔵 {blobPath} ({change.Content.Count.ToString("N0", Program.Culture)}B)"
+          // );
           return;
         }
       }

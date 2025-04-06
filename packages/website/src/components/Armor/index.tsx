@@ -6,6 +6,8 @@ import { spacedArmorRenderTarget } from './components/PrimaryArmorSceneComponent
 import { SpacedArmorScene } from './components/SpacedArmorScene';
 
 export const Armor = memo(() => {
+  return <SpacedArmorScene scene={new Scene()} />;
+
   const [spacedArmorScene] = useState(() => new Scene());
   const [primaryArmorScene] = useState(() => new Scene());
   const spacedArmorPortal = createPortal(

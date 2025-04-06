@@ -10,14 +10,6 @@ export async function blobProxy(url: string) {
   }
 }
 
-export function apiBlobProxy(path: string) {
-  return blobProxy(`http://localhost:5000${path}`);
-}
-
-export function apiBlobProxyCurry(path: string) {
-  return () => apiBlobProxy(path);
-}
-
 export async function jsonMirror<Type>(
   path: string,
   message: MessageFns<Type>,

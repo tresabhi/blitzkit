@@ -1,83 +1,42 @@
-import {
-  ShellType,
-  isExplosive,
-  resolvePenetrationCoefficient,
-} from '@blitzkit/core';
+import { asset } from '@blitzkit/core';
+import { useGLTF } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import { useCallback } from 'react';
-import {
-  type Intersection,
-  MeshBasicMaterial,
-  Object3D,
-  Plane,
-  Quaternion,
-  Raycaster,
-  Scene,
-  Vector3,
-} from 'three';
-import { degToRad } from 'three/src/math/MathUtils.js';
-import { hasEquipment } from '../../../../core/blitzkit/hasEquipment';
+import { Material, MeshBasicMaterial } from 'three';
 import { jsxTree } from '../../../../core/blitzkit/jsxTree';
-import { discardClippingPlane } from '../../../../core/three/discardClippingPlane';
 import { Duel } from '../../../../stores/duel';
-import {
-  type Shot,
-  type ShotLayerBase,
-  type ShotLayerNonExternal,
-  TankopediaEphemeral,
-} from '../../../../stores/tankopediaEphemeral';
-import { ArmorType } from '../SpacedArmorScene';
+import { TankopediaEphemeral } from '../../../../stores/tankopediaEphemeral';
+import { TankopediaPersistent } from '../../../../stores/tankopediaPersistent';
+import { groupNameRegex } from '../StaticArmorSceneComponent';
 import { SpacedArmorSubExternal } from './components/SpacedArmorSubExternal';
 import { SpacedArmorSubSpaced } from './components/SpacedArmorSubSpaced';
 
-type SpacedArmorSceneComponentProps = {
-  node: Object3D;
-  thickness: number;
-  clip?: Plane;
-  scene: Scene;
-} & (
-  | {
-      type: Exclude<ArmorType, ArmorType.External>;
-    }
-  | {
-      type: ArmorType.External;
-      variant: ExternalModuleVariant;
-    }
-);
-
-export type ExternalModuleVariant = 'gun' | 'track';
-export type ArmorUserData = {
-  thickness: number;
-} & (
-  | {
-      type: Exclude<ArmorType, ArmorType.External>;
-    }
-  | {
-      type: ArmorType.External;
-      variant: ExternalModuleVariant;
-    }
-);
+interface StaticArmorSceneComponentsProp {
+  group: string;
+}
 
 const omitMaterial = new MeshBasicMaterial({
   colorWrite: false,
   depthWrite: true,
 });
 
-/**
- * Render orders allocations:
- * - 0  : core omission
- * - 1-2: spaced without depth buffer write but do test to allow additive blending
- * - 3-4: external with depth buffer write in first pass and read in second to simplify geometry
- * - 5  : spaced depth write
- */
 export function SpacedArmorSceneComponent({
-  node,
-  thickness,
-  clip,
-  ...props
-}: SpacedArmorSceneComponentProps) {
+  group,
+}: StaticArmorSceneComponentsProp) {
   const tankopediaEphemeralStore = TankopediaEphemeral.useStore();
-  const duelStore = Duel.useStore();
+  const tank = Duel.use((state) => state.protagonist.tank);
+  const showModules = TankopediaPersistent.use((state) => state.showModules);
+  const showArmorScreen = TankopediaPersistent.use(
+    (state) => state.showArmorScreen,
+  );
+  const showArmor = TankopediaPersistent.use((state) => state.showArmor);
+  const gltf = useGLTF(asset(`tanks/${tank.id}/collision/${group}.glb`));
+  const armor = TankopediaEphemeral.use((state) => state.armor);
+  const groupName = group.match(groupNameRegex)![1];
+  const groupArmor = armor.groups[groupName];
+  const thicknessRange = TankopediaEphemeral.use(
+    (state) => state.thicknessRange,
+  );
   const camera = useThree((state) => state.camera);
 
   const shoot = useCallback(
@@ -369,20 +328,30 @@ export function SpacedArmorSceneComponent({
     [camera],
   );
 
-  return (
-    <>
-      {props.type === ArmorType.Primary &&
-        jsxTree(
-          node,
-          {
-            mesh: {
-              renderOrder: 0,
-              material: omitMaterial,
-              userData: {
-                type: ArmorType.Primary,
-                thickness,
-              } satisfies ArmorUserData,
-              async onClick(event) {
+  return jsxTree(gltf.scene, {
+    mesh(mesh, props, key) {
+      if (!(mesh.material instanceof Material)) {
+        return null;
+      }
+
+      const armorName = mesh.material.name;
+      const armorPlate = groupArmor.armors[armorName];
+
+      if (armorPlate === undefined) {
+        console.warn(`Missing armor: ${armorName}`);
+        return null;
+      }
+
+      switch (armorPlate.type) {
+        case 'Armor':
+          return (
+            <mesh
+              {...props}
+              key={key}
+              renderOrder={0}
+              material={omitMaterial}
+              userData={armorPlate}
+              onClick={async (event) => {
                 event.stopPropagation();
                 const shot = (await shoot(
                   event.point,
@@ -390,24 +359,30 @@ export function SpacedArmorSceneComponent({
                   true,
                 ))!;
                 tankopediaEphemeralStore.setState({ shot });
-              },
-            },
-          },
-          node.uuid,
-        )}
+              }}
+            />
+          );
 
-      {props.type === ArmorType.Spaced && (
-        <SpacedArmorSubSpaced node={node} thickness={thickness} />
-      )}
+        case 'ArmorScreen':
+          return (
+            <SpacedArmorSubSpaced
+              {...props}
+              key={key}
+              armorPlate={armorPlate}
+            />
+          );
 
-      {props.type === ArmorType.External && (
-        <SpacedArmorSubExternal
-          node={node}
-          thickness={thickness}
-          variant={props.variant}
-          clip={clip}
-        />
-      )}
-    </>
-  );
+        default:
+          return null;
+          return (
+            <SpacedArmorSubExternal
+              node={node}
+              thickness={thickness}
+              variant={props.variant}
+              clip={clip}
+            />
+          );
+      }
+    },
+  });
 }

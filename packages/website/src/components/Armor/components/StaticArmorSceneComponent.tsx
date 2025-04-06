@@ -1,5 +1,6 @@
 import { asset } from '@blitzkit/core';
 import { useGLTF } from '@react-three/drei';
+import { Fragment } from 'react/jsx-runtime';
 import {
   Color,
   LineBasicMaterial,
@@ -37,7 +38,7 @@ export function StaticArmorSceneComponent({
   );
 
   return jsxTree(gltf.scene, {
-    mesh(mesh, props) {
+    mesh(mesh, props, key) {
       if (!(mesh.material instanceof Material)) {
         return null;
       }
@@ -109,13 +110,13 @@ export function StaticArmorSceneComponent({
       material.transparent = material.opacity < 1;
 
       return (
-        <>
+        <Fragment key={key}>
           <mesh {...props} material={material} />
 
           <lineSegments material={outlineMaterial}>
             <edgesGeometry args={[props.geometry, 45]} />
           </lineSegments>
-        </>
+        </Fragment>
       );
     },
   });

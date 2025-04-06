@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { arrayfy } from '../../../core/three/arrayfy';
 import { Duel } from '../../../stores/duel';
 import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
@@ -8,8 +7,7 @@ export interface ThicknessRange {
   value: number;
 }
 
-export const StaticArmor = memo(() => {
-  const tank = Duel.use((state) => state.protagonist);
+export function StaticArmor() {
   const model = TankopediaEphemeral.use((state) => state.model);
   const turret = Duel.use((state) => state.protagonist.turret);
   const gun = Duel.use((state) => state.protagonist.gun);
@@ -30,4 +28,4 @@ export const StaticArmor = memo(() => {
       </group>
     </group>
   );
-});
+}

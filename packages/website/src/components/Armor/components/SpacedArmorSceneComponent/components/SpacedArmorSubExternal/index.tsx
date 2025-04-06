@@ -7,12 +7,12 @@ import {
   Plane,
   ShaderMaterial,
 } from 'three';
-import type { ArmorUserData, ExternalModuleVariant } from '../..';
 import { hasEquipment } from '../../../../../../core/blitzkit/hasEquipment';
 import { jsxTree } from '../../../../../../core/blitzkit/jsxTree';
 import { Duel, type EquipmentMatrix } from '../../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
 import { ArmorType } from '../../../SpacedArmorScene';
+import type { ArmorUserData, ExternalModuleVariant } from '../../_index';
 import fragmentShader from './shaders/fragment.glsl?raw';
 import vertexShader from './shaders/vertex.glsl?raw';
 

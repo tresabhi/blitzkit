@@ -8,7 +8,7 @@ import type { Vector3 } from 'three';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import type { ArmorType } from '../components/Armor/components/SpacedArmorScene';
-import type { ExternalModuleVariant } from '../components/Armor/components/SpacedArmorSceneComponent';
+import type { ExternalModuleVariant } from '../components/Armor/components/SpacedArmorSceneComponent/_index';
 import type { XP_MULTIPLIERS } from '../components/Tankopedia/TechTreeSection';
 import { awaitableSkillDefinitions } from '../core/awaitables/skillDefinitions';
 import { createContextualStore } from '../core/zustand/createContextualStore';
@@ -148,7 +148,7 @@ export const TankopediaEphemeral = createContextualStore(
         model,
         controlsEnabled: true,
         xpMultiplier: 1,
-        display: TankopediaDisplay.StaticArmor,
+        display: TankopediaDisplay.DynamicArmor,
       })),
     );
   },
