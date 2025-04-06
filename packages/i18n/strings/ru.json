@@ -733,8 +733,8 @@
     },
     "home": {
       "discord": {
-        "join_short": "Join cool people!",
-        "join_long": "Join super duper cool people!",
+        "join_short": "Присоединяйтесь к крутым ребятам!",
+        "join_long": "Присоединяйся к супер-дупер крутым ребятам!",
         "action": "Discord"
       },
       "hero": {
@@ -752,8 +752,8 @@
     },
     "docs": {
       "patches": {
-        "name": "BlitzKit Changelogs",
-        "seo_description": "Changelogs for BlitzKit Discord bot and website"
+        "name": "Списки изменений BlitzKit",
+        "seo_description": "Список изменений для бота Discord и сайта BlitzKit"
       }
     },
     "tools": {
