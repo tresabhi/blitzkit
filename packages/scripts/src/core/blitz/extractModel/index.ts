@@ -178,14 +178,14 @@ export async function extractModel(data: string, path: string) {
                   new Vector3().fromArray(component['tc.worldScale']),
                 ),
                 new Matrix4().compose(
-                  new Vector3().fromArray(component['tc.localTranslation']),
-                  new Quaternion().fromArray(component['tc.localRotation']),
+                  new Vector3().fromArray(),
+                  new Quaternion().fromArray(),
                   new Vector3().fromArray(component['tc.localScale']),
                 ),
               )
               .decompose(translation, rotation, scale);
 
-            node.setTranslation(translation.toArray());
+            node.setTranslation(component['tc.localTranslation']);
             node.setRotation(rotation.toArray() as Vector4Tuple);
             node.setScale(scale.toArray());
 
