@@ -28,7 +28,7 @@ export default defineConfig({
     sitemap(),
     partytown(),
     // playformCompress(),
-    compressor(),
+    // compressor(),
     playformInline(),
   ],
   vite: {
