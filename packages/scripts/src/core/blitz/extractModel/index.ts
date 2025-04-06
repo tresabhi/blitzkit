@@ -166,28 +166,9 @@ export async function extractModel(data: string, path: string) {
             break;
 
           case 'TransformComponent': {
-            const translation = new Vector3();
-            const rotation = new Quaternion();
-            const scale = new Vector3();
-
-            new Matrix4()
-              .multiplyMatrices(
-                new Matrix4().compose(
-                  new Vector3().fromArray(component['tc.worldTranslation']),
-                  new Quaternion().fromArray(component['tc.worldRotation']),
-                  new Vector3().fromArray(component['tc.worldScale']),
-                ),
-                new Matrix4().compose(
-                  new Vector3().fromArray(),
-                  new Quaternion().fromArray(),
-                  new Vector3().fromArray(component['tc.localScale']),
-                ),
-              )
-              .decompose(translation, rotation, scale);
-
             node.setTranslation(component['tc.localTranslation']);
-            node.setRotation(rotation.toArray() as Vector4Tuple);
-            node.setScale(scale.toArray());
+            node.setRotation(component['tc.localRotation']);
+            node.setScale(component['tc.localScale']);
 
             break;
           }
