@@ -5,7 +5,7 @@ export async function GET({ request }: APIContext) {
   const allowRobots = assertSecret(import.meta.env.ALLOW_ROBOTS) === 'true';
   const flags: Record<string, string | null> = {
     'User-agent': '*',
-    [allowRobots ? 'Allow' : 'Disallow']: '/',
+    Allow: '/',
 
     space: null,
     Sitemap: `${new URL(request.url).origin}/sitemap-index.xml`,
