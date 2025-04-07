@@ -11,3 +11,5 @@
 `Blitz/Config/DefaultBzBattleSettings.ini` contains all modules that can take damage when a tank takes fall damage
 
 `Blitz/Config/DefaultLocalizationFetcher.ini` has a list of all locales
+
+`Blitz/Content/TanksStuff/Dev/DT_DAVATanks.uasset` has all DAVA-UE tank mappings
