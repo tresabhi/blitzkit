@@ -18,6 +18,7 @@ import { definitions } from './definitions';
 import { equipmentIcons } from './equipmentIcons';
 import { flags } from './flags';
 import { gameModeBanners } from './gameModeBanners';
+import { migration } from './migration';
 import { moduleIcons } from './moduleIcons';
 import { shellIcons } from './shellIcons';
 import { skillIcons } from './skillIcons';
@@ -28,6 +29,7 @@ import { tankModels } from './tankModels';
 if (!targets && !allTargets) throw new Error('No target(s) specified');
 
 const methods = [
+  migration,
   definitions,
   tankModels,
   tankArmors,
