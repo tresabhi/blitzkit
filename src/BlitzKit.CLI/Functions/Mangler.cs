@@ -218,7 +218,7 @@ namespace BlitzKit.CLI.Functions
     async Task<Tank> MangleTank(VFS tankDir)
     {
       var pdaName = $"PDA_{tankDir.Name}";
-      var pda = provider.LoadObject($"{tankDir.Path}/{pdaName}.{pdaName}");
+      var pda = provider.LoadPackageObject($"{tankDir.Path}/{pdaName}.{pdaName}");
 
       var id = pda.Get<FName>("TankId").Text;
       var name = GetString($"TankEntity__{id.ToLowerInvariant()}__Short_Name");

@@ -28,11 +28,12 @@ namespace BlitzKit.CLI.Functions
       DefaultFileProvider provider0 = new(
         directory: new DirectoryInfo(pak0Path),
         searchOption: SearchOption.TopDirectoryOnly,
-        versions: new(EGame.GAME_UE5_3)
+        versions: new(EGame.GAME_UE5_3),
+        pathComparer: StringComparer.OrdinalIgnoreCase
       );
       provider0.Initialize();
       provider0.Mount();
-      provider0.TryFindGameFile("Blitz/Config/DefaultDlc.ini", out var defaultDlcGameFile);
+      provider0.TryGetGameFile("Blitz/Config/DefaultDlc.ini", out var defaultDlcGameFile);
 
       if (defaultDlcGameFile is not FPakEntry)
         throw new Exception("Failed to find DefaultDlc.ini");

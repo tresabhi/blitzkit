@@ -254,14 +254,14 @@ namespace BlitzKit.CLI.Models
       int[] indices
     )
     {
-      var uvs1 = new List<Vector2>() { vert1.UV };
-      var uvs2 = new List<Vector2>() { vert2.UV };
-      var uvs3 = new List<Vector2>() { vert3.UV };
+      var uvs1 = new List<Vector2>() { (Vector2)vert1.UV };
+      var uvs2 = new List<Vector2>() { (Vector2)vert2.UV };
+      var uvs3 = new List<Vector2>() { (Vector2)vert3.UV };
       foreach (var uv in uvs)
       {
-        uvs1.Add(uv[indices[0]]);
-        uvs2.Add(uv[indices[1]]);
-        uvs3.Add(uv[indices[2]]);
+        uvs1.Add((Vector2)uv[indices[0]]);
+        uvs2.Add((Vector2)uv[indices[1]]);
+        uvs3.Add((Vector2)uv[indices[2]]);
       }
 
       return (uvs1, uvs2, uvs3);

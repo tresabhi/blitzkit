@@ -21,7 +21,8 @@ namespace BlitzKit.CLI.Models
         directory: new DirectoryInfo(depot ? DEPOT_CONTAINERS_PATH : LOCAL_BUNDLED_CONTAINERS_PATH),
         extraDirectories: depot ? [] : [new(LOCAL_DLC_CONTAINERS_PATH)],
         searchOption: SearchOption.TopDirectoryOnly,
-        versions: new(EGame.GAME_UE5_3)
+        versions: new(EGame.GAME_UE5_3),
+        pathComparer: StringComparer.OrdinalIgnoreCase
       )
     {
       RootDirectory = new()

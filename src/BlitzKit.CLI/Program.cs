@@ -16,16 +16,23 @@ namespace BlitzKit.CLI
 
       switch (args[0])
       {
-        case "unpack":
-        {
-          await Unpacker.Unpack(args);
-          break;
-        }
+        // case "unpack":
+        // {
+        //   await Unpacker.Unpack(args);
+        //   break;
+        // }
 
-        case "mangle":
+        // case "mangle":
+        // {
+        //   Mangler mangler = new(args);
+        //   await mangler.Mangle();
+        //   break;
+        // }
+
+        case "mangle2":
         {
-          Mangler mangler = new(args);
-          await mangler.Mangle();
+          Mangler2 mangler2 = new(args);
+          mangler2.Mangle();
           break;
         }
 

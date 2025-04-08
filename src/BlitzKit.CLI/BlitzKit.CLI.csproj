@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="../../submodules/CUE4Parse/CUE4Parse-Conversion/CUE4Parse-Conversion.csproj" />
     <ProjectReference Include="../../submodules/CUE4Parse/CUE4Parse/CUE4Parse.csproj" />
+    <ProjectReference Include="../../submodules/UAssetAPI/UAssetAPI/UAssetAPI.csproj" />
   </ItemGroup>
 
   <ItemGroup>
