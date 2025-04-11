@@ -188,7 +188,7 @@
         "player_not_linked": "# Використайте команду \"/link\" щоб почати\nЯ не знаю, хто ви, але ви можете сказати мені сьогодні!",
         "tank_name_not_found": "# Танк не знайдено\nНе вдалось знайти танк за ім'ям \"%s1\".",
         "tank_id_not_found": "# Танк не знайдено\nНе вдалось знайти танк за ID \"%s1\". Спробуйте ввести назву танка замість числа.",
-        "no_tank_stats": "# No tank stats available\nThis player doesn't have any stats available. This may not be the player you are looking for.",
+        "no_tank_stats": "# Немає статистики для танка\nЦей гравець не має статистики.\nМожливо, це не той гравець, якого ви шукаєте.",
         "get_help": "Допомогти Discord серверу",
         "uncaught_error": "# Упс! BlitzKit зіткнувся з помилкою!\nНам дуже шкода. Можете попросити допомоги на [офіційному сервері Discord](https://discord.gg/nDt7AjGJQH).",
         "preview": "# Ця команда є в попередньому перегляді\n\nВи можете отримати доступ лише до цієї команди на [офіційному сервері Discord](https://discord.gg/nDt7AjGJQH). Команда в цілому буде доступна найближчим часом.",
@@ -399,8 +399,8 @@
         }
       },
       "breakdown": {
-        "name": "breakdown",
-        "description": "A period's breakdown by tanks played",
+        "name": "аналіз",
+        "description": "Аналіз періоду за зіграними танками",
         "body": {
           "total": "Загалом",
           "battles": "Бої",
