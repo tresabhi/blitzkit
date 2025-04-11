@@ -665,6 +665,7 @@
         "copied": "已複製！"
       },
       "tank_search": {
+        "clear_filters": "清除",
         "search_bar_hint": "搜尋戰車....",
         "recent": "最近查看",
         "select_all": "選擇全部",
@@ -731,6 +732,11 @@
       }
     },
     "home": {
+      "discord": {
+        "join_short": "Join cool people!",
+        "join_long": "Join super duper cool people!",
+        "action": "Discord"
+      },
       "hero": {
         "credit": "由 %s1 製作❤️"
       },
@@ -743,6 +749,12 @@
       },
       "help_translate": "請幫忙將 %s1 翻譯成 %s2！",
       "seo_description": "戰車世界閃擊戰 全方位工具"
+    },
+    "docs": {
+      "patches": {
+        "name": "BlitzKit Changelogs",
+        "seo_description": "Changelogs for BlitzKit Discord bot and website"
+      }
     },
     "tools": {
       "tankopedia": {
