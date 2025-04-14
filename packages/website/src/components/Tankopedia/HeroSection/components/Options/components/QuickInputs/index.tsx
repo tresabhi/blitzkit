@@ -71,8 +71,8 @@ export function QuickInputs() {
         pointerEvents: 'auto',
         position: 'absolute',
         left: '50%',
-        top: 16,
         transform: 'translateX(-50%)',
+        transitionDuration: '0.2s',
       }}
       className="quick-inputs"
     >

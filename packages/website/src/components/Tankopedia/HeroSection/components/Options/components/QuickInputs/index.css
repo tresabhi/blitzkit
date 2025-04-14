@@ -1,8 +1,8 @@
 .quick-inputs {
-  display: none;
+  top: -2rem;
 }
 
 .quick-inputs:focus-within,
 .tank-sandbox-container:hover .quick-inputs {
-  display: flex;
+  top: 1rem;
 }
