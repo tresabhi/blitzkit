@@ -1,3 +1,7 @@
+#define USE_FOG
+
+#include <fog_pars_fragment>
+
 varying vec3 vNormal;
 varying vec3 vViewPosition;
 
@@ -39,6 +43,8 @@ vec3 getPenetrationColor(bool isThreeCalibersRule, bool couldHaveRicochet) {
 }
 
 void main() {
+  #include <clipping_planes_fragment>
+
   vec2 screenCoord = gl_FragCoord.xy / resolution;
   vec4 spacedArmorData = texture2D(spacedArmorBuffer, screenCoord);
   bool isUnderSpacedArmor = spacedArmorData.a != 0.0;
@@ -111,4 +117,6 @@ void main() {
   } else {
     gl_FragColor = vec4(baseColor, (1.0 - penetrationChance) * alpha);
   }
+
+  #include <fog_fragment>
 }

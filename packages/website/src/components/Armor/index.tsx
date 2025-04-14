@@ -1,4 +1,4 @@
-import { createPortal, useFrame } from '@react-three/fiber';
+import { createPortal, useFrame, useThree } from '@react-three/fiber';
 import { memo, useState } from 'react';
 import { DepthTexture, Scene, Vector2 } from 'three';
 import { PrimaryArmorScene } from './components/PrimaryArmorScene';
@@ -6,8 +6,14 @@ import { spacedArmorRenderTarget } from './components/PrimaryArmorSceneComponent
 import { SpacedArmorScene } from './components/SpacedArmorScene';
 
 export const Armor = memo(() => {
+  const rootScene = useThree((state) => state.scene);
   const [spacedArmorScene] = useState(() => new Scene());
-  const [primaryArmorScene] = useState(() => new Scene());
+  const [primaryArmorScene] = useState(() => {
+    const primaryArmorScene = new Scene();
+    primaryArmorScene.fog = rootScene.fog;
+
+    return primaryArmorScene;
+  });
   const spacedArmorPortal = createPortal(
     <SpacedArmorScene scene={spacedArmorScene} />,
     spacedArmorScene,

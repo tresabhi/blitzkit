@@ -5,7 +5,14 @@ import {
 } from '@blitzkit/core';
 import { invalidate, useFrame } from '@react-three/fiber';
 import { useEffect } from 'react';
-import { MeshBasicMaterial, Object3D, ShaderMaterial, Vector2 } from 'three';
+import {
+  MeshBasicMaterial,
+  Object3D,
+  ShaderMaterial,
+  UniformsLib,
+  UniformsUtils,
+  Vector2,
+} from 'three';
 import { degToRad } from 'three/src/math/MathUtils.js';
 import { hasEquipment } from '../../../../core/blitzkit/hasEquipment';
 import { jsxTree } from '../../../../core/blitzkit/jsxTree';
@@ -36,27 +43,33 @@ export function PrimaryArmorSceneComponent({
     fragmentShader,
     vertexShader,
 
+    fog: true,
     transparent: true,
 
-    uniforms: {
-      thickness: { value: null },
-      penetration: { value: null },
-      caliber: { value: null },
-      ricochet: { value: null },
-      normalization: { value: null },
-      isExplosive: { value: null },
-      canSplash: { value: null },
-      damage: { value: null },
-      explosionRadius: { value: null },
-      greenPenetration: { value: null },
-      advancedHighlighting: { value: null },
-      opaque: { value: null },
+    uniforms: UniformsUtils.merge([
+      UniformsLib.common,
+      UniformsLib.fog,
 
-      inverseProjectionMatrix: { value: null },
-      resolution: { value: new Vector2() },
-      spacedArmorBuffer: { value: null },
-      spacedArmorDepth: { value: null },
-    },
+      {
+        thickness: { value: null },
+        penetration: { value: null },
+        caliber: { value: null },
+        ricochet: { value: null },
+        normalization: { value: null },
+        isExplosive: { value: null },
+        canSplash: { value: null },
+        damage: { value: null },
+        explosionRadius: { value: null },
+        greenPenetration: { value: null },
+        advancedHighlighting: { value: null },
+        opaque: { value: null },
+
+        inverseProjectionMatrix: { value: null },
+        resolution: { value: new Vector2() },
+        spacedArmorBuffer: { value: null },
+        spacedArmorDepth: { value: null },
+      },
+    ]),
   });
 
   useEffect(() => {

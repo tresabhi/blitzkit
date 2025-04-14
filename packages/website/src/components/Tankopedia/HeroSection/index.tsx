@@ -4,7 +4,6 @@ import { times } from 'lodash-es';
 import { Suspense, useEffect, useMemo, useRef } from 'react';
 import { NAVBAR_HEIGHT } from '../../../constants/navbar';
 import { awaitableTankDefinitions } from '../../../core/awaitables/tankDefinitions';
-import { Var } from '../../../core/radix/var';
 import { useFullScreen } from '../../../hooks/useFullScreen';
 import { useLocale } from '../../../hooks/useLocale';
 import { Duel } from '../../../stores/duel';
@@ -74,15 +73,10 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
   }, []);
 
   return (
-    <Flex justify="center" style={{ backgroundColor: Var('color-surface') }}>
+    <Flex justify="center" style={{ backgroundColor: 'black' }}>
       <Flex
         direction={{ initial: 'column', md: 'row' }}
-        style={{
-          backgroundColor: isFullScreen
-            ? Var('color-background')
-            : Var('color-surface'),
-          zIndex: isFullScreen ? 2 : undefined,
-        }}
+        style={{ zIndex: isFullScreen ? 2 : undefined }}
         height={
           isFullScreen ? '100vh' : `calc(100vh - ${NAVBAR_HEIGHT}px - 8rem)`
         }

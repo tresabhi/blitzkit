@@ -1,11 +1,17 @@
+#define USE_FOG
+
+#include <fog_pars_vertex>
+
 varying vec3 vNormal;
 varying vec3 vViewPosition;
 
 void main() {
-  vec4 vViewPosition4 = modelViewMatrix * vec4(position, 1.0);
+  vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
 
-  vViewPosition = vViewPosition4.xyz;
+  vViewPosition = mvPosition.xyz;
   vNormal = normalMatrix * normal;
 
-  gl_Position = projectionMatrix * vViewPosition4;
+  gl_Position = projectionMatrix * mvPosition;
+
+  #include <fog_vertex>
 }

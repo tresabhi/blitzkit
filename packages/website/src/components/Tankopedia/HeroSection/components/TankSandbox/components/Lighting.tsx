@@ -4,14 +4,16 @@ import { Euler } from 'three';
 import { degToRad } from 'three/src/math/MathUtils.js';
 import { useModel } from '../../../../../../hooks/useModel';
 import { Duel } from '../../../../../../stores/duel';
-import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
 import { TankopediaDisplay } from '../../../../../../stores/tankopediaPersistent/constants';
 
 const LIGHTS_COUNT = 5;
 
-export function Lighting() {
+interface LightingProps {
+  display: TankopediaDisplay;
+}
+
+export function Lighting({ display }: LightingProps) {
   const protagonist = Duel.use((state) => state.protagonist);
-  const display = TankopediaEphemeral.use((state) => state.display);
   const { hasPbr } = useModel(protagonist.tank.id);
   const isBrighterLighting =
     !hasPbr && display !== TankopediaDisplay.StaticArmor;

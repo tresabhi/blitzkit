@@ -1,12 +1,14 @@
 import { BLITZKIT_TANK_ICON_SIZE } from '@blitzkit/core';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, invalidate } from '@react-three/fiber';
 import {
   forwardRef,
   Suspense,
   useEffect,
   useImperativeHandle,
   useRef,
+  useState,
 } from 'react';
+import { Fog } from 'three';
 import { applyPitchYawLimits } from '../../../../../core/blitz/applyPitchYawLimits';
 import { modelTransformEvent } from '../../../../../core/blitzkit/modelTransform';
 import { Pose, poseEvent } from '../../../../../core/blitzkit/pose';
@@ -36,8 +38,15 @@ interface TankSandboxProps {
   naked?: boolean;
 }
 
+const near0 = 15;
+const far0 = 25;
+const near1 = 0;
+const far1 = 0;
+const animationTime = 0.5;
+
 export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
   ({ thicknessRange, naked }, ref) => {
+    const fog = useRef(new Fog('black', near0, far0));
     const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
     const canvas = useRef<HTMLCanvasElement>(null);
     const hasImprovedVerticalStabilizer = useEquipment(122);
@@ -50,11 +59,41 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
       tankModelDefinition.turrets[protagonistTurret.id];
     const gunModelDefinition =
       turretModelDefinition.guns[protagonistGun.gun_type!.value.base.id];
-    const display = TankopediaEphemeral.use((state) => state.display);
+    const rawDisplay = TankopediaEphemeral.use((state) => state.display);
+    const [display, setDisplay] = useState(rawDisplay);
     const hideTankModelUnderArmor = TankopediaPersistent.use(
       (state) => state.hideTankModelUnderArmor,
     );
     const onScreen = useOnScreen(canvas);
+
+    useEffect(() => {
+      if (rawDisplay === display) return;
+
+      const t0 = Date.now();
+
+      const interval = setInterval((e) => {
+        const t = (Date.now() - t0) / 1000;
+        const x = t / animationTime;
+        const y = Math.cbrt(-2 * Math.abs(x - 0.5)) + 1;
+
+        const near = near0 + (near1 - near0) * y;
+        const far = far0 + (far1 - far0) * y;
+
+        fog.current.near = near;
+        fog.current.far = far;
+
+        invalidate();
+
+        if (rawDisplay !== display && x >= 0.5) setDisplay(rawDisplay);
+        if (x >= 1) {
+          fog.current.near = near0;
+          fog.current.far = far0;
+          clearInterval(interval);
+        }
+      }, 1000 / 60);
+
+      return () => clearInterval(interval);
+    }, [rawDisplay]);
 
     useImperativeHandle(ref, () => canvas.current!, []);
 
@@ -166,6 +205,8 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
 
     return (
       <Canvas
+        ref={canvas}
+        scene={{ fog: naked ? undefined : fog.current }}
         frameloop={
           onScreen
             ? display === TankopediaDisplay.ShootingRange
@@ -179,7 +220,6 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
           preserveDrawingBuffer: true,
         }}
         shadows
-        ref={canvas}
         onPointerDown={handlePointerDown}
         onPointerMissed={() => {
           mutateTankopediaEphemeral((draft) => {
@@ -208,7 +248,7 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
           {display === TankopediaDisplay.StaticArmor && (
             <StaticArmor thicknessRange={thicknessRange} />
           )}
-          <Lighting />
+          <Lighting display={display} />
         </Suspense>
       </Canvas>
     );
