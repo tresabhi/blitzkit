@@ -317,7 +317,7 @@ export function Controls({ naked }: ControlsProps) {
     updateCamera();
 
     const unsubscribeDisplay = tankopediaEphemeralStore.subscribe(
-      (state) => state.display,
+      (state) => state.display === TankopediaDisplay.ShootingRange,
       () => {
         handleDisturbance();
         updateCamera();
