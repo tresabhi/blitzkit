@@ -75,7 +75,7 @@ export function Options({ thicknessRange, canvas, skeleton }: OptionsProps) {
   );
   const wireframe = TankopediaPersistent.use((state) => state.wireframe);
   const opaque = TankopediaPersistent.use((state) => state.opaque);
-  const fullScreenAvailable = useFullscreenAvailability();
+  const fullScreenAvailable = useFullscreenAvailability(true);
   const developerMode = App.use((state) => state.developerMode);
   const protagonistTank = Duel.use((state) => state.protagonist.tank);
   const antagonistGun = Duel.use((state) => state.antagonist.gun);

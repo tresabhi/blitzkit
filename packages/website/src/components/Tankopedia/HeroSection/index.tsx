@@ -1,5 +1,5 @@
 import { TankType } from '@blitzkit/core';
-import { Box, Flex, Heading, Text } from '@radix-ui/themes';
+import { Box, Flex, Heading, Spinner, Text } from '@radix-ui/themes';
 import { times } from 'lodash-es';
 import { Suspense, useEffect, useMemo, useRef } from 'react';
 import { NAVBAR_HEIGHT } from '../../../constants/navbar';
@@ -13,11 +13,11 @@ import type { ThicknessRange } from '../../Armor/components/StaticArmor';
 import { classIcons } from '../../ClassIcon';
 import { Options } from './components/Options';
 import { TankSandbox } from './components/TankSandbox';
-import { TankSandboxLoader } from './components/TankSandboxLoader';
 
 const tankDefinitions = await awaitableTankDefinitions;
 
 export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
+  const revealed = TankopediaEphemeral.use((state) => state.revealed);
   const disturbed = TankopediaEphemeral.use((state) => state.disturbed);
   const { unwrap } = useLocale();
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -92,63 +92,6 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
         top={isFullScreen ? '0' : undefined}
         left={isFullScreen ? '0' : undefined}
       >
-        <Flex
-          justify="center"
-          position={{ initial: 'relative', md: 'absolute' }}
-          left={{ initial: '0', md: '5', lg: '9' }}
-          py="4"
-          top={{ initial: '8', md: '50%' }}
-          style={{ transform: 'translateY(-50%)', transitionDuration: '200ms' }}
-          direction="column"
-          align={{ initial: 'center', md: 'start' }}
-          gap={disturbed ? '0' : { initial: '0', md: '2' }}
-        >
-          <Flex align="center" gap="3">
-            <Heading
-              color={treeColor}
-              trim="end"
-              size={
-                disturbed
-                  ? { initial: '7', lg: '8' }
-                  : { initial: '8', lg: '9' }
-              }
-              style={{ transitionDuration: '200ms' }}
-            >
-              <Icon width="1em" height="1em" />
-            </Heading>
-
-            <Heading
-              weight="bold"
-              size={
-                disturbed
-                  ? { initial: '7', lg: '8' }
-                  : { initial: '8', lg: '9' }
-              }
-              style={{ transitionDuration: '200ms' }}
-              wrap="nowrap"
-              color={treeColor}
-            >
-              {unwrap(protagonist.name)}
-            </Heading>
-          </Flex>
-
-          <Box ml="3">
-            <Text
-              color="gray"
-              size={{ initial: '3', lg: disturbed ? '4' : '5' }}
-              weight="light"
-              ml={{
-                initial: '0',
-                md: disturbed ? 'var(--font-size-7)' : 'var(--font-size-8)',
-                lg: disturbed ? 'var(--font-size-8)' : 'var(--font-size-9)',
-              }}
-              style={{ transitionDuration: '200ms' }}
-            >
-              BlitzKit Tankopedia
-            </Text>
-          </Box>
-        </Flex>
-
         <Box
           className="tank-sandbox-container"
           flexGrow="1"
@@ -164,9 +107,9 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
               left={disturbed ? '0' : { initial: '0', md: '12.5%' }}
               style={{ transitionDuration: '200ms' }}
             >
-              {skeleton && <TankSandboxLoader id={protagonist.id} />}
+              {/* {skeleton && <TankSandboxLoader id={protagonist.id} />} */}
 
-              <Suspense fallback={<TankSandboxLoader id={protagonist.id} />}>
+              <Suspense>
                 <TankSandbox ref={canvas} thicknessRange={thicknessRange} />
               </Suspense>
             </Box>
@@ -178,6 +121,86 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
             />
           </Box>
         </Box>
+
+        <Flex
+          justify="center"
+          position={{ initial: 'relative', md: 'absolute' }}
+          left={{ initial: '0', md: '5', lg: '9' }}
+          py="4"
+          top={{ initial: '8', md: '50%' }}
+          style={{
+            transform: 'translate(0, -50%)',
+            transitionDuration: '200ms',
+          }}
+          direction="column"
+          align={{ initial: 'center', md: 'start' }}
+          gap={disturbed ? '0' : { initial: '0', md: '2' }}
+        >
+          <Flex align="center" gap="3">
+            <Heading
+              color={treeColor}
+              trim="end"
+              size={
+                disturbed
+                  ? { initial: '6', lg: '7' }
+                  : { initial: '7', lg: '8' }
+              }
+              style={{ transitionDuration: '200ms', position: 'relative' }}
+            >
+              <Icon
+                width="1em"
+                height="1em"
+                style={{ opacity: revealed ? 1 : 0 }}
+              />
+              <Spinner
+                style={{
+                  position: 'absolute',
+                  top: '0',
+                  left: '0',
+                  width: '1em',
+                  height: '1em',
+                  opacity: revealed ? 0 : 1,
+                }}
+              />
+            </Heading>
+
+            <Heading
+              weight="regular"
+              size={
+                disturbed
+                  ? { initial: '7', lg: '8' }
+                  : { initial: '8', lg: '9' }
+              }
+              style={{ transitionDuration: '200ms' }}
+              wrap="nowrap"
+              color={treeColor}
+            >
+              {unwrap(protagonist.name)}
+            </Heading>
+          </Flex>
+
+          <Box
+            ml="3"
+            style={{
+              transitionDuration: '200ms',
+              opacity: revealed ? 1 : 0,
+              transform: revealed ? 'translateY(0)' : 'translateY(-100%)',
+            }}
+          >
+            <Text
+              color="gray"
+              size={{ initial: '3', lg: disturbed ? '4' : '5' }}
+              weight="light"
+              ml={{
+                initial: '0',
+                md: disturbed ? 'var(--font-size-6)' : 'var(--font-size-7)',
+                lg: disturbed ? 'var(--font-size-7)' : 'var(--font-size-8)',
+              }}
+            >
+              BlitzKit Tankopedia
+            </Text>
+          </Box>
+        </Flex>
       </Flex>
     </Flex>
   );

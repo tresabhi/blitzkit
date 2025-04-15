@@ -28,8 +28,8 @@ import {
 } from '../../../../Armor/components/StaticArmor';
 import { AutoClear } from './components/AutoClear';
 import { Controls } from './components/Control';
+import { InitialFogReveal } from './components/InitialFogReveal';
 import { Lighting } from './components/Lighting';
-import { ModelLoader } from './components/ModelLoader';
 import { SceneProps } from './components/SceneProps';
 import { TankModel } from './components/TankModel';
 
@@ -38,15 +38,15 @@ interface TankSandboxProps {
   naked?: boolean;
 }
 
-const near0 = 15;
-const far0 = 25;
-const near1 = 0;
-const far1 = 0;
-const animationTime = 0.5;
+export const forNear0 = 15;
+export const fogFar0 = 25;
+export const forNear1 = 0;
+export const fogFar1 = 0;
+export const fogAnimationTime = 0.5;
 
 export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
   ({ thicknessRange, naked }, ref) => {
-    const fog = useRef(new Fog('black', near0, far0));
+    const fog = useRef(new Fog('black', forNear1, fogFar1));
     const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
     const canvas = useRef<HTMLCanvasElement>(null);
     const hasImprovedVerticalStabilizer = useEquipment(122);
@@ -73,11 +73,11 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
 
       const interval = setInterval((e) => {
         const t = (Date.now() - t0) / 1000;
-        const x = t / animationTime;
+        const x = t / fogAnimationTime;
         const y = Math.cbrt(-2 * Math.abs(x - 0.5)) + 1;
 
-        const near = near0 + (near1 - near0) * y;
-        const far = far0 + (far1 - far0) * y;
+        const near = forNear0 + (forNear1 - forNear0) * y;
+        const far = fogFar0 + (fogFar1 - fogFar0) * y;
 
         fog.current.near = near;
         fog.current.far = far;
@@ -86,8 +86,8 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
 
         if (rawDisplay !== display && x >= 0.5) setDisplay(rawDisplay);
         if (x >= 1) {
-          fog.current.near = near0;
-          fog.current.far = far0;
+          fog.current.near = forNear0;
+          fog.current.far = fogFar0;
           clearInterval(interval);
         }
       }, 1000 / 60);
@@ -234,7 +234,6 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
           outline: naked ? '1rem red solid' : undefined,
         }}
       >
-        <Controls naked={naked} />
         {!naked && <SceneProps />}
         {(display === TankopediaDisplay.Model ||
           (display === TankopediaDisplay.DynamicArmor &&
@@ -243,7 +242,11 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
         <ArmorPlateDisplay />
         <AutoClear />
 
-        <Suspense fallback={<ModelLoader />}>
+        <Suspense>
+          {/* Controls within Suspense to allow for frame-perfect start of camera auto-rotate */}
+          <Controls naked={naked} />
+          <InitialFogReveal />
+
           {display === TankopediaDisplay.DynamicArmor && <Armor />}
           {display === TankopediaDisplay.StaticArmor && (
             <StaticArmor thicknessRange={thicknessRange} />
