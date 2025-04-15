@@ -25,6 +25,12 @@ export function InitialFogReveal() {
 
       fog.near = near;
       fog.far = far;
+
+      if (x >= 1) {
+        fog.near = forNear0;
+        fog.far = fogFar0;
+        clearInterval(interval);
+      }
     }, 1000 / 60);
 
     return () => clearInterval(interval);

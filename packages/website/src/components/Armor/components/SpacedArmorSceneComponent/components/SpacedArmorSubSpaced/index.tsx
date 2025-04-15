@@ -125,11 +125,15 @@ export function SpacedArmorSubSpaced({
   return (
     <>
       {jsxTree(node, {
+        group(_, props, key) {
+          return <group {...props} key={`${key}-spaced-sub-spaced-exclude`} />;
+        },
+
         mesh(_, props, key) {
           return (
             <mesh
               {...props}
-              key={key}
+              key={`${key}-spaced-sub-spaced-exclude`}
               renderOrder={2}
               material={material}
               onClick={() => {}}
@@ -145,11 +149,15 @@ export function SpacedArmorSubSpaced({
       })}
 
       {jsxTree(node, {
+        group(_, props, key) {
+          return <group {...props} key={`${key}-spaced-sub-spaced-include`} />;
+        },
+
         mesh(_, props, key) {
           return (
             <mesh
               {...props}
-              key={key}
+              key={`${key}-spaced-sub-spaced-include`}
               renderOrder={5}
               material={depthWriteMaterial}
             />

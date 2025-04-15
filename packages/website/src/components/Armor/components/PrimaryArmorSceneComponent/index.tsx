@@ -216,7 +216,7 @@ export function PrimaryArmorSceneComponent({
           return (
             <mesh
               {...props}
-              key={key}
+              key={`${key}-exclude`}
               renderOrder={0}
               material={excludeMaterial}
             />
@@ -226,7 +226,12 @@ export function PrimaryArmorSceneComponent({
       {jsxTree(node, {
         mesh(_, props, key) {
           return (
-            <mesh {...props} key={key} renderOrder={1} material={material} />
+            <mesh
+              {...props}
+              key={`${key}-include`}
+              renderOrder={1}
+              material={material}
+            />
           );
         },
       })}

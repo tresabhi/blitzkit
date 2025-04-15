@@ -4,6 +4,7 @@ import { times } from 'lodash-es';
 import { Suspense, useEffect, useMemo, useRef } from 'react';
 import { NAVBAR_HEIGHT } from '../../../constants/navbar';
 import { awaitableTankDefinitions } from '../../../core/awaitables/tankDefinitions';
+import { Var } from '../../../core/radix/var';
 import { useFullScreen } from '../../../hooks/useFullScreen';
 import { useLocale } from '../../../hooks/useLocale';
 import { Duel } from '../../../stores/duel';
@@ -107,6 +108,19 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
               left={disturbed ? '0' : { initial: '0', md: '12.5%' }}
               style={{ transitionDuration: '200ms' }}
             >
+              {!revealed && (
+                <Spinner
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: Var('space-6'),
+                    height: Var('space-6'),
+                  }}
+                />
+              )}
+
               {/* {skeleton && <TankSandboxLoader id={protagonist.id} />} */}
 
               <Suspense>
@@ -147,21 +161,7 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
               }
               style={{ transitionDuration: '200ms', position: 'relative' }}
             >
-              <Icon
-                width="1em"
-                height="1em"
-                style={{ opacity: revealed ? 1 : 0 }}
-              />
-              <Spinner
-                style={{
-                  position: 'absolute',
-                  top: '0',
-                  left: '0',
-                  width: '1em',
-                  height: '1em',
-                  opacity: revealed ? 0 : 1,
-                }}
-              />
+              <Icon width="1em" height="1em" />
             </Heading>
 
             <Heading
@@ -179,14 +179,7 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
             </Heading>
           </Flex>
 
-          <Box
-            ml="3"
-            style={{
-              transitionDuration: '200ms',
-              opacity: revealed ? 1 : 0,
-              transform: revealed ? 'translateY(0)' : 'translateY(-100%)',
-            }}
-          >
+          <Box ml="3">
             <Text
               color="gray"
               size={{ initial: '3', lg: disturbed ? '4' : '5' }}

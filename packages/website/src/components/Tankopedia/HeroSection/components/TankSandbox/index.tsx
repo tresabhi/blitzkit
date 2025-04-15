@@ -70,8 +70,7 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
       if (rawDisplay === display) return;
 
       const t0 = Date.now();
-
-      const interval = setInterval((e) => {
+      const interval = setInterval(() => {
         const t = (Date.now() - t0) / 1000;
         const x = t / fogAnimationTime;
         const y = Math.cbrt(-2 * Math.abs(x - 0.5)) + 1;

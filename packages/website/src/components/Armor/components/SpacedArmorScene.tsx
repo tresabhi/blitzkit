@@ -74,7 +74,7 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
           return (
             <SpacedArmorSceneComponent
               scene={scene}
-              key={node.uuid}
+              key={`${node.uuid}-hull`}
               type={spaced ? ArmorType.Spaced : ArmorType.Primary}
               thickness={thickness}
               node={node}
@@ -93,7 +93,7 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
         return (
           <SpacedArmorSceneComponent
             scene={scene}
-            key={node.uuid}
+            key={`${node.uuid}-track`}
             type={ArmorType.External}
             thickness={trackModelDefinition.thickness}
             variant="track"
@@ -127,7 +127,7 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
               <group position={turretOrigin}>
                 <SpacedArmorSceneComponent
                   scene={scene}
-                  key={node.uuid}
+                  key={`${node.uuid}-turret`}
                   type={spaced ? ArmorType.Spaced : ArmorType.Primary}
                   thickness={thickness}
                   node={node}
@@ -158,7 +158,7 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
               return null;
 
             return (
-              <group position={hullOrigin} key={node.uuid}>
+              <group position={hullOrigin} key={`${node.uuid}-gun-spaced}`}>
                 <group position={turretOrigin.clone().add(gunOrigin)}>
                   <SpacedArmorSceneComponent
                     scene={scene}
@@ -185,7 +185,7 @@ export const SpacedArmorScene = memo<SpacedArmorSceneProps>(({ scene }) => {
             return (
               <SpacedArmorSceneComponent
                 scene={scene}
-                key={node.uuid}
+                key={`${node.uuid}-gun-external`}
                 type={ArmorType.External}
                 thickness={gunModelDefinition.thickness}
                 variant="gun"

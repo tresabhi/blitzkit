@@ -1,4 +1,4 @@
-import type { MeshProps, Object3DProps } from '@react-three/fiber';
+import type { GroupProps, MeshProps } from '@react-three/fiber';
 import type { ReactNode } from 'react';
 import { Mesh, Object3D } from 'three';
 
@@ -6,11 +6,7 @@ export function jsxTree(
   node: Object3D,
   mergers?: {
     mesh?: (mesh: Mesh, props: MeshProps, key: string) => ReactNode;
-    group?: (
-      object3d: Object3D,
-      props: Object3DProps,
-      key: string,
-    ) => ReactNode;
+    group?: (object3d: Object3D, props: GroupProps, key: string) => ReactNode;
   },
 ): ReactNode {
   if (node instanceof Mesh) {

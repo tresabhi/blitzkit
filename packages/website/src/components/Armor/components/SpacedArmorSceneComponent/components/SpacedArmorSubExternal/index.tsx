@@ -115,11 +115,17 @@ export function SpacedArmorSubExternal({
   return (
     <>
       {jsxTree(node, {
+        group(_, props, key) {
+          return (
+            <group {...props} key={`${key}-spaced-sub-external-exclude`} />
+          );
+        },
+
         mesh(_, props, key) {
           return (
             <mesh
               {...props}
-              key={key}
+              key={`${key}-spaced-sub-external-exclude`}
               renderOrder={3}
               material={
                 new MeshBasicMaterial({
@@ -142,9 +148,20 @@ export function SpacedArmorSubExternal({
       })}
 
       {jsxTree(node, {
+        group(_, props, key) {
+          return (
+            <group {...props} key={`${key}-spaced-sub-external-include`} />
+          );
+        },
+
         mesh(_, props, key) {
           return (
-            <mesh {...props} key={key} renderOrder={4} material={material} />
+            <mesh
+              {...props}
+              key={`${key}-spaced-sub-external-include`}
+              renderOrder={4}
+              material={material}
+            />
           );
         },
       })}

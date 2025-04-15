@@ -373,11 +373,11 @@ export function SpacedArmorSceneComponent({
     <>
       {props.type === ArmorType.Primary &&
         jsxTree(node, {
-          mesh(mesh, props, key) {
+          mesh(_, props, key) {
             return (
               <mesh
                 {...props}
-                key={key}
+                key={`${key}-spaced-component`}
                 renderOrder={0}
                 material={omitMaterial}
                 userData={
