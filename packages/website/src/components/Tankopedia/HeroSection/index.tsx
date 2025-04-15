@@ -139,12 +139,17 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
         <Flex
           justify="center"
           position={{ initial: 'relative', md: 'absolute' }}
-          left={{ initial: '0', md: '5', lg: '9' }}
+          left={{
+            initial: '0',
+            md: disturbed ? '3' : '5',
+            lg: disturbed ? '7' : '9',
+          }}
           py="4"
           top={{ initial: '8', md: '50%' }}
           style={{
             transform: 'translate(0, -50%)',
             transitionDuration: '200ms',
+            userSelect: 'none',
           }}
           direction="column"
           align={{ initial: 'center', md: 'start' }}
@@ -182,7 +187,10 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
           <Box ml="3">
             <Text
               color="gray"
-              size={{ initial: '3', lg: disturbed ? '4' : '5' }}
+              size={{
+                initial: disturbed ? '3' : '4',
+                lg: disturbed ? '4' : '5',
+              }}
               weight="light"
               ml={{
                 initial: '0',

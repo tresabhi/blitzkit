@@ -403,6 +403,7 @@ export function Options({ thicknessRange, canvas, skeleton }: OptionsProps) {
             value={`${display}`}
             onValueChange={(value) => {
               mutateTankopediaEphemeral((draft) => {
+                draft.disturbed = true;
                 draft.display = Number(value);
                 draft.shootingRangeZoom = ShootingRangeZoom.Arcade;
               });
