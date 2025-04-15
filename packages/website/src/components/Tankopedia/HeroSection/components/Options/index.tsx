@@ -42,6 +42,7 @@ import {
 } from '../../../../../stores/tankopediaEphemeral';
 import { TankopediaPersistent } from '../../../../../stores/tankopediaPersistent';
 import { TankopediaDisplay } from '../../../../../stores/tankopediaPersistent/constants';
+import type { MaybeSkeletonComponentProps } from '../../../../../types/maybeSkeletonComponentProps';
 import type { ThicknessRange } from '../../../../Armor/components/StaticArmor';
 import { ModuleButton } from '../../../../ModuleButtons/ModuleButton';
 import { SmallTankIcon } from '../../../../SmallTankIcon';
@@ -51,12 +52,12 @@ import { DynamicArmorSwitcher } from './components/DynamicArmorSwitcher';
 import { QuickInputs } from './components/QuickInputs';
 import { Thicknesses } from './components/Thicknesses';
 
-interface OptionsProps {
+type OptionsProps = MaybeSkeletonComponentProps & {
   thicknessRange: ThicknessRange;
   canvas: RefObject<HTMLCanvasElement>;
-}
+};
 
-export function Options({ thicknessRange, canvas }: OptionsProps) {
+export function Options({ thicknessRange, canvas, skeleton }: OptionsProps) {
   const hasCustomShell = TankopediaEphemeral.use(
     (state) => state.customShell !== undefined,
   );
@@ -111,216 +112,212 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
         />
       )}
 
-      {display === TankopediaDisplay.StaticArmor && (
-        <Thicknesses thicknessRange={thicknessRange} />
-      )}
+      <Thicknesses skeleton={skeleton} thicknessRange={thicknessRange} />
 
-      {display === TankopediaDisplay.DynamicArmor && (
-        <Flex
-          gap="2"
-          direction="column"
-          top="50%"
-          right="3"
-          style={{ position: 'absolute', transform: 'translateY(-50%)' }}
-          align="end"
-        >
-          {!hasCustomShell && (
-            <Text color="gray" size={{ initial: '1', sm: '2' }}>
-              {literals(strings.common.units.mm, [
-                (
-                  resolvePenetrationCoefficient(
-                    hasCalibratedShells,
-                    antagonistShell.type,
-                  ) * antagonistShell.penetration.near
-                ).toFixed(0),
-              ])}
-            </Text>
-          )}
-          {antagonistUniqueGuns.length > 1 && (
-            <Popover.Root>
-              <Popover.Trigger>
-                <IconButton
-                  radius="full"
-                  variant="soft"
-                  color="gray"
-                  size={{ initial: '2', sm: '3' }}
-                  style={{ position: 'relative' }}
-                >
-                  <Text
-                    size="1"
-                    color="gray"
-                    style={{
-                      position: 'absolute',
-                      right: 0,
-                      bottom: 0,
-                    }}
-                    mr="2"
-                    mb="1"
-                  >
-                    {
-                      TIER_ROMAN_NUMERALS[
-                        antagonistGun.gun_type!.value.base.tier
-                      ]
-                    }
-                  </Text>
+      <Flex
+        gap="2"
+        direction="column"
+        top="50%"
+        right={display === TankopediaDisplay.DynamicArmor ? '3' : '-3rem'}
+        style={{
+          position: 'absolute',
+          transform: 'translateY(-50%)',
+          transitionDuration: '200ms',
+        }}
+        align="end"
+      >
+        {!hasCustomShell && (
+          <Text color="gray" size={{ initial: '1', sm: '2' }}>
+            {literals(strings.common.units.mm, [
+              (
+                resolvePenetrationCoefficient(
+                  hasCalibratedShells,
+                  antagonistShell.type,
+                ) * antagonistShell.penetration.near
+              ).toFixed(0),
+            ])}
+          </Text>
+        )}
 
-                  <img
-                    alt="Antagonist Gun"
-                    src={asset('icons/modules/gun.webp')}
-                    style={{
-                      width: '65%',
-                      height: '65%',
-                      objectFit: 'contain',
-                    }}
-                  />
-                </IconButton>
-              </Popover.Trigger>
-
-              <Popover.Content side="left" align="center">
-                <Flex gap="2">
-                  {[...antagonistUniqueGuns]
-                    .reverse()
-                    .map(({ gun, turret }) => (
-                      <ModuleButton
-                        module="gun"
-                        key={gun.gun_type!.value.base.id}
-                        onClick={() =>
-                          mutateDuel((draft) => {
-                            draft.antagonist.turret = turret;
-                            draft.antagonist.gun = gun;
-                            draft.antagonist.shell =
-                              gun.gun_type!.value.base.shells[0];
-                          })
-                        }
-                        selected={
-                          gun.gun_type!.value.base.id ===
-                          antagonistGun.gun_type!.value.base.id
-                        }
-                        discriminator={
-                          TIER_ROMAN_NUMERALS[gun.gun_type!.value.base.tier]
-                        }
-                        secondaryDiscriminator={
-                          <Text style={{ fontSize: '0.75em' }}>
-                            {literals(strings.common.units.mm, [
-                              gun.gun_type!.value.base.shells[0].caliber.toFixed(
-                                0,
-                              ),
-                            ])}
-                          </Text>
-                        }
-                      />
-                    ))}
-                </Flex>
-              </Popover.Content>
-            </Popover.Root>
-          )}
-          <Flex
-            direction="column"
-            style={{
-              borderRadius: 'var(--radius-full)',
-            }}
-            overflow="hidden"
-          >
-            {antagonistGun.gun_type!.value.base.shells.map((thisShell) => (
+        {antagonistUniqueGuns.length > 1 && (
+          <Popover.Root>
+            <Popover.Trigger>
               <IconButton
-                color={
-                  thisShell.id === antagonistShell.id && !hasCustomShell
-                    ? undefined
-                    : 'gray'
-                }
+                radius="full"
                 variant="soft"
-                key={thisShell.id}
+                color="gray"
                 size={{ initial: '2', sm: '3' }}
-                radius="none"
-                onClick={() => {
-                  mutateDuel((draft) => {
-                    draft.antagonist.shell = thisShell;
-                  });
-                  mutateTankopediaEphemeral((draft) => {
-                    draft.shot = undefined;
-                    draft.customShell = undefined;
-                  });
-                }}
+                style={{ position: 'relative' }}
               >
-                <img
-                  alt={unwrap(thisShell.name)}
-                  src={asset(`icons/shells/${thisShell.icon}.webp`)}
+                <Text
+                  size="1"
+                  color="gray"
                   style={{
-                    width: '50%',
-                    height: '50%',
+                    position: 'absolute',
+                    right: 0,
+                    bottom: 0,
+                  }}
+                  mr="2"
+                  mb="1"
+                >
+                  {TIER_ROMAN_NUMERALS[antagonistGun.gun_type!.value.base.tier]}
+                </Text>
+
+                <img
+                  alt="Antagonist Gun"
+                  src={asset('icons/modules/gun.webp')}
+                  style={{
+                    width: '65%',
+                    height: '65%',
+                    objectFit: 'contain',
                   }}
                 />
               </IconButton>
-            ))}
+            </Popover.Trigger>
 
-            <CustomShellButton />
-          </Flex>
+            <Popover.Content side="left" align="center">
+              <Flex gap="2">
+                {[...antagonistUniqueGuns].reverse().map(({ gun, turret }) => (
+                  <ModuleButton
+                    module="gun"
+                    key={gun.gun_type!.value.base.id}
+                    onClick={() =>
+                      mutateDuel((draft) => {
+                        draft.antagonist.turret = turret;
+                        draft.antagonist.gun = gun;
+                        draft.antagonist.shell =
+                          gun.gun_type!.value.base.shells[0];
+                      })
+                    }
+                    selected={
+                      gun.gun_type!.value.base.id ===
+                      antagonistGun.gun_type!.value.base.id
+                    }
+                    discriminator={
+                      TIER_ROMAN_NUMERALS[gun.gun_type!.value.base.tier]
+                    }
+                    secondaryDiscriminator={
+                      <Text style={{ fontSize: '0.75em' }}>
+                        {literals(strings.common.units.mm, [
+                          gun.gun_type!.value.base.shells[0].caliber.toFixed(0),
+                        ])}
+                      </Text>
+                    }
+                  />
+                ))}
+              </Flex>
+            </Popover.Content>
+          </Popover.Root>
+        )}
 
-          <Flex
-            direction="column"
-            style={{
-              pointerEvents: 'auto',
-              borderRadius: 'var(--radius-full)',
+        <Flex
+          direction="column"
+          style={{
+            borderRadius: 'var(--radius-full)',
+          }}
+          overflow="hidden"
+        >
+          {antagonistGun.gun_type!.value.base.shells.map((thisShell) => (
+            <IconButton
+              color={
+                thisShell.id === antagonistShell.id && !hasCustomShell
+                  ? undefined
+                  : 'gray'
+              }
+              variant="soft"
+              key={thisShell.id}
+              size={{ initial: '2', sm: '3' }}
+              radius="none"
+              onClick={() => {
+                mutateDuel((draft) => {
+                  draft.antagonist.shell = thisShell;
+                });
+                mutateTankopediaEphemeral((draft) => {
+                  draft.shot = undefined;
+                  draft.customShell = undefined;
+                });
+              }}
+            >
+              <img
+                alt={unwrap(thisShell.name)}
+                src={asset(`icons/shells/${thisShell.icon}.webp`)}
+                style={{
+                  width: '50%',
+                  height: '50%',
+                }}
+              />
+            </IconButton>
+          ))}
+
+          <CustomShellButton />
+        </Flex>
+
+        <Flex
+          direction="column"
+          style={{
+            pointerEvents: 'auto',
+            borderRadius: 'var(--radius-full)',
+          }}
+          overflow="hidden"
+        >
+          <IconButton
+            color={hasCalibratedShells ? undefined : 'gray'}
+            variant="soft"
+            size={{ initial: '2', sm: '3' }}
+            radius="none"
+            onClick={() => {
+              mutateDuel((draft) => {
+                draft.antagonist.equipmentMatrix[0][0] = hasCalibratedShells
+                  ? 0
+                  : 1;
+              });
+              mutateTankopediaEphemeral((draft) => {
+                draft.shot = undefined;
+              });
             }}
-            overflow="hidden"
           >
-            <IconButton
-              color={hasCalibratedShells ? undefined : 'gray'}
-              variant="soft"
-              size={{ initial: '2', sm: '3' }}
-              radius="none"
-              onClick={() => {
-                mutateDuel((draft) => {
-                  draft.antagonist.equipmentMatrix[0][0] = hasCalibratedShells
-                    ? 0
-                    : 1;
-                });
-                mutateTankopediaEphemeral((draft) => {
-                  draft.shot = undefined;
-                });
+            <img
+              alt="Calibrated Shells"
+              src={asset('icons/equipment/103.webp')}
+              style={{
+                width: '50%',
+                height: '50%',
               }}
-            >
-              <img
-                alt="Calibrated Shells"
-                src={asset('icons/equipment/103.webp')}
-                style={{
-                  width: '50%',
-                  height: '50%',
-                }}
-              />
-            </IconButton>
-            <IconButton
-              color={hasEnhancedArmor ? undefined : 'gray'}
-              variant="soft"
-              size={{ initial: '2', sm: '3' }}
-              radius="none"
-              onClick={() => {
-                mutateDuel((draft) => {
-                  draft.protagonist.equipmentMatrix[1][1] = hasEnhancedArmor
-                    ? 0
-                    : -1;
-                });
-                mutateTankopediaEphemeral((draft) => {
-                  draft.shot = undefined;
-                });
+            />
+          </IconButton>
+          <IconButton
+            color={hasEnhancedArmor ? undefined : 'gray'}
+            variant="soft"
+            size={{ initial: '2', sm: '3' }}
+            radius="none"
+            onClick={() => {
+              mutateDuel((draft) => {
+                draft.protagonist.equipmentMatrix[1][1] = hasEnhancedArmor
+                  ? 0
+                  : -1;
+              });
+              mutateTankopediaEphemeral((draft) => {
+                draft.shot = undefined;
+              });
+            }}
+          >
+            <img
+              alt="Enhanced Armor"
+              src={asset('icons/equipment/110.webp')}
+              style={{
+                width: '50%',
+                height: '50%',
               }}
-            >
-              <img
-                alt="Enhanced Armor"
-                src={asset('icons/equipment/110.webp')}
-                style={{
-                  width: '50%',
-                  height: '50%',
-                }}
-              />
-            </IconButton>
-          </Flex>
+            />
+          </IconButton>
+        </Flex>
 
+        {!skeleton && (
           <Suspense>
             <DynamicArmorSwitcher />
           </Suspense>
-        </Flex>
-      )}
+        )}
+      </Flex>
 
       <Flex
         direction="column"
@@ -330,72 +327,77 @@ export function Options({ thicknessRange, canvas }: OptionsProps) {
         left="50%"
         style={{ transform: 'translateX(-50%)' }}
       >
-        {display === TankopediaDisplay.DynamicArmor && (
-          <>
-            <Flex
-              align="center"
-              gap="2"
-              mb="1"
-              style={{ cursor: 'pointer' }}
-              onClick={() => {
-                mutateTankopediaPersistent((draft) => {
-                  draft.advancedHighlighting = !draft.advancedHighlighting;
-                });
-              }}
+        <Flex
+          direction="column"
+          align="center"
+          style={{ transitionDuration: '200ms' }}
+          position="relative"
+          bottom={display === TankopediaDisplay.DynamicArmor ? '0' : '-7rem'}
+        >
+          <Flex
+            align="center"
+            gap="2"
+            mb="1"
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              mutateTankopediaPersistent((draft) => {
+                draft.advancedHighlighting = !draft.advancedHighlighting;
+              });
+            }}
+          >
+            <Checkbox checked={advancedHighlighting} />
+            <Text color="gray" size="2">
+              {strings.website.tools.tankopedia.sandbox.dynamic.advanced}
+            </Text>
+          </Flex>
+
+          <Flex align="center" gap="2">
+            <Text color="gray" size="2">
+              {strings.website.tools.tankopedia.sandbox.dynamic.shooter}
+            </Text>
+            <Dialog.Root
+              open={antagonistSelectorOpen}
+              onOpenChange={setAntagonistSelectorOpen}
             >
-              <Checkbox checked={advancedHighlighting} />
-              <Text color="gray" size="2">
-                {strings.website.tools.tankopedia.sandbox.dynamic.advanced}
-              </Text>
-            </Flex>
+              <Dialog.Trigger>
+                <Button variant="ghost">
+                  <Flex gap="2" align="center">
+                    <SmallTankIcon id={antagonistTank.id} size={16} />
+                    {unwrap(antagonistTank.name)}
+                  </Flex>
+                </Button>
+              </Dialog.Trigger>
 
-            <Flex align="center" gap="2">
-              <Text color="gray" size="2">
-                {strings.website.tools.tankopedia.sandbox.dynamic.shooter}
-              </Text>
-              <Dialog.Root
-                open={antagonistSelectorOpen}
-                onOpenChange={setAntagonistSelectorOpen}
-              >
-                <Dialog.Trigger>
-                  <Button variant="ghost">
-                    <Flex gap="2" align="center">
-                      <SmallTankIcon id={antagonistTank.id} size={16} />
-                      {unwrap(antagonistTank.name)}
-                    </Flex>
-                  </Button>
-                </Dialog.Trigger>
+              <Dialog.Content>
+                <Dialog.Title align="center">Select tank</Dialog.Title>
 
-                <Dialog.Content>
-                  <Dialog.Title align="center">Select tank</Dialog.Title>
+                <Tabs.Root
+                  value={tab}
+                  onValueChange={setTab}
+                  style={{ position: 'relative' }}
+                >
+                  <TankSearch
+                    compact
+                    onSelect={(tank) => {
+                      mutateDuel((draft) => {
+                        draft.antagonist.tank = tank;
+                        draft.antagonist.engine = tank.engines.at(-1)!;
+                        draft.antagonist.track = tank.tracks.at(-1)!;
+                        draft.antagonist.turret = tank.turrets.at(-1)!;
+                        draft.antagonist.gun =
+                          draft.antagonist.turret.guns.at(-1)!;
+                        draft.antagonist.shell =
+                          draft.antagonist.gun.gun_type!.value.base.shells[0];
+                      });
+                      setAntagonistSelectorOpen(false);
+                    }}
+                  />
+                </Tabs.Root>
+              </Dialog.Content>
+            </Dialog.Root>
+          </Flex>
+        </Flex>
 
-                  <Tabs.Root
-                    value={tab}
-                    onValueChange={setTab}
-                    style={{ position: 'relative' }}
-                  >
-                    <TankSearch
-                      compact
-                      onSelect={(tank) => {
-                        mutateDuel((draft) => {
-                          draft.antagonist.tank = tank;
-                          draft.antagonist.engine = tank.engines.at(-1)!;
-                          draft.antagonist.track = tank.tracks.at(-1)!;
-                          draft.antagonist.turret = tank.turrets.at(-1)!;
-                          draft.antagonist.gun =
-                            draft.antagonist.turret.guns.at(-1)!;
-                          draft.antagonist.shell =
-                            draft.antagonist.gun.gun_type!.value.base.shells[0];
-                        });
-                        setAntagonistSelectorOpen(false);
-                      }}
-                    />
-                  </Tabs.Root>
-                </Dialog.Content>
-              </Dialog.Root>
-            </Flex>
-          </>
-        )}
         <Flex gap="3" align="center" mt="2">
           <SegmentedControl.Root
             value={`${display}`}

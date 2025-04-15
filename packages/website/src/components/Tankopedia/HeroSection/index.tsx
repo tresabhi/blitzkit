@@ -101,7 +101,7 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
           style={{ transform: 'translateY(-50%)', transitionDuration: '200ms' }}
           direction="column"
           align={{ initial: 'center', md: 'start' }}
-          gap={disturbed ? '0' : '2'}
+          gap={disturbed ? '0' : { initial: '0', md: '2' }}
         >
           <Flex align="center" gap="3">
             <Heading
@@ -139,7 +139,7 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
               weight="light"
               ml={{
                 initial: '0',
-                md: '8',
+                md: disturbed ? 'var(--font-size-7)' : 'var(--font-size-8)',
                 lg: disturbed ? 'var(--font-size-8)' : 'var(--font-size-9)',
               }}
               style={{ transitionDuration: '200ms' }}
@@ -161,7 +161,7 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
               width="100%"
               height="100%"
               position="relative"
-              left={disturbed ? '0' : '12.5%'}
+              left={disturbed ? '0' : { initial: '0', md: '12.5%' }}
               style={{ transitionDuration: '200ms' }}
             >
               {skeleton && <TankSandboxLoader id={protagonist.id} />}
@@ -171,7 +171,11 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
               </Suspense>
             </Box>
 
-            <Options canvas={canvas} thicknessRange={thicknessRange} />
+            <Options
+              skeleton={skeleton}
+              canvas={canvas}
+              thicknessRange={thicknessRange}
+            />
           </Box>
         </Box>
       </Flex>

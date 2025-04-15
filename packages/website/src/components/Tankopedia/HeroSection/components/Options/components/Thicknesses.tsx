@@ -5,14 +5,17 @@ import { Suspense } from 'react';
 import { useLocale } from '../../../../../../hooks/useLocale';
 import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
 import { TankopediaPersistent } from '../../../../../../stores/tankopediaPersistent';
+import { TankopediaDisplay } from '../../../../../../stores/tankopediaPersistent/constants';
+import type { MaybeSkeletonComponentProps } from '../../../../../../types/maybeSkeletonComponentProps';
 import type { ThicknessRange } from '../../../../../Armor/components/StaticArmor';
 import { DynamicArmorSwitcher } from './DynamicArmorSwitcher';
 
-interface ThicknessesProps {
+type ThicknessesProps = MaybeSkeletonComponentProps & {
   thicknessRange: ThicknessRange;
-}
+};
 
-export function Thicknesses({ thicknessRange }: ThicknessesProps) {
+export function Thicknesses({ thicknessRange, skeleton }: ThicknessesProps) {
+  const display = TankopediaEphemeral.use((state) => state.display);
   const showExternalModules = TankopediaPersistent.use(
     (state) => state.showExternalModules,
   );
@@ -31,10 +34,14 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
   return (
     <Flex
       position="absolute"
-      right="0"
+      right={display === TankopediaDisplay.StaticArmor ? '0' : '-6rem'}
       top="50%"
       mr="4"
-      style={{ transform: 'translateY(-50%)', userSelect: 'none' }}
+      style={{
+        transform: 'translateY(-50%)',
+        userSelect: 'none',
+        transitionDuration: '200ms',
+      }}
       direction="column"
       gap="5"
       align="end"
@@ -190,9 +197,11 @@ export function Thicknesses({ thicknessRange }: ThicknessesProps) {
         </Button>
       </Flex>
 
-      <Suspense>
-        <DynamicArmorSwitcher />
-      </Suspense>
+      {!skeleton && (
+        <Suspense>
+          <DynamicArmorSwitcher />
+        </Suspense>
+      )}
     </Flex>
   );
 }
