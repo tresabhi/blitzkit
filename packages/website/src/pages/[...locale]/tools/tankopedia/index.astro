@@ -10,6 +10,6 @@ const { locale } = Astro.params;
 
 <ToolLayout tool={tankopediaTool}>
   <Page {locale} client:only="react">
-    <Page {locale} slot="fallback" />
+    <Page {locale} skeleton slot="fallback" />
   </Page>
 </ToolLayout>

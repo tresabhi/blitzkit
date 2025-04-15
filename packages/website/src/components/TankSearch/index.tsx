@@ -23,6 +23,7 @@ import { $tankFilters } from '../../stores/tankFilters';
 import { TankopediaPersistent } from '../../stores/tankopediaPersistent';
 import { SORT_UNITS } from '../../stores/tankopediaPersistent/constants';
 import { $tankopediaSort } from '../../stores/tankopediaSort';
+import type { MaybeSkeletonComponentProps } from '../../types/maybeSkeletonComponentProps';
 import { ExperimentIcon } from '../ExperimentIcon';
 import { TankSearchCard } from './components/Card';
 import { FilterControl } from './components/FilterControl';
@@ -33,11 +34,12 @@ import { SkeletonTankCard } from './components/SkeletonTankCard';
 import { TankCardWrapper } from './components/TankCardWrapper';
 import { MAX_RECENTLY_VIEWED } from './constants';
 
-type TankSearchProps = Omit<FlexProps, 'onSelect'> & {
-  compact?: boolean;
-  onSelect?: (tank: TankDefinition) => void;
-  onSelectAll?: (tanks: TankDefinition[]) => void;
-};
+type TankSearchProps = MaybeSkeletonComponentProps &
+  Omit<FlexProps, 'onSelect'> & {
+    compact?: boolean;
+    onSelect?: (tank: TankDefinition) => void;
+    onSelectAll?: (tanks: TankDefinition[]) => void;
+  };
 
 const PREVIEW_COUNT = 20;
 const DEFAULT_LOADED_CARDS = 64;
@@ -51,7 +53,7 @@ const [gameDefinitions, modelDefinitions, tankDefinitions, tankNames] =
   ]);
 
 export const TankSearch = memo<TankSearchProps>(
-  ({ compact, onSelect, onSelectAll, ...props }) => {
+  ({ compact, onSelect, onSelectAll, skeleton, ...props }) => {
     const { strings, locale } = useLocale();
     const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
     const awaitedTanksDefinitionsArray = Object.values(tankDefinitions.tanks);
@@ -428,13 +430,17 @@ export const TankSearch = memo<TankSearchProps>(
 
     return (
       <Flex direction="column" gap="4" flexGrow="1" {...props}>
-        <SearchBar topResult={tanks?.[0]} onSelect={onSelect} />
+        <SearchBar
+          skeleton={skeleton}
+          topResult={tanks?.[0]}
+          onSelect={onSelect}
+        />
 
         {!tankFilters.search && !tankFilters.searching && (
           <FilterControl compact={compact} />
         )}
 
-        {!compact && <RecentlyViewed />}
+        {!skeleton && !compact && <RecentlyViewed />}
 
         <Flex mt="2" gap="1" align="center" justify="center" direction="column">
           <Flex gap="2">
@@ -494,7 +500,7 @@ export const TankSearch = memo<TankSearchProps>(
           </Flex>
         )}
 
-        {!tankFilters.searching && (
+        {!skeleton && !tankFilters.searching && (
           <>
             {tanks.length > 0 && (
               <TankCardWrapper>
@@ -528,11 +534,16 @@ export const TankSearch = memo<TankSearchProps>(
           </>
         )}
 
-        {tankFilters.searching && (
+        {(skeleton || tankFilters.searching) && (
           <TankCardWrapper>
-            {times(Math.round(10 + 10 * Math.random()), (index) => (
-              <SkeletonTankCard key={index} />
-            ))}
+            {times(
+              Math.round(
+                skeleton ? DEFAULT_LOADED_CARDS : 10 + 10 * Math.random(),
+              ),
+              (index) => (
+                <SkeletonTankCard key={index} />
+              ),
+            )}
           </TankCardWrapper>
         )}
       </Flex>

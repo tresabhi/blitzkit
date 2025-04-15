@@ -6,15 +6,16 @@ import { debounce } from 'lodash-es';
 import { type KeyboardEventHandler, useCallback, useRef } from 'react';
 import { useLocale } from '../../../hooks/useLocale';
 import { $tankFilters } from '../../../stores/tankFilters';
+import type { MaybeSkeletonComponentProps } from '../../../types/maybeSkeletonComponentProps';
 import { QuickLink } from './QuickLink';
 import { Sort } from './Sort';
 
-interface SearchBarProps {
+type SearchBarProps = MaybeSkeletonComponentProps & {
   topResult?: TankDefinition;
   onSelect?: (tank: TankDefinition) => void;
-}
+};
 
-export function SearchBar({ topResult, onSelect }: SearchBarProps) {
+export function SearchBar({ topResult, skeleton, onSelect }: SearchBarProps) {
   const { strings } = useLocale();
   const tankFilters = useStore($tankFilters);
   const input = useRef<HTMLInputElement>(null);
@@ -66,6 +67,7 @@ export function SearchBar({ topResult, onSelect }: SearchBarProps) {
     <Flex justify="center">
       <Flex gap="2" flexGrow="1">
         <TextField.Root
+          disabled={skeleton}
           defaultValue={tankFilters.search}
           style={{ flex: 1 }}
           ref={input}
