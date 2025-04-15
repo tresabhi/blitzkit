@@ -1,5 +1,6 @@
 import { PlusIcon, TrashIcon } from '@radix-ui/react-icons';
 import { Button, Dialog, Flex, SegmentedControl } from '@radix-ui/themes';
+import { awaitableModelDefinitions } from '../../core/awaitables/modelDefinitions';
 import { awaitableProvisionDefinitions } from '../../core/awaitables/provisionDefinitions';
 import { tankToCompareMember } from '../../core/blitzkit/tankToCompareMember';
 import { useLocale } from '../../hooks/useLocale';
@@ -15,7 +16,10 @@ interface ControlsProps {
   onAddTankDialogOpenChange: (open: boolean) => void;
 }
 
-const provisionDefinitions = await awaitableProvisionDefinitions;
+const [provisionDefinitions, modelDefinitions] = await Promise.all([
+  awaitableProvisionDefinitions,
+  awaitableModelDefinitions,
+]);
 
 export function Controls({
   addTankDialogOpen,
@@ -56,9 +60,11 @@ export function Controls({
               <TankSearch
                 compact
                 onSelect={(tank) => {
+                  const model = modelDefinitions.models[tank.id];
+
                   mutateCompareEphemeral((draft) => {
                     draft.members.push(
-                      tankToCompareMember(tank, provisionDefinitions),
+                      tankToCompareMember(tank, model, provisionDefinitions),
                     );
                     draft.sorting = undefined;
                   });
@@ -67,9 +73,15 @@ export function Controls({
                 onSelectAll={(tanks) => {
                   mutateCompareEphemeral((draft) => {
                     draft.members.push(
-                      ...tanks.map((tank) =>
-                        tankToCompareMember(tank, provisionDefinitions),
-                      ),
+                      ...tanks.map((tank) => {
+                        const model = modelDefinitions.models[tank.id];
+
+                        return tankToCompareMember(
+                          tank,
+                          model,
+                          provisionDefinitions,
+                        );
+                      }),
                     );
                     draft.sorting = undefined;
                   });

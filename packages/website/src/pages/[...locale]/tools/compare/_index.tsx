@@ -113,7 +113,11 @@ function Content() {
 
         if (tank === undefined) return;
 
-        draft.members.push(tankToCompareMember(tank, provisionDefinitions));
+        const model = modelDefinitions.models[tank.id];
+
+        draft.members.push(
+          tankToCompareMember(tank, model, provisionDefinitions),
+        );
       });
     });
   }, []);

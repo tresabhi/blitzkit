@@ -215,50 +215,61 @@ export function StaticArmorSceneComponent({
   return (
     <>
       {jsxTree(node, {
-        mesh: {
-          material: surfaceMaterial,
-          onPointerDown,
-          userData: {
-            type: props.type,
-            variant: props.type === ArmorType.External ? props.variant : 'gun',
-            thickness,
-          } satisfies ArmorUserData,
+        mesh(_, meshProps, key) {
+          return (
+            <mesh
+              {...meshProps}
+              key={key}
+              material={surfaceMaterial}
+              userData={
+                {
+                  type: props.type,
+                  variant:
+                    props.type === ArmorType.External ? props.variant : 'gun',
+                  thickness,
+                } satisfies ArmorUserData
+              }
+              onClick={(event) => {
+                if (discardClippingPlane(event.object, event.point)) return;
 
-          onClick(event) {
-            if (discardClippingPlane(event.object, event.point)) return;
+                event.stopPropagation();
 
-            event.stopPropagation();
+                const { editStatic } = tankopediaEphemeralStore.getState();
 
-            const { editStatic } = tankopediaEphemeralStore.getState();
+                const bounds = new Box3().setFromObject(event.object);
+                const point = bounds.min
+                  .clone()
+                  .add(bounds.max)
+                  .divideScalar(2)
+                  .setY(bounds.max.y);
+                const cameraNormal = camera.position
+                  .clone()
+                  .sub(point)
+                  .normalize();
+                const surfaceNormal = event
+                  .normal!.clone()
+                  .applyQuaternion(
+                    event.object.getWorldQuaternion(new Quaternion()),
+                  );
+                const angle = surfaceNormal.angleTo(cameraNormal);
+                const thicknessAngled =
+                  thickness / Math.sin(Math.PI / 2 - angle);
 
-            const bounds = new Box3().setFromObject(event.object);
-            const point = bounds.min
-              .clone()
-              .add(bounds.max)
-              .divideScalar(2)
-              .setY(bounds.max.y);
-            const cameraNormal = camera.position.clone().sub(point).normalize();
-            const surfaceNormal = event
-              .normal!.clone()
-              .applyQuaternion(
-                event.object.getWorldQuaternion(new Quaternion()),
-              );
-            const angle = surfaceNormal.angleTo(cameraNormal);
-            const thicknessAngled = thickness / Math.sin(Math.PI / 2 - angle);
-
-            mutateTankopediaEphemeralStore((draft) => {
-              draft.highlightArmor = {
-                type: props.type,
-                name,
-                point,
-                thickness,
-                thicknessAngled,
-                angle,
-                color: `#${color.getHexString()}`,
-                editingPlate: editStatic,
-              };
-            });
-          },
+                mutateTankopediaEphemeralStore((draft) => {
+                  draft.highlightArmor = {
+                    type: props.type,
+                    name,
+                    point,
+                    thickness,
+                    thicknessAngled,
+                    angle,
+                    color: `#${color.getHexString()}`,
+                    editingPlate: editStatic,
+                  };
+                });
+              }}
+            />
+          );
         },
       })}
 

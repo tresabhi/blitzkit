@@ -114,33 +114,40 @@ export function SpacedArmorSubExternal({
 
   return (
     <>
-      {jsxTree(
-        node,
-        {
-          mesh: {
-            renderOrder: 3,
-            material: new MeshBasicMaterial({
-              colorWrite: false,
-              depthTest: true,
-              depthWrite: true,
-              ...(clip ? { clippingPlanes: [clip] } : {}),
-            }),
-            onClick() {},
-            userData: {
-              type: ArmorType.External,
-              thickness,
-              variant,
-            } satisfies ArmorUserData,
-          },
+      {jsxTree(node, {
+        mesh(_, props, key) {
+          return (
+            <mesh
+              {...props}
+              key={key}
+              renderOrder={3}
+              material={
+                new MeshBasicMaterial({
+                  colorWrite: false,
+                  depthTest: true,
+                  depthWrite: true,
+                  ...(clip ? { clippingPlanes: [clip] } : {}),
+                })
+              }
+              userData={
+                {
+                  type: ArmorType.External,
+                  thickness,
+                  variant,
+                } satisfies ArmorUserData
+              }
+            />
+          );
         },
-        `${node.uuid}-exclude`,
-      )}
+      })}
 
-      {jsxTree(
-        node,
-        { mesh: { renderOrder: 4, material } },
-        `${node.uuid}-include`,
-      )}
+      {jsxTree(node, {
+        mesh(_, props, key) {
+          return (
+            <mesh {...props} key={key} renderOrder={4} material={material} />
+          );
+        },
+      })}
     </>
   );
 }

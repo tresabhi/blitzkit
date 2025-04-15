@@ -1,43 +1,44 @@
-import type { GroupProps, MeshProps } from '@react-three/fiber';
+import type { MeshProps, Object3DProps } from '@react-three/fiber';
+import type { ReactNode } from 'react';
 import { Mesh, Object3D } from 'three';
 
 export function jsxTree(
   node: Object3D,
   mergers?: {
-    mesh?: MeshProps | ((mesh: Mesh) => MeshProps);
-    group?: GroupProps | ((object3d: Object3D) => GroupProps);
+    mesh?: (mesh: Mesh, props: MeshProps, key: string) => ReactNode;
+    group?: (
+      object3d: Object3D,
+      props: Object3DProps,
+      key: string,
+    ) => ReactNode;
   },
-  key?: string,
-) {
+): ReactNode {
   if (node instanceof Mesh) {
-    return (
-      <mesh
-        key={key}
-        geometry={node.geometry}
-        material={node.material}
-        position={node.position}
-        rotation={node.rotation}
-        scale={node.scale}
-        {...(mergers?.mesh &&
-          (typeof mergers.mesh === 'function'
-            ? mergers.mesh(node)
-            : mergers.mesh))}
-      />
+    const props = {
+      geometry: node.geometry,
+      material: node.material,
+      position: node.position,
+      rotation: node.rotation,
+      scale: node.scale,
+    };
+
+    return mergers?.mesh ? (
+      mergers.mesh(node, props, node.uuid)
+    ) : (
+      <mesh key={node.uuid} {...props} />
     );
   } else if (node instanceof Object3D) {
-    return (
-      <group
-        key={key}
-        position={node.position}
-        rotation={node.rotation}
-        scale={node.scale}
-        {...(mergers?.group &&
-          (typeof mergers.group === 'function'
-            ? mergers.group(node)
-            : mergers.group))}
-      >
-        {node.children.map((child) => jsxTree(child, mergers, child.uuid))}
-      </group>
+    const props = {
+      position: node.position,
+      rotation: node.rotation,
+      scale: node.scale,
+      children: node.children.map((child) => jsxTree(child, mergers)),
+    };
+
+    return mergers?.group ? (
+      mergers.group(node, props, node.uuid)
+    ) : (
+      <group key={node.uuid} {...props} />
     );
   }
 

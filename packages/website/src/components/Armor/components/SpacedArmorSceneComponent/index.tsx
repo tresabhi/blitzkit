@@ -372,29 +372,33 @@ export function SpacedArmorSceneComponent({
   return (
     <>
       {props.type === ArmorType.Primary &&
-        jsxTree(
-          node,
-          {
-            mesh: {
-              renderOrder: 0,
-              material: omitMaterial,
-              userData: {
-                type: ArmorType.Primary,
-                thickness,
-              } satisfies ArmorUserData,
-              async onClick(event) {
-                event.stopPropagation();
-                const shot = (await shoot(
-                  event.point,
-                  event.intersections,
-                  true,
-                ))!;
-                tankopediaEphemeralStore.setState({ shot });
-              },
-            },
+        jsxTree(node, {
+          mesh(mesh, props, key) {
+            return (
+              <mesh
+                {...props}
+                key={key}
+                renderOrder={0}
+                material={omitMaterial}
+                userData={
+                  {
+                    type: ArmorType.Primary,
+                    thickness,
+                  } satisfies ArmorUserData
+                }
+                onClick={async (event) => {
+                  event.stopPropagation();
+                  const shot = (await shoot(
+                    event.point,
+                    event.intersections,
+                    true,
+                  ))!;
+                  tankopediaEphemeralStore.setState({ shot });
+                }}
+              />
+            );
           },
-          node.uuid,
-        )}
+        })}
 
       {props.type === ArmorType.Spaced && (
         <SpacedArmorSubSpaced node={node} thickness={thickness} />

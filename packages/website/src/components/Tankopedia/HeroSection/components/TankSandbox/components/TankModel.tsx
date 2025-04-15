@@ -114,29 +114,35 @@ export function TankModel() {
           window.removeEventListener('pointerup', handlePointerUp);
         }
 
-        return jsxTree(
-          node,
-          {
-            mesh: { onPointerDown, castShadow: true },
-            // group(group) {
-            //   return {
-            //     visible:
-            //       group.name !== 'ST_base' &&
-            //       group.name !== 'MR_Base2' &&
-            //       (!group.name.includes('state_entity') ||
-            //         (isDynamicArmorActive &&
-            //           group.name.includes('state_entity_01')) ||
-            //         (!isDynamicArmorActive &&
-            //           group.name.includes('state_entity_00'))) &&
-            //       (!group.name.includes('shields') ||
-            //         (isDynamicArmorActive &&
-            //           group.name.includes('shields_rev')) ||
-            //         (!isDynamicArmorActive && group.name.endsWith('shields'))),
-            //   };
-            // },
+        return jsxTree(node, {
+          mesh(_, props, key) {
+            return (
+              <mesh
+                {...props}
+                key={key}
+                onPointerDown={onPointerDown}
+                castShadow
+              />
+            );
           },
-          node.uuid,
-        );
+
+          // group(group) {
+          //   return {
+          //     visible:
+          //       group.name !== 'ST_base' &&
+          //       group.name !== 'MR_Base2' &&
+          //       (!group.name.includes('state_entity') ||
+          //         (isDynamicArmorActive &&
+          //           group.name.includes('state_entity_01')) ||
+          //         (!isDynamicArmorActive &&
+          //           group.name.includes('state_entity_00'))) &&
+          //       (!group.name.includes('shields') ||
+          //         (isDynamicArmorActive &&
+          //           group.name.includes('shields_rev')) ||
+          //         (!isDynamicArmorActive && group.name.endsWith('shields'))),
+          //   };
+          // },
+        });
       })}
 
       <group ref={turretContainer}>
@@ -217,30 +223,36 @@ export function TankModel() {
             window.removeEventListener('pointerup', handlePointerUp);
           }
 
-          return jsxTree(
-            node,
-            {
-              mesh: { onPointerDown, castShadow: true },
-              // group(group) {
-              //   return {
-              //     visible:
-              //       group.name !== 'ST_base' &&
-              //       group.name !== 'MR_Base2' &&
-              //       (!group.name.includes('state_entity') ||
-              //         (isDynamicArmorActive &&
-              //           group.name.includes('state_entity_01')) ||
-              //         (!isDynamicArmorActive &&
-              //           group.name.includes('state_entity_00'))) &&
-              //       (!group.name.includes('shields') ||
-              //         (isDynamicArmorActive &&
-              //           group.name.includes('shields_rev')) ||
-              //         (!isDynamicArmorActive &&
-              //           group.name.endsWith('shields'))),
-              //   };
-              // },
+          return jsxTree(node, {
+            mesh(_, props, key) {
+              return (
+                <mesh
+                  {...props}
+                  key={key}
+                  onPointerDown={onPointerDown}
+                  castShadow
+                />
+              );
             },
-            node.uuid,
-          );
+
+            // group(group) {
+            //   return {
+            //     visible:
+            //       group.name !== 'ST_base' &&
+            //       group.name !== 'MR_Base2' &&
+            //       (!group.name.includes('state_entity') ||
+            //         (isDynamicArmorActive &&
+            //           group.name.includes('state_entity_01')) ||
+            //         (!isDynamicArmorActive &&
+            //           group.name.includes('state_entity_00'))) &&
+            //       (!group.name.includes('shields') ||
+            //         (isDynamicArmorActive &&
+            //           group.name.includes('shields_rev')) ||
+            //         (!isDynamicArmorActive &&
+            //           group.name.endsWith('shields'))),
+            //   };
+            // },
+          });
         })}
 
         <group ref={gunContainer}>
@@ -324,30 +336,36 @@ export function TankModel() {
               window.removeEventListener('pointerup', handlePointerUp);
             }
 
-            return jsxTree(
-              node,
-              {
-                mesh: { onPointerDown, castShadow: true },
-                // group(group) {
-                //   return {
-                //     visible:
-                //       group.name !== 'ST_base' &&
-                //       group.name !== 'MR_Base2' &&
-                //       (!group.name.includes('state_entity') ||
-                //         (isDynamicArmorActive &&
-                //           group.name.includes('state_entity_01')) ||
-                //         (!isDynamicArmorActive &&
-                //           group.name.includes('state_entity_00'))) &&
-                //       (!group.name.includes('shields') ||
-                //         (isDynamicArmorActive &&
-                //           group.name.includes('shields_rev')) ||
-                //         (!isDynamicArmorActive &&
-                //           group.name.endsWith('shields'))),
-                //   };
-                // },
+            return jsxTree(node, {
+              mesh(_, props, key) {
+                return (
+                  <mesh
+                    {...props}
+                    key={key}
+                    onPointerDown={onPointerDown}
+                    castShadow
+                  />
+                );
               },
-              node.uuid,
-            );
+
+              // group(group) {
+              //   return {
+              //     visible:
+              //       group.name !== 'ST_base' &&
+              //       group.name !== 'MR_Base2' &&
+              //       (!group.name.includes('state_entity') ||
+              //         (isDynamicArmorActive &&
+              //           group.name.includes('state_entity_01')) ||
+              //         (!isDynamicArmorActive &&
+              //           group.name.includes('state_entity_00'))) &&
+              //       (!group.name.includes('shields') ||
+              //         (isDynamicArmorActive &&
+              //           group.name.includes('shields_rev')) ||
+              //         (!isDynamicArmorActive &&
+              //           group.name.endsWith('shields'))),
+              //   };
+              // },
+            });
           })}
         </group>
       </group>

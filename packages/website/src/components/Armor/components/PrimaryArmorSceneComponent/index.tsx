@@ -211,16 +211,25 @@ export function PrimaryArmorSceneComponent({
 
   return (
     <>
-      {jsxTree(
-        node,
-        { mesh: { renderOrder: 0, material: excludeMaterial } },
-        `${node.uuid}-exclude`,
-      )}
-      {jsxTree(
-        node,
-        { mesh: { renderOrder: 1, material } },
-        `${node.uuid}-include`,
-      )}
+      {jsxTree(node, {
+        mesh(_, props, key) {
+          return (
+            <mesh
+              {...props}
+              key={key}
+              renderOrder={0}
+              material={excludeMaterial}
+            />
+          );
+        },
+      })}
+      {jsxTree(node, {
+        mesh(_, props, key) {
+          return (
+            <mesh {...props} key={key} renderOrder={1} material={material} />
+          );
+        },
+      })}
     </>
   );
 }
