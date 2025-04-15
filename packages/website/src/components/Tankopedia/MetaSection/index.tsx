@@ -95,6 +95,8 @@ export function MetaSection() {
               <TankSearch
                 compact
                 onSelect={(tank) => {
+                  const model = modelDefinitions.models[tank.id];
+
                   setShowSwapDialog(false);
                   mutateTankopediaEphemeral((draft) => {
                     draft.model = modelDefinitions.models[tank.id];
@@ -102,6 +104,7 @@ export function MetaSection() {
                   mutateDuel((draft) => {
                     draft.protagonist = tankToDuelMember(
                       tank,
+                      model,
                       provisionDefinitions,
                     );
                   });

@@ -1,7 +1,7 @@
 import { OrbitControls } from '@react-three/drei';
 import { invalidate, useThree } from '@react-three/fiber';
 import { clamp } from 'lodash-es';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { PerspectiveCamera, Vector3 } from 'three';
 import { OrbitControls as OrbitControlsClass } from 'three-stdlib';
 import { degToRad } from 'three/src/math/MathUtils.js';
@@ -81,16 +81,14 @@ export function Controls({ naked }: ControlsProps) {
     protagonistTrackModelDefinition.origin.y +
     antagonistModelDefinition.turret_origin.y +
     antagonistTurretModelDefinition.gun_origin.y;
-  const [autoRotate, setAutoRotate] = useState(
-    display !== TankopediaDisplay.ShootingRange && !naked,
-  );
+  const disturbed = TankopediaEphemeral.use((state) => state.disturbed);
   const gunHeight =
     protagonistHullOrigin.y +
     protagonistTurretOrigin.y +
     protagonistGunOrigin.y;
   const inspectModeInitialPosition = [
     -8,
-    gunHeight + (naked ? 10 : 4),
+    gunHeight + (naked ? 10 : 2),
     -13,
   ] as const;
   const protagonistGunOriginOnlyY = new Vector3(
@@ -217,10 +215,6 @@ export function Controls({ naked }: ControlsProps) {
   useEffect(() => {
     let isInitialIteration = true;
 
-    function handleDisturbance() {
-      setAutoRotate(false);
-    }
-
     function handleKeyDown(event: KeyboardEvent) {
       if (display !== TankopediaDisplay.ShootingRange || event.repeat) return;
 
@@ -254,8 +248,14 @@ export function Controls({ naked }: ControlsProps) {
       event.preventDefault();
     }
 
-    poseEvent.on(handleDisturbance);
-    canvas.addEventListener('pointerdown', handleDisturbance);
+    function disturb() {
+      mutateTankopediaEphemeral((draft) => {
+        draft.disturbed = true;
+      });
+    }
+
+    poseEvent.on(disturb);
+    canvas.addEventListener('pointerdown', disturb);
     window.addEventListener('keydown', handleKeyDown);
     canvas.addEventListener('wheel', handleWheel);
     document.body.addEventListener('scroll', handleScroll);
@@ -319,7 +319,7 @@ export function Controls({ naked }: ControlsProps) {
     const unsubscribeDisplay = tankopediaEphemeralStore.subscribe(
       (state) => state.display === TankopediaDisplay.ShootingRange,
       () => {
-        handleDisturbance();
+        disturb();
         updateCamera();
       },
     );
@@ -330,8 +330,8 @@ export function Controls({ naked }: ControlsProps) {
     );
 
     return () => {
-      canvas.removeEventListener('pointerdown', handleDisturbance);
-      poseEvent.off(handleDisturbance);
+      canvas.removeEventListener('pointerdown', disturb);
+      poseEvent.off(disturb);
       unsubscribeDisplay();
       unsubscribeShootingRangeZoom();
       window.removeEventListener('keydown', handleKeyDown);
@@ -347,7 +347,7 @@ export function Controls({ naked }: ControlsProps) {
       ref={orbitControls}
       enabled={tankopediaEphemeralStore.getState().controlsEnabled}
       enableDamping={false}
-      autoRotate={autoRotate}
+      autoRotate={!disturbed}
       autoRotateSpeed={1 / 4}
     />
   );

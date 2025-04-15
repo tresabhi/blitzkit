@@ -27,7 +27,7 @@ export function Page({ id }: PageProps) {
     <LocaleProvider locale="en">
       <App.Provider>
         <TankopediaPersistent.Provider>
-          <Duel.Provider data={{ provisionDefinitions, tank }}>
+          <Duel.Provider data={{ provisionDefinitions, model, tank }}>
             <TankopediaEphemeral.Provider data={model}>
               <Content />
             </TankopediaEphemeral.Provider>

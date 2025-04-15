@@ -64,6 +64,7 @@ export function InfoWithDelta({
       : (stats[props.value] as number);
   const delta = useDelta(uhWhatDoICallThisVariable);
   const protagonistTank = Duel.use((state) => state.protagonist.tank);
+  const model = modelDefinitions.models[protagonistTank.id];
   const others = useMemo(() => {
     const defaultSkills = createDefaultSkills(skillDefinitions);
 
@@ -78,7 +79,12 @@ export function InfoWithDelta({
           relativeAgainst === TankopediaRelativeAgainst.All,
       )
       .map((tank) => {
-        const member = tankToDuelMember(tank, provisionDefinitions);
+        const thisTankModel = modelDefinitions.models[tank.id];
+        const member = tankToDuelMember(
+          tank,
+          thisTankModel,
+          provisionDefinitions,
+        );
 
         return tankCharacteristics(
           {

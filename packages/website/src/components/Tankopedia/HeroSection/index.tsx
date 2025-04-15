@@ -18,6 +18,7 @@ import { TankSandboxLoader } from './components/TankSandboxLoader';
 const tankDefinitions = await awaitableTankDefinitions;
 
 export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
+  const disturbed = TankopediaEphemeral.use((state) => state.disturbed);
   const { unwrap } = useLocale();
   const canvas = useRef<HTMLCanvasElement>(null);
   const isFullScreen = useFullScreen();
@@ -73,10 +74,13 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
   }, []);
 
   return (
-    <Flex justify="center" style={{ backgroundColor: 'black' }}>
+    <Flex justify="center">
       <Flex
         direction={{ initial: 'column', md: 'row' }}
-        style={{ zIndex: isFullScreen ? 2 : undefined }}
+        style={{
+          zIndex: isFullScreen ? 2 : undefined,
+          backgroundColor: 'black',
+        }}
         height={
           isFullScreen ? '100vh' : `calc(100vh - ${NAVBAR_HEIGHT}px - 8rem)`
         }
@@ -94,22 +98,33 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
           left={{ initial: '0', md: '5', lg: '9' }}
           py="4"
           top={{ initial: '8', md: '50%' }}
-          style={{ transform: 'translateY(-50%)' }}
+          style={{ transform: 'translateY(-50%)', transitionDuration: '200ms' }}
           direction="column"
           align={{ initial: 'center', md: 'start' }}
+          gap={disturbed ? '0' : '2'}
         >
           <Flex align="center" gap="3">
             <Heading
               color={treeColor}
               trim="end"
-              size={{ initial: '7', lg: '6' }}
+              size={
+                disturbed
+                  ? { initial: '7', lg: '8' }
+                  : { initial: '8', lg: '9' }
+              }
+              style={{ transitionDuration: '200ms' }}
             >
               <Icon width="1em" height="1em" />
             </Heading>
 
             <Heading
               weight="bold"
-              size={{ initial: '7', lg: '8' }}
+              size={
+                disturbed
+                  ? { initial: '7', lg: '8' }
+                  : { initial: '8', lg: '9' }
+              }
+              style={{ transitionDuration: '200ms' }}
               wrap="nowrap"
               color={treeColor}
             >
@@ -117,14 +132,21 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
             </Heading>
           </Flex>
 
-          <Text
-            color="gray"
-            size={{ initial: '3', lg: '4' }}
-            weight="light"
-            ml={{ initial: '0', md: '7', lg: '7' }}
-          >
-            BlitzKit Tankopedia
-          </Text>
+          <Box ml="3">
+            <Text
+              color="gray"
+              size={{ initial: '3', lg: disturbed ? '4' : '5' }}
+              weight="light"
+              ml={{
+                initial: '0',
+                md: '8',
+                lg: disturbed ? 'var(--font-size-8)' : 'var(--font-size-9)',
+              }}
+              style={{ transitionDuration: '200ms' }}
+            >
+              BlitzKit Tankopedia
+            </Text>
+          </Box>
         </Flex>
 
         <Box
@@ -134,8 +156,14 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
           flexShrink="0"
           position="relative"
         >
-          <Box position="absolute" width="100%" height="100%">
-            <Box width="100%" height="100%">
+          <Box position="absolute" width="100%" height="100%" overflow="hidden">
+            <Box
+              width="100%"
+              height="100%"
+              position="relative"
+              left={disturbed ? '0' : '12.5%'}
+              style={{ transitionDuration: '200ms' }}
+            >
               {skeleton && <TankSandboxLoader id={protagonist.id} />}
 
               <Suspense fallback={<TankSandboxLoader id={protagonist.id} />}>

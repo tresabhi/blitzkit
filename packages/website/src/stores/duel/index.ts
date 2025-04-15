@@ -1,4 +1,5 @@
 import {
+  ModelDefinition,
   type EngineDefinition,
   type GunDefinition,
   type ProvisionDefinitions,
@@ -48,16 +49,19 @@ export interface DuelStore {
 export const Duel = createContextualStore(
   ({
     tank,
+    model,
     provisionDefinitions,
   }: {
     tank: TankDefinition;
+    model: ModelDefinition;
     provisionDefinitions: ProvisionDefinitions;
   }) => {
-    const protagonist = tankToDuelMember(tank, provisionDefinitions);
+    const protagonist = tankToDuelMember(tank, model, provisionDefinitions);
 
     return create<DuelStore>()(
       subscribeWithSelector<DuelStore>(() => ({
         protagonist,
+        model,
         antagonist: protagonist,
       })),
     );

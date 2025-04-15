@@ -42,7 +42,7 @@ export function Page({ id, skeleton, locale }: PageProps) {
         <App.Provider>
           <TankopediaPersistent.Provider>
             <Duel.Provider
-              data={{ tank, provisionDefinitions: provisionDefinitions }}
+              data={{ tank, model, provisionDefinitions: provisionDefinitions }}
             >
               <PageWrapper p="0" maxWidth="unset" color="purple" gap="9" pb="9">
                 <HeroSection skeleton={skeleton} />

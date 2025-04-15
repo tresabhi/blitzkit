@@ -96,6 +96,7 @@ export const SHOOTING_RANGE_ZOOM_COEFFICIENTS: Record<
 };
 
 interface TankopediaEphemeral {
+  disturbed: boolean;
   shot?: Shot;
   shootingRangeZoom: ShootingRangeZoom;
   skills: Record<string, number>;
@@ -128,6 +129,7 @@ export const TankopediaEphemeral = createContextualStore(
   (model: ModelDefinition) => {
     return create<TankopediaEphemeral>()(
       subscribeWithSelector<TankopediaEphemeral>(() => ({
+        disturbed: false,
         shootingRangeZoom: ShootingRangeZoom.Arcade,
         relativeAgainst: TankopediaRelativeAgainst.Class,
         editStatic: false,
