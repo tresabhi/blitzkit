@@ -1,9 +1,13 @@
-import { TankType } from '@blitzkit/core';
-import { Box, Flex, Heading, Spinner, Text } from '@radix-ui/themes';
+import { assertSecret, TankType } from '@blitzkit/core';
+import { CaretLeftIcon, MixIcon, UpdateIcon } from '@radix-ui/react-icons';
+import { Box, Dialog, Flex, Heading, Link, Spinner } from '@radix-ui/themes';
 import { times } from 'lodash-es';
-import { Suspense, useEffect, useMemo, useRef } from 'react';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { NAVBAR_HEIGHT } from '../../../constants/navbar';
+import { awaitableModelDefinitions } from '../../../core/awaitables/modelDefinitions';
+import { awaitableProvisionDefinitions } from '../../../core/awaitables/provisionDefinitions';
 import { awaitableTankDefinitions } from '../../../core/awaitables/tankDefinitions';
+import { tankToDuelMember } from '../../../core/blitzkit/tankToDuelMember';
 import { Var } from '../../../core/radix/var';
 import { useFullScreen } from '../../../hooks/useFullScreen';
 import { useLocale } from '../../../hooks/useLocale';
@@ -12,18 +16,27 @@ import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
 import type { MaybeSkeletonComponentProps } from '../../../types/maybeSkeletonComponentProps';
 import type { ThicknessRange } from '../../Armor/components/StaticArmor';
 import { classIcons } from '../../ClassIcon';
+import { ScienceIcon } from '../../ScienceIcon';
+import { TankSearch } from '../../TankSearch';
 import { Options } from './components/Options';
 import { TankSandbox } from './components/TankSandbox';
 
-const tankDefinitions = await awaitableTankDefinitions;
+const [provisionDefinitions, modelDefinitions, tankDefinitions] =
+  await Promise.all([
+    awaitableProvisionDefinitions,
+    awaitableModelDefinitions,
+    awaitableTankDefinitions,
+  ]);
 
 export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
+  const [showSwapDialog, setShowSwapDialog] = useState(false);
   const revealed = TankopediaEphemeral.use((state) => state.revealed);
   const disturbed = TankopediaEphemeral.use((state) => state.disturbed);
-  const { unwrap } = useLocale();
+  const { unwrap, strings } = useLocale();
   const canvas = useRef<HTMLCanvasElement>(null);
   const isFullScreen = useFullScreen();
   const protagonist = Duel.use((state) => state.protagonist.tank);
+  const antagonist = Duel.use((state) => state.antagonist.tank);
   const Icon = classIcons[protagonist.class];
   const treeColor =
     protagonist.type === TankType.COLLECTOR
@@ -31,6 +44,10 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
       : protagonist.type === TankType.PREMIUM
         ? 'amber'
         : undefined;
+  const compareTanks =
+    protagonist.id === antagonist.id
+      ? [protagonist.id]
+      : [protagonist.id, antagonist.id];
   const thicknessRange = useMemo(() => {
     const entries = Object.values(tankDefinitions.tanks);
     const filtered = entries.filter(
@@ -152,10 +169,10 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
             userSelect: 'none',
           }}
           direction="column"
-          align={{ initial: 'center', md: 'start' }}
-          gap={disturbed ? '0' : { initial: '0', md: '2' }}
+          align={{ initial: 'center', md: 'center' }}
+          gap="1"
         >
-          <Flex align="center" gap="3">
+          <Flex align="center" gap="3" width="100%" justify="start">
             <Heading
               color={treeColor}
               trim="end"
@@ -184,23 +201,101 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
             </Heading>
           </Flex>
 
-          <Box ml="3">
-            <Text
+          <Flex
+            mb="4"
+            gap="4"
+            ml={disturbed ? '0' : '-2'}
+            style={{ transitionDuration: '200ms' }}
+          >
+            <Link color="gray" underline="always" href="/tools/tankopedia">
+              <Flex align="center" gap="1">
+                <CaretLeftIcon />
+                {strings.website.tools.tankopedia.meta.back}
+              </Flex>
+            </Link>
+
+            <Link
               color="gray"
-              size={{
-                initial: disturbed ? '3' : '4',
-                lg: disturbed ? '4' : '5',
-              }}
-              weight="light"
-              ml={{
-                initial: '0',
-                md: disturbed ? 'var(--font-size-6)' : 'var(--font-size-7)',
-                lg: disturbed ? 'var(--font-size-7)' : 'var(--font-size-8)',
-              }}
+              underline="always"
+              href={`/tools/compare?tanks=${compareTanks.join('%2C')}`}
             >
-              BlitzKit Tankopedia
-            </Text>
-          </Box>
+              <Flex align="center" gap="1">
+                <MixIcon />
+                {strings.website.tools.tankopedia.meta.compare}
+              </Flex>
+            </Link>
+
+            <Dialog.Root open={showSwapDialog} onOpenChange={setShowSwapDialog}>
+              <Dialog.Trigger>
+                <Link
+                  color="gray"
+                  underline="always"
+                  href="#"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    setShowSwapDialog(true);
+                  }}
+                >
+                  <Flex align="center" gap="1">
+                    <UpdateIcon />
+                    {strings.website.tools.tankopedia.meta.swap.button}
+                  </Flex>
+                </Link>
+              </Dialog.Trigger>
+
+              <Dialog.Content>
+                <Dialog.Title>
+                  {strings.website.tools.tankopedia.meta.swap.title}
+                </Dialog.Title>
+
+                <TankSearch
+                  compact
+                  onSelect={(tank) => {
+                    const model = modelDefinitions.models[tank.id];
+
+                    setShowSwapDialog(false);
+                    mutateTankopediaEphemeral((draft) => {
+                      draft.model = modelDefinitions.models[tank.id];
+                    });
+                    mutateDuel((draft) => {
+                      draft.protagonist = tankToDuelMember(
+                        tank,
+                        model,
+                        provisionDefinitions,
+                      );
+                    });
+
+                    window.history.replaceState(
+                      null,
+                      '',
+                      `/tools/tankopedia/${tank.id}`,
+                    );
+                  }}
+                />
+              </Dialog.Content>
+            </Dialog.Root>
+
+            {assertSecret(import.meta.env.PUBLIC_PROMOTE_OPENTEST) ===
+              'true' && (
+              <Link
+                color="jade"
+                href={`https://${
+                  assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH) ===
+                  'opentest'
+                    ? ''
+                    : 'opentest.'
+                }blitzkit.app/tools/tankopedia/${protagonist.id}`}
+              >
+                <Flex align="center" gap="1">
+                  <ScienceIcon width="1.25em" height="1.25em" />
+                  {assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH) ===
+                  'opentest'
+                    ? strings.website.tools.tankopedia.meta.vanilla
+                    : strings.website.tools.tankopedia.meta.opentest}
+                </Flex>
+              </Link>
+            )}
+          </Flex>
         </Flex>
       </Flex>
     </Flex>

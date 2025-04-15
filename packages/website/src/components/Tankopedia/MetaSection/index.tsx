@@ -29,8 +29,8 @@ const [provisionDefinitions, modelDefinitions] = await Promise.all([
 export function MetaSection() {
   const developerMode = App.useDeferred((state) => state.developerMode, false);
   const protagonist = Duel.use((state) => state.protagonist.tank);
-  const ClassIcon = classIcons[protagonist.class];
   const antagonist = Duel.use((state) => state.antagonist.tank);
+  const ClassIcon = classIcons[protagonist.class];
   const compareTanks =
     protagonist.id === antagonist.id
       ? [protagonist.id]
@@ -43,82 +43,7 @@ export function MetaSection() {
   return (
     <Flex justify="center" align="center">
       <Flex direction="column" align="center" gap="6">
-        <Flex gap="2" wrap="wrap" justify="center" align="center">
-          <LinkI18n locale={locale} href="/tools/tankopedia">
-            <Button variant="outline">
-              <ChevronLeftIcon />
-              {strings.website.tools.tankopedia.meta.back}
-            </Button>
-          </LinkI18n>
-
-          <LinkI18n
-            locale={locale}
-            href={`/tools/compare?tanks=${compareTanks.join('%2C')}`}
-          >
-            <Button variant="outline">
-              <MixIcon />
-              {strings.website.tools.tankopedia.meta.compare}
-            </Button>
-          </LinkI18n>
-
-          {assertSecret(import.meta.env.PUBLIC_PROMOTE_OPENTEST) === 'true' && (
-            <Link
-              href={`https://${
-                assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH) === 'opentest'
-                  ? ''
-                  : 'opentest.'
-              }blitzkit.app/tools/tankopedia/${protagonist.id}`}
-            >
-              <Button variant="outline" color="green">
-                <ScienceIcon height="1.25em" width="1.25em" />
-                {assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH) ===
-                'opentest'
-                  ? strings.website.tools.tankopedia.meta.vanilla
-                  : strings.website.tools.tankopedia.meta.opentest}
-              </Button>
-            </Link>
-          )}
-
-          <Dialog.Root open={showSwapDialog} onOpenChange={setShowSwapDialog}>
-            <Dialog.Trigger>
-              <Button>
-                <UpdateIcon />
-                {strings.website.tools.tankopedia.meta.swap.button}
-              </Button>
-            </Dialog.Trigger>
-
-            <Dialog.Content>
-              <Dialog.Title>
-                {strings.website.tools.tankopedia.meta.swap.title}
-              </Dialog.Title>
-
-              <TankSearch
-                compact
-                onSelect={(tank) => {
-                  const model = modelDefinitions.models[tank.id];
-
-                  setShowSwapDialog(false);
-                  mutateTankopediaEphemeral((draft) => {
-                    draft.model = modelDefinitions.models[tank.id];
-                  });
-                  mutateDuel((draft) => {
-                    draft.protagonist = tankToDuelMember(
-                      tank,
-                      model,
-                      provisionDefinitions,
-                    );
-                  });
-
-                  window.history.replaceState(
-                    null,
-                    '',
-                    `/tools/tankopedia/${tank.id}`,
-                  );
-                }}
-              />
-            </Dialog.Content>
-          </Dialog.Root>
-        </Flex>
+     
 
         <Flex
           gap={{ initial: '0', sm: '6' }}
