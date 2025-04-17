@@ -170,7 +170,7 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
           }}
           direction="column"
           align={{ initial: 'center', md: 'center' }}
-          gap="1"
+          gap="2"
         >
           <Flex align="center" gap="3" width="100%" justify="start">
             <Heading
