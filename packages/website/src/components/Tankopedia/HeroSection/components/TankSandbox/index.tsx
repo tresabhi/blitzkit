@@ -32,17 +32,18 @@ import { InitialFogReveal } from './components/InitialFogReveal';
 import { Lighting } from './components/Lighting';
 import { SceneProps } from './components/SceneProps';
 import { TankModel } from './components/TankModel';
+import { TransitionSkeleton } from './components/TransitionSkeleton';
 
 interface TankSandboxProps {
   thicknessRange: ThicknessRange;
   naked?: boolean;
 }
 
-export const forNear0 = 15;
+export const forNear0 = 20;
 export const fogFar0 = 25;
 export const forNear1 = 0;
 export const fogFar1 = 0;
-export const fogAnimationTime = 0.5;
+export const fogAnimationTime = 1.5;
 
 export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
   ({ thicknessRange, naked }, ref) => {
@@ -237,6 +238,7 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
         {(display === TankopediaDisplay.Model ||
           (display === TankopediaDisplay.DynamicArmor &&
             !hideTankModelUnderArmor)) && <TankModel />}
+        <TransitionSkeleton />
         <ShotDisplay />
         <ArmorPlateDisplay />
         <AutoClear />

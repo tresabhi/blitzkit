@@ -187,7 +187,7 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
             </Heading>
 
             <Heading
-              weight="regular"
+              weight="medium"
               size={
                 disturbed
                   ? { initial: '7', lg: '8' }
