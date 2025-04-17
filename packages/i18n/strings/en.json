@@ -1010,7 +1010,7 @@
         "characteristics": {
           "title": "Characteristics",
           "compare": {
-            "label": "Compare against",
+            "label": "Compare",
             "class": "Tier %s1 %s2",
             "tier": "All of tier %s1",
             "all": "All tanks"

@@ -1,6 +1,6 @@
 import { TIER_ROMAN_NUMERALS } from '@blitzkit/core';
 import { literals } from '@blitzkit/i18n/src/literals';
-import { Flex, Heading, SegmentedControl, Text } from '@radix-ui/themes';
+import { Flex, SegmentedControl, Text, type FlexProps } from '@radix-ui/themes';
 import { useLocale } from '../../../../../../hooks/useLocale';
 import { Duel } from '../../../../../../stores/duel';
 import {
@@ -8,7 +8,7 @@ import {
   TankopediaRelativeAgainst,
 } from '../../../../../../stores/tankopediaEphemeral';
 
-export function CharacteristicsHeading() {
+export function CompareOptions(props: FlexProps) {
   const relativeAgainst = TankopediaEphemeral.use(
     (state) => state.relativeAgainst,
   );
@@ -18,19 +18,18 @@ export function CharacteristicsHeading() {
 
   return (
     <Flex
-      align={{ initial: 'stretch', md: 'start' }}
+      align="center"
       gap="2"
-      direction="column"
+      justify="center"
+      direction={{ initial: 'column', sm: 'row' }}
+      {...props}
     >
-      <Heading mb="2">
-        {strings.website.tools.tankopedia.characteristics.title}
-      </Heading>
-
       <Text color="gray">
         {strings.website.tools.tankopedia.characteristics.compare.label}
       </Text>
+
       <SegmentedControl.Root
-        size={{ initial: '1', md: '2' }}
+        size="1"
         value={`${relativeAgainst}`}
         onValueChange={(value) => {
           mutateTankopediaEphemeral((draft) => {

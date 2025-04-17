@@ -11,8 +11,7 @@ export function Listing({ label, ...props }: ListingProps) {
       minWidth="17rem"
       justify="between"
       gap="4"
-      px="1"
-      style={{ borderBottom: `1px solid ${Var('gray-11')}` }}
+      style={{ borderBottom: `1px solid ${Var('gray-a9')}` }}
     >
       <Text size="4">{label}</Text>
       <Text align="right" size="4" weight="medium" {...props} />

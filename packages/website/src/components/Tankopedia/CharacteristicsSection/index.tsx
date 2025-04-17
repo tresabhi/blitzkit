@@ -1,7 +1,6 @@
-import { Flex, Heading } from '@radix-ui/themes';
-import { useLocale } from '../../../hooks/useLocale';
+import { Flex } from '@radix-ui/themes';
 import { Characteristics } from './components/Characteristics';
-import { CharacteristicsHeading } from './components/Characteristics/components/Heading';
+import { CompareOptions } from './components/Characteristics/components/CompareOptions';
 import { Consumables } from './components/Consumables';
 import { Equipment } from './components/Equipment';
 import { Miscellaneous } from './components/Miscellaneous';
@@ -10,42 +9,42 @@ import { Provisions } from './components/Provisions';
 import { Skills } from './components/Skills';
 
 export function CharacteristicsSection() {
-  const { strings } = useLocale();
-
   return (
-    <Flex mt="4" px="4" style={{ boxSizing: 'border-box' }} gap="6">
-      <Flex
-        flexGrow="1"
-        gap="9"
-        justify="center"
-        align={{ initial: 'center', sm: 'start' }}
-        direction={{ initial: 'column', sm: 'row' }}
-      >
-        <Flex
-          direction="column"
-          gap="6"
-          maxWidth="21rem"
-          align={{ initial: 'center', sm: 'start' }}
-        >
-          <Heading>
-            {strings.website.tools.tankopedia.configuration.title}
-          </Heading>
-          <Modules />
-          <Equipment />
-          <Provisions />
-          <Consumables />
-          <Skills />
-          <Miscellaneous />
-        </Flex>
+    <Flex direction="column" gap="3">
+      <CompareOptions display={{ initial: 'none', sm: 'flex' }} />
+
+      <Flex mt="4" px="4" style={{ boxSizing: 'border-box' }} gap="6">
         <Flex
           flexGrow="1"
-          maxWidth={{ initial: '20rem', md: '40rem' }}
-          direction="column"
-          gap="6"
-          width="100%"
+          gap="9"
+          justify="center"
+          align={{ initial: 'center', sm: 'start' }}
+          direction={{ initial: 'column', sm: 'row' }}
         >
-          <CharacteristicsHeading />
-          <Characteristics />
+          <Flex
+            direction="column"
+            gap="6"
+            maxWidth="21rem"
+            align={{ initial: 'center', sm: 'start' }}
+          >
+            <Modules />
+            <Equipment />
+            <Provisions />
+            <Consumables />
+            <Skills />
+            <Miscellaneous />
+          </Flex>
+
+          <Flex
+            flexGrow="1"
+            maxWidth={{ initial: '20rem', md: '40rem' }}
+            direction="column"
+            gap="6"
+            width="100%"
+          >
+            <CompareOptions display={{ initial: 'flex', sm: 'none' }} />
+            <Characteristics />
+          </Flex>
         </Flex>
       </Flex>
     </Flex>

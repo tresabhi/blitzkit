@@ -24,12 +24,12 @@ export function MetaSection() {
   const ClassIcon = classIcons[protagonist.class];
   const { locale, strings } = useLocale();
 
-  console.log(protagonist.nation);
-
   return (
     <Box
       style={{
         background: `url(/assets/images/national-wallpapers/${protagonist.nation}.jpg)`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
         backgroundPosition:
           NATIONAL_BANNER_POSITION_OVERRIDES[protagonist.nation] ?? 'center',
       }}
@@ -39,7 +39,7 @@ export function MetaSection() {
           background: `url(${asset(`flags/scratched/${protagonist.nation}.webp`)})`,
           backgroundRepeat: 'no-repeat',
           backgroundSize: '53rem',
-          backgroundPosition: '-25% 50%',
+          backgroundPosition: '-8rem 50%',
         }}
       >
         <Flex
@@ -52,7 +52,7 @@ export function MetaSection() {
         >
           <Flex direction="column" align="center" gap="6">
             <Flex
-              gap={{ initial: '0', sm: '8' }}
+              gap={{ initial: '2', sm: '8' }}
               direction={{ initial: 'column', sm: 'row' }}
             >
               <Flex direction="column" width="100%" gap="2">

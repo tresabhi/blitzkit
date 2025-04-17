@@ -16,7 +16,7 @@ export function VideoSection({ skeleton }: MaybeSkeletonComponentProps) {
   const videos = reviews.reviews[tank.id]?.videos;
   const { strings } = useLocale();
 
-  if (!videos) return null;
+  if (videos === undefined || videos.length === 0) return null;
 
   return (
     <PageWrapper noFlex1 noMinHeight>
