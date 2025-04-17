@@ -1,4 +1,4 @@
-import { useThree } from '@react-three/fiber';
+import { invalidate, useThree } from '@react-three/fiber';
 import { useEffect } from 'react';
 import type { Fog } from 'three';
 import { fogAnimationTime, fogFar0, fogFar1, forNear0, forNear1 } from '..';
@@ -25,6 +25,7 @@ export function InitialFogReveal() {
 
       fog.near = near;
       fog.far = far;
+      invalidate();
 
       if (x >= 1) {
         fog.near = forNear0;
