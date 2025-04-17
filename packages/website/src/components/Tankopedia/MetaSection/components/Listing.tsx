@@ -1,4 +1,5 @@
 import { Flex, Text, type TextProps } from '@radix-ui/themes';
+import { Var } from '../../../../core/radix/var';
 
 type ListingProps = TextProps & {
   label: string;
@@ -6,9 +7,15 @@ type ListingProps = TextProps & {
 
 export function Listing({ label, ...props }: ListingProps) {
   return (
-    <Flex minWidth="15rem" justify="between" gap="4">
-      <Text color="gray">{label}</Text>
-      <Text align="right" {...props} />
+    <Flex
+      minWidth="17rem"
+      justify="between"
+      gap="4"
+      px="1"
+      style={{ borderBottom: `1px solid ${Var('gray-11')}` }}
+    >
+      <Text size="4">{label}</Text>
+      <Text align="right" size="4" weight="medium" {...props} />
     </Flex>
   );
 }
