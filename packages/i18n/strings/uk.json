@@ -511,7 +511,7 @@
         },
         "body": {
           "title": "Clan search for %s1 in region %s2",
-          "no_results": "No clans found"
+          "no_results": "Жодного клану не знайдено"
         }
       },
       "search_players": {
