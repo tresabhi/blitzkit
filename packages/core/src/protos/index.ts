@@ -7,6 +7,7 @@ export * from './game_definitions.ts';
 export * from './i18n.ts';
 export * from './map_definitions.ts';
 export * from './model_definitions.ts';
+export * from './popular_tanks.ts';
 export * from './provision_definitions.ts';
 export * from './rating_leaderboard.ts';
 export * from './reviews.ts';

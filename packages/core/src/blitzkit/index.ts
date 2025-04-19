@@ -45,5 +45,6 @@ export * from './votes';
 // export * from './withCORSProxy';
 export * from './createDefaultProvisions';
 export * from './metaSortTank';
+export * from './popularTanks';
 export * from './romanize';
 export * from './youtubers';

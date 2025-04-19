@@ -3,6 +3,7 @@ import { literals } from '@blitzkit/i18n/src/literals';
 import { EyeOpenIcon } from '@radix-ui/react-icons';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
 import { google } from 'googleapis';
+import { awaitablePopularTanks } from '../core/awaitables/popularTanks';
 import { awaitableTankDefinitions } from '../core/awaitables/tankDefinitions';
 import {
   LocaleProvider,
@@ -12,7 +13,10 @@ import {
 import { TankopediaPersistent } from '../stores/tankopediaPersistent';
 import { TankCard } from './TankCard';
 
-const [tankDefinitions] = await Promise.all([awaitableTankDefinitions, ,]);
+const [tankDefinitions, popularTanks] = await Promise.all([
+  awaitableTankDefinitions,
+  awaitablePopularTanks,
+]);
 
 const auth = await google.auth.getClient({
   keyFile: import.meta.env.GOOGLE_APPLICATION_CREDENTIALS,
@@ -39,36 +43,6 @@ if (!report.data.rows) {
   throw new Error('No rows in report');
 }
 
-const hotTanks = report.data.rows
-  .filter(
-    (row) =>
-      row.dimensionValues &&
-      row.dimensionValues[0].value &&
-      row.dimensionValues[0].value !== '/tools/tankopedia/' &&
-      row.metricValues &&
-      row.metricValues[0].value,
-  )
-  .map((row) => ({
-    id: Number(
-      row.dimensionValues![0].value!.match(
-        /\/tools\/tankopedia\/(\d+)\/?/,
-      )?.[1],
-    ),
-    views: Number(row.metricValues![0].value!),
-  }))
-  .filter((row) => {
-    if (!(row.id in tankDefinitions.tanks)) {
-      // console.log('Unknown tank', row.id);
-    }
-
-    return row.id in tankDefinitions.tanks;
-  })
-  .slice(0, 8)
-  .map(({ id, views }) => ({
-    tank: tankDefinitions.tanks[id],
-    views,
-  }));
-
 export function HomePageHotTanks({ locale }: LocaleAcceptorProps) {
   return (
     <LocaleProvider locale={locale}>
@@ -92,19 +66,25 @@ function Content() {
       </Text>
 
       <Flex justify="center" gap="4" wrap="wrap">
-        {hotTanks.map((row) => (
-          <Box width="7rem" key={row.tank.id}>
-            <TankCard
-              tank={row.tank}
-              discriminator={
-                <Flex align="center" gap="1" justify="center">
-                  <EyeOpenIcon />
-                  {Math.round(row.views * (30 / 7)).toLocaleString(locale)}
-                </Flex>
-              }
-            />
-          </Box>
-        ))}
+        {popularTanks.tanks.map(({ id, views }) => {
+          const tank = tankDefinitions.tanks[id];
+
+          if (tank === undefined) return null;
+
+          return (
+            <Box width="7rem" key={tank.id}>
+              <TankCard
+                tank={tank}
+                discriminator={
+                  <Flex align="center" gap="1" justify="center">
+                    <EyeOpenIcon />
+                    {Math.round(views * (30 / 7)).toLocaleString(locale)}
+                  </Flex>
+                }
+              />
+            </Box>
+          );
+        })}
       </Flex>
     </Flex>
   );
