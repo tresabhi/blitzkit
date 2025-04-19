@@ -10,38 +10,40 @@ export async function glossary() {
 
   const avatars: Record<string, { avatar: Avatar; url: string }> = {};
 
-  for (const supported of locales.supported) {
-    console.log(`Fetching glossary for ${supported.locale}`);
+  await Promise.all(
+    locales.supported.map(async (supported) => {
+      const glossary = await fetchGlossary(supported.blitz ?? supported.locale);
 
-    const glossary = await fetchGlossary(supported.blitz ?? supported.locale);
+      console.log(
+        `Found ${Object.keys(glossary).length} things for ${supported.locale}`,
+      );
 
-    console.log(`Found ${Object.keys(glossary).length} things`);
+      for (const key in glossary) {
+        const glossaryEntry = glossary[key];
 
-    for (const key in glossary) {
-      const glossaryEntry = glossary[key];
+        if (
+          !key.startsWith('avatar') ||
+          key.endsWith('_part') ||
+          glossaryEntry.image_url === null
+        ) {
+          continue;
+        }
 
-      if (
-        !key.startsWith('avatar') ||
-        key.endsWith('_part') ||
-        glossaryEntry.image_url === null
-      ) {
-        continue;
+        if (key in avatars) {
+          avatars[key].avatar.name.locales[supported.locale] =
+            glossaryEntry.title;
+        } else {
+          avatars[key] = {
+            url: glossaryEntry.image_url,
+            avatar: {
+              id: key,
+              name: { locales: { [supported.locale]: glossaryEntry.title } },
+            },
+          };
+        }
       }
-
-      if (key in avatars) {
-        avatars[key].avatar.name.locales[supported.locale] =
-          glossaryEntry.title;
-      } else {
-        avatars[key] = {
-          url: glossaryEntry.image_url,
-          avatar: {
-            id: key,
-            name: { locales: { [supported.locale]: glossaryEntry.title } },
-          },
-        };
-      }
-    }
-  }
+    }),
+  );
 
   const changes: FileChange[] = [];
   const gallery: Gallery = { avatars: [] };
