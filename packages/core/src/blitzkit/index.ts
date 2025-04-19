@@ -44,6 +44,7 @@ export * from './unwrapBlitzkitResponse';
 export * from './votes';
 // export * from './withCORSProxy';
 export * from './createDefaultProvisions';
+export * from './gallery';
 export * from './metaSortTank';
 export * from './popularTanks';
 export * from './romanize';

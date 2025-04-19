@@ -1,4 +1,5 @@
-import { assertSecret, type BlitzGlossary } from '@blitzkit/core';
+import { assertSecret } from '../blitzkit';
+import { BlitzGlossary } from '../types';
 
 export async function fetchGlossary(locale: string) {
   const response = await fetch(

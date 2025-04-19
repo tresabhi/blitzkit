@@ -1,4 +1,5 @@
 import { assertSecret } from '@blitzkit/core';
+import { chunk } from 'lodash-es';
 import { commitMultipleFiles, FileChange } from './commitMultipleFiles';
 
 export async function commitAssets(message: string, changes: FileChange[]) {
@@ -6,10 +7,19 @@ export async function commitAssets(message: string, changes: FileChange[]) {
 
   if (changes.length === 0) return;
 
-  await commitMultipleFiles(
-    assertSecret(import.meta.env.PUBLIC_ASSET_REPO),
-    assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
-    `${message} - ${new Date().toDateString()}`,
-    changes,
-  );
+  const chunks = chunk(changes, 16);
+  let chunkIndex = 0;
+
+  for (const chunk of chunks) {
+    console.log(`Committing chunk ${chunkIndex + 1}/${chunks.length}`);
+
+    await commitMultipleFiles(
+      assertSecret(import.meta.env.PUBLIC_ASSET_REPO),
+      assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
+      `${message} - ${new Date().toDateString()} (${chunkIndex + 1}/${chunks.length})`,
+      chunk,
+    );
+
+    chunkIndex++;
+  }
 }

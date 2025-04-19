@@ -1,8 +1,10 @@
+import locales from '@blitzkit/i18n/locales.json';
 import { literals } from '@blitzkit/i18n/src/literals';
 import { Flex, Text } from '@radix-ui/themes';
 import fuzzysort from 'fuzzysort';
 import { times } from 'lodash-es';
 import { useMemo, useState } from 'react';
+import { awaitableGallery } from '../../core/awaitables/gallery';
 import { useLocale } from '../../hooks/useLocale';
 import { GalleryEphemeral } from '../../stores/galleryEphemeral';
 import { GalleryCard } from './Card';
@@ -16,21 +18,30 @@ export interface Avatar {
   id: string;
 }
 
+const gallery = await awaitableGallery;
+
 const DEFAULT_LOADED = 42;
 const PREVIEW_COUNT = 28;
 
-export function GalleryList({ avatars }: GalleryListProps) {
+export function GalleryList() {
   const search = GalleryEphemeral.use((state) => state.search);
   const [loadedCards, setLoadedCards] = useState(DEFAULT_LOADED);
-  const { locale, strings } = useLocale();
+  const { locale, strings, unwrap } = useLocale();
   const filtered = useMemo(() => {
     setLoadedCards(DEFAULT_LOADED);
 
     if (search === undefined) {
-      return avatars;
+      return gallery.avatars;
     } else {
       return fuzzysort
-        .go(search, avatars, { keys: ['name', 'id'] })
+        .go(search, gallery.avatars, {
+          keys: [
+            ...locales.supported.map(
+              (supported) => `name.locales.${supported.locale}`,
+            ),
+            'id',
+          ],
+        })
         .map((result) => result.obj);
     }
   }, [search]);
@@ -45,7 +56,11 @@ export function GalleryList({ avatars }: GalleryListProps) {
 
       <Flex wrap="wrap" gap="4" justify="center">
         {filtered.slice(0, loadedCards).map((avatar) => (
-          <GalleryCard key={avatar.id} id={avatar.id} name={avatar.name} />
+          <GalleryCard
+            key={avatar.id}
+            id={avatar.id}
+            name={unwrap(avatar.name)}
+          />
         ))}
 
         {times(

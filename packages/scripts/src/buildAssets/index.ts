@@ -18,6 +18,7 @@ import { definitions } from './definitions';
 import { equipmentIcons } from './equipmentIcons';
 import { flags } from './flags';
 import { gameModeBanners } from './gameModeBanners';
+import { glossary } from './glossary';
 import { migration } from './migration';
 import { moduleIcons } from './moduleIcons';
 import { popularTanks } from './popularTanks';
@@ -47,6 +48,7 @@ const methods = [
   tankIcons,
   blitzkitTankIcons,
   popularTanks,
+  glossary,
 ];
 
 for (const method of methods) {
