@@ -8,11 +8,6 @@ interface HullTraverseVisualizerProps {
   stats: TankCharacteristics;
 }
 
-interface HullTraverseVisualizerEventData {
-  hull: boolean;
-  turret: boolean;
-}
-
 type Terrain = 'Hard' | 'Medium' | 'Soft';
 
 export function HullTraverseVisualizer({ stats }: HullTraverseVisualizerProps) {
