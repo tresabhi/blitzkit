@@ -665,7 +665,7 @@
         "copied": "コピーしました!"
       },
       "tank_search": {
-        "clear_filters": "クリア",
+        "clear_filters": "Clear filters",
         "search_bar_hint": "車輌名を入力…",
         "recent": "最近の閲覧",
         "select_all": "全て選択",
@@ -900,7 +900,7 @@
         "characteristics": {
           "title": "性能値",
           "compare": {
-            "label": "比較対象",
+            "label": "性能比較",
             "class": "Tier %s1 %s2",
             "tier": "Tier %s1 全車輌",
             "all": "全車輌"
