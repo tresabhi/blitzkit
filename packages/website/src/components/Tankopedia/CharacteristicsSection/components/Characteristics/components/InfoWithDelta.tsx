@@ -64,7 +64,6 @@ export function InfoWithDelta({
       : (stats[props.value] as number);
   const delta = useDelta(uhWhatDoICallThisVariable);
   const protagonistTank = Duel.use((state) => state.protagonist.tank);
-  const model = modelDefinitions.models[protagonistTank.id];
   const others = useMemo(() => {
     const defaultSkills = createDefaultSkills(skillDefinitions);
 

@@ -6,7 +6,7 @@
   "dependencies": {
     "@octokit/plugin-throttling": "^8.2.0",
     "@octokit/rest": "^20.1.1",
-    "@prisma/client": "^5.19.1",
+    "@prisma/client": "^6.6.0",
     "adm-zip": "^0.5.16",
     "crc": "^4.3.2",
     "dotenv": "^16.4.5",

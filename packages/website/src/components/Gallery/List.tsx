@@ -24,7 +24,7 @@ const PREVIEW_COUNT = 28;
 export function GalleryList({ skeleton }: MaybeSkeletonComponentProps) {
   const search = GalleryEphemeral.use((state) => state.search);
   const [loadedCards, setLoadedCards] = useState(DEFAULT_LOADED);
-  const { locale, strings, unwrap } = useLocale();
+  const { locale, strings } = useLocale();
   const filtered = useMemo(() => {
     setLoadedCards(DEFAULT_LOADED);
 

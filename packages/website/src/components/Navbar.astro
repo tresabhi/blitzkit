@@ -1,5 +1,5 @@
 ---
-import { assertSecret, imgur, ImgurSize } from '@blitzkit/core';
+import { assertSecret } from '@blitzkit/core';
 import {
   Cross1Icon,
   DiscordLogoIcon,
@@ -102,7 +102,7 @@ const strings = getStrings(locale);
           className="tools"
         >
           {
-            toolsFiltered.map((tool, index) => {
+            toolsFiltered.map((tool) => {
               const unavailableOnBranch = tool.branches?.every(
                 (branch) =>
                   branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
