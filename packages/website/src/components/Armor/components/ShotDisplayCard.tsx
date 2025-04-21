@@ -115,7 +115,7 @@ export function ShotDisplayCard({ shot, ...props }: ShotDisplayCardProps) {
   const inTitleColor = shotStatusColors[shot.in.status];
 
   return (
-    <Card style={{ width: 300 }} {...props}>
+    <Card variant="classic" style={{ width: 300 }} {...props}>
       <Flex direction="column" gap="2">
         <Flex direction="column" gap="1">
           <Text color={inTitleColor} weight="bold">

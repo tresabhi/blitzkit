@@ -29,6 +29,7 @@ export function CompareOptions(props: FlexProps) {
       </Text>
 
       <SegmentedControl.Root
+        variant="classic"
         size="1"
         value={`${relativeAgainst}`}
         onValueChange={(value) => {

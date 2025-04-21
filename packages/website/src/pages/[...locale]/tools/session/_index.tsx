@@ -203,6 +203,7 @@ function Content() {
           </Flex>
 
           <TextField.Root
+            variant="classic"
             size="3"
             style={{
               position: 'relative',

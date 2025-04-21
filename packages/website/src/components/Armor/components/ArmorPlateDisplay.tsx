@@ -36,6 +36,7 @@ export function ArmorPlateDisplay() {
         style={{ pointerEvents: highlightArmor.editingPlate ? 'auto' : 'none' }}
       >
         <Card
+          variant="classic"
           mb="4"
           style={{
             whiteSpace: 'nowrap',
@@ -72,6 +73,7 @@ export function ArmorPlateDisplay() {
             {highlightArmor.editingPlate && (
               <Flex gap="2" align="center">
                 <TextField.Root
+                  variant="classic"
                   style={{ width: 96 }}
                   mt="2"
                   ref={input}

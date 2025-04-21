@@ -107,6 +107,7 @@ export function Controls({
       </Button>
 
       <SegmentedControl.Root
+        variant="classic"
         value={deltaMode}
         onValueChange={(value) => {
           mutateComparePersistent((draft) => {

@@ -7,7 +7,7 @@ export function Boolean({ configKey }: EmbedPreviewControllerProps) {
 
   return (
     <Switch
-      variant="soft"
+      variant="classic"
       checked={EmbedState.use((state) => state[configKey] as boolean)}
       onCheckedChange={() => {
         mutateEmbedState((draft) => {

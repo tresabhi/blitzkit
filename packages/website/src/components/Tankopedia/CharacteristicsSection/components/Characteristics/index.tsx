@@ -305,6 +305,7 @@ export function Characteristics() {
                   }
                 </Text>
                 <Slider
+                  variant="classic"
                   key={penetrationDistance}
                   min={0}
                   max={500}
@@ -319,6 +320,7 @@ export function Characteristics() {
                   }}
                 />
                 <TextField.Root
+                  variant="classic"
                   style={{ width: 64 }}
                   ref={penetrationDistanceInput}
                   defaultValue={penetrationDistance}

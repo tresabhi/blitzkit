@@ -30,6 +30,7 @@ function Content({ locale }: LocaleAcceptorProps) {
         <Flex align="center" gap="2" justify="between">
           <Text>{strings.website.settings.dev_mode}</Text>
           <Switch
+            variant="classic"
             checked={developerMode}
             onCheckedChange={(checked) =>
               appStore.setState({ developerMode: checked })

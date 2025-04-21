@@ -7,7 +7,7 @@ export function Radius({ configKey }: EmbedPreviewControllerProps) {
 
   return (
     <Slider
-      variant="soft"
+      variant="classic"
       min={0}
       max={5}
       value={[

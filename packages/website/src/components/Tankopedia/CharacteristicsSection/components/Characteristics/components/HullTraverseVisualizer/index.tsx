@@ -105,7 +105,7 @@ export function HullTraverseVisualizer({ stats }: HullTraverseVisualizerProps) {
           onClick={() => setRotateHull((state) => !state)}
           style={{ cursor: 'pointer' }}
         >
-          <Checkbox checked={rotateHull} />
+          <Checkbox variant="classic" checked={rotateHull} />
           <Text size="2">
             {strings.website.tools.tankopedia.visualizers.rotator.hull}
           </Text>
@@ -117,7 +117,7 @@ export function HullTraverseVisualizer({ stats }: HullTraverseVisualizerProps) {
           onClick={() => setRotateTurret((state) => !state)}
           style={{ cursor: 'pointer' }}
         >
-          <Checkbox checked={rotateTurret} />
+          <Checkbox variant="classic" checked={rotateTurret} />
           <Text size="2">
             {strings.website.tools.tankopedia.visualizers.rotator.turret}
           </Text>

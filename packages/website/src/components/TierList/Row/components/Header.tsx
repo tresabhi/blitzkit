@@ -50,6 +50,7 @@ export function Header({ index }: HeaderProps) {
         <Popover.Content>
           <Flex direction="column" gap="2">
             <TextField.Root
+              variant="classic"
               placeholder="Tier name"
               ref={input}
               defaultValue={name}

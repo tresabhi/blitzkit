@@ -23,7 +23,7 @@ export function PlayerCountControl() {
           });
         }}
       >
-        <Select.Trigger />
+        <Select.Trigger variant="classic" />
         <Select.Content>
           <Select.Item value="total">
             {strings.common.player_count_period.total}

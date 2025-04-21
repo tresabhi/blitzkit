@@ -67,6 +67,7 @@ export function SearchBar({ topResult, skeleton, onSelect }: SearchBarProps) {
     <Flex justify="center">
       <Flex gap="2" flexGrow="1">
         <TextField.Root
+          variant="classic"
           disabled={skeleton}
           defaultValue={tankFilters.search}
           style={{ flex: 1 }}

@@ -77,6 +77,7 @@ export function QuickInputs() {
       className="quick-inputs"
     >
       <TextField.Root
+        variant="classic"
         size="1"
         radius="full"
         style={{ flex: 1, textAlign: 'right' }}
@@ -117,6 +118,7 @@ export function QuickInputs() {
       </TextField.Root>
 
       <TextField.Root
+        variant="classic"
         size="1"
         radius="full"
         style={{ flex: 1, textAlign: 'right' }}

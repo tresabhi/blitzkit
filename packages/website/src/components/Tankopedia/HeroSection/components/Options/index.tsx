@@ -345,7 +345,7 @@ export function Options({ thicknessRange, canvas, skeleton }: OptionsProps) {
               });
             }}
           >
-            <Checkbox checked={advancedHighlighting} />
+            <Checkbox variant="classic" checked={advancedHighlighting} />
             <Text color="gray" size="2">
               {strings.website.tools.tankopedia.sandbox.dynamic.advanced}
             </Text>
@@ -400,6 +400,7 @@ export function Options({ thicknessRange, canvas, skeleton }: OptionsProps) {
 
         <Flex gap="3" align="center" mt="2">
           <SegmentedControl.Root
+            variant="classic"
             value={`${display}`}
             onValueChange={(value) => {
               mutateTankopediaEphemeral((draft) => {

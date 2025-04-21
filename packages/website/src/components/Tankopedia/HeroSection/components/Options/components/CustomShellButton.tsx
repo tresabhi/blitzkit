@@ -102,7 +102,7 @@ export function CustomShellButton() {
                     });
                   }}
                 >
-                  <Select.Trigger />
+                  <Select.Trigger variant="classic" />
 
                   <Select.Content>
                     <Select.Item value={`${ShellType.AP}`}>
@@ -129,6 +129,7 @@ export function CustomShellButton() {
                   }
                 </Text>
                 <TextField.Root
+                  variant="classic"
                   style={{ maxWidth: '6rem' }}
                   defaultValue={customShell.caliber}
                   type="number"
@@ -164,6 +165,7 @@ export function CustomShellButton() {
                   }
                 </Text>
                 <TextField.Root
+                  variant="classic"
                   style={{ maxWidth: '6rem' }}
                   defaultValue={customShell.penetration.near}
                   type="number"
@@ -216,6 +218,7 @@ export function CustomShellButton() {
                         ])}
                       </Text>
                       <Slider
+                        variant="classic"
                         min={0}
                         max={90}
                         step={Number.EPSILON}
@@ -246,6 +249,7 @@ export function CustomShellButton() {
                         ])}
                       </Text>
                       <Slider
+                        variant="classic"
                         min={0}
                         max={90}
                         step={Number.EPSILON}
@@ -265,6 +269,7 @@ export function CustomShellButton() {
                 <Flex align="center" justify="between" gap="4">
                   <Text>Explosion radius</Text>
                   <TextField.Root
+                    variant="classic"
                     style={{ maxWidth: '6rem' }}
                     defaultValue={customShell.explosion_radius ?? 0}
                     type="number"

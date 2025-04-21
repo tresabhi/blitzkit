@@ -40,7 +40,7 @@ export function RichText({ configKey }: EmbedPreviewControllerProps) {
           <FontSizeIcon width="1em" height="1em" />
         </Text>
         <Slider
-          variant="soft"
+          variant="classic"
           min={1}
           max={9}
           value={[Number(state.size)]}
@@ -61,7 +61,7 @@ export function RichText({ configKey }: EmbedPreviewControllerProps) {
           <FontBoldIcon width="1em" height="1em" />
         </Text>
         <Slider
-          variant="soft"
+          variant="classic"
           min={0}
           max={radixTextWeights.length - 1}
           value={[radixTextWeights.indexOf(state.weight)]}

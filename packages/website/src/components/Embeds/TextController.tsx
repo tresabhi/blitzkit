@@ -7,6 +7,7 @@ export function TextController({ configKey }: EmbedPreviewControllerProps) {
 
   return (
     <TextField.Root
+      variant="classic"
       placeholder="Empty"
       value={EmbedState.use((state) => state[configKey] as string)}
       onChange={(event) => {

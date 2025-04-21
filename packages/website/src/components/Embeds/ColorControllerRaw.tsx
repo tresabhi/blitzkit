@@ -25,7 +25,7 @@ export function ColorControllerRaw({
         }}
       />
       <Slider
-        variant="soft"
+        variant="classic"
         min={0}
         max={255}
         value={[alpha]}

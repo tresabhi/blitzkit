@@ -25,7 +25,8 @@ export function Enum({
         });
       }}
     >
-      <Select.Trigger />
+      <Select.Trigger variant="classic" />
+
       <Select.Content>
         {config.options.map((option) => (
           <Select.Item key={option.value} value={option.value}>

@@ -38,7 +38,7 @@ export function LocaleSwitcher({ locale }: LocaleAcceptorProps) {
         }${rawPath}`;
       }}
     >
-      <Select.Trigger />
+      <Select.Trigger variant="classic" />
 
       <Select.Content>
         {SUPPORTED_LOCALES.map((locale) => (

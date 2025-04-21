@@ -177,7 +177,7 @@ export function Thicknesses({ thicknessRange, skeleton }: ThicknessesProps) {
             <Text size="1">
               {strings.website.tools.tankopedia.sandbox.static.edit.label}
             </Text>
-            <Checkbox size="2" checked={editStatic} />
+            <Checkbox variant="classic" size="2" checked={editStatic} />
           </Flex>
         </Flex>
 

@@ -52,6 +52,7 @@ export function Import() {
 
       <Flex gap="2" mb="6">
         <TextField.Root
+          variant="classic"
           ref={importInput}
           placeholder={strings.website.tools.embed.configuration.import.hint}
           style={{ flex: 1 }}

@@ -92,6 +92,7 @@ export function GenerateURL({ embed }: GenerateURLProps) {
           </Flex>
 
           <TextField.Root
+            variant="classic"
             mt="4"
             style={{ width: '20rem' }}
             placeholder={strings.website.common.player_search.hint}

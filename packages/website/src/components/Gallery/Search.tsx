@@ -12,6 +12,7 @@ export function GallerySearch({ skeleton }: MaybeSkeletonComponentProps) {
 
   return (
     <TextField.Root
+      variant="classic"
       disabled={skeleton}
       placeholder={strings.website.tools.gallery.search.hint}
       ref={input}
