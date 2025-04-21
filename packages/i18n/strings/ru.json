@@ -665,7 +665,7 @@
         "copied": "Скопировано!"
       },
       "tank_search": {
-        "clear_filters": "Clear filters",
+        "clear_filters": "Сбросить фильтры",
         "search_bar_hint": "Поиск танков...",
         "recent": "Недавние",
         "select_all": "Выбрать всё",
@@ -1143,7 +1143,7 @@
         "description": "Встраиваемые элементы для стримов",
         "seo_description": "Создать вставки для стримов по World of Tanks Blitz с невероятной кастомизации",
         "coming_soon": "Скоро появятся новые встраиваемые элементы.",
-        "suggest": "Предложить идеи.",
+        "suggest": "Предложить идеи",
         "preview": {
           "title": "Предпросмотр",
           "upload": "Загрузить фон для теста"
