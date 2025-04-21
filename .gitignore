@@ -28,4 +28,4 @@ target
 /.astro
 .vercel
 /src
-/packages/core/src/prisma
+/packages/bot/src/prisma

@@ -1,4 +1,4 @@
-import { usersDatabase } from '@blitzkit/core';
+import { usersDatabase } from '../db/users';
 import { client } from '../discord/client';
 
 const EXIT_EVENTS = [

@@ -1,5 +1,5 @@
-import { usersDatabase } from '@blitzkit/core';
 import { flagUserActivity } from './flagUserActivity';
+import { usersDatabase } from './users';
 
 export async function linkBlitzAndDiscord(discordId: bigint, blitzId: number) {
   await usersDatabase.discordUser.upsert({

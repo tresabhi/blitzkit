@@ -1,5 +1,6 @@
-import { idToRegion, usersDatabase } from '@blitzkit/core';
-import { flagUserActivity } from '@blitzkit/core/src/blitzkit/flagUserActivity';
+import { idToRegion } from '@blitzkit/core';
+import { flagUserActivity } from '../db/flagUserActivity';
+import { usersDatabase } from '../db/users';
 
 export async function getBlitzFromDiscord(discordId: bigint) {
   const unique = await usersDatabase.discordUser.findUnique({
