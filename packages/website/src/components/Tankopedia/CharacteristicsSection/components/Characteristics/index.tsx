@@ -34,6 +34,7 @@ import { TankopediaEphemeral } from '../../../../../stores/tankopediaEphemeral';
 import { HullTraverseVisualizer } from './components/HullTraverseVisualizer';
 import { Info } from './components/Info';
 import { InfoWithDelta } from './components/InfoWithDelta';
+import { RicochetVisualizer } from './components/RicochetVisuazlizer';
 
 const [equipmentDefinitions, provisionDefinitions] = await Promise.all([
   awaitableEquipmentDefinitions,
@@ -368,22 +369,26 @@ export function Characteristics() {
             />
           )}
           <InfoWithDelta stats={stats} decimals={0} unit="mm" value="caliber" />
-          <InfoWithDelta
-            stats={stats}
-            decimals={0}
-            unit="°"
-            noRanking
-            value="shellNormalization"
-          />
+
           {!isExplosive(shell.type) && (
-            <InfoWithDelta
-              stats={stats}
-              noRanking
-              decimals={0}
-              deltaType="lowerIsBetter"
-              unit="°"
-              value="shellRicochet"
-            />
+            <>
+              <InfoWithDelta
+                stats={stats}
+                decimals={0}
+                unit="°"
+                noRanking
+                value="shellNormalization"
+              />
+              <InfoWithDelta
+                stats={stats}
+                noRanking
+                decimals={0}
+                deltaType="lowerIsBetter"
+                unit="°"
+                value="shellRicochet"
+              />
+              <RicochetVisualizer stats={stats} />
+            </>
           )}
           <InfoWithDelta
             stats={stats}

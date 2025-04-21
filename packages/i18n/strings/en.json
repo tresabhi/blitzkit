@@ -868,6 +868,10 @@
             "hard": "Hard",
             "medium": "Medium",
             "soft": "Soft"
+          },
+
+          "ricochet": {
+            "max": "Max: %s1°"
           }
         },
 

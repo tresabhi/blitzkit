@@ -41,7 +41,7 @@ export function MetaSection() {
           style={{
             background: `url(${asset(`flags/scratched/${protagonist.nation}.webp`)})`,
             backgroundRepeat: 'no-repeat',
-            backgroundSize: '53rem',
+            backgroundSize: 'min(53rem, 80vw)',
             backgroundPosition: '-8rem 50%',
           }}
         >
