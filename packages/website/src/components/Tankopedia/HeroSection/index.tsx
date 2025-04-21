@@ -110,69 +110,34 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
         top={isFullScreen ? '0' : undefined}
         left={isFullScreen ? '0' : undefined}
       >
-        <Box
-          className="tank-sandbox-container"
-          flexGrow="1"
-          flexBasis="0"
-          flexShrink="0"
-          position="relative"
-        >
-          <Box position="absolute" width="100%" height="100%" overflow="hidden">
-            <Box
-              width="100%"
-              height="100%"
-              position="relative"
-              left={disturbed ? '0' : { initial: '0', md: '12.5%' }}
-              style={{ transitionDuration: '200ms' }}
-            >
-              {!revealed && (
-                <Spinner
-                  style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: Var('space-6'),
-                    height: Var('space-6'),
-                  }}
-                />
-              )}
-
-              {/* {skeleton && <TankSandboxLoader id={protagonist.id} />} */}
-
-              <Suspense>
-                <TankSandbox ref={canvas} thicknessRange={thicknessRange} />
-              </Suspense>
-            </Box>
-
-            <Options
-              skeleton={skeleton}
-              canvas={canvas}
-              thicknessRange={thicknessRange}
-            />
-          </Box>
-        </Box>
-
         <Flex
+          className="tankopedia-title-bar"
           justify="center"
-          position={{ initial: 'relative', md: 'absolute' }}
+          position={{ initial: 'static', md: 'absolute' }}
           left={{
             initial: '0',
             md: disturbed ? '3' : '5',
             lg: disturbed ? '7' : '9',
           }}
-          py="4"
+          pt="7"
+          pb="4"
           top={{ initial: '8', md: '50%' }}
+          mt={{ initial: '0', md: '-9' }}
           style={{
-            transform: 'translate(0, -50%)',
             transitionDuration: '200ms',
             userSelect: 'none',
+            // background: 'red',
           }}
           direction="column"
-          align={{ initial: 'center', md: 'center' }}
+          align="center"
           gap="2"
         >
-          <Flex align="center" gap="3" width="100%" justify="start">
+          <Flex
+            align="center"
+            gap="3"
+            width="100%"
+            justify={{ initial: 'center', md: 'start' }}
+          >
             <Heading
               color={treeColor}
               trim="end"
@@ -202,7 +167,6 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
           </Flex>
 
           <Flex
-            mb="4"
             gap="4"
             ml={disturbed ? '0' : '-2'}
             style={{ transitionDuration: '200ms' }}
@@ -297,6 +261,49 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
             )}
           </Flex>
         </Flex>
+
+        <Box
+          className="tank-sandbox-container"
+          flexGrow="1"
+          flexBasis="0"
+          flexShrink="0"
+          position="relative"
+        >
+          <Box position="absolute" width="100%" height="100%" overflow="hidden">
+            <Box
+              width="100%"
+              height="100%"
+              position="relative"
+              left={disturbed ? '0' : { initial: '0', md: '12.5%' }}
+              style={{ transitionDuration: '200ms' }}
+            >
+              {!revealed && (
+                <Spinner
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: Var('space-6'),
+                    height: Var('space-6'),
+                  }}
+                />
+              )}
+
+              {/* {skeleton && <TankSandboxLoader id={protagonist.id} />} */}
+
+              <Suspense>
+                <TankSandbox ref={canvas} thicknessRange={thicknessRange} />
+              </Suspense>
+            </Box>
+
+            <Options
+              skeleton={skeleton}
+              canvas={canvas}
+              thicknessRange={thicknessRange}
+            />
+          </Box>
+        </Box>
       </Flex>
     </Flex>
   );
