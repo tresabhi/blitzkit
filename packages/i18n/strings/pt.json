@@ -665,7 +665,7 @@
         "copied": "Copiado!"
       },
       "tank_search": {
-        "clear_filters": "Limpar",
+        "clear_filters": "Clear filters",
         "search_bar_hint": "Procurar tanques...",
         "recent": "Visto recentemente",
         "select_all": "Selecionar todos",
@@ -900,7 +900,7 @@
         "characteristics": {
           "title": "Características",
           "compare": {
-            "label": "Comparar com",
+            "label": "Comparar",
             "class": "Nível %s1 %s2",
             "tier": "Tudo de nível %s1",
             "all": "Todos os tanques"
