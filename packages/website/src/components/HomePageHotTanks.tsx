@@ -1,8 +1,6 @@
-import { assertSecret } from '@blitzkit/core';
 import { literals } from '@blitzkit/i18n/src/literals';
 import { EyeOpenIcon } from '@radix-ui/react-icons';
 import { Box, Flex, Heading, Text } from '@radix-ui/themes';
-import { google } from 'googleapis';
 import { awaitablePopularTanks } from '../core/awaitables/popularTanks';
 import { awaitableTankDefinitions } from '../core/awaitables/tankDefinitions';
 import {
@@ -17,31 +15,6 @@ const [tankDefinitions, popularTanks] = await Promise.all([
   awaitableTankDefinitions,
   awaitablePopularTanks,
 ]);
-
-const auth = await google.auth.getClient({
-  keyFile: import.meta.env.GOOGLE_APPLICATION_CREDENTIALS,
-  scopes: ['https://www.googleapis.com/auth/analytics.readonly'],
-});
-const analytics = google.analyticsdata({ version: 'v1beta', auth });
-const report = await analytics.properties.runReport({
-  property: `properties/${assertSecret(import.meta.env.PUBLIC_GOOGLE_ANALYTICS_PROPERTY_ID)}`,
-  requestBody: {
-    dateRanges: [{ startDate: '7daysAgo', endDate: 'today' }],
-    dimensions: [{ name: 'pagePath' }],
-    metrics: [{ name: 'screenPageViews' }],
-    orderBys: [{ metric: { metricName: 'screenPageViews' }, desc: true }],
-    dimensionFilter: {
-      filter: {
-        fieldName: 'pagePath',
-        stringFilter: { matchType: 'BEGINS_WITH', value: '/tools/tankopedia/' },
-      },
-    },
-  },
-});
-
-if (!report.data.rows) {
-  throw new Error('No rows in report');
-}
 
 export function HomePageHotTanks({ locale }: LocaleAcceptorProps) {
   return (
