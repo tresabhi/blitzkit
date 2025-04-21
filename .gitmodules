@@ -6,4 +6,4 @@
 	url = https://github.com/FabianFG/CUE4Parse
 [submodule "submodules/UAssetAPI"]
 	path = submodules/UAssetAPI
-	url = https://github.com/yourname/UAssetAPI
+	url = https://github.com/atenfyr/UAssetAPI
