@@ -665,7 +665,7 @@
         "copied": "Скопійовано!"
       },
       "tank_search": {
-        "clear_filters": "Clear",
+        "clear_filters": "Clear filters",
         "search_bar_hint": "Шукайте техніку...",
         "recent": "Недавно переглянуті",
         "select_all": "Вибрати все",
@@ -900,7 +900,7 @@
         "characteristics": {
           "title": "Characteristics",
           "compare": {
-            "label": "Compare against",
+            "label": "Порівняти",
             "class": "Tier %s1 %s2",
             "tier": "All of tier %s1",
             "all": "Усі танки"
