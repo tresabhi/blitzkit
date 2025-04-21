@@ -31,6 +31,7 @@ import { useLocale } from '../../../../../hooks/useLocale';
 import { useTankModelDefinition } from '../../../../../hooks/useTankModelDefinition';
 import { Duel } from '../../../../../stores/duel';
 import { TankopediaEphemeral } from '../../../../../stores/tankopediaEphemeral';
+import { HullTraverseVisualizer } from './components/HullTraverseVisualizer';
 import { Info } from './components/Info';
 import { InfoWithDelta } from './components/InfoWithDelta';
 
@@ -753,6 +754,8 @@ export function Characteristics() {
             indent
             value="hullTraverseSoftTerrain"
           />
+
+          <HullTraverseVisualizer stats={stats} />
         </Flex>
 
         <Flex direction="column" gap="2">
