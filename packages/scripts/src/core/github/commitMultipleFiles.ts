@@ -38,7 +38,11 @@ export async function commitMultipleFiles(
           );
 
           changes.push(change);
+
+          return;
         }
+
+        console.log(`🔵 (${buffer.length.toLocaleString()}B) ${blobPath}`);
       } else {
         throw new Error(
           `Unexpected status code ${response.status} for ${blobPath}`,

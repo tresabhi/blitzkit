@@ -1,3 +1,4 @@
+import { asset, Avatar } from '@blitzkit/core';
 import { Cross1Icon, DownloadIcon } from '@radix-ui/react-icons';
 import {
   Dialog,
@@ -9,16 +10,19 @@ import {
 } from '@radix-ui/themes';
 import { useRef } from 'react';
 import { useIntersection } from '../../hooks/useIntersection';
+import { useLocale } from '../../hooks/useLocale';
 import type { MaybeSkeletonComponentProps } from '../../types/maybeSkeletonComponentProps';
 
 type GalleryCardProps = MaybeSkeletonComponentProps<{
-  id: string;
-  name: string;
+  avatar: Avatar;
 }>;
 
 export function GalleryCard(props: GalleryCardProps) {
-  const src = `/api/gallery/${!props.skeleton && props.id}.webp`;
+  const src = asset(
+    `gallery/avatars/${!props.skeleton && `${props.avatar.id}${props.avatar.extension}`}`,
+  );
   const card = useRef<HTMLDivElement>(null);
+  const { unwrap } = useLocale();
 
   useIntersection(() => props.skeleton && props.onIntersection?.(), card, {
     disabled: !props.skeleton || props.onIntersection === undefined,
@@ -50,11 +54,11 @@ export function GalleryCard(props: GalleryCardProps) {
               objectFit: 'cover',
             }}
             src={src}
-            alt={props.name}
+            alt={unwrap(props.avatar.name)}
           />
 
           <Text size="1" align="center" style={{ maxWidth: '100%' }}>
-            {props.name}
+            {unwrap(props.avatar.name)}
           </Text>
         </>
       )}
@@ -86,12 +90,12 @@ export function GalleryCard(props: GalleryCardProps) {
         </Flex>
 
         <Flex px="4" justify="center" mt="3">
-          <img src={src} alt={props.name} />
+          <img src={src} alt={unwrap(props.avatar.name)} />
         </Flex>
 
         <Flex justify="center" mt="4">
           <Dialog.Title align="center" style={{ maxWidth: '10rem' }}>
-            {props.name}
+            {unwrap(props.avatar.name)}
           </Dialog.Title>
         </Flex>
       </Dialog.Content>

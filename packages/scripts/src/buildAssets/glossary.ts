@@ -33,11 +33,14 @@ export async function glossary() {
           avatars[key].avatar.name.locales[supported.locale] =
             glossaryEntry.title;
         } else {
+          const extension = extname(glossaryEntry.image_url);
+
           avatars[key] = {
             url: glossaryEntry.image_url,
             avatar: {
               id: key,
               name: { locales: { [supported.locale]: glossaryEntry.title } },
+              extension,
             },
           };
         }
@@ -65,13 +68,12 @@ export async function glossary() {
 
       gallery.avatars.push(avatar);
 
-      const fileExtension = extname(url);
       const content = await fetch(url).then((response) =>
         response.arrayBuffer(),
       );
 
       changes.push({
-        path: `gallery/avatars/${key}${fileExtension}`,
+        path: `gallery/avatars/${key}${avatar.extension}`,
         content: Buffer.from(content),
       });
 

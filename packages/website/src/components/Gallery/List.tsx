@@ -7,11 +7,9 @@ import { useMemo, useState } from 'react';
 import { awaitableGallery } from '../../core/awaitables/gallery';
 import { useLocale } from '../../hooks/useLocale';
 import { GalleryEphemeral } from '../../stores/galleryEphemeral';
+import type { MaybeSkeletonComponentProps } from '../../types/maybeSkeletonComponentProps';
+import { InlineSkeleton } from '../InlineSkeleton';
 import { GalleryCard } from './Card';
-
-interface GalleryListProps {
-  avatars: Avatar[];
-}
 
 export interface Avatar {
   name: string;
@@ -23,7 +21,7 @@ const gallery = await awaitableGallery;
 const DEFAULT_LOADED = 42;
 const PREVIEW_COUNT = 28;
 
-export function GalleryList() {
+export function GalleryList({ skeleton }: MaybeSkeletonComponentProps) {
   const search = GalleryEphemeral.use((state) => state.search);
   const [loadedCards, setLoadedCards] = useState(DEFAULT_LOADED);
   const { locale, strings, unwrap } = useLocale();
@@ -49,22 +47,25 @@ export function GalleryList() {
   return (
     <>
       <Text align="center" color="gray">
-        {literals(strings.website.tools.gallery.search.results, [
-          filtered.length.toLocaleString(locale),
-        ])}
+        {skeleton ? (
+          <InlineSkeleton width="7rem" />
+        ) : (
+          literals(strings.website.tools.gallery.search.results, [
+            filtered.length.toLocaleString(locale),
+          ])
+        )}
       </Text>
 
       <Flex wrap="wrap" gap="4" justify="center">
-        {filtered.slice(0, loadedCards).map((avatar) => (
-          <GalleryCard
-            key={avatar.id}
-            id={avatar.id}
-            name={unwrap(avatar.name)}
-          />
-        ))}
+        {!skeleton &&
+          filtered
+            .slice(0, loadedCards)
+            .map((avatar) => <GalleryCard key={avatar.id} avatar={avatar} />)}
 
         {times(
-          Math.min(PREVIEW_COUNT, filtered.length - loadedCards),
+          skeleton
+            ? DEFAULT_LOADED + PREVIEW_COUNT
+            : Math.min(PREVIEW_COUNT, filtered.length - loadedCards),
           (index) => (
             <GalleryCard
               key={index}

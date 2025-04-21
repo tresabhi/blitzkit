@@ -11,4 +11,5 @@ message Gallery {
 message Avatar {
   required string id = 1;
   required I18nString name = 2;
+  required string extension = 3;
 }

@@ -1,16 +1,17 @@
 import { GalleryList } from '../../../../components/Gallery/List';
 import { GallerySearch } from '../../../../components/Gallery/Search';
 import { PageWrapper } from '../../../../components/PageWrapper';
-import { awaitableGallery } from '../../../../core/awaitables/gallery';
 import {
   LocaleProvider,
-  useLocale,
   type LocaleAcceptorProps,
 } from '../../../../hooks/useLocale';
 import { GalleryEphemeral } from '../../../../stores/galleryEphemeral';
+import type { MaybeSkeletonComponentProps } from '../../../../types/maybeSkeletonComponentProps';
 
-
-export function Page({ locale, ...props }: LocaleAcceptorProps) {
+export function Page({
+  locale,
+  ...props
+}: LocaleAcceptorProps & MaybeSkeletonComponentProps) {
   return (
     <LocaleProvider locale={locale}>
       <Content {...props} />
@@ -18,13 +19,12 @@ export function Page({ locale, ...props }: LocaleAcceptorProps) {
   );
 }
 
-function Content() {
-
+function Content({ skeleton }: MaybeSkeletonComponentProps) {
   return (
     <PageWrapper maxWidth="80rem" color="gold">
       <GalleryEphemeral.Provider>
-        <GallerySearch />
-        <GalleryList   />
+        <GallerySearch skeleton={skeleton} />
+        <GalleryList skeleton={skeleton} />
       </GalleryEphemeral.Provider>
     </PageWrapper>
   );

@@ -7,7 +7,7 @@ export async function commitAssets(message: string, changes: FileChange[]) {
 
   if (changes.length === 0) return;
 
-  const chunks = chunk(changes, 16);
+  const chunks = chunk(changes, 64);
   let chunkIndex = 0;
 
   for (const chunk of chunks) {
