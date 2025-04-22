@@ -871,7 +871,8 @@
           },
 
           "ricochet": {
-            "max": "Max: %s1°"
+            "safe": "Safe %s1°",
+            "unsafe": "Unsafe %s1°"
           }
         },
 

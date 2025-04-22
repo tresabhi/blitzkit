@@ -1,0 +1,79 @@
+@keyframes penetrating-shell-slide {
+  0% {
+    margin-top: -9rem;
+  }
+  28%,
+  100% {
+    margin-top: 8rem;
+  }
+}
+
+@keyframes ricocheting-shell-slide {
+  0% {
+    margin-top: -18rem;
+  }
+  38% {
+    margin-top: -18rem;
+  }
+  63%,
+  69% {
+    margin-top: 0rem;
+  }
+  100% {
+    margin-top: 8rem;
+  }
+}
+
+@keyframes ricocheting-shell-slide-container {
+  0% {
+    transform: translateX(-50%) rotate(80deg);
+  }
+  63% {
+    transform: translateX(-50%) rotate(80deg);
+  }
+  69% {
+    transform: translateX(-50%) rotate(100deg);
+  }
+  100% {
+    transform: translateX(-50%) rotate(100deg);
+  }
+}
+
+.ricochet-visualizer-penetrating-shell {
+  position: absolute;
+  animation: penetrating-shell-slide 3s infinite;
+}
+
+.ricochet-visualizer-ricocheting-shell {
+  position: absolute;
+  animation: ricocheting-shell-slide 3s infinite;
+}
+
+.ricochet-visualizer-ricocheting-shell-container {
+  animation: ricocheting-shell-slide-container 3s infinite;
+}
+
+@keyframes surface-impact {
+  0%,
+  10% {
+    opacity: 1;
+    width: 0;
+    height: 0;
+  }
+  15%,
+  30% {
+    opacity: 1;
+    width: 3rem;
+    height: 3rem;
+  }
+  45%,
+  100% {
+    opacity: 0;
+    width: 3rem;
+    height: 3rem;
+  }
+}
+
+.ricochet-visualizer-surface-impact {
+  animation: surface-impact 3s infinite;
+}
