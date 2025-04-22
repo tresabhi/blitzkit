@@ -68,8 +68,8 @@ export function ViewRangeVisualizer({ stats }: VisualizerProps) {
             borderRadius: '50%',
           }}
         >
-          <Text>
-            <Flex align="center" gap="2">
+          <Text style={{ userSelect: 'none' }}>
+            <Flex align="center" gap="1">
               <EyeOpenIcon width="1.25rem" height="1.25rem" />
               {literals(strings.common.units.m, [resolvedViewRange.toFixed(0)])}
             </Flex>
