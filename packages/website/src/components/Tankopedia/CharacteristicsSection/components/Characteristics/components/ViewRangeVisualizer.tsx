@@ -31,7 +31,7 @@ export function ViewRangeVisualizer({ stats }: VisualizerProps) {
   const range = useRef<HTMLDivElement>(null);
 
   return (
-    <Card style={{ aspectRatio: '1 / 1' }} mb="6">
+    <Card style={{ aspectRatio: '1 / 1' }} mb="6" variant="classic">
       <Box
         ref={container}
         onPointerMove={(event) => {
@@ -82,18 +82,21 @@ export function ViewRangeVisualizer({ stats }: VisualizerProps) {
         top="0"
         left="0"
         width="100%"
-        p="2"
+        py="2"
+        px="3"
         gap="3"
         align="center"
         style={{
-          background: `linear-gradient(${Var('black-a9')}, ${Var('black-a4')})`,
+          backgroundColor: Var('black-a8'),
+          backdropFilter: 'blur(4rem)',
         }}
       >
-        <Text>
+        <Text size="2">
           {strings.website.tools.tankopedia.visualizers.view_range.camo}
         </Text>
 
         <Slider
+          size="1"
           variant="classic"
           value={[camouflage]}
           min={0}
@@ -102,8 +105,8 @@ export function ViewRangeVisualizer({ stats }: VisualizerProps) {
           onValueChange={([value]) => setCamouflage(value)}
         />
 
-        <Code highContrast color="gray" variant="ghost">
-          <Flex justify="center" width="3em">
+        <Code size="1" color="gray" variant="ghost">
+          <Flex justify="center" width="2em">
             {literals(
               strings.website.tools.tankopedia.visualizers.view_range
                 .percentage,
