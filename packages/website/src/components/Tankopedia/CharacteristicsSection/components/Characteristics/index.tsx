@@ -35,6 +35,7 @@ import { HullTraverseVisualizer } from './components/HullTraverseVisualizer';
 import { Info } from './components/Info';
 import { InfoWithDelta } from './components/InfoWithDelta';
 import { RicochetVisualizer } from './components/RicochetVisualizer';
+import { RicochetVisualizer2 } from './components/RicochetVisualizer2';
 import { ViewRangeVisualizer } from './components/ViewRangeVisualizer';
 
 const [equipmentDefinitions, provisionDefinitions] = await Promise.all([
@@ -389,6 +390,7 @@ export function Characteristics() {
                 value="shellRicochet"
               />
               <RicochetVisualizer stats={stats} />
+              <RicochetVisualizer2 stats={stats} />
             </>
           )}
           <InfoWithDelta
