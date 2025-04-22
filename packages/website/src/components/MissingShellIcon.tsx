@@ -15,7 +15,7 @@ export function MissingShellIcon(props: ComponentProps<'svg'>) {
         stroke="currentColor"
         strokeWidth="4"
         strokeLinecap="round"
-        stroke-linejoin="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

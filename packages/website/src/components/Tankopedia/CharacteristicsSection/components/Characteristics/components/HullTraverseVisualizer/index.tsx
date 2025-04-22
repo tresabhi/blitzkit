@@ -17,6 +17,8 @@ export function HullTraverseVisualizer({ stats }: VisualizerProps) {
   const [rotateHull, setRotateHull] = useState(true);
   const [rotateTurret, setRotateTurret] = useState(true);
   const { strings } = useLocale();
+  const isTurretless =
+    stats.azimuthLeft !== undefined || stats.azimuthRight !== undefined;
 
   return (
     <Card variant="classic" style={{ aspectRatio: '1 / 1' }}>
@@ -35,32 +37,34 @@ export function HullTraverseVisualizer({ stats }: VisualizerProps) {
       >
         <img
           style={{
-            width: '12rem',
-            height: '12rem',
+            width: isTurretless ? '22rem' : '12rem',
+            height: isTurretless ? '22rem' : '12rem',
             objectFit: 'contain',
             filter: 'drop-shadow(0px 0px 4px black)',
           }}
-          src="/assets/images/tankopedia/visualizers/hull-traverse/hull.png"
+          src={`/assets/images/tankopedia/visualizers/hull-traverse/hull${isTurretless ? '-only' : ''}.png`}
         />
 
-        <img
-          ref={turret}
-          className="hull-traverse-visualizer"
-          style={{
-            width: '27rem',
-            height: '27rem',
-            objectFit: 'contain',
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            filter: 'drop-shadow(0px 0px 4px black)',
-            transform: 'translate(-50%, -50%)',
-            animationDuration: `${
-              rotateTurret ? 1 / (stats.turretTraverseSpeed / 360) : 0
-            }s`,
-          }}
-          src="/assets/images/tankopedia/visualizers/hull-traverse/turret.png"
-        />
+        {!isTurretless && (
+          <img
+            ref={turret}
+            className="hull-traverse-visualizer"
+            style={{
+              width: '27rem',
+              height: '27rem',
+              objectFit: 'contain',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              filter: 'drop-shadow(0px 0px 4px black)',
+              transform: 'translate(-50%, -50%)',
+              animationDuration: `${
+                rotateTurret ? 1 / (stats.turretTraverseSpeed / 360) : 0
+              }s`,
+            }}
+            src="/assets/images/tankopedia/visualizers/hull-traverse/turret.png"
+          />
+        )}
       </div>
 
       <Flex
@@ -89,40 +93,42 @@ export function HullTraverseVisualizer({ stats }: VisualizerProps) {
         </Tabs.Root>
       </Flex>
 
-      <Flex
-        position="absolute"
-        top="4"
-        left="50%"
-        gap="5"
-        style={{
-          transform: 'translateX(-50%)',
-          userSelect: 'none',
-        }}
-      >
+      {!isTurretless && (
         <Flex
-          align="center"
-          gap="2"
-          onClick={() => setRotateHull((state) => !state)}
-          style={{ cursor: 'pointer' }}
+          position="absolute"
+          top="4"
+          left="50%"
+          gap="5"
+          style={{
+            transform: 'translateX(-50%)',
+            userSelect: 'none',
+          }}
         >
-          <Checkbox variant="classic" checked={rotateHull} />
-          <Text size="2">
-            {strings.website.tools.tankopedia.visualizers.rotator.hull}
-          </Text>
-        </Flex>
+          <Flex
+            align="center"
+            gap="2"
+            onClick={() => setRotateHull((state) => !state)}
+            style={{ cursor: 'pointer' }}
+          >
+            <Checkbox variant="classic" checked={rotateHull} />
+            <Text size="2">
+              {strings.website.tools.tankopedia.visualizers.rotator.hull}
+            </Text>
+          </Flex>
 
-        <Flex
-          align="center"
-          gap="2"
-          onClick={() => setRotateTurret((state) => !state)}
-          style={{ cursor: 'pointer' }}
-        >
-          <Checkbox variant="classic" checked={rotateTurret} />
-          <Text size="2">
-            {strings.website.tools.tankopedia.visualizers.rotator.turret}
-          </Text>
+          <Flex
+            align="center"
+            gap="2"
+            onClick={() => setRotateTurret((state) => !state)}
+            style={{ cursor: 'pointer' }}
+          >
+            <Checkbox variant="classic" checked={rotateTurret} />
+            <Text size="2">
+              {strings.website.tools.tankopedia.visualizers.rotator.turret}
+            </Text>
+          </Flex>
         </Flex>
-      </Flex>
+      )}
     </Card>
   );
 }

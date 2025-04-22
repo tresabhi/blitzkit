@@ -9,7 +9,7 @@
 }
 
 .ricochet-visualizer-penetrating-shell {
-  animation: penetrating-shell-slide 3s infinite;
+  animation: penetrating-shell-slide infinite;
 }
 
 @keyframes ricocheting-shell-slide {
@@ -44,11 +44,11 @@
 }
 
 .ricochet-visualizer-ricocheting-shell {
-  animation: ricocheting-shell-slide 3s infinite;
+  animation: ricocheting-shell-slide infinite;
 }
 
 .ricochet-visualizer-ricocheting-shell-container {
-  animation: ricocheting-shell-slide-container 3s infinite;
+  animation: ricocheting-shell-slide-container infinite;
 }
 
 @keyframes surface-impact {
@@ -72,7 +72,7 @@
 }
 
 .ricochet-visualizer-surface-impact {
-  animation: surface-impact 3s linear infinite;
+  animation: surface-impact linear infinite;
 }
 
 @keyframes puncture {
@@ -94,5 +94,41 @@
 }
 
 .ricochet-visualizer-puncture {
-  animation: puncture 3s infinite;
+  animation: puncture infinite;
+}
+
+@keyframes safe {
+  0% {
+    opacity: 0;
+  }
+  5%,
+  28% {
+    opacity: 1;
+  }
+  33%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.ricochet-visualizer-safe {
+  animation: safe infinite;
+}
+
+@keyframes unsafe {
+  0%,
+  33% {
+    opacity: 0;
+  }
+  38%,
+  95% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.ricochet-visualizer-unsafe {
+  animation: unsafe infinite;
 }

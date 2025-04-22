@@ -11,6 +11,7 @@ export function RicochetVisualizer({ stats }: VisualizerProps) {
   const ricochet = stats.shellRicochet ?? 90;
   const shell = Duel.use((state) => state.protagonist.shell);
   const { strings } = useLocale();
+  const animationDuration = '6s';
 
   return (
     <Card
@@ -54,6 +55,7 @@ export function RicochetVisualizer({ stats }: VisualizerProps) {
             height="6rem"
             style={{
               background: `linear-gradient(${Var('gray-1')}, ${Var('gray-a1')})`,
+              animationDuration,
             }}
           />
         </Box>
@@ -77,7 +79,7 @@ export function RicochetVisualizer({ stats }: VisualizerProps) {
               conic-gradient(
                 from -90deg at 25% 100%,
                 transparent ${90 - ricochet}deg,
-                ${Var('jade-a3')} ${90 - ricochet}deg,
+                ${Var('jade-a7')} ${90 - ricochet}deg,
                 ${Var('jade-9')} ${90 + ricochet}deg,
                 ${Var('tomato-8')} ${90 + ricochet}deg,
                 ${Var('tomato-a3')} 180deg,
@@ -121,7 +123,7 @@ export function RicochetVisualizer({ stats }: VisualizerProps) {
           style={{
             transformOrigin: 'bottom center',
             transform: `translateX(-50%) rotate(-${ricochet}deg)`,
-            background: `repeating-linear-gradient(${Var('gray-10')}, ${Var('gray-a3')} 15px, transparent 15px, transparent 30px)`,
+            background: `repeating-linear-gradient(${Var('gray-11')}, ${Var('gray-a3')} 15px, transparent 15px, transparent 30px)`,
           }}
         />
 
@@ -134,6 +136,7 @@ export function RicochetVisualizer({ stats }: VisualizerProps) {
             transform: `translate(-50%, 50%) rotate(${ricochet}deg)`,
             background: `radial-gradient(${Var('gray-a2')}, ${Var('gray-a9')})`,
             borderRadius: '50%',
+            animationDuration,
           }}
         />
 
@@ -157,6 +160,7 @@ export function RicochetVisualizer({ stats }: VisualizerProps) {
               width: '100%',
               height: '100%',
               position: 'absolute',
+              animationDuration,
             }}
           />
         </Box>
@@ -170,6 +174,7 @@ export function RicochetVisualizer({ stats }: VisualizerProps) {
           bottom="0"
           style={{
             transformOrigin: 'bottom center',
+            animationDuration,
           }}
         >
           <img
@@ -181,6 +186,7 @@ export function RicochetVisualizer({ stats }: VisualizerProps) {
               width: '100%',
               height: '100%',
               position: 'absolute',
+              animationDuration,
             }}
           />
         </Box>
@@ -192,11 +198,13 @@ export function RicochetVisualizer({ stats }: VisualizerProps) {
             left: '30%',
             bottom: '40%',
             transform: 'translateX(-50%)',
+            animationDuration,
           }}
+          className="ricochet-visualizer-safe"
         >
           {literals(
             strings.website.tools.tankopedia.visualizers.ricochet.safe,
-            [(2 * ricochet).toFixed(0)],
+            [ricochet.toFixed(0)],
           )}
         </Text>
 
@@ -206,11 +214,13 @@ export function RicochetVisualizer({ stats }: VisualizerProps) {
             position: 'absolute',
             right: '5%',
             bottom: '12%',
+            animationDuration,
           }}
+          className="ricochet-visualizer-unsafe"
         >
           {literals(
             strings.website.tools.tankopedia.visualizers.ricochet.unsafe,
-            [(90 - ricochet).toFixed(0)],
+            [ricochet.toFixed(0)],
           )}
         </Text>
       </Box>
