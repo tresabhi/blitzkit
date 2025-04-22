@@ -34,7 +34,8 @@ import { TankopediaEphemeral } from '../../../../../stores/tankopediaEphemeral';
 import { HullTraverseVisualizer } from './components/HullTraverseVisualizer';
 import { Info } from './components/Info';
 import { InfoWithDelta } from './components/InfoWithDelta';
-import { RicochetVisualizer } from './components/RicochetVisuazlizer';
+import { RicochetVisualizer } from './components/RicochetVisualizer';
+import { ViewRangeVisualizer } from './components/ViewRangeVisualizer';
 
 const [equipmentDefinitions, provisionDefinitions] = await Promise.all([
   awaitableEquipmentDefinitions,
@@ -398,7 +399,7 @@ export function Characteristics() {
           />
           <InfoWithDelta
             stats={stats}
-            unit="m/s"
+            unit="m"
             decimals={0}
             value="shellRange"
           />
@@ -786,6 +787,7 @@ export function Characteristics() {
             unit="m"
             decimals={0}
           />
+          <ViewRangeVisualizer stats={stats} />
           <Info
             name={
               strings.website.tools.tankopedia.characteristics.values.camouflage

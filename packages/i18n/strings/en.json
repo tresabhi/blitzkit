@@ -873,6 +873,13 @@
           "ricochet": {
             "safe": "Safe <%s1°",
             "unsafe": "Unsafe ≥%s1°"
+          },
+
+          "view_range": {
+            "camo": "Camo",
+            "percentage": "%s1%",
+            "desert_sands": "Desert Sands",
+            "new_bay": "New Bay"
           }
         },
 
