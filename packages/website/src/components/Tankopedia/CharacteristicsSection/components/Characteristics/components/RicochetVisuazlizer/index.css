@@ -8,6 +8,10 @@
   }
 }
 
+.ricochet-visualizer-penetrating-shell {
+  animation: penetrating-shell-slide 3s infinite;
+}
+
 @keyframes ricocheting-shell-slide {
   0% {
     margin-top: -18rem;
@@ -39,13 +43,7 @@
   }
 }
 
-.ricochet-visualizer-penetrating-shell {
-  position: absolute;
-  animation: penetrating-shell-slide 3s infinite;
-}
-
 .ricochet-visualizer-ricocheting-shell {
-  position: absolute;
   animation: ricocheting-shell-slide 3s infinite;
 }
 
@@ -55,18 +53,17 @@
 
 @keyframes surface-impact {
   0%,
-  10% {
+  60% {
     opacity: 1;
     width: 0;
     height: 0;
   }
-  15%,
-  30% {
+  66% {
     opacity: 1;
-    width: 3rem;
-    height: 3rem;
+    width: 1.5rem;
+    height: 1.5rem;
   }
-  45%,
+  72%,
   100% {
     opacity: 0;
     width: 3rem;
@@ -75,5 +72,27 @@
 }
 
 .ricochet-visualizer-surface-impact {
-  animation: surface-impact 3s infinite;
+  animation: surface-impact 3s linear infinite;
+}
+
+@keyframes puncture {
+  0%,
+  10% {
+    opacity: 1;
+    margin-top: -6rem;
+  }
+  15%,
+  30% {
+    opacity: 1;
+    margin-top: -1rem;
+  }
+  45%,
+  100% {
+    opacity: 0;
+    margin-top: -1rem;
+  }
+}
+
+.ricochet-visualizer-puncture {
+  animation: puncture 3s infinite;
 }

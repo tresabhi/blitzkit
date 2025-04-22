@@ -38,6 +38,25 @@ export function RicochetVisualizer({ stats }: VisualizerProps) {
             backgroundImage: `url(/assets/images/tankopedia/visualizers/ricochet/armor-hash.png)`,
           }}
         />
+
+        <Box
+          position="absolute"
+          left="25%"
+          top="0"
+          style={{
+            transformOrigin: 'top center',
+            transform: `translateX(-50%) rotate(${ricochet / 2}deg)`,
+          }}
+        >
+          <Box
+            className="ricochet-visualizer-puncture"
+            width="1rem"
+            height="6rem"
+            style={{
+              background: `linear-gradient(${Var('gray-1')}, ${Var('gray-a1')})`,
+            }}
+          />
+        </Box>
       </Box>
 
       <Box
@@ -137,6 +156,7 @@ export function RicochetVisualizer({ stats }: VisualizerProps) {
               transform: 'rotate(135deg)',
               width: '100%',
               height: '100%',
+              position: 'absolute',
             }}
           />
         </Box>
@@ -160,6 +180,7 @@ export function RicochetVisualizer({ stats }: VisualizerProps) {
               transform: 'translateY(50%) rotate(135deg)',
               width: '100%',
               height: '100%',
+              position: 'absolute',
             }}
           />
         </Box>
