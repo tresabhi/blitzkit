@@ -4,7 +4,7 @@ import { Box, Card, Code, Flex, Slider, Tabs, Text } from '@radix-ui/themes';
 import { useRef, useState } from 'react';
 import { Var } from '../../../../../../core/radix/var';
 import { useLocale } from '../../../../../../hooks/useLocale';
-import type { VisualizerProps } from './HullTraverseVisualizer';
+import type { StatsAcceptorProps } from './HullTraverseVisualizer';
 
 const maps = [
   {
@@ -19,7 +19,7 @@ const maps = [
   },
 ] as const;
 
-export function ViewRangeVisualizer({ stats }: VisualizerProps) {
+export function ViewRangeVisualizer({ stats }: StatsAcceptorProps) {
   const [mapIndex, setMapIndex] = useState(0);
   const [camouflage, setCamouflage] = useState(0);
   const map = maps[mapIndex];

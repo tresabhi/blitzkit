@@ -4,13 +4,13 @@ import type { TankCharacteristics } from '../../../../../../../core/blitzkit/tan
 import { useLocale } from '../../../../../../../hooks/useLocale';
 import './index.css';
 
-export interface VisualizerProps {
+export interface StatsAcceptorProps {
   stats: TankCharacteristics;
 }
 
 type Terrain = 'Hard' | 'Medium' | 'Soft';
 
-export function HullTraverseVisualizer({ stats }: VisualizerProps) {
+export function HullTraverseVisualizer({ stats }: StatsAcceptorProps) {
   const hull = useRef<HTMLDivElement>(null);
   const turret = useRef<HTMLImageElement>(null);
   const [terrain, setTerrain] = useState<Terrain>('Hard');

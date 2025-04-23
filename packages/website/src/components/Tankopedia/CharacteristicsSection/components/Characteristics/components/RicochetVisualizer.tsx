@@ -6,9 +6,9 @@ import { clamp, degToRad, radToDeg } from 'three/src/math/MathUtils.js';
 import { Var } from '../../../../../../core/radix/var';
 import { useLocale } from '../../../../../../hooks/useLocale';
 import { Duel } from '../../../../../../stores/duel';
-import type { VisualizerProps } from './HullTraverseVisualizer';
+import type { StatsAcceptorProps } from './HullTraverseVisualizer';
 
-export function RicochetVisualizer({ stats }: VisualizerProps) {
+export function RicochetVisualizer({ stats }: StatsAcceptorProps) {
   const shell = Duel.use((state) => state.protagonist.shell);
   const container = useRef<HTMLDivElement>(null);
   const normalization = degToRad(stats.shellNormalization);
