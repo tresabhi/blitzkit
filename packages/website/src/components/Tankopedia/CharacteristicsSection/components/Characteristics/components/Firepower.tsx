@@ -57,7 +57,7 @@ export function Firepower({ stats }: StatsAcceptorProps) {
   }, [penetrationDistance]);
 
   return (
-    <Flex direction="column" gap="2">
+    <Flex direction="column" gap="2" width="16rem">
       <Flex align="center" gap="4">
         <Heading size="5">
           {strings.website.tools.tankopedia.firepower.title}

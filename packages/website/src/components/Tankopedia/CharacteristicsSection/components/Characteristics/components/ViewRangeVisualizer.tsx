@@ -8,13 +8,13 @@ import type { StatsAcceptorProps } from './HullTraverseVisualizer';
 
 const maps = [
   {
-    id: 'new-bay',
-    string: 'new_bay',
+    id: 'ghost-factory',
+    string: 'ghost_factory',
     size: 512,
   },
   {
-    id: 'desert-sands',
-    string: 'desert_sands',
+    id: 'dead-rail',
+    string: 'dead_rail',
     size: 512,
   },
 ] as const;
@@ -48,11 +48,22 @@ export function ViewRangeVisualizer({ stats }: StatsAcceptorProps) {
         width="100%"
         height="100%"
         style={{
-          backgroundImage: `url(/assets/images/tankopedia/visualizers/range/${map.id}.webp)`,
+          backgroundImage: `url(/assets/images/tankopedia/visualizers/range/${map.id}.png)`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
       >
+        <Box
+          position="absolute"
+          top="0"
+          left="0"
+          width="100%"
+          height="100%"
+          style={{
+            background: Var('black-a5'),
+          }}
+        />
+
         <Flex
           ref={range}
           position="absolute"
@@ -87,7 +98,7 @@ export function ViewRangeVisualizer({ stats }: StatsAcceptorProps) {
         gap="3"
         align="center"
         style={{
-          backgroundColor: Var('black-a8'),
+          backgroundColor: Var('black-a5'),
           backdropFilter: 'blur(4rem)',
         }}
       >

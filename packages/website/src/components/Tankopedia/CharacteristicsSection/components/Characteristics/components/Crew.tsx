@@ -28,7 +28,7 @@ export function Crew({ stats }: StatsAcceptorProps) {
   const commanderMastery = 1 + provisionCrewBonus;
 
   return (
-    <Flex direction="column" gap="2">
+    <Flex direction="column" gap="2" width="16rem">
       <Flex gap="2" align="center">
         <Heading size="5">
           {strings.website.tools.tankopedia.crew.title}

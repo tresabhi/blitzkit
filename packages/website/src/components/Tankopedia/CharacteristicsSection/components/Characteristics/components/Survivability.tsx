@@ -9,7 +9,7 @@ export function Survivability({ stats }: StatsAcceptorProps) {
   const { strings } = useLocale();
 
   return (
-    <Flex direction="column" gap="2">
+    <Flex direction="column" gap="2" width="16rem">
       <Heading size="5">
         {strings.website.tools.tankopedia.survivability.title}
       </Heading>

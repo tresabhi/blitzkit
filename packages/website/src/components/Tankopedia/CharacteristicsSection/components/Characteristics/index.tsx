@@ -87,17 +87,15 @@ export function Characteristics() {
       gap="8"
       direction={{
         initial: 'column',
-        md: 'row',
+        lg: 'row',
       }}
     >
-      <Flex direction="column" gap="8" style={{ flex: 1 }}>
-        <Firepower stats={stats} />
-        <Crew stats={stats} />
-      </Flex>
+      <Firepower stats={stats} />
+      <Maneuverability stats={stats} />
 
-      <Flex direction="column" gap="8" style={{ flex: 1 }}>
-        <Maneuverability stats={stats} />
+      <Flex direction="column" gap="8">
         <Survivability stats={stats} />
+        <Crew stats={stats} />
       </Flex>
     </Flex>
   );

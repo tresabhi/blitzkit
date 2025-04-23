@@ -881,8 +881,8 @@
           "view_range": {
             "camo": "Camo",
             "percentage": "%s1%",
-            "desert_sands": "Desert Sands",
-            "new_bay": "New Bay"
+            "ghost_factory": "Ghost Factory",
+            "dead_rail": "Dead Rail"
           }
         },
 

@@ -13,7 +13,7 @@ export function RicochetVisualizer({ stats }: StatsAcceptorProps) {
   const container = useRef<HTMLDivElement>(null);
   const normalization = degToRad(stats.shellNormalization);
   const ricochet = degToRad(stats.shellRicochet ?? 90);
-  const [angle, setAngle] = useState(degToRad(45));
+  const [angle, setAngle] = useState(degToRad(-25));
   const doesRicochet = Math.abs(angle) >= ricochet;
   const effectiveAngle = doesRicochet
     ? -angle + Math.PI
@@ -226,7 +226,7 @@ export function RicochetVisualizer({ stats }: StatsAcceptorProps) {
             {doesRicochet
               ? '-'
               : literals(strings.common.units.percentage, [
-                  (100 / Math.cos(effectiveAngle)).toFixed(2),
+                  (100 / Math.cos(effectiveAngle)).toFixed(0),
                 ])}
           </Code>
         </Flex>

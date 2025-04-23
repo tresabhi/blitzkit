@@ -37,7 +37,7 @@ export function CharacteristicsSection() {
 
           <Flex
             flexGrow="1"
-            maxWidth={{ initial: '20rem', md: '40rem' }}
+            maxWidth={{ initial: '20rem', md: '54rem' }}
             direction="column"
             gap="6"
             width="100%"
