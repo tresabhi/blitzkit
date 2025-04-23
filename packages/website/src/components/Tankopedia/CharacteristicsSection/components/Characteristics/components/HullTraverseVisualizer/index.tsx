@@ -31,7 +31,7 @@ export function HullTraverseVisualizer({ stats }: VisualizerProps) {
           left: '50%',
           transform: 'translate(-50%, -50%)',
           animationDuration: `${
-            rotateHull ? 1 / (stats[`hullTraverse${terrain}Terrain`] / 360) : 0
+            rotateHull ? 360 / stats[`hullTraverse${terrain}Terrain`] : 0
           }s`,
         }}
       >
@@ -59,7 +59,7 @@ export function HullTraverseVisualizer({ stats }: VisualizerProps) {
               filter: 'drop-shadow(0px 0px 4px black)',
               transform: 'translate(-50%, -50%)',
               animationDuration: `${
-                rotateTurret ? 1 / (stats.turretTraverseSpeed / 360) : 0
+                rotateTurret ? 360 / stats.turretTraverseSpeed : 0
               }s`,
             }}
             src="/assets/images/tankopedia/visualizers/hull-traverse/turret.png"

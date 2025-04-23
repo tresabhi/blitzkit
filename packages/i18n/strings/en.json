@@ -11,7 +11,8 @@
       "mm": "%s1mm",
       "deg": "%s1°",
       "hp": "%s1hp",
-      "x": "x%s1"
+      "x": "x%s1",
+      "percentage": "%s1%"
     },
 
     "gun_types": {
@@ -871,8 +872,10 @@
           },
 
           "ricochet": {
-            "safe": "Safe <%s1°",
-            "unsafe": "Unsafe ≥%s1°"
+            "angle": "Angle",
+            "normalization": "Normalization",
+            "effective_angle": "Effective angle",
+            "armor": "Armor"
           },
 
           "view_range": {
