@@ -36,6 +36,7 @@ export function HullTraverseVisualizer({ stats }: StatsAcceptorProps) {
         }}
       >
         <img
+          draggable="false"
           style={{
             width: isTurretless ? '22rem' : '12rem',
             height: isTurretless ? '22rem' : '12rem',
@@ -47,6 +48,7 @@ export function HullTraverseVisualizer({ stats }: StatsAcceptorProps) {
 
         {!isTurretless && (
           <img
+            draggable="false"
             ref={turret}
             className="hull-traverse-visualizer"
             style={{
