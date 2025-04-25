@@ -1,6 +1,7 @@
 import { Flex } from '@radix-ui/themes';
 import { Characteristics } from './components/Characteristics';
 import { CompareOptions } from './components/Characteristics/components/CompareOptions';
+import { StatSearch } from './components/Characteristics/components/StatSearch';
 import { Consumables } from './components/Consumables';
 import { Equipment } from './components/Equipment';
 import { Miscellaneous } from './components/Miscellaneous';
@@ -11,7 +12,17 @@ import { Skills } from './components/Skills';
 export function CharacteristicsSection() {
   return (
     <Flex direction="column" gap="3">
-      <CompareOptions display={{ initial: 'none', sm: 'flex' }} />
+      <Flex
+        display={{ initial: 'none', sm: 'flex' }}
+        direction={{ initial: 'column', md: 'row' }}
+        align="center"
+        justify="center"
+        mb="8"
+        gap={{ initial: '4', md: '8' }}
+      >
+        <CompareOptions />
+        <StatSearch />
+      </Flex>
 
       <Flex mt="4" px="4" style={{ boxSizing: 'border-box' }} gap="6">
         <Flex
@@ -41,7 +52,18 @@ export function CharacteristicsSection() {
             align={{ initial: 'stretch', sm: 'center' }}
             width={{ initial: '100%', sm: 'auto' }}
           >
-            <CompareOptions display={{ initial: 'flex', sm: 'none' }} />
+            <Flex
+              display={{ initial: 'flex', sm: 'none' }}
+              direction="column"
+              align="center"
+              justify="center"
+              mb="8"
+              gap="8"
+            >
+              <StatSearch />
+              <CompareOptions />
+            </Flex>
+
             <Characteristics />
           </Flex>
         </Flex>

@@ -122,6 +122,7 @@ interface TankopediaEphemeral {
   xpMultiplier: (typeof XP_MULTIPLIERS)[number];
   customShell?: ShellDefinition;
   display: TankopediaDisplay;
+  statSearch?: string;
 }
 
 const skillDefinitions = await awaitableSkillDefinitions;

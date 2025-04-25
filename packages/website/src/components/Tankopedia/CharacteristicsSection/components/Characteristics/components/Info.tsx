@@ -1,6 +1,13 @@
 import { CaretDownIcon, CaretUpIcon } from '@radix-ui/react-icons';
 import { Box, Flex, Text } from '@radix-ui/themes';
-import type { ReactNode } from 'react';
+import fuzzysort from 'fuzzysort';
+import { Quicklime } from 'quicklime';
+import { useEffect, useRef, type ReactNode } from 'react';
+import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
+import { Mark } from '../../../../../Mark';
+
+export const highlightedRows = new Set<HTMLDivElement>();
+export const highlightedRowsUpdate = new Quicklime();
 
 export interface InfoProps {
   name: ReactNode;
@@ -21,9 +28,46 @@ export function Info({
   prefix,
   deltaType = 'higherIsBetter',
 }: InfoProps) {
+  const statSearch = TankopediaEphemeral.use((state) => state.statSearch);
+  const container = useRef<HTMLDivElement>(null);
+
+  let label = name;
+  let highlighted = false;
+
+  if (statSearch !== undefined && typeof name === 'string') {
+    const result = fuzzysort.single(statSearch, name);
+
+    if (result) {
+      label = fuzzysort.highlight(result, (match, index) => (
+        <Mark key={index}>{match}</Mark>
+      ));
+      highlighted = true;
+    }
+  }
+
+  useEffect(() => {
+    if (!container.current) return;
+
+    if (highlighted) {
+      highlightedRows.add(container.current);
+      highlightedRowsUpdate.dispatch();
+    }
+
+    return () => {
+      highlightedRows.delete(container.current!);
+      highlightedRowsUpdate.dispatch();
+    };
+  });
+
   return (
-    <Flex align="center" pl={indent ? '2' : '0'} width="100%" gap="4">
-      <Text color="gray">{name}</Text>
+    <Flex
+      align="center"
+      pl={indent ? '2' : '0'}
+      width="100%"
+      gap="4"
+      ref={container}
+    >
+      <Text color="gray">{label}</Text>
 
       <Box flexGrow="1" />
 

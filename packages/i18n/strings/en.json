@@ -855,6 +855,8 @@
 
     "tools": {
       "tankopedia": {
+        "search": "Search a stat...",
+
         "name": "Tankopedia",
         "button": "Find tanks",
         "description": "Blitz tank encyclopedia",
