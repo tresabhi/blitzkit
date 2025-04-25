@@ -129,9 +129,9 @@
         "asia": "Asie-Pacifique"
       },
       "short": {
-        "com": "NA",
+        "com": "Amérique du Nord",
         "eu": "Europe",
-        "asia": "APAC"
+        "asia": "Asie-Pacifique"
       }
     },
     "leagues": {
@@ -350,7 +350,7 @@
           }
         },
         "body": {
-          "subtitle": "Research",
+          "subtitle": "Recherche",
           "total": "Total",
           "research": "Recherche: %s1",
           "upgrades": "Améliorations : %s1",
@@ -377,7 +377,7 @@
             "body": "# Commandes\n\nBlitzKit offre les commandes suivantes :\n\n"
           },
           "embeds": {
-            "name": "embeds",
+            "name": "intègre",
             "description": "How embeds work"
           },
           "introduction": {
@@ -457,7 +457,7 @@
         "body": {
           "cards": {
             "games": {
-              "title": "Games",
+              "title": "Parties",
               "winrate": "Taux de victoires",
               "battles": "Batailles",
               "wins_losses": "Victoires/Défaites"
@@ -505,45 +505,45 @@
         "description": "Search clans",
         "options": {
           "limit": {
-            "name": "limit",
+            "name": "limite",
             "description": "The max number of clan results (default: %s1)"
           }
         },
         "body": {
           "title": "Clan search for %s1 in region %s2",
-          "no_results": "No clans found"
+          "no_results": "Pas de clan trouvé"
         }
       },
       "search_players": {
-        "name": "search-players",
-        "description": "Search players",
+        "name": "recherche de joueur",
+        "description": "Recherche des joueurs",
         "options": {
           "limit": {
-            "name": "limit",
-            "description": "The max number of player results (default: %s1)"
+            "name": "limite",
+            "description": "Le nombre maximum de résultats de joueur (par défaut: %s1)"
           }
         },
         "body": {
-          "title": "Player search for %s1 in region %s2",
-          "no_results": "No players found"
+          "title": "Recherche de %s1 dans la région %s2",
+          "no_results": "Pas de joueur de trouvé"
         }
       },
       "rating_leaderboard": {
-        "name": "rating-leaderboard",
-        "description": "Rating battles statistics",
+        "name": "Classement de côté",
+        "description": "Statistiques des batailles de cotés",
         "subcommands": {
           "neighbors": {
             "name": "neighbors",
             "description": "Neighboring players on the leaderboard"
           },
           "league": {
-            "name": "league",
+            "name": "ligue",
             "description": "Top players of a league"
           }
         },
         "options": {
           "limit": {
-            "name": "limit",
+            "name": "limite",
             "description": "How many neighbors to display (default: %s1)"
           },
           "season": {
@@ -554,7 +554,7 @@
             }
           },
           "league": {
-            "name": "league",
+            "name": "ligue",
             "description": "The league to display"
           }
         },
@@ -572,7 +572,7 @@
         "description": "Today's played tanks and statistics"
       },
       "stats": {
-        "name": "stats",
+        "name": "statistiques",
         "description": "Quick statistics for a period"
       },
       "owned_tanks": {
@@ -1104,7 +1104,7 @@
           "lookup": "Look up a player to get started",
           "hint": "Search players...",
           "searching": "Searching...",
-          "no_results": "No players found"
+          "no_results": "Pas de joueur de trouvé"
         },
         "controls": {
           "title": "Tracking %s1",
