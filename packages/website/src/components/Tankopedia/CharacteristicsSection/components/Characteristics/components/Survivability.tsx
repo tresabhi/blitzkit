@@ -82,25 +82,25 @@ export function Survivability({ stats }: StatsAcceptorProps) {
         value={(stats) => stats.camouflageCaughtOnFire * 100}
       />
       <InfoWithDelta
-        decimals={0}
+        decimals={2}
         deltaType="lowerIsBetter"
         stats={stats}
         value="width"
       />
       <InfoWithDelta
-        decimals={0}
+        decimals={2}
         deltaType="lowerIsBetter"
         stats={stats}
         value="height"
       />
       <InfoWithDelta
-        decimals={0}
+        decimals={2}
         deltaType="lowerIsBetter"
         stats={stats}
         value="length"
       />
       <InfoWithDelta
-        decimals={0}
+        decimals={2}
         deltaType="lowerIsBetter"
         stats={stats}
         value="volume"
