@@ -29,6 +29,16 @@ const strings = getStrings(locale);
     height: 100%;
   }
 
+  .navbar[data-expanded='false'] .content {
+    background-color: var(--black-a8);
+    backdrop-filter: blur(4rem);
+    box-shadow: var(--shadow-5);
+  }
+
+  .navbar[data-expanded='true'] .content {
+    background-color: var(--gray-1);
+  }
+
   .navbar[data-expanded='true'] *[data-closed] {
     display: none;
   }
@@ -64,11 +74,11 @@ const strings = getStrings(locale);
   }}
 >
   <Flex
+    className="content"
     width="100%"
     p={{ initial: '4', sm: '3' }}
     direction="column"
     align="center"
-    style={{ backgroundColor: Var('gray-1') }}
   >
     <Flex gap="4" direction="column" maxWidth="80rem" width="100%">
       <Flex align="center">
@@ -208,7 +218,7 @@ const strings = getStrings(locale);
                     justify="end"
                     flexGrow="1"
                     style={{
-                      background: `linear-gradient(90deg, transparent, ${Var('gray-1')})`,
+                      background: `linear-gradient(90deg, transparent, ${Var('gray-1')} 90%)`,
                     }}
                   >
                     {toolStrings.name}
