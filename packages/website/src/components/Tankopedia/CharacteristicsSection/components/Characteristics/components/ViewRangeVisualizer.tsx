@@ -96,11 +96,11 @@ export function ViewRangeVisualizer({ stats }: StatsAcceptorProps) {
         left="0"
         width="100%"
         py="2"
-        px="3"
+        px="4"
         gap="3"
         align="center"
         style={{
-          backgroundColor: Var('black-a5'),
+          backgroundColor: Var('black-a7'),
           backdropFilter: 'blur(4rem)',
         }}
       >
