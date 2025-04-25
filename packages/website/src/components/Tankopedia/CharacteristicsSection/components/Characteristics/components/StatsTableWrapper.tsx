@@ -5,7 +5,8 @@ export function StatsTableWrapper(props: FlexProps) {
     <Flex
       direction="column"
       gap="2"
-      width={{ initial: '16rem', xs: '20rem', md: '16rem', xl: '20rem' }}
+      maxWidth="25rem"
+      width={{ initial: '100%', md: '16rem', xl: '20rem' }}
       {...props}
     />
   );

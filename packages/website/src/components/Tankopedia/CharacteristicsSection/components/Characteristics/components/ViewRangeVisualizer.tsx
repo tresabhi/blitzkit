@@ -31,7 +31,11 @@ export function ViewRangeVisualizer({ stats }: StatsAcceptorProps) {
   const range = useRef<HTMLDivElement>(null);
 
   return (
-    <Card style={{ aspectRatio: '1 / 1' }} mb="6" variant="classic">
+    <Card
+      style={{ aspectRatio: '1 / 1', touchAction: 'none' }}
+      mb="6"
+      variant="classic"
+    >
       <Box
         ref={container}
         onPointerMove={(event) => {
@@ -47,11 +51,6 @@ export function ViewRangeVisualizer({ stats }: StatsAcceptorProps) {
         left="0"
         width="100%"
         height="100%"
-        style={{
-          backgroundImage: `url(/assets/images/tankopedia/visualizers/range/${map.id}.png)`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
       >
         <Box
           position="absolute"
@@ -60,7 +59,10 @@ export function ViewRangeVisualizer({ stats }: StatsAcceptorProps) {
           width="100%"
           height="100%"
           style={{
-            background: Var('black-a5'),
+            backgroundImage: `url(/assets/images/tankopedia/visualizers/range/${map.id}.png)`,
+            filter: `grayscale(0.5) brightness(0.8) contrast(1.2)`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
           }}
         />
 
@@ -75,7 +77,7 @@ export function ViewRangeVisualizer({ stats }: StatsAcceptorProps) {
           style={{
             aspectRatio: '1 / 1',
             transform: 'translate(-50%, -50%)',
-            background: `radial-gradient(${Var('gray-a1')}, ${Var('gray-a12')})`,
+            background: `radial-gradient(${Var('black-a6')}, ${Var('gray-a12')})`,
             borderRadius: '50%',
           }}
         >

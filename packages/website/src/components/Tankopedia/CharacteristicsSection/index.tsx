@@ -35,7 +35,12 @@ export function CharacteristicsSection() {
             <Miscellaneous />
           </Flex>
 
-          <Flex direction="column" gap="6" align="center">
+          <Flex
+            direction="column"
+            gap="6"
+            align={{ initial: 'stretch', sm: 'center' }}
+            width={{ initial: '100%', sm: 'auto' }}
+          >
             <CompareOptions display={{ initial: 'flex', sm: 'none' }} />
             <Characteristics />
           </Flex>

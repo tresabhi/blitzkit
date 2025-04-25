@@ -25,6 +25,7 @@ export function RicochetVisualizer({ stats }: StatsAcceptorProps) {
       variant="classic"
       style={{
         aspectRatio: '1 / 1',
+        touchAction: 'none',
       }}
       mb="6"
       ref={container}

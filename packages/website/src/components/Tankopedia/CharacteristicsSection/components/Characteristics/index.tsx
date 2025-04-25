@@ -83,13 +83,28 @@ export function Characteristics() {
   }, [hasImprovedVerticalStabilizer, hasDownImprovedVerticalStabilizer]);
 
   return (
-    <Flex gap="8" direction={{ initial: 'column', md: 'row' }}>
+    <Flex
+      gap="8"
+      direction={{ initial: 'column', md: 'row' }}
+      align={{ initial: 'center', sm: 'start' }}
+      width={{ initial: '100%', sm: 'auto' }}
+    >
       <Firepower stats={stats} />
 
-      <Flex gap="8" direction={{ initial: 'column', lg: 'row' }}>
+      <Flex
+        gap="8"
+        direction={{ initial: 'column', lg: 'row' }}
+        align={{ initial: 'center', sm: 'start' }}
+        width={{ initial: '100%', sm: 'auto' }}
+      >
         <Maneuverability stats={stats} />
 
-        <Flex gap="8" direction="column">
+        <Flex
+          gap="8"
+          direction="column"
+          align={{ initial: 'center', sm: 'start' }}
+          width={{ initial: '100%', sm: 'auto' }}
+        >
           <Survivability stats={stats} />
           <Crew stats={stats} />
         </Flex>
