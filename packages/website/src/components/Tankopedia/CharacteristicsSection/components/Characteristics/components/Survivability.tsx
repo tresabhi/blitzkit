@@ -14,24 +14,22 @@ export function Survivability({ stats }: StatsAcceptorProps) {
       <Heading size="5">
         {strings.website.tools.tankopedia.survivability.title}
       </Heading>
-      <InfoWithDelta value="health" stats={stats} unit="hp" decimals={0} />
+      <InfoWithDelta value="health" stats={stats} decimals={0} />
       <InfoWithDelta
         stats={stats}
         name={
           strings.website.tools.tankopedia.characteristics.values.fireChance
         }
-        unit="%"
         deltaType="lowerIsBetter"
         decimals={0}
         value={(stats) => stats.fireChance * 100}
       />
-      <InfoWithDelta value="viewRange" stats={stats} unit="m" decimals={0} />
+      <InfoWithDelta value="viewRange" stats={stats} decimals={0} />
       <ViewRangeVisualizer stats={stats} />
       <Info
         name={
           strings.website.tools.tankopedia.characteristics.values.camouflage
         }
-        unit="%"
       />
       <InfoWithDelta
         value={(stats) => stats.camouflageStill * 100}
@@ -84,28 +82,24 @@ export function Survivability({ stats }: StatsAcceptorProps) {
         value={(stats) => stats.camouflageCaughtOnFire * 100}
       />
       <InfoWithDelta
-        unit="m"
         decimals={0}
         deltaType="lowerIsBetter"
         stats={stats}
         value="width"
       />
       <InfoWithDelta
-        unit="m"
         decimals={0}
         deltaType="lowerIsBetter"
         stats={stats}
         value="height"
       />
       <InfoWithDelta
-        unit="m"
         decimals={0}
         deltaType="lowerIsBetter"
         stats={stats}
         value="length"
       />
       <InfoWithDelta
-        unit="m"
         decimals={0}
         deltaType="lowerIsBetter"
         stats={stats}

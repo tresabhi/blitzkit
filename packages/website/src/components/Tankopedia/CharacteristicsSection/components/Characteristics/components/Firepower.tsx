@@ -106,15 +106,9 @@ export function Firepower({ stats }: StatsAcceptorProps) {
       >
         {strings.common.gun_types[gun.gun_type!.$case]}
       </Info>
-      <InfoWithDelta stats={stats} decimals={0} unit="hp / min" value="dpm" />
+      <InfoWithDelta stats={stats} decimals={0} value="dpm" />
       {gun.gun_type!.$case === 'auto_reloader' && (
-        <InfoWithDelta
-          stats={stats}
-          decimals={0}
-          indent
-          unit="hp / min"
-          value="dpmEffective"
-        />
+        <InfoWithDelta stats={stats} decimals={0} indent value="dpmEffective" />
       )}
       {gun.gun_type!.$case !== 'regular' && (
         <InfoWithDelta stats={stats} value="shells" />
@@ -135,7 +129,6 @@ export function Firepower({ stats }: StatsAcceptorProps) {
               strings.website.tools.tankopedia.characteristics.values
                 .shellReloads
             }
-            unit="s"
           />
           {stats.shellReloads!.map((reload, index) => (
             <InfoWithDelta
@@ -158,7 +151,6 @@ export function Firepower({ stats }: StatsAcceptorProps) {
         <InfoWithDelta
           stats={stats}
           decimals={2}
-          unit="s"
           deltaType="lowerIsBetter"
           value="shellReload"
         />
@@ -169,12 +161,11 @@ export function Firepower({ stats }: StatsAcceptorProps) {
           stats={stats}
           indent
           decimals={2}
-          unit="s"
           deltaType="lowerIsBetter"
           value="intraClip"
         />
       )}
-      <InfoWithDelta stats={stats} decimals={0} unit="mm" value="penetration" />
+      <InfoWithDelta stats={stats} decimals={0} value="penetration" />
       {typeof shell.penetration !== 'number' && (
         <>
           <InfoWithDelta
@@ -242,33 +233,26 @@ export function Firepower({ stats }: StatsAcceptorProps) {
           </Flex>
         </>
       )}
-      <InfoWithDelta stats={stats} unit="hp" decimals={0} value="damage" />
+      <InfoWithDelta stats={stats} decimals={0} value="damage" />
       {gun.gun_type!.$case !== 'regular' && (
         <InfoWithDelta stats={stats} indent decimals={0} value="clipDamage" />
       )}
-      <InfoWithDelta
-        stats={stats}
-        unit="hp"
-        decimals={0}
-        value="moduleDamage"
-      />
+      <InfoWithDelta stats={stats} decimals={0} value="moduleDamage" />
       {isExplosive(shell.type) && (
         <InfoWithDelta
           stats={stats}
-          unit="m"
           noRanking
           decimals={0}
           value="explosionRadius"
         />
       )}
-      <InfoWithDelta stats={stats} decimals={0} unit="mm" value="caliber" />
+      <InfoWithDelta stats={stats} decimals={0} value="caliber" />
 
       {!isExplosive(shell.type) && (
         <>
           <InfoWithDelta
             stats={stats}
             decimals={0}
-            unit="°"
             noRanking
             value="shellNormalization"
           />
@@ -277,24 +261,17 @@ export function Firepower({ stats }: StatsAcceptorProps) {
             noRanking
             decimals={0}
             deltaType="lowerIsBetter"
-            unit="°"
             value="shellRicochet"
           />
           <RicochetVisualizer stats={stats} />
         </>
       )}
-      <InfoWithDelta
-        stats={stats}
-        unit="m/s"
-        decimals={0}
-        value="shellVelocity"
-      />
-      <InfoWithDelta stats={stats} unit="m" decimals={0} value="shellRange" />
+      <InfoWithDelta stats={stats} decimals={0} value="shellVelocity" />
+      <InfoWithDelta stats={stats} decimals={0} value="shellRange" />
       <InfoWithDelta stats={stats} decimals={0} value="shellCapacity" />
       <InfoWithDelta
         stats={stats}
         decimals={2}
-        unit="s"
         deltaType="lowerIsBetter"
         value="aimTime"
       />
@@ -309,7 +286,6 @@ export function Firepower({ stats }: StatsAcceptorProps) {
         stats={stats}
         decimals={3}
         indent
-        unit="m"
         deltaType="lowerIsBetter"
         value="dispersion"
       />
@@ -358,7 +334,6 @@ export function Firepower({ stats }: StatsAcceptorProps) {
           strings.website.tools.tankopedia.characteristics.values
             .gun_flexibility
         }
-        unit="°"
       />
       <InfoWithDelta value="gunDepression" stats={stats} decimals={1} indent />
       <InfoWithDelta stats={stats} decimals={1} indent value="gunElevation" />

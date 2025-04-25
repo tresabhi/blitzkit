@@ -18,7 +18,6 @@ export function Maneuverability({ stats }: StatsAcceptorProps) {
       </Heading>
       <Info
         name={strings.website.tools.tankopedia.characteristics.values.speed}
-        unit="kph"
       />
       <InfoWithDelta value="speedForwards" stats={stats} decimals={0} indent />
       <InfoWithDelta value="speedBackwards" stats={stats} decimals={0} indent />
@@ -26,7 +25,6 @@ export function Maneuverability({ stats }: StatsAcceptorProps) {
       <InfoWithDelta
         stats={stats}
         decimals={1}
-        unit="tn"
         deltaType="lowerIsBetter"
         value="weight"
       />
@@ -40,13 +38,11 @@ export function Maneuverability({ stats }: StatsAcceptorProps) {
         value="hardTerrainCoefficient"
         stats={stats}
         decimals={0}
-        unit="%"
         indent
       />
       <InfoWithDelta
         stats={stats}
         decimals={0}
-        unit="%"
         indent
         value="mediumTerrainCoefficient"
       />
@@ -54,7 +50,6 @@ export function Maneuverability({ stats }: StatsAcceptorProps) {
         value="softTerrainCoefficient"
         stats={stats}
         decimals={0}
-        unit="%"
         indent
       />
       <Info
@@ -68,14 +63,12 @@ export function Maneuverability({ stats }: StatsAcceptorProps) {
         value="hardTerrainCoefficientRaw"
         stats={stats}
         decimals={2}
-        unit="%"
         indent
         deltaType="lowerIsBetter"
       />
       <InfoWithDelta
         stats={stats}
         decimals={2}
-        unit="%"
         indent
         deltaType="lowerIsBetter"
         value="mediumTerrainCoefficientRaw"
@@ -83,7 +76,6 @@ export function Maneuverability({ stats }: StatsAcceptorProps) {
       <InfoWithDelta
         stats={stats}
         decimals={2}
-        unit="%"
         indent
         deltaType="lowerIsBetter"
         value="softTerrainCoefficientRaw"
@@ -93,7 +85,6 @@ export function Maneuverability({ stats }: StatsAcceptorProps) {
           strings.website.tools.tankopedia.characteristics.values
             .power_to_weight_ratio
         }
-        unit="hp/tn"
       />
       <InfoWithDelta
         stats={stats}
@@ -113,18 +104,12 @@ export function Maneuverability({ stats }: StatsAcceptorProps) {
         indent
         value="powerToWeightRatioSoftTerrain"
       />
-      <InfoWithDelta
-        stats={stats}
-        unit="°/s"
-        decimals={1}
-        value="turretTraverseSpeed"
-      />
+      <InfoWithDelta stats={stats} decimals={1} value="turretTraverseSpeed" />
       <Info
         name={
           strings.website.tools.tankopedia.characteristics.values
             .hull_traverse_speed
         }
-        unit="°/s"
       />
       <InfoWithDelta
         stats={stats}

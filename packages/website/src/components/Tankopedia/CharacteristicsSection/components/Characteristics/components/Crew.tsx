@@ -68,7 +68,6 @@ export function Crew({ stats }: StatsAcceptorProps) {
                   ? ` ${literals(strings.common.units.x, [`${member.count}`])}`
                   : ''
               }`}
-              unit="%"
               decimals={0}
               noRanking
               value={() =>
@@ -83,7 +82,6 @@ export function Crew({ stats }: StatsAcceptorProps) {
                 stats={stats}
                 key={`${member.type}-substitute`}
                 decimals={0}
-                unit="%"
                 indent
                 name={
                   <>

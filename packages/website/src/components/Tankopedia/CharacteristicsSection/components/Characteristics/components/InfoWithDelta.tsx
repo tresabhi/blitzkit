@@ -1,5 +1,6 @@
 import { createDefaultSkills } from '@blitzkit/core';
 import { Flex, Progress, Text } from '@radix-ui/themes';
+import { clamp } from 'lodash-es';
 import { useMemo, type ComponentProps, type ReactNode } from 'react';
 import { awaitableEquipmentDefinitions } from '../../../../../../core/awaitables/equipmentDefinitions';
 import { awaitableModelDefinitions } from '../../../../../../core/awaitables/modelDefinitions';
@@ -166,10 +167,11 @@ export function InfoWithDelta({
             size="1"
             value={goodness * 100}
             color={color}
-            style={{ height: '0.125rem' }}
+            style={{ height: '0.125rem', opacity: 0.5 }}
           />
+
           <Text color="gray" size="1">
-            {betterTanks.length + 1} / {others.length}
+            {clamp(betterTanks.length + 1, 1, others.length)} / {others.length}
           </Text>
         </Flex>
       )}

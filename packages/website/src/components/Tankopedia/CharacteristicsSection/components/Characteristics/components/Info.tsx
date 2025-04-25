@@ -5,7 +5,6 @@ import type { ReactNode } from 'react';
 export interface InfoProps {
   name: ReactNode;
   children?: ReactNode;
-  unit?: string;
   indent?: boolean;
   delta?: number;
   decimals?: number;
@@ -16,7 +15,6 @@ export interface InfoProps {
 export function Info({
   name,
   children,
-  unit,
   indent = false,
   delta,
   decimals,
@@ -25,17 +23,7 @@ export function Info({
 }: InfoProps) {
   return (
     <Flex align="center" pl={indent ? '2' : '0'} width="100%" gap="4">
-      <Text color="gray">
-        {name}
-        {unit != undefined && (
-          <>
-            {' '}
-            <Text color="gray" size="1">
-              {unit}
-            </Text>
-          </>
-        )}
-      </Text>
+      <Text color="gray">{name}</Text>
 
       <Box flexGrow="1" />
 
@@ -65,8 +53,14 @@ export function Info({
               </Text>
             </>
           )}
+
           <Text>
-            {prefix}
+            {prefix !== undefined && (
+              <Text color="gray" size="1">
+                {prefix}
+              </Text>
+            )}
+
             {decimals !== undefined && typeof children === 'number'
               ? children.toFixed(decimals)
               : children}
