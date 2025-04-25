@@ -9,6 +9,7 @@ import { useLocale } from '../../../../../../hooks/useLocale';
 import { Duel } from '../../../../../../stores/duel';
 import type { StatsAcceptorProps } from './HullTraverseVisualizer';
 import { InfoWithDelta } from './InfoWithDelta';
+import { StatsTableWrapper } from './StatsTableWrapper';
 
 const provisionDefinitions = await awaitableProvisionDefinitions;
 
@@ -28,7 +29,7 @@ export function Crew({ stats }: StatsAcceptorProps) {
   const commanderMastery = 1 + provisionCrewBonus;
 
   return (
-    <Flex direction="column" gap="2" width="16rem">
+    <StatsTableWrapper>
       <Flex gap="2" align="center">
         <Heading size="5">
           {strings.website.tools.tankopedia.crew.title}
@@ -107,6 +108,6 @@ export function Crew({ stats }: StatsAcceptorProps) {
           </Fragment>
         );
       })}
-    </Flex>
+    </StatsTableWrapper>
   );
 }

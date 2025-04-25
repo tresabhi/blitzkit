@@ -1,15 +1,16 @@
-import { Flex, Heading } from '@radix-ui/themes';
+import { Heading } from '@radix-ui/themes';
 import { useLocale } from '../../../../../../hooks/useLocale';
 import type { StatsAcceptorProps } from './HullTraverseVisualizer';
 import { Info } from './Info';
 import { InfoWithDelta } from './InfoWithDelta';
+import { StatsTableWrapper } from './StatsTableWrapper';
 import { ViewRangeVisualizer } from './ViewRangeVisualizer';
 
 export function Survivability({ stats }: StatsAcceptorProps) {
   const { strings } = useLocale();
 
   return (
-    <Flex direction="column" gap="2" width="16rem">
+    <StatsTableWrapper>
       <Heading size="5">
         {strings.website.tools.tankopedia.survivability.title}
       </Heading>
@@ -110,6 +111,6 @@ export function Survivability({ stats }: StatsAcceptorProps) {
         stats={stats}
         value="volume"
       />
-    </Flex>
+    </StatsTableWrapper>
   );
 }

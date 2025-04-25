@@ -1,4 +1,4 @@
-import { Flex, Heading } from '@radix-ui/themes';
+import { Heading } from '@radix-ui/themes';
 import { useLocale } from '../../../../../../hooks/useLocale';
 import {
   HullTraverseVisualizer,
@@ -6,12 +6,13 @@ import {
 } from './HullTraverseVisualizer';
 import { Info } from './Info';
 import { InfoWithDelta } from './InfoWithDelta';
+import { StatsTableWrapper } from './StatsTableWrapper';
 
 export function Maneuverability({ stats }: StatsAcceptorProps) {
   const { strings } = useLocale();
 
   return (
-    <Flex direction="column" gap="2" width="16rem">
+    <StatsTableWrapper>
       <Heading size="5">
         {strings.website.tools.tankopedia.maneuverability.title}
       </Heading>
@@ -145,6 +146,6 @@ export function Maneuverability({ stats }: StatsAcceptorProps) {
       />
 
       <HullTraverseVisualizer stats={stats} />
-    </Flex>
+    </StatsTableWrapper>
   );
 }

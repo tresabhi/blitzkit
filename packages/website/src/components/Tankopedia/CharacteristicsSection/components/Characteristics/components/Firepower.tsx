@@ -25,6 +25,7 @@ import type { StatsAcceptorProps } from './HullTraverseVisualizer';
 import { Info } from './Info';
 import { InfoWithDelta } from './InfoWithDelta';
 import { RicochetVisualizer } from './RicochetVisualizer';
+import { StatsTableWrapper } from './StatsTableWrapper';
 
 export function Firepower({ stats }: StatsAcceptorProps) {
   const mutateDuel = Duel.useMutation();
@@ -57,7 +58,7 @@ export function Firepower({ stats }: StatsAcceptorProps) {
   }, [penetrationDistance]);
 
   return (
-    <Flex direction="column" gap="2" width="16rem">
+    <StatsTableWrapper>
       <Flex align="center" gap="4">
         <Heading size="5">
           {strings.website.tools.tankopedia.firepower.title}
@@ -409,6 +410,6 @@ export function Firepower({ stats }: StatsAcceptorProps) {
           />
         </>
       )}
-    </Flex>
+    </StatsTableWrapper>
   );
 }

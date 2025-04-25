@@ -46,7 +46,7 @@ export function RicochetVisualizer({ stats }: StatsAcceptorProps) {
         top="0"
         left="0"
         style={{
-          background: `linear-gradient(to right, ${Var('gray-a1')}, ${Var('gray-a5')})`,
+          background: `linear-gradient(to right, transparent, ${Var('gray-a4')})`,
         }}
       >
         <Box
@@ -104,12 +104,12 @@ export function RicochetVisualizer({ stats }: StatsAcceptorProps) {
           bottom="100%"
           style={{
             transform: 'translateX(-50%)',
-            backgroundColor: Var('gray-a5'),
+            backgroundColor: Var('gray-a8'),
           }}
         />
         <Box
           position="absolute"
-          width="2px"
+          width="3px"
           height="100%"
           style={{
             transform: 'translateX(-50%)',
@@ -127,7 +127,7 @@ export function RicochetVisualizer({ stats }: StatsAcceptorProps) {
             height: '2rem',
             top: '6rem',
             left: 0,
-            filter: 'drop-shadow(0px 0px 4px black)',
+            filter: 'drop-shadow(0px 0px 0.25rem black)',
           }}
         />
       </Box>
@@ -144,7 +144,7 @@ export function RicochetVisualizer({ stats }: StatsAcceptorProps) {
       >
         <Box
           position="absolute"
-          width="2px"
+          width="3px"
           height="100%"
           top="-100%"
           style={{

@@ -24,7 +24,7 @@ export function CharacteristicsSection() {
           <Flex
             direction="column"
             gap="6"
-            maxWidth="21rem"
+            maxWidth="19rem"
             align={{ initial: 'center', sm: 'start' }}
           >
             <Modules />
@@ -35,13 +35,7 @@ export function CharacteristicsSection() {
             <Miscellaneous />
           </Flex>
 
-          <Flex
-            flexGrow="1"
-            maxWidth={{ initial: '20rem', md: '54rem' }}
-            direction="column"
-            gap="6"
-            width="100%"
-          >
+          <Flex direction="column" gap="6" align="center">
             <CompareOptions display={{ initial: 'flex', sm: 'none' }} />
             <Characteristics />
           </Flex>
