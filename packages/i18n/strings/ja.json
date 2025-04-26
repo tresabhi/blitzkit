@@ -665,6 +665,7 @@
         "copied": "コピーしました!"
       },
       "tank_search": {
+        "clear_filters": "Clear filters",
         "search_bar_hint": "車輌名を入力…",
         "recent": "最近の閲覧",
         "select_all": "全て選択",
@@ -731,6 +732,11 @@
       }
     },
     "home": {
+      "discord": {
+        "join_short": "Join cool people!",
+        "join_long": "Join super duper cool people!",
+        "action": "Discord"
+      },
       "hero": {
         "credit": "By %s1 ❤️"
       },
@@ -743,6 +749,12 @@
       },
       "help_translate": "%s1の %s2への翻訳にご協力ください！",
       "seo_description": "Tools for everything World of Tanks Blitz"
+    },
+    "docs": {
+      "patches": {
+        "name": "BlitzKit Changelogs",
+        "seo_description": "Changelogs for BlitzKit Discord bot and website"
+      }
     },
     "tools": {
       "tankopedia": {
@@ -888,7 +900,7 @@
         "characteristics": {
           "title": "性能値",
           "compare": {
-            "label": "比較対象",
+            "label": "性能比較",
             "class": "Tier %s1 %s2",
             "tier": "Tier %s1 全車輌",
             "all": "全車輌"
