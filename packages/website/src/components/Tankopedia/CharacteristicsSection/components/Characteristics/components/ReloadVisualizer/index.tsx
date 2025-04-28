@@ -14,9 +14,7 @@ export interface ReloadUpdateData {
 export const reloadUpdate = new Quicklime<ReloadUpdateData>();
 
 export function ReloadVisualizer({ stats }: StatsAcceptorProps) {
-  const reloadCircle = useRef<HTMLDivElement>(null!);
-  const reloadCore = useRef<HTMLDivElement>(null!);
-  const reloadGlow = useRef<HTMLDivElement>(null!);
+  const reloadCircle = useRef<HTMLDivElement>(null);
 
   const size = `${stats.shells === 1 ? 66 : 58}%`;
 
@@ -48,11 +46,11 @@ export function ReloadVisualizer({ stats }: StatsAcceptorProps) {
     const handleReloadUpdate: QuicklimeCallback<ReloadUpdateData> = ({
       data,
     }) => {
+      if (!reloadCircle.current) return;
+
       const reloadAngle = data.reload * 2 * Math.PI;
 
       reloadCircle.current.style.background = `conic-gradient(${Var('amber-9')} 0 ${reloadAngle}rad, ${Var('red-7')} ${reloadAngle}rad)`;
-      reloadCore.current.style.background = `conic-gradient(${Var('amber-3')} 0 ${reloadAngle}rad, ${Var('red-2')} ${reloadAngle}rad)`;
-      reloadGlow.current.style.background = `conic-gradient(${Var('amber-8')} 0 ${reloadAngle}rad, transparent ${reloadAngle}rad)`;
     };
 
     reloadUpdate.on(handleReloadUpdate);
@@ -64,21 +62,32 @@ export function ReloadVisualizer({ stats }: StatsAcceptorProps) {
 
   return (
     <Card variant="classic" mb="6" style={{ aspectRatio: '1 / 1' }}>
-      <Box
-        p="4"
-        position="absolute"
-        top="50%"
-        left="50%"
-        width={size}
-        height={size}
-        className="reload"
-        ref={reloadGlow}
-        style={{
-          transform: 'translate(-50%, -50%)',
-          borderRadius: '50%',
-          filter: 'blur(0.5rem)',
-        }}
-      />
+      <Box position="absolute" top="0" left="0" width="100%" height="100%">
+        <img
+          src="/assets/images/tankopedia/visualizers/reload/background.jpg"
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            filter: 'blur(0.2rem) contrast(1.2) brightness(0.5) saturate(0.8)',
+          }}
+        />
+
+        <Box
+          position="absolute"
+          top="0"
+          left="0"
+          width="100%"
+          height="100%"
+          style={{
+            background: `radial-gradient(transparent 50%, ${Var('black-a8')} 100%)`,
+          }}
+        />
+      </Box>
 
       <Box
         p="1"
@@ -93,27 +102,9 @@ export function ReloadVisualizer({ stats }: StatsAcceptorProps) {
           transform: 'translate(-50%, -50%)',
           borderRadius: '50%',
           background: Var('red-7'),
+          maskImage: `radial-gradient(transparent 65%, black 68%)`,
         }}
-      >
-        <Box
-          ref={reloadCore}
-          style={{
-            backgroundColor: Var('red-2'),
-            borderRadius: '50%',
-          }}
-          width="100%"
-          height="100%"
-          overflow="hidden"
-        >
-          <Box
-            style={{
-              width: '100%',
-              height: '100%',
-              background: `radial-gradient(${Var('gray-3')} 25%, transparent)`,
-            }}
-          />
-        </Box>
-      </Box>
+      />
 
       <img
         src="/assets/images/tankopedia/visualizers/reload/caret.png"
@@ -127,9 +118,10 @@ export function ReloadVisualizer({ stats }: StatsAcceptorProps) {
         }}
       />
 
-      {times(stats.shells, (index) => (
-        <Shell stats={stats} index={index} key={index} />
-      ))}
+      {stats.shells > 1 &&
+        times(stats.shells, (index) => (
+          <Shell stats={stats} index={index} key={index} />
+        ))}
     </Card>
   );
 }
