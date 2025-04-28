@@ -24,6 +24,7 @@ import { Duel } from '../../../../../../stores/duel';
 import type { StatsAcceptorProps } from './HullTraverseVisualizer';
 import { Info } from './Info';
 import { InfoWithDelta } from './InfoWithDelta';
+import { ReloadVisualizer } from './ReloadVisualizer';
 import { RicochetVisualizer } from './RicochetVisualizer';
 import { StatsTableWrapper } from './StatsTableWrapper';
 
@@ -165,6 +166,8 @@ export function Firepower({ stats }: StatsAcceptorProps) {
           value="intraClip"
         />
       )}
+      <ReloadVisualizer stats={stats} />
+
       <InfoWithDelta stats={stats} decimals={0} value="penetration" />
       {typeof shell.penetration !== 'number' && (
         <>
