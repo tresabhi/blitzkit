@@ -53,7 +53,7 @@ export function ReloadVisualizer({ stats }: StatsAcceptorProps) {
       const reloadAngle = data.reload * 2 * Math.PI;
 
       reloadCircle.current.style.background = `conic-gradient(${Var('amber-9')} 0 ${reloadAngle}rad, ${Var('orange-7')} ${reloadAngle}rad)`;
-      reloadCore.current.style.background = `conic-gradient(${Var('amber-4')} 0 ${reloadAngle}rad, ${Var('orange-3')} ${reloadAngle}rad)`;
+      reloadCore.current.style.background = `conic-gradient(${Var('amber-6')} 0 ${reloadAngle}rad, ${Var('orange-3')} ${reloadAngle}rad)`;
       reloadGlow.current.style.background = `conic-gradient(${Var('amber-9')} 0 ${reloadAngle}rad, transparent ${reloadAngle}rad)`;
     };
 
