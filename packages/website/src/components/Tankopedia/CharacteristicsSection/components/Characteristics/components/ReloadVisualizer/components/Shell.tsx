@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { reloadUpdate, type ReloadUpdateData } from '..';
 import { Var } from '../../../../../../../../core/radix/var';
 import type { StatsAcceptorProps } from '../../HullTraverseVisualizer';
+import { ShellBorder } from './ShellBorder';
 
 interface ShellProps {
   index: number;
@@ -33,29 +34,58 @@ export function Shell({ index, stats }: ShellProps & StatsAcceptorProps) {
         position: 'absolute',
         top: '50%',
         left: '50%',
-        transform: `translate(-50%, -50%) rotate(${(index - Math.floor(stats.shells / 2)) * 10}deg)`,
+        transform: `translate(-50%, -50%) rotate(${7 * (index - (stats.shells - 1) / 2) + 135}deg)`,
       }}
     >
-      <Flex
-        justify="end"
+      <Box
+        left="50%"
+        position="absolute"
+        ml="calc(25% + 2.5rem)"
+        width="1.25rem"
+        height="1.25rem"
         style={{
-          position: 'absolute',
-          left: '50%',
-          marginLeft: 'calc(25% + 2rem)',
-          width: '1.25rem',
-          height: '0.5rem',
-          borderRadius: '0.25rem',
-          overflow: 'hidden',
-          outline: `1px solid ${Var('jade-6')}`,
+          transform: 'translate(-50%, -50%)',
         }}
       >
-        <Box
-          ref={bar}
+        <ShellBorder
+          width="100%"
+          height="100%"
           style={{
-            background: Var('jade-9'),
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            color: Var('jade-8'),
           }}
         />
-      </Flex>
+
+        <Flex
+          position="absolute"
+          top="0"
+          left="0"
+          width="100%"
+          height="100%"
+          justify="end"
+          style={{
+            borderRadius: '0.25rem',
+            overflow: 'hidden',
+            maskImage:
+              'url(/assets/images/tankopedia/visualizers/reload/shell.png)',
+            // maskComposite: 'exclude',
+            maskSize: 'contain',
+            maskRepeat: 'no-repeat',
+            maskPosition: 'center',
+            // background: 'red',
+          }}
+        >
+          <Box
+            ref={bar}
+            style={{
+              width: '100%',
+              background: Var('jade-9'),
+            }}
+          />
+        </Flex>
+      </Box>
     </Box>
   );
 }
