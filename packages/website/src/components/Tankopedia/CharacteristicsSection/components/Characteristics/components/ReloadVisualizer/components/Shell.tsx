@@ -34,7 +34,7 @@ export function Shell({ index, stats }: ShellProps & StatsAcceptorProps) {
         position: 'absolute',
         top: '50%',
         left: '50%',
-        transform: `translate(-50%, -50%) rotate(${7 * (index - (stats.shells - 1) / 2) + 135}deg)`,
+        transform: `translate(-50%, -50%) rotate(${135 - 7 * (index - (stats.shells - 1) / 2)}deg)`,
       }}
     >
       <Box

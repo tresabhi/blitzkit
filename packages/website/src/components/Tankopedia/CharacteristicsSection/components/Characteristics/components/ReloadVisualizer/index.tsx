@@ -18,22 +18,42 @@ export function ReloadVisualizer({ stats }: StatsAcceptorProps) {
   const reloadCircle = useRef<HTMLDivElement>(null);
   const reloadCore = useRef<HTMLDivElement>(null);
   const reloadGlow = useRef<HTMLDivElement>(null);
+  const t = useRef(0);
 
   useEffect(() => {
     let cancel = false;
+    let lastT = Date.now() / 1000;
+    const period =
+      stats.shellReload! +
+      (stats.intraClip ? stats.intraClip * (stats.shells - 1) : 0);
 
     function frame() {
       const now = Date.now() / 1000;
+      const dt = now - lastT;
+      t.current = (t.current + dt) % period;
 
-      const t = now % stats.shellReload!;
-      const x = t / stats.shellReload!;
+      // clipReloadProgress.current =
+      //   (clipReloadProgress.current + dt / stats.shellReload!) % 1;
 
-      reloadUpdate.dispatch({
-        reload: x,
-        shells: Array(stats.shells).fill(x),
-      });
+      const reload =
+        t.current < stats.shellReload!
+          ? t.current / stats.shellReload!
+          : ((t.current - stats.shellReload!) % stats.intraClip!) /
+            stats.intraClip!;
+      const shells =
+        t.current < stats.shellReload!
+          ? Array(stats.shells).fill(reload)
+          : times(stats.shells, (index) =>
+              index < (t.current - stats.shellReload!) / stats.intraClip!
+                ? 0
+                : 1,
+            );
+
+      reloadUpdate.dispatch({ reload, shells });
 
       if (!cancel) requestAnimationFrame(frame);
+
+      lastT = now;
     }
 
     frame();
@@ -93,7 +113,6 @@ export function ReloadVisualizer({ stats }: StatsAcceptorProps) {
         style={{
           transform: 'translate(-50%, -50%)',
           borderRadius: '50%',
-          background: Var('red-7'),
           filter: 'blur(0.5rem)',
         }}
       />
@@ -110,7 +129,7 @@ export function ReloadVisualizer({ stats }: StatsAcceptorProps) {
         style={{
           transform: 'translate(-50%, -50%)',
           borderRadius: '50%',
-          background: Var('red-7'),
+          background: Var('orange-7'),
         }}
       >
         <Box
