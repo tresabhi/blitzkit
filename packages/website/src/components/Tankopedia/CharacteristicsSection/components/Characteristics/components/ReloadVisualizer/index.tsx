@@ -18,36 +18,48 @@ export function ReloadVisualizer({ stats }: StatsAcceptorProps) {
   const reloadCircle = useRef<HTMLDivElement>(null);
   const reloadCore = useRef<HTMLDivElement>(null);
   const reloadGlow = useRef<HTMLDivElement>(null);
-  const t = useRef(0);
+
+  /**
+   * 3-shell gun example:
+   *
+   * 0-1: clip reload
+   * ~~~: shell shot
+   * 1-2: intra-clip
+   * ~~~: shell shot
+   * 2-3: intra-clip
+   * ~~~: shell shot & reset to 0
+   *
+   * intra-clip time = intraClip * (n - 1)
+   */
+  const state = useRef(0);
 
   useEffect(() => {
     let cancel = false;
     let lastT = Date.now() / 1000;
-    const period =
-      stats.shellReload! +
-      (stats.intraClip ? stats.intraClip * (stats.shells - 1) : 0);
+    const shellArray = new Array(stats.shells);
 
     function frame() {
       const now = Date.now() / 1000;
       const dt = now - lastT;
-      t.current = (t.current + dt) % period;
+      let reload;
+      let shells;
 
-      // clipReloadProgress.current =
-      //   (clipReloadProgress.current + dt / stats.shellReload!) % 1;
-
-      const reload =
-        t.current < stats.shellReload!
-          ? t.current / stats.shellReload!
-          : ((t.current - stats.shellReload!) % stats.intraClip!) /
-            stats.intraClip!;
-      const shells =
-        t.current < stats.shellReload!
-          ? Array(stats.shells).fill(reload)
-          : times(stats.shells, (index) =>
-              index < (t.current - stats.shellReload!) / stats.intraClip!
-                ? 0
-                : 1,
-            );
+      if (state.current < 1) {
+        state.current = Math.min(1, state.current + dt / stats.shellReload!);
+        reload = state.current;
+        shells = shellArray.fill(reload);
+      } else if (state.current < stats.shells) {
+        state.current = Math.min(
+          stats.shells,
+          state.current + dt / stats.intraClip!,
+        );
+        shells = times(stats.shells, (index) => index > state.current - 1);
+        reload = state.current % 1;
+      } else {
+        state.current = 0;
+        reload = 0;
+        shells = shellArray.fill(0);
+      }
 
       reloadUpdate.dispatch({ reload, shells });
 
