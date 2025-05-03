@@ -36,7 +36,7 @@
       "local": "dev",
       "dev": "бета",
       "opentest": "открытый тест",
-      "preview": "предварительный просмотр"
+      "preview": "превью"
     },
     "locales": {
       "en": "Английский",
@@ -665,6 +665,7 @@
         "copied": "Скопировано!"
       },
       "tank_search": {
+        "clear_filters": "Сбросить фильтры",
         "search_bar_hint": "Поиск танков...",
         "recent": "Недавние",
         "select_all": "Выбрать всё",
@@ -731,6 +732,11 @@
       }
     },
     "home": {
+      "discord": {
+        "join_short": "Присоединяйтесь к крутым ребятам!",
+        "join_long": "Присоединяйся к супер-дупер крутым ребятам!",
+        "action": "Discord"
+      },
       "hero": {
         "credit": "От %s1 ❤️"
       },
@@ -743,6 +749,12 @@
       },
       "help_translate": "Пожалуйста, помогите перевести %s1 на %s2!",
       "seo_description": "Инструменты для World of Tanks Blitz"
+    },
+    "docs": {
+      "patches": {
+        "name": "Списки изменений BlitzKit",
+        "seo_description": "Список изменений для бота Discord и сайта BlitzKit"
+      }
     },
     "tools": {
       "tankopedia": {
@@ -888,7 +900,7 @@
         "characteristics": {
           "title": "Характеристики",
           "compare": {
-            "label": "Сравнивать с",
+            "label": "Сравнение",
             "class": "%s2 %s1 уровня",
             "tier": "Все %s1 уровня",
             "all": "Все танки"
@@ -1131,7 +1143,7 @@
         "description": "Встраиваемые элементы для стримов",
         "seo_description": "Создать вставки для стримов по World of Tanks Blitz с невероятной кастомизации",
         "coming_soon": "Скоро появятся новые встраиваемые элементы.",
-        "suggest": "Предложить идеи.",
+        "suggest": "Предложить идеи",
         "preview": {
           "title": "Предпросмотр",
           "upload": "Загрузить фон для теста"
