@@ -17,6 +17,7 @@ import {
   discordTool,
   embedTool,
   galleryTool,
+  guessTool,
   moreTool,
   performanceTool,
   sessionTool,
@@ -118,21 +119,22 @@ export const getStaticPaths = (() => {
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         <!-- <ToolCard tool={chartsTool} /> -->
+        <ToolCard tool={guessTool} />
         <ToolCard tool={galleryTool} />
+      </Flex>
+
+      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         <ToolCard tool={sessionTool} />
-      </Flex>
-
-      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         <ToolCard tool={discordTool} />
+      </Flex>
+
+      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         <ToolCard tool={tierListTool} />
-      </Flex>
-
-      <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
         <ToolCard tool={embedTool} />
-        <ToolCard tool={moreTool} />
       </Flex>
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+        <ToolCard tool={moreTool} />
         <Box flexGrow="1" />
       </Flex>
 

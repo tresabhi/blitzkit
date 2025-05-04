@@ -1,0 +1,13 @@
+---
+import { PageWrapper } from '../../../../components/PageWrapper';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { Page } from './_index';
+
+export { getStaticPaths } from '../../index.astro';
+---
+
+<BaseLayout noFooter>
+  <PageWrapper p="0" maxWidth="unset">
+    <Page client:load />
+  </PageWrapper>
+</BaseLayout>

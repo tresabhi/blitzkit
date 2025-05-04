@@ -853,6 +853,13 @@
     },
 
     "tools": {
+      "guess": {
+        "name": "Guess the tank",
+        "button": "Guess away",
+        "description": "Silhouette mini-game",
+        "seo_description": "Play a tank guessing game with a silhouette in World of Tanks Blitz"
+      },
+
       "tankopedia": {
         "name": "Tankopedia",
         "button": "Find tanks",

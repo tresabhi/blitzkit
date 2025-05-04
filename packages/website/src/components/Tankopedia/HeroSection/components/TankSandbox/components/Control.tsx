@@ -33,9 +33,17 @@ const ARCADE_MODE_FOV = 54;
 
 interface ControlsProps {
   naked?: boolean;
+  autoRotate?: boolean;
+  zoomable?: boolean;
+  enableRotate?: boolean;
 }
 
-export function Controls({ naked }: ControlsProps) {
+export function Controls({
+  naked,
+  autoRotate = true,
+  zoomable = true,
+  enableRotate = true,
+}: ControlsProps) {
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const display = TankopediaEphemeral.use((state) => state.display);
   const duelStore = Duel.useStore();
@@ -342,12 +350,14 @@ export function Controls({ naked }: ControlsProps) {
 
   return (
     <OrbitControls
+      enableRotate={enableRotate}
       maxDistance={20}
       minDistance={5}
+      zoomSpeed={zoomable ? undefined : 0}
       ref={orbitControls}
       enabled={tankopediaEphemeralStore.getState().controlsEnabled}
       enableDamping={false}
-      autoRotate={!disturbed}
+      autoRotate={autoRotate && !disturbed}
       autoRotateSpeed={1 / 4}
     />
   );
