@@ -1,4 +1,5 @@
-import { Box, Card } from '@radix-ui/themes';
+import { type Datum, type Serie } from '@nivo/line';
+import { Box, Card, Code } from '@radix-ui/themes';
 import { times } from 'lodash-es';
 import { Quicklime, type QuicklimeCallback } from 'quicklime';
 import { useEffect, useRef } from 'react';
@@ -14,10 +15,13 @@ export interface ReloadUpdateData {
 
 export const reloadUpdate = new Quicklime<ReloadUpdateData>();
 
+const T = 60;
+
 export function ReloadVisualizer({ stats }: StatsAcceptorProps) {
   const reloadCircle = useRef<HTMLDivElement>(null);
   const reloadCore = useRef<HTMLDivElement>(null);
   const reloadGlow = useRef<HTMLDivElement>(null);
+  const dpmDisplay = useRef<HTMLSpanElement>(null);
 
   /**
    * 3-shell gun example:
@@ -32,22 +36,42 @@ export function ReloadVisualizer({ stats }: StatsAcceptorProps) {
    * intra-clip time = intraClip * (n - 1)
    */
   const state = useRef(0);
+  const dpm = useRef(0);
+  const shotPool = useRef(new Set<number>());
+  const data = useRef<Serie[]>([{ id: 'value', data: [] }]);
 
   useEffect(() => {
     let cancel = false;
     let lastT = Date.now() / 1000;
+    let lastState = state.current;
     const shellArray = new Array(stats.shells);
 
+    function shoot() {
+      shotPool.current.add(Date.now() / 1000);
+      dpm.current += stats.damage;
+    }
+
     function frame() {
+      if (!dpmDisplay.current) return;
+
       const now = Date.now() / 1000;
       const dt = now - lastT;
       let reload;
       let shells;
 
+      shotPool.current.forEach((t) => {
+        if (now - t > 60) shotPool.current.delete(t);
+      });
+
+      dpm.current = shotPool.current.size * stats.damage;
+      dpmDisplay.current.innerText = `${Math.round(dpm.current)}`;
+
       if (state.current < 1) {
         state.current = Math.min(1, state.current + dt / stats.shellReload!);
         reload = state.current;
         shells = shellArray.fill(reload);
+
+        if (state.current >= 1) shoot();
       } else if (state.current < stats.shells) {
         state.current = Math.min(
           stats.shells,
@@ -55,6 +79,8 @@ export function ReloadVisualizer({ stats }: StatsAcceptorProps) {
         );
         shells = times(stats.shells, (index) => index > state.current - 1);
         reload = state.current % 1;
+
+        if (lastState % 1 > state.current % 1) shoot();
       } else {
         state.current = 0;
         reload = 0;
@@ -66,6 +92,16 @@ export function ReloadVisualizer({ stats }: StatsAcceptorProps) {
       if (!cancel) requestAnimationFrame(frame);
 
       lastT = now;
+      lastState = state.current;
+
+      (data.current[0].data as Datum[]).push({
+        x: now,
+        y: dpm.current / (stats.dpm + stats.damage),
+      });
+      (data.current[0].data as Datum[]).splice(
+        0,
+        data.current[0].data.findIndex((d) => now - (d.x as number) < T),
+      );
     }
 
     frame();
@@ -187,6 +223,10 @@ export function ReloadVisualizer({ stats }: StatsAcceptorProps) {
         times(stats.shells, (index) => (
           <Shell stats={stats} index={index} key={index} />
         ))}
+
+      <Box position="absolute" right="3" bottom="3">
+        <Code ref={dpmDisplay}>0 dpm</Code>
+      </Box>
     </Card>
   );
 }
