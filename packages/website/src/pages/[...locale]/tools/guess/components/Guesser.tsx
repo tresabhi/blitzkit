@@ -3,6 +3,7 @@ import {
   TankDefinition,
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
+import { literals } from '@blitzkit/i18n';
 import {
   ArrowRightIcon,
   MagnifyingGlassIcon,
@@ -40,6 +41,8 @@ const ids = Object.keys(tankDefinitions.tanks);
 export function Guesser() {
   const tank = GuessEphemeral.use((state) => state.tank);
   const guessState = GuessEphemeral.use((state) => state.guessState);
+  const correctGuesses = GuessEphemeral.use((state) => state.correctGuesses);
+  const totalGuesses = GuessEphemeral.use((state) => state.totalGuesses);
   const { strings, unwrap } = useLocale();
   const input = useRef<HTMLInputElement>(null);
   const [searching, setSearching] = useState(false);
@@ -132,6 +135,15 @@ export function Guesser() {
         </Card>
       )}
 
+      <Flex justify="center">
+        <Text>
+          {literals(strings.website.tools.guess.stats, [
+            `${correctGuesses}`,
+            `${totalGuesses}`,
+          ])}
+        </Text>
+      </Flex>
+
       <Flex gap="3">
         <TextField.Root
           disabled={guessState !== null}
@@ -158,8 +170,8 @@ export function Guesser() {
               revealEvent.dispatch(true);
               mutateGuessEphemeral((draft) => {
                 draft.guessState = correct;
-                draft.totalSeen++;
-                draft.correct += correct ? 1 : 0;
+                draft.totalGuesses++;
+                draft.correctGuesses += correct ? 1 : 0;
               });
             } else {
               const id = Number(ids[Math.floor(Math.random() * ids.length)]);

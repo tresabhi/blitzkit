@@ -863,7 +863,8 @@
           "guess": "Guess",
           "next": "Next",
           "no_results": "No results"
-        }
+        },
+        "stats": "%s1 / %s2 guessed correctly"
       },
 
       "tankopedia": {
