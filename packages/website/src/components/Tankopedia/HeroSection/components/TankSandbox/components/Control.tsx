@@ -1,3 +1,4 @@
+import { I_HAT, J_HAT } from '@blitzkit/core';
 import { OrbitControls } from '@react-three/drei';
 import { invalidate, useThree } from '@react-three/fiber';
 import { clamp } from 'lodash-es';
@@ -92,6 +93,7 @@ export function Controls({
     antagonistModelDefinition.turret_origin.y +
     antagonistTurretModelDefinition.gun_origin.y;
   const disturbed = TankopediaEphemeral.use((state) => state.disturbed);
+  const doAutoRotate = autoRotate && !disturbed;
   const gunHeight =
     protagonistHullOrigin.y +
     protagonistTurretOrigin.y +
@@ -110,6 +112,34 @@ export function Controls({
     .clone()
     .add(protagonistTurretOrigin)
     .add(protagonistGunOriginOnlyY);
+
+  useEffect(() => {
+    if (!orbitControls.current || !doAutoRotate) return;
+
+    const t0 = Date.now() / 1000;
+    let cancel = false;
+    const position = inspectModeInitialPosition.clone();
+
+    function frame() {
+      if (!cancel) requestAnimationFrame(frame);
+
+      const now = Date.now() / 1000;
+      const t = now - t0;
+
+      camera.position
+        .copy(inspectModeInitialPosition)
+        .applyAxisAngle(I_HAT, (Math.PI / 16) * Math.sin(t / 9))
+        .applyAxisAngle(J_HAT, (-Math.PI / 4) * Math.sin(t / 7));
+
+      invalidate();
+    }
+
+    frame();
+
+    return () => {
+      cancel = true;
+    };
+  }, [doAutoRotate, camera]);
 
   useEffect(() => {
     const unsubscribeTankopediaEphemeral = tankopediaEphemeralStore.subscribe(
@@ -359,7 +389,6 @@ export function Controls({
       ref={orbitControls}
       enabled={tankopediaEphemeralStore.getState().controlsEnabled}
       enableDamping={false}
-      autoRotate={autoRotate && !disturbed}
       autoRotateSpeed={1 / 4}
     />
   );
