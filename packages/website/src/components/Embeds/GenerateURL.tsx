@@ -6,7 +6,6 @@ import {
 import { literals } from '@blitzkit/i18n/src/literals';
 import { CaretLeftIcon, Link2Icon, PersonIcon } from '@radix-ui/react-icons';
 import {
-  Badge,
   Button,
   Dialog,
   Flex,
@@ -22,6 +21,7 @@ import type { embedConfigurations } from '../../constants/embeds';
 import { useLocale } from '../../hooks/useLocale';
 import { EmbedState, type EmbedStateStore } from '../../stores/embedState';
 import { CopyButton } from '../CopyButton';
+import { SearchResults } from '../SearchResults';
 
 interface GenerateURLProps {
   embed: keyof typeof embedConfigurations;
@@ -118,25 +118,19 @@ export function GenerateURL({ embed }: GenerateURLProps) {
             )}
 
             {!searching && results.length > 0 && (
-              <Flex direction="column" gap="2" width="100%">
+              <SearchResults.Root>
                 {results.map((result) => (
-                  <Button
-                    variant="ghost"
+                  <SearchResults.Item
+                    text={result.nickname}
+                    discriminator={strings.common.regions.short[result.region]}
                     onClick={() => {
                       setCopyUser(result);
                       setCopyDialogOpen(true);
                       setSearchDialogOpen(false);
                     }}
-                  >
-                    <Flex justify="between" width="100%" gap="2">
-                      {result.nickname}
-                      <Badge>
-                        {strings.common.regions.short[result.region]}
-                      </Badge>
-                    </Flex>
-                  </Button>
+                  />
                 ))}
-              </Flex>
+              </SearchResults.Root>
             )}
           </Flex>
 

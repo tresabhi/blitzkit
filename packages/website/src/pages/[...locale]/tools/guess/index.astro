@@ -4,10 +4,12 @@ import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import { Page } from './_index';
 
 export { getStaticPaths } from '../../index.astro';
+
+const { locale } = Astro.params;
 ---
 
 <BaseLayout noFooter>
-  <PageWrapper p="0" maxWidth="unset">
-    <Page client:load />
+  <PageWrapper p="0" maxWidth="unset" color="cyan">
+    <Page {locale} client:load />
   </PageWrapper>
 </BaseLayout>

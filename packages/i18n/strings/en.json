@@ -857,7 +857,12 @@
         "name": "Guess the tank",
         "button": "Guess away",
         "description": "Silhouette mini-game",
-        "seo_description": "Play a tank guessing game with a silhouette in World of Tanks Blitz"
+        "seo_description": "Play a tank guessing game with a silhouette in World of Tanks Blitz",
+        "search": {
+          "placeholder": "Type to guess...",
+          "button": "Guess",
+          "no_results": "No results"
+        }
       },
 
       "tankopedia": {

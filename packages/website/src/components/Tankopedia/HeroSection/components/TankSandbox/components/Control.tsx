@@ -36,6 +36,7 @@ interface ControlsProps {
   autoRotate?: boolean;
   zoomable?: boolean;
   enableRotate?: boolean;
+  distanceScale?: number;
 }
 
 export function Controls({
@@ -43,6 +44,7 @@ export function Controls({
   autoRotate = true,
   zoomable = true,
   enableRotate = true,
+  distanceScale = 1,
 }: ControlsProps) {
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const display = TankopediaEphemeral.use((state) => state.display);
@@ -94,11 +96,11 @@ export function Controls({
     protagonistHullOrigin.y +
     protagonistTurretOrigin.y +
     protagonistGunOrigin.y;
-  const inspectModeInitialPosition = [
+  const inspectModeInitialPosition = new Vector3(
     -8,
     gunHeight + (naked ? 10 : 2),
     -13,
-  ] as const;
+  ).multiplyScalar(distanceScale);
   const protagonistGunOriginOnlyY = new Vector3(
     0,
     protagonistTurretModelDefinition.gun_origin.y,
@@ -203,7 +205,7 @@ export function Controls({
         }
 
         case Pose.Default: {
-          camera.position.set(...inspectModeInitialPosition);
+          camera.position.copy(inspectModeInitialPosition);
           orbitControls.current?.target.set(0, 1.25, 0);
           break;
         }
@@ -312,7 +314,7 @@ export function Controls({
             .add(shellOrigin);
         }
       } else {
-        camera.position.set(...inspectModeInitialPosition);
+        camera.position.copy(inspectModeInitialPosition);
         orbitControls.current.target.set(0, gunHeight / (naked ? 4 : 2), 0);
         orbitControls.current.enablePan = true;
         orbitControls.current.enableZoom = true;

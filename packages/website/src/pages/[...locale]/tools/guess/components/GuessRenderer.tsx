@@ -1,4 +1,5 @@
 import { Canvas, invalidate } from '@react-three/fiber';
+import { type QuicklimeCallback, Quicklime } from 'quicklime';
 import { useCallback, useEffect, useRef } from 'react';
 import { Fog } from 'three';
 import { Controls } from '../../../../../components/Tankopedia/HeroSection/components/TankSandbox/components/Control';
@@ -7,15 +8,17 @@ import { TankModel } from '../../../../../components/Tankopedia/HeroSection/comp
 import { Var } from '../../../../../core/radix/var';
 import { TankopediaDisplay } from '../../../../../stores/tankopediaPersistent/constants';
 
-const nearConcealed = -40;
+const nearConcealed = -45;
 const farConcealed = 22;
-const nearRevealed = 20;
-const farRevealed = 22;
+const nearRevealed = 25;
+const farRevealed = 25;
 const animationDuration = 1;
+
+export const revealEvent = new Quicklime<boolean>();
 
 export function GuessRenderer() {
   const fog = useRef(new Fog('black', nearConcealed, farConcealed));
-  const reveal = useCallback(() => {
+  const reveal = useCallback((show: boolean) => {
     const t0 = Date.now() / 1000;
 
     function frame() {
@@ -30,14 +33,27 @@ export function GuessRenderer() {
 
       invalidate();
 
-      if (y < 1) requestAnimationFrame(frame);
+      if (y < 1) {
+        requestAnimationFrame(frame);
+      } else {
+        fog.current.near = nearRevealed;
+        fog.current.far = farRevealed;
+      }
     }
 
     requestAnimationFrame(frame);
   }, []);
 
   useEffect(() => {
-    setTimeout(reveal, 2000);
+    const handleRevealEvent: QuicklimeCallback<boolean> = ({ data }) => {
+      reveal(data);
+    };
+
+    revealEvent.on(handleRevealEvent);
+
+    return () => {
+      revealEvent.off(handleRevealEvent);
+    };
   }, []);
 
   return (
@@ -48,7 +64,7 @@ export function GuessRenderer() {
       camera={{ position: [-5, 5, -5] }}
       scene={{ fog: fog.current }}
     >
-      <Controls zoomable={false} />
+      <Controls distanceScale={2} zoomable={false} />
       <Lighting display={TankopediaDisplay.Model} />
       <TankModel />
     </Canvas>
