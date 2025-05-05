@@ -19,6 +19,13 @@ export const revealEvent = new Quicklime<boolean>();
 export function GuessRenderer() {
   const fog = useRef(new Fog('black', nearConcealed, farConcealed));
   const reveal = useCallback((show: boolean) => {
+    if (!show) {
+      fog.current.near = nearConcealed;
+      fog.current.far = farConcealed;
+      invalidate();
+      return;
+    }
+
     const t0 = Date.now() / 1000;
 
     function frame() {

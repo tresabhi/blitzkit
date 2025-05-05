@@ -860,7 +860,8 @@
         "seo_description": "Play a tank guessing game with a silhouette in World of Tanks Blitz",
         "search": {
           "placeholder": "Type to guess...",
-          "button": "Guess",
+          "guess": "Guess",
+          "next": "Next",
           "no_results": "No results"
         }
       },

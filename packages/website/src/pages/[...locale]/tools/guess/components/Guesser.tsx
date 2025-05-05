@@ -3,7 +3,11 @@ import {
   TankDefinition,
   TIER_ROMAN_NUMERALS,
 } from '@blitzkit/core';
-import { MagnifyingGlassIcon, PaperPlaneIcon } from '@radix-ui/react-icons';
+import {
+  ArrowRightIcon,
+  MagnifyingGlassIcon,
+  PaperPlaneIcon,
+} from '@radix-ui/react-icons';
 import {
   Box,
   Button,
@@ -21,6 +25,7 @@ import { SearchResults } from '../../../../../components/SearchResults';
 import { awaitableTankDefinitions } from '../../../../../core/awaitables/tankDefinitions';
 import { awaitableTankNames } from '../../../../../core/awaitables/tankNames';
 import { useLocale } from '../../../../../hooks/useLocale';
+import { GuessEphemeral } from '../../../../../stores/guessEphemeral';
 import { revealEvent } from './GuessRenderer';
 
 const { go } = fuzzysort;
@@ -30,12 +35,17 @@ const [tankNames, tankDefinitions] = await Promise.all([
   awaitableTankDefinitions,
 ]);
 
+const ids = Object.keys(tankDefinitions.tanks);
+
 export function Guesser() {
+  const tank = GuessEphemeral.use((state) => state.tank);
+  const guessState = GuessEphemeral.use((state) => state.guessState);
   const { strings, unwrap } = useLocale();
   const input = useRef<HTMLInputElement>(null);
   const [searching, setSearching] = useState(false);
   const [results, setResults] = useState<TankDefinition[] | null>(null);
   const [selected, setSelected] = useState<TankDefinition | null>(null);
+  const mutateGuessEphemeral = GuessEphemeral.useMutation();
 
   const requestSearch = useCallback(() => {
     setSelected(null);
@@ -124,6 +134,7 @@ export function Guesser() {
 
       <Flex gap="3">
         <TextField.Root
+          disabled={guessState !== null}
           ref={input}
           onChange={requestSearch}
           style={{ flex: 1 }}
@@ -138,12 +149,44 @@ export function Guesser() {
 
         <Button
           size="3"
-          disabled={selected === null}
+          disabled={guessState === null && selected === null}
           onClick={() => {
-            revealEvent.dispatch(true);
+            if (guessState === null) {
+              console.log('what');
+              const correct = selected!.id === tank.id;
+
+              revealEvent.dispatch(true);
+              mutateGuessEphemeral((draft) => {
+                draft.guessState = correct;
+                draft.totalSeen++;
+                draft.correct += correct ? 1 : 0;
+              });
+            } else {
+              const id = Number(ids[Math.floor(Math.random() * ids.length)]);
+              const tank = tankDefinitions.tanks[id];
+
+              revealEvent.dispatch(false);
+              mutateGuessEphemeral((draft) => {
+                if (!input.current) return;
+
+                draft.tank = tank;
+                draft.guessState = null;
+                input.current.value = '';
+              });
+            }
           }}
         >
-          {strings.website.tools.guess.search.button} <PaperPlaneIcon />
+          {guessState === null ? (
+            <>
+              {strings.website.tools.guess.search.guess}
+              <PaperPlaneIcon />
+            </>
+          ) : (
+            <>
+              {strings.website.tools.guess.search.next}
+              <ArrowRightIcon />
+            </>
+          )}
         </Button>
       </Flex>
     </Flex>
