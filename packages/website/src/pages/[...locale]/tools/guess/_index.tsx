@@ -1,10 +1,12 @@
-import { Box, Flex } from '@radix-ui/themes';
+import { Box, Flex, Heading } from '@radix-ui/themes';
 import { Suspense } from 'react';
 import { awaitableModelDefinitions } from '../../../../core/awaitables/modelDefinitions';
 import { awaitableProvisionDefinitions } from '../../../../core/awaitables/provisionDefinitions';
 import { awaitableTankDefinitions } from '../../../../core/awaitables/tankDefinitions';
+import { Var } from '../../../../core/radix/var';
 import {
   LocaleProvider,
+  useLocale,
   type LocaleAcceptorProps,
 } from '../../../../hooks/useLocale';
 import { Duel } from '../../../../stores/duel';
@@ -51,15 +53,69 @@ function Page2() {
 }
 
 function Content() {
+  const { unwrap } = useLocale();
+  const tank = GuessEphemeral.use((state) => state.tank);
+  const guessState = GuessEphemeral.use((state) => state.guessState);
+  const isRevealed = guessState !== null;
+
   return (
     <Flex flexGrow="1" position="relative" overflow="hidden">
       <Background />
 
-      <Box position="absolute" width="100%" height="100%" top="0" left="0">
+      <Flex
+        position="absolute"
+        left="50%"
+        top="50%"
+        ml="9"
+        style={{
+          opacity: isRevealed ? 1 : 0,
+          transitionDuration: isRevealed ? '2s' : undefined,
+          transform: 'translateY(-50%)',
+        }}
+      >
+        <Heading weight="medium" size="9">
+          {unwrap(tank.name)}
+        </Heading>
+      </Flex>
+
+      <Box
+        position="absolute"
+        width="100%"
+        height="100%"
+        top="0"
+        right={isRevealed ? '16rem' : '0'}
+        style={{
+          transitionDuration: isRevealed ? '2s' : undefined,
+        }}
+      >
         <Suspense fallback={<GuessRendererLoader />}>
           <GuessRenderer />
         </Suspense>
       </Box>
+
+      <Flex
+        position="absolute"
+        left="50%"
+        top="50%"
+        ml="9"
+        style={{
+          opacity: isRevealed ? 1 : 0,
+          transitionDuration: isRevealed ? '2s' : undefined,
+          transform: 'translateY(-50%)',
+          color: 'transparent',
+          WebkitTextStroke: `1px ${Var('gray-12')}`,
+        }}
+      >
+        <Heading
+          style={{
+            WebkitTextStroke: `1px inherit`,
+          }}
+          weight="medium"
+          size="9"
+        >
+          {unwrap(tank.name)}
+        </Heading>
+      </Flex>
 
       <Guesser />
     </Flex>
