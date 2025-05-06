@@ -10,9 +10,10 @@ import { DEFAULT_LOCALE } from '@blitzkit/i18n';
 
 export interface Props {
   noFooter?: boolean;
+  noNavbar?: boolean;
 }
 
-const { noFooter } = Astro.props;
+const { noFooter, noNavbar } = Astro.props;
 const locale = Astro.params.locale ?? DEFAULT_LOCALE;
 ---
 
@@ -53,7 +54,7 @@ const locale = Astro.params.locale ?? DEFAULT_LOCALE;
     </script>
   </head>
 
-  <body>
+  <body class={noNavbar ? 'no-navbar' : ''}>
     <BlitzKitTheme>
       <Flex direction="column" minHeight="100vh">
         <Navbar />

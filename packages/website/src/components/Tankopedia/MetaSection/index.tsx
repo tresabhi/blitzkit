@@ -25,7 +25,7 @@ export function MetaSection() {
   const { locale, strings } = useLocale();
 
   return (
-    <Flex justify="center">
+    <Flex justify="center" mt="-9">
       <Box
         style={{
           background: `url(/assets/images/national-wallpapers/${protagonist.nation}.jpg)`,
@@ -50,7 +50,7 @@ export function MetaSection() {
             align="center"
             py="6rem"
             style={{
-              background: `linear-gradient(${Var('gray-1')}, ${Var('black-a8')}, ${Var('black-a8')}, ${Var('gray-1')})`,
+              background: `linear-gradient(${Var('black-a8')}, ${Var('black-a8')}, ${Var('gray-1')})`,
             }}
           >
             <Flex direction="column" align="center" gap="6">

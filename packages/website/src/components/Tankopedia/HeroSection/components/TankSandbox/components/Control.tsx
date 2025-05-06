@@ -385,6 +385,7 @@ export function Controls({
       enableRotate={enableRotate}
       maxDistance={20}
       minDistance={5}
+      enableZoom={zoomable}
       zoomSpeed={zoomable ? undefined : 0}
       ref={orbitControls}
       enabled={tankopediaEphemeralStore.getState().controlsEnabled}

@@ -66,12 +66,13 @@ export function QuickInputs() {
     <Flex
       align="center"
       gap="2"
-      width="10rem"
+      width="5rem"
+      direction="column"
       style={{
         pointerEvents: 'auto',
         position: 'absolute',
-        left: '50%',
-        transform: 'translateX(-50%)',
+        top: '50%',
+        transform: 'translateY(-50%)',
         transitionDuration: '0.2s',
       }}
       className="quick-inputs"

@@ -2,10 +2,10 @@ import { TankType } from '@blitzkit/core';
 import { Box, Flex } from '@radix-ui/themes';
 import { times } from 'lodash-es';
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
-import { NAVBAR_HEIGHT } from '../../../constants/navbar';
 import { awaitableModelDefinitions } from '../../../core/awaitables/modelDefinitions';
 import { awaitableProvisionDefinitions } from '../../../core/awaitables/provisionDefinitions';
 import { awaitableTankDefinitions } from '../../../core/awaitables/tankDefinitions';
+import { Var, type VarName } from '../../../core/radix/var';
 import { useFullScreen } from '../../../hooks/useFullScreen';
 import { useLocale } from '../../../hooks/useLocale';
 import { Duel } from '../../../stores/duel';
@@ -14,8 +14,9 @@ import type { MaybeSkeletonComponentProps } from '../../../types/maybeSkeletonCo
 import type { ThicknessRange } from '../../Armor/components/StaticArmor';
 import { classIcons } from '../../ClassIcon';
 import { Options } from './components/Options';
+import { ScrollHint } from './components/ScrollHint';
 import { TankSandbox } from './components/TankSandbox';
-import { Title } from './components/TankSandbox/Title';
+import { NATION_COLORS, Title } from './components/TankSandbox/Title';
 
 const [provisionDefinitions, modelDefinitions, tankDefinitions] =
   await Promise.all([
@@ -65,6 +66,13 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
   const duelStore = Duel.useStore();
   const mutateDuel = Duel.useMutation();
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
+  const nationColors = NATION_COLORS[protagonist.nation];
+
+  useEffect(() => {
+    if (disturbed) {
+      document.body.classList.remove('no-navbar');
+    }
+  }, [disturbed]);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -88,16 +96,46 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
   }, []);
 
   return (
-    <Flex justify="center">
+    <Flex
+      justify="center"
+      style={{
+        backgroundColor: 'black',
+      }}
+      position="relative"
+      onWheel={() => {
+        mutateTankopediaEphemeral((draft) => {
+          draft.disturbed = true;
+        });
+      }}
+    >
+      <Box
+        position="absolute"
+        width="100%"
+        height="100%"
+        top="0"
+        left="0"
+        style={{
+          opacity: disturbed ? 0 : 1,
+          background: `linear-gradient(${nationColors.background
+            .map((color, index) =>
+              Var(
+                `${color}-${Math.round(3 * (1 - index / nationColors.background.length))}` as VarName,
+              ),
+            )
+            .join(',')})`,
+          transitionDuration: '1s',
+        }}
+      />
+
+      <ScrollHint />
+
       <Flex
         direction={{ initial: 'column-reverse', md: 'row' }}
         style={{
           zIndex: isFullScreen ? 2 : undefined,
-          backgroundColor: 'black',
+          transitionDuration: '1s',
         }}
-        height={
-          isFullScreen ? '100vh' : `calc(100vh - ${NAVBAR_HEIGHT}px - 8rem)`
-        }
+        height="calc(100vh - 6rem)"
         maxHeight={isFullScreen ? undefined : '60rem'}
         maxWidth={isFullScreen ? undefined : '120rem'}
         flexGrow="1"

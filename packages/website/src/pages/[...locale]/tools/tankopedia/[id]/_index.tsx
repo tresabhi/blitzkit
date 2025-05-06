@@ -46,8 +46,8 @@ export function Page({ id, skeleton, locale }: PageProps) {
             >
               <PageWrapper p="0" maxWidth="unset" color="purple" gap="9" pb="9">
                 <HeroSection skeleton={skeleton} />
-                <CalloutsSection />
                 <MetaSection />
+                <CalloutsSection />
                 {tank.type === TankType.RESEARCHABLE && !tank.deprecated && (
                   <TechTreeSection skeleton={skeleton} />
                 )}
