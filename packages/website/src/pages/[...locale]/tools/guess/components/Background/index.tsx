@@ -48,7 +48,15 @@ export function Background() {
                 : 'tomato-3',
           ),
         }}
-      />
+      >
+        <Box
+          width="100%"
+          height="100%"
+          style={{
+            background: `radial-gradient(circle, ${Var('color-panel-translucent')}, ${Var('color-panel-solid')})`,
+          }}
+        />
+      </Box>
 
       <Box
         className="guess-background"

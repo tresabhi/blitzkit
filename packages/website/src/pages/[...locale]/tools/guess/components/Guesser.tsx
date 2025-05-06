@@ -20,7 +20,7 @@ import {
 } from '@radix-ui/themes';
 import fuzzysort from 'fuzzysort';
 import { debounce } from 'lodash-es';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { classIcons } from '../../../../../components/ClassIcon';
 import { SearchResults } from '../../../../../components/SearchResults';
 import { awaitableTankDefinitions } from '../../../../../core/awaitables/tankDefinitions';
@@ -77,6 +77,10 @@ export function Guesser() {
     }, 500),
     [],
   );
+
+  useEffect(() => {
+    if (guessState !== null) setSelected(null);
+  }, [guessState]);
 
   return (
     <Flex
@@ -160,11 +164,10 @@ export function Guesser() {
 
         <Button
           size="3"
-          disabled={guessState === null && selected === null}
+          color={guessState === null && selected === null ? 'red' : undefined}
           onClick={() => {
             if (guessState === null) {
-              console.log('what');
-              const correct = selected!.id === tank.id;
+              const correct = selected !== null && selected.id === tank.id;
 
               mutateGuessEphemeral((draft) => {
                 draft.guessState = correct;
@@ -187,8 +190,12 @@ export function Guesser() {
         >
           {guessState === null ? (
             <>
-              {strings.website.tools.guess.search.guess}
-              <PaperPlaneIcon />
+              {
+                strings.website.tools.guess.search[
+                  selected === null ? 'skip' : 'guess'
+                ]
+              }
+              {selected === null ? <ArrowRightIcon /> : <PaperPlaneIcon />}
             </>
           ) : (
             <>
