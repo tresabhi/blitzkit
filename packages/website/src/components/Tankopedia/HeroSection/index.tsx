@@ -5,7 +5,7 @@ import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { awaitableModelDefinitions } from '../../../core/awaitables/modelDefinitions';
 import { awaitableProvisionDefinitions } from '../../../core/awaitables/provisionDefinitions';
 import { awaitableTankDefinitions } from '../../../core/awaitables/tankDefinitions';
-import { Var, type VarName } from '../../../core/radix/var';
+import { Var } from '../../../core/radix/var';
 import { useFullScreen } from '../../../hooks/useFullScreen';
 import { useLocale } from '../../../hooks/useLocale';
 import { Duel } from '../../../stores/duel';
@@ -97,6 +97,7 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
 
   return (
     <Flex
+      overflow="hidden"
       justify="center"
       style={{
         backgroundColor: 'black',
@@ -117,11 +118,7 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
         style={{
           opacity: disturbed ? 0 : 1,
           background: `linear-gradient(${nationColors.background
-            .map((color, index) =>
-              Var(
-                `${color}-${Math.round(3 * (1 - index / nationColors.background.length))}` as VarName,
-              ),
-            )
+            .map((color) => Var(`${color}-2`))
             .join(',')})`,
           transitionDuration: '1s',
         }}
@@ -162,27 +159,13 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
                 transitionDuration: '1s',
               }}
             >
-              {/* {!revealed && (
-                <Spinner
-                  style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: Var('space-6'),
-                    height: Var('space-6'),
-                  }}
-                />
-              )} */}
-
-              {/* {skeleton && <TankSandboxLoader id={protagonist.id} />} */}
-
               <Box
                 style={{
                   width: '100%',
                   height: '100%',
                   transitionDuration: '2s',
                   opacity: revealed ? 1 : 0,
+                  filter: disturbed ? undefined : `drop-shadow(0 0 1rem black)`,
                 }}
               >
                 <Suspense>
