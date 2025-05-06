@@ -15,7 +15,7 @@ const [modelDefinitions, provisionDefinitions] = await Promise.all([
 ]);
 
 export function Background() {
-  const state = GuessEphemeral.use((state) => state.guessState);
+  const guessState = GuessEphemeral.use((state) => state.guessState);
   const tank = GuessEphemeral.use((state) => state.tank);
   const mutateDuel = Duel.useMutation();
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
@@ -39,19 +39,16 @@ export function Background() {
         top="0"
         left="0"
         style={{
-          backgroundColor: Var(`${state ? 'jade' : 'tomato'}-3`),
+          transitionDuration: '2s',
+          backgroundColor: Var(
+            guessState === null
+              ? 'accent-2'
+              : guessState
+                ? 'jade-3'
+                : 'tomato-3',
+          ),
         }}
-      >
-        <Box
-          width="100%"
-          height="100%"
-          style={{
-            opacity: state === null ? 1 : 0,
-            transitionDuration: '200ms',
-            backgroundColor: Var('cyan-3'),
-          }}
-        />
-      </Box>
+      />
 
       <Box
         className="guess-background"

@@ -27,7 +27,6 @@ import { awaitableTankDefinitions } from '../../../../../core/awaitables/tankDef
 import { awaitableTankNames } from '../../../../../core/awaitables/tankNames';
 import { useLocale } from '../../../../../hooks/useLocale';
 import { GuessEphemeral } from '../../../../../stores/guessEphemeral';
-import { revealEvent } from './GuessRenderer';
 
 const { go } = fuzzysort;
 
@@ -167,7 +166,6 @@ export function Guesser() {
               console.log('what');
               const correct = selected!.id === tank.id;
 
-              revealEvent.dispatch(true);
               mutateGuessEphemeral((draft) => {
                 draft.guessState = correct;
                 draft.totalGuesses++;
@@ -177,7 +175,6 @@ export function Guesser() {
               const id = Number(ids[Math.floor(Math.random() * ids.length)]);
               const tank = tankDefinitions.tanks[id];
 
-              revealEvent.dispatch(false);
               mutateGuessEphemeral((draft) => {
                 if (!input.current) return;
 
