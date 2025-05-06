@@ -66,7 +66,7 @@ export function QuickInputs() {
     <Flex
       align="center"
       gap="2"
-      width="5rem"
+      width="4rem"
       direction="column"
       style={{
         pointerEvents: 'auto',

@@ -34,8 +34,8 @@ export const NATION_COLORS: Record<
     background: ['brown', 'gold', 'gray'],
   },
   european: {
-    text: 'cyan',
-    tint: 'mint',
+    text: 'sky',
+    tint: 'violet',
     background: ['cyan', 'blue', 'indigo'],
   },
   ussr: {
@@ -49,12 +49,12 @@ export const NATION_COLORS: Record<
     background: ['bronze', 'gold', 'brown'],
   },
   japan: {
-    text: 'jade',
+    text: 'mint',
     tint: 'violet',
     background: ['green', 'teal', 'jade'],
   },
   china: {
-    text: 'teal',
+    text: 'mint',
     tint: 'pink',
     background: ['green', 'teal', 'jade'],
   },
