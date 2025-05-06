@@ -1,14 +1,11 @@
-import { assertSecret, TankType } from '@blitzkit/core';
-import { CaretLeftIcon, MixIcon, UpdateIcon } from '@radix-ui/react-icons';
-import { Box, Dialog, Flex, Heading, Link, Spinner } from '@radix-ui/themes';
+import { TankType } from '@blitzkit/core';
+import { Box, Flex } from '@radix-ui/themes';
 import { times } from 'lodash-es';
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { NAVBAR_HEIGHT } from '../../../constants/navbar';
 import { awaitableModelDefinitions } from '../../../core/awaitables/modelDefinitions';
 import { awaitableProvisionDefinitions } from '../../../core/awaitables/provisionDefinitions';
 import { awaitableTankDefinitions } from '../../../core/awaitables/tankDefinitions';
-import { tankToDuelMember } from '../../../core/blitzkit/tankToDuelMember';
-import { Var } from '../../../core/radix/var';
 import { useFullScreen } from '../../../hooks/useFullScreen';
 import { useLocale } from '../../../hooks/useLocale';
 import { Duel } from '../../../stores/duel';
@@ -16,10 +13,9 @@ import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
 import type { MaybeSkeletonComponentProps } from '../../../types/maybeSkeletonComponentProps';
 import type { ThicknessRange } from '../../Armor/components/StaticArmor';
 import { classIcons } from '../../ClassIcon';
-import { ScienceIcon } from '../../ScienceIcon';
-import { TankSearch } from '../../TankSearch';
 import { Options } from './components/Options';
 import { TankSandbox } from './components/TankSandbox';
+import { Title } from './components/TankSandbox/Title';
 
 const [provisionDefinitions, modelDefinitions, tankDefinitions] =
   await Promise.all([
@@ -110,6 +106,8 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
         top={isFullScreen ? '0' : undefined}
         left={isFullScreen ? '0' : undefined}
       >
+        <Title />
+
         <Box
           className="tank-sandbox-container"
           flexGrow="1"
@@ -122,10 +120,11 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
               width="100%"
               height="100%"
               position="relative"
-              left={disturbed ? '0' : { initial: '0', md: '12.5%' }}
-              style={{ transitionDuration: '200ms' }}
+              style={{
+                transitionDuration: '1s',
+              }}
             >
-              {!revealed && (
+              {/* {!revealed && (
                 <Spinner
                   style={{
                     position: 'absolute',
@@ -136,13 +135,22 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
                     height: Var('space-6'),
                   }}
                 />
-              )}
+              )} */}
 
               {/* {skeleton && <TankSandboxLoader id={protagonist.id} />} */}
 
-              <Suspense>
-                <TankSandbox ref={canvas} thicknessRange={thicknessRange} />
-              </Suspense>
+              <Box
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  transitionDuration: '2s',
+                  opacity: revealed ? 1 : 0,
+                }}
+              >
+                <Suspense>
+                  <TankSandbox ref={canvas} thicknessRange={thicknessRange} />
+                </Suspense>
+              </Box>
             </Box>
 
             <Options
@@ -153,157 +161,7 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
           </Box>
         </Box>
 
-        <Flex
-          className="tankopedia-title-bar"
-          justify="center"
-          position={{ initial: 'static', md: 'absolute' }}
-          left={{
-            initial: '0',
-            md: disturbed ? '3' : '5',
-            lg: disturbed ? '7' : '9',
-          }}
-          pt="7"
-          pb="4"
-          top={{ initial: '8', md: '50%' }}
-          mt={{ initial: '0', md: '-9' }}
-          style={{
-            transitionDuration: '200ms',
-            userSelect: 'none',
-            // background: 'red',
-          }}
-          direction="column"
-          align="center"
-          gap="2"
-        >
-          <Flex
-            align="center"
-            gap="3"
-            width="100%"
-            justify={{ initial: 'center', md: 'start' }}
-          >
-            <Heading
-              color={treeColor}
-              trim="end"
-              size={
-                disturbed
-                  ? { initial: '6', lg: '7' }
-                  : { initial: '7', lg: '8' }
-              }
-              style={{ transitionDuration: '200ms', position: 'relative' }}
-            >
-              <Icon width="1em" height="1em" />
-            </Heading>
-
-            <Heading
-              weight="medium"
-              size={
-                disturbed
-                  ? { initial: '7', lg: '8' }
-                  : { initial: '8', lg: '9' }
-              }
-              style={{ transitionDuration: '200ms' }}
-              wrap="nowrap"
-              color={treeColor}
-            >
-              {unwrap(protagonist.name)}
-            </Heading>
-          </Flex>
-
-          <Flex
-            gap="4"
-            ml={disturbed ? '0' : '-2'}
-            style={{ transitionDuration: '200ms' }}
-          >
-            <Link color="gray" underline="always" href="/tools/tankopedia">
-              <Flex align="center" gap="1">
-                <CaretLeftIcon />
-                {strings.website.tools.tankopedia.meta.back}
-              </Flex>
-            </Link>
-
-            <Link
-              color="gray"
-              underline="always"
-              href={`/tools/compare?tanks=${compareTanks.join('%2C')}`}
-            >
-              <Flex align="center" gap="1">
-                <MixIcon />
-                {strings.website.tools.tankopedia.meta.compare}
-              </Flex>
-            </Link>
-
-            <Dialog.Root open={showSwapDialog} onOpenChange={setShowSwapDialog}>
-              <Dialog.Trigger>
-                <Link
-                  color="gray"
-                  underline="always"
-                  href="#"
-                  onClick={(event) => {
-                    event.preventDefault();
-                    setShowSwapDialog(true);
-                  }}
-                >
-                  <Flex align="center" gap="1">
-                    <UpdateIcon />
-                    {strings.website.tools.tankopedia.meta.swap.button}
-                  </Flex>
-                </Link>
-              </Dialog.Trigger>
-
-              <Dialog.Content>
-                <Dialog.Title>
-                  {strings.website.tools.tankopedia.meta.swap.title}
-                </Dialog.Title>
-
-                <TankSearch
-                  compact
-                  onSelect={(tank) => {
-                    const model = modelDefinitions.models[tank.id];
-
-                    setShowSwapDialog(false);
-                    mutateTankopediaEphemeral((draft) => {
-                      draft.model = modelDefinitions.models[tank.id];
-                    });
-                    mutateDuel((draft) => {
-                      draft.protagonist = tankToDuelMember(
-                        tank,
-                        model,
-                        provisionDefinitions,
-                      );
-                    });
-
-                    window.history.replaceState(
-                      null,
-                      '',
-                      `/tools/tankopedia/${tank.id}`,
-                    );
-                  }}
-                />
-              </Dialog.Content>
-            </Dialog.Root>
-
-            {assertSecret(import.meta.env.PUBLIC_PROMOTE_OPENTEST) ===
-              'true' && (
-              <Link
-                color="jade"
-                href={`https://${
-                  assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH) ===
-                  'opentest'
-                    ? ''
-                    : 'opentest.'
-                }blitzkit.app/tools/tankopedia/${protagonist.id}`}
-              >
-                <Flex align="center" gap="1">
-                  <ScienceIcon width="1.25em" height="1.25em" />
-                  {assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH) ===
-                  'opentest'
-                    ? strings.website.tools.tankopedia.meta.vanilla
-                    : strings.website.tools.tankopedia.meta.opentest}
-                </Flex>
-              </Link>
-            )}
-          </Flex>
-        </Flex>
+        <Title outline />
       </Flex>
     </Flex>
   );

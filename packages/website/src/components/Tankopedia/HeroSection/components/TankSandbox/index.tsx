@@ -30,7 +30,6 @@ import { AutoClear } from './components/AutoClear';
 import { Controls } from './components/Control';
 import { InitialFogReveal } from './components/InitialFogReveal';
 import { Lighting } from './components/Lighting';
-import { SceneProps } from './components/SceneProps';
 import { TankModel } from './components/TankModel';
 import { TransitionSkeleton } from './components/TransitionSkeleton';
 
@@ -234,7 +233,7 @@ export const TankSandbox = forwardRef<HTMLCanvasElement, TankSandboxProps>(
           outline: naked ? '1rem red solid' : undefined,
         }}
       >
-        {!naked && <SceneProps />}
+        {/* {!naked && <SceneProps />} */}
         {(display === TankopediaDisplay.Model ||
           (display === TankopediaDisplay.DynamicArmor &&
             !hideTankModelUnderArmor)) && <TankModel />}

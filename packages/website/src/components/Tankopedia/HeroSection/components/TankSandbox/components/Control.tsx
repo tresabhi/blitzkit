@@ -128,8 +128,8 @@ export function Controls({
 
       camera.position
         .copy(inspectModeInitialPosition)
-        .applyAxisAngle(I_HAT, (Math.PI / 16) * Math.sin(t / 9))
-        .applyAxisAngle(J_HAT, (-Math.PI / 4) * Math.sin(t / 7));
+        .applyAxisAngle(I_HAT, (Math.PI / 32) * Math.sin(t / 9))
+        .applyAxisAngle(J_HAT, (-Math.PI / 16) * Math.sin(t / 7));
 
       invalidate();
     }

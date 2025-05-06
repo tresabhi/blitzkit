@@ -90,10 +90,11 @@ export function Options({ thicknessRange, canvas, skeleton }: OptionsProps) {
   const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const { strings, unwrap } = useLocale();
+  const disturbed = TankopediaEphemeral.use((state) => state.disturbed);
 
   return (
     <>
-      <QuickInputs />
+      {disturbed && <QuickInputs />}
 
       {display === TankopediaDisplay.ShootingRange && (
         <Box
@@ -323,9 +324,9 @@ export function Options({ thicknessRange, canvas, skeleton }: OptionsProps) {
         direction="column"
         align="center"
         position="absolute"
-        bottom="4"
+        bottom={disturbed ? '4' : '-100%'}
         left="50%"
-        style={{ transform: 'translateX(-50%)' }}
+        style={{ transform: 'translateX(-50%)', transitionDuration: '200ms' }}
       >
         <Flex
           direction="column"
