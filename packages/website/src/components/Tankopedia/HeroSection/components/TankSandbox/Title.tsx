@@ -15,17 +15,54 @@ export const NATION_COLORS: Record<
   {
     text: RadixColor;
     background: RadixColor[];
+    tint: RadixColor;
   }
 > = {
-  france: { text: 'mint', background: ['mint', 'cyan', 'jade'] },
-  germany: { text: 'sage', background: ['slate', 'sage', 'mauve'] },
-  usa: { text: 'gold', background: ['brown', 'gold', 'gray'] },
-  european: { text: 'gold', background: ['bronze', 'gold', 'brown'] },
-  ussr: { text: 'bronze', background: ['bronze', 'tomato', 'bronze'] },
-  uk: { text: 'gold', background: ['bronze', 'gold', 'brown'] },
-  japan: { text: 'jade', background: ['green', 'teal', 'jade'] },
-  china: { text: 'teal', background: ['green', 'teal', 'jade'] },
-  other: { text: 'amber', background: ['amber', 'yellow', 'gray'] },
+  france: {
+    text: 'mint',
+    tint: 'purple',
+    background: ['mint', 'cyan', 'jade'],
+  },
+  germany: {
+    text: 'sage',
+    tint: 'blue',
+    background: ['slate', 'sage', 'mauve'],
+  },
+  usa: {
+    text: 'gold',
+    tint: 'red',
+    background: ['brown', 'gold', 'gray'],
+  },
+  european: {
+    text: 'cyan',
+    tint: 'mint',
+    background: ['cyan', 'blue', 'indigo'],
+  },
+  ussr: {
+    text: 'bronze',
+    tint: 'red',
+    background: ['bronze', 'tomato', 'bronze'],
+  },
+  uk: {
+    text: 'gold',
+    tint: 'red',
+    background: ['bronze', 'gold', 'brown'],
+  },
+  japan: {
+    text: 'jade',
+    tint: 'violet',
+    background: ['green', 'teal', 'jade'],
+  },
+  china: {
+    text: 'teal',
+    tint: 'pink',
+    background: ['green', 'teal', 'jade'],
+  },
+  other: {
+    text: 'amber',
+    tint: 'sky',
+    background: ['amber', 'yellow', 'gray'],
+  },
 };
 
 export function Title({ outline }: TitleProps) {
@@ -66,7 +103,7 @@ export function Title({ outline }: TitleProps) {
               : `${125 / name.length}vw`
             : `${75 / name.length}vw`,
           whiteSpace: 'nowrap',
-          color: outline ? 'transparent' : color,
+          color: outline ? Var(`${nationColors.tint}-a2`) : color,
           WebkitTextStroke: outline
             ? `${revealed ? (disturbed ? '1px' : 'min(2px, 0.2vw)') : 0} ${color}`
             : undefined,
