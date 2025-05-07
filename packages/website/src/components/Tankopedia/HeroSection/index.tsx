@@ -103,11 +103,6 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
         backgroundColor: 'black',
       }}
       position="relative"
-      onWheel={() => {
-        mutateTankopediaEphemeral((draft) => {
-          draft.disturbed = true;
-        });
-      }}
     >
       <Box
         position="absolute"
@@ -132,7 +127,7 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
           zIndex: isFullScreen ? 2 : undefined,
           transitionDuration: '1s',
         }}
-        height="calc(100vh - 6rem)"
+        height={disturbed && !isFullScreen ? 'calc(100vh - 6rem)' : '100vh'}
         maxHeight={isFullScreen ? undefined : '60rem'}
         maxWidth={isFullScreen ? undefined : '120rem'}
         flexGrow="1"
@@ -184,6 +179,28 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
 
         <Title outline />
       </Flex>
+
+      {!disturbed && (
+        <Box
+          onPointerDown={(event) => {
+            event.stopPropagation();
+            mutateTankopediaEphemeral((draft) => {
+              draft.disturbed = true;
+            });
+          }}
+          onWheel={(event) => {
+            event.stopPropagation();
+            mutateTankopediaEphemeral((draft) => {
+              draft.disturbed = true;
+            });
+          }}
+          position="absolute"
+          width="100%"
+          height="100%"
+          top="0"
+          left="0"
+        />
+      )}
     </Flex>
   );
 }

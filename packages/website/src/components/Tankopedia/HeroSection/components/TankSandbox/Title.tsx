@@ -85,7 +85,7 @@ export function Title({ outline }: TitleProps) {
   return (
     <Box
       position="absolute"
-      top={disturbed ? '8' : '50%'}
+      top={disturbed ? '6rem' : '50%'}
       left="50%"
       style={{
         transitionDuration: '1s',
@@ -109,10 +109,10 @@ export function Title({ outline }: TitleProps) {
             : undefined,
           letterSpacing: disturbed || !revealed ? 0 : '-0.03em',
           transition: `
-          letter-spacing 1s ease ${disturbed ? '0s' : '1s'},
-          font-size 1s,
-          -webkit-text-stroke 1.5s
-        `,
+            letter-spacing 1s ${disturbed ? '0s' : '1s'},
+            font-size 1s,
+            -webkit-text-stroke 1.5s
+          `,
         }}
         wrap="nowrap"
       >
