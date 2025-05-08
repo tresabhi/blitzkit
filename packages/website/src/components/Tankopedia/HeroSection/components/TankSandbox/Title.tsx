@@ -110,7 +110,7 @@ export function Title({ outline }: TitleProps) {
             : undefined,
           letterSpacing: disturbed || !revealed ? 0 : '-0.03em',
           transition: `
-            letter-spacing 1.5s cubic-bezier(.81,-2,.68,1),
+            letter-spacing 1.5s ${disturbed ? '' : 'cubic-bezier(.81,-2,.68,1)'},
             font-size 1s,
             -webkit-text-stroke 2s,
             opacity 1s

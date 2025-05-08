@@ -1,5 +1,4 @@
 import { youtubers } from '@blitzkit/core';
-import { literals } from '@blitzkit/i18n/src/literals';
 import { Box, Flex, Heading, Link, Skeleton, Text } from '@radix-ui/themes';
 import { awaitableReviews } from '../../core/awaitables/reviews';
 import { Var } from '../../core/radix/var';
@@ -91,38 +90,6 @@ export function VideoSection({ skeleton }: MaybeSkeletonComponentProps) {
               </Link>
             );
           })}
-
-          <Link
-            href="https://discord.gg/nDt7AjGJQH"
-            target="_blank"
-            color="gray"
-            highContrast
-          >
-            <Flex
-              align="center"
-              justify="center"
-              gap="2"
-              p="3"
-              direction="column"
-              height="100%"
-              style={{
-                backgroundColor: Var('color-panel-solid'),
-                borderRadius: Var('radius-3'),
-              }}
-            >
-              <VerifiedIcon />
-              <Text
-                align="center"
-                style={{
-                  width: '9rem',
-                }}
-              >
-                {literals(strings.website.tools.tankopedia.review.join, [
-                  'BlitzKit',
-                ])}
-              </Text>
-            </Flex>
-          </Link>
         </Flex>
       </Flex>
     </PageWrapper>
