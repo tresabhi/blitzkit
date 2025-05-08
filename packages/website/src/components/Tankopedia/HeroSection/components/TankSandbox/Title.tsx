@@ -93,8 +93,8 @@ export function Title({ outline }: TitleProps) {
       }}
     >
       <Heading
-        weight="bold"
         style={{
+          fontWeight: 900,
           userSelect: 'none',
           pointerEvents: 'none',
           fontSize: revealed
@@ -104,14 +104,16 @@ export function Title({ outline }: TitleProps) {
             : `${75 / name.length}vw`,
           whiteSpace: 'nowrap',
           color: outline ? Var(`${nationColors.tint}-a2`) : color,
+          opacity: outline && disturbed ? 0 : 1,
           WebkitTextStroke: outline
             ? `${revealed ? (disturbed ? '1px' : 'min(2px, 0.2vw)') : 0} ${color}`
             : undefined,
           letterSpacing: disturbed || !revealed ? 0 : '-0.03em',
           transition: `
-            letter-spacing 1s ${disturbed ? '0s' : '1s'},
+            letter-spacing 1.5s cubic-bezier(.81,-2,.68,1),
             font-size 1s,
-            -webkit-text-stroke 1.5s
+            -webkit-text-stroke 2s,
+            opacity 1s
           `,
         }}
         wrap="nowrap"

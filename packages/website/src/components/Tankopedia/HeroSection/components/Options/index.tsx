@@ -120,7 +120,7 @@ export function Options({ thicknessRange, canvas, skeleton }: OptionsProps) {
         gap="2"
         direction="column"
         top="50%"
-        right={display === TankopediaDisplay.DynamicArmor ? '3' : '-3rem'}
+        right={display === TankopediaDisplay.DynamicArmor ? '3' : '-4rem'}
         style={{
           position: 'absolute',
           transform: 'translateY(-50%)',
