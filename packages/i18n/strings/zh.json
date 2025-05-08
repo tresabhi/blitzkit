@@ -757,6 +757,20 @@
       }
     },
     "tools": {
+      "guess": {
+        "name": "Guess the tank",
+        "button": "Guess away",
+        "description": "Silhouette mini-game",
+        "seo_description": "Play a tank guessing game with a silhouette in World of Tanks Blitz",
+        "search": {
+          "placeholder": "Type to guess...",
+          "skip": "Skip",
+          "guess": "Guess",
+          "next": "Next",
+          "no_results": "沒有結果"
+        },
+        "stats": "%s1 / %s2 guessed correctly"
+      },
       "tankopedia": {
         "name": "戰車百科",
         "button": "尋找戰車",
