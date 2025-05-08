@@ -14,7 +14,6 @@ import type { MaybeSkeletonComponentProps } from '../../../types/maybeSkeletonCo
 import type { ThicknessRange } from '../../Armor/components/StaticArmor';
 import { classIcons } from '../../ClassIcon';
 import { Options } from './components/Options';
-import { ScrollHint } from './components/ScrollHint';
 import { TankSandbox } from './components/TankSandbox';
 import { NATION_COLORS, Title } from './components/TankSandbox/Title';
 
@@ -119,13 +118,14 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
         }}
       />
 
-      <ScrollHint />
+      {/* <ScrollHint /> */}
 
       <Flex
         direction={{ initial: 'column-reverse', md: 'row' }}
         style={{
           zIndex: isFullScreen ? 2 : undefined,
           transitionDuration: '1s',
+          background: isFullScreen ? 'black' : undefined,
         }}
         height={disturbed && !isFullScreen ? 'calc(100vh - 6rem)' : '100vh'}
         maxHeight={isFullScreen ? undefined : '60rem'}
@@ -182,13 +182,7 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
 
       {!disturbed && (
         <Box
-          onPointerDown={(event) => {
-            event.stopPropagation();
-            mutateTankopediaEphemeral((draft) => {
-              draft.disturbed = true;
-            });
-          }}
-          onWheel={(event) => {
+          onClick={(event) => {
             event.stopPropagation();
             mutateTankopediaEphemeral((draft) => {
               draft.disturbed = true;
