@@ -179,22 +179,6 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
 
         <Title outline />
       </Flex>
-
-      {!disturbed && (
-        <Box
-          onClick={(event) => {
-            event.stopPropagation();
-            mutateTankopediaEphemeral((draft) => {
-              draft.disturbed = true;
-            });
-          }}
-          position="absolute"
-          width="100%"
-          height="100%"
-          top="0"
-          left="0"
-        />
-      )}
     </Flex>
   );
 }

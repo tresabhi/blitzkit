@@ -100,8 +100,8 @@ export function Title({ outline }: TitleProps) {
           fontSize: revealed
             ? disturbed
               ? '2rem'
-              : `${125 / name.length}vw`
-            : `${75 / name.length}vw`,
+              : `min(65vh, ${125 / name.length}vw)`
+            : `min(48vh, ${75 / name.length}vw)`,
           whiteSpace: 'nowrap',
           color: outline ? Var(`${nationColors.tint}-a2`) : color,
           opacity: outline && disturbed ? 0 : 1,
