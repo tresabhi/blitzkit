@@ -10,7 +10,9 @@
       "mm": "%s1mm",
       "deg": "%s1°",
       "hp": "%s1hp",
-      "x": "x%s1"
+      "x": "x%s1",
+      "percentage": "%s1%",
+      "deg_s": "%s1°/s"
     },
     "gun_types": {
       "auto_loader": "Autocarregador",
@@ -772,12 +774,36 @@
         "stats": "%s1 / %s2 guessed correctly"
       },
       "tankopedia": {
+        "search": "Search a stat...",
         "name": "Tanquepedia",
         "button": "Encontrar tanques",
         "description": "Blitz enciclopédia de tanques",
         "seo_description": "Estatísticas, blindagem, e mais para todos os tanques de Wolrd of Tanks Blitz",
         "tank_seo_title": "%s1 - Nível %s2 %s3 %s4 | %s5 Tanquepedia | World of Tanks Blitz (WoTB)",
         "tank_seo_description": "%s1 blindagem, estatísticas, equipamentos, provisões e mais. %s2 DPM, %s3hp alfa, %s4mm de penetração, %s5km/h velocidade máxima, %s6hp vida.",
+        "visualizers": {
+          "rotator": {
+            "hull": "Hull",
+            "turret": "Turret",
+            "hard": "Hard",
+            "medium": "Médio",
+            "soft": "Macio",
+            "effective": "Effective"
+          },
+          "ricochet": {
+            "angle": "Angle",
+            "normalization": "Normalização",
+            "effective_angle": "Effective angle",
+            "armor": "Blindagem",
+            "no_ricochet": "Explosive shells don't ricochet"
+          },
+          "view_range": {
+            "camo": "Camo",
+            "percentage": "%s1%",
+            "ghost_factory": "Ghost Factory",
+            "dead_rail": "Dead Rail"
+          }
+        },
         "sandbox": {
           "poses": {
             "hull_down": "Casco para baixo",
