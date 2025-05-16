@@ -22,4 +22,4 @@ export const getStaticPaths = (() => {
 const { embed } = Astro.params;
 ---
 
-<LegacyRedirect tool={`embed/${embed}`} />
+<LegacyRedirect path={`embed/${embed}`} />
