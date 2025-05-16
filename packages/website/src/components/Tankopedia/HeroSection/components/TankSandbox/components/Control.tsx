@@ -1,3 +1,4 @@
+import { I_HAT, J_HAT } from '@blitzkit/core';
 import { OrbitControls } from '@react-three/drei';
 import { invalidate, useThree } from '@react-three/fiber';
 import { clamp } from 'lodash-es';
@@ -33,9 +34,19 @@ const ARCADE_MODE_FOV = 54;
 
 interface ControlsProps {
   naked?: boolean;
+  autoRotate?: boolean;
+  zoomable?: boolean;
+  enableRotate?: boolean;
+  distanceScale?: number;
 }
 
-export function Controls({ naked }: ControlsProps) {
+export function Controls({
+  naked,
+  autoRotate = true,
+  zoomable = true,
+  enableRotate = true,
+  distanceScale = 1,
+}: ControlsProps) {
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const display = TankopediaEphemeral.use((state) => state.display);
   const duelStore = Duel.useStore();
@@ -82,15 +93,16 @@ export function Controls({ naked }: ControlsProps) {
     antagonistModelDefinition.turret_origin.y +
     antagonistTurretModelDefinition.gun_origin.y;
   const disturbed = TankopediaEphemeral.use((state) => state.disturbed);
+  const doAutoRotate = autoRotate && !disturbed;
   const gunHeight =
     protagonistHullOrigin.y +
     protagonistTurretOrigin.y +
     protagonistGunOrigin.y;
-  const inspectModeInitialPosition = [
+  const inspectModeInitialPosition = new Vector3(
     -8,
     gunHeight + (naked ? 10 : 2),
     -13,
-  ] as const;
+  ).multiplyScalar(distanceScale);
   const protagonistGunOriginOnlyY = new Vector3(
     0,
     protagonistTurretModelDefinition.gun_origin.y,
@@ -100,6 +112,34 @@ export function Controls({ naked }: ControlsProps) {
     .clone()
     .add(protagonistTurretOrigin)
     .add(protagonistGunOriginOnlyY);
+
+  useEffect(() => {
+    if (!orbitControls.current || !doAutoRotate) return;
+
+    const t0 = Date.now() / 1000;
+    let cancel = false;
+    const position = inspectModeInitialPosition.clone();
+
+    function frame() {
+      if (!cancel) requestAnimationFrame(frame);
+
+      const now = Date.now() / 1000;
+      const t = now - t0;
+
+      camera.position
+        .copy(inspectModeInitialPosition)
+        .applyAxisAngle(I_HAT, (Math.PI / 32) * Math.sin(t / 9))
+        .applyAxisAngle(J_HAT, (-Math.PI / 16) * Math.sin(t / 7));
+
+      invalidate();
+    }
+
+    frame();
+
+    return () => {
+      cancel = true;
+    };
+  }, [doAutoRotate, camera]);
 
   useEffect(() => {
     const unsubscribeTankopediaEphemeral = tankopediaEphemeralStore.subscribe(
@@ -195,7 +235,7 @@ export function Controls({ naked }: ControlsProps) {
         }
 
         case Pose.Default: {
-          camera.position.set(...inspectModeInitialPosition);
+          camera.position.copy(inspectModeInitialPosition);
           orbitControls.current?.target.set(0, 1.25, 0);
           break;
         }
@@ -304,7 +344,7 @@ export function Controls({ naked }: ControlsProps) {
             .add(shellOrigin);
         }
       } else {
-        camera.position.set(...inspectModeInitialPosition);
+        camera.position.copy(inspectModeInitialPosition);
         orbitControls.current.target.set(0, gunHeight / (naked ? 4 : 2), 0);
         orbitControls.current.enablePan = true;
         orbitControls.current.enableZoom = true;
@@ -342,12 +382,14 @@ export function Controls({ naked }: ControlsProps) {
 
   return (
     <OrbitControls
+      enableRotate={enableRotate}
       maxDistance={20}
       minDistance={5}
+      enableZoom={zoomable}
+      zoomSpeed={zoomable ? undefined : 0}
       ref={orbitControls}
       enabled={tankopediaEphemeralStore.getState().controlsEnabled}
       enableDamping={false}
-      autoRotate={!disturbed}
       autoRotateSpeed={1 / 4}
     />
   );

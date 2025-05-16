@@ -23,7 +23,7 @@
 
 .tank-search-card .image {
   width: 100%;
-  height: 6rem;
+  height: 8rem;
   object-position: center right;
   object-fit: contain;
   filter: drop-shadow(-1px -1px 4px black);

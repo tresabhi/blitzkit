@@ -90,10 +90,12 @@ export function Options({ thicknessRange, canvas, skeleton }: OptionsProps) {
   const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
   const mutateTankopediaEphemeral = TankopediaEphemeral.useMutation();
   const { strings, unwrap } = useLocale();
+  const revealed = TankopediaEphemeral.use((state) => state.revealed);
+  const disturbed = TankopediaEphemeral.use((state) => state.disturbed);
 
   return (
     <>
-      <QuickInputs />
+      {disturbed && <QuickInputs />}
 
       {display === TankopediaDisplay.ShootingRange && (
         <Box
@@ -118,7 +120,7 @@ export function Options({ thicknessRange, canvas, skeleton }: OptionsProps) {
         gap="2"
         direction="column"
         top="50%"
-        right={display === TankopediaDisplay.DynamicArmor ? '3' : '-3rem'}
+        right={display === TankopediaDisplay.DynamicArmor ? '3' : '-4rem'}
         style={{
           position: 'absolute',
           transform: 'translateY(-50%)',
@@ -323,9 +325,9 @@ export function Options({ thicknessRange, canvas, skeleton }: OptionsProps) {
         direction="column"
         align="center"
         position="absolute"
-        bottom="4"
+        bottom={revealed ? '4' : '-100%'}
         left="50%"
-        style={{ transform: 'translateX(-50%)' }}
+        style={{ transform: 'translateX(-50%)', transitionDuration: '200ms' }}
       >
         <Flex
           direction="column"
@@ -401,7 +403,7 @@ export function Options({ thicknessRange, canvas, skeleton }: OptionsProps) {
         <Flex gap="3" align="center" mt="2">
           <SegmentedControl.Root
             variant="classic"
-            value={`${display}`}
+            value={`${disturbed ? display : -1}`}
             onValueChange={(value) => {
               mutateTankopediaEphemeral((draft) => {
                 draft.disturbed = true;
@@ -455,185 +457,214 @@ export function Options({ thicknessRange, canvas, skeleton }: OptionsProps) {
             </SegmentedControl.Item> */}
           </SegmentedControl.Root>
 
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
-              <IconButton variant="ghost" color="gray">
-                <EyeOpenIcon />
-              </IconButton>
-            </DropdownMenu.Trigger>
+          {disturbed && (
+            <>
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                  <IconButton variant="ghost" color="gray">
+                    <EyeOpenIcon />
+                  </IconButton>
+                </DropdownMenu.Trigger>
 
-            <DropdownMenu.Content>
-              <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.HullDown)}>
-                {strings.website.tools.tankopedia.sandbox.poses.hull_down}
-              </DropdownMenu.Item>
+                <DropdownMenu.Content>
+                  <DropdownMenu.Item
+                    onClick={() => poseEvent.emit(Pose.HullDown)}
+                  >
+                    {strings.website.tools.tankopedia.sandbox.poses.hull_down}
+                  </DropdownMenu.Item>
 
-              <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.FaceHug)}>
-                {strings.website.tools.tankopedia.sandbox.poses.face_hug}
-              </DropdownMenu.Item>
+                  <DropdownMenu.Item
+                    onClick={() => poseEvent.emit(Pose.FaceHug)}
+                  >
+                    {strings.website.tools.tankopedia.sandbox.poses.face_hug}
+                  </DropdownMenu.Item>
 
-              <DropdownMenu.Item onClick={() => poseEvent.emit(Pose.Default)}>
-                {strings.website.tools.tankopedia.sandbox.poses.default}
-              </DropdownMenu.Item>
-            </DropdownMenu.Content>
-          </DropdownMenu.Root>
+                  <DropdownMenu.Item
+                    onClick={() => poseEvent.emit(Pose.Default)}
+                  >
+                    {strings.website.tools.tankopedia.sandbox.poses.default}
+                  </DropdownMenu.Item>
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
 
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
-              <IconButton variant="ghost" color="gray">
-                <GearIcon />
-              </IconButton>
-            </DropdownMenu.Trigger>
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                  <IconButton variant="ghost" color="gray">
+                    <GearIcon />
+                  </IconButton>
+                </DropdownMenu.Trigger>
 
-            <DropdownMenu.Content>
-              {display === TankopediaDisplay.DynamicArmor && (
-                <>
+                <DropdownMenu.Content>
+                  {display === TankopediaDisplay.DynamicArmor && (
+                    <>
+                      <DropdownMenu.Label>
+                        {
+                          strings.website.tools.tankopedia.sandbox.settings
+                            .armor
+                        }
+                      </DropdownMenu.Label>
+
+                      <DropdownMenu.CheckboxItem
+                        checked={greenPenetration}
+                        onCheckedChange={(checked) => {
+                          mutateTankopediaPersistent((draft) => {
+                            draft.greenPenetration = checked;
+                          });
+                        }}
+                      >
+                        {
+                          strings.website.tools.tankopedia.sandbox.settings
+                            .green_penetration
+                        }
+                      </DropdownMenu.CheckboxItem>
+
+                      <DropdownMenu.CheckboxItem
+                        checked={hideTankModelUnderArmor}
+                        onCheckedChange={(checked) => {
+                          mutateTankopediaPersistent((draft) => {
+                            draft.hideTankModelUnderArmor = checked;
+                          });
+                        }}
+                      >
+                        {
+                          strings.website.tools.tankopedia.sandbox.settings
+                            .hide_model_under_armor
+                        }
+                      </DropdownMenu.CheckboxItem>
+
+                      <DropdownMenu.CheckboxItem
+                        checked={opaque}
+                        onCheckedChange={(checked) => {
+                          mutateTankopediaPersistent((draft) => {
+                            draft.opaque = checked;
+                          });
+                        }}
+                      >
+                        {
+                          strings.website.tools.tankopedia.sandbox.settings
+                            .opaque
+                        }
+                      </DropdownMenu.CheckboxItem>
+
+                      {developerMode && (
+                        <DropdownMenu.CheckboxItem
+                          checked={wireframe}
+                          onCheckedChange={(checked) => {
+                            mutateTankopediaPersistent((draft) => {
+                              draft.wireframe = checked;
+                            });
+                          }}
+                        >
+                          {
+                            strings.website.tools.tankopedia.sandbox.settings
+                              .dev_wireframe
+                          }
+                        </DropdownMenu.CheckboxItem>
+                      )}
+                    </>
+                  )}
+
                   <DropdownMenu.Label>
-                    {strings.website.tools.tankopedia.sandbox.settings.armor}
+                    {
+                      strings.website.tools.tankopedia.sandbox.settings
+                        .environment
+                    }
                   </DropdownMenu.Label>
 
                   <DropdownMenu.CheckboxItem
-                    checked={greenPenetration}
+                    checked={showGrid}
                     onCheckedChange={(checked) => {
                       mutateTankopediaPersistent((draft) => {
-                        draft.greenPenetration = checked;
+                        draft.showGrid = checked;
                       });
                     }}
                   >
                     {
                       strings.website.tools.tankopedia.sandbox.settings
-                        .green_penetration
+                        .show_grid
                     }
                   </DropdownMenu.CheckboxItem>
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
 
-                  <DropdownMenu.CheckboxItem
-                    checked={hideTankModelUnderArmor}
-                    onCheckedChange={(checked) => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.hideTankModelUnderArmor = checked;
-                      });
-                    }}
-                  >
-                    {
-                      strings.website.tools.tankopedia.sandbox.settings
-                        .hide_model_under_armor
-                    }
-                  </DropdownMenu.CheckboxItem>
+              <Popover.Root>
+                <Popover.Trigger>
+                  <IconButton color="gray" variant="ghost">
+                    <CameraIcon />
+                  </IconButton>
+                </Popover.Trigger>
 
-                  <DropdownMenu.CheckboxItem
-                    checked={opaque}
-                    onCheckedChange={(checked) => {
-                      mutateTankopediaPersistent((draft) => {
-                        draft.opaque = checked;
-                      });
-                    }}
-                  >
-                    {strings.website.tools.tankopedia.sandbox.settings.opaque}
-                  </DropdownMenu.CheckboxItem>
+                <Popover.Content>
+                  <Flex direction="column" gap="2">
+                    <Popover.Close>
+                      <Button
+                        onClick={() => {
+                          if (!canvas.current) return;
 
-                  {developerMode && (
-                    <DropdownMenu.CheckboxItem
-                      checked={wireframe}
-                      onCheckedChange={(checked) => {
-                        mutateTankopediaPersistent((draft) => {
-                          draft.wireframe = checked;
-                        });
-                      }}
-                    >
-                      {
-                        strings.website.tools.tankopedia.sandbox.settings
-                          .dev_wireframe
-                      }
-                    </DropdownMenu.CheckboxItem>
+                          const anchor = document.createElement('a');
+
+                          anchor.setAttribute(
+                            'download',
+                            `${protagonistTank.name}.png`,
+                          );
+                          anchor.setAttribute(
+                            'href',
+                            canvas.current.toDataURL('image/png'),
+                          );
+                          anchor.click();
+                        }}
+                      >
+                        <DownloadIcon />
+                        {
+                          strings.website.tools.tankopedia.sandbox.screenshot
+                            .download
+                        }
+                      </Button>
+                    </Popover.Close>
+                    <Popover.Close>
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          if (!canvas.current) return;
+
+                          canvas.current.toBlob((blob) => {
+                            if (!blob) return;
+
+                            navigator.clipboard.write([
+                              new ClipboardItem({ 'image/png': blob }),
+                            ]);
+                          });
+                        }}
+                      >
+                        <CopyIcon />
+                        {
+                          strings.website.tools.tankopedia.sandbox.screenshot
+                            .copy
+                        }
+                      </Button>
+                    </Popover.Close>
+                  </Flex>
+                </Popover.Content>
+              </Popover.Root>
+
+              {fullScreenAvailable && (
+                <IconButton
+                  color="gray"
+                  variant="ghost"
+                  onClick={() => {
+                    if (isFullScreen) {
+                      document.exitFullscreen();
+                    } else document.body.requestFullscreen();
+                  }}
+                >
+                  {isFullScreen ? (
+                    <ExitFullScreenIcon />
+                  ) : (
+                    <EnterFullScreenIcon />
                   )}
-                </>
+                </IconButton>
               )}
-
-              <DropdownMenu.Label>
-                {strings.website.tools.tankopedia.sandbox.settings.environment}
-              </DropdownMenu.Label>
-
-              <DropdownMenu.CheckboxItem
-                checked={showGrid}
-                onCheckedChange={(checked) => {
-                  mutateTankopediaPersistent((draft) => {
-                    draft.showGrid = checked;
-                  });
-                }}
-              >
-                {strings.website.tools.tankopedia.sandbox.settings.show_grid}
-              </DropdownMenu.CheckboxItem>
-            </DropdownMenu.Content>
-          </DropdownMenu.Root>
-
-          <Popover.Root>
-            <Popover.Trigger>
-              <IconButton color="gray" variant="ghost">
-                <CameraIcon />
-              </IconButton>
-            </Popover.Trigger>
-
-            <Popover.Content>
-              <Flex direction="column" gap="2">
-                <Popover.Close>
-                  <Button
-                    onClick={() => {
-                      if (!canvas.current) return;
-
-                      const anchor = document.createElement('a');
-
-                      anchor.setAttribute(
-                        'download',
-                        `${protagonistTank.name}.png`,
-                      );
-                      anchor.setAttribute(
-                        'href',
-                        canvas.current.toDataURL('image/png'),
-                      );
-                      anchor.click();
-                    }}
-                  >
-                    <DownloadIcon />
-                    {
-                      strings.website.tools.tankopedia.sandbox.screenshot
-                        .download
-                    }
-                  </Button>
-                </Popover.Close>
-                <Popover.Close>
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      if (!canvas.current) return;
-
-                      canvas.current.toBlob((blob) => {
-                        if (!blob) return;
-
-                        navigator.clipboard.write([
-                          new ClipboardItem({ 'image/png': blob }),
-                        ]);
-                      });
-                    }}
-                  >
-                    <CopyIcon />
-                    {strings.website.tools.tankopedia.sandbox.screenshot.copy}
-                  </Button>
-                </Popover.Close>
-              </Flex>
-            </Popover.Content>
-          </Popover.Root>
-
-          {fullScreenAvailable && (
-            <IconButton
-              color="gray"
-              variant="ghost"
-              onClick={() => {
-                if (isFullScreen) {
-                  document.exitFullscreen();
-                } else document.body.requestFullscreen();
-              }}
-            >
-              {isFullScreen ? <ExitFullScreenIcon /> : <EnterFullScreenIcon />}
-            </IconButton>
+            </>
           )}
         </Flex>
       </Flex>

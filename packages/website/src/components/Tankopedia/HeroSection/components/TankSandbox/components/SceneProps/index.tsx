@@ -35,6 +35,7 @@ const [modelDefinitions, equipmentDefinitions, provisionDefinitions] =
 const emptyVector = new Vector2();
 
 export function SceneProps() {
+  const disturbed = TankopediaEphemeral.use((state) => state.disturbed);
   const targetCircleWrapper = useRef<Group>(null);
   const clientTargetCircle = useRef<HTMLDivElement>(null);
   const serverTargetCircle = useRef<HTMLDivElement>(null);
@@ -232,6 +233,8 @@ export function SceneProps() {
     serverTargetCircle.current.style.width = targetCircleDotsSize;
     serverTargetCircle.current.style.height = targetCircleDotsSize;
   });
+
+  if (!disturbed) return null;
 
   return (
     <>

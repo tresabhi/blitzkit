@@ -117,6 +117,12 @@ export const chartsTool: Tool = {
   button: {
     color: 'bronze',
   },
+  branches: ['main', 'dev'],
+};
+
+export const guessTool: Tool = {
+  id: 'guess',
+  button: { color: 'cyan' },
   branches: ['main', 'dev', 'opentest', 'preview'],
 };
 
@@ -124,6 +130,7 @@ export const TOOLS: Tool[] = [
   tankopediaTool,
   compareTool,
   performanceTool,
+  // guessTool,
   // chartsTool,
   galleryTool,
   sessionTool,

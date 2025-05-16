@@ -13,6 +13,11 @@ import { getStrings } from '../core/i18n/getStrings';
 import { Var } from '../core/radix/var';
 import { LinkI18n } from './LinkI18n';
 
+export interface Props {
+  integrated?: boolean;
+}
+
+const { integrated } = Astro.props;
 const toolsFiltered = TOOLS.filter((tool) => !('href' in tool));
 const { locale } = Astro.params;
 const branchName = resolveBranchName(locale);
@@ -21,6 +26,19 @@ const strings = getStrings(locale);
 ---
 
 <style>
+  .navbar,
+  .padder {
+    transition-duration: 1s;
+  }
+
+  body.no-navbar .navbar {
+    transform: translateY(-100%);
+  }
+
+  body.no-navbar .padder {
+    height: 0;
+  }
+
   .navbar[data-expanded='false'] *[data-expanded] {
     display: none;
   }
@@ -59,7 +77,11 @@ const strings = getStrings(locale);
   });
 </script>
 
-<Box height={{ initial: '3.5rem', sm: '3rem' }} />
+{
+  !integrated && (
+    <Box className="padder" height={{ initial: '3.5rem', sm: '3rem' }} />
+  )
+}
 
 <Flex
   direction="column"
@@ -71,6 +93,7 @@ const strings = getStrings(locale);
   position="fixed"
   style={{
     zIndex: 1,
+    backdropFilter: 'blur(4rem)',
   }}
 >
   <Flex
@@ -79,6 +102,7 @@ const strings = getStrings(locale);
     p={{ initial: '4', sm: '3' }}
     direction="column"
     align="center"
+    style={{ backgroundColor: integrated ? undefined : Var('gray-1') }}
   >
     <Flex gap="4" direction="column" maxWidth="80rem" width="100%">
       <Flex align="center">
