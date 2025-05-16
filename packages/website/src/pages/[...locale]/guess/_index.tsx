@@ -1,21 +1,21 @@
 import { Box, Flex, Heading } from '@radix-ui/themes';
 import { Suspense } from 'react';
-import { GuessBackground } from '../../../../components/GuessBackground';
-import { Guesser } from '../../../../components/Guesser';
-import { GuessRenderer } from '../../../../components/GuessRenderer';
-import { GuessRendererLoader } from '../../../../components/GuessRendererLoader';
-import { awaitableModelDefinitions } from '../../../../core/awaitables/modelDefinitions';
-import { awaitableProvisionDefinitions } from '../../../../core/awaitables/provisionDefinitions';
-import { awaitableTankDefinitions } from '../../../../core/awaitables/tankDefinitions';
-import { Var } from '../../../../core/radix/var';
+import { GuessBackground } from '../../../components/GuessBackground';
+import { Guesser } from '../../../components/Guesser';
+import { GuessRenderer } from '../../../components/GuessRenderer';
+import { GuessRendererLoader } from '../../../components/GuessRendererLoader';
+import { awaitableModelDefinitions } from '../../../core/awaitables/modelDefinitions';
+import { awaitableProvisionDefinitions } from '../../../core/awaitables/provisionDefinitions';
+import { awaitableTankDefinitions } from '../../../core/awaitables/tankDefinitions';
+import { Var } from '../../../core/radix/var';
 import {
+  type LocaleAcceptorProps,
   LocaleProvider,
   useLocale,
-  type LocaleAcceptorProps,
-} from '../../../../hooks/useLocale';
-import { Duel } from '../../../../stores/duel';
-import { GuessEphemeral } from '../../../../stores/guessEphemeral';
-import { TankopediaEphemeral } from '../../../../stores/tankopediaEphemeral';
+} from '../../../hooks/useLocale';
+import { Duel } from '../../../stores/duel';
+import { GuessEphemeral } from '../../../stores/guessEphemeral';
+import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
 
 const [tankDefinitions, modelDefinitions, provisionDefinitions] =
   await Promise.all([
