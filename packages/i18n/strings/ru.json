@@ -774,7 +774,7 @@
         "stats": "%s1 / %s2 guessed correctly"
       },
       "tankopedia": {
-        "search": "Search a stat...",
+        "search": "Поиск характеристик...",
         "name": "Танкопедия",
         "button": "Поиск танков",
         "description": "Танковая энциклопедия Blitz",
@@ -783,25 +783,25 @@
         "tank_seo_description": "%s1 броня, статистика, оборудование, снабжение и многое другое. %s2 УВМ, %s3hp альфа, %s4mm пробитие, %s5км/ч лучшая скорость, %s6hp здоровье.",
         "visualizers": {
           "rotator": {
-            "hull": "Hull",
-            "turret": "Turret",
-            "hard": "Hard",
+            "hull": "Корпус",
+            "turret": "Башня",
+            "hard": "Твёрдые",
             "medium": "Средний танк",
             "soft": "На мягком грунте",
-            "effective": "Effective"
+            "effective": "Эффективно"
           },
           "ricochet": {
-            "angle": "Angle",
+            "angle": "Угол",
             "normalization": "Нормализация",
-            "effective_angle": "Effective angle",
+            "effective_angle": "Эффективный угол",
             "armor": "Броня",
-            "no_ricochet": "Explosive shells don't ricochet"
+            "no_ricochet": "Разрывные снаряды не рикошетят"
           },
           "view_range": {
-            "camo": "Camo",
+            "camo": "Камо",
             "percentage": "%s1%",
-            "ghost_factory": "Ghost Factory",
-            "dead_rail": "Dead Rail"
+            "ghost_factory": "Промзона",
+            "dead_rail": "Эшелон"
           }
         },
         "sandbox": {
