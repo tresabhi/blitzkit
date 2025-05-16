@@ -1,4 +1,8 @@
 import {
+  type AccountListWithServer,
+  type CompositeStatsKey,
+  type IndividualAccountInfo,
+  type IndividualTankStats,
   compositeStats,
   compositeStatsKeys,
   deltaTankStats,
@@ -8,12 +12,8 @@ import {
   idToRegion,
   searchPlayersAcrossRegions,
   sumCompositeStats,
-  type AccountListWithServer,
-  type CompositeStatsKey,
-  type IndividualAccountInfo,
-  type IndividualTankStats,
 } from '@blitzkit/core';
-import { literals } from '@blitzkit/i18n/src/literals';
+import { literals } from '@blitzkit/i18n';
 import {
   ArrowDownIcon,
   MagnifyingGlassIcon,
@@ -33,18 +33,18 @@ import {
 } from '@radix-ui/themes';
 import { debounce } from 'lodash-es';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { PageWrapper } from '../../../../components/PageWrapper';
-import { StickyRowHeaderCell } from '../../../../components/StickyRowHeaderCell';
-import { StickyTableRoot } from '../../../../components/StickyTableRoot';
-import { TankRowHeaderCell } from '../../../../components/TankRowHeaderCell';
-import { awaitableAverageDefinitions } from '../../../../core/awaitables/averageDefinitions';
-import { awaitableTankDefinitions } from '../../../../core/awaitables/tankDefinitions';
+import { PageWrapper } from '../../../components/PageWrapper';
+import { StickyRowHeaderCell } from '../../../components/StickyRowHeaderCell';
+import { StickyTableRoot } from '../../../components/StickyTableRoot';
+import { TankRowHeaderCell } from '../../../components/TankRowHeaderCell';
+import { awaitableAverageDefinitions } from '../../../core/awaitables/averageDefinitions';
+import { awaitableTankDefinitions } from '../../../core/awaitables/tankDefinitions';
 import {
+  type LocaleAcceptorProps,
   LocaleProvider,
   useLocale,
-  type LocaleAcceptorProps,
-} from '../../../../hooks/useLocale';
-import { Session, type SessionTracking } from '../../../../stores/session';
+} from '../../../hooks/useLocale';
+import { Session, type SessionTracking } from '../../../stores/session';
 
 const [tankDefinitions, averageDefinitions] = await Promise.all([
   awaitableTankDefinitions,

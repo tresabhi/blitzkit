@@ -1,0 +1,14 @@
+---
+import { sessionTool } from '../../../constants/tools';
+import ToolLayout from '../../../layouts/ToolLayout.astro';
+import type { getStaticPaths } from '../index.astro';
+import { Page } from './_index';
+
+export { getStaticPaths } from '../index.astro';
+
+const { locale } = Astro.params;
+---
+
+<ToolLayout tool={sessionTool}>
+  <Page client:load {locale} />
+</ToolLayout>
