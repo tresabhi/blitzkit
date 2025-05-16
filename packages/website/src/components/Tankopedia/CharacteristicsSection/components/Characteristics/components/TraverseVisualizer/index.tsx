@@ -1,8 +1,8 @@
-import { Card, Checkbox, Flex, Tabs, Text } from '@radix-ui/themes';
-import { useRef, useState } from 'react';
+import { literals } from '@blitzkit/i18n';
+import { Card, Checkbox, Code, Flex, Tabs, Text } from '@radix-ui/themes';
+import { useEffect, useRef, useState } from 'react';
 import type { TankCharacteristics } from '../../../../../../../core/blitzkit/tankCharacteristics';
 import { useLocale } from '../../../../../../../hooks/useLocale';
-import './index.css';
 
 export interface StatsAcceptorProps {
   stats: TankCharacteristics;
@@ -10,7 +10,7 @@ export interface StatsAcceptorProps {
 
 type Terrain = 'Hard' | 'Medium' | 'Soft';
 
-export function HullTraverseVisualizer({ stats }: StatsAcceptorProps) {
+export function TraverseVisualizer({ stats }: StatsAcceptorProps) {
   const hull = useRef<HTMLDivElement>(null);
   const turret = useRef<HTMLImageElement>(null);
   const [terrain, setTerrain] = useState<Terrain>('Hard');
@@ -19,12 +19,46 @@ export function HullTraverseVisualizer({ stats }: StatsAcceptorProps) {
   const { strings } = useLocale();
   const isTurretless =
     stats.azimuthLeft !== undefined || stats.azimuthRight !== undefined;
+  const turretAngle = useRef(0);
+  const hullAngle = useRef(0);
+  const turretSpeedDeg = rotateTurret ? stats.turretTraverseSpeed : 0;
+  const hullSpeedDeg = rotateHull ? stats[`hullTraverse${terrain}Terrain`] : 0;
+
+  useEffect(() => {
+    let cancel = false;
+    const turretSpeedRad = turretSpeedDeg * (Math.PI / 180);
+    const hullTraverseRad = hullSpeedDeg * (Math.PI / 180);
+    let lastT = Date.now() / 1000;
+
+    function frame() {
+      if (!turret.current || !hull.current) return;
+
+      const t = Date.now() / 1000;
+      const dt = t - lastT;
+      lastT = t;
+
+      turretAngle.current =
+        (turretAngle.current + turretSpeedRad * dt) % (2 * Math.PI);
+      hullAngle.current =
+        (hullAngle.current + hullTraverseRad * dt) % (2 * Math.PI);
+
+      turret.current.style.transform = `translate(-50%, -50%) rotate(${-turretAngle.current}rad)`;
+      hull.current.style.transform = `translate(-50%, -50%) rotate(${-hullAngle.current}rad)`;
+
+      if (!cancel) requestAnimationFrame(frame);
+    }
+
+    frame();
+
+    return () => {
+      cancel = true;
+    };
+  }, [terrain, turretSpeedDeg, hullSpeedDeg]);
 
   return (
     <Card variant="classic" style={{ aspectRatio: '1 / 1' }}>
       <div
         ref={hull}
-        className="hull-traverse-visualizer"
         style={{
           position: 'absolute',
           top: '50%',
@@ -50,7 +84,6 @@ export function HullTraverseVisualizer({ stats }: StatsAcceptorProps) {
           <img
             draggable="false"
             ref={turret}
-            className="hull-traverse-visualizer"
             style={{
               width: '27rem',
               height: '27rem',
@@ -95,12 +128,34 @@ export function HullTraverseVisualizer({ stats }: StatsAcceptorProps) {
         </Tabs.Root>
       </Flex>
 
+      <Flex
+        gap="2"
+        position="absolute"
+        left="50%"
+        bottom="7"
+        style={{
+          transform: 'translateX(-50%)',
+        }}
+      >
+        <Text color="gray" size="1">
+          {strings.website.tools.tankopedia.visualizers.rotator.effective}
+        </Text>
+        <Code size="1" variant="ghost">
+          {literals(strings.common.units.deg_s, [
+            `${(turretSpeedDeg + hullSpeedDeg).toFixed(1)}`,
+          ])}
+        </Code>
+      </Flex>
+
       {!isTurretless && (
         <Flex
           position="absolute"
           top="4"
           left="50%"
+          width="100%"
+          px="5"
           gap="5"
+          justify="center"
           style={{
             transform: 'translateX(-50%)',
             userSelect: 'none',

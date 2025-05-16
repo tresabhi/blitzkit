@@ -7,9 +7,9 @@ import { awaitableProvisionDefinitions } from '../../../../../../core/awaitables
 import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useLocale } from '../../../../../../hooks/useLocale';
 import { Duel } from '../../../../../../stores/duel';
-import type { StatsAcceptorProps } from './HullTraverseVisualizer';
 import { InfoWithDelta } from './InfoWithDelta';
 import { StatsTableWrapper } from './StatsTableWrapper';
+import type { StatsAcceptorProps } from './TraverseVisualizer';
 
 const provisionDefinitions = await awaitableProvisionDefinitions;
 

@@ -6,7 +6,7 @@ import { clamp, degToRad, radToDeg } from 'three/src/math/MathUtils.js';
 import { Var } from '../../../../../../../core/radix/var';
 import { useLocale } from '../../../../../../../hooks/useLocale';
 import { Duel } from '../../../../../../../stores/duel';
-import type { StatsAcceptorProps } from '../HullTraverseVisualizer';
+import type { StatsAcceptorProps } from '../TraverseVisualizer';
 import { ShellSwitcher } from './components/ShellSwitcher';
 
 export function RicochetVisualizer({ stats }: StatsAcceptorProps) {

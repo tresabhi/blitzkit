@@ -4,7 +4,7 @@ import { times } from 'lodash-es';
 import { Quicklime, type QuicklimeCallback } from 'quicklime';
 import { useEffect, useRef } from 'react';
 import { Var } from '../../../../../../../core/radix/var';
-import type { StatsAcceptorProps } from '../HullTraverseVisualizer';
+import type { StatsAcceptorProps } from '../TraverseVisualizer';
 import { Shell } from './components/Shell';
 import { Target } from './components/Target';
 

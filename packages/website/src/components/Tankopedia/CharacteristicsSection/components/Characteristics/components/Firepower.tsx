@@ -21,11 +21,11 @@ import { useEquipment } from '../../../../../../hooks/useEquipment';
 import { useLocale } from '../../../../../../hooks/useLocale';
 import { useTankModelDefinition } from '../../../../../../hooks/useTankModelDefinition';
 import { Duel } from '../../../../../../stores/duel';
-import type { StatsAcceptorProps } from './HullTraverseVisualizer';
 import { Info } from './Info';
 import { InfoWithDelta } from './InfoWithDelta';
 import { RicochetVisualizer } from './RicochetVisualizer';
 import { StatsTableWrapper } from './StatsTableWrapper';
+import type { StatsAcceptorProps } from './TraverseVisualizer';
 
 export function Firepower({ stats }: StatsAcceptorProps) {
   const mutateDuel = Duel.useMutation();

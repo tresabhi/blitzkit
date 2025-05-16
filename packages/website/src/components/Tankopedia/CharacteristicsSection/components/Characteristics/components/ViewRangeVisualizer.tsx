@@ -4,7 +4,7 @@ import { Box, Card, Code, Flex, Slider, Tabs, Text } from '@radix-ui/themes';
 import { useRef, useState } from 'react';
 import { Var } from '../../../../../../core/radix/var';
 import { useLocale } from '../../../../../../hooks/useLocale';
-import type { StatsAcceptorProps } from './HullTraverseVisualizer';
+import type { StatsAcceptorProps } from './TraverseVisualizer';
 
 const maps = [
   {

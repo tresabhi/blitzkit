@@ -1,9 +1,9 @@
 import { Heading } from '@radix-ui/themes';
 import { useLocale } from '../../../../../../hooks/useLocale';
-import type { StatsAcceptorProps } from './HullTraverseVisualizer';
 import { Info } from './Info';
 import { InfoWithDelta } from './InfoWithDelta';
 import { StatsTableWrapper } from './StatsTableWrapper';
+import type { StatsAcceptorProps } from './TraverseVisualizer';
 import { ViewRangeVisualizer } from './ViewRangeVisualizer';
 
 export function Survivability({ stats }: StatsAcceptorProps) {

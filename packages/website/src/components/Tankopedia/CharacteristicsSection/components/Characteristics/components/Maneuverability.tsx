@@ -1,12 +1,12 @@
 import { Heading } from '@radix-ui/themes';
 import { useLocale } from '../../../../../../hooks/useLocale';
-import {
-  HullTraverseVisualizer,
-  type StatsAcceptorProps,
-} from './HullTraverseVisualizer';
 import { Info } from './Info';
 import { InfoWithDelta } from './InfoWithDelta';
 import { StatsTableWrapper } from './StatsTableWrapper';
+import {
+  TraverseVisualizer,
+  type StatsAcceptorProps,
+} from './TraverseVisualizer';
 
 export function Maneuverability({ stats }: StatsAcceptorProps) {
   const { strings } = useLocale();
@@ -130,7 +130,7 @@ export function Maneuverability({ stats }: StatsAcceptorProps) {
         value="hullTraverseSoftTerrain"
       />
 
-      <HullTraverseVisualizer stats={stats} />
+      <TraverseVisualizer stats={stats} />
     </StatsTableWrapper>
   );
 }

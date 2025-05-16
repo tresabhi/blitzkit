@@ -3,7 +3,7 @@ import type { QuicklimeCallback } from 'quicklime';
 import { useEffect, useRef } from 'react';
 import { reloadUpdate, type ReloadUpdateData } from '..';
 import { Var } from '../../../../../../../../core/radix/var';
-import type { StatsAcceptorProps } from '../../HullTraverseVisualizer';
+import type { StatsAcceptorProps } from '../../TraverseVisualizer';
 import { ShellBorder } from './ShellBorder';
 
 interface ShellProps {

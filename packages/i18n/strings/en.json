@@ -12,7 +12,8 @@
       "deg": "%s1°",
       "hp": "%s1hp",
       "x": "x%s1",
-      "percentage": "%s1%"
+      "percentage": "%s1%",
+      "deg_s": "%s1°/s"
     },
 
     "gun_types": {
@@ -885,7 +886,8 @@
             "turret": "Turret",
             "hard": "Hard",
             "medium": "Medium",
-            "soft": "Soft"
+            "soft": "Soft",
+            "effective": "Effective"
           },
 
           "ricochet": {
