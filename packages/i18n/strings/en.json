@@ -892,7 +892,8 @@
             "angle": "Angle",
             "normalization": "Normalization",
             "effective_angle": "Effective angle",
-            "armor": "Armor"
+            "armor": "Armor",
+            "no_ricochet": "Explosive shells don't ricochet"
           },
 
           "view_range": {

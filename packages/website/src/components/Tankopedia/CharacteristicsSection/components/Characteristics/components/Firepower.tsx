@@ -65,39 +65,44 @@ export function Firepower({ stats }: StatsAcceptorProps) {
         </Heading>
 
         <Flex>
-          {gun.gun_type!.value.base.shells.map((thisShell, shellIndex) => (
-            <Tooltip content={unwrap(thisShell.name)} key={thisShell.id}>
-              <IconButton
-                color={thisShell.id === shell.id ? undefined : 'gray'}
-                variant="soft"
-                style={{
-                  borderTopLeftRadius: shellIndex === 0 ? undefined : 0,
-                  borderBottomLeftRadius: shellIndex === 0 ? undefined : 0,
-                  borderTopRightRadius:
-                    shellIndex === gun.gun_type!.value.base.shells.length - 1
-                      ? undefined
-                      : 0,
-                  borderBottomRightRadius:
-                    shellIndex === gun.gun_type!.value.base.shells.length - 1
-                      ? undefined
-                      : 0,
-                  marginLeft: shellIndex === 0 ? 0 : -1,
-                }}
-                onClick={() => {
-                  mutateDuel((draft) => {
-                    draft.protagonist.shell = thisShell;
-                  });
-                }}
-              >
-                <img
-                  alt={unwrap(thisShell.name)}
-                  width={16}
-                  height={16}
-                  src={asset(`icons/shells/${thisShell.icon}.webp`)}
-                />
-              </IconButton>
-            </Tooltip>
-          ))}
+          {gun.gun_type!.value.base.shells.map((thisShell, shellIndex) => {
+            const selected = thisShell.id === shell.id;
+
+            return (
+              <Tooltip content={unwrap(thisShell.name)} key={thisShell.id}>
+                <IconButton
+                  color={selected ? undefined : 'gray'}
+                  variant={selected ? 'solid' : 'soft'}
+                  highContrast={selected}
+                  style={{
+                    borderTopLeftRadius: shellIndex === 0 ? undefined : 0,
+                    borderBottomLeftRadius: shellIndex === 0 ? undefined : 0,
+                    borderTopRightRadius:
+                      shellIndex === gun.gun_type!.value.base.shells.length - 1
+                        ? undefined
+                        : 0,
+                    borderBottomRightRadius:
+                      shellIndex === gun.gun_type!.value.base.shells.length - 1
+                        ? undefined
+                        : 0,
+                    marginLeft: shellIndex === 0 ? 0 : -1,
+                  }}
+                  onClick={() => {
+                    mutateDuel((draft) => {
+                      draft.protagonist.shell = thisShell;
+                    });
+                  }}
+                >
+                  <img
+                    alt={unwrap(thisShell.name)}
+                    width={16}
+                    height={16}
+                    src={asset(`icons/shells/${thisShell.icon}.webp`)}
+                  />
+                </IconButton>
+              </Tooltip>
+            );
+          })}
         </Flex>
       </Flex>
 
@@ -265,9 +270,11 @@ export function Firepower({ stats }: StatsAcceptorProps) {
             deltaType="lowerIsBetter"
             value="shellRicochet"
           />
-          <RicochetVisualizer stats={stats} />
         </>
       )}
+
+      <RicochetVisualizer stats={stats} />
+
       <InfoWithDelta stats={stats} decimals={0} value="shellVelocity" />
       <InfoWithDelta stats={stats} decimals={0} value="shellRange" />
       <InfoWithDelta stats={stats} decimals={0} value="shellCapacity" />
