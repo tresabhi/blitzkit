@@ -28,7 +28,7 @@ export function applyPitchYawLimits(
   const elevationBuff = verticalStabilizer ? degToRad(4) : 0;
   let lowerPitch = -degToRad(pitchLimits.max) - depressionBuff;
   let upperPitch = -degToRad(pitchLimits.min) + elevationBuff;
-  const transition = degToRad(pitchLimits.transition ?? 0);
+  const transition = degToRad(pitchLimits.transition ?? 15);
 
   if (pitchLimits.back) {
     const range = degToRad(pitchLimits.back.range);
