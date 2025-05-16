@@ -12,7 +12,7 @@
       "hp": "%s1hp",
       "x": "x%s1",
       "percentage": "%s1%",
-      "deg_s": "%s1°/s"
+      "deg_s": "%s1°/с"
     },
     "gun_types": {
       "auto_loader": "Барабан",
@@ -760,18 +760,18 @@
     },
     "tools": {
       "guess": {
-        "name": "Guess the tank",
-        "button": "Guess away",
-        "description": "Silhouette mini-game",
-        "seo_description": "Play a tank guessing game with a silhouette in World of Tanks Blitz",
+        "name": "Угадайте танк",
+        "button": "Угадать",
+        "description": "Мини-игра «Силуэт»",
+        "seo_description": "Играйте угадывая силуэт танка из World of Tanks Blitz",
         "search": {
-          "placeholder": "Type to guess...",
-          "skip": "Skip",
-          "guess": "Guess",
-          "next": "Next",
+          "placeholder": "Введите догадку...",
+          "skip": "Пропустить",
+          "guess": "Угадать",
+          "next": "Следующий",
           "no_results": "Ничего не найденo"
         },
-        "stats": "%s1 / %s2 guessed correctly"
+        "stats": "%s1 / %s2 угадано верно"
       },
       "tankopedia": {
         "search": "Поиск характеристик...",
