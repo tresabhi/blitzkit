@@ -39,8 +39,7 @@ export function ShellSwitcher() {
             >
               <img
                 alt={unwrap(thisShell.name)}
-                width={16}
-                height={16}
+                style={{ width: '1.125rem', height: '1.125rem' }}
                 src={asset(`icons/shells/${thisShell.icon}.webp`)}
               />
             </IconButton>
