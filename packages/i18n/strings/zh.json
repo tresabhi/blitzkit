@@ -10,7 +10,9 @@
       "mm": "%s毫米",
       "deg": "%s1度",
       "hp": "%s生命值",
-      "x": "x%s1"
+      "x": "x%s1",
+      "percentage": "%s1%",
+      "deg_s": "%s1°/s"
     },
     "gun_types": {
       "auto_loader": "彈夾型戰車",
@@ -772,12 +774,36 @@
         "stats": "%s1 / %s2 guessed correctly"
       },
       "tankopedia": {
+        "search": "Search a stat...",
         "name": "戰車百科",
         "button": "尋找戰車",
         "description": "閃擊戰戰車百科全書",
         "seo_description": "世界坦克布莱茨坦克坦克世界闪击战的所有坦克的统计数字、装甲和更多",
         "tank_seo_title": "%s1-Tier %s2 %s3 %s4 | %s5 Tankopedia | 戰車世界閃擊戰 (WoTB)",
         "tank_seo_description": "%s1-Tier %s2 %s3 %s4 | %s5 Tankopedia | 戰車世界閃擊戰 (WoTB)",
+        "visualizers": {
+          "rotator": {
+            "hull": "Hull",
+            "turret": "Turret",
+            "hard": "Hard",
+            "medium": "中型戰車",
+            "soft": "柔软的",
+            "effective": "Effective"
+          },
+          "ricochet": {
+            "angle": "Angle",
+            "normalization": "轉正",
+            "effective_angle": "Effective angle",
+            "armor": "裝甲",
+            "no_ricochet": "Explosive shells don't ricochet"
+          },
+          "view_range": {
+            "camo": "Camo",
+            "percentage": "%s1%",
+            "ghost_factory": "Ghost Factory",
+            "dead_rail": "Dead Rail"
+          }
+        },
         "sandbox": {
           "poses": {
             "hull_down": "戰車下部",
