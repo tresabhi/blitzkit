@@ -1,18 +1,15 @@
-import { TankType } from '@blitzkit/core';
 import { Box, Flex } from '@radix-ui/themes';
 import { times } from 'lodash-es';
-import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, useEffect, useMemo, useRef } from 'react';
 import { awaitableModelDefinitions } from '../../../core/awaitables/modelDefinitions';
 import { awaitableProvisionDefinitions } from '../../../core/awaitables/provisionDefinitions';
 import { awaitableTankDefinitions } from '../../../core/awaitables/tankDefinitions';
 import { Var } from '../../../core/radix/var';
 import { useFullScreen } from '../../../hooks/useFullScreen';
-import { useLocale } from '../../../hooks/useLocale';
 import { Duel } from '../../../stores/duel';
 import { TankopediaEphemeral } from '../../../stores/tankopediaEphemeral';
 import type { MaybeSkeletonComponentProps } from '../../../types/maybeSkeletonComponentProps';
 import type { ThicknessRange } from '../../Armor/components/StaticArmor';
-import { classIcons } from '../../ClassIcon';
 import { Options } from './components/Options';
 import { TankSandbox } from './components/TankSandbox';
 import { NATION_COLORS, Title } from './components/TankSandbox/Title';
@@ -25,25 +22,11 @@ const [provisionDefinitions, modelDefinitions, tankDefinitions] =
   ]);
 
 export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
-  const [showSwapDialog, setShowSwapDialog] = useState(false);
   const revealed = TankopediaEphemeral.use((state) => state.revealed);
   const disturbed = TankopediaEphemeral.use((state) => state.disturbed);
-  const { unwrap, strings } = useLocale();
   const canvas = useRef<HTMLCanvasElement>(null);
   const isFullScreen = useFullScreen();
   const protagonist = Duel.use((state) => state.protagonist.tank);
-  const antagonist = Duel.use((state) => state.antagonist.tank);
-  const Icon = classIcons[protagonist.class];
-  const treeColor =
-    protagonist.type === TankType.COLLECTOR
-      ? 'blue'
-      : protagonist.type === TankType.PREMIUM
-        ? 'amber'
-        : undefined;
-  const compareTanks =
-    protagonist.id === antagonist.id
-      ? [protagonist.id]
-      : [protagonist.id, antagonist.id];
   const thicknessRange = useMemo(() => {
     const entries = Object.values(tankDefinitions.tanks);
     const filtered = entries.filter(
@@ -127,7 +110,7 @@ export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
           transitionDuration: '1s',
           background: isFullScreen ? 'black' : undefined,
         }}
-        height={disturbed && !isFullScreen ? 'calc(100vh - 6rem)' : '100vh'}
+        height={disturbed && !isFullScreen ? 'calc(100svh - 6rem)' : '100vh'}
         maxHeight={isFullScreen ? undefined : '60rem'}
         maxWidth={isFullScreen ? undefined : '120rem'}
         flexGrow="1"
