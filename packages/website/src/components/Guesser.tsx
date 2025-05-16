@@ -21,12 +21,12 @@ import {
 import fuzzysort from 'fuzzysort';
 import { debounce } from 'lodash-es';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { classIcons } from '../../../../../components/ClassIcon';
-import { SearchResults } from '../../../../../components/SearchResults';
-import { awaitableTankDefinitions } from '../../../../../core/awaitables/tankDefinitions';
-import { awaitableTankNames } from '../../../../../core/awaitables/tankNames';
-import { useLocale } from '../../../../../hooks/useLocale';
-import { GuessEphemeral } from '../../../../../stores/guessEphemeral';
+import { awaitableTankDefinitions } from '../core/awaitables/tankDefinitions';
+import { awaitableTankNames } from '../core/awaitables/tankNames';
+import { useLocale } from '../hooks/useLocale';
+import { GuessEphemeral } from '../stores/guessEphemeral';
+import { classIcons } from './ClassIcon';
+import { SearchResults } from './SearchResults';
 
 const { go } = fuzzysort;
 

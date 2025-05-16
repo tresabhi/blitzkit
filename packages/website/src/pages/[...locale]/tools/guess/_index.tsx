@@ -1,5 +1,9 @@
 import { Box, Flex, Heading } from '@radix-ui/themes';
 import { Suspense } from 'react';
+import { GuessBackground } from '../../../../components/GuessBackground';
+import { Guesser } from '../../../../components/Guesser';
+import { GuessRenderer } from '../../../../components/GuessRenderer';
+import { GuessRendererLoader } from '../../../../components/GuessRendererLoader';
 import { awaitableModelDefinitions } from '../../../../core/awaitables/modelDefinitions';
 import { awaitableProvisionDefinitions } from '../../../../core/awaitables/provisionDefinitions';
 import { awaitableTankDefinitions } from '../../../../core/awaitables/tankDefinitions';
@@ -12,10 +16,6 @@ import {
 import { Duel } from '../../../../stores/duel';
 import { GuessEphemeral } from '../../../../stores/guessEphemeral';
 import { TankopediaEphemeral } from '../../../../stores/tankopediaEphemeral';
-import { Background } from './components/Background';
-import { Guesser } from './components/Guesser';
-import { GuessRenderer } from './components/GuessRenderer';
-import { GuessRendererLoader } from './components/GuessRendererLoader';
 
 const [tankDefinitions, modelDefinitions, provisionDefinitions] =
   await Promise.all([
@@ -60,7 +60,7 @@ function Content() {
 
   return (
     <Flex flexGrow="1" position="relative" overflow="hidden">
-      <Background />
+      <GuessBackground />
 
       <Flex
         position="absolute"

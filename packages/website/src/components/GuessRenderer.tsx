@@ -1,9 +1,9 @@
 import { Canvas } from '@react-three/fiber';
-import { Controls } from '../../../../../components/Tankopedia/HeroSection/components/TankSandbox/components/Control';
-import { Lighting } from '../../../../../components/Tankopedia/HeroSection/components/TankSandbox/components/Lighting';
-import { TankModel } from '../../../../../components/Tankopedia/HeroSection/components/TankSandbox/components/TankModel';
-import { GuessEphemeral } from '../../../../../stores/guessEphemeral';
-import { TankopediaDisplay } from '../../../../../stores/tankopediaPersistent/constants';
+import { GuessEphemeral } from '../stores/guessEphemeral';
+import { TankopediaDisplay } from '../stores/tankopediaPersistent/constants';
+import { Controls } from './Tankopedia/HeroSection/components/TankSandbox/components/Control';
+import { Lighting } from './Tankopedia/HeroSection/components/TankSandbox/components/Lighting';
+import { TankModel } from './Tankopedia/HeroSection/components/TankSandbox/components/TankModel';
 
 const BRIGHTNESS = 2 ** -5;
 const CONTRAST = 2 ** 2;

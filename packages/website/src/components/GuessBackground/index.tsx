@@ -1,12 +1,12 @@
 import { Box } from '@radix-ui/themes';
 import { useEffect } from 'react';
-import { awaitableModelDefinitions } from '../../../../../../core/awaitables/modelDefinitions';
-import { awaitableProvisionDefinitions } from '../../../../../../core/awaitables/provisionDefinitions';
-import { tankToDuelMember } from '../../../../../../core/blitzkit/tankToDuelMember';
-import { Var } from '../../../../../../core/radix/var';
-import { Duel } from '../../../../../../stores/duel';
-import { GuessEphemeral } from '../../../../../../stores/guessEphemeral';
-import { TankopediaEphemeral } from '../../../../../../stores/tankopediaEphemeral';
+import { awaitableModelDefinitions } from '../../core/awaitables/modelDefinitions';
+import { awaitableProvisionDefinitions } from '../../core/awaitables/provisionDefinitions';
+import { tankToDuelMember } from '../../core/blitzkit/tankToDuelMember';
+import { Var } from '../../core/radix/var';
+import { Duel } from '../../stores/duel';
+import { GuessEphemeral } from '../../stores/guessEphemeral';
+import { TankopediaEphemeral } from '../../stores/tankopediaEphemeral';
 import './index.css';
 
 const [modelDefinitions, provisionDefinitions] = await Promise.all([
@@ -14,7 +14,7 @@ const [modelDefinitions, provisionDefinitions] = await Promise.all([
   awaitableProvisionDefinitions,
 ]);
 
-export function Background() {
+export function GuessBackground() {
   const guessState = GuessEphemeral.use((state) => state.guessState);
   const tank = GuessEphemeral.use((state) => state.tank);
   const mutateDuel = Duel.useMutation();
