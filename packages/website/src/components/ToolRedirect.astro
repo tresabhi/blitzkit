@@ -1,0 +1,19 @@
+---
+import { literals } from '@blitzkit/i18n';
+import { getStrings } from '../core/i18n/getStrings';
+
+export interface Props {
+  tool: string;
+}
+
+const { tool } = Astro.props;
+const { locale } = Astro.params;
+
+const strings = getStrings(locale);
+const url = `/${locale === undefined ? '' : `${locale}/`}${tool}`;
+---
+
+<meta http-equiv="refresh" content={`0; url=${url}`} />
+<a href={url}>
+  {literals(strings.website.redirect, [url])}
+</a>

@@ -741,6 +741,8 @@
   },
 
   "website": {
+    "redirect": "Redirecting to %s1... Didn't happen automatically? Click here.",
+
     "settings": {
       "dev_mode": "Development mode",
       "language": "Language"
