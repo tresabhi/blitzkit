@@ -1,15 +1,7 @@
 ---
-import { galleryTool } from '../../../../constants/tools';
-import ToolLayout from '../../../../layouts/ToolLayout.astro';
-import { Page } from './_index';
+import LegacyRedirect from '../../../../components/LegacyRedirect.astro';
 
 export { getStaticPaths } from '../../index.astro';
-
-const { locale } = Astro.params;
 ---
 
-<ToolLayout tool={galleryTool}>
-  <Page {locale} client:only="react">
-    <Page {locale} skeleton slot="fallback" />
-  </Page>
-</ToolLayout>
+<LegacyRedirect tool="gallery" />
