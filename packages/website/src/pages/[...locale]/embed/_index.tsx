@@ -1,19 +1,19 @@
 import { Box, Flex, Link, Text } from '@radix-ui/themes';
-import { PreviewWrapper } from '../../../../components/Embeds/PreviewWrapper';
-import { LinkI18n } from '../../../../components/LinkI18n';
-import { PageWrapper } from '../../../../components/PageWrapper';
+import { PreviewWrapper } from '../../../components/Embeds/PreviewWrapper';
+import { LinkI18n } from '../../../components/LinkI18n';
+import { PageWrapper } from '../../../components/PageWrapper';
 import {
   embedConfigurations,
   extractEmbedConfigDefaults,
-} from '../../../../constants/embeds';
-import { Var } from '../../../../core/radix/var';
+} from '../../../constants/embeds';
+import { Var } from '../../../core/radix/var';
 import {
+  type LocaleAcceptorProps,
   LocaleProvider,
   useLocale,
-  type LocaleAcceptorProps,
-} from '../../../../hooks/useLocale';
-import { App } from '../../../../stores/app';
-import { EmbedState } from '../../../../stores/embedState';
+} from '../../../hooks/useLocale';
+import { App } from '../../../stores/app';
+import { EmbedState } from '../../../stores/embedState';
 
 export function Page({ locale }: LocaleAcceptorProps) {
   return (
@@ -39,7 +39,6 @@ function Content() {
         >
           {strings.website.tools.embed.suggest}
         </Link>
-        .
       </Text>
 
       <Flex justify="center">

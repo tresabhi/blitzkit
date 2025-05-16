@@ -1,24 +1,28 @@
 import { Box } from '@radix-ui/themes';
 import { useMemo } from 'react';
 import { parse } from 'urlon';
-import { BlitzKitTheme } from '../../../../../../components/BlitzKitTheme';
+import { BlitzKitTheme } from '../../../../../components/BlitzKitTheme';
 import {
   embedConfigurations,
   embedRenderers,
   extractEmbedConfigDefaults,
-} from '../../../../../../constants/embeds';
+} from '../../../../../constants/embeds';
+import {
+  LocaleProvider,
+  type LocaleAcceptorProps,
+} from '../../../../../hooks/useLocale';
 import {
   EmbedState,
   type EmbedConfig,
   type ExtractEmbedConfigTypes,
-} from '../../../../../../stores/embedState';
-import { useEmbedStateCurry } from '../../../../../../stores/embedState/utilities';
+} from '../../../../../stores/embedState';
+import { useEmbedStateCurry } from '../../../../../stores/embedState/utilities';
 
 interface PageProps {
   embed: keyof typeof embedConfigurations;
 }
 
-export function Page({ embed }: PageProps) {
+export function Page({ embed, locale }: PageProps & LocaleAcceptorProps) {
   const state = useMemo(() => {
     const params = new URLSearchParams(window.location.search);
     const stateRaw = params.get('state');
@@ -32,9 +36,11 @@ export function Page({ embed }: PageProps) {
   }, [embed]);
 
   return (
-    <EmbedState.Provider data={state}>
-      <Content embed={embed} />
-    </EmbedState.Provider>
+    <LocaleProvider locale={locale}>
+      <EmbedState.Provider data={state}>
+        <Content embed={embed} />
+      </EmbedState.Provider>
+    </LocaleProvider>
   );
 }
 

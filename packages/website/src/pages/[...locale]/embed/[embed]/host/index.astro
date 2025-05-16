@@ -1,11 +1,13 @@
 ---
-import EmbedLayout from '../../../../../../layouts/EmbedLayout.astro';
+import EmbedLayout from '../../../../../layouts/EmbedLayout.astro';
 import type { getStaticPaths } from '../index.astro';
 import { Page } from './_index';
 
 export { getStaticPaths } from '../index.astro';
+
+const { locale } = Astro.params;
 ---
 
 <EmbedLayout>
-  <Page client:only="react" embed={Astro.params.embed} />
+  <Page {locale} client:only="react" embed={Astro.params.embed} />
 </EmbedLayout>

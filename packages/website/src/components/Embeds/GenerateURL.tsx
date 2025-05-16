@@ -199,7 +199,7 @@ export function GenerateURL({ embed }: GenerateURLProps) {
                 setSearchDialogOpen(false);
                 setCopyDialogOpen(false);
 
-                return `${location.origin}/tools/embed/${embed}/host?${searchParams.toString()}`;
+                return `${location.origin}/embed/${embed}/host?${searchParams.toString()}`;
               }}
             >
               <Link2Icon />{' '}
