@@ -1,0 +1,13 @@
+---
+import { tierListTool } from '../../../constants/tools';
+import ToolLayout from '../../../layouts/ToolLayout.astro';
+import { Page } from './_index';
+
+export { getStaticPaths } from '../index.astro';
+
+const { locale } = Astro.params;
+---
+
+<ToolLayout tool={tierListTool}>
+  <Page {locale} client:load />
+</ToolLayout>
