@@ -27,7 +27,7 @@ export async function popularTanks() {
           fieldName: 'pagePath',
           stringFilter: {
             matchType: 'BEGINS_WITH',
-            value: '/tools/tankopedia/',
+            value: '/tanks/',
           },
         },
       },
@@ -43,7 +43,7 @@ export async function popularTanks() {
       (row) =>
         row.dimensionValues &&
         row.dimensionValues[0].value &&
-        row.dimensionValues[0].value !== '/tools/tankopedia/' &&
+        row.dimensionValues[0].value !== '/tanks/' &&
         row.metricValues &&
         row.metricValues[0].value,
     )

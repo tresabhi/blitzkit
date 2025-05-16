@@ -73,7 +73,7 @@ export const TankCard = forwardRef<HTMLSpanElement, TankCardProps>(
           locale={locale}
           className="link"
           underline="hover"
-          href={provideLink ? `/tools/tankopedia/${tank.id}` : '#'}
+          href={provideLink ? `/tanks/${tank.slug}` : '#'}
           onClick={(event) => {
             if (!provideLink) event.preventDefault();
           }}

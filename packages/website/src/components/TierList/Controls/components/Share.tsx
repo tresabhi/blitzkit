@@ -12,7 +12,7 @@ export function Share() {
     <CopyButton
       variant="outline"
       copy={() =>
-        `${location.origin}/tools/tier-list?${generateTierListParams(rows)}`
+        `${location.origin}/tier-list?${generateTierListParams(rows)}`
       }
     >
       <Share2Icon /> {strings.website.tools.tier_list.buttons.share}

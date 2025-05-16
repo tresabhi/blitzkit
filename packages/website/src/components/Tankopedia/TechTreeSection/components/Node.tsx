@@ -46,7 +46,7 @@ export function Node({ id, highlight, nextIds, skeleton }: NodeProps) {
   return (
     <LinkI18n
       locale={locale}
-      href={`/tools/tankopedia/${id}`}
+      href={`/tanks/${tankDefinitions.tanks[id].slug}`}
       key={id}
       style={{
         textDecoration: 'none',

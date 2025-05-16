@@ -135,7 +135,10 @@ function ModuleButton({
   );
 
   return isTank ? (
-    <LinkI18n locale={locale} href={`/tools/tankopedia/${unlock.id}`}>
+    <LinkI18n
+      locale={locale}
+      href={`/tanks/${tankDefinitions.tanks[unlock.id].slug}`}
+    >
       {button}
     </LinkI18n>
   ) : (

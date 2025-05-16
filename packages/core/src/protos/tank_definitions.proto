@@ -10,16 +10,16 @@ message TankDefinitions {
 
 message TankDefinition {
   required uint32 id = 1;
-  map<uint32, uint32> roles = 2;
-  required bool fixed_camouflage = 4;
-  repeated int32 camouflages = 5;
-  repeated int32 ancestors = 6;
-  repeated int32 successors = 7;
-  repeated Crew crew = 8;
-  required uint32 health = 9;
-  required string nation = 10;
-  required I18nString name = 11;
-  optional I18nString name_full = 12;
+  required string slug = 2;
+  map<uint32, uint32> roles = 3;
+  required bool fixed_camouflage = 5;
+  repeated int32 camouflages = 6;
+  repeated int32 ancestors = 7;
+  repeated int32 successors = 8;
+  repeated Crew crew = 9;
+  required uint32 health = 10;
+  required string nation = 11;
+  required I18nString name = 12;
   required TankType type = 13;
   required uint32 max_consumables = 14;
   required uint32 max_provisions = 15;

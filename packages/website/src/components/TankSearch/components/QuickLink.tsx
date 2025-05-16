@@ -18,7 +18,7 @@ export function QuickLink({ topResult }: QuickLinkProps) {
 
   return (
     <TextField.Slot>
-      <LinkI18n locale={locale} href={`/tools/tankopedia/${topResult.id}`}>
+      <LinkI18n locale={locale} href={`/tanks/${topResult.slug}`}>
         <Button variant="ghost">
           {unwrap(topResult.name)} <CaretRightIcon />
         </Button>

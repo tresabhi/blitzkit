@@ -141,7 +141,7 @@ const strings = getStrings(locale);
                 (branch) =>
                   branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
               );
-              const selected = Astro.url.pathname.includes(`/tools/${tool.id}`);
+              const selected = Astro.url.pathname.includes(`/${tool.id}`);
               const toolStrings =
                 strings.website.tools[
                   (tool.stringsId ??
@@ -157,7 +157,7 @@ const strings = getStrings(locale);
                   color="gray"
                   highContrast={selected}
                   size="2"
-                  href={`/tools/${tool.id}`}
+                  href={`/${tool.id}`}
                   underline="hover"
                 >
                   {toolStrings.name}
@@ -227,12 +227,12 @@ const strings = getStrings(locale);
                 color="gray"
                 highContrast
                 style={{ display: 'contents' }}
-                href={`/tools/${tool.id}`}
+                href={`/${tool.id}`}
               >
                 <Box
                   style={{
                     borderRadius: Var('radius-2'),
-                    backgroundImage: `url(/assets/images/tools/${tool.id}.webp)`,
+                    backgroundImage: `url(/assets/images/${tool.id}.webp)`,
                     backgroundSize: '200%',
                     backgroundPosition: 'right center',
                   }}

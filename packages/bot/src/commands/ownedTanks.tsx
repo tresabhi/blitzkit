@@ -78,7 +78,7 @@ export const ownedTanksCommand = new Promise<CommandRegistry>((resolve) => {
         )
         .map(
           (tank) =>
-            `[${flags[tank.nation]} ${markdownEscape(unwrap(tank.name))}](<https://blitzkit.app/tools/tankopedia/${tank.id}>)`,
+            `[${flags[tank.nation]} ${markdownEscape(unwrap(tank.name))}](<https://blitzkit.app/tanks/${tank.slug}>)`,
         );
       const lines = [title, ...tankList];
 

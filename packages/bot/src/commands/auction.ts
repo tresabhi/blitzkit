@@ -107,8 +107,8 @@ export const auctionCommand = new Promise<CommandRegistry>((resolve) => {
 
         if (!tank) return '';
 
-        const name = `[${tank.name}](<https://blitzkit.app/tools/tankopedia/${
-          tank.id
+        const name = `[${tank.name}](<https://blitzkit.app/tanks/${
+          tank.slug
         }>)`;
         const next =
           data.next_price === null

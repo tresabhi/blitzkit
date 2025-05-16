@@ -18,11 +18,7 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
       width={{ initial: '144px', sm: '240px' }}
       style={{ overflow: 'hidden' }}
     >
-      <LinkI18n
-        locale={locale}
-        href={`/tools/tankopedia/${tank.id}`}
-        tabIndex={-1}
-      >
+      <LinkI18n locale={locale} href={`/tanks/${tank.slug}`} tabIndex={-1}>
         <img
           alt={unwrap(tank.name)}
           draggable={false}
@@ -48,7 +44,7 @@ export function TankRowHeaderCell({ tank }: TankRowHeaderCellProps) {
         highContrast={tank.type === TankType.RESEARCHABLE}
         underline="hover"
         wrap="nowrap"
-        href={`/tools/tankopedia/${tank.id}`}
+        href={`/tanks/${tank.slug}`}
         style={{
           paddingLeft: 'var(--space-2)',
           display: 'flex',

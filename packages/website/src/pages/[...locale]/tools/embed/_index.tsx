@@ -50,7 +50,7 @@ function Content() {
           >
             <LinkI18n
               locale={locale}
-              href={`/tools/embed/${embed}`}
+              href={`/embed/${embed}`}
               color="gray"
               highContrast
               style={{

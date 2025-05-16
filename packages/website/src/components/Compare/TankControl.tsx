@@ -11,7 +11,7 @@ import { TankSearch } from '../TankSearch';
 
 interface TankControlProps {
   index: number;
-  id: number;
+  slug: string;
 }
 
 const [provisionDefinitions, modelDefinitions] = await Promise.all([
@@ -19,7 +19,7 @@ const [provisionDefinitions, modelDefinitions] = await Promise.all([
   awaitableModelDefinitions,
 ]);
 
-export function TankControl({ index, id }: TankControlProps) {
+export function TankControl({ index, slug }: TankControlProps) {
   const { locale } = useLocale();
   const [switchTankDialogOpen, setSwitchTankDialogOpen] = useState(false);
   const mutateCompareEphemeral = CompareEphemeral.useMutation();
@@ -79,11 +79,7 @@ export function TankControl({ index, id }: TankControlProps) {
         </Dialog.Content>
       </Dialog.Root>
 
-      <LinkI18n
-        locale={locale}
-        href={`/tools/tankopedia/${id}`}
-        target="_blank"
-      >
+      <LinkI18n locale={locale} href={`/tanks/${slug}`} target="_blank">
         <IconButton variant="ghost">
           <ExternalLinkIcon />
         </IconButton>

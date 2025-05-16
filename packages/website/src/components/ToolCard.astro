@@ -61,7 +61,7 @@ const toolStrings =
     {locale}
     className="link"
     underline="none"
-    href={disabled ? '#' : (tool.href ?? `/tools/${tool.id}`)}
+    href={disabled ? '#' : (tool.href ?? `/${tool.id}`)}
     target={tool.href ? '_blank' : undefined}
   >
     <Box

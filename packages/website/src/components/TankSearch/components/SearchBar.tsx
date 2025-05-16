@@ -57,7 +57,7 @@ export function SearchBar({ topResult, skeleton, onSelect }: SearchBarProps) {
       if (onSelect) {
         onSelect(topResult);
       } else {
-        window.location.href = `/tools/tankopedia/${topResult.id}`;
+        window.location.href = `/tanks/${topResult.slug}`;
       }
     },
     [topResult],
