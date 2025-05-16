@@ -31,19 +31,21 @@ export function TraverseVisualizer({ stats }: StatsAcceptorProps) {
     let lastT = Date.now() / 1000;
 
     function frame() {
-      if (!turret.current || !hull.current) return;
-
       const t = Date.now() / 1000;
       const dt = t - lastT;
       lastT = t;
 
-      turretAngle.current =
-        (turretAngle.current + turretSpeedRad * dt) % (2 * Math.PI);
-      hullAngle.current =
-        (hullAngle.current + hullTraverseRad * dt) % (2 * Math.PI);
+      if (turret.current) {
+        turretAngle.current =
+          (turretAngle.current + turretSpeedRad * dt) % (2 * Math.PI);
+        turret.current.style.transform = `translate(-50%, -50%) rotate(${-turretAngle.current}rad)`;
+      }
 
-      turret.current.style.transform = `translate(-50%, -50%) rotate(${-turretAngle.current}rad)`;
-      hull.current.style.transform = `translate(-50%, -50%) rotate(${-hullAngle.current}rad)`;
+      if (hull.current) {
+        hullAngle.current =
+          (hullAngle.current + hullTraverseRad * dt) % (2 * Math.PI);
+        hull.current.style.transform = `translate(-50%, -50%) rotate(${-hullAngle.current}rad)`;
+      }
 
       if (!cancel) requestAnimationFrame(frame);
     }
