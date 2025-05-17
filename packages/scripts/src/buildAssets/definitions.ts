@@ -37,6 +37,7 @@ import {
   SUPPORTED_LOCALES,
 } from '@blitzkit/i18n';
 import { readdir } from 'fs/promises';
+import { deburr } from 'lodash-es';
 import { parse as parsePath } from 'path';
 import { Vector3Tuple } from 'three';
 import { parse as parseYaml } from 'yaml';
@@ -47,6 +48,23 @@ import { commitAssets } from '../core/github/commitAssets';
 import { DATA } from './constants';
 import { Avatar } from './skillIcons';
 import { TankParameters } from './tankIcons';
+
+const nonAlphanumericRegex = /[^a-z0-9]/g;
+const multipleDashesRegex = /--+/g;
+const trailingDashRegex = /-$/g;
+const leadingDashRegex = /^-/g;
+
+const nationSlugDiscriminators = {
+  china: 'cn',
+  european: 'eu',
+  france: 'fr',
+  germany: 'de',
+  japan: 'jp',
+  other: 'ot',
+  uk: 'gb',
+  usa: 'us',
+  ussr: 'ru',
+};
 
 function parseResearchCost(raw: number | string) {
   if (typeof raw === 'number') {
@@ -502,7 +520,7 @@ const blitzShellKindToBlitzkit: Record<ShellKind, ShellType> = {
   HIGH_EXPLOSIVE: ShellType.HE,
   HOLLOW_CHARGE: ShellType.HEAT,
 };
-export const botPattern = /^.+((tutorial_bot(\d+)?)|(TU(R?)))$/;
+export const botPattern = /^.+((tutorial_bot(\d+)?)|(TU))$/;
 const blitzModuleTypeToBlitzkit: Record<keyof BlitzModuleType, ModuleType> = {
   chassis: ModuleType.TRACKS,
   engine: ModuleType.ENGINE,
@@ -703,6 +721,93 @@ export async function definitions() {
     };
   });
 
+  const slugRequesters = new Map<string, { id: number; key: string }[]>();
+  const idToNation: Record<number, string> = {};
+
+  await Promise.all(
+    nations.map(async (nation) => {
+      const tankList = await readXMLDVPL<{ root: VehicleDefinitionList }>(
+        `${DATA}/XML/item_defs/vehicles/${nation}/list.xml`,
+      );
+
+      for (const tankKey in tankList.root) {
+        if (botPattern.test(tankKey)) continue;
+
+        const tank = tankList.root[tankKey];
+        const tankId = toUniqueId(nation, tank.id);
+        const name = (
+          (tank.shortUserString
+            ? getString(tank.shortUserString)
+            : undefined) ?? getString(tank.userString)
+        ).locales.en;
+
+        let slug = deburr(name).toLowerCase();
+        slug = slug.replaceAll(nonAlphanumericRegex, '-');
+        slug = slug.replaceAll(multipleDashesRegex, '-');
+        slug = slug.replaceAll(trailingDashRegex, '');
+        slug = slug.replaceAll(leadingDashRegex, '');
+
+        idToNation[tankId] = nation;
+
+        if (slugRequesters.has(slug)) {
+          slugRequesters.get(slug)!.push({ id: tankId, key: tankKey });
+        } else {
+          slugRequesters.set(slug, [{ id: tankId, key: tankKey }]);
+        }
+      }
+    }),
+  );
+
+  const slugs = new Map<number, string>();
+
+  slugRequesters.forEach((requesters, slug) => {
+    if (requesters.length === 1) {
+      slugs.set(requesters[0].id, slug);
+      return;
+    }
+
+    console.warn(
+      `Multiple tanks share slug ${slug}: ${requesters.map(({ key }) => key).join(', ')}`,
+    );
+
+    if (requesters.length !== 2) {
+      throw new Error('Unresolvable number of duplicates :(');
+    }
+
+    const nonCanonical = requesters.find(({ key }) => key.endsWith('TUR'));
+
+    if (nonCanonical === undefined) {
+      console.log('Using nations to discriminate');
+      // both are non-tutorial tanks, will have to discriminate using nation
+
+      requesters.forEach(({ id, key }) => {
+        const nation = idToNation[id];
+        const discriminator =
+          nationSlugDiscriminators[
+            nation as keyof typeof nationSlugDiscriminators
+          ];
+
+        console.log(`Solution: ${key} -> ${slug}-${discriminator}`);
+        slugs.set(id, `${slug}-${discriminator}`);
+      });
+    } else {
+      console.log('Using tutorial bot suffix to discriminate');
+
+      const canonical = requesters.find(({ key }) => !key.endsWith('TUR'));
+
+      if (canonical === undefined) {
+        throw new Error(
+          'Two tutorial bots share the same slug? The world is truly broken.',
+        );
+      }
+
+      console.log(`Solution: ${canonical.key} -> ${slug}`);
+      slugs.set(canonical.id, slug);
+      console.log(`Solution: ${nonCanonical.key} -> ${slug}-tur`);
+      slugs.set(nonCanonical.id, `${slug}-tur`);
+    }
+  });
+
   await Promise.all(
     nations.map(async (nation) => {
       const tankList = await readXMLDVPL<{ root: VehicleDefinitionList }>(
@@ -787,6 +892,7 @@ export async function definitions() {
         const hullArmor: Armor = { spaced: [], thickness: {} };
         const equipment = tankDefinition.root.optDevicePreset;
         tankStringIdMap[`${nation}:${tankKey}`] = tankId;
+        const slug = slugs.get(tank.id)!;
 
         if (tank.sellPrice) {
           tankPrice = {
@@ -903,7 +1009,7 @@ export async function definitions() {
             (tank.shortUserString
               ? getString(tank.shortUserString)
               : undefined) ?? getString(tank.userString),
-          name_full: getString(tank.userString),
+          slug,
           nation,
           type: tankTags.includes('collectible')
             ? TankType.COLLECTOR
@@ -937,13 +1043,6 @@ export async function definitions() {
 
             tankDefinitions.tanks[tankId].roles[id] = combatRoles[role].id;
           });
-        }
-
-        if (
-          tankDefinitions.tanks[tankId].name ===
-          tankDefinitions.tanks[tankId].name_full
-        ) {
-          delete tankDefinitions.tanks[tankId].name_full;
         }
 
         modelDefinitions.models[tankId] = {
