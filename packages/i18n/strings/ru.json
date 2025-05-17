@@ -654,8 +654,8 @@
   },
   "website": {
     "redirect": {
-      "title": "301: moved permanently",
-      "body": "This page has moved. Redirecting..."
+      "title": "301: перемещено навсегда",
+      "body": "Эта страница перемещена. Перенаправление..."
     },
     "settings": {
       "dev_mode": "Режим разработчика",
