@@ -7,7 +7,7 @@ export interface FileChange {
   content: Buffer;
 }
 
-const heuristicFormats = ['glb'];
+const heuristicFormats = ['glb', 'webp', 'jpg', 'png'];
 
 export async function commitMultipleFiles(
   repoRaw: string,
