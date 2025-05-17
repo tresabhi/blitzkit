@@ -1,8 +1,6 @@
 import { Box, Flex } from '@radix-ui/themes';
 import { times } from 'lodash-es';
 import { Suspense, useEffect, useMemo, useRef } from 'react';
-import { awaitableModelDefinitions } from '../../../core/awaitables/modelDefinitions';
-import { awaitableProvisionDefinitions } from '../../../core/awaitables/provisionDefinitions';
 import { awaitableTankDefinitions } from '../../../core/awaitables/tankDefinitions';
 import { Var } from '../../../core/radix/var';
 import { useFullScreen } from '../../../hooks/useFullScreen';
@@ -14,12 +12,7 @@ import { Options } from './components/Options';
 import { TankSandbox } from './components/TankSandbox';
 import { NATION_COLORS, Title } from './components/TankSandbox/Title';
 
-const [provisionDefinitions, modelDefinitions, tankDefinitions] =
-  await Promise.all([
-    awaitableProvisionDefinitions,
-    awaitableModelDefinitions,
-    awaitableTankDefinitions,
-  ]);
+const tankDefinitions = await awaitableTankDefinitions;
 
 export function HeroSection({ skeleton }: MaybeSkeletonComponentProps) {
   const revealed = TankopediaEphemeral.use((state) => state.revealed);

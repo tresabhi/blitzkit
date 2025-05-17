@@ -118,7 +118,6 @@ export function Controls({
 
     const t0 = Date.now() / 1000;
     let cancel = false;
-    const position = inspectModeInitialPosition.clone();
 
     function frame() {
       if (!cancel) requestAnimationFrame(frame);
