@@ -7,6 +7,8 @@ export interface FileChange {
   content: Buffer;
 }
 
+const heuristicFormats = ['glb'];
+
 export async function commitMultipleFiles(
   repoRaw: string,
   branch: string,
@@ -21,31 +23,67 @@ export async function commitMultipleFiles(
       const response = await fetch(
         `https://raw.githubusercontent.com/${blobPath}`,
       );
+      let isNew: boolean;
+      let isDifferent: boolean;
+      let diff: number;
 
       if (response.status === 404) {
+        isNew = true;
+        diff = change.content.length;
+        isDifferent = true;
+      } else if (
+        response.headers.has('Content-Length') &&
+        parseInt(response.headers.get('Content-Length')!) !==
+          change.content.length
+      ) {
+        isNew = false;
+        diff =
+          change.content.length -
+          parseInt(response.headers.get('Content-Length')!);
+        isDifferent = true;
+      } else if (response.status === 200) {
+        isNew = false;
+        const buffer = Buffer.from(await response.arrayBuffer());
+
+        if (buffer.equals(change.content)) {
+          diff = 0;
+          isDifferent = false;
+        } else {
+          diff = change.content.length - buffer.length;
+          isDifferent = true;
+        }
+      } else {
+        throw new Error(
+          `Unexpected status code ${response.status} for ${blobPath}`,
+        );
+      }
+
+      /**
+       * Heuristic: if it's a large blob like a .glb, a diff = 0 might end up
+       * being a false positive with isDifferent = true. So, it's okay to
+       * assume it's unchanged.
+       */
+      if (
+        diff === 0 &&
+        heuristicFormats.some((format) => change.path.endsWith(`.${format}`))
+      ) {
+        isDifferent = false;
+        isNew = false;
+      }
+
+      if (isNew) {
         console.log(
           `🟢 (+${change.content.length.toLocaleString()}B) ${blobPath}`,
         );
         changes.push(change);
-      } else if (response.status === 200) {
-        const buffer = Buffer.from(await response.arrayBuffer());
-
-        if (!buffer.equals(change.content)) {
-          const diff = change.content.length - buffer.length;
-
-          console.log(
-            `🟡 (${diff > 0 ? '+' : ''}${diff.toLocaleString()}B) ${blobPath}`,
-          );
-
-          changes.push(change);
-
-          return;
-        }
-
-        console.log(`🔵 (${buffer.length.toLocaleString()}B) ${blobPath}`);
+      } else if (isDifferent) {
+        console.log(
+          `🟡 (${diff > 0 ? '+' : ''}${diff.toLocaleString()}B) ${blobPath}`,
+        );
+        changes.push(change);
       } else {
-        throw new Error(
-          `Unexpected status code ${response.status} for ${blobPath}`,
+        console.log(
+          `🔵 (${change.content.length.toLocaleString()}B) ${blobPath}`,
         );
       }
     }),
