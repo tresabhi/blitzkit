@@ -15,18 +15,22 @@ export async function fetchTankNames() {
     tankDefinitionsArray.map(async (tank) => {
       const searchableNameDeburr: I18nString = { locales: {} };
 
-      Object.entries(tank.name_full ?? tank.name).forEach(([key, value]) => {
+      Object.entries(tank.name).forEach(([key, value]) => {
         searchableNameDeburr.locales[key] = deburr(value);
       });
 
       return {
         id: tank.id,
         name: tank.name,
-        nameFull: tank.name_full,
-        searchableName: tank.name_full ?? tank.name,
+        searchableName: tank.name,
         searchableNameDeburr,
         camouflages: tank.camouflages
-          ?.map((id) => SUPPORTED_LOCALES.map((locale) => camouflageDefinitions.camouflages[id]?.name.locales[locale]))
+          ?.map((id) =>
+            SUPPORTED_LOCALES.map(
+              (locale) =>
+                camouflageDefinitions.camouflages[id]?.name.locales[locale],
+            ),
+          )
           .flat()
           .filter(Boolean)
           .map(deburr)
