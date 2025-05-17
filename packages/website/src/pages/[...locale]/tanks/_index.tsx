@@ -1,12 +1,12 @@
-import { PageWrapper } from '../../../../components/PageWrapper';
-import { TankSearch } from '../../../../components/TankSearch';
+import { PageWrapper } from '../../../components/PageWrapper';
+import { TankSearch } from '../../../components/TankSearch';
 import {
   LocaleProvider,
   type LocaleAcceptorProps,
-} from '../../../../hooks/useLocale';
-import { App } from '../../../../stores/app';
-import { TankopediaPersistent } from '../../../../stores/tankopediaPersistent';
-import type { MaybeSkeletonComponentProps } from '../../../../types/maybeSkeletonComponentProps';
+} from '../../../hooks/useLocale';
+import { App } from '../../../stores/app';
+import { TankopediaPersistent } from '../../../stores/tankopediaPersistent';
+import type { MaybeSkeletonComponentProps } from '../../../types/maybeSkeletonComponentProps';
 
 export function Page({
   locale,
