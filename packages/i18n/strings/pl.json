@@ -773,9 +773,9 @@
           "skip": "Skip",
           "guess": "Guess",
           "next": "Next",
-          "no_results": "No results"
+          "no_results": "Brak wyników"
         },
-        "stats": "%s1 / %s2 guessed correctly"
+        "stats": ""
       },
       "tankopedia": {
         "search": "Search a stat...",
