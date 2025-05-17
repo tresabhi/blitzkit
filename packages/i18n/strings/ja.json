@@ -653,6 +653,10 @@
     }
   },
   "website": {
+    "redirect": {
+      "title": "301: moved permanently",
+      "body": "This page has moved. Redirecting..."
+    },
     "settings": {
       "dev_mode": "開発者モード",
       "language": "言語 / Language"
