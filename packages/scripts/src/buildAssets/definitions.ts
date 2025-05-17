@@ -892,7 +892,13 @@ export async function definitions() {
         const hullArmor: Armor = { spaced: [], thickness: {} };
         const equipment = tankDefinition.root.optDevicePreset;
         tankStringIdMap[`${nation}:${tankKey}`] = tankId;
-        const slug = slugs.get(tank.id)!;
+        const slug = slugs.get(tankId);
+
+        if (slug === undefined) {
+          throw new Error(
+            `Could not find slug for ${nation}/${tankKey} (${tankId})`,
+          );
+        }
 
         if (tank.sellPrice) {
           tankPrice = {

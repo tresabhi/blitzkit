@@ -1,0 +1,45 @@
+---
+import { DiscordLogoIcon, PaperPlaneIcon } from '@radix-ui/react-icons';
+import { Button, Flex, Heading, Link, Text } from '@radix-ui/themes';
+import { PageWrapper } from '../components/PageWrapper';
+import { getStrings } from '../core/i18n/getStrings';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+export interface Props {
+  path: string;
+}
+
+const { path } = Astro.props;
+const { locale } = Astro.params;
+
+const strings = getStrings(locale);
+const resolvedPath = `/${locale === undefined ? '' : `${locale}/`}${path}`;
+---
+
+<BaseLayout>
+  <link
+    slot="head"
+    rel="canonical"
+    href={`${Astro.url.origin}${resolvedPath}`}
+  />
+  <meta slot="head" http-equiv="refresh" content={`0; url=${resolvedPath}`} />
+
+  <PageWrapper align="center" justify="center" gap="0">
+    <Heading>{strings.website.redirect.title}</Heading>
+    <Text color="gray">{strings.website.redirect.body}</Text>
+
+    <Flex mt="4" gap="2">
+      <Link href={resolvedPath}>
+        <Button>
+          <PaperPlaneIcon /> Redirect
+        </Button>
+      </Link>
+
+      <Link href="https://discord.gg/nDt7AjGJQH">
+        <Button variant="outline">
+          <DiscordLogoIcon /> Discord
+        </Button>
+      </Link>
+    </Flex>
+  </PageWrapper>
+</BaseLayout>

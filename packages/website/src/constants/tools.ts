@@ -15,7 +15,8 @@ export interface Tool {
 }
 
 export const tankopediaTool: Tool = {
-  id: 'tankopedia',
+  id: 'tanks',
+  stringsId: 'tankopedia',
   button: {
     color: 'purple',
   },

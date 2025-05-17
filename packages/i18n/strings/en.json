@@ -741,7 +741,10 @@
   },
 
   "website": {
-    "redirect": "Redirecting to %s1... Didn't happen automatically? Click here.",
+    "redirect": {
+      "title": "301: moved permanently",
+      "body": "This page has moved. Redirecting..."
+    },
 
     "settings": {
       "dev_mode": "Development mode",

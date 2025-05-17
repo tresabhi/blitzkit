@@ -1,7 +1,7 @@
 ---
 import type { GetStaticPaths } from 'astro';
-import LegacyRedirect from '../../../../../components/LegacyRedirect.astro';
 import { embedConfigurations } from '../../../../../constants/embeds';
+import LegacyRedirect from '../../../../../layouts/LegacyRedirect.astro';
 import { getStaticPaths as parentGetStaticPaths } from '../index.astro';
 
 export const getStaticPaths = (() => {

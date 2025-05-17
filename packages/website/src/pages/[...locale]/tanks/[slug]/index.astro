@@ -1,0 +1,114 @@
+---
+import { AstroSeo } from '@astrolib/seo';
+import {
+  asset,
+  createDefaultProvisions,
+  createDefaultSkills,
+  fetchEquipmentDefinitions,
+  fetchModelDefinitions,
+  fetchProvisionDefinitions,
+  fetchSkillDefinitions,
+  fetchTankDefinitions,
+  TIER_ROMAN_NUMERALS,
+} from '@blitzkit/core';
+import { DEFAULT_LOCALE, unwrapper } from '@blitzkit/i18n';
+import { literals } from '@blitzkit/i18n/src/literals';
+import type { GetStaticPaths } from 'astro';
+import { tankCharacteristics } from '../../../../core/blitzkit/tankCharacteristics';
+import { getStrings } from '../../../../core/i18n/getStrings';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { genericDefaultEquipmentMatrix } from '../../../../stores/duel/constants';
+import { getStaticPaths as parentGetStaticPaths } from '../index.astro';
+import { Page } from './_index';
+
+export const getStaticPaths = (async () => {
+  const tankDefinitions = await fetchTankDefinitions();
+  const parentPaths = parentGetStaticPaths();
+
+  return Object.values(tankDefinitions.tanks)
+    .map((tank) =>
+      parentPaths.map((parent) => ({
+        params: { ...parent.params, slug: tank.slug },
+        props: { id: tank.id },
+      })),
+    )
+    .flat();
+}) satisfies GetStaticPaths;
+
+const { id } = Astro.props;
+const locale = Astro.params.locale ?? DEFAULT_LOCALE;
+const strings = getStrings(locale);
+const tankDefinitions = await fetchTankDefinitions();
+const skillDefinitions = await fetchSkillDefinitions();
+const provisionDefinitions = await fetchProvisionDefinitions();
+const equipmentDefinitions = await fetchEquipmentDefinitions();
+const tankModelDefinitions = await fetchModelDefinitions();
+const tank = tankDefinitions.tanks[id];
+const tankModelDefinition = tankModelDefinitions.models[tank.id];
+const unwrap = unwrapper(locale);
+const title = literals(strings.website.tools.tankopedia.tank_seo_title, [
+  unwrap(tank.name),
+  TIER_ROMAN_NUMERALS[tank.tier],
+  strings.common.nations_adjectives[
+    tank.nation as keyof typeof strings.common.nations_adjectives
+  ],
+  strings.common.tank_class_short[tank.class],
+  'BlitzKit',
+  strings.common.nations[tank.nation as keyof typeof strings.common.nations],
+]);
+const url = import.meta.env.SITE + Astro.url.pathname;
+const icon = asset(`icons/tanks/big/${id}.webp`);
+const turret = tank.turrets.at(-1)!;
+const gun = turret.guns.at(-1)!;
+const characteristics = tankCharacteristics(
+  {
+    tank,
+    applyDynamicArmor: false,
+    applyReactiveArmor: false,
+    applySpallLiner: false,
+    camouflage: true,
+    consumables: [],
+    crewSkills: createDefaultSkills(skillDefinitions),
+    engine: tank.engines.at(-1)!,
+    equipmentMatrix: genericDefaultEquipmentMatrix,
+    turret,
+    gun,
+    provisions: createDefaultProvisions(tank, gun, provisionDefinitions),
+    shell: gun.gun_type!.value.base.shells[0],
+    stockEngine: tank.engines[0],
+    stockGun: tank.turrets[0].guns[0],
+    stockTurret: tank.turrets[0],
+    stockTrack: tank.tracks[0],
+    track: tank.tracks.at(-1)!,
+  },
+  { equipmentDefinitions, provisionDefinitions, tankModelDefinition },
+);
+const description = literals(
+  strings.website.tools.tankopedia.tank_seo_description,
+  [
+    unwrap(tank.name),
+    Math.round(characteristics.dpm).toLocaleString(locale),
+    Math.round(characteristics.damage).toLocaleString(locale),
+    Math.round(characteristics.penetration).toLocaleString(locale),
+    Math.round(characteristics.speedForwards).toLocaleString(locale),
+    Math.round(characteristics.health).toLocaleString(locale),
+  ],
+);
+---
+
+<AstroSeo
+  {title}
+  {description}
+  openGraph={{ title, description, images: [{ url: icon }], url }}
+/>
+
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image:src" content={icon} />
+
+<BaseLayout integrated>
+  <Page {locale} id={id} client:only="react">
+    <Page {locale} id={id} skeleton slot="fallback" />
+  </Page>
+</BaseLayout>

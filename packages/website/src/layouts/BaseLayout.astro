@@ -54,6 +54,8 @@ const locale = Astro.params.locale ?? DEFAULT_LOCALE;
           : `/${bestLocale}${window.location.pathname}`;
       }
     </script>
+
+    <slot name="head" />
   </head>
 
   <body class={noNavbar ? 'no-navbar' : ''}>
