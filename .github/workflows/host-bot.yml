@@ -20,6 +20,8 @@ env:
   PUBLIC_ASSET_REPO: ${{ secrets.PUBLIC_ASSET_REPO }}
   PUBLIC_ASSET_BRANCH: ${{ secrets.PUBLIC_ASSET_BRANCH }}
   PUBLIC_WARGAMING_APPLICATION_ID: ${{ secrets.PUBLIC_WARGAMING_APPLICATION_ID }}
+  PUBLIC_ASSET_FAST_USER: ${{ secrets.PUBLIC_ASSET_FAST_USER }}
+  PUBLIC_ASSET_FAST_REPO: ${{ secrets.PUBLIC_ASSET_FAST_REPO }}
 
 jobs:
   host:
@@ -27,8 +29,8 @@ jobs:
 
     steps:
       - uses: oven-sh/setup-bun@v1
-#        with:
-#          bun-version: 1.1.33
+      #        with:
+      #          bun-version: 1.1.33
 
       - name: Download release assets
         run: |
