@@ -25,4 +25,6 @@ jobs:
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           PUBLIC_WARGAMING_APPLICATION_ID: ${{ secrets.PUBLIC_WARGAMING_APPLICATION_ID }}
+          PUBLIC_ASSET_FAST_USER: ${{ secrets.PUBLIC_ASSET_FAST_USER }}
+          PUBLIC_ASSET_FAST_REPO: ${{ secrets.PUBLIC_ASSET_FAST_REPO }}
         run: bun build:ratingleaderboard --region=asia
