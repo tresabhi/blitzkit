@@ -944,7 +944,7 @@
         "characteristics": {
           "title": "Características",
           "compare": {
-            "label": "Comparar",
+            "label": "Comparar com",
             "class": "Nível %s1 %s2",
             "tier": "Tudo de nível %s1",
             "all": "Todos os tanques"
