@@ -46,13 +46,13 @@ export function readDVPL(buffer: Buffer) {
       source.length,
       0,
     );
-
+    
     if (decompressedSize !== footerData.oSize) {
       throw new RangeError(
         `Decompressed DVPL size mismatch (${decompressedSize} vs ${footerData.oSize})`,
       );
     }
-
+    
     return Buffer.from(destination);
   } else {
     throw new SyntaxError('Unknown DVPL format');

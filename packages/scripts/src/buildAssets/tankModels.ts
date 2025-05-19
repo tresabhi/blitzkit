@@ -28,26 +28,24 @@ export async function tankModels() {
 
     console.log(`Building models for ${nation}`);
 
-    await Promise.all(
-      Object.entries(tanks.root).map(async ([tankKey, tank]) => {
-        if (tankKey.includes('tutorial_bot')) return;
+    for (const [tankKey, tank] of Object.entries(tanks.root)) {
+      if (tankKey.includes('tutorial_bot')) return;
 
-        const id = toUniqueId(nation, tank.id);
+      const id = toUniqueId(nation, tank.id);
 
-        const parameters = await readYAMLDVPL<TankParameters>(
-          `${DATA}/3d/Tanks/Parameters/${nation}/${tankKey}.yaml`,
-        );
-        const model = await extractModel(
-          DATA,
-          parameters.resourcesPath.blitzModelPath.replace(/\.sc2$/, ''),
-        );
+      const parameters = await readYAMLDVPL<TankParameters>(
+        `${DATA}/3d/Tanks/Parameters/${nation}/${tankKey}.yaml`,
+      );
+      const model = await extractModel(
+        DATA,
+        parameters.resourcesPath.blitzModelPath.replace(/\.sc2$/, ''),
+      );
 
-        changes.push({
-          path: `3d/tanks/models/${id}.glb`,
-          content: Buffer.from(await nodeIO.writeBinary(model)),
-        });
-      }),
-    );
+      changes.push({
+        path: `3d/tanks/models/${id}.glb`,
+        content: Buffer.from(await nodeIO.writeBinary(model)),
+      });
+    }
 
     await commitAssets(`tank models ${nation}`, changes);
   }

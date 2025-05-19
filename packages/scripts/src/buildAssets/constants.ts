@@ -5,11 +5,15 @@ const WINDOWS_APPS = 'C:/Program Files/WindowsApps';
 const wotbPackageRegex = /7458BE2C\..+_\d+(\.\d+)+_x64__.+/;
 
 const isDepot = argv.includes('--depot');
+const isManual = argv.includes('--manual');
 
 let data: string;
 let compressed: boolean;
 
-if (isDepot) {
+if (isManual) {
+  data = '../../temp/game/Data';
+  compressed = true;
+} else if (isDepot) {
   const [installationVersion] = await readdir(`../../depots/444202`);
   data = `../../depots/444202/${installationVersion}/Data`;
   compressed = true;

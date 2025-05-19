@@ -130,15 +130,13 @@ const strings = getStrings(locale);
   <Flex gap="5" display={{ initial: 'flex', sm: 'none' }}>
     <Flex direction="column" justify="between" align="end">
       <Text size="2" color="gray">BlitzKit</Text>
-
       {
-        PUBLIC_ASSET_BRANCH !== 'opentest' && (
+        PUBLIC_ASSET_BRANCH !== 'preview' && (
           <Text size="2" color="gray">
             WoTB
           </Text>
         )
       }
-
       <Text size="2" color="gray">CDN</Text>
     </Flex>
 
@@ -146,15 +144,13 @@ const strings = getStrings(locale);
       <Code size="2" color="gray">
         {packageJson.version}
       </Code>
-
       {
-        PUBLIC_ASSET_BRANCH !== 'opentest' && (
+        PUBLIC_ASSET_BRANCH !== 'preview' && (
           <Code size="2" color="gray">
             {gameDefinitions.version}
           </Code>
         )
       }
-
       <Code size="2" color="gray">
         {PUBLIC_ASSET_BRANCH}
       </Code>
@@ -168,7 +164,7 @@ const strings = getStrings(locale);
     </Code>
 
     {
-      PUBLIC_ASSET_BRANCH !== 'opentest' && (
+      PUBLIC_ASSET_BRANCH !== 'preview' && (
         <>
           <Text size="2" color="gray">
             WoTB
