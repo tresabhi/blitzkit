@@ -944,7 +944,7 @@
         "characteristics": {
           "title": "Characteristics",
           "compare": {
-            "label": "Порівняти",
+            "label": "Compare against",
             "class": "Tier %s1 %s2",
             "tier": "All of tier %s1",
             "all": "Усі танки"
