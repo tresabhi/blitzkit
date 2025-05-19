@@ -29,7 +29,7 @@ export async function tankModels() {
     console.log(`Building models for ${nation}`);
 
     for (const [tankKey, tank] of Object.entries(tanks.root)) {
-      if (tankKey.includes('tutorial_bot')) return;
+      if (tankKey.includes('tutorial_bot')) continue;
 
       const id = toUniqueId(nation, tank.id);
 
