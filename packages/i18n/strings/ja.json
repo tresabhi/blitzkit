@@ -944,7 +944,7 @@
         "characteristics": {
           "title": "性能値",
           "compare": {
-            "label": "性能比較",
+            "label": "比較対象",
             "class": "Tier %s1 %s2",
             "tier": "Tier %s1 全車輌",
             "all": "全車輌"
