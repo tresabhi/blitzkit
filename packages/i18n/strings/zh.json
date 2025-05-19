@@ -944,7 +944,7 @@
         "characteristics": {
           "title": "属性",
           "compare": {
-            "label": "比較",
+            "label": "比较",
             "class": "%s1 %s2 级",
             "tier": "所有级别 %s1",
             "all": "所有坦克"
