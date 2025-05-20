@@ -10,7 +10,9 @@
       "mm": "%s1мм",
       "deg": "%s1°",
       "hp": "%s1hp",
-      "x": "x%s1"
+      "x": "x%s1",
+      "percentage": "%s1%",
+      "deg_s": "%s1°/с"
     },
     "gun_types": {
       "auto_loader": "Барабан",
@@ -651,6 +653,10 @@
     }
   },
   "website": {
+    "redirect": {
+      "title": "301: перемещено навсегда",
+      "body": "Эта страница перемещена. Перенаправление..."
+    },
     "settings": {
       "dev_mode": "Режим разработчика",
       "language": "Язык"
@@ -757,13 +763,51 @@
       }
     },
     "tools": {
+      "guess": {
+        "name": "Угадайте танк",
+        "button": "Угадать",
+        "description": "Мини-игра «Силуэт»",
+        "seo_description": "Играйте угадывая силуэт танка из World of Tanks Blitz",
+        "search": {
+          "placeholder": "Введите догадку...",
+          "skip": "Пропустить",
+          "guess": "Угадать",
+          "next": "Следующий",
+          "no_results": "Ничего не найденo"
+        },
+        "stats": "%s1 / %s2 угадано верно"
+      },
       "tankopedia": {
+        "search": "Поиск характеристик...",
         "name": "Танкопедия",
         "button": "Поиск танков",
         "description": "Танковая энциклопедия Blitz",
         "seo_description": "Статистика, броня и многое другое по всем танкам World of Tanks Blitz",
         "tank_seo_title": "%s1 - %s4 %s3 %s2 уровня | Танкопедия %s5 | World of Tanks Blitz (WoTB)",
         "tank_seo_description": "%s1 броня, статистика, оборудование, снабжение и многое другое. %s2 УВМ, %s3hp альфа, %s4mm пробитие, %s5км/ч лучшая скорость, %s6hp здоровье.",
+        "visualizers": {
+          "rotator": {
+            "hull": "Корпус",
+            "turret": "Башня",
+            "hard": "Твёрдые",
+            "medium": "Средний танк",
+            "soft": "На мягком грунте",
+            "effective": "Эффективно"
+          },
+          "ricochet": {
+            "angle": "Угол",
+            "normalization": "Нормализация",
+            "effective_angle": "Эффективный угол",
+            "armor": "Броня",
+            "no_ricochet": "Разрывные снаряды не рикошетят"
+          },
+          "view_range": {
+            "camo": "Камо",
+            "percentage": "%s1%",
+            "ghost_factory": "Промзона",
+            "dead_rail": "Эшелон"
+          }
+        },
         "sandbox": {
           "poses": {
             "hull_down": "За холмом",
@@ -900,7 +944,7 @@
         "characteristics": {
           "title": "Характеристики",
           "compare": {
-            "label": "Сравнение",
+            "label": "Сравнивать с",
             "class": "%s2 %s1 уровня",
             "tier": "Все %s1 уровня",
             "all": "Все танки"
@@ -1143,7 +1187,7 @@
         "description": "Встраиваемые элементы для стримов",
         "seo_description": "Создать вставки для стримов по World of Tanks Blitz с невероятной кастомизации",
         "coming_soon": "Скоро появятся новые встраиваемые элементы.",
-        "suggest": "Предложить идеи",
+        "suggest": "Предложить идеи.",
         "preview": {
           "title": "Предпросмотр",
           "upload": "Загрузить фон для теста"

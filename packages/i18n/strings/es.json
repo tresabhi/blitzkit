@@ -10,7 +10,9 @@
       "mm": "%s1mm",
       "deg": "%s1°",
       "hp": "%s1pv",
-      "x": "x%s1"
+      "x": "x%s1",
+      "percentage": "%s1%",
+      "deg_s": "%s1°/s"
     },
     "gun_types": {
       "auto_loader": "Auto cargador",
@@ -651,6 +653,10 @@
     }
   },
   "website": {
+    "redirect": {
+      "title": "301: moved permanently",
+      "body": "This page has moved. Redirecting..."
+    },
     "settings": {
       "dev_mode": "Modo de desarrollador",
       "language": "Idioma"
@@ -757,13 +763,51 @@
       }
     },
     "tools": {
+      "guess": {
+        "name": "Guess the tank",
+        "button": "Guess away",
+        "description": "Silhouette mini-game",
+        "seo_description": "Play a tank guessing game with a silhouette in World of Tanks Blitz",
+        "search": {
+          "placeholder": "Type to guess...",
+          "skip": "Skip",
+          "guess": "Guess",
+          "next": "Next",
+          "no_results": "Sin resultados"
+        },
+        "stats": "%s1 / %s2 guessed correctly"
+      },
       "tankopedia": {
+        "search": "Search a stat...",
         "name": "Tankopedia",
         "button": "Encuentra tanques",
         "description": "Enciclopedia de tanques de WOTB",
         "seo_description": "Estadísticas, armaduras y más para todos los tanques en World of Tanks Blitz",
         "tank_seo_title": "%s1 - Nivel %s2 %s3 %s4 | %s5 Tankopedia | World of Tanks Blitz (WoTB)",
         "tank_seo_description": "%s1 blindaje, estadisticas, equipamiento, proviciones y mas.\n%s2 DPM, %3hp alfa, %s4mm penetracion, %s5kph velocidad maxima, %s6 hp salud",
+        "visualizers": {
+          "rotator": {
+            "hull": "Hull",
+            "turret": "Turret",
+            "hard": "Hard",
+            "medium": "Medio",
+            "soft": "Suave",
+            "effective": "Effective"
+          },
+          "ricochet": {
+            "angle": "Angle",
+            "normalization": "Normalización",
+            "effective_angle": "Effective angle",
+            "armor": "Blindaje",
+            "no_ricochet": "Explosive shells don't ricochet"
+          },
+          "view_range": {
+            "camo": "Camo",
+            "percentage": "%s1%",
+            "ghost_factory": "Ghost Factory",
+            "dead_rail": "Dead Rail"
+          }
+        },
         "sandbox": {
           "poses": {
             "hull_down": "Hull down",
@@ -900,7 +944,7 @@
         "characteristics": {
           "title": "Características",
           "compare": {
-            "label": "Comparar",
+            "label": "Comparar con",
             "class": "Nivel %s1 - %s2",
             "tier": "Todos de nivel %s1",
             "all": "Todos los tanques"

@@ -10,7 +10,9 @@
       "mm": "%s毫米",
       "deg": "%s1度",
       "hp": "%s生命值",
-      "x": "x%s1"
+      "x": "x%s1",
+      "percentage": "%s1%",
+      "deg_s": "%s1°/s"
     },
     "gun_types": {
       "auto_loader": "彈夾型戰車",
@@ -651,6 +653,10 @@
     }
   },
   "website": {
+    "redirect": {
+      "title": "301: moved permanently",
+      "body": "This page has moved. Redirecting..."
+    },
     "settings": {
       "dev_mode": "開發人員模式",
       "language": "語言"
@@ -757,13 +763,51 @@
       }
     },
     "tools": {
+      "guess": {
+        "name": "Guess the tank",
+        "button": "Guess away",
+        "description": "Silhouette mini-game",
+        "seo_description": "Play a tank guessing game with a silhouette in World of Tanks Blitz",
+        "search": {
+          "placeholder": "Type to guess...",
+          "skip": "Skip",
+          "guess": "Guess",
+          "next": "Next",
+          "no_results": "沒有結果"
+        },
+        "stats": "%s1 / %s2 guessed correctly"
+      },
       "tankopedia": {
+        "search": "Search a stat...",
         "name": "戰車百科",
         "button": "尋找戰車",
         "description": "閃擊戰戰車百科全書",
         "seo_description": "世界坦克布莱茨坦克坦克世界闪击战的所有坦克的统计数字、装甲和更多",
         "tank_seo_title": "%s1-Tier %s2 %s3 %s4 | %s5 Tankopedia | 戰車世界閃擊戰 (WoTB)",
         "tank_seo_description": "%s1-Tier %s2 %s3 %s4 | %s5 Tankopedia | 戰車世界閃擊戰 (WoTB)",
+        "visualizers": {
+          "rotator": {
+            "hull": "Hull",
+            "turret": "Turret",
+            "hard": "Hard",
+            "medium": "中型戰車",
+            "soft": "柔软的",
+            "effective": "Effective"
+          },
+          "ricochet": {
+            "angle": "Angle",
+            "normalization": "轉正",
+            "effective_angle": "Effective angle",
+            "armor": "裝甲",
+            "no_ricochet": "Explosive shells don't ricochet"
+          },
+          "view_range": {
+            "camo": "Camo",
+            "percentage": "%s1%",
+            "ghost_factory": "Ghost Factory",
+            "dead_rail": "Dead Rail"
+          }
+        },
         "sandbox": {
           "poses": {
             "hull_down": "戰車下部",
@@ -810,14 +854,14 @@
                 "track": "履帶"
               },
               "status": {
-                "penetration": "%s生命值 擊穿",
+                "penetration": "%s1生命值 擊穿",
                 "blocked": "阻擋傷害",
                 "ricochet": "跳彈",
                 "splash": "%s生命值 爆炸範圍"
               },
               "stats": {
-                "thickness_and_angle": "等效%s毫米 %s2度",
-                "nominal": "%s毫米 裝甲厚度",
+                "thickness_and_angle": "等效%s1毫米 %s2度",
+                "nominal": "%s1毫米 裝甲厚度",
                 "ricochet_loss": "%s1%機率擊穿"
               }
             }
@@ -900,7 +944,7 @@
         "characteristics": {
           "title": "属性",
           "compare": {
-            "label": "比較",
+            "label": "比较",
             "class": "%s1 %s2 级",
             "tier": "所有级别 %s1",
             "all": "所有坦克"
