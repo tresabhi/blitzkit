@@ -1,6 +1,6 @@
 {
   "test": {
-    "default": "測試",
+    "default": "测试",
     "long": "这是一个测试用长字符串。你不会再用户界面中看见这些。我最喜欢的水果是%s1因为它的颜色是%s2。我如此喜欢它以至于我会把它的名字念3次！%s1！%s1！%s1！重申一次，它是%s2而不是%s3。",
     "fox": "褐色的狐狸迅速地跳过那只懒狗"
   },
@@ -12,7 +12,7 @@
       "hp": "%s生命值",
       "x": "x%s1",
       "percentage": "%s1%",
-      "deg_s": "%s1°/s"
+      "deg_s": "%s1度/秒"
     },
     "gun_types": {
       "auto_loader": "彈夾型戰車",
@@ -654,8 +654,8 @@
   },
   "website": {
     "redirect": {
-      "title": "301: moved permanently",
-      "body": "This page has moved. Redirecting..."
+      "title": "301: 已永久移动",
+      "body": "此页面已被移动。正在重定向……"
     },
     "settings": {
       "dev_mode": "開發人員模式",
@@ -671,7 +671,7 @@
         "copied": "已複製！"
       },
       "tank_search": {
-        "clear_filters": "Clear filters",
+        "clear_filters": "清除筛选",
         "search_bar_hint": "搜尋戰車....",
         "recent": "最近查看",
         "select_all": "選擇全部",
