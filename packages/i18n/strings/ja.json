@@ -2,7 +2,7 @@
   "test": {
     "default": "test",
     "long": "This is a long test string. You MUST NEVER see this in the UI. My favorite fruit is %s1 because it has the color of %s2. I like it so much that I will say its name 3 times! %s1! %s1! %s1! Once again, it's %s2, not %s3.",
-    "fox": "The quick brown fox jumps over the lazy dog."
+    "fox": "すばしっこい茶色のキツネが怠け者の犬を飛び越した。"
   },
   "common": {
     "units": {
@@ -186,7 +186,7 @@
     "common": {
       "errors": {
         "clan_not_found": "# クランが見つかりませんでした\n\"%s1\"は見つかりませんでした。検索結果からクランを選択してください。",
-        "player_not_found": "# Could not find user\nI couldn't find user \"%s1\". Try picking an user from the search result, typing in a valid username, or using the `/link` command.",
+        "player_not_found": "# ユーザーが見つかりませんでした\nユーザー「\"%s1\"」は見つかりませんでした。検索結果からユーザーを選択するか、有効な名前を入力してください。`/link`コマンドを使用することも可能です。",
         "player_not_linked": "# `/link`を使用して始めましょう\nはじめまして！あなたが誰か、私に教えてください。",
         "tank_name_not_found": "# 車輌が見つかりませんでした\n\"%s1\"という名前の車輌は見つかりませんでした。",
         "tank_id_not_found": "# 車輌が見つかりませんでした\n\"%s1\"というIDの車輌は見つかりませんでした。番号ではなく名前で検索してください。",
@@ -238,7 +238,7 @@
           "description": "Custom range",
           "options": {
             "start": {
-              "name": "start",
+              "name": "開始",
               "description": "Start in number of days ago from today"
             },
             "end": {
@@ -250,21 +250,21 @@
       },
       "options": {
         "clan": {
-          "name": "clan",
-          "description": "The clan name or tag"
+          "name": "クラン",
+          "description": "クラン名もしくはタグ"
         },
         "tank": {
-          "name": "tank",
-          "description": "The tank to get stats for"
+          "name": "車輌",
+          "description": "統計を得る車輌"
         },
         "username": {
-          "name": "username",
-          "description": "The Blitz username of the player"
+          "name": "ユーザー名",
+          "description": "プレイヤーのBlitzユーザー名"
         },
         "filters": {
           "nation": {
-            "name": "nation",
-            "description": "Nation"
+            "name": "国家",
+            "description": "国家"
           },
           "class": {
             "name": "",
@@ -276,8 +276,8 @@
           }
         },
         "region": {
-          "name": "region",
-          "description": "Region"
+          "name": "地域",
+          "description": "地域"
         },
         "tier": {
           "name": "tier",
@@ -294,7 +294,7 @@
         "custom": "%s1 - %s2 days"
       },
       "filters": {
-        "none": "No filters",
+        "none": "フィルターなし",
         "tier": "Tier %s1"
       },
       "no_data": {
@@ -312,26 +312,26 @@
         "damage": "ダメージ",
         "damage_ratio": "ダメージ率",
         "tier": "Tier",
-        "survival": "Survival",
+        "survival": "生存",
         "accuracy": "命中率",
         "kills": "撃破"
       }
     },
     "commands": {
       "auction": {
-        "name": "auction",
-        "description": "Tanks available right now in the auction",
+        "name": "オークション",
+        "description": "現在オークションで購入可能な車輌",
         "body": {
-          "title": "Blitz Auction",
-          "subtitle": "%s1 available • next prices %s2\nBid now: %s3",
-          "next": "Next price: %s1",
-          "available": "Available: %s1 / %s2"
+          "title": "Blitzオークション",
+          "subtitle": "%s1 残り• 次の価格 %s2\n今すぐ入札: %s3",
+          "next": "次の価格: %s1",
+          "available": "残り: %s1 / %s2"
         },
         "errors": {
-          "no_auction": "# No ongoing auction\n\nCurrently, there are no tanks available for purchase in the auction. If you think this is an error, please report this discrepancy in [the official Discord Server](https://discord.gg/nDt7AjGJQH)."
+          "no_auction": "# 進行中のオークションはありません\n現在、オークションで購入可能な車輌はありません。もしこれが間違いの場合、[公式Discardサーバー](https://discord.gg/nDt7AjGJQH)に報告してください。"
         },
         "actions": {
-          "bid": "Bid now"
+          "bid": "今すぐ入札"
         }
       },
       "replay": {
@@ -339,7 +339,7 @@
         "description": "Display replay results"
       },
       "research": {
-        "name": "research",
+        "name": "研究",
         "description": "Lists the expenses in researching a line",
         "options": {
           "target_tank": {
@@ -371,32 +371,32 @@
       },
       "about": {
         "name": "about",
-        "description": "All the info you need about the bot",
+        "description": "botについての情報の全て",
         "subcommands": {
           "commands": {
-            "name": "commands",
-            "description": "List of all commands and their descriptions",
-            "body": "# Commands\n\nBlitzKit offers the following commands:\n\n"
+            "name": "コマンド",
+            "description": "全コマンドのリストと説明",
+            "body": "# コマンド\nBlitzKitは以下のコマンドを提供します:"
           },
           "embeds": {
-            "name": "embeds",
-            "description": "How embeds work"
+            "name": "埋め込み",
+            "description": "埋め込みがどう機能するか"
           },
           "introduction": {
             "name": "introduction",
-            "description": "About the bot"
+            "description": "botについて"
           },
           "invite": {
-            "name": "invite",
-            "description": "How to invite the bot"
+            "name": "招待",
+            "description": "botを招待する方法"
           },
           "timezones": {
-            "name": "timezones",
+            "name": "タイムゾーン",
             "description": "How BlitzKit infers and uses your timezone"
           },
           "credits": {
-            "name": "credits",
-            "description": "People who have helped BlitzKit"
+            "name": "クレジット",
+            "description": "BlitzKitを支援した人々"
           }
         }
       },
@@ -434,7 +434,7 @@
             "description": "Player statistics"
           },
           "tank": {
-            "name": "tank",
+            "name": "車輌",
             "description": "Tank statistics"
           }
         }
@@ -467,7 +467,7 @@
             "efficiency": {
               "title": "Efficiency",
               "wn8": "WN8",
-              "survival": "Survival",
+              "survival": "生存",
               "accuracy": "精度"
             },
             "lethality": {
@@ -726,7 +726,7 @@
               "survivability": "生存性"
             },
             "direction": {
-              "label": "方法",
+              "label": "方向",
               "ascending": "昇順",
               "descending": "降順"
             }
@@ -748,7 +748,7 @@
       },
       "hot_tanks": {
         "title": "人気の車輌",
-        "subtitle": "過去 %s1 日間"
+        "subtitle": "過去 %s1日間"
       },
       "other_projects": {
         "title": "他のプロジェクト"
@@ -790,8 +790,8 @@
             "hull": "Hull",
             "turret": "Turret",
             "hard": "Hard",
-            "medium": "中戦車",
-            "soft": "水辺",
+            "medium": "不整地",
+            "soft": "軟弱地",
             "effective": "Effective"
           },
           "ricochet": {
@@ -839,7 +839,7 @@
               "normalization": "標準化",
               "ricochet": "跳弾角度",
               "explosion_radius": "爆風半径",
-              "exit": "決定",
+              "exit": "終了",
               "reset": "リセット"
             },
             "advanced": "高度なハイライト",
@@ -996,22 +996,22 @@
             "azimuthRight": "右射界",
             "speedForwards": "前進",
             "speedBackwards": "後退",
-            "hardTerrainCoefficient": "道",
-            "hardTerrainCoefficientRaw": "道",
-            "mediumTerrainCoefficient": "地面",
-            "mediumTerrainCoefficientRaw": "地面",
-            "softTerrainCoefficient": "水辺",
-            "softTerrainCoefficientRaw": "水辺",
+            "hardTerrainCoefficient": "舗装路での地形走破能力",
+            "hardTerrainCoefficientRaw": "舗装路での地形係数",
+            "mediumTerrainCoefficient": "不整地",
+            "mediumTerrainCoefficientRaw": "不整地",
+            "softTerrainCoefficient": "軟弱地",
+            "softTerrainCoefficientRaw": "軟弱地",
             "enginePower": "エンジン出力",
-            "powerToWeightRatioHardTerrain": "道",
-            "powerToWeightRatioMediumTerrain": "地面",
-            "powerToWeightRatioSoftTerrain": "水辺",
+            "powerToWeightRatioHardTerrain": "舗装路での重量毎出力値",
+            "powerToWeightRatioMediumTerrain": "不整地",
+            "powerToWeightRatioSoftTerrain": "軟弱地",
             "weight": "重量",
             "turretTraverseSpeed": "砲塔旋回速度",
             "gunTraverseSpeed": "主砲旋回速度",
-            "hullTraverseHardTerrain": "道",
-            "hullTraverseMediumTerrain": "地面",
-            "hullTraverseSoftTerrain": "水辺",
+            "hullTraverseHardTerrain": "舗装路での旋回速度",
+            "hullTraverseMediumTerrain": "不整地",
+            "hullTraverseSoftTerrain": "軟弱地",
             "health": "耐久値",
             "fireChance": "火災発生率",
             "viewRange": "視認範囲",
@@ -1024,7 +1024,7 @@
             "height": "全高",
             "length": "車体長",
             "volume": "体積",
-            "shellRange": "射程範囲",
+            "shellRange": "射程",
             "shellCapacity": "総弾数",
             "gunType": "主砲タイプ",
             "penetrationAt250m": "250m での貫通力"
