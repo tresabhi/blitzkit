@@ -1,44 +1,44 @@
 {
   "test": {
     "default": "测试",
-    "long": "这是一个测试用长字符串。你不会再用户界面中看见这些。我最喜欢的水果是%s1因为它的颜色是%s2。我如此喜欢它以至于我会把它的名字念3次！%s1！%s1！%s1！重申一次，它是%s2而不是%s3。",
+    "long": "这是一个测试用长字符串。你不会在用户界面中看见这些。我最喜欢的水果是%s1因为它的颜色是%s2。我如此喜欢它以至于我会把它的名字念3次！%s1！%s1！%s1！重申一次，它是%s2而不是%s3。",
     "fox": "褐色的狐狸迅速地跳过那只懒狗"
   },
   "common": {
     "units": {
-      "m": "%s公尺",
-      "mm": "%s毫米",
+      "m": "%s1公尺",
+      "mm": "%s1毫米",
       "deg": "%s1度",
-      "hp": "%s生命值",
+      "hp": "%s1生命值",
       "x": "x%s1",
       "percentage": "%s1%",
       "deg_s": "%s1度/秒"
     },
     "gun_types": {
-      "auto_loader": "彈夾型戰車",
-      "auto_reloader": "自動裝填",
-      "regular": "單發"
+      "auto_loader": "弹夹型战车",
+      "auto_reloader": "自动装填型战车",
+      "regular": "单发"
     },
     "shells": {
-      "ap": "穿甲彈",
-      "apcr": "硬式複合穿甲彈",
-      "heat": "反戰車高爆彈",
-      "he": "高爆彈"
+      "ap": "穿甲弹",
+      "apcr": "硬式复合穿甲弹",
+      "heat": "反战车高爆弹",
+      "he": "高爆弹"
     },
     "player_count_period": {
       "total": "全部",
-      "d_120": "過去120天",
-      "d_90": "過去90天",
-      "d_60": "過去60天",
-      "d_30": "過去一個月",
-      "d_7": "過去一週",
+      "d_120": "过去120天",
+      "d_90": "过去90天",
+      "d_60": "过去60天",
+      "d_30": "过去一个月",
+      "d_7": "过去一周",
       "d_1": "昨日"
     },
     "branches": {
-      "local": "開發人員",
-      "dev": "測試版",
-      "opentest": "開放測試",
-      "preview": "預覽"
+      "local": "开发者",
+      "dev": "测试版",
+      "opentest": "开放测试",
+      "preview": "预览"
     },
     "locales": {
       "en": "英文",
@@ -61,7 +61,7 @@
       "6": "非常好",
       "7": "很好",
       "8": "極品",
-      "9": "超強勢玩家"
+      "9": "超级强势玩家"
     },
     "bkni_percentile": {
       "0": "Super malum",
@@ -70,104 +70,104 @@
       "3": "差",
       "4": "低於平均",
       "5": "平均",
-      "6": "高於平均",
+      "6": "高于平均",
       "7": "好",
       "8": "非常好",
       "9": "極品",
       "10": "超级强势玩家"
     },
     "nations": {
-      "ussr": "苏联 (S系)",
-      "germany": "德國",
-      "usa": "美國。",
-      "china": "中國",
-      "uk": "英國。",
-      "france": "法國",
+      "ussr": "苏联",
+      "germany": "德国",
+      "usa": "美国",
+      "china": "中国",
+      "uk": "英国",
+      "france": "法国",
       "japan": "日本",
-      "european": "歐洲國家",
-      "other": "混合型國家"
+      "european": "欧洲国家",
+      "other": "混合型国家"
     },
     "nations_adjectives": {
-      "ussr": "蘇聯。",
-      "germany": "德國",
-      "usa": "美國。",
-      "china": "中國",
-      "uk": "英國。",
-      "france": "法國",
+      "ussr": "苏联",
+      "germany": "德国",
+      "usa": "美国",
+      "china": "中国",
+      "uk": "英国",
+      "france": "法国",
       "japan": "日本",
-      "european": "歐洲的",
-      "other": "混合型國家"
+      "european": "欧洲国家",
+      "other": "混合型国家"
     },
     "tank_class_short": {
-      "-1": "未識別",
-      "0": "輕型戰車",
-      "1": "中型戰車",
-      "2": "重型戰車",
-      "3": "驅逐戰車"
+      "-1": "未识别",
+      "0": "轻型战车",
+      "1": "中型战车",
+      "2": "重型战车",
+      "3": "驱逐战车"
     },
     "tank_class_short_plural_lowercase": {
-      "0": "輕型戰車",
-      "1": "中型戰車",
-      "2": "重型戰車",
-      "3": "驅逐戰車"
+      "0": "轻型战车",
+      "1": "中型战车",
+      "2": "重型战车",
+      "3": "驱逐战车"
     },
     "tank_class_medium": {
-      "-1": "未識別",
-      "0": "輕型戰車",
-      "1": "中型戰車",
-      "2": "重型戰車",
-      "3": "驅逐戰車"
+      "-1": "未识别",
+      "0": "轻型战车",
+      "1": "中型战车",
+      "2": "重型战车",
+      "3": "驱逐战车"
     },
     "tree_type": {
-      "-1": "未識別",
-      "0": "科技樹",
-      "1": "加值戰車",
-      "2": "收藏家戰車"
+      "-1": "未识别",
+      "0": "科技树",
+      "1": "加值战车",
+      "2": "收藏家战车"
     },
     "regions": {
       "normal": {
         "com": "北美",
-        "eu": "歐洲",
-        "asia": "亞太地區"
+        "eu": "欧洲",
+        "asia": "亚太地区"
       },
       "short": {
         "com": "北美",
-        "eu": "歐洲",
-        "asia": "亞太地區"
+        "eu": "欧洲",
+        "asia": "亚太地区"
       }
     },
     "leagues": {
-      "diamond": "鑽石",
+      "diamond": "钻石",
       "platinum": "白金",
       "gold": "黃金",
-      "silver": "白銀",
-      "bronze": "青銅"
+      "silver": "白银",
+      "bronze": "青铜"
     },
     "composite_stats": {
-      "normalized_damage_dealt": "傷害",
-      "normalized_damage_received": "受到的傷害",
-      "normalized_deaths": "陣亡比",
-      "normalized_frags": "擊殺數",
-      "normalized_hits": "命中數",
-      "normalized_losses": "戰敗率",
-      "normalized_misses": "未命中數",
-      "normalized_shots": "射擊次數",
-      "normalized_spotted": "偵查次數",
+      "normalized_damage_dealt": "伤害",
+      "normalized_damage_received": "受到的伤害",
+      "normalized_deaths": "阵亡率",
+      "normalized_frags": "击杀数",
+      "normalized_hits": "命中数",
+      "normalized_losses": "战败率",
+      "normalized_misses": "未命中数",
+      "normalized_shots": "开火次数",
+      "normalized_spotted": "侦查次数",
       "normalized_survived_battles": "存活率",
-      "normalized_win_and_survived": "存活勝利率",
-      "normalized_wins": "勝率",
-      "normalized_xp": "經驗值",
-      "normalized_battle_life_time": "戰鬥時間",
+      "normalized_win_and_survived": "存活胜利率",
+      "normalized_wins": "胜率",
+      "normalized_xp": "经验值",
+      "normalized_battle_life_time": "战斗时间",
       "cumulative_accuracy": "命中率",
-      "cumulative_battles": "戰鬥場次",
-      "cumulative_capture_points": "總佔領點數",
-      "cumulative_damage_dealt": "總傷害",
-      "cumulative_damage_ratio": "傷害比",
-      "cumulative_damage_received": "總承受的傷害",
-      "cumulative_deaths": "總陣亡數",
-      "cumulative_dropped_capture_points": "總阻止的佔領點數",
-      "cumulative_frags": "總擊殺數",
-      "cumulative_hits": "總命中數",
+      "cumulative_battles": "战斗场次",
+      "cumulative_capture_points": "总占领点数",
+      "cumulative_damage_dealt": "总伤害",
+      "cumulative_damage_ratio": "伤害比率",
+      "cumulative_damage_received": "总承受伤害",
+      "cumulative_deaths": "总阵亡数",
+      "cumulative_dropped_capture_points": "总阻止的占领点数",
+      "cumulative_frags": "总击杀数",
+      "cumulative_hits": "总命中数",
       "cumulative_inaccuracy": "未命中率",
       "cumulative_kills_to_death_ratio": "擊殺陣亡比",
       "cumulative_losses": "戰敗",
@@ -790,22 +790,22 @@
             "hull": "车身",
             "turret": "炮塔",
             "hard": "硬地质",
-            "medium": "中型戰車",
-            "soft": "柔软的",
-            "effective": "Effective"
+            "medium": "中性地質",
+            "soft": "軟地質",
+            "effective": "效率"
           },
           "ricochet": {
-            "angle": "Angle",
+            "angle": "角度",
             "normalization": "轉正",
-            "effective_angle": "Effective angle",
+            "effective_angle": "有效角度",
             "armor": "裝甲",
-            "no_ricochet": "Explosive shells don't ricochet"
+            "no_ricochet": "高爆弹不会跳弹"
           },
           "view_range": {
-            "camo": "Camo",
+            "camo": "迷彩",
             "percentage": "%s1%",
-            "ghost_factory": "Ghost Factory",
-            "dead_rail": "Dead Rail"
+            "ghost_factory": "幽灵工厂",
+            "dead_rail": "死亡铁道"
           }
         },
         "sandbox": {
@@ -998,20 +998,20 @@
             "speedBackwards": "后退",
             "hardTerrainCoefficient": "硬地质",
             "hardTerrainCoefficientRaw": "硬地质",
-            "mediumTerrainCoefficient": "中型戰車",
-            "mediumTerrainCoefficientRaw": "中型戰車",
-            "softTerrainCoefficient": "柔软的",
-            "softTerrainCoefficientRaw": "軟的",
+            "mediumTerrainCoefficient": "中性地質",
+            "mediumTerrainCoefficientRaw": "中性地質",
+            "softTerrainCoefficient": "軟地質",
+            "softTerrainCoefficientRaw": "軟地質",
             "enginePower": "引擎功率",
             "powerToWeightRatioHardTerrain": "硬地质",
-            "powerToWeightRatioMediumTerrain": "中型戰車",
-            "powerToWeightRatioSoftTerrain": "柔软的",
+            "powerToWeightRatioMediumTerrain": "中性地質",
+            "powerToWeightRatioSoftTerrain": "軟地質",
             "weight": "重量",
             "turretTraverseSpeed": "炮塔迴轉速度",
             "gunTraverseSpeed": "炮塔旋转速度",
             "hullTraverseHardTerrain": "硬地质",
-            "hullTraverseMediumTerrain": "中型戰車",
-            "hullTraverseSoftTerrain": "柔软的",
+            "hullTraverseMediumTerrain": "中性地質",
+            "hullTraverseSoftTerrain": "軟地質",
             "health": "生命值",
             "fireChance": "着火概率",
             "viewRange": "可視範圍",
