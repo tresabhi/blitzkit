@@ -854,14 +854,14 @@
                 "track": "履帶"
               },
               "status": {
-                "penetration": "%s生命值 擊穿",
+                "penetration": "%s1生命值 擊穿",
                 "blocked": "阻擋傷害",
                 "ricochet": "跳彈",
                 "splash": "%s生命值 爆炸範圍"
               },
               "stats": {
-                "thickness_and_angle": "等效%s毫米 %s2度",
-                "nominal": "%s毫米 裝甲厚度",
+                "thickness_and_angle": "等效%s1毫米 %s2度",
+                "nominal": "%s1毫米 裝甲厚度",
                 "ricochet_loss": "%s1%機率擊穿"
               }
             }
