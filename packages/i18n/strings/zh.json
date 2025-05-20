@@ -758,27 +758,27 @@
     },
     "docs": {
       "patches": {
-        "name": "BlitzKit Changelogs",
-        "seo_description": "Changelogs for BlitzKit Discord bot and website"
+        "name": "BlitzKit 变更日志",
+        "seo_description": "BlitzKit Discord 机器人和网站的变更日志"
       }
     },
     "tools": {
       "guess": {
-        "name": "Guess the tank",
+        "name": "猜坦克",
         "button": "Guess away",
         "description": "Silhouette mini-game",
         "seo_description": "Play a tank guessing game with a silhouette in World of Tanks Blitz",
         "search": {
           "placeholder": "Type to guess...",
-          "skip": "Skip",
+          "skip": "跳过",
           "guess": "Guess",
-          "next": "Next",
+          "next": "下一个",
           "no_results": "沒有結果"
         },
-        "stats": "%s1 / %s2 guessed correctly"
+        "stats": "%s1 / %s2 猜对了"
       },
       "tankopedia": {
-        "search": "Search a stat...",
+        "search": "搜索属性……",
         "name": "戰車百科",
         "button": "尋找戰車",
         "description": "閃擊戰戰車百科全書",
@@ -787,9 +787,9 @@
         "tank_seo_description": "%s1-Tier %s2 %s3 %s4 | %s5 Tankopedia | 戰車世界閃擊戰 (WoTB)",
         "visualizers": {
           "rotator": {
-            "hull": "Hull",
-            "turret": "Turret",
-            "hard": "Hard",
+            "hull": "车身",
+            "turret": "炮塔",
+            "hard": "硬地质",
             "medium": "中型戰車",
             "soft": "柔软的",
             "effective": "Effective"
@@ -810,8 +810,8 @@
         },
         "sandbox": {
           "poses": {
-            "hull_down": "戰車下部",
-            "face_hug": "面部色调",
+            "hull_down": "俯角视角",
+            "face_hug": "抱脸视角",
             "default": "預設"
           },
           "settings": {
@@ -996,20 +996,20 @@
             "azimuthRight": "右射界",
             "speedForwards": "前進最高速度",
             "speedBackwards": "后退",
-            "hardTerrainCoefficient": "坚硬的",
-            "hardTerrainCoefficientRaw": "坚硬的",
+            "hardTerrainCoefficient": "硬地质",
+            "hardTerrainCoefficientRaw": "硬地质",
             "mediumTerrainCoefficient": "中型戰車",
             "mediumTerrainCoefficientRaw": "中型戰車",
             "softTerrainCoefficient": "柔软的",
             "softTerrainCoefficientRaw": "軟的",
             "enginePower": "引擎功率",
-            "powerToWeightRatioHardTerrain": "硬的",
+            "powerToWeightRatioHardTerrain": "硬地质",
             "powerToWeightRatioMediumTerrain": "中型戰車",
             "powerToWeightRatioSoftTerrain": "柔软的",
             "weight": "重量",
             "turretTraverseSpeed": "炮塔迴轉速度",
             "gunTraverseSpeed": "炮塔旋转速度",
-            "hullTraverseHardTerrain": "坚硬的",
+            "hullTraverseHardTerrain": "硬地质",
             "hullTraverseMediumTerrain": "中型戰車",
             "hullTraverseSoftTerrain": "柔软的",
             "health": "生命值",
