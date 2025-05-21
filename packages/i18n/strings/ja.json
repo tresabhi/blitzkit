@@ -2,7 +2,7 @@
   "test": {
     "default": "test",
     "long": "This is a long test string. You MUST NEVER see this in the UI. My favorite fruit is %s1 because it has the color of %s2. I like it so much that I will say its name 3 times! %s1! %s1! %s1! Once again, it's %s2, not %s3.",
-    "fox": "The quick brown fox jumps over the lazy dog."
+    "fox": "すばしっこい茶色のキツネが怠け者の犬を飛び越した。"
   },
   "common": {
     "units": {
@@ -10,7 +10,9 @@
       "mm": "%s1mm",
       "deg": "%s1°",
       "hp": "%s1hp",
-      "x": "x%s1"
+      "x": "x%s1",
+      "percentage": "%s1%",
+      "deg_s": "%s1°/s"
     },
     "gun_types": {
       "auto_loader": "自動装填砲",
@@ -33,10 +35,10 @@
       "d_1": "昨日"
     },
     "branches": {
-      "local": "dev",
-      "dev": "beta",
-      "opentest": "opentest",
-      "preview": "preview"
+      "local": "開発",
+      "dev": "ベータ版",
+      "opentest": "オープンテスト",
+      "preview": "プレビュー"
     },
     "locales": {
       "en": "英語",
@@ -104,10 +106,10 @@
       "3": "駆逐戦車"
     },
     "tank_class_short_plural_lowercase": {
-      "0": "LT",
-      "1": "MT",
-      "2": "HT",
-      "3": "TD"
+      "0": "軽戦車",
+      "1": "中戦車",
+      "2": "重戦車",
+      "3": "駆逐戦車"
     },
     "tank_class_medium": {
       "-1": "不明",
@@ -124,9 +126,9 @@
     },
     "regions": {
       "normal": {
-        "com": "North America",
-        "eu": "Europe",
-        "asia": "Asia-Pacific"
+        "com": "北米",
+        "eu": "ヨーロッパ",
+        "asia": "アジア太平洋"
       },
       "short": {
         "com": "NA",
@@ -142,58 +144,58 @@
       "bronze": "ブロンズ"
     },
     "composite_stats": {
-      "normalized_damage_dealt": "Damage",
-      "normalized_damage_received": "Damage received",
-      "normalized_deaths": "Deathrate",
-      "normalized_frags": "Kills",
-      "normalized_hits": "Hits",
-      "normalized_losses": "Lossrate",
-      "normalized_misses": "Misses",
-      "normalized_shots": "Shots",
-      "normalized_spotted": "Spots",
-      "normalized_survived_battles": "Survival rate",
-      "normalized_win_and_survived": "Winning and surviving rate",
-      "normalized_wins": "Winrate",
-      "normalized_xp": "XP",
-      "normalized_battle_life_time": "Battle time",
-      "cumulative_accuracy": "Accuracy",
-      "cumulative_battles": "Battles",
-      "cumulative_capture_points": "Total capture points",
-      "cumulative_damage_dealt": "Total damage",
-      "cumulative_damage_ratio": "Damage ratio",
-      "cumulative_damage_received": "Total damage received",
-      "cumulative_deaths": "Total deaths",
-      "cumulative_dropped_capture_points": "Total dropped capture points",
-      "cumulative_frags": "Total kills",
-      "cumulative_hits": "Total hits",
-      "cumulative_inaccuracy": "Inaccuracy",
-      "cumulative_kills_to_death_ratio": "Kills to death ratio",
-      "cumulative_losses": "Losses",
-      "cumulative_misses": "Total misses",
-      "cumulative_shots": "Total shots",
-      "cumulative_spotted": "Total spots",
-      "cumulative_survived_battles": "Survived battles",
-      "cumulative_win_and_survived": "Won and survived battles",
-      "cumulative_wins": "Wins",
-      "cumulative_xp": "Total XP",
+      "normalized_damage_dealt": "ダメージ",
+      "normalized_damage_received": "被ダメージ",
+      "normalized_deaths": "被撃破率",
+      "normalized_frags": "撃破",
+      "normalized_hits": "命中",
+      "normalized_losses": "減衰率",
+      "normalized_misses": "非命中数",
+      "normalized_shots": "射撃数",
+      "normalized_spotted": "発見数",
+      "normalized_survived_battles": "生存率",
+      "normalized_win_and_survived": "勝率・生還率",
+      "normalized_wins": "勝率",
+      "normalized_xp": "経験値",
+      "normalized_battle_life_time": "戦闘時間",
+      "cumulative_accuracy": "精度",
+      "cumulative_battles": "戦闘数",
+      "cumulative_capture_points": "総占領ポイント",
+      "cumulative_damage_dealt": "総ダメージ",
+      "cumulative_damage_ratio": "ダメージ率",
+      "cumulative_damage_received": "総被ダメージ",
+      "cumulative_deaths": "総被撃破数",
+      "cumulative_dropped_capture_points": "総喪失占領ポイント",
+      "cumulative_frags": "総撃破数",
+      "cumulative_hits": "総命中数",
+      "cumulative_inaccuracy": "非命中率",
+      "cumulative_kills_to_death_ratio": "撃破/被撃破比",
+      "cumulative_losses": "敗北",
+      "cumulative_misses": "総非命中数",
+      "cumulative_shots": "総射撃数",
+      "cumulative_spotted": "総発見数",
+      "cumulative_survived_battles": "生還した戦闘数",
+      "cumulative_win_and_survived": "勝利し生還した戦闘数",
+      "cumulative_wins": "勝利",
+      "cumulative_xp": "総経験値",
       "cumulative_wn8": "WN8",
-      "cumulative_battle_life_time": "Total battle time"
+      "cumulative_battle_life_time": "総戦闘時間"
     }
   },
   "bot": {
     "common": {
       "errors": {
-        "clan_not_found": "# Could not find clan\nCouldn't find \"%s1\". Try selecting a clan from the search result.",
-        "player_not_found": "# Could not find user\nI couldn't find user \"%s1\". Try picking an user from the search result, typing in a valid username, or using the `/link` command.",
-        "player_not_linked": "# Use `/link` to get started\nI don't know who you are but you can tell me today!",
-        "tank_name_not_found": "# Tank not found\nCould not find tank by the name \"%s1\".",
-        "tank_id_not_found": "# Tank not found\nCould not find tank by the ID \"%s1\". Try typing the name of the tank instead of a number.",
-        "no_tank_stats": "# No tank stats available\nThis player doesn't have any stats available. This may not be the player you are looking for.",
+        "clan_not_found": "# クランが見つかりませんでした\n\"%s1\"は見つかりませんでした。検索結果からクランを選択してください。",
+        "player_not_found": "# ユーザーが見つかりませんでした\nユーザー「\"%s1\"」は見つかりませんでした。検索結果からユーザーを選択するか、有効な名前を入力してください。`/link`コマンドを使用することも可能です。",
+        "player_not_linked": "# `/link`を使用して始めましょう\nはじめまして！あなたが誰か、私に教えてください。",
+        "tank_name_not_found": "# 車輌が見つかりませんでした\n\"%s1\"という名前の車輌は見つかりませんでした。",
+        "tank_id_not_found": "# 車輌が見つかりませんでした\n\"%s1\"というIDの車輌は見つかりませんでした。番号ではなく名前で検索してください。",
+        "no_tank_stats": "# 利用可能な車輌統計がありません\nこのプレイヤーには利用可能な統計がありません。あなたが探しているプレイヤーではない可能性があります。",
         "get_help": "Discordサーバーに参加する",
-        "uncaught_error": "# BlitzKit がエラーに遭遇しました！\n申し訳ありません。お気軽に[Discordの公式サーバー](https://discord.gg/nDt7AjGJQH) をご利用ください。",
-        "preview": "# This command is in preview\n\nYou can only access this command in [the official Discord server](https://discord.gg/nDt7AjGJQH). The command will be generally available soon.",
-        "query_too_small": "# Your search is too short\nYour search must be at least 3 characters long.",
-        "query_too_long": "# Your search is too long\nYour search must be at most 100 characters long."
+        "uncaught_error": "# BlitzKitがエラーに遭遇しました！\n申し訳ありません。お気軽に[公式Discordサーバー](https://discord.gg/nDt7AjGJQH)にお問い合わせください。",
+        "preview": "このコマンドは現在[公式Discardサーバー](https://discord.gg/nDt7AjGJQH)でのみ利用可能です。間もなく全体で利用可能になります。",
+        "query_too_small": "# 単語が短すぎます\n検索には少なくとも3文字が含まれている必要があります。",
+        "query_too_long": "# 単語が長すぎます\n検索は最大で100文字までです。"
       },
       "wn8": {
         "name": "WN8",
@@ -217,26 +219,26 @@
         },
         "30": {
           "name": "30",
-          "description": "30 days"
+          "description": "30日"
         },
         "60": {
           "name": "60",
-          "description": "60 days"
+          "description": "60日"
         },
         "90": {
           "name": "90",
-          "description": "９０日"
+          "description": "90日"
         },
         "career": {
           "name": "総合戦績",
           "description": "Career"
         },
         "custom": {
-          "name": "custom",
+          "name": "カスタム",
           "description": "Custom range",
           "options": {
             "start": {
-              "name": "start",
+              "name": "開始",
               "description": "Start in number of days ago from today"
             },
             "end": {
@@ -248,21 +250,21 @@
       },
       "options": {
         "clan": {
-          "name": "clan",
-          "description": "The clan name or tag"
+          "name": "クラン",
+          "description": "クラン名もしくはタグ"
         },
         "tank": {
-          "name": "tank",
-          "description": "The tank to get stats for"
+          "name": "車輌",
+          "description": "統計を得る車輌"
         },
         "username": {
-          "name": "username",
-          "description": "The Blitz username of the player"
+          "name": "ユーザー名",
+          "description": "プレイヤーのBlitzユーザー名"
         },
         "filters": {
           "nation": {
-            "name": "nation",
-            "description": "Nation"
+            "name": "国家",
+            "description": "国家"
           },
           "class": {
             "name": "",
@@ -274,8 +276,8 @@
           }
         },
         "region": {
-          "name": "region",
-          "description": "Region"
+          "name": "地域",
+          "description": "地域"
         },
         "tier": {
           "name": "tier",
@@ -292,7 +294,7 @@
         "custom": "%s1 - %s2 days"
       },
       "filters": {
-        "none": "No filters",
+        "none": "フィルターなし",
         "tier": "Tier %s1"
       },
       "no_data": {
@@ -305,31 +307,31 @@
         "refresh": "Refresh"
       },
       "hero_stats": {
-        "battles": "Battles",
-        "winrate": "Winrate",
-        "damage": "Damage",
-        "damage_ratio": "Damage ratio",
+        "battles": "戦闘数",
+        "winrate": "勝率",
+        "damage": "ダメージ",
+        "damage_ratio": "ダメージ率",
         "tier": "Tier",
-        "survival": "Survival",
-        "accuracy": "Accuracy",
-        "kills": "Kills"
+        "survival": "生存",
+        "accuracy": "命中率",
+        "kills": "撃破"
       }
     },
     "commands": {
       "auction": {
-        "name": "auction",
-        "description": "Tanks available right now in the auction",
+        "name": "オークション",
+        "description": "現在オークションで購入可能な車輌",
         "body": {
-          "title": "Blitz Auction",
-          "subtitle": "%s1 available • next prices %s2\nBid now: %s3",
-          "next": "Next price: %s1",
-          "available": "Available: %s1 / %s2"
+          "title": "Blitzオークション",
+          "subtitle": "%s1 残り• 次の価格 %s2\n今すぐ入札: %s3",
+          "next": "次の価格: %s1",
+          "available": "残り: %s1 / %s2"
         },
         "errors": {
-          "no_auction": "# No ongoing auction\n\nCurrently, there are no tanks available for purchase in the auction. If you think this is an error, please report this discrepancy in [the official Discord Server](https://discord.gg/nDt7AjGJQH)."
+          "no_auction": "# 進行中のオークションはありません\n現在、オークションで購入可能な車輌はありません。もしこれが間違いの場合、[公式Discardサーバー](https://discord.gg/nDt7AjGJQH)に報告してください。"
         },
         "actions": {
-          "bid": "Bid now"
+          "bid": "今すぐ入札"
         }
       },
       "replay": {
@@ -337,7 +339,7 @@
         "description": "Display replay results"
       },
       "research": {
-        "name": "research",
+        "name": "研究",
         "description": "Lists the expenses in researching a line",
         "options": {
           "target_tank": {
@@ -369,32 +371,32 @@
       },
       "about": {
         "name": "about",
-        "description": "All the info you need about the bot",
+        "description": "botについての情報の全て",
         "subcommands": {
           "commands": {
-            "name": "commands",
-            "description": "List of all commands and their descriptions",
-            "body": "# Commands\n\nBlitzKit offers the following commands:\n\n"
+            "name": "コマンド",
+            "description": "全コマンドのリストと説明",
+            "body": "# コマンド\nBlitzKitは以下のコマンドを提供します:"
           },
           "embeds": {
-            "name": "embeds",
-            "description": "How embeds work"
+            "name": "埋め込み",
+            "description": "埋め込みがどう機能するか"
           },
           "introduction": {
             "name": "introduction",
-            "description": "About the bot"
+            "description": "botについて"
           },
           "invite": {
-            "name": "invite",
-            "description": "How to invite the bot"
+            "name": "招待",
+            "description": "botを招待する方法"
           },
           "timezones": {
-            "name": "timezones",
+            "name": "タイムゾーン",
             "description": "How BlitzKit infers and uses your timezone"
           },
           "credits": {
-            "name": "credits",
-            "description": "People who have helped BlitzKit"
+            "name": "クレジット",
+            "description": "BlitzKitを支援した人々"
           }
         }
       },
@@ -403,10 +405,10 @@
         "description": "A period's breakdown by tanks played",
         "body": {
           "total": "トータル",
-          "battles": "Battles",
+          "battles": "戦闘数",
           "wn8": "WN8",
-          "winrate": "Winrate",
-          "damage": "Damage",
+          "winrate": "勝率",
+          "damage": "ダメージ",
           "unknown_tank": "Unknown tank %s1"
         }
       },
@@ -432,7 +434,7 @@
             "description": "Player statistics"
           },
           "tank": {
-            "name": "tank",
+            "name": "車輌",
             "description": "Tank statistics"
           }
         }
@@ -458,21 +460,21 @@
           "cards": {
             "games": {
               "title": "Games",
-              "winrate": "Winrate",
-              "battles": "Battles",
+              "winrate": "勝率",
+              "battles": "戦闘数",
               "wins_losses": "Wins / losses"
             },
             "efficiency": {
               "title": "Efficiency",
               "wn8": "WN8",
-              "survival": "Survival",
-              "accuracy": "Accuracy"
+              "survival": "生存",
+              "accuracy": "精度"
             },
             "lethality": {
               "title": "Lethality",
               "average_damage": "Average damage",
               "damage_per_tier": "Damage per tier",
-              "damage_ratio": "Damage ratio",
+              "damage_ratio": "ダメージ比",
               "average_kills": "Average kills"
             },
             "miscellaneous": {
@@ -480,7 +482,7 @@
               "average_tier": "Average tier",
               "average_spots": "Average spots",
               "average_xp": "Average XP",
-              "kills_to_death_ratio": "Kills to death ratio"
+              "kills_to_death_ratio": "撃破/被撃破比"
             }
           }
         }
@@ -568,7 +570,7 @@
         }
       },
       "today": {
-        "name": "today",
+        "name": "今日",
         "description": "Today's played tanks and statistics"
       },
       "stats": {
@@ -617,8 +619,8 @@
         "body": {
           "title": "%s1's information",
           "nickname": "Nickname",
-          "battles": "Battles",
-          "winrate": "Winrate",
+          "battles": "戦闘数",
+          "winrate": "勝率",
           "account_id": "Account ID",
           "created": "Created",
           "last_battle": "Last battle"
@@ -629,7 +631,7 @@
         "description": "Rating player's statistics",
         "subcommands": {
           "today": {
-            "name": "today",
+            "name": "今日",
             "description": "Today's rating statistics"
           },
           "season": {
@@ -651,6 +653,10 @@
     }
   },
   "website": {
+    "redirect": {
+      "title": "301: moved permanently",
+      "body": "This page has moved. Redirecting..."
+    },
     "settings": {
       "dev_mode": "開発者モード",
       "language": "言語 / Language"
@@ -670,11 +676,11 @@
         "recent": "最近の閲覧",
         "select_all": "全て選択",
         "count_singular": "1 輌",
-        "count_plural": "%s1 輌",
-        "sorting_by": "並べ替え:%s1",
+        "count_plural": "%s1輌",
+        "sorting_by": ":%s1で並び替え",
         "no_tanks_found": {
           "body": "該当する車輌が存在しません。",
-          "search_again": "もう一度探してください。",
+          "search_again": "もう一度検索してください。",
           "clear_filters": "フィルターをクリアしてください"
         },
         "sort": {
@@ -687,7 +693,7 @@
           "survivability.volume": "体積",
           "survivability.length": "全長",
           "fire.dpm": "通常弾DPM",
-          "fire.dpmPremium": "課金弾DPM",
+          "fire.dpmPremium": "プレミアム弾DPM",
           "fire.reload": "装填時間",
           "fire.caliber": "砲口径",
           "fire.standardPenetration": "通常弾貫通力",
@@ -698,10 +704,10 @@
           "fire.shellRange": "射程範囲",
           "fire.shellCapacity": "総弾数",
           "fire.aimTime": "照準時間",
-          "fire.dispersionStill": "静止時散布界",
-          "fire.dispersionMoving": "移動時散布界",
-          "fire.gunDepression": "主砲俯角",
-          "fire.gunElevation": "主砲仰角",
+          "fire.dispersionStill": "静止時拡散",
+          "fire.dispersionMoving": "移動時拡散",
+          "fire.gunDepression": "俯角",
+          "fire.gunElevation": "仰角",
           "maneuverability.forwardsSpeed": "前進速度",
           "maneuverability.backwardsSpeed": "後退速度",
           "maneuverability.power": "馬力",
@@ -710,17 +716,17 @@
           "maneuverability.traverseSpeed": "車体旋回速度"
         },
         "sort_dropdown": {
-          "label": "ソート",
+          "label": "並び替え",
           "groups": {
             "sort": {
-              "no_sort": "ソートなし",
+              "no_sort": "並び替えなし",
               "label": "並べ替え項目",
               "fire": "火力",
               "maneuverability": "機動性",
               "survivability": "生存性"
             },
             "direction": {
-              "label": "方法",
+              "label": "方向",
               "ascending": "昇順",
               "descending": "降順"
             }
@@ -742,13 +748,13 @@
       },
       "hot_tanks": {
         "title": "人気の車輌",
-        "subtitle": "過去 %s1 日間"
+        "subtitle": "過去 %s1日間"
       },
       "other_projects": {
-        "title": "Other cool projects"
+        "title": "他のプロジェクト"
       },
       "help_translate": "%s1の %s2への翻訳にご協力ください！",
-      "seo_description": "Tools for everything World of Tanks Blitz"
+      "seo_description": "World of Tanks Blitz全般のツール"
     },
     "docs": {
       "patches": {
@@ -757,13 +763,51 @@
       }
     },
     "tools": {
+      "guess": {
+        "name": "Guess the tank",
+        "button": "Guess away",
+        "description": "Silhouette mini-game",
+        "seo_description": "Play a tank guessing game with a silhouette in World of Tanks Blitz",
+        "search": {
+          "placeholder": "Type to guess...",
+          "skip": "Skip",
+          "guess": "Guess",
+          "next": "Next",
+          "no_results": "該当なし"
+        },
+        "stats": "%s1 / %s2 guessed correctly"
+      },
       "tankopedia": {
+        "search": "Search a stat...",
         "name": "Tankopedia",
         "button": "戦車を探す",
         "description": "Blitz戦車百科",
         "seo_description": "Statistics, armor, and more for all tanks in World of Tanks Blitz",
         "tank_seo_title": "%s1 - Tier %s2 %s3 %s4 | %s5 Tankopedia | World of Tanks Blitz (WoTB)",
         "tank_seo_description": "%s1 armor, statistics, equipment, provisions, and more. %s2 DPM, %s3hp alpha, %s4mm penetration, %s5kph top speed, %s6hp health.",
+        "visualizers": {
+          "rotator": {
+            "hull": "Hull",
+            "turret": "Turret",
+            "hard": "Hard",
+            "medium": "不整地",
+            "soft": "軟弱地",
+            "effective": "Effective"
+          },
+          "ricochet": {
+            "angle": "Angle",
+            "normalization": "標準化",
+            "effective_angle": "Effective angle",
+            "armor": "装甲",
+            "no_ricochet": "Explosive shells don't ricochet"
+          },
+          "view_range": {
+            "camo": "Camo",
+            "percentage": "%s1%",
+            "ghost_factory": "Ghost Factory",
+            "dead_rail": "Dead Rail"
+          }
+        },
         "sandbox": {
           "poses": {
             "hull_down": "ハルダウン",
@@ -795,7 +839,7 @@
               "normalization": "標準化",
               "ricochet": "跳弾角度",
               "explosion_radius": "爆風半径",
-              "exit": "決定",
+              "exit": "終了",
               "reset": "リセット"
             },
             "advanced": "高度なハイライト",
@@ -900,7 +944,7 @@
         "characteristics": {
           "title": "性能値",
           "compare": {
-            "label": "性能比較",
+            "label": "比較対象",
             "class": "Tier %s1 %s2",
             "tier": "Tier %s1 全車輌",
             "all": "全車輌"
@@ -952,22 +996,22 @@
             "azimuthRight": "右射界",
             "speedForwards": "前進",
             "speedBackwards": "後退",
-            "hardTerrainCoefficient": "道",
-            "hardTerrainCoefficientRaw": "道",
-            "mediumTerrainCoefficient": "地面",
-            "mediumTerrainCoefficientRaw": "地面",
-            "softTerrainCoefficient": "水辺",
-            "softTerrainCoefficientRaw": "水辺",
+            "hardTerrainCoefficient": "舗装路での地形走破能力",
+            "hardTerrainCoefficientRaw": "舗装路での地形係数",
+            "mediumTerrainCoefficient": "不整地",
+            "mediumTerrainCoefficientRaw": "不整地",
+            "softTerrainCoefficient": "軟弱地",
+            "softTerrainCoefficientRaw": "軟弱地",
             "enginePower": "エンジン出力",
-            "powerToWeightRatioHardTerrain": "道",
-            "powerToWeightRatioMediumTerrain": "地面",
-            "powerToWeightRatioSoftTerrain": "水辺",
+            "powerToWeightRatioHardTerrain": "舗装路での重量毎出力値",
+            "powerToWeightRatioMediumTerrain": "不整地",
+            "powerToWeightRatioSoftTerrain": "軟弱地",
             "weight": "重量",
             "turretTraverseSpeed": "砲塔旋回速度",
             "gunTraverseSpeed": "主砲旋回速度",
-            "hullTraverseHardTerrain": "道",
-            "hullTraverseMediumTerrain": "地面",
-            "hullTraverseSoftTerrain": "水辺",
+            "hullTraverseHardTerrain": "舗装路での旋回速度",
+            "hullTraverseMediumTerrain": "不整地",
+            "hullTraverseSoftTerrain": "軟弱地",
             "health": "耐久値",
             "fireChance": "火災発生率",
             "viewRange": "視認範囲",
@@ -980,7 +1024,7 @@
             "height": "全高",
             "length": "車体長",
             "volume": "体積",
-            "shellRange": "射程範囲",
+            "shellRange": "射程",
             "shellCapacity": "総弾数",
             "gunType": "主砲タイプ",
             "penetrationAt250m": "250m での貫通力"

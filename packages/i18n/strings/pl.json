@@ -10,7 +10,9 @@
       "mm": "%s1mm",
       "deg": "%s1°",
       "hp": "%s1hp",
-      "x": "x%s1"
+      "x": "x%s1",
+      "percentage": "%s1%",
+      "deg_s": "%s1°/s"
     },
     "gun_types": {
       "auto_loader": "Auto loader",
@@ -651,6 +653,10 @@
     }
   },
   "website": {
+    "redirect": {
+      "title": "301: moved permanently",
+      "body": "This page has moved. Redirecting..."
+    },
     "settings": {
       "dev_mode": "Development mode",
       "language": "Language"
@@ -757,13 +763,51 @@
       }
     },
     "tools": {
+      "guess": {
+        "name": "Guess the tank",
+        "button": "Guess away",
+        "description": "Silhouette mini-game",
+        "seo_description": "Play a tank guessing game with a silhouette in World of Tanks Blitz",
+        "search": {
+          "placeholder": "Type to guess...",
+          "skip": "Skip",
+          "guess": "Guess",
+          "next": "Next",
+          "no_results": "Brak wyników"
+        },
+        "stats": ""
+      },
       "tankopedia": {
+        "search": "Search a stat...",
         "name": "Tankopedia",
         "button": "Find tanks",
         "description": "Blitz tank encyclopedia",
         "seo_description": "Statistics, armor, and more for all tanks in World of Tanks Blitz",
         "tank_seo_title": "%s1 - Tier %s2 %s3 %s4 | %s5 Tankopedia | World of Tanks Blitz (WoTB)",
         "tank_seo_description": "%s1 armor, statistics, equipment, provisions, and more. %s2 DPM, %s3hp alpha, %s4mm penetration, %s5kph top speed, %s6hp health.",
+        "visualizers": {
+          "rotator": {
+            "hull": "Hull",
+            "turret": "Turret",
+            "hard": "Hard",
+            "medium": "Medium",
+            "soft": "Soft",
+            "effective": "Effective"
+          },
+          "ricochet": {
+            "angle": "Angle",
+            "normalization": "Normalization",
+            "effective_angle": "Effective angle",
+            "armor": "Armor",
+            "no_ricochet": "Explosive shells don't ricochet"
+          },
+          "view_range": {
+            "camo": "Camo",
+            "percentage": "%s1%",
+            "ghost_factory": "Ghost Factory",
+            "dead_rail": "Dead Rail"
+          }
+        },
         "sandbox": {
           "poses": {
             "hull_down": "Hull down",
@@ -900,7 +944,7 @@
         "characteristics": {
           "title": "Characteristics",
           "compare": {
-            "label": "Compare",
+            "label": "Compare against",
             "class": "Tier %s1 %s2",
             "tier": "All of tier %s1",
             "all": "All tanks"
