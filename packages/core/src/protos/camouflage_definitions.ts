@@ -6,7 +6,7 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
-import { I18nString, createBaseI18nString } from "./i18n";
+import { createBaseI18nString, I18nString } from "./i18n";
 
 export const protobufPackage = "blitzkit";
 
@@ -26,7 +26,7 @@ export interface Camouflage {
   tank_name_full?: I18nString | undefined;
 }
 
-function createBaseCamouflageDefinitions(): CamouflageDefinitions {
+export function createBaseCamouflageDefinitions(): CamouflageDefinitions {
   return { camouflages: {} };
 }
 
@@ -108,7 +108,7 @@ export const CamouflageDefinitions: MessageFns<CamouflageDefinitions> = {
   },
 };
 
-function createBaseCamouflageDefinitions_CamouflagesEntry(): CamouflageDefinitions_CamouflagesEntry {
+export function createBaseCamouflageDefinitions_CamouflagesEntry(): CamouflageDefinitions_CamouflagesEntry {
   return { key: 0, value: createBaseCamouflage() };
 }
 
@@ -185,12 +185,12 @@ export const CamouflageDefinitions_CamouflagesEntry: MessageFns<CamouflageDefini
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? Camouflage.fromPartial(object.value)
-      : undefined;
+      : createBaseCamouflage();
     return message;
   },
 };
 
-function createBaseCamouflage(): Camouflage {
+export function createBaseCamouflage(): Camouflage {
   return { id: 0, name: createBaseI18nString(), tank_name: undefined, tank_name_full: undefined };
 }
 

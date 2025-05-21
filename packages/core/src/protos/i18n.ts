@@ -97,7 +97,7 @@ export const I18nString: MessageFns<I18nString> = {
   },
 };
 
-function createBaseI18nString_LocalesEntry(): I18nString_LocalesEntry {
+export function createBaseI18nString_LocalesEntry(): I18nString_LocalesEntry {
   return { key: "", value: "" };
 }
 

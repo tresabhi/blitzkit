@@ -6,7 +6,7 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
-import { I18nString, createBaseI18nString } from "./i18n";
+import { createBaseI18nString, I18nString } from "./i18n";
 
 export const protobufPackage = "blitzkit";
 
@@ -36,7 +36,7 @@ export interface GameModeRole {
   consumables: number[];
 }
 
-function createBaseGameDefinitions(): GameDefinitions {
+export function createBaseGameDefinitions(): GameDefinitions {
   return { version: "", nations: [], gameModes: {}, roles: {} };
 }
 
@@ -185,7 +185,7 @@ export const GameDefinitions: MessageFns<GameDefinitions> = {
   },
 };
 
-function createBaseGameDefinitions_GameModesEntry(): GameDefinitions_GameModesEntry {
+export function createBaseGameDefinitions_GameModesEntry(): GameDefinitions_GameModesEntry {
   return { key: 0, value: createBaseGameMode() };
 }
 
@@ -260,12 +260,12 @@ export const GameDefinitions_GameModesEntry: MessageFns<GameDefinitions_GameMode
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? GameMode.fromPartial(object.value)
-      : undefined;
+      : createBaseGameMode();
     return message;
   },
 };
 
-function createBaseGameDefinitions_RolesEntry(): GameDefinitions_RolesEntry {
+export function createBaseGameDefinitions_RolesEntry(): GameDefinitions_RolesEntry {
   return { key: 0, value: createBaseGameModeRole() };
 }
 
@@ -338,12 +338,12 @@ export const GameDefinitions_RolesEntry: MessageFns<GameDefinitions_RolesEntry> 
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? GameModeRole.fromPartial(object.value)
-      : undefined;
+      : createBaseGameModeRole();
     return message;
   },
 };
 
-function createBaseGameMode(): GameMode {
+export function createBaseGameMode(): GameMode {
   return { name: createBaseI18nString() };
 }
 
@@ -403,7 +403,7 @@ export const GameMode: MessageFns<GameMode> = {
   },
 };
 
-function createBaseGameModeRole(): GameModeRole {
+export function createBaseGameModeRole(): GameModeRole {
   return { provisions: [], consumables: [] };
 }
 

@@ -28,7 +28,7 @@ export interface Video {
   author: string;
 }
 
-function createBaseReviews(): Reviews {
+export function createBaseReviews(): Reviews {
   return { reviews: {} };
 }
 
@@ -107,7 +107,7 @@ export const Reviews: MessageFns<Reviews> = {
   },
 };
 
-function createBaseReviews_ReviewsEntry(): Reviews_ReviewsEntry {
+export function createBaseReviews_ReviewsEntry(): Reviews_ReviewsEntry {
   return { key: 0, value: createBaseReview() };
 }
 
@@ -180,12 +180,12 @@ export const Reviews_ReviewsEntry: MessageFns<Reviews_ReviewsEntry> = {
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? Review.fromPartial(object.value)
-      : undefined;
+      : createBaseReview();
     return message;
   },
 };
 
-function createBaseReview(): Review {
+export function createBaseReview(): Review {
   return { last_updated: 0, videos: [] };
 }
 
@@ -261,7 +261,7 @@ export const Review: MessageFns<Review> = {
   },
 };
 
-function createBaseVideo(): Video {
+export function createBaseVideo(): Video {
   return { id: "", author: "" };
 }
 

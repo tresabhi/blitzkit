@@ -6,7 +6,7 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
-import { I18nString, createBaseI18nString } from "./i18n";
+import { createBaseI18nString, I18nString } from "./i18n";
 
 export const protobufPackage = "blitzkit";
 
@@ -82,7 +82,7 @@ export interface ConsumableTankNationFilter {
   nations: string[];
 }
 
-function createBaseConsumableDefinitions(): ConsumableDefinitions {
+export function createBaseConsumableDefinitions(): ConsumableDefinitions {
   return { consumables: {} };
 }
 
@@ -164,7 +164,7 @@ export const ConsumableDefinitions: MessageFns<ConsumableDefinitions> = {
   },
 };
 
-function createBaseConsumableDefinitions_ConsumablesEntry(): ConsumableDefinitions_ConsumablesEntry {
+export function createBaseConsumableDefinitions_ConsumablesEntry(): ConsumableDefinitions_ConsumablesEntry {
   return { key: 0, value: createBaseConsumable() };
 }
 
@@ -241,12 +241,12 @@ export const ConsumableDefinitions_ConsumablesEntry: MessageFns<ConsumableDefini
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? Consumable.fromPartial(object.value)
-      : undefined;
+      : createBaseConsumable();
     return message;
   },
 };
 
-function createBaseConsumable(): Consumable {
+export function createBaseConsumable(): Consumable {
   return {
     id: 0,
     name: createBaseI18nString(),
@@ -416,7 +416,7 @@ export const Consumable: MessageFns<Consumable> = {
   },
 };
 
-function createBaseConsumableTankFilter(): ConsumableTankFilter {
+export function createBaseConsumableTankFilter(): ConsumableTankFilter {
   return { filter_type: undefined };
 }
 
@@ -564,7 +564,7 @@ export const ConsumableTankFilter: MessageFns<ConsumableTankFilter> = {
   },
 };
 
-function createBaseConsumableTankTierFilter(): ConsumableTankTierFilter {
+export function createBaseConsumableTankTierFilter(): ConsumableTankTierFilter {
   return { min: 0, max: 0 };
 }
 
@@ -640,7 +640,7 @@ export const ConsumableTankTierFilter: MessageFns<ConsumableTankTierFilter> = {
   },
 };
 
-function createBaseConsumableTankIdsFilter(): ConsumableTankIdsFilter {
+export function createBaseConsumableTankIdsFilter(): ConsumableTankIdsFilter {
   return { ids: [] };
 }
 
@@ -710,7 +710,7 @@ export const ConsumableTankIdsFilter: MessageFns<ConsumableTankIdsFilter> = {
   },
 };
 
-function createBaseConsumableTankCategoryFilter(): ConsumableTankCategoryFilter {
+export function createBaseConsumableTankCategoryFilter(): ConsumableTankCategoryFilter {
   return { categories: [] };
 }
 
@@ -784,7 +784,7 @@ export const ConsumableTankCategoryFilter: MessageFns<ConsumableTankCategoryFilt
   },
 };
 
-function createBaseConsumableTankNationFilter(): ConsumableTankNationFilter {
+export function createBaseConsumableTankNationFilter(): ConsumableTankNationFilter {
   return { nations: [] };
 }
 

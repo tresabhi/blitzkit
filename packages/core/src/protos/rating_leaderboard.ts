@@ -36,7 +36,7 @@ export interface RatingLeaderboardEntryV2 {
   kills: number;
 }
 
-function createBaseRatingLeaderboard(): RatingLeaderboard {
+export function createBaseRatingLeaderboard(): RatingLeaderboard {
   return { version: undefined };
 }
 
@@ -121,7 +121,7 @@ export const RatingLeaderboard: MessageFns<RatingLeaderboard> = {
   },
 };
 
-function createBaseRatingLeaderboardV1(): RatingLeaderboardV1 {
+export function createBaseRatingLeaderboardV1(): RatingLeaderboardV1 {
   return { entries: [] };
 }
 
@@ -183,7 +183,7 @@ export const RatingLeaderboardV1: MessageFns<RatingLeaderboardV1> = {
   },
 };
 
-function createBaseRatingLeaderboardEntryV1(): RatingLeaderboardEntryV1 {
+export function createBaseRatingLeaderboardEntryV1(): RatingLeaderboardEntryV1 {
   return { id: 0, score: 0 };
 }
 
@@ -259,7 +259,7 @@ export const RatingLeaderboardEntryV1: MessageFns<RatingLeaderboardEntryV1> = {
   },
 };
 
-function createBaseRatingLeaderboardV2(): RatingLeaderboardV2 {
+export function createBaseRatingLeaderboardV2(): RatingLeaderboardV2 {
   return { entries: [] };
 }
 
@@ -321,7 +321,7 @@ export const RatingLeaderboardV2: MessageFns<RatingLeaderboardV2> = {
   },
 };
 
-function createBaseRatingLeaderboardEntryV2(): RatingLeaderboardEntryV2 {
+export function createBaseRatingLeaderboardEntryV2(): RatingLeaderboardEntryV2 {
   return { id: 0, score: 0, battles: 0, wins: 0, survived: 0, damage: 0, kills: 0 };
 }
 

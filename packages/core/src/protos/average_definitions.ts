@@ -58,7 +58,7 @@ export interface Samples {
   total: number;
 }
 
-function createBaseAverageDefinitions(): AverageDefinitions {
+export function createBaseAverageDefinitions(): AverageDefinitions {
   return { averages: {}, samples: createBaseSamples(), time: 0 };
 }
 
@@ -174,7 +174,7 @@ export const AverageDefinitions: MessageFns<AverageDefinitions> = {
   },
 };
 
-function createBaseAverageDefinitions_AveragesEntry(): AverageDefinitions_AveragesEntry {
+export function createBaseAverageDefinitions_AveragesEntry(): AverageDefinitions_AveragesEntry {
   return { key: 0, value: createBaseAverageDefinitionsEntry() };
 }
 
@@ -251,12 +251,12 @@ export const AverageDefinitions_AveragesEntry: MessageFns<AverageDefinitions_Ave
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? AverageDefinitionsEntry.fromPartial(object.value)
-      : undefined;
+      : createBaseAverageDefinitionsEntry();
     return message;
   },
 };
 
-function createBaseAverageDefinitionsEntry(): AverageDefinitionsEntry {
+export function createBaseAverageDefinitionsEntry(): AverageDefinitionsEntry {
   return {
     mu: createBaseAverageDefinitionsAllStats(),
     sigma: createBaseAverageDefinitionsAllStats(),
@@ -377,7 +377,7 @@ export const AverageDefinitionsEntry: MessageFns<AverageDefinitionsEntry> = {
   },
 };
 
-function createBaseAverageDefinitionsAllStats(): AverageDefinitionsAllStats {
+export function createBaseAverageDefinitionsAllStats(): AverageDefinitionsAllStats {
   return {
     battles: 0,
     capture_points: 0,
@@ -738,7 +738,7 @@ export const AverageDefinitionsAllStats: MessageFns<AverageDefinitionsAllStats> 
   },
 };
 
-function createBaseSamples(): Samples {
+export function createBaseSamples(): Samples {
   return { d_1: 0, d_7: 0, d_30: 0, d_60: 0, d_90: 0, d_120: 0, total: 0 };
 }
 

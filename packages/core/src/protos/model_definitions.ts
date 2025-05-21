@@ -110,7 +110,7 @@ export interface PitchLimitsExtrema {
   range: number;
 }
 
-function createBaseModelDefinitions(): ModelDefinitions {
+export function createBaseModelDefinitions(): ModelDefinitions {
   return { models: {} };
 }
 
@@ -192,7 +192,7 @@ export const ModelDefinitions: MessageFns<ModelDefinitions> = {
   },
 };
 
-function createBaseModelDefinitions_ModelsEntry(): ModelDefinitions_ModelsEntry {
+export function createBaseModelDefinitions_ModelsEntry(): ModelDefinitions_ModelsEntry {
   return { key: 0, value: createBaseModelDefinition() };
 }
 
@@ -265,12 +265,12 @@ export const ModelDefinitions_ModelsEntry: MessageFns<ModelDefinitions_ModelsEnt
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? ModelDefinition.fromPartial(object.value)
-      : undefined;
+      : createBaseModelDefinition();
     return message;
   },
 };
 
-function createBaseModelDefinition(): ModelDefinition {
+export function createBaseModelDefinition(): ModelDefinition {
   return {
     armor: createBaseArmor(),
     turret_origin: createBaseVector3(),
@@ -472,7 +472,7 @@ export const ModelDefinition: MessageFns<ModelDefinition> = {
   },
 };
 
-function createBaseModelDefinition_TurretsEntry(): ModelDefinition_TurretsEntry {
+export function createBaseModelDefinition_TurretsEntry(): ModelDefinition_TurretsEntry {
   return { key: 0, value: createBaseTurretModelDefinition() };
 }
 
@@ -545,12 +545,12 @@ export const ModelDefinition_TurretsEntry: MessageFns<ModelDefinition_TurretsEnt
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? TurretModelDefinition.fromPartial(object.value)
-      : undefined;
+      : createBaseTurretModelDefinition();
     return message;
   },
 };
 
-function createBaseModelDefinition_TracksEntry(): ModelDefinition_TracksEntry {
+export function createBaseModelDefinition_TracksEntry(): ModelDefinition_TracksEntry {
   return { key: 0, value: createBaseTrackModelDefinition() };
 }
 
@@ -623,12 +623,12 @@ export const ModelDefinition_TracksEntry: MessageFns<ModelDefinition_TracksEntry
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? TrackModelDefinition.fromPartial(object.value)
-      : undefined;
+      : createBaseTrackModelDefinition();
     return message;
   },
 };
 
-function createBaseArmor(): Armor {
+export function createBaseArmor(): Armor {
   return { thickness: {}, spaced: [] };
 }
 
@@ -738,7 +738,7 @@ export const Armor: MessageFns<Armor> = {
   },
 };
 
-function createBaseArmor_ThicknessEntry(): Armor_ThicknessEntry {
+export function createBaseArmor_ThicknessEntry(): Armor_ThicknessEntry {
   return { key: 0, value: 0 };
 }
 
@@ -814,7 +814,7 @@ export const Armor_ThicknessEntry: MessageFns<Armor_ThicknessEntry> = {
   },
 };
 
-function createBaseVector3(): Vector3 {
+export function createBaseVector3(): Vector3 {
   return { x: 0, y: 0, z: 0 };
 }
 
@@ -906,7 +906,7 @@ export const Vector3: MessageFns<Vector3> = {
   },
 };
 
-function createBaseInitialTurretRotation(): InitialTurretRotation {
+export function createBaseInitialTurretRotation(): InitialTurretRotation {
   return { yaw: 0, pitch: 0, roll: 0 };
 }
 
@@ -998,7 +998,7 @@ export const InitialTurretRotation: MessageFns<InitialTurretRotation> = {
   },
 };
 
-function createBaseTurretModelDefinition(): TurretModelDefinition {
+export function createBaseTurretModelDefinition(): TurretModelDefinition {
   return {
     bounding_box: createBaseBoundingBox(),
     armor: createBaseArmor(),
@@ -1173,7 +1173,7 @@ export const TurretModelDefinition: MessageFns<TurretModelDefinition> = {
   },
 };
 
-function createBaseTurretModelDefinition_GunsEntry(): TurretModelDefinition_GunsEntry {
+export function createBaseTurretModelDefinition_GunsEntry(): TurretModelDefinition_GunsEntry {
   return { key: 0, value: createBaseGunModelDefinition() };
 }
 
@@ -1248,12 +1248,12 @@ export const TurretModelDefinition_GunsEntry: MessageFns<TurretModelDefinition_G
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? GunModelDefinition.fromPartial(object.value)
-      : undefined;
+      : createBaseGunModelDefinition();
     return message;
   },
 };
 
-function createBaseYawLimits(): YawLimits {
+export function createBaseYawLimits(): YawLimits {
   return { min: 0, max: 0 };
 }
 
@@ -1329,7 +1329,7 @@ export const YawLimits: MessageFns<YawLimits> = {
   },
 };
 
-function createBaseBoundingBox(): BoundingBox {
+export function createBaseBoundingBox(): BoundingBox {
   return { min: createBaseVector3(), max: createBaseVector3() };
 }
 
@@ -1409,7 +1409,7 @@ export const BoundingBox: MessageFns<BoundingBox> = {
   },
 };
 
-function createBaseTrackModelDefinition(): TrackModelDefinition {
+export function createBaseTrackModelDefinition(): TrackModelDefinition {
   return { thickness: 0, origin: createBaseVector3() };
 }
 
@@ -1487,7 +1487,7 @@ export const TrackModelDefinition: MessageFns<TrackModelDefinition> = {
   },
 };
 
-function createBaseGunModelDefinition(): GunModelDefinition {
+export function createBaseGunModelDefinition(): GunModelDefinition {
   return { armor: createBaseArmor(), thickness: 0, model_id: 0, pitch: createBasePitchLimits(), mask: undefined };
 }
 
@@ -1615,7 +1615,7 @@ export const GunModelDefinition: MessageFns<GunModelDefinition> = {
   },
 };
 
-function createBasePitchLimits(): PitchLimits {
+export function createBasePitchLimits(): PitchLimits {
   return { min: 0, max: 0, front: undefined, back: undefined, transition: undefined };
 }
 
@@ -1743,7 +1743,7 @@ export const PitchLimits: MessageFns<PitchLimits> = {
   },
 };
 
-function createBasePitchLimitsExtrema(): PitchLimitsExtrema {
+export function createBasePitchLimitsExtrema(): PitchLimitsExtrema {
   return { min: 0, max: 0, range: 0 };
 }
 

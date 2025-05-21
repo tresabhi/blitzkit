@@ -6,7 +6,7 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
-import { I18nString, createBaseI18nString } from "./i18n";
+import { createBaseI18nString, I18nString } from "./i18n";
 
 export const protobufPackage = "blitzkit";
 
@@ -39,7 +39,7 @@ export interface EquipmentSlot {
   right: number;
 }
 
-function createBaseEquipmentDefinitions(): EquipmentDefinitions {
+export function createBaseEquipmentDefinitions(): EquipmentDefinitions {
   return { presets: {}, equipments: {} };
 }
 
@@ -159,7 +159,7 @@ export const EquipmentDefinitions: MessageFns<EquipmentDefinitions> = {
   },
 };
 
-function createBaseEquipmentDefinitions_PresetsEntry(): EquipmentDefinitions_PresetsEntry {
+export function createBaseEquipmentDefinitions_PresetsEntry(): EquipmentDefinitions_PresetsEntry {
   return { key: "", value: createBaseEquipmentPreset() };
 }
 
@@ -236,12 +236,12 @@ export const EquipmentDefinitions_PresetsEntry: MessageFns<EquipmentDefinitions_
     message.key = object.key ?? "";
     message.value = (object.value !== undefined && object.value !== null)
       ? EquipmentPreset.fromPartial(object.value)
-      : undefined;
+      : createBaseEquipmentPreset();
     return message;
   },
 };
 
-function createBaseEquipmentDefinitions_EquipmentsEntry(): EquipmentDefinitions_EquipmentsEntry {
+export function createBaseEquipmentDefinitions_EquipmentsEntry(): EquipmentDefinitions_EquipmentsEntry {
   return { key: 0, value: createBaseEquipment() };
 }
 
@@ -318,12 +318,12 @@ export const EquipmentDefinitions_EquipmentsEntry: MessageFns<EquipmentDefinitio
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? Equipment.fromPartial(object.value)
-      : undefined;
+      : createBaseEquipment();
     return message;
   },
 };
 
-function createBaseEquipment(): Equipment {
+export function createBaseEquipment(): Equipment {
   return { name: createBaseI18nString(), description: createBaseI18nString() };
 }
 
@@ -403,7 +403,7 @@ export const Equipment: MessageFns<Equipment> = {
   },
 };
 
-function createBaseEquipmentPreset(): EquipmentPreset {
+export function createBaseEquipmentPreset(): EquipmentPreset {
   return { slots: [] };
 }
 
@@ -463,7 +463,7 @@ export const EquipmentPreset: MessageFns<EquipmentPreset> = {
   },
 };
 
-function createBaseEquipmentSlot(): EquipmentSlot {
+export function createBaseEquipmentSlot(): EquipmentSlot {
   return { left: 0, right: 0 };
 }
 

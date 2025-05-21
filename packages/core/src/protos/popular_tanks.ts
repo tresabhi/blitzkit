@@ -19,7 +19,7 @@ export interface PopularTank {
   views: number;
 }
 
-function createBasePopularTanks(): PopularTanks {
+export function createBasePopularTanks(): PopularTanks {
   return { tanks: [] };
 }
 
@@ -79,7 +79,7 @@ export const PopularTanks: MessageFns<PopularTanks> = {
   },
 };
 
-function createBasePopularTank(): PopularTank {
+export function createBasePopularTank(): PopularTank {
   return { id: 0, views: 0 };
 }
 

@@ -23,7 +23,7 @@ export interface Skill {
   skills: string[];
 }
 
-function createBaseSkillDefinitions(): SkillDefinitions {
+export function createBaseSkillDefinitions(): SkillDefinitions {
   return { classes: {} };
 }
 
@@ -102,7 +102,7 @@ export const SkillDefinitions: MessageFns<SkillDefinitions> = {
   },
 };
 
-function createBaseSkillDefinitions_ClassesEntry(): SkillDefinitions_ClassesEntry {
+export function createBaseSkillDefinitions_ClassesEntry(): SkillDefinitions_ClassesEntry {
   return { key: 0, value: createBaseSkill() };
 }
 
@@ -175,12 +175,14 @@ export const SkillDefinitions_ClassesEntry: MessageFns<SkillDefinitions_ClassesE
   ): SkillDefinitions_ClassesEntry {
     const message = createBaseSkillDefinitions_ClassesEntry();
     message.key = object.key ?? 0;
-    message.value = (object.value !== undefined && object.value !== null) ? Skill.fromPartial(object.value) : undefined;
+    message.value = (object.value !== undefined && object.value !== null)
+      ? Skill.fromPartial(object.value)
+      : createBaseSkill();
     return message;
   },
 };
 
-function createBaseSkill(): Skill {
+export function createBaseSkill(): Skill {
   return { skills: [] };
 }
 

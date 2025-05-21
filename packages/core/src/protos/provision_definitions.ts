@@ -7,7 +7,7 @@
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { ConsumableTankFilter } from "./consumable_definitions";
-import { I18nString, createBaseI18nString } from "./i18n";
+import { createBaseI18nString, I18nString } from "./i18n";
 
 export const protobufPackage = "blitzkit";
 
@@ -29,7 +29,7 @@ export interface Provision {
   exclude: ConsumableTankFilter[];
 }
 
-function createBaseProvisionDefinitions(): ProvisionDefinitions {
+export function createBaseProvisionDefinitions(): ProvisionDefinitions {
   return { provisions: {} };
 }
 
@@ -111,7 +111,7 @@ export const ProvisionDefinitions: MessageFns<ProvisionDefinitions> = {
   },
 };
 
-function createBaseProvisionDefinitions_ProvisionsEntry(): ProvisionDefinitions_ProvisionsEntry {
+export function createBaseProvisionDefinitions_ProvisionsEntry(): ProvisionDefinitions_ProvisionsEntry {
   return { key: 0, value: createBaseProvision() };
 }
 
@@ -188,12 +188,12 @@ export const ProvisionDefinitions_ProvisionsEntry: MessageFns<ProvisionDefinitio
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? Provision.fromPartial(object.value)
-      : undefined;
+      : createBaseProvision();
     return message;
   },
 };
 
-function createBaseProvision(): Provision {
+export function createBaseProvision(): Provision {
   return { id: 0, name: createBaseI18nString(), crew: undefined, game_mode_exclusive: false, include: [], exclude: [] };
 }
 

@@ -6,7 +6,7 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
-import { I18nString, createBaseI18nString } from "./i18n";
+import { createBaseI18nString, I18nString } from "./i18n";
 
 export const protobufPackage = "blitzkit";
 
@@ -24,7 +24,7 @@ export interface MapDefinition {
   name: I18nString;
 }
 
-function createBaseMapDefinitions(): MapDefinitions {
+export function createBaseMapDefinitions(): MapDefinitions {
   return { maps: {} };
 }
 
@@ -103,7 +103,7 @@ export const MapDefinitions: MessageFns<MapDefinitions> = {
   },
 };
 
-function createBaseMapDefinitions_MapsEntry(): MapDefinitions_MapsEntry {
+export function createBaseMapDefinitions_MapsEntry(): MapDefinitions_MapsEntry {
   return { key: 0, value: createBaseMapDefinition() };
 }
 
@@ -176,12 +176,12 @@ export const MapDefinitions_MapsEntry: MessageFns<MapDefinitions_MapsEntry> = {
     message.key = object.key ?? 0;
     message.value = (object.value !== undefined && object.value !== null)
       ? MapDefinition.fromPartial(object.value)
-      : undefined;
+      : createBaseMapDefinition();
     return message;
   },
 };
 
-function createBaseMapDefinition(): MapDefinition {
+export function createBaseMapDefinition(): MapDefinition {
   return { id: 0, name: createBaseI18nString() };
 }
 
