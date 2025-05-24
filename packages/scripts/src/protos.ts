@@ -15,7 +15,7 @@ if (existsSync('node_modules/.bin/protoc-gen-ts_proto.exe')) {
 }
 
 await compile('packages/core/src/protos');
-await compile('submodules/blitzkit-closed/src/unreal/protos');
+await compile('submodules/blitzkit-closed/src/protos');
 
 async function compile(root: string) {
   const filesRaw = await readdir(root);
