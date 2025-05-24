@@ -2,7 +2,7 @@
 // versions:
 //   protoc-gen-ts_proto  v2.2.2
 //   protoc               v5.28.2
-// source: packages/core/src/protos/tank_definitions.proto
+// source: tank_definitions.proto
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
@@ -11,18 +11,18 @@ import { createBaseI18nString, I18nString } from "./i18n";
 export const protobufPackage = "blitzkit";
 
 export enum TankPriceType {
-  CREDITS = 0,
-  GOLD = 1,
+  TANK_PRICE_TYPE_CREDITS = 0,
+  TANK_PRICE_TYPE_GOLD = 1,
 }
 
 export function tankPriceTypeFromJSON(object: any): TankPriceType {
   switch (object) {
     case 0:
     case "TANK_PRICE_TYPE_CREDITS":
-      return TankPriceType.CREDITS;
+      return TankPriceType.TANK_PRICE_TYPE_CREDITS;
     case 1:
     case "TANK_PRICE_TYPE_GOLD":
-      return TankPriceType.GOLD;
+      return TankPriceType.TANK_PRICE_TYPE_GOLD;
     default:
       throw new globalThis.Error("Unrecognized enum value " + object + " for enum TankPriceType");
   }
@@ -30,9 +30,9 @@ export function tankPriceTypeFromJSON(object: any): TankPriceType {
 
 export function tankPriceTypeToJSON(object: TankPriceType): string {
   switch (object) {
-    case TankPriceType.CREDITS:
+    case TankPriceType.TANK_PRICE_TYPE_CREDITS:
       return "TANK_PRICE_TYPE_CREDITS";
-    case TankPriceType.GOLD:
+    case TankPriceType.TANK_PRICE_TYPE_GOLD:
       return "TANK_PRICE_TYPE_GOLD";
     default:
       throw new globalThis.Error("Unrecognized enum value " + object + " for enum TankPriceType");
@@ -40,26 +40,26 @@ export function tankPriceTypeToJSON(object: TankPriceType): string {
 }
 
 export enum ShellType {
-  AP = 0,
-  APCR = 1,
-  HEAT = 2,
-  HE = 3,
+  SHELL_TYPE_AP = 0,
+  SHELL_TYPE_APCR = 1,
+  SHELL_TYPE_HEAT = 2,
+  SHELL_TYPE_HE = 3,
 }
 
 export function shellTypeFromJSON(object: any): ShellType {
   switch (object) {
     case 0:
     case "SHELL_TYPE_AP":
-      return ShellType.AP;
+      return ShellType.SHELL_TYPE_AP;
     case 1:
     case "SHELL_TYPE_APCR":
-      return ShellType.APCR;
+      return ShellType.SHELL_TYPE_APCR;
     case 2:
     case "SHELL_TYPE_HEAT":
-      return ShellType.HEAT;
+      return ShellType.SHELL_TYPE_HEAT;
     case 3:
     case "SHELL_TYPE_HE":
-      return ShellType.HE;
+      return ShellType.SHELL_TYPE_HE;
     default:
       throw new globalThis.Error("Unrecognized enum value " + object + " for enum ShellType");
   }
@@ -67,13 +67,13 @@ export function shellTypeFromJSON(object: any): ShellType {
 
 export function shellTypeToJSON(object: ShellType): string {
   switch (object) {
-    case ShellType.AP:
+    case ShellType.SHELL_TYPE_AP:
       return "SHELL_TYPE_AP";
-    case ShellType.APCR:
+    case ShellType.SHELL_TYPE_APCR:
       return "SHELL_TYPE_APCR";
-    case ShellType.HEAT:
+    case ShellType.SHELL_TYPE_HEAT:
       return "SHELL_TYPE_HEAT";
-    case ShellType.HE:
+    case ShellType.SHELL_TYPE_HE:
       return "SHELL_TYPE_HE";
     default:
       throw new globalThis.Error("Unrecognized enum value " + object + " for enum ShellType");
@@ -81,30 +81,30 @@ export function shellTypeToJSON(object: ShellType): string {
 }
 
 export enum ModuleType {
-  VEHICLE = 0,
-  ENGINE = 1,
-  TRACKS = 2,
-  TURRET = 3,
-  GUN = 4,
+  MODULE_TYPE_VEHICLE = 0,
+  MODULE_TYPE_ENGINE = 1,
+  MODULE_TYPE_TRACKS = 2,
+  MODULE_TYPE_TURRET = 3,
+  MODULE_TYPE_GUN = 4,
 }
 
 export function moduleTypeFromJSON(object: any): ModuleType {
   switch (object) {
     case 0:
     case "MODULE_TYPE_VEHICLE":
-      return ModuleType.VEHICLE;
+      return ModuleType.MODULE_TYPE_VEHICLE;
     case 1:
     case "MODULE_TYPE_ENGINE":
-      return ModuleType.ENGINE;
+      return ModuleType.MODULE_TYPE_ENGINE;
     case 2:
     case "MODULE_TYPE_TRACKS":
-      return ModuleType.TRACKS;
+      return ModuleType.MODULE_TYPE_TRACKS;
     case 3:
     case "MODULE_TYPE_TURRET":
-      return ModuleType.TURRET;
+      return ModuleType.MODULE_TYPE_TURRET;
     case 4:
     case "MODULE_TYPE_GUN":
-      return ModuleType.GUN;
+      return ModuleType.MODULE_TYPE_GUN;
     default:
       throw new globalThis.Error("Unrecognized enum value " + object + " for enum ModuleType");
   }
@@ -112,15 +112,15 @@ export function moduleTypeFromJSON(object: any): ModuleType {
 
 export function moduleTypeToJSON(object: ModuleType): string {
   switch (object) {
-    case ModuleType.VEHICLE:
+    case ModuleType.MODULE_TYPE_VEHICLE:
       return "MODULE_TYPE_VEHICLE";
-    case ModuleType.ENGINE:
+    case ModuleType.MODULE_TYPE_ENGINE:
       return "MODULE_TYPE_ENGINE";
-    case ModuleType.TRACKS:
+    case ModuleType.MODULE_TYPE_TRACKS:
       return "MODULE_TYPE_TRACKS";
-    case ModuleType.TURRET:
+    case ModuleType.MODULE_TYPE_TURRET:
       return "MODULE_TYPE_TURRET";
-    case ModuleType.GUN:
+    case ModuleType.MODULE_TYPE_GUN:
       return "MODULE_TYPE_GUN";
     default:
       throw new globalThis.Error("Unrecognized enum value " + object + " for enum ModuleType");
@@ -128,26 +128,26 @@ export function moduleTypeToJSON(object: ModuleType): string {
 }
 
 export enum TankClass {
-  LIGHT = 0,
-  MEDIUM = 1,
-  HEAVY = 2,
-  TANK_DESTROYER = 3,
+  TANK_CLASS_LIGHT = 0,
+  TANK_CLASS_MEDIUM = 1,
+  TANK_CLASS_HEAVY = 2,
+  TANK_CLASS_TANK_DESTROYER = 3,
 }
 
 export function tankClassFromJSON(object: any): TankClass {
   switch (object) {
     case 0:
     case "TANK_CLASS_LIGHT":
-      return TankClass.LIGHT;
+      return TankClass.TANK_CLASS_LIGHT;
     case 1:
     case "TANK_CLASS_MEDIUM":
-      return TankClass.MEDIUM;
+      return TankClass.TANK_CLASS_MEDIUM;
     case 2:
     case "TANK_CLASS_HEAVY":
-      return TankClass.HEAVY;
+      return TankClass.TANK_CLASS_HEAVY;
     case 3:
     case "TANK_CLASS_TANK_DESTROYER":
-      return TankClass.TANK_DESTROYER;
+      return TankClass.TANK_CLASS_TANK_DESTROYER;
     default:
       throw new globalThis.Error("Unrecognized enum value " + object + " for enum TankClass");
   }
@@ -155,13 +155,13 @@ export function tankClassFromJSON(object: any): TankClass {
 
 export function tankClassToJSON(object: TankClass): string {
   switch (object) {
-    case TankClass.LIGHT:
+    case TankClass.TANK_CLASS_LIGHT:
       return "TANK_CLASS_LIGHT";
-    case TankClass.MEDIUM:
+    case TankClass.TANK_CLASS_MEDIUM:
       return "TANK_CLASS_MEDIUM";
-    case TankClass.HEAVY:
+    case TankClass.TANK_CLASS_HEAVY:
       return "TANK_CLASS_HEAVY";
-    case TankClass.TANK_DESTROYER:
+    case TankClass.TANK_CLASS_TANK_DESTROYER:
       return "TANK_CLASS_TANK_DESTROYER";
     default:
       throw new globalThis.Error("Unrecognized enum value " + object + " for enum TankClass");
@@ -169,22 +169,22 @@ export function tankClassToJSON(object: TankClass): string {
 }
 
 export enum TankType {
-  RESEARCHABLE = 0,
-  PREMIUM = 1,
-  COLLECTOR = 2,
+  TANK_TYPE_RESEARCHABLE = 0,
+  TANK_TYPE_PREMIUM = 1,
+  TANK_TYPE_COLLECTOR = 2,
 }
 
 export function tankTypeFromJSON(object: any): TankType {
   switch (object) {
     case 0:
     case "TANK_TYPE_RESEARCHABLE":
-      return TankType.RESEARCHABLE;
+      return TankType.TANK_TYPE_RESEARCHABLE;
     case 1:
     case "TANK_TYPE_PREMIUM":
-      return TankType.PREMIUM;
+      return TankType.TANK_TYPE_PREMIUM;
     case 2:
     case "TANK_TYPE_COLLECTOR":
-      return TankType.COLLECTOR;
+      return TankType.TANK_TYPE_COLLECTOR;
     default:
       throw new globalThis.Error("Unrecognized enum value " + object + " for enum TankType");
   }
@@ -192,11 +192,11 @@ export function tankTypeFromJSON(object: any): TankType {
 
 export function tankTypeToJSON(object: TankType): string {
   switch (object) {
-    case TankType.RESEARCHABLE:
+    case TankType.TANK_TYPE_RESEARCHABLE:
       return "TANK_TYPE_RESEARCHABLE";
-    case TankType.PREMIUM:
+    case TankType.TANK_TYPE_PREMIUM:
       return "TANK_TYPE_PREMIUM";
-    case TankType.COLLECTOR:
+    case TankType.TANK_TYPE_COLLECTOR:
       return "TANK_TYPE_COLLECTOR";
     default:
       throw new globalThis.Error("Unrecognized enum value " + object + " for enum TankType");
@@ -204,30 +204,30 @@ export function tankTypeToJSON(object: TankType): string {
 }
 
 export enum CrewType {
-  COMMANDER = 0,
-  RADIOMAN = 1,
-  GUNNER = 2,
-  DRIVER = 3,
-  LOADER = 4,
+  CREW_TYPE_COMMANDER = 0,
+  CREW_TYPE_RADIOMAN = 1,
+  CREW_TYPE_GUNNER = 2,
+  CREW_TYPE_DRIVER = 3,
+  CREW_TYPE_LOADER = 4,
 }
 
 export function crewTypeFromJSON(object: any): CrewType {
   switch (object) {
     case 0:
     case "CREW_TYPE_COMMANDER":
-      return CrewType.COMMANDER;
+      return CrewType.CREW_TYPE_COMMANDER;
     case 1:
     case "CREW_TYPE_RADIOMAN":
-      return CrewType.RADIOMAN;
+      return CrewType.CREW_TYPE_RADIOMAN;
     case 2:
     case "CREW_TYPE_GUNNER":
-      return CrewType.GUNNER;
+      return CrewType.CREW_TYPE_GUNNER;
     case 3:
     case "CREW_TYPE_DRIVER":
-      return CrewType.DRIVER;
+      return CrewType.CREW_TYPE_DRIVER;
     case 4:
     case "CREW_TYPE_LOADER":
-      return CrewType.LOADER;
+      return CrewType.CREW_TYPE_LOADER;
     default:
       throw new globalThis.Error("Unrecognized enum value " + object + " for enum CrewType");
   }
@@ -235,15 +235,15 @@ export function crewTypeFromJSON(object: any): CrewType {
 
 export function crewTypeToJSON(object: CrewType): string {
   switch (object) {
-    case CrewType.COMMANDER:
+    case CrewType.CREW_TYPE_COMMANDER:
       return "CREW_TYPE_COMMANDER";
-    case CrewType.RADIOMAN:
+    case CrewType.CREW_TYPE_RADIOMAN:
       return "CREW_TYPE_RADIOMAN";
-    case CrewType.GUNNER:
+    case CrewType.CREW_TYPE_GUNNER:
       return "CREW_TYPE_GUNNER";
-    case CrewType.DRIVER:
+    case CrewType.CREW_TYPE_DRIVER:
       return "CREW_TYPE_DRIVER";
-    case CrewType.LOADER:
+    case CrewType.CREW_TYPE_LOADER:
       return "CREW_TYPE_LOADER";
     default:
       throw new globalThis.Error("Unrecognized enum value " + object + " for enum CrewType");

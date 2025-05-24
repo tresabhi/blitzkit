@@ -1,12 +1,13 @@
 {
-  "name": "blitzkit",
+  "name": "@blitzkit",
   "private": true,
   "version": "1.27.11",
   "description": "🎉 Tools for everything World of Tanks Blitz",
   "type": "module",
   "types": "./types.d.ts",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "submodules/*"
   ],
   "scripts": {
     "build:assets": "cd packages/scripts && bun run build:assets",

@@ -2,7 +2,7 @@ syntax = "proto2";
 
 package blitzkit;
 
-import "packages/core/src/protos/i18n.proto";
+import "i18n.proto";
 
 message TankDefinitions {
   map<uint32, TankDefinition> tanks = 1;

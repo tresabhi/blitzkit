@@ -2,7 +2,7 @@
 // versions:
 //   protoc-gen-ts_proto  v2.2.2
 //   protoc               v5.28.2
-// source: packages/core/src/protos/consumable_definitions.proto
+// source: consumable_definitions.proto
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
@@ -11,14 +11,14 @@ import { createBaseI18nString, I18nString } from "./i18n";
 export const protobufPackage = "blitzkit";
 
 export enum ConsumableTankCategoryFilterCategory {
-  CLIP = 0,
+  CONSUMABLE_TANK_CATEGORY_FILTER_CATEGORY_CLIP = 0,
 }
 
 export function consumableTankCategoryFilterCategoryFromJSON(object: any): ConsumableTankCategoryFilterCategory {
   switch (object) {
     case 0:
     case "CONSUMABLE_TANK_CATEGORY_FILTER_CATEGORY_CLIP":
-      return ConsumableTankCategoryFilterCategory.CLIP;
+      return ConsumableTankCategoryFilterCategory.CONSUMABLE_TANK_CATEGORY_FILTER_CATEGORY_CLIP;
     default:
       throw new globalThis.Error(
         "Unrecognized enum value " + object + " for enum ConsumableTankCategoryFilterCategory",
@@ -28,7 +28,7 @@ export function consumableTankCategoryFilterCategoryFromJSON(object: any): Consu
 
 export function consumableTankCategoryFilterCategoryToJSON(object: ConsumableTankCategoryFilterCategory): string {
   switch (object) {
-    case ConsumableTankCategoryFilterCategory.CLIP:
+    case ConsumableTankCategoryFilterCategory.CONSUMABLE_TANK_CATEGORY_FILTER_CATEGORY_CLIP:
       return "CONSUMABLE_TANK_CATEGORY_FILTER_CATEGORY_CLIP";
     default:
       throw new globalThis.Error(

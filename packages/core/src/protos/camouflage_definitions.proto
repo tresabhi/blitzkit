@@ -2,7 +2,7 @@ syntax = "proto2";
 
 package blitzkit;
 
-import "packages/core/src/protos/i18n.proto";
+import "i18n.proto";
 
 message CamouflageDefinitions {
   map<uint32, Camouflage> camouflages = 1;

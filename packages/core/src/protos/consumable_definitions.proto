@@ -2,7 +2,7 @@ syntax = "proto2";
 
 package blitzkit;
 
-import "packages/core/src/protos/i18n.proto";
+import "i18n.proto";
 
 message ConsumableDefinitions {
   map<uint32, Consumable> consumables = 1;

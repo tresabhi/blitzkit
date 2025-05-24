@@ -2,8 +2,8 @@ syntax = "proto2";
 
 package blitzkit;
 
-import "packages/core/src/protos/consumable_definitions.proto";
-import "packages/core/src/protos/i18n.proto";
+import "consumable_definitions.proto";
+import "i18n.proto";
 
 message ProvisionDefinitions {
   map<uint32, Provision> provisions = 1;

@@ -2,7 +2,7 @@
 // versions:
 //   protoc-gen-ts_proto  v2.2.2
 //   protoc               v5.28.2
-// source: packages/core/src/protos/skill_definitions.proto
+// source: skill_definitions.proto
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
