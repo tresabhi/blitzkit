@@ -8,10 +8,10 @@ import { TankopediaEphemeral_ue } from '../../stores/tankopediaEphemeral_ue';
 import { classIcons_ue } from '../ClassIcon';
 import { Listing } from '../Tankopedia/MetaSection/components/Listing';
 
-const NATIONAL_BANNER_POSITION_OVERRIDES: Record<string, string> = {
-  germany: '50% 35%',
-  france: '50% 35%',
-  other: '50% 35%',
+const NATIONAL_BANNER_POSITION_OVERRIDES: Partial<Record<Nation, string>> = {
+  [Nation.NATION_GERMANY]: '50% 35%',
+  [Nation.NATION_FRANCE]: '50% 35%',
+  [Nation.NATION_OTHER]: '50% 35%',
 };
 
 export function MetaSection() {
