@@ -1037,6 +1037,7 @@
         },
 
         "meta": {
+          "free": "Free",
           "back": "Back",
           "compare": "Compare",
           "swap": {
@@ -1054,7 +1055,8 @@
           "purchase": "Purchase price",
           "restoration": "Restoration price",
           "sale": "Sale price",
-          "research": "Research XP"
+          "set": "Set",
+          "price": "Price"
         },
 
         "tech_tree": {

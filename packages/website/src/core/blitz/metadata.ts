@@ -8,5 +8,5 @@ import type { GetPackedMetadataAsyncResponse } from '@blitzkit/closed/src/unreal
 export const metadata = new MetadataAccessor(
   await requestAutoProxyClient<GetPackedMetadataAsyncResponse>(
     'GetPackedMetadataAsyncRequest',
-  ).then((packed) => unpackMetadata(packed)),
+  ).then(unpackMetadata),
 );

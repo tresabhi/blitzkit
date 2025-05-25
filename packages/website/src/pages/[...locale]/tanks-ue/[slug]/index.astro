@@ -7,6 +7,7 @@ import type {
 import { slugify } from '@blitzkit/core';
 import locales from '@blitzkit/i18n/locales.json';
 import type { GetStaticPaths } from 'astro';
+import { tankToSet } from 'packages/website/src/core/blitz/tankToSet';
 import { metadata } from '../../../../core/blitz/metadata';
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import { getStaticPaths as parentGetStaticPaths } from '../index.astro';
@@ -44,6 +45,7 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { item, locale, strings } = Astro.props;
+const set = await tankToSet(metadata, item);
 const tankComponents = await metadata.get(item);
 const tank = await tankComponents.get<TankCatalogComponent>(
   'tankCatalogComponent',
@@ -54,5 +56,12 @@ const compensation = await tankComponents.get<CompensationComponent>(
 ---
 
 <BaseLayout {locale} {strings}>
-  <Page client:load {tank} {compensation} localeContext={{ locale, strings }} />
+  <Page
+    client:load
+    catalogueId={item}
+    {set}
+    {tank}
+    {compensation}
+    localeContext={{ locale, strings }}
+  />
 </BaseLayout>

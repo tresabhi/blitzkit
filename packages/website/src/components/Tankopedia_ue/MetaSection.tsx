@@ -17,8 +17,21 @@ const NATIONAL_BANNER_POSITION_OVERRIDES: Partial<Record<Nation, string>> = {
 export function MetaSection() {
   const developerMode = App.useDeferred((state) => state.developerMode, false);
   const tank = TankopediaEphemeral_ue.use((state) => state.tank);
+  const set = TankopediaEphemeral_ue.use((state) => state.set);
+  const catalogueId = TankopediaEphemeral_ue.use((state) => state.catalogueId);
   const ClassIcon = classIcons_ue[tank.tank_class];
   const { locale, strings } = useLocale();
+  const reward = set.tank_set_rewards.find(
+    (reward) =>
+      reward.tank_set_reward_on_level &&
+      reward.tank_set_reward_on_level.reward_list.some(
+        (rewardOnLevel) =>
+          rewardOnLevel.tank_reward &&
+          rewardOnLevel.tank_reward.tank_catalog_id === catalogueId,
+      ),
+  )!;
+  const price =
+    reward.tank_set_reward_price?.price_list[0].currency_price!.amount;
 
   return (
     <Flex justify="center" mt="-9">
@@ -148,24 +161,28 @@ export function MetaSection() {
                       />
                     </Flex>
                   </Listing>
-                  {/* TODO: ADD RESEARCH COST */}
-                  {/* {protagonist.research_cost && (
-                    <Listing
-                      label={strings.website.tools.tankopedia.meta.research}
-                    >
-                      <Flex align="center" gap="1">
-                        {(
-                          protagonist.research_cost.research_cost_type!
-                            .value as number
-                        ).toLocaleString(locale)}
-                        <img
-                          style={{ width: '1em', height: '1em' }}
-                          alt="xp"
-                          src={asset('icons/currencies/xp.webp')}
-                        />
-                      </Flex>
-                    </Listing>
-                  )} */}
+                  <Listing label={strings.website.tools.tankopedia.meta.set}>
+                    {set.tank_set_ui!.tank_set_displayed_name}
+                  </Listing>
+                  <Listing label={strings.website.tools.tankopedia.meta.price}>
+                    <Flex align="center" gap="1">
+                      {reward.tank_set_reward_price === undefined ? (
+                        strings.website.tools.tankopedia.meta.free
+                      ) : (
+                        <>
+                          {price?.toLocaleString(locale)}
+
+                          <img
+                            style={{ width: '1em', height: '1em' }}
+                            alt="xp"
+                            src={
+                              'https://wotblitz-gc.gcdn.co/dlc/ultra_test2_25abc2385a5/assets/Medusa/Currency/T_UI_Currency_Silver_S.webp'
+                            }
+                          />
+                        </>
+                      )}
+                    </Flex>
+                  </Listing>
                 </Flex>
               </Flex>
             </Flex>
