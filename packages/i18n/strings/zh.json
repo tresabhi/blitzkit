@@ -239,48 +239,48 @@
           "options": {
             "start": {
               "name": "开始",
-              "description": "從今天起算的天數前開始"
+              "description": "距今若干天前开始"
             },
             "end": {
-              "name": "結束",
-              "description": "從今天起算的天數前結束"
+              "name": "结束",
+              "description": "距今若干天前开结束"
             }
           }
         }
       },
       "options": {
         "clan": {
-          "name": "公會",
-          "description": "公會名稱或標籤"
+          "name": "公会",
+          "description": "公会名称或标签"
         },
         "tank": {
-          "name": "戰車",
-          "description": "要獲取統計資料的戰車"
+          "name": "战车",
+          "description": "要获取战绩的坦克"
         },
         "username": {
-          "name": "使用者名稱",
-          "description": "玩家的閃擊戰暱稱"
+          "name": "用户名",
+          "description": "玩家的闪击战游戏昵称"
         },
         "filters": {
           "nation": {
-            "name": "國別",
-            "description": "國別"
+            "name": "国别",
+            "description": "国别"
           },
           "class": {
-            "name": "分類",
-            "description": "戰車類別"
+            "name": "车种",
+            "description": "战车种类"
           },
           "type": {
-            "name": "戰車類型",
-            "description": "戰車類型"
+            "name": "战车类型",
+            "description": "战车类型"
           }
         },
         "region": {
-          "name": "所在地區",
-          "description": "地區"
+          "name": "所在地区",
+          "description": "地区"
         },
         "tier": {
-          "name": "等級",
+          "name": "等级",
           "description": "等级",
           "choices": {
             "tier": "%s1- %s2 级"
@@ -288,77 +288,77 @@
         }
       },
       "periods": {
-        "career": "玩家資料",
+        "career": "玩家资料",
         "today": "今日：",
         "days": "%s1 天",
         "custom": "%s1 - %s2 天"
       },
       "filters": {
-        "none": "無篩選器",
-        "tier": "等級 %s1"
+        "none": "无筛选器",
+        "tier": "等级 %s1"
       },
       "no_data": {
-        "battles_in_period": "在這段時間裡沒有參與任何戰鬥",
-        "battles_in_season": "在這個賽季中沒有戰鬥記錄",
-        "players_in_period": "這段時間內沒有玩家",
-        "tanks_found": "找不到戰車"
+        "battles_in_period": "在这段时间里没有参与任何战斗",
+        "battles_in_season": "在这个赛季中没有战斗记录",
+        "players_in_period": "这段时间内没有玩家",
+        "tanks_found": "找不到战车"
       },
       "buttons": {
-        "refresh": "重新整理"
+        "refresh": "刷新"
       },
       "hero_stats": {
-        "battles": "戰鬥場次",
-        "winrate": "勝率",
-        "damage": "傷害",
-        "damage_ratio": "傷害比",
-        "tier": "等級",
-        "survival": "生存性",
+        "battles": "战斗场次",
+        "winrate": "胜率",
+        "damage": "伤害",
+        "damage_ratio": "伤害比",
+        "tier": "等级",
+        "survival": "生存",
         "accuracy": "命中率",
-        "kills": "擊殺數"
+        "kills": "击杀数"
       }
     },
     "commands": {
       "auction": {
-        "name": "拍賣",
-        "description": "目前拍賣中的戰車",
+        "name": "拍卖",
+        "description": "目前拍卖中的战车",
         "body": {
-          "title": "Blitz 拍賣活動",
-          "subtitle": "%s1 可用 • 下一個價格 %s2\n現在出價： %s3",
-          "next": "下一個價格: %s1",
+          "title": "Blitz 拍卖会",
+          "subtitle": "%s1 可用 • 下一个价格 %s2\n现在出价： %s3",
+          "next": "下一个价格: %s1",
           "available": "可用: %s1 / %s2"
         },
         "errors": {
-          "no_auction": "# 目前没有正在進行的拍賣\n\n拍賣中沒有可供購買的戰車。 如果您認為這是一個錯誤，請在[官方的 Discord伺服器](https://discord.gg/nDt7AjGJQH)中報告這個問題。"
+          "no_auction": "# 目前没有正在进行中的拍卖会\n\n拍卖中没有可供购买的战车。 如果您认为这是一个错误，请在[官方的 Discord服务器]（https://discord.gg/nDt7AjGJQH）中报告这个问题。"
         },
         "actions": {
-          "bid": "立即購買"
+          "bid": "立刻购买"
         }
       },
       "replay": {
-        "name": "重播",
-        "description": "顯示重播結果"
+        "name": "回放",
+        "description": "显示重播结果"
       },
       "research": {
-        "name": "研發",
-        "description": "列出研發線路的花費",
+        "name": "研发",
+        "description": "列出研发线路的费用",
         "options": {
           "target_tank": {
-            "name": "目標戰車",
+            "name": "目标战车",
             "description": "科技樹裡最後的待研發戰車"
           },
           "starting_tank": {
-            "name": "起始戰車",
-            "description": "科技樹中起始戰車(如果未提供則自動推定)"
+            "name": "起始战车",
+            "description": "科技线中起始战车(如果未提供则自动推定)"
           }
         },
         "body": {
-          "subtitle": "研發",
+          "subtitle": "研发",
           "total": "全部",
-          "research": "研發： %s1",
-          "upgrades": "升級：%s1",
-          "purchase": "購買: %s1",
-          "equipment": "裝備: %s1",
-          "estimation": "# 這是一個估計值！\n\n這個列表可能包含已經研發過的戰車，因為 Warming 提供了不正確的資料。 如果您可以，請嘗試從列表中提供一個 \"起始戰車\" 。"
+          "research": "研发：%s1",
+          "upgrades": "升级：%s1",
+          "purchase": "购买：%s1",
+          "equipment": "装备：%s1",
+          "estimation": "# 这是一个估计值！\n\n这个列表可能包含已经研发过的战车，因为 Wargaming 提供了不正确的资料。 如有需要，请尝试从科技树中提供一个 “起始战车” 。"
         },
         "errors": {
           "non_tech_tree": "#%s1不在科技樹裡\n\n你不能研究一個 加值/收藏家 戰車。",
