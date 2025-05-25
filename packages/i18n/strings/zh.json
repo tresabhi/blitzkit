@@ -672,21 +672,21 @@
       },
       "tank_search": {
         "clear_filters": "清除筛选",
-        "search_bar_hint": "搜尋戰車....",
-        "recent": "最近查看",
-        "select_all": "選擇全部",
-        "count_singular": "1 台戰車",
-        "count_plural": "%s1戰車",
+        "search_bar_hint": "搜寻战车……",
+        "recent": "最近查看的",
+        "select_all": "全选",
+        "count_singular": "1辆战车",
+        "count_plural": "%s1辆战车",
         "sorting_by": "按 %s1 排序",
         "no_tanks_found": {
-          "body": "找不到戰車。",
-          "search_again": "請嘗試重新搜尋。",
-          "clear_filters": "請嘗試重置篩選器。"
+          "body": "找不到战车。",
+          "search_again": "请尝试重新搜索。",
+          "clear_filters": "请尝试清除筛选。"
         },
         "sort": {
-          "meta.none": "無",
+          "meta.none": "无",
           "survivability.health": "生命值",
-          "survivability.viewRange": "偵查範圍",
+          "survivability.viewRange": "侦察范围",
           "survivability.camouflageStill": "静止中隐蔽值",
           "survivability.camouflageMoving": "移動中隐蔽值",
           "survivability.camouflageShooting": "射擊隐蔽值",
