@@ -22,6 +22,7 @@ import {
   ResearchCost,
   ShellType,
   SkillDefinitions,
+  slugify,
   TankClass,
   TankDefinitions,
   TankPrice,
@@ -37,7 +38,6 @@ import {
   SUPPORTED_LOCALES,
 } from '@blitzkit/i18n';
 import { readdir } from 'fs/promises';
-import { deburr } from 'lodash-es';
 import { parse as parsePath } from 'path';
 import { Vector3Tuple } from 'three';
 import { parse as parseYaml } from 'yaml';
@@ -48,11 +48,6 @@ import { commitAssets } from '../core/github/commitAssets';
 import { DATA } from './constants';
 import { Avatar } from './skillIcons';
 import { TankParameters } from './tankIcons';
-
-const nonAlphanumericRegex = /[^a-z0-9]/g;
-const multipleDashesRegex = /--+/g;
-const trailingDashRegex = /-$/g;
-const leadingDashRegex = /^-/g;
 
 const nationSlugDiscriminators = {
   china: 'cn',
@@ -740,12 +735,7 @@ export async function definitions() {
             ? getString(tank.shortUserString)
             : undefined) ?? getString(tank.userString)
         ).locales.en;
-
-        let slug = deburr(name).toLowerCase();
-        slug = slug.replaceAll(nonAlphanumericRegex, '-');
-        slug = slug.replaceAll(multipleDashesRegex, '-');
-        slug = slug.replaceAll(trailingDashRegex, '');
-        slug = slug.replaceAll(leadingDashRegex, '');
+        const slug = slugify(name);
 
         idToNation[tankId] = nation;
 

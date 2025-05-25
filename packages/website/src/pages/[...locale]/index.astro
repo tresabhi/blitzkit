@@ -1,7 +1,8 @@
 ---
 import { AstroSeo } from '@astrolib/seo';
 import { assertSecret } from '@blitzkit/core';
-import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from '@blitzkit/i18n';
+import { DEFAULT_LOCALE } from '@blitzkit/i18n';
+import locales from '@blitzkit/i18n/locales.json';
 import { literals } from '@blitzkit/i18n/src/literals';
 import { Box, Flex, Heading, Link } from '@radix-ui/themes';
 import type { GetStaticPaths } from 'astro';
@@ -25,15 +26,20 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const PUBLIC_ASSET_BRANCH = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
 const locale = Astro.params.locale ?? DEFAULT_LOCALE;
-const strings = getStrings(Astro.params.locale);
+const strings = getStrings(Astro.props.locale);
 
 export const getStaticPaths = (() => {
-  return [
-    ...SUPPORTED_LOCALES.filter((locale) => locale !== DEFAULT_LOCALE).map(
-      (locale) => ({ params: { locale } }),
-    ),
-    { params: { locale: undefined } },
-  ];
+  // return [
+  //   ...SUPPORTED_LOCALES.filter((locale) => locale !== DEFAULT_LOCALE).map(
+  //     (locale) => ({ params: { locale } }),
+  //   ),
+  //   { params: { locale: undefined } },
+  // ];
+
+  return locales.supported.map(({ locale, blitz }) => ({
+    params: { locale: locale === locales.default ? undefined : locale },
+    props: { locale, blitzLocale: blitz ?? locale },
+  }));
 }) satisfies GetStaticPaths;
 ---
 
@@ -79,7 +85,9 @@ export const getStaticPaths = (() => {
         >
           {literals(strings.website.home.help_translate, [
             'BlitzKit',
-            strings.common.locales[locale],
+            strings.common.locales[
+              locale as keyof typeof strings.common.locales
+            ],
           ])}
         </Link>
       </Flex>

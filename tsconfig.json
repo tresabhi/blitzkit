@@ -14,11 +14,17 @@
     "allowJs": true,
     "incremental": true,
     "isolatedModules": true,
+
     "plugins": [
       {
         "name": "next"
       }
-    ]
+    ],
+
+    "baseUrl": "./",
+    "paths": {
+      "@protos/*": ["submodules/blitzkit-closed/src/unreal/protos/*"]
+    }
   },
   "exclude": ["node_modules/**/*", "dist", ".next"]
 }

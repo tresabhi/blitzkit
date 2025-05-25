@@ -1,0 +1,46 @@
+---
+import { slugify } from '@blitzkit/core';
+import locales from '@blitzkit/i18n/locales.json';
+import type { CatalogItemsComponent } from '@protos/blitz_static_catalog_items_group_component';
+import { TankCatalogComponent } from '@protos/blitz_static_tank_component';
+import { metadata } from '../../../core/blitz/metadata';
+
+export { getStaticPaths } from '../index.astro';
+
+const { blitzLocale } = Astro.props;
+const allTanks = await metadata
+  .get('CatalogItemsGroupEntity.all_tanks')
+  .then((components) =>
+    components.get<CatalogItemsComponent>('catalogItemsGroupComponent'),
+  );
+const gameStrings = await metadata
+  .strings(blitzLocale)
+  .then((strings) => strings.subset(['TankEntity']));
+const gameStringsDefault = await metadata
+  .strings(locales.default)
+  .then((strings) => strings.subset(['TankEntity']));
+const tanks: { tank: TankCatalogComponent; slug: string; id: string }[] = [];
+
+for (const tankComponentId of allTanks.catalog_items) {
+  const tank = await metadata.get(tankComponentId).then((components) => {
+    return components.get<TankCatalogComponent>('tankCatalogComponent');
+  });
+  const nameEn = gameStringsDefault[tank.name!.value];
+  const slug = slugify(nameEn);
+
+  tanks.push({ tank, slug, id: tankComponentId });
+}
+---
+
+{
+  tanks.map(({ tank, slug, id }) => {
+    return (
+      <>
+        <a href={`/tanks-ue/${slug}`}>
+          {gameStrings[tank.name!.value] ?? `MISSING NAME (${id})`}
+        </a>
+        <br />
+      </>
+    );
+  })
+}
