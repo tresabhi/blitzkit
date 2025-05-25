@@ -605,49 +605,49 @@
         "subcommands": {
           "blitzkit": {
             "name": "blitzkit",
-            "description": "BlitzKit 的 Ping 值"
+            "description": "测试BlitzKit的ping值（延迟值）"
           },
           "wotb": {
-            "name": "戰車世界閃擊戰",
-            "description": "戰車世界閃擊戰的 Ping 值"
+            "name": "坦克世界闪击战",
+            "description": "测试坦克世界闪击战的ping值（延迟值）"
           }
         }
       },
       "player_info": {
-        "name": "玩家資訊",
-        "description": "玩家基本資訊",
+        "name": "玩家信息",
+        "description": "玩家基本信息",
         "body": {
-          "title": "%s1的資訊",
-          "nickname": "暱稱",
-          "battles": "戰鬥場次",
-          "winrate": "勝率",
-          "account_id": "帳號 ID",
-          "created": "已創建",
-          "last_battle": "最後戰鬥"
+          "title": "%s1的信息",
+          "nickname": "昵称",
+          "battles": "战斗场次",
+          "winrate": "胜率",
+          "account_id": "账号ID",
+          "created": "创建时间",
+          "last_battle": "最后一场战斗"
         }
       },
       "rating": {
-        "name": "评级战斗",
-        "description": "評價戰鬥統計資料",
+        "name": "评价战斗",
+        "description": "评价战斗的统计数据",
         "subcommands": {
           "today": {
             "name": "今日",
-            "description": "今日評價統計資料"
+            "description": "今日评价战斗统计数据"
           },
           "season": {
-            "name": "賽季",
-            "description": "本賽季評價統計資料"
+            "name": "赛季",
+            "description": "本季评价战斗统计数据"
           }
         },
         "body": {
           "subtitle": {
-            "today": "今日評價統計資料",
-            "season": "本賽季評價統計資料"
+            "today": "今日评价战斗统计数据",
+            "season": "本季评价战斗统计数据"
           }
         },
         "errors": {
-          "no_participation": "# %s1 未完成評價\n該玩家未參與本賽季的評價戰鬥。",
-          "unrecorded_stats": "# 統計資料目前無法使用\n\nWargaming 可能暫停了伺服器。 如果有連續的賽季，統計資料可能在24小時内提供。"
+          "no_participation": "# %s1 未完成评价\n\n该玩家未参与本赛季的评价战斗。",
+          "unrecorded_stats": "# 统计数据目前无法使用\n\nWargaming 可能暂停了服务器。 如果有连续的赛季，统计数据可能在24小时内提供。"
         }
       }
     }
@@ -658,17 +658,17 @@
       "body": "此页面已被移动。正在重定向……"
     },
     "settings": {
-      "dev_mode": "開發人員模式",
-      "language": "語言"
+      "dev_mode": "开发者模式",
+      "language": "语言"
     },
     "common": {
       "player_search": {
-        "hint": "搜尋玩家……",
-        "no_results": "沒有結果",
-        "searching": "搜尋中……"
+        "hint": "搜索玩家",
+        "no_results": "没有结果",
+        "searching": "搜索中..."
       },
       "copy_button": {
-        "copied": "已複製！"
+        "copied": "已复制！"
       },
       "tank_search": {
         "clear_filters": "清除筛选",
