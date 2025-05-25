@@ -13,7 +13,9 @@ export function Listing({ label, ...props }: ListingProps) {
       gap="4"
       style={{ borderBottom: `1px solid ${Var('gray-a9')}` }}
     >
-      <Text size="4">{label}</Text>
+      <Text size="4" wrap="nowrap">
+        {label}
+      </Text>
       <Text align="right" size="4" weight="medium" {...props} />
     </Flex>
   );

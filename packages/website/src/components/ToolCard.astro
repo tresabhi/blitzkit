@@ -2,20 +2,20 @@
 import { assertSecret } from '@blitzkit/core';
 import { CaretRightIcon } from '@radix-ui/react-icons';
 import { Box, Button, Code, Flex, Heading, Text } from '@radix-ui/themes';
+import type { BlitzKitStrings } from 'packages/i18n/src';
 import type { Tool } from '../constants/tools';
-import { getStrings } from '../core/i18n/getStrings';
 import { LinkI18n } from './LinkI18n';
 
 interface Props {
   tool: Tool;
+  strings: BlitzKitStrings;
+  locale: string;
 }
 
-const { tool } = Astro.props;
+const { tool, strings, locale } = Astro.props;
 const disabled = tool.branches?.every(
   (branch) => branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
 );
-const { locale } = Astro.params;
-const strings = getStrings(locale);
 const toolStrings =
   strings.website.tools[
     (tool.stringsId ?? tool.id) as keyof typeof strings.website.tools

@@ -6,6 +6,18 @@
   },
 
   "common": {
+    "tiers": {
+      "0": "Unknown tier",
+      "1": "I",
+      "2": "II",
+      "3": "III",
+      "4": "IV",
+      "5": "V",
+      "6": "VI",
+      "7": "VII",
+      "8": "Vintage"
+    },
+
     "units": {
       "m": "%s1m",
       "mm": "%s1mm",
@@ -86,15 +98,44 @@
     },
 
     "nations": {
-      "ussr": "U.S.S.R.",
-      "germany": "Germany",
-      "usa": "U.S.A.",
-      "china": "China",
-      "uk": "U.K.",
-      "france": "France",
-      "japan": "Japan",
-      "european": "European Nation",
-      "other": "Hybrid Nation"
+      "0": "Unknown nation",
+      "1": "U.S.S.R.",
+      "2": "Germany",
+      "3": "U.S.A.",
+      "4": "China",
+      "5": "France",
+      "6": "U.K.",
+      "7": "Japan",
+      "8": "Europe",
+      "9": "Poland",
+      "10": "Australia",
+      "11": "Canada",
+      "12": "Italy",
+      "13": "Finland",
+      "14": "Czech",
+      "15": "Hybrid Nation",
+      "16": "GDR",
+      "17": "Ireland",
+      "18": "Scotland",
+      "19": "Sweden",
+      "20": "Argo Coalition",
+      "21": "Titan Lab",
+      "22": "Defender",
+      "23": "Progresston",
+      "24": "Wasteland",
+      "25": "Hunters Moon",
+      "26": "Cold Front",
+      "27": "The Explorer",
+      "28": "Fablegear",
+      "29": "Outlaws",
+      "30": "GUP",
+      "31": "Dune",
+      "32": "Terminator",
+      "33": "Warhammer",
+      "34": "Valkirya Chronicles",
+      "35": "Mecha",
+      "36": "TMNT",
+      "37": "Star Trek"
     },
 
     "nations_adjectives": {
@@ -107,6 +148,14 @@
       "japan": "Japanese",
       "european": "European",
       "other": "Hybrid"
+    },
+
+    "tank_class": {
+      "0": "Unknown Class",
+      "1": "Heavy",
+      "2": "Light",
+      "3": "Medium",
+      "4": "Tank destroyer"
     },
 
     "tank_class_short": {
@@ -133,10 +182,10 @@
     },
 
     "tree_type": {
-      "-1": "unrecognized",
-      "0": "Tech tree",
-      "1": "Premium",
-      "2": "Collector"
+      "0": "Unknown tree type",
+      "1": "Common",
+      "2": "Premium",
+      "3": "Collector"
     },
 
     "regions": {

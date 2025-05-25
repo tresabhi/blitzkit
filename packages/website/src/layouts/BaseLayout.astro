@@ -1,5 +1,4 @@
 ---
-import '@fontsource/inter';
 import { Flex } from '@radix-ui/themes';
 import { BlitzKitTheme } from '../components/BlitzKitTheme';
 import { Checks } from '../components/Checks';
@@ -7,16 +6,17 @@ import Footer from '../components/Footer.astro';
 import Navbar from '../components/Navbar.astro';
 import Party3 from '../components/Party3.astro';
 import './base.css';
-import { DEFAULT_LOCALE } from '@blitzkit/i18n';
+import type { BlitzKitStrings } from 'packages/i18n/src';
 
 export interface Props {
   noFooter?: boolean;
   noNavbar?: boolean;
   integrated?: boolean;
+  locale: string;
+  strings: BlitzKitStrings;
 }
 
-const { noFooter, noNavbar, integrated } = Astro.props;
-const locale = Astro.params.locale ?? DEFAULT_LOCALE;
+const { noFooter, noNavbar, integrated, locale, strings } = Astro.props;
 ---
 
 <html lang={locale}>
@@ -61,9 +61,9 @@ const locale = Astro.params.locale ?? DEFAULT_LOCALE;
   <body class={noNavbar ? 'no-navbar' : ''}>
     <BlitzKitTheme>
       <Flex direction="column" minHeight="100vh">
-        <Navbar {integrated} />
+        <Navbar {locale} {integrated} />
 
-        <Checks {locale} client:only="react" />
+        <Checks localeContext={{ locale, strings }} client:only="react" />
 
         <slot />
 

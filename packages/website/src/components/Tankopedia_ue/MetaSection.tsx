@@ -1,11 +1,6 @@
-import {
-  Nation,
-  TankClass,
-  TankType,
-  Tier,
-} from '@protos/blitz_static_tank_component';
+import { Nation, TankType } from '@protos/blitz_static_tank_component';
 import { Box, Code, Flex } from '@radix-ui/themes';
-import { asset } from 'packages/core/src';
+import { asset, TIER_ROMAN_NUMERALS } from 'packages/core/src';
 import { Var } from '../../core/radix/var';
 import { useLocale } from '../../hooks/useLocale';
 import { App } from '../../stores/app';
@@ -67,17 +62,17 @@ export function MetaSection() {
                         alt={Nation[tank.nation]}
                         src={asset(`flags/circle/${tank.nation}.webp`)}
                       />
-                      {Nation[tank.nation]}
+                      {strings.common.nations[tank.nation]}
                     </Flex>
                   </Listing>
                   <Listing label={strings.website.tools.tankopedia.meta.class}>
                     <Flex align="center" gap="1">
                       <ClassIcon width="1em" height="1em" />
-                      {TankClass[tank.tank_class]}
+                      {strings.common.tank_class[tank.tank_class]}
                     </Flex>
                   </Listing>
                   <Listing label={strings.website.tools.tankopedia.meta.tier}>
-                    {Tier[tank.tier]}
+                    {TIER_ROMAN_NUMERALS[tank.tier]}
                   </Listing>
                   <Listing
                     label={strings.website.tools.tankopedia.meta.type}
@@ -89,7 +84,7 @@ export function MetaSection() {
                           : undefined
                     }
                   >
-                    {TankType[tank.tank_type]}
+                    {strings.common.tree_type[tank.tank_type]}
                   </Listing>
                 </Flex>
 
@@ -106,7 +101,7 @@ export function MetaSection() {
                       label={strings.website.tools.tankopedia.meta.purchase}
                     >
                       <Flex align="center" gap="1">
-                        {tank.price.value / 400}
+                        {(9999999999).toLocaleString(locale)}
                         <img
                           style={{ width: '1em', height: '1em' }}
                           alt="gold"
@@ -117,43 +112,44 @@ export function MetaSection() {
                   )}
                   <Listing
                     label={
-                      protagonist.type === TankType.RESEARCHABLE
+                      tank.tank_type === TankType.TANK_TYPE_COMMON
                         ? strings.website.tools.tankopedia.meta.purchase
                         : strings.website.tools.tankopedia.meta.restoration
                     }
                   >
                     <Flex align="center" gap="1">
-                      {protagonist.price.value.toLocaleString(locale)}
+                      {(999999999).toLocaleString(locale)}
                       <img
                         style={{ width: '1em', height: '1em' }}
-                        alt={TankPriceType[protagonist.price.type]}
-                        src={asset(
-                          `icons/currencies/${
-                            protagonist.price.type === TankPriceType.GOLD
-                              ? 'gold'
-                              : 'silver'
-                          }.webp`,
-                        )}
+                        alt="TODO: REPLACE WITH CURRENCY NAME"
+                        // src={asset(
+                        //   `icons/currencies/${
+                        //     protagonist.price.type === TankPriceType.GOLD
+                        //       ? 'gold'
+                        //       : 'silver'
+                        //   }.webp`,
+                        // )}
                       />
                     </Flex>
                   </Listing>
                   <Listing label={strings.website.tools.tankopedia.meta.sale}>
                     <Flex align="center" gap="1">
-                      {(protagonist.price.value / 2).toLocaleString(locale)}
+                      {(999999999).toLocaleString(locale)}
                       <img
                         style={{ width: '1em', height: '1em' }}
-                        alt={TankPriceType[protagonist.price.type]}
-                        src={asset(
-                          `icons/currencies/${
-                            protagonist.price.type === TankPriceType.GOLD
-                              ? 'gold'
-                              : 'silver'
-                          }.webp`,
-                        )}
+                        alt="TODO: REPLACE WITH CURRENCY NAME"
+                        // src={asset(
+                        //   `icons/currencies/${
+                        //     protagonist.price.type === TankPriceType.GOLD
+                        //       ? 'gold'
+                        //       : 'silver'
+                        //   }.webp`,
+                        // )}
                       />
                     </Flex>
                   </Listing>
-                  {protagonist.research_cost && (
+                  {/* TODO: ADD RESEARCH COST */}
+                  {/* {protagonist.research_cost && (
                     <Listing
                       label={strings.website.tools.tankopedia.meta.research}
                     >
@@ -169,7 +165,7 @@ export function MetaSection() {
                         />
                       </Flex>
                     </Listing>
-                  )}
+                  )} */}
                 </Flex>
               </Flex>
             </Flex>

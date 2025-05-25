@@ -1,7 +1,7 @@
 ---
 import { AstroSeo } from '@astrolib/seo';
 import { assertSecret } from '@blitzkit/core';
-import { DEFAULT_LOCALE } from '@blitzkit/i18n';
+import { DEFAULT_LOCALE, STRINGS, type SupportedLocale } from '@blitzkit/i18n';
 import locales from '@blitzkit/i18n/locales.json';
 import { literals } from '@blitzkit/i18n/src/literals';
 import { Box, Flex, Heading, Link } from '@radix-ui/themes';
@@ -21,25 +21,23 @@ import {
   tankopediaTool,
   tierListTool,
 } from '../../constants/tools';
-import { getStrings } from '../../core/i18n/getStrings';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const PUBLIC_ASSET_BRANCH = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
-const locale = Astro.params.locale ?? DEFAULT_LOCALE;
-const strings = getStrings(Astro.props.locale);
+const { strings, locale } = Astro.props;
 
 export const getStaticPaths = (() => {
-  // return [
-  //   ...SUPPORTED_LOCALES.filter((locale) => locale !== DEFAULT_LOCALE).map(
-  //     (locale) => ({ params: { locale } }),
-  //   ),
-  //   { params: { locale: undefined } },
-  // ];
+  return locales.supported.map(({ locale, blitz }) => {
+    return {
+      params: { locale: locale === locales.default ? undefined : locale },
 
-  return locales.supported.map(({ locale, blitz }) => ({
-    params: { locale: locale === locales.default ? undefined : locale },
-    props: { locale, blitzLocale: blitz ?? locale },
-  }));
+      props: {
+        locale,
+        strings: STRINGS[locale as SupportedLocale],
+        blitzLocale: blitz ?? locale,
+      },
+    };
+  });
 }) satisfies GetStaticPaths;
 ---
 
@@ -56,8 +54,8 @@ export const getStaticPaths = (() => {
   twitter={{ cardType: 'summary_large_image' }}
 />
 
-<BaseLayout>
-  <HomeHero />
+<BaseLayout {locale} {strings}>
+  <HomeHero {locale} {strings} />
 
   <!-- <Flex justify="center" py="6" px="4" justify="center">
     <Flex
@@ -106,29 +104,29 @@ export const getStaticPaths = (() => {
 
   <Flex p="4" justify="center" gap="4" mt="3">
     <Flex maxWidth="80rem" flexGrow="1" gap="4" direction="column">
-      <ToolCard tool={tankopediaTool} />
+      <ToolCard {locale} {strings} tool={tankopediaTool} />
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
-        {/* <ToolCard tool={playerStatsTool} /> */}
-        <ToolCard tool={compareTool} />
-        <ToolCard tool={performanceTool} />
+        {/* <ToolCard {locale} {strings} tool={playerStatsTool} /> */}
+        <ToolCard {locale} {strings} tool={compareTool} />
+        <ToolCard {locale} {strings} tool={performanceTool} />
       </Flex>
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
-        <!-- <ToolCard tool={chartsTool} /> -->
-        <!-- <ToolCard tool={guessTool} /> -->
-        <ToolCard tool={galleryTool} />
-        <ToolCard tool={sessionTool} />
+        <!-- <ToolCard {locale} {strings} tool={chartsTool} /> -->
+        <!-- <ToolCard {locale} {strings} tool={guessTool} /> -->
+        <ToolCard {locale} {strings} tool={galleryTool} />
+        <ToolCard {locale} {strings} tool={sessionTool} />
       </Flex>
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
-        <ToolCard tool={discordTool} />
-        <ToolCard tool={tierListTool} />
+        <ToolCard {locale} {strings} tool={discordTool} />
+        <ToolCard {locale} {strings} tool={tierListTool} />
       </Flex>
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
-        <ToolCard tool={embedTool} />
-        <ToolCard tool={moreTool} />
+        <ToolCard {locale} {strings} tool={embedTool} />
+        <ToolCard {locale} {strings} tool={moreTool} />
       </Flex>
 
       <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
@@ -141,6 +139,8 @@ export const getStaticPaths = (() => {
 
       <Flex gap="4" mb="6" direction={{ initial: 'column', sm: 'row' }}>
         <ToolCard
+          {locale}
+          {strings}
           tool={{
             button: { color: 'blue' },
             id: 'blitz-analysis',
@@ -149,6 +149,8 @@ export const getStaticPaths = (() => {
           }}
         />
         <ToolCard
+          {locale}
+          {strings}
           tool={{
             button: { color: 'purple', highContrast: true },
             id: 'blitz-insider',

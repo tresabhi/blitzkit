@@ -15,11 +15,11 @@ import { LinkI18n } from './LinkI18n';
 
 export interface Props {
   integrated?: boolean;
+  locale: string;
 }
 
-const { integrated } = Astro.props;
+const { integrated, locale } = Astro.props;
 const toolsFiltered = TOOLS.filter((tool) => !('href' in tool));
-const { locale } = Astro.params;
 const branchName = resolveBranchName(locale);
 const isBranchNamed = branchName !== undefined;
 const strings = getStrings(locale);

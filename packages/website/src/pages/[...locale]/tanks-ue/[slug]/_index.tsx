@@ -14,9 +14,9 @@ interface PageProps extends LocaleAcceptorProps {
   compensation: CompensationComponent;
 }
 
-export function Page({ tank, compensation, locale }: PageProps) {
+export function Page({ tank, compensation, localeContext }: PageProps) {
   return (
-    <LocaleProvider locale={locale}>
+    <LocaleProvider {...localeContext}>
       <App.Provider>
         <TankopediaEphemeral_ue.Provider data={{ tank, compensation }}>
           <PageWrapper p="0" maxWidth="unset" color="purple" gap="9" pb="9">

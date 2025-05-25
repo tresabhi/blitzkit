@@ -1,0 +1,58 @@
+---
+import type {
+  CatalogItemsComponent,
+  CompensationComponent,
+  TankCatalogComponent,
+} from '@blitzkit/closed/src/unreal/protos';
+import { slugify } from '@blitzkit/core';
+import locales from '@blitzkit/i18n/locales.json';
+import type { GetStaticPaths } from 'astro';
+import { metadata } from '../../../../core/blitz/metadata';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { getStaticPaths as parentGetStaticPaths } from '../index.astro';
+import { Page } from './_index';
+
+export const getStaticPaths = (async () => {
+  const tanks = await metadata
+    .get('CatalogItemsGroupEntity.all_tanks')
+    .then((components) =>
+      components.get<CatalogItemsComponent>('catalogItemsGroupComponent'),
+    );
+  const parentPaths = parentGetStaticPaths();
+  const gameStringsDefault = await metadata
+    .strings(locales.default)
+    .then((strings) => strings.subset(['TankEntity']));
+
+  return (
+    await Promise.all(
+      tanks.catalog_items.map(async (item) => {
+        const tank = await metadata.get(item).then((components) => {
+          return components.get<TankCatalogComponent>('tankCatalogComponent');
+        });
+        const nameEn = gameStringsDefault[tank.name!.value];
+        const slug = slugify(nameEn) || item.replace('TankEntity.', '');
+
+        return parentPaths.map((parent) => {
+          return {
+            params: { ...parent.params, slug },
+            props: { ...parent.props, item },
+          };
+        });
+      }),
+    )
+  ).flat();
+}) satisfies GetStaticPaths;
+
+const { item, locale, strings } = Astro.props;
+const tankComponents = await metadata.get(item);
+const tank = await tankComponents.get<TankCatalogComponent>(
+  'tankCatalogComponent',
+);
+const compensation = await tankComponents.get<CompensationComponent>(
+  'compensationComponent',
+);
+---
+
+<BaseLayout {locale} {strings}>
+  <Page client:load {tank} {compensation} localeContext={{ locale, strings }} />
+</BaseLayout>
