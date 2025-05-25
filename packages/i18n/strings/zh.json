@@ -193,23 +193,23 @@
         "no_tank_stats": "# 没有这辆战车的数据\n这个玩家没有可用资料。 这可能不是你要找的玩家。",
         "get_help": "Discord的协助服务器",
         "uncaught_error": "# BlitzKit 发生错误！\n我们对此感到抱歉。 欢迎加入[官方Discord](https://discord.gg/nDt7AjGJQH)，以方便帮助你解决问题。",
-        "preview": "# 此命令處於預覽\n\n您只能在[官方Discord伺服器](https://discord.gg/nDt7AjGJQH)訪問此命令。該命令將很快可用。",
-        "query_too_small": "# 搜尋內容過短\n您的搜尋必需至少包含 3 個字元。",
-        "query_too_long": "# 搜尋內容過長\n您搜尋的內容必須少於 100 個字元。"
+        "preview": "# 此命令处于预览\n\n您只能在[官方Discord服务器](https://discord.gg/nDt7AjGJQH)访问此命令。该命令将很快可用。",
+        "query_too_small": "# 搜寻内容过短\n您的搜寻必需至少包含 3 个字元。",
+        "query_too_long": "# 搜索内容过长\n您搜索的内容必须少于 100 个字符。"
       },
       "wn8": {
-        "name": "玩家表現評分",
+        "name": "WN8",
         "types": {
           "very_bad": "非常差",
           "bad": "差",
-          "below_average": "低於平均",
+          "below_average": "低于平均",
           "average": "平均",
-          "above_average": "高於平均",
+          "above_average": "高于平均",
           "good": "好",
           "very_good": "非常好",
           "great": "很好",
           "unicum": "極品",
-          "super_unicum": "超強勢玩家"
+          "super_unicum": "超强势玩家"
         }
       },
       "subcommands": {
@@ -231,14 +231,14 @@
         },
         "career": {
           "name": "生涯",
-          "description": "玩家資料"
+          "description": "玩家资料"
         },
         "custom": {
-          "name": "自定",
-          "description": "自定範圍",
+          "name": "自定义",
+          "description": "自定义范围",
           "options": {
             "start": {
-              "name": "開始",
+              "name": "开始",
               "description": "從今天起算的天數前開始"
             },
             "end": {
