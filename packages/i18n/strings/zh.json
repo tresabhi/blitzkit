@@ -280,8 +280,8 @@
           "description": "地区"
         },
         "tier": {
-          "name": "等级",
-          "description": "等级",
+          "name": "阶级",
+          "description": "阶级",
           "choices": {
             "tier": "%s1- %s2 级"
           }
@@ -295,7 +295,7 @@
       },
       "filters": {
         "none": "无筛选器",
-        "tier": "等级 %s1"
+        "tier": "%s1 阶级"
       },
       "no_data": {
         "battles_in_period": "在这段时间里没有参与任何战斗",
@@ -311,7 +311,7 @@
         "winrate": "胜率",
         "damage": "伤害",
         "damage_ratio": "伤害比",
-        "tier": "等级",
+        "tier": "阶级",
         "survival": "生存",
         "accuracy": "命中率",
         "kills": "击杀数"
@@ -362,11 +362,11 @@
         },
         "errors": {
           "non_tech_tree": "# \"%s1\" 不在科技树里\n\n你不能研究一个 加值/收藏家 战车。",
-          "tier_1": "# “%s1”是一级战车\n\n一级战车是可免费解锁的。",
+          "tier_1": "# “%s1”是一阶战车\n\n一阶战车是可免费解锁的。",
           "already_researched": "# \"%s1\" 已完成研发\n\n请尝试在同一研发线路上提供“起始战车”， 以查看全部您已研发过的战车。",
           "start_end_equal": "# \"%s1\" 重复提供了\n\n请确认 \"初始战车\" 和 \"目标战车\" 是不同的。",
           "tanks_not_on_line": "# “%s1” 和 “%s2” 不在同一个研发线路上\n\n请确认“起始战车” 和 “目标战车” 在同一研发线路中。",
-          "unordered": "# “%s1” 等级比 “%s2” 高\n\n请以 %s3 作为起始战车，因为它的等级更低。"
+          "unordered": "# “%s1” 阶级比 “%s2” 高\n\n请以 %s3 作为起始战车，因为它的阶级更低。"
         }
       },
       "about": {
@@ -473,13 +473,13 @@
             "lethality": {
               "title": "致命伤害",
               "average_damage": "平均伤害",
-              "damage_per_tier": "各等级伤害",
+              "damage_per_tier": "各阶级伤害",
               "damage_ratio": "伤害比",
               "average_kills": "平均击毁"
             },
             "miscellaneous": {
               "title": "杂项",
-              "average_tier": "平均等级",
+              "average_tier": "平均阶级",
               "average_spots": "平均侦查",
               "average_xp": "平均经验",
               "kills_to_death_ratio": "击杀阵亡比"
@@ -579,7 +579,7 @@
       },
       "owned_tanks": {
         "name": "已擁有的戰車",
-        "description": "在一个等级中显示所有已拥有的战车",
+        "description": "显示该阶级中所有您已拥有的战车",
         "body": {
           "title": "# %s1 所拥有的 %s2 阶战车\n\n"
         }
@@ -668,7 +668,7 @@
         "searching": "搜索中..."
       },
       "copy_button": {
-        "copied": "已复制！"
+        "copied": "已拷贝！"
       },
       "tank_search": {
         "clear_filters": "清除筛选",
@@ -765,7 +765,7 @@
     "tools": {
       "guess": {
         "name": "猜坦克",
-        "button": "Guess away",
+        "button": "猜猜看",
         "description": "Silhouette mini-game",
         "seo_description": "Play a tank guessing game with a silhouette in World of Tanks Blitz",
         "search": {
@@ -783,7 +783,7 @@
         "button": "搜索战车",
         "description": "闪击战战车百科全书",
         "seo_description": "战车世界闪击战的所有坦克参数， 装甲， 等等...",
-        "tank_seo_title": "%s1 - %s2 階 %s3 %s4 | %s5 战车百科 | 战车世界闪击战 (WoTB)",
+        "tank_seo_title": "%s1 - %s2 阶 %s3 %s4 | %s5 战车百科 | 战车世界闪击战 (WoTB)",
         "tank_seo_description": "%s1 装甲，统计设备，装备，供给等。 %s2 每分钟伤害， %s3生命值， %s4毫米穿透， %s5kph 最高速度， %s6hp 生命值。",
         "visualizers": {
           "rotator": {
@@ -825,7 +825,7 @@
           },
           "screenshot": {
             "download": "下载",
-            "copy": "复制"
+            "copy": "拷贝"
           },
           "model": {
             "name": "模型"
@@ -889,7 +889,7 @@
           "full_name": "全称",
           "nation": "国别",
           "class": "战车车型",
-          "tier": "等级",
+          "tier": "阶级",
           "type": "战车类型",
           "dev_id": "开发参数：ID",
           "purchase": "购买价格",
@@ -945,8 +945,8 @@
           "title": "属性",
           "compare": {
             "label": "比较",
-            "class": "%s1階 %s2",
-            "tier": "所有 %s1 階",
+            "class": "%s1阶 %s2",
+            "tier": "所有 %s1 阶",
             "all": "所有战车"
           },
           "values": {
@@ -1096,86 +1096,86 @@
       "performance": {
         "name": "性能表现",
         "button": "查看战车",
-        "description": "戰車性能統計",
-        "seo_description": "最好的戰車及其在戰車世界閃擊戰中的表現",
+        "description": "战车性能统计",
+        "seo_description": "最好的战车及其在战车世界闪击战中的表现",
         "estimation": {
-          "body": "基于 %s1个玩家的估计数据。更新 %s2 之前。",
-          "hours": "%s1 小時",
-          "minutes": "%s1 分鐘"
+          "body": "基于 %s1 个玩家的估计数据。更新于 %s2 之前。",
+          "hours": "%s1 小时",
+          "minutes": "%s1 分钟"
         },
         "player_count": {
           "label": "玩家数量"
         },
         "table": {
           "tanks": {
-            "header": "戰車",
+            "header": "战车",
             "total": "全部"
           },
           "stats": {
-            "winrate": "勝率",
+            "winrate": "胜率",
             "players": "玩家",
-            "damage": "傷害",
+            "damage": "伤害",
             "survival": "生存性",
-            "xp": "經驗值",
-            "kills": "擊殺數",
-            "spots": "被敵方偵查次數",
+            "xp": "经验值",
+            "kills": "击杀数",
+            "spots": "侦查次数",
             "accuracy": "命中率",
-            "shots": "開火次數",
-            "hits": "命中數",
+            "shots": "开火次数",
+            "hits": "命中数",
             "damage_ratio": "伤害效率",
-            "damage_taken": "伤害值",
-            "capture_points": "佔領點數"
+            "damage_taken": "承受伤害值",
+            "capture_points": "占领值"
           }
         }
       },
       "gallery": {
-        "name": "圖庫",
-        "button": "瀏覽所有",
-        "description": "Blitz 玩家頭像",
-        "seo_description": "所有戰車世界閃擊戰玩家頭像",
-        "last_updated": "最後更新於 %s1",
+        "name": "图库",
+        "button": "浏览全部",
+        "description": "Blitz玩家头像",
+        "seo_description": "所有战车世界闪击战玩家头像",
+        "last_updated": "最后更新于 %s1",
         "search": {
-          "hint": "搜尋頭像……",
-          "results": "%s1 頭像"
+          "hint": "搜索頭像……",
+          "results": "%s1 头像"
         }
       },
       "session": {
-        "name": "場次",
-        "button": "開始追蹤",
-        "description": "即時場次統計",
-        "seo_description": "在遊玩 戰車世界閃擊戰 時，實時追蹤你的統計數據",
+        "name": "场次",
+        "button": "开始追踪",
+        "description": "即时场次统计",
+        "seo_description": "在游玩 战车世界闪击战 时，实时追踪你的统计数据",
         "search": {
-          "lookup": "查詢玩家以開始使用",
-          "hint": "搜尋玩家……",
-          "searching": "搜尋中……",
+          "lookup": "查询玩家以开始使用",
+          "hint": "搜索玩家……",
+          "searching": "搜索中...",
           "no_results": "找不到玩家"
         },
         "controls": {
-          "title": "追蹤 %s1",
-          "subtitle": "起始於 %s1",
+          "title": "追踪 %s1",
+          "subtitle": "起始于 %s1",
           "reset": "重置",
-          "change": "變更"
+          "change": "变更"
         },
         "no_cc": {
-          "title": "你正在嘗試追蹤一個 CC 帳號",
-          "body": "CC（社群貢獻者）帳號沒有公開的戰車統計數據。我們正在為 CC 帳號添加嵌入功能，敬請期待。",
+          "title": "你正在尝试追踪一个 CC 帐戶",
+          "body": "CC（社群贡献者）账戶没有公开的战车统计数据。 我们正在为CC账戶添加嵌入功能，敬请期待。",
           "alright": "好的"
         },
         "no_battles": {
-          "title": "沒有戰鬥",
-          "hint": "開始遊戲吧"
+          "title": "没有战斗",
+          "hint": "去玩一场游戏吧"
         },
         "table": {
-          "tank": "戰車",
+          "tank": "战车",
           "total": "全部",
           "remove": "移除"
         }
       },
       "tier_list": {
-        "name": "階級列表",
-        "button": "排名戰車",
-        "description": "戰車世界閃擊戰 戰車等級排名",
-        "seo_description": "探索根據玩家評分和統計表現，從最佳到最差排名的《戰車世界：閃擊戰》戰車等級列表",
+        "name": "阶级列表",
+        "button": "排名战车",
+        "description": "战车世界闪击战 战车等级排名",
+        "seo_description": "基于玩家评分和统计表现，从最佳到最差排名的《战车世界：闪击战》战车等级列表",
         "buttons": {
           "reset": "重置",
           "share": "分享"
@@ -1183,143 +1183,143 @@
       },
       "embed": {
         "name": "嵌入",
-        "button": "現在創建",
-        "description": "串流嵌入功能",
-        "seo_description": "創建具有極高自訂化的《戰車世界：閃擊戰》串流嵌入功能",
-        "coming_soon": "更多嵌入功能即將推出。",
-        "suggest": "建議與想法。",
+        "button": "立即创建",
+        "description": "用于串流的嵌入",
+        "seo_description": "创建具有极高自订化的《战车世界：闪击战》串流嵌入功能",
+        "coming_soon": "更多嵌入功能即将推出。",
+        "suggest": "建议与想法",
         "preview": {
-          "title": "範例",
-          "upload": "上傳測試背景"
+          "title": "示例预览",
+          "upload": "上传测试背景"
         },
         "configuration": {
           "import": {
-            "title": "導入",
-            "description": "如果您已经有一个要导入您的设置，请粘贴您当前的 URL",
-            "hint": "貼上 URL……",
-            "apply": "套用",
-            "idiot_title": "無效的 URL",
-            "idiot_description": "試著貼上 BlitzKit 先前生成的網址吧，你這隻傻鵝！",
-            "idiot_button": "好吧，我的錯"
+            "title": "导入",
+            "description": "如果您已经有一个要导入的设置，请粘贴您当前的 URL",
+            "hint": "粘贴 URL……",
+            "apply": "应用",
+            "idiot_title": "无效的 URL",
+            "idiot_description": "试着粘贴 BlitzKit 先前生成的URL，你这只傻鹅！",
+            "idiot_button": "好吧，我的错"
           },
           "export": {
-            "title": "匯出",
-            "description": "為你的串流軟體複製所有屬性",
+            "title": "导出",
+            "description": "为你的流软件拷贝所有属性",
             "generate": {
-              "button": "生成網址",
-              "title": "生成網址",
-              "subtitle": "搜尋帳號以進行追蹤",
+              "button": "生成 URL",
+              "title": "生成 URL",
+              "subtitle": "搜索账戶以进行追踪",
               "cancel": "取消",
               "success": {
-                "title": "複製 URL",
-                "info": "已為 %s1 生成網址。當網址貼上後，嵌入功能將開始追蹤。您可以隨時點擊右鍵 \"PC\" 或長按 \"手機\" 並選擇「重設」來重置。",
+                "title": "拷贝 URL",
+                "info": "已为 %s1 生成 URL。 当 URL 粘贴后，嵌入功能将开始追踪。 您可以随时在 PC 上点击右键或手机上长按并选择「重置」来重置。",
                 "back": "返回",
-                "copy": "複製 URL"
+                "copy": "拷贝 URL"
               }
             },
-            "css": "複製 CSS",
-            "width": "複製寬度",
-            "height": "複製高度",
-            "framerate": "複製幀率"
+            "css": "拷贝 CSS",
+            "width": "拷贝宽度",
+            "height": "拷贝高度",
+            "framerate": "拷贝帧率"
           },
           "customize": {
-            "title": "自訂",
+            "title": "自定义",
             "reset": "重置",
-            "description": "嵌入內容的各項附加內容"
+            "description": "嵌入的各种花俏功能"
           }
         },
         "types": {
           "breakdown": {
-            "name": "詳細分析",
+            "name": "详细分析",
             "options": {
-              "width": "寬度",
+              "width": "宽度",
               "height": "高度",
-              "showTotal": "顯示總和",
-              "listGap": "項目間隔",
-              "listMaxTanks": "最多戰車數量",
-              "cardRadius": "資訊卡半徑",
-              "cardHeaderBackgroundColor": "資訊卡標題背景顏色",
-              "cardHeaderPadding": "資訊卡標題內間距",
-              "cardTitle": "資訊卡標題",
-              "cardTitleTypeColor": "資訊卡標題形式顏色",
-              "cardTitleClassIcon": "資訊卡標題類別圖示",
-              "cardBodyBackgroundColor": "資訊卡本體背景顏色",
-              "cardBodyPadding": "資訊卡內容區間距",
-              "columnGap": "欄位間距",
-              "columnValue": "欄位值",
-              "columnLabel": "欄位標籤",
-              "column1": "欄位1",
-              "column2": "欄位2",
-              "column3": "欄位3",
-              "column4": "欄位4",
-              "column1CustomLabel": "欄位1標籤",
-              "column2CustomLabel": "欄位2標籤",
-              "column3CustomLabel": "欄位3標籤"
+              "showTotal": "显示总计",
+              "listGap": "列表间距",
+              "listMaxTanks": "最多战车数量",
+              "cardRadius": "卡片半径",
+              "cardHeaderBackgroundColor": "卡片标题背景颜色",
+              "cardHeaderPadding": "卡片标题內间距",
+              "cardTitle": "卡片标题",
+              "cardTitleTypeColor": "卡片标题(战车类型)颜色",
+              "cardTitleClassIcon": "卡片标题(战车车型)颜色",
+              "cardBodyBackgroundColor": "卡片內容背景颜色",
+              "cardBodyPadding": "卡片內容內間距",
+              "columnGap": "栏间距",
+              "columnValue": "栏位值",
+              "columnLabel": "栏位标签",
+              "column1": "栏位1",
+              "column2": "栏位2",
+              "column3": "栏位3",
+              "column4": "栏位4",
+              "column1CustomLabel": "第1栏标签",
+              "column2CustomLabel": "第2栏标签",
+              "column3CustomLabel": "第3栏标签"
             }
           }
         }
       },
       "charts": {
-        "name": "圖表",
+        "name": "图表",
         "button": "瘋狂研究",
-        "description": "大量圖標",
-        "seo_description": "有關 戰車世界閃擊戰 戰車、玩家與事件的各種圖表與圖形"
+        "description": "大量图标",
+        "seo_description": "有关战车世界闪击战 战车、玩家与事件的各种图表与图形"
       },
       "rating": {
-        "name": "評價戰鬥",
+        "name": "评价战斗",
         "button": "查看排行榜",
-        "description": "完整評價戰鬥排行榜",
-        "seo_description": "《戰車世界：閃擊戰》即時與歷史完整評分排行榜"
+        "description": "完整评价战斗排行榜",
+        "seo_description": "《战车世界：闪击战》即时及已存档的完整评分排行榜"
       },
       "discord": {
-        "name": "Discord 機器人",
-        "button": "現在安裝",
-        "description": "直接在 Discord 上查看統計資料",
-        "seo_description": "透過 BlitzKit 的 Discord 機器人，直接在 Discord 上獲取統計資料"
+        "name": "Discord机器人",
+        "button": "立即安装",
+        "description": "直接在 Discord 上开始使用",
+        "seo_description": "透过 BlitzKit 的 Discord 机器人，直接在 Discord 上获取统计资料"
       },
       "more": {
-        "name": "更多內容即將推出",
-        "button": "加入我們的 Discord",
-        "description": "我們正在製作的內容",
-        "seo_description": "我們正在與 BlitzKit 一起製作的內容"
+        "name": "更多内容即将推出",
+        "button": "加入我们的 Discord",
+        "description": "我们正在开发的内容",
+        "seo_description": "我们正在用 BlitzKit 开发什么"
       },
       "players": {
         "name": "玩家",
-        "button": "查詢玩家",
-        "description": "定期玩家統計",
-        "seo_description": "戰車世界閃擊戰 定期玩家統計"
+        "button": "查询玩家",
+        "description": "定期玩家统计",
+        "seo_description": "战车世界闪击战 定期玩家统计"
       },
       "home": {
-        "name": "首頁",
-        "button": "開始使用",
-        "description": "開始使用 BlitzKit",
-        "seo_description": "開始使用 BlitzKit"
+        "name": "主页",
+        "button": "开始使用",
+        "description": "开始使用 BlitzKit",
+        "seo_description": "开始使用 BlitzKit"
       },
       "blitz_analysis": {
-        "name": "閃擊戰分析",
-        "button": "現在分析",
-        "description": "豐富的歷史平均統計資料",
-        "seo_description": "戰車世界閃擊戰中的歷史平均統計資料"
+        "name": "闪击战分析",
+        "button": "立即分析",
+        "description": "丰富的历史平均统计",
+        "seo_description": "战车世界闪击战中丰富的历史平均统计"
       },
       "blitz_insider": {
-        "name": "閃擊戰內部",
-        "button": "今日探索",
-        "description": "遊戲內場次統計",
-        "seo_description": "戰車世界閃擊戰內的遊戲場次統計"
+        "name": "闪击战内嵌插件",
+        "button": "开始探索",
+        "description": "游戏内场次统计",
+        "seo_description": "战车世界闪击战内的游戏内场次统计"
       }
     },
     "footer": {
-      "motto": "戰車世界閃擊戰全方位資訊",
-      "copyright": "本網站與 Wargaming 戰遊網 或任何服務無關",
+      "motto": "战车世界闪击战 全方位工具",
+      "copyright": "本网站与 Wargaming战游网 或任何服务无关",
       "about": {
-        "title": "關於",
-        "credits": "製作名單",
+        "title": "关于",
+        "credits": "鸣谢",
         "discord": "Discord",
         "github": "GitHub",
-        "patches": "修補更新"
+        "patches": "补丁"
       },
       "legal": {
-        "title": "法律資訊",
+        "title": "法律声明",
         "privacy": "隐私条款",
         "terms": "服务条款"
       }
