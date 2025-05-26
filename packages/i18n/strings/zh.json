@@ -267,8 +267,8 @@
             "description": "国别"
           },
           "class": {
-            "name": "车种",
-            "description": "战车种类"
+            "name": "战车车型",
+            "description": "战车车型"
           },
           "type": {
             "name": "战车类型",
@@ -608,8 +608,8 @@
             "description": "测试BlitzKit的ping值（延迟值）"
           },
           "wotb": {
-            "name": "坦克世界闪击战",
-            "description": "测试坦克世界闪击战的ping值（延迟值）"
+            "name": "战车世界闪击战",
+            "description": "测试战车世界闪击战的ping值（延迟值）"
           }
         }
       },
@@ -713,7 +713,7 @@
           "maneuverability.power": "引擎功率",
           "maneuverability.powerToWeight": "功重比",
           "maneuverability.weight": "重量",
-          "maneuverability.traverseSpeed": "车身转动速率"
+          "maneuverability.traverseSpeed": "转速"
         },
         "sort_dropdown": {
           "label": "排序",
@@ -744,17 +744,17 @@
         "action": "Discord"
       },
       "hero": {
-        "credit": "由 %s1 製作❤️"
+        "credit": "由 %s1 制作 ❤️"
       },
       "hot_tanks": {
-        "title": "受歡迎的戰車",
-        "subtitle": "過去 %s1 天"
+        "title": "受欢迎的坦克",
+        "subtitle": "过去 %s1 天"
       },
       "other_projects": {
-        "title": "其他酷炫的專案"
+        "title": "其他酷炫的项目"
       },
-      "help_translate": "請幫忙將 %s1 翻譯成 %s2！",
-      "seo_description": "戰車世界閃擊戰 全方位工具"
+      "help_translate": "请帮忙将 %s1 翻译成 %s2！",
+      "seo_description": "战车世界闪击战 全方位工具"
     },
     "docs": {
       "patches": {
@@ -775,19 +775,19 @@
           "next": "下一个",
           "no_results": "沒有結果"
         },
-        "stats": "%s1 / %s2 猜对了"
+        "stats": "猜对了 %s1 / %s2"
       },
       "tankopedia": {
         "search": "搜索属性……",
-        "name": "戰車百科",
-        "button": "尋找戰車",
-        "description": "閃擊戰戰車百科全書",
-        "seo_description": "世界坦克布莱茨坦克坦克世界闪击战的所有坦克的统计数字、装甲和更多",
-        "tank_seo_title": "%s1-Tier %s2 %s3 %s4 | %s5 Tankopedia | 戰車世界閃擊戰 (WoTB)",
-        "tank_seo_description": "%s1-Tier %s2 %s3 %s4 | %s5 Tankopedia | 戰車世界閃擊戰 (WoTB)",
+        "name": "战车百科",
+        "button": "搜索战车",
+        "description": "闪击战战车百科全书",
+        "seo_description": "战车世界闪击战的所有坦克参数， 装甲， 等等...",
+        "tank_seo_title": "%s1 - %s2 階 %s3 %s4 | %s5 战车百科 | 战车世界闪击战 (WoTB)",
+        "tank_seo_description": "%s1 装甲，统计设备，装备，供给等。 %s2 每分钟伤害， %s3生命值， %s4毫米穿透， %s5kph 最高速度， %s6hp 生命值。",
         "visualizers": {
           "rotator": {
-            "hull": "车身",
+            "hull": "车体",
             "turret": "炮塔",
             "hard": "硬地质",
             "medium": "中性地質",
@@ -812,290 +812,290 @@
           "poses": {
             "hull_down": "俯角视角",
             "face_hug": "抱脸视角",
-            "default": "預設"
+            "default": "默认"
           },
           "settings": {
-            "armor": "裝甲",
-            "green_penetration": "击穿概率",
+            "armor": "装甲",
+            "green_penetration": "可击穿区域",
             "hide_model_under_armor": "隐藏装甲下的模型",
             "opaque": "不透明",
-            "dev_wireframe": "设备：线程",
+            "dev_wireframe": "开发选项：网格",
             "environment": "环境",
             "show_grid": "显示网格"
           },
           "screenshot": {
-            "download": "下載",
-            "copy": "複製"
+            "download": "下载",
+            "copy": "复制"
           },
           "model": {
             "name": "模型"
           },
           "dynamic": {
-            "name": "動態裝甲",
+            "name": "动态装甲",
             "custom_shell": {
-              "type": "戰車類型",
-              "caliber": "口徑",
+              "type": "战车类型",
+              "caliber": "口径",
               "penetration": "穿深",
-              "normalization": "轉正",
-              "ricochet": "跳彈",
-              "explosion_radius": "爆炸半徑",
+              "normalization": "转正",
+              "ricochet": "跳弹",
+              "explosion_radius": "溅射半径",
               "exit": "退出",
               "reset": "重置"
             },
-            "advanced": "進階高亮顯示",
-            "shooter": "主視角射擊者：",
+            "advanced": "进阶高亮显示",
+            "shooter": "主视角射击者",
             "shot_card": {
               "element": {
-                "primary": "主裝甲",
-                "spaced": "間隙裝甲",
-                "external": "外部模組",
+                "primary": "主装甲",
+                "spaced": "间隙装甲",
+                "external": "外部模块",
                 "gap": "空隙",
                 "gun": "主炮",
-                "track": "履帶"
+                "track": "履带"
               },
               "status": {
                 "penetration": "%s1生命值 擊穿",
-                "blocked": "阻擋傷害",
-                "ricochet": "跳彈",
-                "splash": "%s生命值 爆炸範圍"
+                "blocked": "抵挡伤害",
+                "ricochet": "跳弹",
+                "splash": "%s1生命值 溅射"
               },
               "stats": {
                 "thickness_and_angle": "等效%s1毫米 %s2度",
-                "nominal": "%s1毫米 裝甲厚度",
-                "ricochet_loss": "%s1%機率擊穿"
+                "nominal": "%s1毫米 装甲厚度",
+                "ricochet_loss": "%s1%概率击穿"
               }
             }
           },
           "static": {
-            "name": "静態裝甲",
-            "primary": "主裝甲",
-            "spaced": "間隙裝甲",
-            "external": "外部模組",
+            "name": "静态装甲",
+            "primary": "主装甲",
+            "spaced": "间隙装甲",
+            "external": "外部模块",
             "edit": {
-              "label": "編輯",
+              "label": "编辑",
               "reset": "重置"
             }
           }
         },
         "meta": {
           "back": "返回",
-          "compare": "比較",
+          "compare": "比较",
           "swap": {
-            "button": "調換",
-            "title": "調換戰車"
+            "button": "调换",
+            "title": "调换战车"
           },
           "vanilla": "原版",
-          "opentest": "開放測試",
-          "full_name": "全名",
-          "nation": "國別",
-          "class": "戰車分類",
-          "tier": "等級",
-          "type": "戰車類型",
-          "dev_id": "開發人員ID",
-          "purchase": "購買價格",
-          "restoration": "恢復戰車價格",
-          "sale": "出售價格",
-          "research": "研發所需經驗"
+          "opentest": "开放测试",
+          "full_name": "全称",
+          "nation": "国别",
+          "class": "战车车型",
+          "tier": "等级",
+          "type": "战车类型",
+          "dev_id": "开发参数：ID",
+          "purchase": "购买价格",
+          "restoration": "恢复战车价格",
+          "sale": "出售价格",
+          "research": "研发所需经验"
         },
         "tech_tree": {
-          "title": "科技樹",
-          "battle": "一場比賽",
-          "battles": "%s1場比賽",
-          "route": "路線 %s1 的 %s2"
+          "title": "科技树",
+          "battle": "一场比赛",
+          "battles": "%s1场比赛",
+          "route": "路线 %s1 / %s2"
         },
         "game_modes": {
-          "title": "路線 %s1 的 %s2"
+          "title": "游戏模式技能"
         },
         "review": {
-          "title": "重播影片",
-          "disclaimer": "BlitzKit 不支援任何影片重播。",
+          "title": "回顾影片",
+          "disclaimer": "BlitzKit 不支援任何影片回顾。",
           "join": "应用到 %s1 YouTuber程序"
         },
         "configuration": {
-          "title": "配置設定",
+          "title": "配置设定",
           "modules": {
-            "title": "功能模組",
-            "stock": "庫存",
-            "upgrade": "升級"
+            "title": "战车模块",
+            "stock": "白板",
+            "upgrade": "顶级配置"
           },
           "equipment": {
-            "title": "裝備",
+            "title": "装备",
             "clear": "清除"
           },
           "provisions": {
-            "title": "補給品",
+            "title": "规定配给",
             "clear": "清除"
           },
           "consumables": {
             "title": "消耗品",
             "clear": "清除",
-            "info": "黄色消耗品不影响统计数据"
+            "info": "黄色高亮消耗品不影响战车参数。"
           },
           "skills": {
-            "title": "乘員技能",
+            "title": "乘员技能",
             "clear": "清除",
             "maximize": "最大化",
-            "info": "黄色技能只适用于特殊情况。按空格键可在0到7级之间快速切换。"
+            "info": "黄色高亮技能只适用于特殊情况。 按空格键可在0到7级之间快速切换。"
           },
           "miscellaneous": {
-            "title": "雜項"
+            "title": "杂项"
           }
         },
         "characteristics": {
           "title": "属性",
           "compare": {
             "label": "比较",
-            "class": "%s1 %s2 级",
-            "tier": "所有级别 %s1",
-            "all": "所有坦克"
+            "class": "%s1階 %s2",
+            "tier": "所有 %s1 階",
+            "all": "所有战车"
           },
           "values": {
             "shell_index": "炮弹 %s1",
-            "at_distance": "在 %s1m",
+            "at_distance": "在 %s1 公尺",
             "at_distance_slider_label": "距离",
-            "dispersion_at_distance": "%s1公尺擴散度",
-            "gun_flexibility": "炮控灵活度",
+            "dispersion_at_distance": "%s1 公尺扩散度",
+            "gun_flexibility": "炮管转动界限",
             "speed": "速度",
-            "terrain_coefficients": "地势系数",
+            "terrain_coefficients": "地形系数",
             "raw_terrain_coefficients": "原始地形系数",
-            "power_to_weight_ratio": "推重比",
-            "hull_traverse_speed": "炮塔旋转速度",
-            "camouflage": "偽裝",
-            "reload": "裝填",
+            "power_to_weight_ratio": "功重比",
+            "hull_traverse_speed": "车体转向速率",
+            "camouflage": "迷彩",
+            "reload": "装填时间",
             "crewCount": "乘员人数",
-            "shellNormalization": "轉正",
-            "shellRicochet": "跳彈",
-            "dpm": "每分鍾傷害血量",
+            "shellNormalization": "转正",
+            "shellRicochet": "跳弹",
+            "dpm": "每分钟伤害",
             "dpmEffective": "60秒内生效",
-            "shells": "砲彈",
+            "shells": "炮弹 ",
             "mostOptimalShellIndex": "最优炮弹",
-            "shellReloads": "炮弹重装",
-            "shellReload": "炮弹重装",
-            "intraClip": "内置素材",
-            "caliber": "口徑",
+            "shellReloads": "弹匣装填",
+            "shellReload": "炮弹装填",
+            "intraClip": "炮弹装填",
+            "caliber": "口径",
             "penetration": "穿深",
-            "damage": "傷害",
-            "clipDamage": "爬坡性能",
-            "moduleDamage": "模組傷害",
-            "explosionRadius": "爆炸半徑",
-            "shellVelocity": "砲彈飛行速度",
-            "aimTime": "瞄準時間",
+            "damage": "伤害",
+            "clipDamage": "弹匣伤害期望值",
+            "moduleDamage": "模组伤害",
+            "explosionRadius": "溅射半径",
+            "shellVelocity": "炮弹飞行速度",
+            "aimTime": "瞄准时间",
             "dispersion": "静止時",
-            "dispersionMoving": "移動時",
-            "dispersionHullTraversing": "車身轉向時",
-            "dispersionTurretTraversing": "炮塔轉向時",
+            "dispersionMoving": "移动时",
+            "dispersionHullTraversing": "车体转向时",
+            "dispersionTurretTraversing": "炮塔转向时",
             "dispersionShooting": "开火时",
-            "dispersionGunDamaged": "主炮損壞",
+            "dispersionGunDamaged": "主炮损坏时",
             "gunDepression": "俯角",
             "gunElevation": "仰角",
-            "gunFrontalDepression": "車輛前部俯角",
-            "gunFrontalElevation": "車輛前部仰角",
-            "gunRearDepression": "車輛後部俯角",
-            "gunRearElevation": "車輛後部俯角",
+            "gunFrontalDepression": "车辆前部俯角",
+            "gunFrontalElevation": "车辆前部仰角",
+            "gunRearDepression": "车辆後部俯角",
+            "gunRearElevation": "车辆後部仰角",
             "azimuthLeft": "左射界",
             "azimuthRight": "右射界",
-            "speedForwards": "前進最高速度",
-            "speedBackwards": "后退",
+            "speedForwards": "最高前进速度",
+            "speedBackwards": "最高后退速度",
             "hardTerrainCoefficient": "硬地质",
             "hardTerrainCoefficientRaw": "硬地质",
-            "mediumTerrainCoefficient": "中性地質",
-            "mediumTerrainCoefficientRaw": "中性地質",
-            "softTerrainCoefficient": "軟地質",
-            "softTerrainCoefficientRaw": "軟地質",
+            "mediumTerrainCoefficient": "中性地质",
+            "mediumTerrainCoefficientRaw": "中性地质",
+            "softTerrainCoefficient": "软地质",
+            "softTerrainCoefficientRaw": "软地质",
             "enginePower": "引擎功率",
             "powerToWeightRatioHardTerrain": "硬地质",
-            "powerToWeightRatioMediumTerrain": "中性地質",
-            "powerToWeightRatioSoftTerrain": "軟地質",
+            "powerToWeightRatioMediumTerrain": "中性地质",
+            "powerToWeightRatioSoftTerrain": "软地质",
             "weight": "重量",
-            "turretTraverseSpeed": "炮塔迴轉速度",
-            "gunTraverseSpeed": "炮塔旋转速度",
+            "turretTraverseSpeed": "炮塔转向速率",
+            "gunTraverseSpeed": "炮管转向速率",
             "hullTraverseHardTerrain": "硬地质",
-            "hullTraverseMediumTerrain": "中性地質",
-            "hullTraverseSoftTerrain": "軟地質",
+            "hullTraverseMediumTerrain": "中性地质",
+            "hullTraverseSoftTerrain": "软地质",
             "health": "生命值",
             "fireChance": "着火概率",
-            "viewRange": "可視範圍",
-            "camouflageStill": "靜止時",
-            "camouflageMoving": "移動時",
-            "camouflageShootingStill": "静止時",
-            "camouflageShootingMoving": "移動時",
-            "camouflageCaughtOnFire": "被击中",
+            "viewRange": "视野范围",
+            "camouflageStill": "静止时",
+            "camouflageMoving": "移动时",
+            "camouflageShootingStill": "静止时",
+            "camouflageShootingMoving": "移动时",
+            "camouflageCaughtOnFire": "着火时",
             "width": "宽度",
             "height": "高度",
-            "length": "長度",
-            "volume": "體積",
+            "length": "长度",
+            "volume": "体积",
             "shellRange": "射程",
-            "shellCapacity": "彈藥容量",
-            "gunType": "炮管類型",
-            "penetrationAt250m": "兩百五十公尺處的穿透力"
+            "shellCapacity": "携弹量",
+            "gunType": "炮管类型",
+            "penetrationAt250m": "两百五十米处的穿透力"
           }
         },
         "firepower": {
           "title": "火力"
         },
         "crew": {
-          "title": "乘員訓練",
-          "info": "代表車組成員可以擔任的其他角色。",
-          "count": "乘員人數",
-          "commander": "車長",
+          "title": "乘员训练",
+          "info": "代表车组成员可以担任的其他角色。",
+          "count": "乘员人数",
+          "commander": "车长",
           "gunner": "炮手",
-          "driver": "駕駛員",
-          "radioman": "無線電操作員",
-          "loader": "裝填手"
+          "driver": "驾驶员",
+          "radioman": "通讯兵",
+          "loader": "装填手"
         },
         "maneuverability": {
-          "title": "機動性"
+          "title": "机动性"
         },
         "survivability": {
           "title": "生存性"
         }
       },
       "compare": {
-        "name": "比較",
-        "button": "戰車比較",
-        "description": "比較戰車統計資料",
-        "seo_description": "比較《戰車世界：閃擊戰》中的戰車統計資料和裝備配置",
+        "name": "比较",
+        "button": "战车比较",
+        "description": "比较战车参数",
+        "seo_description": "比较《战车世界：闪击战》中的战车参数和装备配置",
         "actions": {
           "add": {
-            "button": "增加...",
-            "title": "增加戰車",
-            "description": "選擇要加入比較的戰車"
+            "button": "添加",
+            "title": "添加战车",
+            "description": "选择要加入比较的战车"
           },
           "clear": "清除",
           "deltas": {
-            "none": "無變化",
+            "none": "无变化",
             "percentage": "百分比",
-            "absolute": "絕對"
+            "absolute": "绝对值"
           }
         },
         "no_tanks": {
-          "title": "未選擇戰車",
-          "body": "按下 Add 按鈕來開始"
+          "title": "未选择坦克",
+          "body": "按“添加”按钮开始"
         },
         "table": {
           "equipment": {
             "clear": "清除",
-            "apply_to_all": "套用所有"
+            "apply_to_all": "应用到全部"
           },
           "skills": {
-            "clear": "清空",
+            "clear": "清除",
             "maximize": "最大化"
           },
           "modules": {
-            "stock": "库存量",
-            "upgrade": "升级"
+            "stock": "白板",
+            "upgrade": "顶级配置"
           },
           "provisions": {
-            "clear": "清空"
+            "clear": "清除"
           },
           "consumables": {
-            "clear": "清空"
+            "clear": "清除"
           }
         }
       },
       "performance": {
         "name": "性能表现",
-        "button": "查看坦克",
+        "button": "查看战车",
         "description": "戰車性能統計",
         "seo_description": "最好的戰車及其在戰車世界閃擊戰中的表現",
         "estimation": {
