@@ -1,17 +1,21 @@
 ---
 import { CatalogItemsComponent } from '@protos/blitz_static_catalog_items_group_component';
-import { TestComponent } from 'packages/website/src/components/TestComponent';
+import { Link } from '@radix-ui/themes';
+import { PageWrapper } from 'packages/website/src/components/PageWrapper';
 import { unpackedMetadata } from 'packages/website/src/core/blitz/unpackedMetadata';
-import { getStrings } from 'packages/website/src/core/i18n/getStrings';
+import BaseLayout from 'packages/website/src/layouts/BaseLayout.astro';
 
 export { getStaticPaths } from '../index.astro';
 
 const { locale } = Astro.props;
-const strings = await getStrings(locale);
 
 const allTanks = unpackedMetadata
   .get('CatalogItemsGroupEntity.all_tanks')
   .get(CatalogItemsComponent, 'catalogItemsGroupComponent');
 ---
 
-<TestComponent client:load data={allTanks} />
+<BaseLayout {locale}>
+  <PageWrapper>
+    {allTanks.catalog_items.map((tank) => <Link>{tank}</Link>)}
+  </PageWrapper>
+</BaseLayout>

@@ -6,7 +6,6 @@ import {
   type CompositeStats,
   type CompositeStatsKey,
 } from '@blitzkit/core';
-import strings from '@blitzkit/i18n/strings/en.json';
 import { amberDark, blueDark } from '@radix-ui/colors';
 import { Flex, Text, type FlexProps } from '@radix-ui/themes';
 import { times } from 'lodash-es';
@@ -53,7 +52,7 @@ export function BreakdownEmbedCard({
 }: BreakdownEmbedCardProps) {
   const { useEmbedState, useRichText } =
     useEmbedStateCurry<typeof breakdownConfig>();
-  const { unwrap } = useLocale();
+  const { unwrap, strings } = useLocale();
 
   return (
     <Flex

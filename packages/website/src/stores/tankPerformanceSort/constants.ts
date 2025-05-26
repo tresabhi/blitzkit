@@ -1,4 +1,4 @@
-import en from '@blitzkit/i18n/strings/en.json';
+import en from '@blitzkit/i18n/strings/en.json' with { type: 'json' };
 import type { TankPerformanceSortType } from '.';
 
 export const TankPerformanceSortTypeNamesArray = Object.keys(

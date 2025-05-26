@@ -1,9 +1,9 @@
-import type en from '@blitzkit/i18n/strings/en.json';
+import type { BlitzKitStrings } from 'packages/i18n/src';
 import { create } from 'zustand';
 import { createContextualStore } from '../../core/zustand/createContextualStore';
 
 export type TankPerformanceSortType =
-  keyof typeof en.website.tools.performance.table.stats;
+  keyof BlitzKitStrings['website']['tools']['performance']['table']['stats'];
 
 export interface TankPerformanceSort {
   type: TankPerformanceSortType;

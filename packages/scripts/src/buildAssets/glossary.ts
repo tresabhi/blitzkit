@@ -1,5 +1,5 @@
 import { Avatar, encodePBBuffer, fetchGlossary, Gallery } from '@blitzkit/core';
-import locales from '@blitzkit/i18n/locales.json';
+import locales from '@blitzkit/i18n/locales.json' with { type: 'json' };
 import { extname } from 'path';
 import ProgressBar from 'progress';
 import { commitAssets } from '../core/github/commitAssets';

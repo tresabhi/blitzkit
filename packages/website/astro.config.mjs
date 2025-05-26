@@ -3,13 +3,13 @@
 import partytown from '@astrojs/partytown';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
-import { SUPPORTED_LOCALES } from '@blitzkit/i18n';
+import locales from '@blitzkit/i18n/locales.json' with { type: 'json' };
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
   i18n: {
-    defaultLocale: 'en',
-    locales: [...SUPPORTED_LOCALES],
+    defaultLocale: locales.default,
+    locales: locales.supported.map(({ locale }) => locale),
     routing: {
       prefixDefaultLocale: false,
     },

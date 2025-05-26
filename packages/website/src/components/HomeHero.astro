@@ -7,10 +7,10 @@ import type { BlitzKitStrings } from 'packages/i18n/src';
 
 interface Props {
   locale: string;
-  strings: BlitzKitStrings;
 }
 
-const { strings, locale } = Astro.props;
+const { locale } = Astro.props;
+const strings = await getStrings(locale);
 const branchName = resolveBranchName(locale);
 const isBranchNamed = branchName !== undefined;
 ---

@@ -1,6 +1,8 @@
-import { STRINGS, type SupportedLocale } from '@blitzkit/i18n';
+import en from '@strings/en.json' with { type: 'json' };
+import { merge } from 'lodash-es';
+import type { BlitzKitStrings } from 'packages/i18n/src';
 
-export function getStrings(locale: string) {
-  if (locale in STRINGS) return STRINGS[locale as SupportedLocale];
-  throw new Error(`Unsupported locale: ${locale}`);
+export async function getStrings(locale: string) {
+  const strings = await import(`../../../../i18n/strings/${locale}.json`);
+  return merge({}, en, strings) as BlitzKitStrings;
 }

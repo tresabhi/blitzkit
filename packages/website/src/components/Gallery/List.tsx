@@ -1,4 +1,4 @@
-import locales from '@blitzkit/i18n/locales.json';
+import locales from '@blitzkit/i18n/locales.json' with { type: 'json' };
 import { literals } from '@blitzkit/i18n/src/literals';
 import { Flex, Text } from '@radix-ui/themes';
 import fuzzysort from 'fuzzysort';

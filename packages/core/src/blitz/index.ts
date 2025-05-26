@@ -1,4 +1,5 @@
 export * from './canSplash';
+export * from './catalogItemAccessor';
 export * from './clans';
 export * from './classes';
 export * from './constants';

@@ -5,29 +5,30 @@ import type {
   TankCatalogComponent,
 } from '@blitzkit/closed/src/unreal/protos';
 import { slugify } from '@blitzkit/core';
-import locales from '@blitzkit/i18n/locales.json';
+import locales from '@blitzkit/i18n/locales.json' with { type: 'json' };
 import type { GetStaticPaths } from 'astro';
 import { tankToSet } from 'packages/website/src/core/blitz/tankToSet';
 import type { TankopediaEphemeral_ue } from 'packages/website/src/stores/tankopediaEphemeral_ue';
-import { metadata } from '../../../../core/blitz/metadata';
+import { unpackedMetadata } from '../../../../core/blitz/unpackedMetadata';
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import { getStaticPaths as parentGetStaticPaths } from '../index.astro';
 import { Page } from './_index';
 
 export const getStaticPaths = (async () => {
-  const tanks = await metadata.getComponent<CatalogItemsComponent>(
+  const tanks = await unpackedMetadata.getComponent<CatalogItemsComponent>(
     'CatalogItemsGroupEntity.all_tanks',
     'catalogItemsGroupComponent',
   );
-  const gameStringsDefault = await metadata.stringsSubset(locales.default, [
-    'TankEntity',
-  ]);
+  const gameStringsDefault = await unpackedMetadata.stringsSubset(
+    locales.default,
+    ['TankEntity'],
+  );
   const parentPaths = parentGetStaticPaths();
 
   return (
     await Promise.all(
       tanks.catalog_items.map(async (item) => {
-        const tank = await metadata.get(item).then((components) => {
+        const tank = await unpackedMetadata.get(item).then((components) => {
           return components.get<TankCatalogComponent>('tankCatalogComponent');
         });
         const nameEn = gameStringsDefault[tank.name!.value];
@@ -45,11 +46,11 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { entity, locale, strings, blitzLocale } = Astro.props;
-const set = await tankToSet(metadata, entity);
-const gameStrings = await metadata.stringsSubset(blitzLocale, [
+const set = await tankToSet(unpackedMetadata, entity);
+const gameStrings = await unpackedMetadata.stringsSubset(blitzLocale, [
   set.tank_set_ui!.tank_set_displayed_name,
 ]);
-const tankEntity = await metadata.get(entity);
+const tankEntity = await unpackedMetadata.get(entity);
 const tank = await tankEntity.get<TankCatalogComponent>('tankCatalogComponent');
 const compensation = await tankEntity.get<CompensationComponent>(
   'compensationComponent',

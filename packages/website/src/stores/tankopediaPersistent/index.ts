@@ -1,10 +1,11 @@
-import type en from '@blitzkit/i18n/strings/en.json';
 import * as lodash from 'lodash-es';
+import type { BlitzKitStrings } from 'packages/i18n/src';
 import { create } from 'zustand';
 import { persist, subscribeWithSelector } from 'zustand/middleware';
 import { createContextualStore } from '../../core/zustand/createContextualStore';
 
-export type TankopediaSortBy = keyof typeof en.website.common.tank_search.sort;
+export type TankopediaSortBy =
+  keyof BlitzKitStrings['website']['common']['tank_search']['sort'];
 export type TankopediaSortDirection = 'ascending' | 'descending';
 export type TankopediaTestTankDisplay = 'include' | 'exclude' | 'only';
 
