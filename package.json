@@ -20,7 +20,7 @@
     "dev:bot": "bun run build:bot --dev && bun start:bot",
     "start:bot": "bun dist/bot/main.js",
     "dev:docs": "vitepress dev docs",
-    "dev:website": "cd packages/website && bun run dev",
+    "dev:website": "cd packages/website-ue && bun run dev",
     "dev:api": "bun --filter=@blitzkit/api run dev",
     "setup:depotdownloader": "bun --filter=@blitzkit/scripts run setup:depotdownloader",
     "setup:patches": "bun --filter=@blitzkit/scripts run setup:patches",
@@ -40,10 +40,15 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@astrojs/react": "^4.3.0",
+    "@types/react": "^19.1.5",
+    "@types/react-dom": "^19.1.5",
     "googleapis": "^144.0.0",
     "lodash-es": "^4.17.21",
     "protobufjs": "^7.5.2",
     "quicklime": "^1.2.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "sharp": "^0.33.5"
   },
   "devDependencies": {

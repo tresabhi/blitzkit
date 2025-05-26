@@ -1,0 +1,15 @@
+---
+import locales from '@blitzkit/i18n/locales.json';
+import type { GetStaticPaths } from 'astro';
+
+export const getStaticPaths = (() => {
+  return locales.supported.map(({ locale, blitz }) => ({
+    params: { locale: locale === locales.default ? undefined : locale },
+    props: { locale, blitzLocale: blitz ?? locale },
+  }));
+}) satisfies GetStaticPaths;
+
+const { locale } = Astro.props;
+---
+
+Hello in {locale}!
