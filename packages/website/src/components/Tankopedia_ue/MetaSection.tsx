@@ -3,9 +3,9 @@ import { Box, Code, Flex } from '@radix-ui/themes';
 import { asset, TIER_ROMAN_NUMERALS } from 'packages/core/src';
 import { Var } from '../../core/radix/var';
 import { useLocale } from '../../hooks/useLocale';
-import { App } from '../../stores/app';
 import { TankopediaEphemeral_ue } from '../../stores/tankopediaEphemeral_ue';
 import { classIcons_ue } from '../ClassIcon';
+import { Currency } from '../Currency';
 import { Listing } from '../Tankopedia/MetaSection/components/Listing';
 
 const NATIONAL_BANNER_POSITION_OVERRIDES: Partial<Record<Nation, string>> = {
@@ -15,12 +15,15 @@ const NATIONAL_BANNER_POSITION_OVERRIDES: Partial<Record<Nation, string>> = {
 };
 
 export function MetaSection() {
-  const developerMode = App.useDeferred((state) => state.developerMode, false);
   const tank = TankopediaEphemeral_ue.use((state) => state.tank);
+  const entity = TankopediaEphemeral_ue.use((state) => state.entity);
   const set = TankopediaEphemeral_ue.use((state) => state.set);
-  const catalogueId = TankopediaEphemeral_ue.use((state) => state.catalogueId);
+  const compensation = TankopediaEphemeral_ue.use(
+    (state) => state.compensation,
+  );
+  const catalogueId = TankopediaEphemeral_ue.use((state) => state.entity);
   const ClassIcon = classIcons_ue[tank.tank_class];
-  const { locale, strings } = useLocale();
+  const { locale, strings, gameStrings } = useLocale();
   const reward = set.tank_set_rewards.find(
     (reward) =>
       reward.tank_set_reward_on_level &&
@@ -84,9 +87,11 @@ export function MetaSection() {
                       {strings.common.tank_class[tank.tank_class]}
                     </Flex>
                   </Listing>
+
                   <Listing label={strings.website.tools.tankopedia.meta.tier}>
                     {TIER_ROMAN_NUMERALS[tank.tier]}
                   </Listing>
+
                   <Listing
                     label={strings.website.tools.tankopedia.meta.type}
                     color={
@@ -99,71 +104,19 @@ export function MetaSection() {
                   >
                     {strings.common.tree_type[tank.tank_type]}
                   </Listing>
+
+                  <Listing label={strings.website.tools.tankopedia.meta.id}>
+                    <Code variant="ghost">
+                      {entity.replace('TankEntity.', '')}
+                    </Code>
+                  </Listing>
                 </Flex>
 
                 <Flex direction="column" width="100%" gap="2">
-                  {developerMode && (
-                    <Listing
-                      label={strings.website.tools.tankopedia.meta.dev_id}
-                    >
-                      <Code>TANK_ID</Code>
-                    </Listing>
-                  )}
-                  {tank.tank_type === TankType.TANK_TYPE_PREMIUM && (
-                    <Listing
-                      label={strings.website.tools.tankopedia.meta.purchase}
-                    >
-                      <Flex align="center" gap="1">
-                        {(9999999999).toLocaleString(locale)}
-                        <img
-                          style={{ width: '1em', height: '1em' }}
-                          alt="gold"
-                          src={asset('icons/currencies/gold.webp')}
-                        />
-                      </Flex>
-                    </Listing>
-                  )}
-                  <Listing
-                    label={
-                      tank.tank_type === TankType.TANK_TYPE_COMMON
-                        ? strings.website.tools.tankopedia.meta.purchase
-                        : strings.website.tools.tankopedia.meta.restoration
-                    }
-                  >
-                    <Flex align="center" gap="1">
-                      {(999999999).toLocaleString(locale)}
-                      <img
-                        style={{ width: '1em', height: '1em' }}
-                        alt="TODO: REPLACE WITH CURRENCY NAME"
-                        // src={asset(
-                        //   `icons/currencies/${
-                        //     protagonist.price.type === TankPriceType.GOLD
-                        //       ? 'gold'
-                        //       : 'silver'
-                        //   }.webp`,
-                        // )}
-                      />
-                    </Flex>
-                  </Listing>
-                  <Listing label={strings.website.tools.tankopedia.meta.sale}>
-                    <Flex align="center" gap="1">
-                      {(999999999).toLocaleString(locale)}
-                      <img
-                        style={{ width: '1em', height: '1em' }}
-                        alt="TODO: REPLACE WITH CURRENCY NAME"
-                        // src={asset(
-                        //   `icons/currencies/${
-                        //     protagonist.price.type === TankPriceType.GOLD
-                        //       ? 'gold'
-                        //       : 'silver'
-                        //   }.webp`,
-                        // )}
-                      />
-                    </Flex>
-                  </Listing>
                   <Listing label={strings.website.tools.tankopedia.meta.set}>
-                    {set.tank_set_ui!.tank_set_displayed_name}
+                    {gameStrings[set.tank_set_ui!.tank_set_displayed_name]}
                   </Listing>
+
                   <Listing label={strings.website.tools.tankopedia.meta.price}>
                     <Flex align="center" gap="1">
                       {reward.tank_set_reward_price === undefined ? (
@@ -183,6 +136,16 @@ export function MetaSection() {
                       )}
                     </Flex>
                   </Listing>
+
+                  {compensation.compensation?.currency_reward && (
+                    <Listing
+                      label={strings.website.tools.tankopedia.meta.compensation}
+                    >
+                      <Currency
+                        reward={compensation.compensation.currency_reward}
+                      />
+                    </Listing>
+                  )}
                 </Flex>
               </Flex>
             </Flex>

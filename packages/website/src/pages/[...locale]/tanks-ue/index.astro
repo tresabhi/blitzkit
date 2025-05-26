@@ -3,34 +3,40 @@ import { slugify } from '@blitzkit/core';
 import locales from '@blitzkit/i18n/locales.json';
 import type { CatalogItemsComponent } from '@protos/blitz_static_catalog_items_group_component';
 import { TankCatalogComponent } from '@protos/blitz_static_tank_component';
+import { TestComponent } from 'packages/website/src/components/TestComponent';
 import { metadata } from '../../../core/blitz/metadata';
 
 export { getStaticPaths } from '../index.astro';
 
 const { blitzLocale } = Astro.props;
-const allTanks = await metadata
-  .get('CatalogItemsGroupEntity.all_tanks')
-  .then((components) =>
-    components.get<CatalogItemsComponent>('catalogItemsGroupComponent'),
-  );
-const gameStrings = await metadata
-  .strings(blitzLocale)
-  .then((strings) => strings.subset(['TankEntity']));
-const gameStringsDefault = await metadata
-  .strings(locales.default)
-  .then((strings) => strings.subset(['TankEntity']));
+const allTanks = await metadata.getComponent<CatalogItemsComponent>(
+  'CatalogItemsGroupEntity.all_tanks',
+  'catalogItemsGroupComponent',
+);
+const gameStrings = await metadata.stringsSubset(blitzLocale, ['TankEntity']);
+const gameStringsDefault = await metadata.stringsSubset(locales.default, [
+  'TankEntity',
+]);
 const tanks: { tank: TankCatalogComponent; slug: string; id: string }[] = [];
 
 for (const tankComponentId of allTanks.catalog_items) {
-  const tank = await metadata.get(tankComponentId).then((components) => {
-    return components.get<TankCatalogComponent>('tankCatalogComponent');
-  });
-  const nameEn = gameStringsDefault[tank.name!.value];
+  const tank = await metadata.getComponent<TankCatalogComponent>(
+    tankComponentId,
+    'tankCatalogComponent',
+  );
+
+  if (tank.name === undefined) {
+    continue;
+  }
+
+  const nameEn = gameStringsDefault[tank.name.value];
   const slug = slugify(nameEn);
 
   tanks.push({ tank, slug, id: tankComponentId });
 }
 ---
+
+<TestComponent client:load data={metadata} />
 
 {
   tanks.map(({ tank, slug, id }) => {

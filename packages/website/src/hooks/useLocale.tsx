@@ -1,24 +1,26 @@
 import { type BlitzKitStrings } from '@blitzkit/i18n';
 import { createContext, useContext, type ReactNode } from 'react';
 
-const LocaleContext = createContext<{
+interface LocaleContextContent {
   locale: string;
   strings: BlitzKitStrings;
-} | null>(null);
+  gameStrings: Record<string, string>;
+}
+
+type LocaleContextData = Omit<LocaleContextContent, 'gameStrings'> & {
+  gameStrings?: Record<string, string>;
+};
+
+const LocaleContext = createContext<LocaleContextContent | null>(null);
 
 interface LocaleProviderProps {
-  locale: string;
-  strings: BlitzKitStrings;
+  data: LocaleContextData;
   children: ReactNode;
 }
 
-export function LocaleProvider({
-  locale,
-  strings,
-  children,
-}: LocaleProviderProps) {
+export function LocaleProvider({ data, children }: LocaleProviderProps) {
   return (
-    <LocaleContext.Provider value={{ locale, strings }}>
+    <LocaleContext.Provider value={{ gameStrings: {}, ...data }}>
       {children}
     </LocaleContext.Provider>
   );
@@ -31,11 +33,9 @@ export function useLocale() {
     throw new Error('useLocale must be used within a LocaleProvider');
   }
 
-  const { locale, strings } = context;
-
-  return { locale, strings };
+  return context;
 }
 
 export interface LocaleAcceptorProps {
-  localeContext: { locale: string; strings: BlitzKitStrings };
+  localeContext: LocaleContextContent;
 }

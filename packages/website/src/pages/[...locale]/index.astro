@@ -30,7 +30,6 @@ export const getStaticPaths = (() => {
   return locales.supported.map(({ locale, blitz }) => {
     return {
       params: { locale: locale === locales.default ? undefined : locale },
-
       props: {
         locale,
         strings: STRINGS[locale as SupportedLocale],

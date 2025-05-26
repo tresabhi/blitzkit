@@ -8,21 +8,21 @@ import { slugify } from '@blitzkit/core';
 import locales from '@blitzkit/i18n/locales.json';
 import type { GetStaticPaths } from 'astro';
 import { tankToSet } from 'packages/website/src/core/blitz/tankToSet';
+import type { TankopediaEphemeral_ue } from 'packages/website/src/stores/tankopediaEphemeral_ue';
 import { metadata } from '../../../../core/blitz/metadata';
 import BaseLayout from '../../../../layouts/BaseLayout.astro';
 import { getStaticPaths as parentGetStaticPaths } from '../index.astro';
 import { Page } from './_index';
 
 export const getStaticPaths = (async () => {
-  const tanks = await metadata
-    .get('CatalogItemsGroupEntity.all_tanks')
-    .then((components) =>
-      components.get<CatalogItemsComponent>('catalogItemsGroupComponent'),
-    );
+  const tanks = await metadata.getComponent<CatalogItemsComponent>(
+    'CatalogItemsGroupEntity.all_tanks',
+    'catalogItemsGroupComponent',
+  );
+  const gameStringsDefault = await metadata.stringsSubset(locales.default, [
+    'TankEntity',
+  ]);
   const parentPaths = parentGetStaticPaths();
-  const gameStringsDefault = await metadata
-    .strings(locales.default)
-    .then((strings) => strings.subset(['TankEntity']));
 
   return (
     await Promise.all(
@@ -36,7 +36,7 @@ export const getStaticPaths = (async () => {
         return parentPaths.map((parent) => {
           return {
             params: { ...parent.params, slug },
-            props: { ...parent.props, item },
+            props: { ...parent.props, entity: item },
           };
         });
       }),
@@ -44,24 +44,23 @@ export const getStaticPaths = (async () => {
   ).flat();
 }) satisfies GetStaticPaths;
 
-const { item, locale, strings } = Astro.props;
-const set = await tankToSet(metadata, item);
-const tankComponents = await metadata.get(item);
-const tank = await tankComponents.get<TankCatalogComponent>(
-  'tankCatalogComponent',
-);
-const compensation = await tankComponents.get<CompensationComponent>(
+const { entity, locale, strings, blitzLocale } = Astro.props;
+const set = await tankToSet(metadata, entity);
+const gameStrings = await metadata.stringsSubset(blitzLocale, [
+  set.tank_set_ui!.tank_set_displayed_name,
+]);
+const tankEntity = await metadata.get(entity);
+const tank = await tankEntity.get<TankCatalogComponent>('tankCatalogComponent');
+const compensation = await tankEntity.get<CompensationComponent>(
   'compensationComponent',
 );
+const tankContext: TankopediaEphemeral_ue = { tank, set, compensation, entity };
 ---
 
 <BaseLayout {locale} {strings}>
   <Page
     client:load
-    catalogueId={item}
-    {set}
-    {tank}
-    {compensation}
-    localeContext={{ locale, strings }}
+    {tankContext}
+    localeContext={{ locale, strings, gameStrings }}
   />
 </BaseLayout>

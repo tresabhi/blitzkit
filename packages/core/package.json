@@ -4,6 +4,7 @@
   "type": "module",
   "main": "src/index.ts",
   "dependencies": {
+    "@blitzkit/closed": "workspace:*",
     "@octokit/plugin-throttling": "^8.2.0",
     "@octokit/rest": "^20.1.1",
     "@prisma/client": "^6.6.0",

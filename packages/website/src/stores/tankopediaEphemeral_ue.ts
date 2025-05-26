@@ -5,11 +5,11 @@ import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { createContextualStore } from '../core/zustand/createContextualStore';
 
-interface TankopediaEphemeral_ue {
+export interface TankopediaEphemeral_ue {
   tank: TankCatalogComponent;
   compensation: CompensationComponent;
   set: TankSetCatalogComponent;
-  catalogueId: string;
+  entity: string;
 }
 
 export const TankopediaEphemeral_ue = createContextualStore(

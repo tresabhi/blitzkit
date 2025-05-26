@@ -1037,6 +1037,7 @@
         },
 
         "meta": {
+          "compensation": "Compensation",
           "free": "Free",
           "back": "Back",
           "compare": "Compare",
@@ -1051,7 +1052,7 @@
           "class": "Class",
           "tier": "Tier",
           "type": "Type",
-          "dev_id": "DEV: ID",
+          "id": "ID",
           "purchase": "Purchase price",
           "restoration": "Restoration price",
           "sale": "Sale price",
