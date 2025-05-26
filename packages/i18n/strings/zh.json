@@ -690,51 +690,51 @@
           "survivability.camouflageStill": "静止中隐蔽值",
           "survivability.camouflageMoving": "移动中隐蔽值",
           "survivability.camouflageShooting": "射击隐蔽值",
-          "survivability.volume": "體積",
-          "survivability.length": "長度",
-          "fire.dpm": "標準砲彈 每分鐘傷害血量",
-          "fire.dpmPremium": "加值砲彈 每分鐘傷害血量",
-          "fire.reload": "裝填",
-          "fire.caliber": "口徑",
-          "fire.standardPenetration": "標準砲彈穿透力",
-          "fire.premiumPenetration": "加值砲彈穿透力",
-          "fire.damage": "殺傷力",
-          "fire.moduleDamage": "模組傷害值",
-          "fire.shellVelocity": "砲彈飛行速度",
+          "survivability.volume": "体积",
+          "survivability.length": "长度",
+          "fire.dpm": "标准炮弹 每分钟伤害血量",
+          "fire.dpmPremium": "加值炮弹 每分钟伤害血量",
+          "fire.reload": "装填时间",
+          "fire.caliber": "口径",
+          "fire.standardPenetration": "标准炮弹穿透力",
+          "fire.premiumPenetration": "加值炮弹穿透力",
+          "fire.damage": "炮弹伤害值",
+          "fire.moduleDamage": "模组伤害值",
+          "fire.shellVelocity": "炮弹飞行速度",
           "fire.shellRange": "最大射程",
-          "fire.shellCapacity": "攜彈量",
-          "fire.aimTime": "瞄準時間",
-          "fire.dispersionStill": "一百公尺擴散度",
-          "fire.dispersionMoving": "移動時擴散度",
+          "fire.shellCapacity": "携弹量",
+          "fire.aimTime": "瞄准时间",
+          "fire.dispersionStill": "一百米处扩散度",
+          "fire.dispersionMoving": "移动时扩散度",
           "fire.gunDepression": "俯角",
           "fire.gunElevation": "仰角",
-          "maneuverability.forwardsSpeed": "最高前進速度",
-          "maneuverability.backwardsSpeed": "倒退速度",
-          "maneuverability.power": "功率",
-          "maneuverability.powerToWeight": "推重比",
+          "maneuverability.forwardsSpeed": "最高前进速度",
+          "maneuverability.backwardsSpeed": "最高后退速度",
+          "maneuverability.power": "引擎功率",
+          "maneuverability.powerToWeight": "功重比",
           "maneuverability.weight": "重量",
-          "maneuverability.traverseSpeed": "轉速"
+          "maneuverability.traverseSpeed": "车身转动速率"
         },
         "sort_dropdown": {
           "label": "排序",
           "groups": {
             "sort": {
               "no_sort": "未排序",
-              "label": "排序依據",
-              "fire": "開火",
-              "maneuverability": "機動性",
+              "label": "排序依据",
+              "fire": "开火",
+              "maneuverability": "机动性",
               "survivability": "生存能力"
             },
             "direction": {
-              "label": "轉向",
-              "ascending": "爬升",
-              "descending": "下坡"
+              "label": "排序算法",
+              "ascending": "升序",
+              "descending": "倒序"
             }
           }
         }
       },
       "warnings": {
-        "test": "測試中的戰車可能會發生變化，並不代表最終結果。"
+        "test": "试验中的坦克可能会发生变化，可能不代表最终产品。"
       }
     },
     "home": {
