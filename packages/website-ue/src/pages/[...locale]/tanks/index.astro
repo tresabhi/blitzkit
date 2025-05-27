@@ -1,0 +1,14 @@
+---
+import { CatalogItemsComponent } from '@protos/blitz_static_catalog_items_group_component';
+import { TestComponent } from '../../../components/TestComponent';
+import { unpackedMetadata } from '../../../core/blitz/unpackedMetadata';
+export { getStaticPaths } from '../index.astro';
+
+const { locale } = Astro.props;
+
+const allTanks = unpackedMetadata
+  .get('CatalogItemsGroupEntity.all_tanks')
+  .get(CatalogItemsComponent, 'catalogItemsGroupComponent');
+---
+
+<TestComponent />

@@ -1,4 +1,11 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["src/**/*", "../core/src/blitzkit/supportedLocales.ts", "../i18n/src/unwrapper.ts"]
+  "include": [
+    "src/**/*",
+    "../core/src/blitzkit/supportedLocales.ts",
+    "../i18n/src/unwrapper.ts"
+  ],
+  "compilerOptions": {
+    "baseUrl": "../../"
+  }
 }

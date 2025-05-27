@@ -1,5 +1,5 @@
 {
-  "name": "website-ue",
+  "name": "@blitzkit/website-ue",
   "type": "module",
   "scripts": {
     "dev": "astro dev",
@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@blitzkit/core": "workspace:*",
-    "@blitzkit/i18n": "workspace:*",
+    "@blitzkit/closed": "workspace:*",
     "@astrojs/react": "^4.3.0",
     "@types/react": "^19.1.5",
     "@types/react-dom": "^19.1.5",

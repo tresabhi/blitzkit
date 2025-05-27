@@ -18,7 +18,12 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "baseUrl": "./",
+    "paths": {
+      "@protos/*": ["submodules/blitzkit-closed/src/unreal/protos/*"],
+      "@strings/*": ["packages/i18n/strings/*"]
+    }
   },
   "exclude": ["node_modules/**/*", "dist", ".next"]
 }
