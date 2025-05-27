@@ -23,15 +23,17 @@ export function LocaleProvider({ locale, children }: LocaleProviderProps) {
   );
 }
 
+const strings = import.meta.glob('../../../i18n/strings/*.json', {
+  import: 'default',
+});
 const cache = new Map<string, Promise<BlitzKitStrings>>();
 
 function loadLocale(locale: string) {
   if (cache.has(locale)) return cache.get(locale)!;
 
-  const promise = fetch(`/api/strings/${locale}.json`).then((response) => {
-    if (!response.ok) throw new Error('Failed to load locale');
-    return response.json();
-  });
+  const promise = strings[
+    `../../../i18n/strings/${locale}.json`
+  ]() as Promise<BlitzKitStrings>;
 
   cache.set(locale, promise);
 

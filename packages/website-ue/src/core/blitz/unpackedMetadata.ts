@@ -6,4 +6,4 @@ export const unpackedMetadata = new UnpackedMetadataAccessor(
   await requestAutoProxyClient<GetPackedMetadataAsyncResponse>(
     'GetPackedMetadataAsyncRequest',
   ).then(unpackMetadata),
-);
+).injectBlitzkit();

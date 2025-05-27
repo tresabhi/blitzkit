@@ -1,9 +1,8 @@
 import { exec as execSync } from 'child_process';
 import { existsSync } from 'fs';
 import { readdir, rm, writeFile } from 'fs/promises';
+import { chunk } from 'lodash-es';
 import { promisify } from 'util';
-
-const ROOT = 'packages/core/src/protos';
 
 const exec = promisify(execSync);
 
@@ -15,33 +14,42 @@ if (existsSync('node_modules/.bin/protoc-gen-ts_proto.exe')) {
   executableFileExtension = '';
 }
 
-const filesRaw = await readdir(`${ROOT}`);
-await Promise.all(
-  filesRaw.map(async (file) => {
-    if (!file.endsWith('.proto')) {
-      await rm(`${ROOT}/${file}`);
-    }
-  }),
-);
+// await compile('packages/core/src/protos');
+await compile('submodules/blitzkit-closed/src/unreal/protos');
 
-const files = filesRaw.filter((file) => file.endsWith('.proto'));
-const args = [
-  `--plugin=./node_modules/.bin/protoc-gen-ts_proto${executableFileExtension}`,
-  '--ts_proto_opt=esModuleInterop=true',
-  '--ts_proto_opt=oneof=unions-value',
-  '--ts_proto_opt=removeEnumPrefix=true',
-  '--ts_proto_opt=unrecognizedEnum=false',
-  '--ts_proto_opt=snakeToCamel=false',
-  '--ts_proto_out=.',
-  ...files.map((file) => `${ROOT}/${file}`),
-];
+async function compile(root: string) {
+  const filesRaw = await readdir(root);
 
-await exec(`protoc ${args.join(' ')}`);
-await writeFile(
-  `${ROOT}/index.ts`,
-  '// @ts-nocheck\n' +
-    files
-      .map((file) => file.replace('.proto', ''))
-      .map((file) => `export * from './${file}.ts';`)
-      .join('\n'),
-);
+  for (const file of filesRaw) {
+    if (!file.endsWith('.ts')) continue;
+    await rm(`${root}/${file}`);
+  }
+
+  const allFiles = filesRaw.filter((file) => file.endsWith('.proto'));
+
+  for (const files of chunk(allFiles, 32)) {
+    const args = [
+      `-I=${root}`,
+      `--plugin=./node_modules/.bin/protoc-gen-ts_proto${executableFileExtension}`,
+      '--ts_proto_opt=esModuleInterop=true',
+      '--ts_proto_opt=oneof=unions-value',
+      // '--ts_proto_opt=removeEnumPrefix=true',
+      '--ts_proto_opt=unrecognizedEnum=false',
+      '--ts_proto_opt=snakeToCamel=false',
+      `--ts_proto_out=${root}`,
+      ...files.map((file) => `${root}/${file}`),
+    ];
+
+    await exec(`protoc ${args.join(' ')}`);
+  }
+
+  await writeFile(
+    `${root}/index.ts`,
+    '// @ts-nocheck\n' +
+      allFiles
+        .sort()
+        .map((file) => file.replace('.proto', ''))
+        .map((file) => `export * from './${file}.ts';`)
+        .join('\n'),
+  );
+}
