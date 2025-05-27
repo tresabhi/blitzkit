@@ -1,0 +1,80 @@
+---
+import { Flex } from '@radix-ui/themes';
+import { BlitzKitTheme } from '../components/BlitzKitTheme';
+import { Checks } from '../components/Checks';
+import Footer from '../components/Footer.astro';
+import Navbar from '../components/Navbar.astro';
+import Party3 from '../components/Party3.astro';
+
+export interface Props {
+  noFooter?: boolean;
+  noNavbar?: boolean;
+  integrated?: boolean;
+  locale: string;
+}
+
+const { noFooter, noNavbar, integrated, locale } = Astro.props;
+---
+
+<html lang={locale}>
+  <head>
+    <meta property="og:site_name" content="BlitzKit" />
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <Party3 />
+
+    <script>
+      import locales from '@blitzkit/i18n/locales.json' with { type: 'json' };
+      import { getBestLocale } from '../core/i18n/getBestLocale';
+      const isAPI = window.location.pathname.startsWith('/api');
+      const isI18nPath = locales.supported.some(({ locale }) =>
+        window.location.pathname.startsWith(`/${locale}`),
+      );
+      const bestLocale = getBestLocale();
+      const currentPathLocale = locales.supported.find(({ locale }) =>
+        window.location.pathname.startsWith(`/${locale}`),
+      );
+
+      if (
+        !isAPI && // not an api, duh!
+        localStorage.getItem('preferred-locale') !== null && // no preference, so probably google's crawler
+        currentPathLocale &&
+        bestLocale !== currentPathLocale.locale // we need to redirect
+      ) {
+        window.location.pathname = isI18nPath
+          ? window.location.pathname.replace(
+              `/${currentPathLocale.locale}`,
+              bestLocale === undefined ? '' : `/${bestLocale}`,
+            )
+          : `/${bestLocale}${window.location.pathname}`;
+      }
+    </script>
+
+    <style is:global>
+      @import '@radix-ui/themes/styles.css';
+
+      body {
+        margin: 0;
+      }
+    </style>
+
+    <slot name="head" />
+  </head>
+
+  <body class={noNavbar ? 'no-navbar' : ''}>
+    <BlitzKitTheme>
+      <Flex direction="column" minHeight="100vh">
+        <Navbar {locale} {integrated} />
+
+        <Checks {locale} client:only="react" />
+
+        <slot />
+
+        {!noFooter && <Footer />}
+      </Flex>
+    </BlitzKitTheme>
+  </body>
+</html>

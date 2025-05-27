@@ -1,5 +1,5 @@
 import { I18nString } from '@blitzkit/core';
-import { DEFAULT_LOCALE } from './strings';
+import locales from '../locales.json' with { type: 'json' };
 
 export function unwrapper(locale: string) {
   return function (i18nString: I18nString) {
@@ -7,6 +7,6 @@ export function unwrapper(locale: string) {
       return i18nString.locales[locale];
     }
 
-    return i18nString.locales[DEFAULT_LOCALE];
+    return i18nString.locales[locales.default];
   };
 }

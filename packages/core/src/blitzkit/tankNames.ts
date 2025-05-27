@@ -1,5 +1,5 @@
+import locales from '@blitzkit/i18n/locales.json' with { type: 'json' };
 import { deburr } from 'lodash-es';
-import { SUPPORTED_LOCALES } from '../../../i18n/src/strings';
 import { I18nString } from '../protos';
 import { fetchCamouflageDefinitions } from './camouflageDefinitions';
 import { fetchTankDefinitions } from './tankDefinitions';
@@ -26,8 +26,8 @@ export async function fetchTankNames() {
         searchableNameDeburr,
         camouflages: tank.camouflages
           ?.map((id) =>
-            SUPPORTED_LOCALES.map(
-              (locale) =>
+            locales.supported.map(
+              ({ locale }) =>
                 camouflageDefinitions.camouflages[id]?.name.locales[locale],
             ),
           )
@@ -42,9 +42,11 @@ export async function fetchTankNames() {
 }
 
 export const SEARCH_KEYS = [
-  ...SUPPORTED_LOCALES.map((locale) => [
-    `searchableName.locales.${locale}`,
-    `searchableNameDeburr.locales.${locale}`,
-  ]).flat(),
+  ...locales.supported
+    .map(({ locale }) => [
+      `searchableName.locales.${locale}`,
+      `searchableNameDeburr.locales.${locale}`,
+    ])
+    .flat(),
   'camouflages',
 ];
