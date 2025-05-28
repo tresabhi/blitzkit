@@ -76,7 +76,6 @@
     "@types/three": "^0.160.0",
     "astro-compressor": "^1.0.0",
     "@astrojs/partytown": "^2.1.4",
-    "@astrolib/seo": "^1.0.0-beta.8",
     "@fontsource/inter": "^5.2.5",
     "@nanostores/persistent": "^0.10.2",
     "@nanostores/react": "^0.7.3",

@@ -1,6 +1,18 @@
 ---
+import { AstroSeo } from '@astrolib/seo';
 import locales from '@blitzkit/i18n/locales.json';
+import { ExternalLinkIcon } from '@radix-ui/react-icons';
+import { Flex, Link } from '@radix-ui/themes';
 import type { GetStaticPaths } from 'astro';
+import { literals } from 'packages/i18n/src';
+import HomeHero from '../../components/HomeHero.astro';
+import ToolCard from '../../components/ToolCard.astro';
+import { type Tool, tools } from '../../constants/tools';
+import { getStrings } from '../../core/i18n/getStrings';
+import { Var } from '../../core/radix/var';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const MAX_TOOLS_PER_ROW = 2;
 
 export const getStaticPaths = (() => {
   return locales.supported.map(({ locale, blitz }) => ({
@@ -10,6 +22,92 @@ export const getStaticPaths = (() => {
 }) satisfies GetStaticPaths;
 
 const { locale } = Astro.props;
+const strings = await getStrings(locale);
+const rows: Tool[][] = [];
+
+toolLoop: for (const tool of tools.filter((tool) => tool.enabled)) {
+  if (tool.significant) {
+    rows.push([tool]);
+  } else {
+    for (const row of rows) {
+      if (!row[0]?.significant && row.length < MAX_TOOLS_PER_ROW) {
+        row.push(tool);
+        continue toolLoop;
+      }
+    }
+
+    rows.push([tool]);
+  }
+}
 ---
 
-Hello in {locale}!
+<AstroSeo
+  title="BlitzKit"
+  description={strings.website.home.seo_description}
+  canonical={Astro.url.href}
+  openGraph={{
+    url: Astro.url.href,
+    title: 'BlitzKit',
+    description: strings.website.home.seo_description,
+    site_name: 'BlitzKit',
+  }}
+  twitter={{ cardType: 'summary_large_image' }}
+/>
+
+<BaseLayout {locale}>
+  <Flex direction="column" gap="8" pb="9">
+    <HomeHero {locale} />
+
+    {
+      locale !== locales.default && (
+        <Flex justify="center">
+          <Link
+            href="https://crowdin.com/project/blitzkrieg"
+            target="_blank"
+            underline="hover"
+            color="gray"
+            highContrast
+            style={{
+              color: Var('gray-3'),
+            }}
+          >
+            <Flex
+              align="center"
+              px="5"
+              py="4"
+              gap="3"
+              style={{
+                backgroundImage: 'url(/assets/morphing-diamonds.svg)',
+                borderRadius: Var('radius-full'),
+                boxShadow: Var('shadow-2'),
+              }}
+            >
+              {literals(strings.website.home.help_translate, [
+                'BlitzKit',
+                strings.common.locales[
+                  locale as keyof typeof strings.common.locales
+                ],
+              ])}
+
+              <ExternalLinkIcon />
+            </Flex>
+          </Link>
+        </Flex>
+      )
+    }
+
+    <Flex px="4" justify="center" gap="4">
+      <Flex maxWidth="80rem" flexGrow="1" gap="4" direction="column">
+        {
+          rows.map((row) => (
+            <Flex gap="4" direction={{ initial: 'column', sm: 'row' }}>
+              {row.map((tool) => (
+                <ToolCard {locale} tool={tool} />
+              ))}
+            </Flex>
+          ))
+        }
+      </Flex>
+    </Flex>
+  </Flex>
+</BaseLayout>

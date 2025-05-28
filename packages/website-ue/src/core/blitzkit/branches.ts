@@ -1,6 +1,6 @@
 import { assertSecret } from 'packages/core/src';
 
-export function resolveBranchName(locale: string) {
+export function resolveBranchName() {
   if (assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH) === 'main') {
     return undefined;
   }
