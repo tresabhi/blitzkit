@@ -1,141 +1,85 @@
-import { Button } from '@radix-ui/themes';
-import type { ComponentProps } from 'react';
+import type { ButtonProps } from '@radix-ui/themes';
 
-export interface Tool {
+interface Tool {
   id: string;
-  stringsId?: string;
-  disabled?: boolean;
-  href?: string;
-  button: {
-    highContrast?: boolean;
-    color: ComponentProps<typeof Button>['color'];
-  };
+  enabled: boolean;
+  strings?: string;
   significant?: boolean;
-  branches?: string[];
+  button: { color: ButtonProps['color']; contrast?: boolean };
 }
 
-export const tankopediaTool: Tool = {
+export const tanks: Tool = {
   id: 'tanks',
-  stringsId: 'tankopedia',
-  button: {
-    color: 'purple',
-  },
+  enabled: true,
+  strings: 'tankopedia',
   significant: true,
-  branches: ['main', 'dev', 'opentest', 'preview'],
+  button: { color: 'purple' },
 };
 
-// export const ratingTool: Tool = {
-//   id: 'rating',
-//   image: 'WEyMZH3',
-//   button: {
-//     color: 'orange',
-//   },
-//   branches: ['main', 'dev'],
-// };
-
-export const compareTool: Tool = {
+export const compare: Tool = {
   id: 'compare',
-  button: {
-    color: 'crimson',
-  },
-  branches: ['main', 'dev', 'opentest', 'preview'],
+  enabled: true,
+  button: { color: 'crimson' },
 };
 
-export const sessionTool: Tool = {
-  // TODO: rename to tracker
-  id: 'session',
-  button: {
-    color: 'blue',
-  },
-  branches: ['main', 'dev'],
-};
-
-export const discordTool: Tool = {
-  id: 'discord',
-  href: 'https://discord.com/application-directory/1097673957865443370',
-  button: {
-    color: 'indigo',
-  },
-};
-
-export const moreTool: Tool = {
-  id: 'more',
-  href: 'https://discord.gg/nDt7AjGJQH',
-  button: {
-    color: 'plum',
-  },
-};
-
-export const playersTool: Tool = {
-  id: 'players',
-  button: {
-    color: 'blue',
-  },
-  href: '_', // TODO: remove this to re-enable link
-  branches: ['main', 'dev'],
-};
-
-export const performanceTool: Tool = {
+export const performance: Tool = {
   id: 'performance',
-  button: {
-    color: 'jade',
-  },
-  branches: ['main', 'dev'],
+  enabled: true,
+  button: { color: 'jade' },
 };
 
-export const embedTool: Tool = {
-  id: 'embed',
-  button: {
-    color: 'red',
-  },
-  branches: ['main', 'dev'],
+export const guess: Tool = {
+  id: 'guess',
+  enabled: false,
+  button: { color: 'bronze' },
 };
 
-export const homeTool: Tool = {
-  id: 'home',
+export const charts: Tool = {
+  id: 'charts',
+  enabled: false,
+  button: { color: 'bronze' },
+};
+
+export const gallery: Tool = {
+  id: 'gallery',
+  enabled: true,
+  button: { color: 'gold' },
+};
+
+export const session: Tool = {
+  id: 'session',
+  enabled: true,
   button: { color: 'blue' },
 };
 
-export const galleryTool: Tool = {
-  id: 'gallery',
-  button: {
-    color: 'gold',
-  },
-  branches: ['main', 'dev'],
-};
-
-export const tierListTool: Tool = {
+export const tierList: Tool = {
   id: 'tier-list',
-  stringsId: 'tier_list',
-  button: {
-    color: 'orange',
-  },
-  branches: ['main', 'dev', 'opentest', 'preview'],
+  enabled: true,
+  strings: 'tier_list',
+  button: { color: 'orange' },
 };
 
-export const chartsTool: Tool = {
-  id: 'charts',
-  button: {
-    color: 'bronze',
-  },
-  branches: ['main', 'dev'],
-};
-
-export const guessTool: Tool = {
-  id: 'guess',
+export const embed: Tool = {
+  id: 'embed',
+  enabled: true,
   button: { color: 'cyan' },
-  branches: ['main', 'dev', 'opentest', 'preview'],
 };
 
-export const TOOLS: Tool[] = [
-  tankopediaTool,
-  compareTool,
-  performanceTool,
-  // guessTool,
-  // chartsTool,
-  galleryTool,
-  sessionTool,
-  tierListTool,
-  embedTool,
-  // ratingTool,
+export const rating: Tool = {
+  id: 'rating',
+  enabled: false,
+  button: { color: 'orange' },
+};
+
+export const tools: Tool[] = [
+  tanks,
+  compare,
+  performance,
+  guess,
+  charts,
+  gallery,
+  session,
+  tierList,
+  embed,
+  rating,
 ];

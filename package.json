@@ -30,7 +30,7 @@
     "lint": "tsc",
     "lint:website": "cd packages/website && bun run lint",
     "format": "prettier --write \"**/*.@(json|js|jsx|css|md|ts|tsx|html|xml|yml|gltf)\"",
-    "update": "yarn upgrade --latest",
+    "update": "yarn upgace --latest",
     "tunnel": "cloudflared tunnel --url http://localhost:3000",
     "discoverids": "scripts/discoverIds.ts",
     "build:protos": "bun packages/scripts/src/protos.ts",
