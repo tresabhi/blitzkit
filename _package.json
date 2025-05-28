@@ -95,13 +95,11 @@
     "urlon": "^3.1.0",
     "zustand": "^4.5.5",
     "@types/bun": "latest",
-    "@types/lodash-es": "^4.17.12",
     "@types/node": "^22.14.1",
     "prettier": "^3.5.3",
     "prisma": "^6.6.0",
     "typescript": "^5.8.3",
     "googleapis": "^144.0.0",
-    "lodash-es": "^4.17.21",
     "protobufjs": "^7.5.2",
     "quicklime": "^1.2.0",
     "sharp": "^0.33.5"

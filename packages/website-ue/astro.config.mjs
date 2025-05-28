@@ -7,4 +7,5 @@ import react from '@astrojs/react';
 export default defineConfig({
   integrations: [react()],
   devToolbar: { enabled: false },
+  site: 'https://blitzkit.app',
 });

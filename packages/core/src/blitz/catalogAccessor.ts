@@ -1,15 +1,14 @@
 import { CatalogItem } from '@protos/blitz_items';
-import { Metadata } from '@protos/blitz_metadata';
 import { CatalogItemsComponent } from '@protos/blitz_static_catalog_items_group_component';
-import { BlitzKitAllTankEntities } from '@protos/blitzkit_static_all_tank_entities';
+import { BlitzkitAllTanksComponent } from '@protos/blitzkit_static_all_tanks_component';
 import { BlitzKitTankCatalogComponent } from '@protos/blitzkit_static_tank_component';
 import { CatalogItemAccessor } from './catalogItemAccessor';
 
-export class UnpackedMetadataAccessor {
+export class CatalogAccessor {
   items: Record<string, CatalogItemAccessor> = {};
 
-  constructor(metadata: Metadata) {
-    for (const item of metadata.catalog_items) {
+  constructor(catalogItems: CatalogItem[]) {
+    for (const item of catalogItems) {
       if (item.catalog_id in this.items) {
         throw new Error(`Duplicate catalog ID: ${item.catalog_id}`);
       }
@@ -20,27 +19,12 @@ export class UnpackedMetadataAccessor {
 
   get(item: string) {
     if (item in this.items) return this.items[item];
-
     throw new Error(`Unknown catalog ID: ${item}`);
   }
 
-  addCatalogItem(item: CatalogItemAccessor) {
+  add(item: CatalogItemAccessor) {
     this.items[item.id] = item;
     return this;
-  }
-
-  addCatalogItemWithComponent(
-    catalogId: string,
-    componentId: string,
-    url: string,
-    value: Uint8Array,
-  ) {
-    this.addCatalogItem(
-      new CatalogItemAccessor({
-        catalog_id: catalogId,
-        components: [],
-      }).addComponent(componentId, { type_url: url, value }),
-    );
   }
 
   getAllTanks() {
@@ -52,7 +36,7 @@ export class UnpackedMetadataAccessor {
 
   injectBlitzkit() {
     this.injectBlitzKitTankComponents();
-    this.injectBlitzKitAllTankEntities();
+    this.injectBlitzKitAllTanksEntity();
 
     return this;
   }
@@ -73,23 +57,27 @@ export class UnpackedMetadataAccessor {
     }
   }
 
-  injectBlitzKitAllTankEntities() {
-    const allTanksEntities: BlitzKitAllTankEntities = { tanks: [] };
+  injectBlitzKitAllTanksEntity() {
+    const allTanksEntities: BlitzkitAllTanksComponent = { tanks: [] };
 
     for (const item of this.getAllTanks().catalog_items) {
       allTanksEntities.tanks.push(this.get(item).pack());
     }
 
-    this.addCatalogItemWithComponent(
-      'BlitzKitAllTankEntities.all_tanks',
-      'blitzkitAllTankEntitiesComponent',
-      './blitzkit_static_all_tank_entities.BlitzKitAllTankEntities',
-      BlitzKitAllTankEntities.encode(allTanksEntities).finish(),
+    this.add(
+      CatalogItemAccessor.fromComponent(
+        'BlitzKitAllTanksEntity.blitzkit_all_tanks',
+        {
+          type_url:
+            './blitzkit_static_all_tanks_component.BlitzkitAllTanksComponent',
+          value: BlitzkitAllTanksComponent.encode(allTanksEntities).finish(),
+        },
+      ),
     );
   }
 }
 
-export class DiscreteMetadataAccessor {
+export class RemoteCatalogAccessor {
   constructor(private base: string) {}
 
   async get(item: string) {

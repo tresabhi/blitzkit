@@ -1,5 +1,6 @@
 import { CatalogItem } from '@protos/blitz_items';
 import { Any } from '@protos/google/protobuf/any';
+import { lowerFirst } from 'lodash-es';
 import { MessageFns } from '../protos';
 
 export class CatalogItemAccessor {
@@ -19,6 +20,22 @@ export class CatalogItemAccessor {
 
       this.components[component.key] = component.value.component;
     }
+  }
+
+  static fromComponent(id: string, component: Any) {
+    return this.fromComponents(id, [component]);
+  }
+
+  static fromComponents(id: string, components: Any[]) {
+    return new CatalogItemAccessor({
+      catalog_id: id,
+      components: components.map((component) => ({
+        key: lowerFirst(
+          component.type_url.slice(2).split('.').slice(1).join('.'),
+        ),
+        value: { type_url: component.type_url, component },
+      })),
+    });
   }
 
   addComponent(key: string, value: Any) {
@@ -47,5 +64,9 @@ export class CatalogItemAccessor {
     }
 
     return item;
+  }
+
+  encode() {
+    return CatalogItem.encode(this.pack()).finish();
   }
 }

@@ -1,23 +1,9 @@
 ---
-import { CatalogItemsComponent } from '@protos/blitz_static_catalog_items_group_component';
-import { BlitzKitAllTankEntities } from '@protos/blitzkit_static_all_tank_entities';
-import { unpackedMetadata } from '../../../core/blitz/unpackedMetadata';
+import { Page } from './_index';
+
 export { getStaticPaths } from '../index.astro';
 
 const { locale } = Astro.props;
-
-const allTanks = unpackedMetadata
-  .get('CatalogItemsGroupEntity.all_tanks')
-  .get(CatalogItemsComponent, 'catalogItemsGroupComponent');
-
-const allTankEntities = unpackedMetadata
-  .get('BlitzKitAllTankEntities.all_tanks')
-  .get(BlitzKitAllTankEntities, 'blitzkitAllTankEntitiesComponent');
 ---
 
-<pre>
-{JSON.stringify(allTankEntities.tanks.map(tank=>({
-  tank: tank.catalog_id,
-  components: tank.components.map(component=>component.key)
-})), null, 2)}
-</pre>
+<Page client:load />
