@@ -25,7 +25,9 @@ async function compile(root: string) {
     await rm(`${root}/${file}`);
   }
 
-  const allFiles = filesRaw.filter((file) => file.endsWith('.proto'));
+  const allFiles = filesRaw.filter(
+    (file) => file.endsWith('.proto') && !file.startsWith('_'),
+  );
 
   for (const files of chunk(allFiles, 32)) {
     const args = [

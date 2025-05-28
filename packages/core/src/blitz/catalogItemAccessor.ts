@@ -4,7 +4,7 @@ import { MessageFns } from '../protos';
 
 export class CatalogItemAccessor {
   public id: string;
-  private components: Record<string, Any> = {};
+  components: Record<string, Any> = {};
 
   constructor(item: CatalogItem) {
     this.id = item.catalog_id;

@@ -6,7 +6,7 @@ import { BlitzKitTankCatalogComponent } from '@protos/blitzkit_static_tank_compo
 import { CatalogItemAccessor } from './catalogItemAccessor';
 
 export class UnpackedMetadataAccessor {
-  private items: Record<string, CatalogItemAccessor> = {};
+  items: Record<string, CatalogItemAccessor> = {};
 
   constructor(metadata: Metadata) {
     for (const item of metadata.catalog_items) {
