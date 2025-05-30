@@ -39,5 +39,8 @@
     "build:ids": "cd packages/scripts && bun build:ids",
     "prunestrings": "cd packages/scripts && bun prunestrings"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "prettier": "^3.5.3"
+  }
 }

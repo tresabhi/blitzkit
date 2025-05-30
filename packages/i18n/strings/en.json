@@ -1254,6 +1254,7 @@
       },
       "gallery": {
         "name": "Gallery",
+        "unnamed_avatar": "Unnamed avatar",
         "button": "Browse all",
         "description": "Blitz player avatars",
         "seo_description": "All World of Tanks Blitz player avatars",
