@@ -11,3 +11,12 @@ Your premier source for all things Blitz.
 Go to [application directory for BlitzKit](https://discord.com/application-directory/1097673957865443370) and click "Add to Server." Voila! You're ready to go.
 
 ![BlitzKit application directory](https://i.imgur.com/YWCtOuJ.png)
+
+## Naming Guide
+
+| Type      | Style          | Example                                                          |
+| --------- | -------------- | ---------------------------------------------------------------- |
+| In-text   | CamelCase      | BlitzKit                                                         |
+| Code      | lowerCamelCase | `let blitzkit = { ... }`, `function fetchBlitzkitData() { ... }` |
+| URLs      | kebab-case     | `https://example.com/blitzkit/`                                  |
+| Constants | SNAKE_CASE     | `const BLITZKIT_VERSION = "1.0.0"`                               |

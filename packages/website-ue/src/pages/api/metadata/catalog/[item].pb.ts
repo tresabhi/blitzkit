@@ -1,5 +1,5 @@
 import type { APIRoute, GetStaticPaths, GetStaticPathsItem } from 'astro';
-import { catalog } from 'packages/website-ue/src/core/blitz/catalog';
+import { catalog } from 'packages/website-ue/src/core/blitz/metadata';
 
 export const getStaticPaths: GetStaticPaths = () => {
   const paths: GetStaticPathsItem[] = [];

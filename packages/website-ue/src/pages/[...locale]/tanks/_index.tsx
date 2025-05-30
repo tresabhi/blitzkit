@@ -1,6 +1,6 @@
 import { TankCatalogComponent } from '@protos/blitz_static_tank_component';
 import { BlitzkitAllTanksComponent } from '@protos/blitzkit_static_all_tanks_component';
-import { CatalogAccessor } from 'packages/core/src';
+import { SocketCatalogAccessor } from 'packages/core/src';
 import { remoteCatalog } from 'packages/website-ue/src/core/blitz/remoteCatalog';
 
 const data = await remoteCatalog
@@ -10,7 +10,7 @@ const data = await remoteCatalog
   );
 
 export function Page() {
-  const tankCatalog = new CatalogAccessor(data.tanks);
+  const tankCatalog = new SocketCatalogAccessor(data.tanks);
 
   const content = tankCatalog
     .get('TankEntity.A92_M60')

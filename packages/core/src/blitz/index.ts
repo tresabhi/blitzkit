@@ -1,5 +1,4 @@
 export * from './canSplash';
-export * from './catalogAccessor';
 export * from './clans';
 export * from './classes';
 export * from './constants';
@@ -19,6 +18,9 @@ export * from './getTankStats';
 export * from './idToRegion';
 export * from './isOnGoingRatingSeason';
 export * from './isValidBlitzId';
+export * from './metadata';
+export * from './metadata.remote';
+export * from './metadata.socket';
 export * from './nations';
 export * from './normalizeExtra';
 export * from './normalizeIds';

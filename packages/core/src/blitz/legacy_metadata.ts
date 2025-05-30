@@ -1,10 +1,5 @@
-import { CatalogItem } from '@protos/blitz_items';
-import { CatalogItemsComponent } from '@protos/blitz_static_catalog_items_group_component';
-import { BlitzkitAllTanksComponent } from '@protos/blitzkit_static_all_tanks_component';
-import { BlitzKitTankCatalogComponent } from '@protos/blitzkit_static_tank_component';
-import { CatalogItemAccessor } from './catalogItemAccessor';
-
-export class CatalogAccessor {
+/*
+export class SocketMetadataAccessor {
   items: Record<string, CatalogItemAccessor> = {};
 
   constructor(catalogItems: CatalogItem[]) {
@@ -77,7 +72,7 @@ export class CatalogAccessor {
   }
 }
 
-export class RemoteCatalogAccessor {
+export class RemoteMetadataAccessor {
   constructor(private base: string) {}
 
   async get(item: string) {
@@ -91,3 +86,4 @@ export class RemoteCatalogAccessor {
     return new CatalogItemAccessor(catalogItem);
   }
 }
+*/

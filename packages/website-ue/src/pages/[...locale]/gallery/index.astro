@@ -1,0 +1,12 @@
+---
+import BaseLayout from 'packages/website-ue/src/layouts/BaseLayout.astro';
+import { Page } from './_index';
+
+export { getStaticPaths } from '../index.astro';
+
+const { locale } = Astro.props;
+---
+
+<BaseLayout {locale}>
+  <Page client:load />
+</BaseLayout>
