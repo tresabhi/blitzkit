@@ -1,6 +1,7 @@
 ---
+import { avatarsTool } from 'packages/website-ue/src/constants/tools';
 import { metadata } from 'packages/website-ue/src/core/blitz/metadata';
-import BaseLayout from 'packages/website-ue/src/layouts/BaseLayout.astro';
+import ToolLayout from 'packages/website-ue/src/layouts/ToolLayout.astro';
 import { Page } from './_index';
 
 export { getStaticPaths } from '../index.astro';
@@ -12,6 +13,6 @@ const gameStrings = await metadata.stringsPartial(locale, [
 ]);
 ---
 
-<BaseLayout {locale}>
+<ToolLayout tool={avatarsTool} {locale}>
   <Page localeData={{ locale, gameStrings }} client:load />
-</BaseLayout>
+</ToolLayout>
