@@ -3,6 +3,7 @@ import { StuffUIComponent } from '@protos/blitz_static_stuff_ui_component';
 import { BlitzkitAllAvatarsComponent } from '@protos/blitzkit_static_all_avatars_component';
 import { Badge, Box, Flex, Grid, Text } from '@radix-ui/themes';
 import { CatalogItemAccessor } from 'packages/core/src/blitz/catalogItemAccessor';
+import { literals } from 'packages/i18n/src';
 import { PageWrapper } from 'packages/website-ue/src/components/PageWrapper';
 import { metadata } from 'packages/website-ue/src/core/blitz/metadata';
 import { Var } from 'packages/website-ue/src/core/radix/var';
@@ -45,7 +46,7 @@ function Content() {
         );
         const name =
           gameStrings[stuffComponent.display_name] ??
-          strings.website.tools.gallery.unnamed_avatar;
+          strings.website.tools.avatars.unnamed_avatar;
 
         return { avatar, name, stuffComponent, avatarComponent };
       })
@@ -82,7 +83,7 @@ function Content() {
             <Flex direction="column" gap="3" key={name}>
               <Box
                 width="100%"
-                style={{ aspectRatio: '1 / 1' }}
+                style={{ aspectRatio: '7 / 8' }}
                 position="relative"
               >
                 {avatarsReduced.map((avatar, index) => (
@@ -100,26 +101,41 @@ function Content() {
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
                     }}
-                  />
+                  >
+                    {avatars.length > 1 && (
+                      <Box
+                        width="100%"
+                        height="100%"
+                        style={{
+                          background: `linear-gradient(-45deg, ${Var('black-a9')} 25%, ${Var('black-a1')} 50%)`,
+                        }}
+                      />
+                    )}
+                  </Box>
                 ))}
 
                 {avatars.length > 1 && (
-                  <Box
-                    position="absolute"
-                    bottom="0"
-                    left="50%"
-                    style={{
-                      transform: 'translate(-50%, 25%)',
-                    }}
-                  >
+                  <Box position="absolute" bottom="1" right="1">
                     <Badge variant="solid" color="gray" highContrast size="3">
-                      x{avatars.length}
+                      {literals(strings.common.units.times, [
+                        `${avatars.length}`,
+                      ])}
                     </Badge>
                   </Box>
                 )}
               </Box>
 
-              <Text size="2">{name}</Text>
+              <Text
+                size="2"
+                wrap="nowrap"
+                align="center"
+                style={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                {name}
+              </Text>
             </Flex>
           );
         })}

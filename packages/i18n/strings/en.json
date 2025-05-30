@@ -13,7 +13,8 @@
       "hp": "%s1hp",
       "x": "x%s1",
       "percentage": "%s1%",
-      "deg_s": "%s1°/s"
+      "deg_s": "%s1°/s",
+      "times": "x%s1"
     },
 
     "gun_types": {
@@ -1252,18 +1253,20 @@
           }
         }
       },
-      "gallery": {
-        "name": "Gallery",
-        "unnamed_avatar": "Unnamed avatar",
+
+      "avatars": {
+        "name": "Avatars",
         "button": "Browse all",
-        "description": "Blitz player avatars",
-        "seo_description": "All World of Tanks Blitz player avatars",
-        "last_updated": "Last updated on %s1",
+        "seo_description": "All World of Tanks Blitz player profile avatars",
+        "description": "Player profile avatars",
+
+        "unnamed_avatar": "Unnamed avatar",
         "search": {
           "hint": "Search avatars...",
           "results": "%s1 avatars"
         }
       },
+
       "session": {
         "name": "Session",
         "button": "Start tracking",

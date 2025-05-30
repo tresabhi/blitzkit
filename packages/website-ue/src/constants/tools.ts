@@ -35,8 +35,8 @@ export const chartsTool: Tool = {
   button: { color: 'bronze' },
 };
 
-export const galleryTool: Tool = {
-  id: 'gallery',
+export const avatarsTool: Tool = {
+  id: 'avatars',
   enabled: true,
   button: { color: 'gold' },
 };
@@ -68,7 +68,7 @@ export const tools: Tool[] = [
   performanceTool,
   guessTool,
   chartsTool,
-  galleryTool,
+  avatarsTool,
   sessionTool,
   tierListTool,
   embedTool,
