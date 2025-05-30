@@ -14,6 +14,7 @@ export interface Props {
 }
 
 const { noFooter, noNavbar, integrated, locale } = Astro.props;
+const localeData = { locale };
 ---
 
 <html lang={locale}>
@@ -69,11 +70,11 @@ const { noFooter, noNavbar, integrated, locale } = Astro.props;
       <Flex direction="column" minHeight="100vh">
         <Navbar {locale} {integrated} />
 
-        <Checks {locale} client:only="react" />
+        <Checks {localeData} client:only="react" />
 
         <slot />
 
-        {!noFooter && <Footer />}
+        {!noFooter && <Footer {locale} />}
       </Flex>
     </BlitzKitTheme>
   </body>

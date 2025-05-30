@@ -1,15 +1,19 @@
 ---
 import { assertSecret, fetchGameDefinitions } from '@blitzkit/core';
-import locales from '@blitzkit/i18n/locales.json' with { type: 'json' };
 import { Box, Code, Flex, Heading, Link, Text } from '@radix-ui/themes';
 import packageJson from '../../../../package.json';
 import { getStrings } from '../core/i18n/getStrings';
 import { LinkI18n } from './LinkI18n';
 import { LocaleSwitcherThemeWrapper } from './LocaleSwitcher';
 
+interface Props {
+  locale: string;
+}
+
 const gameDefinitions = await fetchGameDefinitions();
 const PUBLIC_ASSET_BRANCH = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
-const locale = Astro.params.locale ?? locales.default;
+const { locale } = Astro.props;
+const localeData = { locale };
 const strings = await getStrings(locale);
 ---
 
@@ -44,7 +48,7 @@ const strings = await getStrings(locale);
       </Text>
 
       <Box mt="2">
-        <LocaleSwitcherThemeWrapper {locale} client:load />
+        <LocaleSwitcherThemeWrapper {localeData} client:load />
       </Box>
     </Flex>
 
@@ -79,7 +83,7 @@ const strings = await getStrings(locale);
             sm: 'start',
           }}
         >
-          <LinkI18n {locale} href="/docs/about/credits" color="gray">
+          <LinkI18n {localeData} href="/docs/about/credits" color="gray">
             {strings.website.footer.about.credits}
           </LinkI18n>
           <Link
@@ -96,7 +100,7 @@ const strings = await getStrings(locale);
           >
             {strings.website.footer.about.github}
           </Link>
-          <LinkI18n {locale} href="/docs/patches" color="gray">
+          <LinkI18n {localeData} href="/docs/patches" color="gray">
             {strings.website.footer.about.patches}
           </LinkI18n>
         </Flex>
@@ -116,10 +120,14 @@ const strings = await getStrings(locale);
       >
         <Heading size="3">{strings.website.footer.legal.title}</Heading>
         <Flex direction="column">
-          <LinkI18n {locale} href="/docs/legal/privacy-policy" color="gray">
+          <LinkI18n {localeData} href="/docs/legal/privacy-policy" color="gray">
             {strings.website.footer.legal.privacy}
           </LinkI18n>
-          <LinkI18n {locale} href="/docs/legal/terms-of-service" color="gray">
+          <LinkI18n
+            {localeData}
+            href="/docs/legal/terms-of-service"
+            color="gray"
+          >
             {strings.website.footer.legal.terms}
           </LinkI18n>
         </Flex>

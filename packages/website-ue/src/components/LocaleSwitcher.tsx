@@ -4,18 +4,20 @@ import { LOCALE_NAMES, SUPPORTED_LOCALE_FLAGS } from 'packages/i18n/src';
 import type { LocaleAcceptorProps } from '../hooks/useLocale';
 import { BlitzKitTheme } from './BlitzKitTheme';
 
-export function LocaleSwitcherThemeWrapper({ locale }: LocaleAcceptorProps) {
+export function LocaleSwitcherThemeWrapper({
+  localeData,
+}: LocaleAcceptorProps) {
   return (
     <BlitzKitTheme style={{ background: 'transparent' }}>
-      <LocaleSwitcher locale={locale} />
+      <LocaleSwitcher localeData={localeData} />
     </BlitzKitTheme>
   );
 }
 
-export function LocaleSwitcher({ locale }: LocaleAcceptorProps) {
+export function LocaleSwitcher({ localeData }: LocaleAcceptorProps) {
   return (
     <Select.Root
-      defaultValue={locale}
+      defaultValue={localeData.locale}
       onValueChange={(locale) => {
         localStorage.setItem('preferred-locale', locale);
 

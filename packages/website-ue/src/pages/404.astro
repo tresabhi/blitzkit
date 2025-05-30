@@ -7,6 +7,7 @@ import { PageWrapper } from '../components/PageWrapper';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const locale = locales.default;
+const localeData = { locale };
 ---
 
 <BaseLayout {locale}>
@@ -15,7 +16,7 @@ const locale = locales.default;
     <Text color="gray">Where would you like to go?</Text>
 
     <Flex mt="4" gap="2">
-      <LinkI18n {locale} href="/">
+      <LinkI18n {localeData} href="/">
         <Button>
           <HomeIcon /> Home
         </Button>

@@ -1,7 +1,7 @@
 import { CatalogItem } from '@protos/blitz_items';
 import { Metadata } from '@protos/blitz_metadata';
-import { CatalogItemAccessor } from './catalogItemAccessor';
-import { MetadataAccessor } from './metadata';
+import { CatalogItemAccessor } from '../catalogItemAccessor';
+import { MetadataAccessor } from './abstract';
 
 export class SocketMetadataAccessor extends MetadataAccessor {
   items: Record<string, CatalogItem> = {};
@@ -16,6 +16,7 @@ export class SocketMetadataAccessor extends MetadataAccessor {
 
   async get(item: string) {
     if (item in this.items) return new CatalogItemAccessor(this.items[item]);
+
     throw new Error(`Item ${item} does not exist in socket metadata`);
   }
 

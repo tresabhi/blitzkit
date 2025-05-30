@@ -1,5 +1,4 @@
 ---
-import { assertSecret } from '@blitzkit/core';
 import {
   Cross1Icon,
   DiscordLogoIcon,
@@ -19,8 +18,9 @@ export interface Props {
 }
 
 const { integrated, locale } = Astro.props;
+const localeData = { locale };
 const toolsFiltered = tools.filter((tool) => tool.enabled);
-const branchName = resolveBranchName(locale);
+const branchName = resolveBranchName();
 const isBranchNamed = branchName !== undefined;
 const strings = await getStrings(locale);
 ---
@@ -107,7 +107,7 @@ const strings = await getStrings(locale);
     <Flex gap="4" direction="column" maxWidth="80rem" width="100%">
       <Flex align="center">
         <LinkI18n
-          {locale}
+          {localeData}
           color="gray"
           highContrast
           href="/"
@@ -146,7 +146,7 @@ const strings = await getStrings(locale);
 
               return (
                 <LinkI18n
-                  {locale}
+                  {localeData}
                   weight={selected ? 'medium' : 'regular'}
                   color="gray"
                   highContrast={selected}
@@ -175,7 +175,7 @@ const strings = await getStrings(locale);
           </Link>
 
           <LinkI18n
-            {locale}
+            {localeData}
             style={{ display: 'flex', alignContent: 'center' }}
             color="gray"
             href="/settings"
@@ -183,8 +183,6 @@ const strings = await getStrings(locale);
           >
             <GearIcon width="1em" height="1em" />
           </LinkI18n>
-
-          <!-- <NavbarAccount client:idle /> -->
 
           <Flex align="center" display={{ initial: 'flex', sm: 'none' }}>
             <IconButton variant="ghost" color="gray" className="hamburger">

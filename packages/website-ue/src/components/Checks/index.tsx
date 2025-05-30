@@ -25,9 +25,9 @@ type Extension =
       status: 'error';
     };
 
-export function Checks({ locale }: LocaleAcceptorProps) {
+export function Checks({ localeData }: LocaleAcceptorProps) {
   return (
-    <LocaleProvider locale={locale}>
+    <LocaleProvider localeData={localeData}>
       <App.Provider>
         <Content />
       </App.Provider>
@@ -39,7 +39,7 @@ export function Checks({ locale }: LocaleAcceptorProps) {
  * Wargaming: 14 (refresh: 7)
  */
 function Content() {
-  const { locale } = useLocale();
+  const localeData = useLocale();
   const logins = App.use((state) => state.logins);
   const mutateApp = App.useMutation();
   const appStore = App.useStore();
@@ -128,11 +128,17 @@ function Content() {
             <Text>
               This website utilizes cookies to perform analytics and personalize
               your experience. You can learn more through{' '}
-              <LinkI18n locale={locale} href="/docs/legal/privacy-policy">
+              <LinkI18n
+                localeData={localeData}
+                href="/docs/legal/privacy-policy"
+              >
                 our privacy policy
               </LinkI18n>
               . By using BlitzKit, you also agree to our{' '}
-              <LinkI18n locale={locale} href="/docs/legal/terms-of-service">
+              <LinkI18n
+                localeData={localeData}
+                href="/docs/legal/terms-of-service"
+              >
                 terms of service
               </LinkI18n>
               .

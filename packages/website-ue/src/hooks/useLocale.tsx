@@ -1,25 +1,39 @@
 import locales from '@blitzkit/i18n/locales.json' with { type: 'json' };
 import type { BlitzKitStrings } from 'packages/i18n/src';
 import { createContext, use, useContext } from 'react';
-const LocaleContext = createContext<string | null>(null);
+
+const LocaleContext = createContext<{
+  locale: string;
+  gameStrings: Record<string, string>;
+} | null>(null);
 
 export interface LocaleAcceptorProps {
-  locale: string;
+  localeData: {
+    locale: string;
+    gameStrings?: Record<string, string>;
+  };
 }
 
 interface LocaleProviderProps extends LocaleAcceptorProps {
   children: React.ReactNode;
 }
 
-export function LocaleProvider({ locale, children }: LocaleProviderProps) {
+export function LocaleProvider({ localeData, children }: LocaleProviderProps) {
   const isSupported = locales.supported.some(
-    (supported) => supported.locale === locale,
+    (supported) => supported.locale === localeData.locale,
   );
 
-  if (!isSupported) throw new Error(`Unsupported locale: ${locale}`);
+  if (!isSupported) throw new Error(`Unsupported locale: ${localeData.locale}`);
 
   return (
-    <LocaleContext.Provider value={locale}>{children}</LocaleContext.Provider>
+    <LocaleContext.Provider
+      value={{
+        locale: localeData.locale,
+        gameStrings: localeData.gameStrings ?? {},
+      }}
+    >
+      {children}
+    </LocaleContext.Provider>
   );
 }
 
@@ -41,13 +55,13 @@ function loadLocale(locale: string) {
 }
 
 export function useLocale() {
-  const locale = useContext(LocaleContext);
+  const localeData = useContext(LocaleContext);
 
-  if (locale === null) {
+  if (localeData === null) {
     throw new Error('useLocale must be used within a LocaleProvider');
   }
 
-  const strings = use(loadLocale(locale));
+  const strings = use(loadLocale(localeData.locale));
 
-  return { locale, strings };
+  return { ...localeData, strings };
 }

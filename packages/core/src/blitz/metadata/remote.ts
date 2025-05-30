@@ -1,6 +1,6 @@
 import { CatalogItem } from '@protos/blitz_items';
-import { CatalogItemAccessor } from './catalogItemAccessor';
-import { MetadataAccessor } from './metadata';
+import { CatalogItemAccessor } from '../catalogItemAccessor';
+import { MetadataAccessor } from './abstract';
 
 export class RemoteMetadataAccessor extends MetadataAccessor {
   constructor(private base: string) {

@@ -1,12 +1,17 @@
 ---
+import { metadata } from 'packages/website-ue/src/core/blitz/metadata';
 import BaseLayout from 'packages/website-ue/src/layouts/BaseLayout.astro';
 import { Page } from './_index';
 
 export { getStaticPaths } from '../index.astro';
 
 const { locale } = Astro.props;
+
+const gameStrings = await metadata.stringsPartial(locale, [
+  'ProfileAvatarEntity__*',
+]);
 ---
 
 <BaseLayout {locale}>
-  <Page client:load />
+  <Page localeData={{ locale, gameStrings }} client:load />
 </BaseLayout>

@@ -5,6 +5,7 @@ import { Flex, Text } from '@radix-ui/themes';
 import { CatalogItemAccessor } from 'packages/core/src/blitz/catalogItemAccessor';
 import { metadata } from 'packages/website-ue/src/core/blitz/metadata';
 import { Var } from 'packages/website-ue/src/core/radix/var';
+import type { LocaleAcceptorProps } from 'packages/website-ue/src/hooks/useLocale';
 
 const allAvatars = await metadata
   .get('BlitzkitAllAvatarsEntity.blitzkit_all_avatars')
@@ -14,7 +15,7 @@ const allAvatars = await metadata
         .avatars,
   );
 
-export function Page() {
+export function Page({ localeData }: LocaleAcceptorProps) {
   return (
     <Flex wrap="wrap" gapX="4" gapY="6" justify="center" p="9">
       {allAvatars.map((avatar) => {

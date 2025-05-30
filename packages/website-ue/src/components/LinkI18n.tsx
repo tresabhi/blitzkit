@@ -3,11 +3,12 @@ import { Link, type LinkProps } from '@radix-ui/themes';
 import type { LocaleAcceptorProps } from '../hooks/useLocale';
 
 export function LinkI18n({
-  locale,
+  localeData,
   href,
   ...props
 }: LinkProps & LocaleAcceptorProps) {
-  const prefix = locale === locales.default ? '' : `/${locale}`;
+  const prefix =
+    localeData.locale === locales.default ? '' : `/${localeData.locale}`;
 
   return (
     <Link href={href?.startsWith('/') ? `${prefix}${href}` : href} {...props} />
