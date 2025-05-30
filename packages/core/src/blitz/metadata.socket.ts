@@ -4,7 +4,7 @@ import { CatalogItemAccessor } from './catalogItemAccessor';
 import { MetadataAccessor } from './metadata';
 
 export class SocketMetadataAccessor extends MetadataAccessor {
-  private items: Record<string, CatalogItem> = {};
+  items: Record<string, CatalogItem> = {};
 
   constructor(metadata: Metadata) {
     super();

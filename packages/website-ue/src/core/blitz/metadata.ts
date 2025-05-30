@@ -1,13 +1,11 @@
 import type { MetadataAccessor } from 'packages/core/src';
-import { remoteMetadata } from './metadata.remote';
-import { socketMetadata } from './metadata.socket';
 
 let accessor: MetadataAccessor;
 
 if (import.meta.env.SSR) {
-  accessor = socketMetadata;
+  accessor = await import('./metadata.socket').then((m) => m.socketMetadata);
 } else {
-  accessor = remoteMetadata;
+  accessor = await import('./metadata.remote').then((m) => m.remoteMetadata);
 }
 
 export const metadata = accessor;
