@@ -19,7 +19,7 @@ export function BlitzKitTheme({
       appearance="dark"
       panelBackground="solid"
       radius="full"
-      accentColor="amber"
+      accentColor="iris"
       suppressHydrationWarning
       suppressContentEditableWarning
       {...props}

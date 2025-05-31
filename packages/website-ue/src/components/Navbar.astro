@@ -13,11 +13,10 @@ import { Var } from '../core/radix/var';
 import { LinkI18n } from './LinkI18n';
 
 export interface Props {
-  integrated?: boolean;
   locale: string;
 }
 
-const { integrated, locale } = Astro.props;
+const { locale } = Astro.props;
 const toolsFiltered = tools.filter((tool) => tool.enabled);
 const branchName = resolveBranchName();
 const isBranchNamed = branchName !== undefined;
@@ -76,12 +75,6 @@ const strings = await getStrings(locale);
   });
 </script>
 
-{
-  !integrated && (
-    <Box className="padder" height={{ initial: '3.5rem', sm: '3rem' }} />
-  )
-}
-
 <Flex
   direction="column"
   align="center"
@@ -89,7 +82,7 @@ const strings = await getStrings(locale);
   className="navbar"
   width="100%"
   top="0"
-  position="fixed"
+  position="sticky"
   style={{
     zIndex: 1,
     backdropFilter: 'blur(4rem)',
@@ -101,7 +94,6 @@ const strings = await getStrings(locale);
     p={{ initial: '4', sm: '3' }}
     direction="column"
     align="center"
-    style={{ backgroundColor: integrated ? undefined : Var('gray-1') }}
   >
     <Flex gap="4" direction="column" maxWidth="80rem" width="100%">
       <Flex align="center">

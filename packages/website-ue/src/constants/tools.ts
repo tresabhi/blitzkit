@@ -38,6 +38,7 @@ export const chartsTool: Tool = {
 export const avatarsTool: Tool = {
   id: 'avatars',
   enabled: true,
+  significant: true,
   button: { color: 'gold' },
 };
 

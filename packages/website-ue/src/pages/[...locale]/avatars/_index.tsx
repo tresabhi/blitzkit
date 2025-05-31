@@ -16,10 +16,10 @@ import { useMemo } from 'react';
 
 const allAvatars = await metadata
   .get('BlitzkitAllAvatarsEntity.blitzkit_all_avatars')
-  .then(
-    (entity) =>
-      entity.get(BlitzkitAllAvatarsComponent, 'blitzkitAllAvatarsComponent')
-        .avatars,
+  .then((entity) =>
+    entity
+      .get(BlitzkitAllAvatarsComponent, 'blitzkitAllAvatarsComponent')
+      .avatars.reverse(),
   );
 
 export function Page({ localeData }: LocaleAcceptorProps) {
@@ -71,7 +71,7 @@ function Content() {
   }, []);
 
   return (
-    <PageWrapper color="gold">
+    <PageWrapper color="amber">
       <Grid
         columns={{
           initial: 'repeat(auto-fill, minmax(6rem, 1fr))',
@@ -83,7 +83,7 @@ function Content() {
         flexGrow="1"
       >
         {groups.map(([name, avatars]) => (
-          <AvatarGroup key={name} name={name} avatars={avatars} />
+          <AvatarGroup key={`${name}`} name={name} avatars={avatars} />
         ))}
       </Grid>
     </PageWrapper>

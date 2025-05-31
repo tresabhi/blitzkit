@@ -6,6 +6,14 @@
   },
 
   "common": {
+    "grades": {
+      "0": "Unspecified grade",
+      "1": "Common",
+      "2": "Rare",
+      "3": "Epic",
+      "4": "Legendary"
+    },
+
     "units": {
       "m": "%s1m",
       "mm": "%s1mm",
@@ -1260,10 +1268,21 @@
         "seo_description": "All World of Tanks Blitz player profile avatars",
         "description": "Player profile avatars",
 
+        "no_description": "This avatar has no description.",
+        "download": "Download",
+        "hidden": "Hidden",
         "unnamed_avatars": "Unnamed avatars",
         "search": {
           "hint": "Search avatars...",
           "results": "%s1 avatars"
+        },
+        "categories": {
+          "0": "Unspecified category",
+          "1": "Premium",
+          "2": "Special",
+          "3": "Accumulative",
+          "4": "Other",
+          "5": "Temporary"
         }
       },
 
