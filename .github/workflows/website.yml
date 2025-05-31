@@ -18,6 +18,7 @@ concurrency:
 
 env:
   AUTO_PROXY_ORIGIN: ${{ secrets.AUTO_PROXY_ORIGIN }}
+  GH_TOKEN: ${{ secrets.GH_TOKEN }}
   PUBLIC_GOOGLE_TAG_MANAGER_ID: ${{ secrets.PUBLIC_GOOGLE_TAG_MANAGER_ID }}
   PUBLIC_WARGAMING_APPLICATION_ID: ${{ secrets.PUBLIC_WARGAMING_APPLICATION_ID }}
 
@@ -30,7 +31,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
