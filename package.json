@@ -1,7 +1,7 @@
 {
   "name": "blitzkit",
   "private": true,
-  "version": "1.27.11",
+  "version": "1.28.0-beta.1",
   "description": "🎉 Tools for everything World of Tanks Blitz",
   "type": "module",
   "types": "./types.d.ts",
@@ -13,7 +13,7 @@
     "build:assets": "cd packages/scripts && bun run build:assets",
     "build:averages": "bun --filter=@blitzkit/scripts run build:averages",
     "build:bot": "cd packages/scripts && bun run build:bot",
-    "build:website": "bun build:prisma --no-hints && cd packages/website && bun run build",
+    "build:website": "bun build:prisma --no-hints && cd packages/website-ue && bun run build",
     "build:prisma": "prisma generate",
     "build:sitemap": "bun scripts/sitemap.ts",
     "build:docs": "vitepress build docs",

@@ -1,7 +1,6 @@
 ---
-import { assertSecret } from '@blitzkit/core';
 import { CaretRightIcon } from '@radix-ui/react-icons';
-import { Box, Button, Code, Flex, Heading, Text } from '@radix-ui/themes';
+import { Box, Button, Flex, Heading, Text } from '@radix-ui/themes';
 import type { Tool } from '../constants/tools';
 import { getStrings } from '../core/i18n/getStrings';
 import { LinkI18n } from './LinkI18n';
@@ -102,16 +101,7 @@ const toolStrings =
           size={{ initial: '3', sm: tool.significant ? '4' : '3' }}
           color="gray"
         >
-          {
-            disabled ? (
-              <>
-                Unavailable on{' '}
-                <Code>{assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH)}</Code>
-              </>
-            ) : (
-              toolStrings.description
-            )
-          }
+          {toolStrings.description}
         </Text>
       </Flex>
 

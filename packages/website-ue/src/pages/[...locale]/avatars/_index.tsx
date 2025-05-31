@@ -31,7 +31,7 @@ export function Page({ localeData }: LocaleAcceptorProps) {
 }
 
 function Content() {
-  const { gameStrings, strings } = useLocale();
+  const { gameStrings } = useLocale();
   const groups = useMemo(() => {
     const avatars = allAvatars
       .map((id) => {

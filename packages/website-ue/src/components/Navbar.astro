@@ -18,7 +18,6 @@ export interface Props {
 }
 
 const { integrated, locale } = Astro.props;
-const localeData = { locale };
 const toolsFiltered = tools.filter((tool) => tool.enabled);
 const branchName = resolveBranchName();
 const isBranchNamed = branchName !== undefined;
@@ -107,7 +106,7 @@ const strings = await getStrings(locale);
     <Flex gap="4" direction="column" maxWidth="80rem" width="100%">
       <Flex align="center">
         <LinkI18n
-          {localeData}
+          {locale}
           color="gray"
           highContrast
           href="/"
@@ -146,7 +145,7 @@ const strings = await getStrings(locale);
 
               return (
                 <LinkI18n
-                  {localeData}
+                  {locale}
                   weight={selected ? 'medium' : 'regular'}
                   color="gray"
                   highContrast={selected}
@@ -175,7 +174,7 @@ const strings = await getStrings(locale);
           </Link>
 
           <LinkI18n
-            {localeData}
+            {locale}
             style={{ display: 'flex', alignContent: 'center' }}
             color="gray"
             href="/settings"

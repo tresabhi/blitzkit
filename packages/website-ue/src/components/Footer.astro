@@ -1,5 +1,4 @@
 ---
-import { assertSecret, fetchGameDefinitions } from '@blitzkit/core';
 import { Box, Code, Flex, Heading, Link, Text } from '@radix-ui/themes';
 import packageJson from '../../../../package.json';
 import { getStrings } from '../core/i18n/getStrings';
@@ -10,8 +9,6 @@ interface Props {
   locale: string;
 }
 
-const gameDefinitions = await fetchGameDefinitions();
-const PUBLIC_ASSET_BRANCH = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
 const { locale } = Astro.props;
 const localeData = { locale };
 const strings = await getStrings(locale);
@@ -83,7 +80,7 @@ const strings = await getStrings(locale);
             sm: 'start',
           }}
         >
-          <LinkI18n {localeData} href="/docs/about/credits" color="gray">
+          <LinkI18n {locale} href="/docs/about/credits" color="gray">
             {strings.website.footer.about.credits}
           </LinkI18n>
           <Link
@@ -100,7 +97,7 @@ const strings = await getStrings(locale);
           >
             {strings.website.footer.about.github}
           </Link>
-          <LinkI18n {localeData} href="/docs/patches" color="gray">
+          <LinkI18n {locale} href="/docs/patches" color="gray">
             {strings.website.footer.about.patches}
           </LinkI18n>
         </Flex>
@@ -120,14 +117,10 @@ const strings = await getStrings(locale);
       >
         <Heading size="3">{strings.website.footer.legal.title}</Heading>
         <Flex direction="column">
-          <LinkI18n {localeData} href="/docs/legal/privacy-policy" color="gray">
+          <LinkI18n {locale} href="/docs/legal/privacy-policy" color="gray">
             {strings.website.footer.legal.privacy}
           </LinkI18n>
-          <LinkI18n
-            {localeData}
-            href="/docs/legal/terms-of-service"
-            color="gray"
-          >
+          <LinkI18n {locale} href="/docs/legal/terms-of-service" color="gray">
             {strings.website.footer.legal.terms}
           </LinkI18n>
         </Flex>
@@ -138,29 +131,11 @@ const strings = await getStrings(locale);
   <Flex gap="5" display={{ initial: 'flex', sm: 'none' }}>
     <Flex direction="column" justify="between" align="end">
       <Text size="2" color="gray">BlitzKit</Text>
-      {
-        PUBLIC_ASSET_BRANCH !== 'preview' && (
-          <Text size="2" color="gray">
-            WoTB
-          </Text>
-        )
-      }
-      <Text size="2" color="gray">CDN</Text>
     </Flex>
 
     <Flex direction="column" justify="between" align="start">
       <Code size="2" color="gray">
         {packageJson.version}
-      </Code>
-      {
-        PUBLIC_ASSET_BRANCH !== 'preview' && (
-          <Code size="2" color="gray">
-            {gameDefinitions.version}
-          </Code>
-        )
-      }
-      <Code size="2" color="gray">
-        {PUBLIC_ASSET_BRANCH}
       </Code>
     </Flex>
   </Flex>
@@ -169,24 +144,6 @@ const strings = await getStrings(locale);
     <Text size="2" color="gray">BlitzKit</Text>
     <Code size="2" color="gray">
       {packageJson.version}
-    </Code>
-
-    {
-      PUBLIC_ASSET_BRANCH !== 'preview' && (
-        <>
-          <Text size="2" color="gray">
-            WoTB
-          </Text>
-          <Code size="2" color="gray">
-            {gameDefinitions.version}
-          </Code>
-        </>
-      )
-    }
-
-    <Text size="2" color="gray">CDN</Text>
-    <Code size="2" color="gray">
-      {PUBLIC_ASSET_BRANCH}
     </Code>
   </Flex>
 </Flex>

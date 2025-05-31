@@ -1,9 +1,10 @@
-import { assertSecret } from 'packages/core/src';
+import { prerelease } from 'semver';
+import packageJSON from '../../../../../package.json';
 
 export function resolveBranchName() {
-  if (assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH) === 'main') {
-    return undefined;
-  }
+  const components = prerelease(packageJSON.version);
 
-  return import.meta.env.PUBLIC_ASSET_BRANCH;
+  if (components === null) return undefined;
+
+  return components[0];
 }
