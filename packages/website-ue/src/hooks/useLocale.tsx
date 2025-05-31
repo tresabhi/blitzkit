@@ -1,7 +1,6 @@
 import locales from '@blitzkit/i18n/locales.json' with { type: 'json' };
 import type { BlitzKitStrings } from 'packages/i18n/src';
 import { createContext, use, useContext } from 'react';
-
 const LocaleContext = createContext<{
   locale: string;
   gameStrings: Record<string, string>;
@@ -45,9 +44,17 @@ const cache = new Map<string, Promise<BlitzKitStrings>>();
 function loadLocale(locale: string) {
   if (cache.has(locale)) return cache.get(locale)!;
 
-  const promise = strings[
-    `../../../i18n/strings/${locale}.json`
-  ]() as Promise<BlitzKitStrings>;
+  let promise: Promise<BlitzKitStrings>;
+
+  if (import.meta.env.SSR) {
+    promise = import('../core/i18n/getStrings').then((module) =>
+      module.getStrings(locale),
+    );
+  } else {
+    promise = fetch(`/api/strings/${locale}.json`).then((response) =>
+      response.json(),
+    );
+  }
 
   cache.set(locale, promise);
 
