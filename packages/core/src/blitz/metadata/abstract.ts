@@ -66,7 +66,16 @@ export abstract class MetadataAccessor {
           `${remoteStorage.url}/${relative_path}/${namespace}/${locale}.yaml`,
         )
           .then((response) => response.text())
-          .then((text) => load(text) as Record<string, string>),
+          .then((text) => {
+            const strings: Record<string, string> = {};
+            const parsed = load(text) as Record<string, string>;
+
+            for (const key in parsed) {
+              strings[key] = parsed[key].replaceAll('\\"', '"');
+            }
+
+            return strings;
+          }),
       );
     }
 
