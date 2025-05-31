@@ -1,29 +1,48 @@
 import type { ProfileAvatarComponent } from '@protos/blitz_static_profile_avatar_component';
 import type { SellableComponent } from '@protos/blitz_static_sellable_component';
 import type { StuffUIComponent } from '@protos/blitz_static_stuff_ui_component';
-import { Badge, Box, Flex, Text } from '@radix-ui/themes';
+import {
+  Badge,
+  Box,
+  Dialog,
+  Flex,
+  Text,
+  type FlexProps,
+} from '@radix-ui/themes';
 import { literals } from 'packages/i18n/src';
 import { Var } from '../../core/radix/var';
 import { useLocale } from '../../hooks/useLocale';
 
 interface AvatarGroupProps {
-  name: string;
+  name?: string;
   avatars: {
     stuff: StuffUIComponent;
     avatar: ProfileAvatarComponent;
-    sellable: SellableComponent;
+    sellable?: SellableComponent;
   }[];
 }
 
 const dx = '4px';
 const MAX_AVATARS_PREVIEW = 5;
 
-export function AvatarGroup({ avatars, name }: AvatarGroupProps) {
+export function AvatarGroup({ name, avatars }: AvatarGroupProps) {
+  return (
+    <Dialog.Root>
+      <Dialog.Trigger>
+        <Content avatars={avatars} name={name} />
+      </Dialog.Trigger>
+
+      <Dialog.Content>asd</Dialog.Content>
+    </Dialog.Root>
+  );
+}
+
+function Content({ avatars, name, ...props }: FlexProps & AvatarGroupProps) {
   const { strings } = useLocale();
   const avatarsReduced = [...avatars].reverse().slice(0, MAX_AVATARS_PREVIEW);
 
   return (
-    <Flex direction="column" gap="3">
+    <Flex direction="column" gap="3" style={{ cursor: 'pointer' }} {...props}>
       <Box width="100%" style={{ aspectRatio: '7 / 8' }} position="relative">
         {avatarsReduced.map((avatar, index) => (
           <Box
@@ -35,7 +54,7 @@ export function AvatarGroup({ avatars, name }: AvatarGroupProps) {
             style={{
               filter: `brightness(${(index + 1) / avatarsReduced.length})`,
               borderRadius: Var('radius-2'),
-              boxShadow: Var('shadow-3'),
+              boxShadow: Var('shadow-2'),
               backgroundImage: `url(${avatar.avatar.avatar})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
@@ -69,9 +88,10 @@ export function AvatarGroup({ avatars, name }: AvatarGroupProps) {
         style={{
           overflow: 'hidden',
           textOverflow: 'ellipsis',
+          fontStyle: name === undefined ? 'italic' : undefined,
         }}
       >
-        {name}
+        {name ?? strings.website.tools.avatars.unnamed_avatars}
       </Text>
     </Flex>
   );

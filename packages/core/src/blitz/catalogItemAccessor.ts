@@ -43,12 +43,16 @@ export class CatalogItemAccessor {
     return this;
   }
 
-  get<Type>(Message: MessageFns<Type>, component: string) {
+  getOptional<Type>(Message: MessageFns<Type>, component: string) {
     if (component in this.components) {
       return Message.decode(this.components[component].value);
     }
+  }
 
-    throw new Error(`Unknown component: ${component}`);
+  get<Type>(Message: MessageFns<Type>, component: string) {
+    const value = this.getOptional(Message, component);
+    if (value === undefined) throw new Error(`Unknown component: ${component}`);
+    return value;
   }
 
   pack() {

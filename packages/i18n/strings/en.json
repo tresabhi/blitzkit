@@ -1260,7 +1260,7 @@
         "seo_description": "All World of Tanks Blitz player profile avatars",
         "description": "Player profile avatars",
 
-        "unnamed_avatar": "Unnamed avatar",
+        "unnamed_avatars": "Unnamed avatars",
         "search": {
           "hint": "Search avatars...",
           "results": "%s1 avatars"

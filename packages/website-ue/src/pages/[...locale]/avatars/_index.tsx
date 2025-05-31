@@ -41,30 +41,37 @@ function Content() {
           ProfileAvatarComponent,
           'profileAvatarComponent',
         );
-        const sellable = item.get(SellableComponent, 'sellableComponent');
-        const name =
-          gameStrings[stuff.display_name] ??
-          strings.website.tools.avatars.unnamed_avatar; // maybe move to dumb component?
+        const sellable = item.getOptional(
+          SellableComponent,
+          'sellableComponent',
+        );
+        const name = gameStrings[stuff.display_name] as string | undefined;
 
         return { avatar, name, stuff, sellable };
       })
       .sort((a, b) => a.stuff.grade - b.stuff.grade)
-      .sort((a, b) => a.name.localeCompare(b.name));
-    const groups: Record<string, typeof avatars> = {};
+      .sort((a, b) =>
+        a.name === undefined
+          ? 1
+          : b.name === undefined
+            ? -1
+            : a.name.localeCompare(b.name),
+      );
+    const groups = new Map<string | undefined, typeof avatars>();
 
     for (const avatar of avatars) {
-      if (avatar.name in groups) {
-        groups[avatar.name].push(avatar);
+      if (groups.has(avatar.name)) {
+        groups.get(avatar.name)!.push(avatar);
       } else {
-        groups[avatar.name] = [avatar];
+        groups.set(avatar.name, [avatar]);
       }
     }
 
-    return Object.entries(groups);
+    return [...groups];
   }, []);
 
   return (
-    <PageWrapper>
+    <PageWrapper color="gold">
       <Grid
         columns={{
           initial: 'repeat(auto-fill, minmax(6rem, 1fr))',
