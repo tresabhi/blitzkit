@@ -2,7 +2,7 @@
 import { AstroSeo } from '@astrolib/seo';
 import locales from '@blitzkit/i18n/locales.json';
 import { ExternalLinkIcon } from '@radix-ui/react-icons';
-import { Flex, Link } from '@radix-ui/themes';
+import { Blockquote, Box, Flex, Link, Text } from '@radix-ui/themes';
 import type { GetStaticPaths } from 'astro';
 import { literals } from 'packages/i18n/src';
 import HomeHero from '../../components/HomeHero.astro';
@@ -57,6 +57,45 @@ toolLoop: for (const tool of tools.filter((tool) => tool.enabled)) {
 <BaseLayout {locale}>
   <Flex direction="column" gap="8" pb="9">
     <HomeHero {locale} />
+
+    <Flex justify="center" align="center" gap="3">
+      <Box maxWidth="40rem">
+        <Blockquote>
+          <Text>
+            <Flex align="center" gap="2">
+              <Box
+                style={{
+                  backgroundImage: 'url(https://github.com/tresabhi.png)',
+                  backgroundSize: 'cover',
+                  borderRadius: Var('radius-1'),
+                  width: '2em',
+                  height: '2em',
+                }}
+              />
+              TrèsAbhi
+            </Flex>
+          </Text>
+
+          <br />
+
+          <Text>
+            Welcome to BlitzKit Redux Beta 1 — rebuilt from the ground up for
+            World of Tanks Blitz Reforged!
+          </Text>
+
+          <br />
+          <br />
+
+          <Text>
+            This release focuses on reintroducing the familiar BlitzKit UI while
+            laying the foundation for future tools. To test the new tech, I've
+            implemented the "Avatars" tool (formerly "Gallery") — simple enough
+            for fast testing yet complex sufficient to validate the flexibility
+            of the new architecture.
+          </Text>
+        </Blockquote>
+      </Box>
+    </Flex>
 
     {
       locale !== locales.default && (
