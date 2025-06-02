@@ -35,17 +35,13 @@ jobs:
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
-
-      - name: Debug
-        run: |
-          bun -v
-          npm -v
-          node -v
+          node-version: latest
 
       - name: Configure pages
         uses: actions/configure-pages@v5
