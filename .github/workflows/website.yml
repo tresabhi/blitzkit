@@ -36,6 +36,11 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
 
+      - name: Debug
+        run: |
+          bun -v
+          npm -v
+
       - name: Configure pages
         uses: actions/configure-pages@v5
 
