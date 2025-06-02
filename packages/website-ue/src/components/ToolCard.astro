@@ -3,6 +3,7 @@ import { CaretRightIcon } from '@radix-ui/react-icons';
 import { Box, Button, Flex, Heading, Text } from '@radix-ui/themes';
 import type { Tool } from '../constants/tools';
 import { getStrings } from '../core/i18n/getStrings';
+import { Var } from '../core/radix/var';
 import { LinkI18n } from './LinkI18n';
 
 interface Props {
@@ -19,40 +20,19 @@ const toolStrings =
   ];
 ---
 
-<style>
-  .container {
-    border-radius: var(--radius-2);
-    background-size: cover;
-    background-position: center;
-    height: 16rem;
-
-    &[data-disabled='true'] {
-      opacity: 0.25;
-    }
-
-    &[data-significant='true'] {
-      height: min(20rem, 50vh);
-      flex: 1;
-    }
-  }
-
-  .link {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    flex-direction: column;
-    color: inherit;
-  }
-</style>
-
 <Flex
-  style={{ backgroundImage: `url(/assets/tool-backgrounds/${tool.id}.webp)` }}
+  style={{
+    backgroundImage: `url(/assets/tool-backgrounds/${tool.id}.webp)`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    borderRadius: Var('radius-2'),
+  }}
+  height={tool.significant ? '20rem' : '16rem'}
   data-disabled={disabled}
   data-significant={tool.significant}
-  className="container"
   position="relative"
   overflow="hidden"
-  flexGrow={tool.significant ? undefined : '1'}
+  flexGrow="1"
   flexBasis={tool.significant ? undefined : { initial: undefined, sm: '0' }}
 >
   <LinkI18n
@@ -60,6 +40,13 @@ const toolStrings =
     className="link"
     underline="none"
     href={disabled ? '#' : `/${tool.id}`}
+    style={{
+      display: 'flex',
+      width: '100%',
+      height: '100%',
+      flexDirection: 'column',
+      color: 'inherit',
+    }}
   >
     <Box
       flexGrow="1"
@@ -71,7 +58,7 @@ const toolStrings =
     />
 
     <Flex
-      px={{ initial: '6', md: tool.significant ? '8' : '6' }}
+      px={{ initial: '5', md: tool.significant ? '8' : '6' }}
       py={{ initial: '4', sm: tool.significant ? '6' : '4' }}
       gap="4"
       align="center"
