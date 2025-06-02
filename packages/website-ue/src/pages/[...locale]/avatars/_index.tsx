@@ -3,6 +3,7 @@ import { SellableComponent } from '@protos/blitz_static_sellable_component';
 import { StuffUIComponent } from '@protos/blitz_static_stuff_ui_component';
 import { BlitzkitAllAvatarsComponent } from '@protos/blitzkit_static_all_avatars_component';
 import { Grid } from '@radix-ui/themes';
+import { times } from 'lodash-es';
 import { CatalogItemAccessor } from 'packages/core/src/blitz/catalogItemAccessor';
 import { AvatarGroup } from 'packages/website-ue/src/components/Avatars/Group';
 import { PageWrapper } from 'packages/website-ue/src/components/PageWrapper';
@@ -12,7 +13,8 @@ import {
   useLocale,
   type LocaleAcceptorProps,
 } from 'packages/website-ue/src/hooks/useLocale';
-import { useMemo } from 'react';
+import type { MaybeSkeletonComponentProps } from 'packages/website-ue/src/types/maybeSkeletonComponentProps';
+import { useMemo, useState } from 'react';
 
 const allAvatars = await metadata
   .get('BlitzkitAllAvatarsEntity.blitzkit_all_avatars')
@@ -30,7 +32,10 @@ export function Page({ localeData }: LocaleAcceptorProps) {
   );
 }
 
-function Content() {
+const DEFAULT_LOADED = 42;
+const PREVIEW_COUNT = 28;
+
+function Content({ skeleton }: MaybeSkeletonComponentProps) {
   const { gameStrings } = useLocale();
   const groups = useMemo(() => {
     const avatars = allAvatars
@@ -67,8 +72,10 @@ function Content() {
       }
     }
 
-    return [...groups];
+    return [...groups].map(([name, avatars]) => ({ name, avatars }));
   }, []);
+  const [loadedAvatars, setLoadedAvatars] = useState(DEFAULT_LOADED);
+  const filtered = useMemo(() => groups, []);
 
   return (
     <PageWrapper color="amber">
@@ -82,9 +89,22 @@ function Content() {
         gapY="6"
         flexGrow="1"
       >
-        {groups.map(([name, avatars]) => (
-          <AvatarGroup key={`${name}`} name={name} avatars={avatars} />
+        {filtered.slice(0, loadedAvatars).map((props) => (
+          <AvatarGroup key={`${props.name}`} {...props} />
         ))}
+
+        {times(
+          skeleton
+            ? DEFAULT_LOADED + PREVIEW_COUNT
+            : Math.min(PREVIEW_COUNT, filtered.length - loadedAvatars),
+          (index) => (
+            <AvatarGroup
+              key={index}
+              skeleton
+              onIntersection={() => setLoadedAvatars((state) => state + 2)}
+            />
+          ),
+        )}
       </Grid>
     </PageWrapper>
   );
