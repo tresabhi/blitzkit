@@ -36,6 +36,9 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+
       - name: Debug
         run: |
           bun -v
