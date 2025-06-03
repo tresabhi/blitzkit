@@ -11,7 +11,7 @@ export function Stack({ avatars }: { avatars: AvatarGroupProps['avatars'] }) {
 
   return (
     <>
-      {avatars.map((avatar, index) => (
+      {avatars.map(({ avatar }, index) => (
         <Box
           key={index}
           position="absolute"
@@ -23,12 +23,24 @@ export function Stack({ avatars }: { avatars: AvatarGroupProps['avatars'] }) {
             filter: `brightness(${(index + 1) / avatars.length})`,
             borderRadius: Var('radius-4'),
             boxShadow: Var('shadow-2'),
-            backgroundImage: `url(${avatar.avatar.avatar})`,
-            backgroundSize: 'cover',
+            overflow: 'hidden',
+            backgroundImage: 'url(/assets/sad-ghost.png)',
+            backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
+            backgroundSize: '3rem',
           }}
         >
-          {avatars.length > 1 && (
+          <Box
+            width="100%"
+            height="100%"
+            style={{
+              backgroundImage: `url(/api/avatars/${avatar.id}.webp)`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          />
+
+          {avatars.length > 1 && index === avatars.length - 1 && (
             <Box
               width="100%"
               height="100%"

@@ -22,6 +22,10 @@ export class CatalogItemAccessor {
     }
   }
 
+  undiscriminatedId() {
+    return this.id.split('.').slice(1).join('.');
+  }
+
   static fromComponent(id: string, component: Any) {
     return this.fromComponents(id, [component]);
   }

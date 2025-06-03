@@ -16,7 +16,6 @@ export class SocketMetadataAccessor extends MetadataAccessor {
 
   async get(item: string) {
     if (item in this.items) return new CatalogItemAccessor(this.items[item]);
-
     throw new Error(`Item ${item} does not exist in socket metadata`);
   }
 

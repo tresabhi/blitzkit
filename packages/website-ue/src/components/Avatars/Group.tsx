@@ -1,6 +1,4 @@
-import { type ProfileAvatarComponent } from '@protos/blitz_static_profile_avatar_component';
-import type { SellableComponent } from '@protos/blitz_static_sellable_component';
-import type { StuffUIComponent } from '@protos/blitz_static_stuff_ui_component';
+import type { BlitzKitAvatar } from '@protos/blitzkit_static_all_avatars_component';
 import { Dialog } from '@radix-ui/themes';
 import type { MaybeSkeletonComponentProps } from '../../types/maybeSkeletonComponentProps';
 import { Content } from './Content';
@@ -8,11 +6,7 @@ import { Popup } from './Popup';
 
 export interface AvatarGroupProps {
   name?: string;
-  avatars: {
-    stuff: StuffUIComponent;
-    avatar: ProfileAvatarComponent;
-    sellable?: SellableComponent;
-  }[];
+  avatars: { avatar: BlitzKitAvatar }[];
 }
 
 export function AvatarGroup(

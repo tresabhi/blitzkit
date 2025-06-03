@@ -1,10 +1,8 @@
-import { ProfileAvatarComponent } from '@protos/blitz_static_profile_avatar_component';
-import { SellableComponent } from '@protos/blitz_static_sellable_component';
-import { StuffUIComponent } from '@protos/blitz_static_stuff_ui_component';
 import { BlitzkitAllAvatarsComponent } from '@protos/blitzkit_static_all_avatars_component';
-import { Grid } from '@radix-ui/themes';
-import { times } from 'lodash-es';
-import { CatalogItemAccessor } from 'packages/core/src/blitz/catalogItemAccessor';
+import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
+import { Flex, Grid, Spinner, TextField } from '@radix-ui/themes';
+import fuzzysort from 'fuzzysort';
+import { debounce, times } from 'lodash-es';
 import { AvatarGroup } from 'packages/website-ue/src/components/Avatars/Group';
 import { PageWrapper } from 'packages/website-ue/src/components/PageWrapper';
 import { metadata } from 'packages/website-ue/src/core/blitz/metadata';
@@ -14,7 +12,7 @@ import {
   type LocaleAcceptorProps,
 } from 'packages/website-ue/src/hooks/useLocale';
 import type { MaybeSkeletonComponentProps } from 'packages/website-ue/src/types/maybeSkeletonComponentProps';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 const allAvatars = await metadata
   .get('BlitzkitAllAvatarsEntity.blitzkit_all_avatars')
@@ -36,25 +34,17 @@ const DEFAULT_LOADED = 42;
 const PREVIEW_COUNT = 28;
 
 function Content({ skeleton }: MaybeSkeletonComponentProps) {
-  const { gameStrings } = useLocale();
+  const { strings, gameStrings } = useLocale();
+  const input = useRef<HTMLInputElement>(null);
+  const [search, setSearch] = useState<string | null>(null);
+  const [searching, setSearching] = useState(false);
   const groups = useMemo(() => {
     const avatars = allAvatars
-      .map((id) => {
-        const item = new CatalogItemAccessor(id);
-        const stuff = item.get(StuffUIComponent, 'UIComponent');
-        const avatar = item.get(
-          ProfileAvatarComponent,
-          'profileAvatarComponent',
-        );
-        const sellable = item.getOptional(
-          SellableComponent,
-          'sellableComponent',
-        );
-        const name = gameStrings[stuff.display_name] as string | undefined;
-
-        return { avatar, name, stuff, sellable };
-      })
-      .sort((a, b) => a.stuff.grade - b.stuff.grade)
+      .map((avatar) => ({
+        avatar,
+        name: gameStrings[avatar.name] as string | undefined,
+      }))
+      .sort((a, b) => a.avatar.grade - b.avatar.grade)
       .sort((a, b) =>
         a.name === undefined
           ? 1
@@ -75,10 +65,50 @@ function Content({ skeleton }: MaybeSkeletonComponentProps) {
     return [...groups].map(([name, avatars]) => ({ name, avatars }));
   }, []);
   const [loadedAvatars, setLoadedAvatars] = useState(DEFAULT_LOADED);
-  const filtered = useMemo(() => groups, []);
+  const filtered = useMemo(() => {
+    setSearching(false);
+
+    if (search === null || search.trim().length === 0) return groups;
+
+    return fuzzysort
+      .go(search, groups, { key: 'name' })
+      .map((result) => result.obj);
+  }, [search]);
+  const requestSearch = useCallback(
+    debounce(() => {
+      if (!input.current) return;
+      setSearch(input.current.value);
+    }, 500),
+    [],
+  );
 
   return (
     <PageWrapper color="amber">
+      <Flex justify="center">
+        <TextField.Root
+          ref={input}
+          my="7"
+          placeholder={strings.website.tools.avatars.search.hint}
+          style={{
+            flex: 1,
+            maxWidth: '30rem',
+          }}
+          onChange={(event) => {
+            if (event.target.value.trim().length === 0) {
+              setSearching(false);
+              return;
+            }
+
+            requestSearch();
+            setSearching(true);
+          }}
+        >
+          <TextField.Slot>
+            {searching ? <Spinner /> : <MagnifyingGlassIcon />}
+          </TextField.Slot>
+        </TextField.Root>
+      </Flex>
+
       <Grid
         columns={{
           initial: 'repeat(auto-fill, minmax(6rem, 1fr))',

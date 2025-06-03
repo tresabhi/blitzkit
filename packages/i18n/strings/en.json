@@ -1270,14 +1270,16 @@
 
         "no_description": "This avatar has no description.",
         "download": "Download",
+        "enlarge": "Enlarge",
         "hidden": "Hidden",
         "unnamed_avatars": "Unnamed avatars",
         "search": {
           "hint": "Search avatars...",
           "results": "%s1 avatars"
         },
+
         "categories": {
-          "0": "Unspecified category",
+          "0": "Unspecified",
           "1": "Premium",
           "2": "Special",
           "3": "Accumulative",

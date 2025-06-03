@@ -1,9 +1,12 @@
 import { LocalizationResourcesComponent } from '@protos/blitz_static_localization_resources_component';
+import { ProfileAvatarComponent } from '@protos/blitz_static_profile_avatar_component';
 import { RemoteStorageComponent } from '@protos/blitz_static_remote_storage_component';
+import { SellableComponent } from '@protos/blitz_static_sellable_component';
+import { StuffUIComponent } from '@protos/blitz_static_stuff_ui_component';
 import { BlitzkitAllAvatarsComponent } from '@protos/blitzkit_static_all_avatars_component';
 import { load } from 'js-yaml';
 import { minimatch } from 'minimatch';
-import { CatalogItemAccessor } from '../catalogItemAccessor';
+import { CatalogItemAccessor } from 'packages/core/src/blitz/catalogItemAccessor';
 
 interface LocalizationConfig {
   namespaces: string[];
@@ -102,11 +105,26 @@ export abstract class MetadataAccessor {
   }
 
   injectBlitzkitProfileAvatars() {
-    const allAvatars: BlitzkitAllAvatarsComponent = {
-      avatars: this.filter((item) =>
-        item.startsWith('ProfileAvatarEntity.'),
-      ).map((avatar) => avatar.pack()),
-    };
+    const allAvatars: BlitzkitAllAvatarsComponent = { avatars: [] };
+
+    for (const item of this.filter((item) =>
+      item.startsWith('ProfileAvatarEntity.'),
+    )) {
+      const stuff = item.get(StuffUIComponent, 'UIComponent');
+      const avatar = item.get(ProfileAvatarComponent, 'profileAvatarComponent');
+      const sellable = item.getOptional(SellableComponent, 'sellableComponent');
+
+      allAvatars.avatars.push({
+        id: item.undiscriminatedId(),
+        name: stuff.display_name,
+        obtaining: stuff.obtaining_methods,
+        description: stuff.description,
+        grade: stuff.grade,
+        category: avatar.category,
+        hidden_if_not_obtained: avatar.hidden_if_not_obtained,
+        sale: sellable?.reward,
+      });
+    }
 
     this.add(
       CatalogItemAccessor.fromComponent(
