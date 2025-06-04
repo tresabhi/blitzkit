@@ -1,9 +1,7 @@
+import { CatalogItem } from '@protos/blitz_items';
+import { Metadata } from '@protos/blitz_metadata';
 import { LocalizationResourcesComponent } from '@protos/blitz_static_localization_resources_component';
-import { ProfileAvatarComponent } from '@protos/blitz_static_profile_avatar_component';
 import { RemoteStorageComponent } from '@protos/blitz_static_remote_storage_component';
-import { SellableComponent } from '@protos/blitz_static_sellable_component';
-import { StuffUIComponent } from '@protos/blitz_static_stuff_ui_component';
-import { BlitzkitAllAvatarsComponent } from '@protos/blitzkit_static_all_avatars_component';
 import { load } from 'js-yaml';
 import { minimatch } from 'minimatch';
 import { CatalogItemAccessor } from 'packages/core/src/blitz/catalogItemAccessor';
@@ -12,12 +10,35 @@ interface LocalizationConfig {
   namespaces: string[];
 }
 
-export abstract class MetadataAccessor {
-  abstract get(item: string): Promise<CatalogItemAccessor>;
+export class MetadataAccessor {
+  items: Record<string, CatalogItem> = {};
 
-  abstract add(item: CatalogItemAccessor): void;
+  constructor(metadata: Metadata) {
+    for (const item of metadata.catalog_items) {
+      this.items[item.catalog_id] = item;
+    }
+  }
 
-  abstract filter(predicate: (item: string) => boolean): CatalogItemAccessor[];
+  get(item: string) {
+    if (item in this.items) return new CatalogItemAccessor(this.items[item]);
+    throw new Error(`Item ${item} does not exist in socket metadata`);
+  }
+
+  add(item: CatalogItemAccessor) {
+    this.items[item.id] = item.pack();
+  }
+
+  filter(predicate: (item: string) => boolean) {
+    const items: CatalogItemAccessor[] = [];
+
+    for (const item in this.items) {
+      if (predicate(item)) {
+        items.push(new CatalogItemAccessor(this.items[item]));
+      }
+    }
+
+    return items;
+  }
 
   async strings(locale: string) {
     const clientConfig = await this.get(
@@ -96,45 +117,5 @@ export abstract class MetadataAccessor {
     }
 
     return filtered;
-  }
-
-  injectBlitzkit() {
-    this.injectBlitzkitProfileAvatars();
-
-    return this;
-  }
-
-  injectBlitzkitProfileAvatars() {
-    const allAvatars: BlitzkitAllAvatarsComponent = { avatars: [] };
-
-    for (const item of this.filter((item) =>
-      item.startsWith('ProfileAvatarEntity.'),
-    )) {
-      const stuff = item.get(StuffUIComponent, 'UIComponent');
-      const avatar = item.get(ProfileAvatarComponent, 'profileAvatarComponent');
-      const sellable = item.getOptional(SellableComponent, 'sellableComponent');
-
-      allAvatars.avatars.push({
-        id: item.undiscriminatedId(),
-        name: stuff.display_name,
-        obtaining: stuff.obtaining_methods,
-        description: stuff.description,
-        grade: stuff.grade,
-        category: avatar.category,
-        hidden_if_not_obtained: avatar.hidden_if_not_obtained,
-        sale: sellable?.reward,
-      });
-    }
-
-    this.add(
-      CatalogItemAccessor.fromComponent(
-        'BlitzkitAllAvatarsEntity.blitzkit_all_avatars',
-        {
-          type_url:
-            './blitzkit_static_all_avatars_component.BlitzkitAllAvatarsComponent',
-          value: BlitzkitAllAvatarsComponent.encode(allAvatars).finish(),
-        },
-      ),
-    );
   }
 }

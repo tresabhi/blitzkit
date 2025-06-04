@@ -6,6 +6,7 @@
   "dependencies": {
     "@types/js-yaml": "^4.0.9",
     "js-yaml": "^4.1.0",
-    "ts-proto": "^2.2.2"
+    "ts-proto": "^2.2.2",
+    "@blitzkit/closed": "workspace:*"
   }
 }

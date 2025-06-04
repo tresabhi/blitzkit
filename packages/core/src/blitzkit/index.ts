@@ -41,6 +41,7 @@ export * from './uniqueGuns';
 export * from './unwrapBlitzkitResponse';
 export * from './votes';
 // export * from './withCORSProxy';
+export * from './api';
 export * from './createDefaultProvisions';
 export * from './gallery';
 export * from './metaSortTank';

@@ -41,6 +41,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@types/bun": "^1.2.15",
     "prettier": "^3.5.3"
   }
 }

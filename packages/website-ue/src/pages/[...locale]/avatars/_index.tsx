@@ -1,11 +1,10 @@
-import { BlitzkitAllAvatarsComponent } from '@protos/blitzkit_static_all_avatars_component';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 import { Flex, Grid, Spinner, TextField } from '@radix-ui/themes';
 import fuzzysort from 'fuzzysort';
 import { debounce, times } from 'lodash-es';
 import { AvatarGroup } from 'packages/website-ue/src/components/Avatars/Group';
 import { PageWrapper } from 'packages/website-ue/src/components/PageWrapper';
-import { metadata } from 'packages/website-ue/src/core/blitz/metadata';
+import { api } from 'packages/website-ue/src/core/blitzkit/api';
 import {
   LocaleProvider,
   useLocale,
@@ -14,13 +13,7 @@ import {
 import type { MaybeSkeletonComponentProps } from 'packages/website-ue/src/types/maybeSkeletonComponentProps';
 import { useCallback, useMemo, useRef, useState } from 'react';
 
-const allAvatars = await metadata
-  .get('BlitzkitAllAvatarsEntity.blitzkit_all_avatars')
-  .then((entity) =>
-    entity
-      .get(BlitzkitAllAvatarsComponent, 'blitzkitAllAvatarsComponent')
-      .avatars.reverse(),
-  );
+const { avatars } = await api.avatars();
 
 export function Page({ localeData }: LocaleAcceptorProps) {
   return (
@@ -39,7 +32,7 @@ function Content({ skeleton }: MaybeSkeletonComponentProps) {
   const [search, setSearch] = useState<string | null>(null);
   const [searching, setSearching] = useState(false);
   const groups = useMemo(() => {
-    const avatars = allAvatars
+    const avatarsSorted = avatars
       .map((avatar) => ({
         avatar,
         name: gameStrings[avatar.name] as string | undefined,
@@ -52,9 +45,9 @@ function Content({ skeleton }: MaybeSkeletonComponentProps) {
             ? -1
             : a.name.localeCompare(b.name),
       );
-    const groups = new Map<string | undefined, typeof avatars>();
+    const groups = new Map<string | undefined, typeof avatarsSorted>();
 
-    for (const avatar of avatars) {
+    for (const avatar of avatarsSorted) {
       if (groups.has(avatar.name)) {
         groups.get(avatar.name)!.push(avatar);
       } else {

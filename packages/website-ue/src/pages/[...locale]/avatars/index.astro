@@ -1,6 +1,6 @@
 ---
 import { avatarsTool } from 'packages/website-ue/src/constants/tools';
-import { metadata } from 'packages/website-ue/src/core/blitz/metadata';
+import { api } from 'packages/website-ue/src/core/blitzkit/api';
 import ToolLayout from 'packages/website-ue/src/layouts/ToolLayout.astro';
 import { Page } from './_index';
 
@@ -8,11 +8,11 @@ export { getStaticPaths } from '../index.astro';
 
 const { locale } = Astro.props;
 
-const gameStrings = await metadata.stringsPartial(locale, [
+const gameStrings = await api.metadata.stringsPartial(locale, [
   'ProfileAvatarEntity__*',
 ]);
 ---
 
-<ToolLayout tool={avatarsTool} {locale} >
+<ToolLayout tool={avatarsTool} {locale}>
   <Page localeData={{ locale, gameStrings }} client:load />
 </ToolLayout>
