@@ -12,8 +12,6 @@ export const getStaticPaths: GetStaticPaths = () => {
 };
 
 export const GET: APIRoute<{ ui: StuffUIComponent }> = async ({ props }) => {
-  console.log(props.ui.icon);
-
   const response = await fetch(props.ui.icon);
   const buffer = await response.arrayBuffer();
 
