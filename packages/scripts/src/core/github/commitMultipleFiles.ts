@@ -1,3 +1,4 @@
+import { asset } from '@blitzkit/core';
 import ProgressBar from 'progress';
 import { GithubChangeBlob, createBlob } from './createBlob';
 import { octokit } from './octokit';
@@ -19,10 +20,7 @@ export async function commitMultipleFiles(
 
   await Promise.all(
     changesRaw.map(async (change) => {
-      const blobPath = `${repoRaw}/${branch}/${change.path}`;
-      const response = await fetch(
-        `https://raw.githubusercontent.com/${blobPath}`,
-      );
+      const response = await fetch(asset(change.path));
       let isNew: boolean;
       let isDifferent: boolean;
       let diff: number;
@@ -45,7 +43,7 @@ export async function commitMultipleFiles(
         isNew = false;
         const buffer = Buffer.from(await response.arrayBuffer());
 
-        if (buffer.equals(change.content)) {
+        if (buffer.equals(new Uint8Array(change.content))) {
           diff = 0;
           isDifferent = false;
         } else {
@@ -54,7 +52,7 @@ export async function commitMultipleFiles(
         }
       } else {
         throw new Error(
-          `Unexpected status code ${response.status} for ${blobPath}`,
+          `Unexpected status code ${response.status} for ${change.path}`,
         );
       }
 
@@ -73,17 +71,17 @@ export async function commitMultipleFiles(
 
       if (isNew) {
         console.log(
-          `🟢 (+${change.content.length.toLocaleString()}B) ${blobPath}`,
+          `🟢 (+${change.content.length.toLocaleString()}B) ${change.path}`,
         );
         changes.push(change);
       } else if (isDifferent) {
         console.log(
-          `🟡 (${diff > 0 ? '+' : ''}${diff.toLocaleString()}B) ${blobPath}`,
+          `🟡 (${diff > 0 ? '+' : ''}${diff.toLocaleString()}B) ${change.path}`,
         );
         changes.push(change);
       } else {
         console.log(
-          `🔵 (${change.content.length.toLocaleString()}B) ${blobPath}`,
+          `🔵 (${change.content.length.toLocaleString()}B) ${change.path}`,
         );
       }
     }),
