@@ -4,3 +4,6 @@
 [submodule "submodules/CUE4Parse"]
 	path = submodules/CUE4Parse
 	url = https://github.com/FabianFG/CUE4Parse
+[submodule "submodules/blitzkit-internal"]
+	path = submodules/blitzkit-internal
+	url = https://github.com/blitzkit/internal

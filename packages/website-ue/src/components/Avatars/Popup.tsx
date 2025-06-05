@@ -9,6 +9,7 @@ import {
 import { Badge, Box, Button, Dialog, Flex, Link, Text } from '@radix-ui/themes';
 import { Var } from '../../core/radix/var';
 import { useLocale } from '../../hooks/useLocale';
+import { RewardBadge } from '../RewardBadge';
 import { GRADE_COLORS } from './Colors';
 import type { AvatarGroupProps } from './Group';
 
@@ -79,11 +80,11 @@ export function Popup({ name, avatars }: AvatarGroupProps) {
                 )}
 
                 {avatar.sale && (
-                  <Badge>
-                    {JSON.stringify(
-                      avatar.sale.reward_list[0].currency_reward?.amount,
-                    )}
-                  </Badge>
+                  <RewardBadge
+                    reward={avatar.sale}
+                    color="gray"
+                    variant="surface"
+                  />
                 )}
               </Flex>
 

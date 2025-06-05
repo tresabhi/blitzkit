@@ -1,4 +1,4 @@
-import type { BlitzKitAvatar } from '@protos/blitzkit_static_all_avatars_component';
+import type { BlitzKitAvatar } from '@protos/blitzkit';
 import { Dialog } from '@radix-ui/themes';
 import type { MaybeSkeletonComponentProps } from '../../types/maybeSkeletonComponentProps';
 import { Content } from './Content';
