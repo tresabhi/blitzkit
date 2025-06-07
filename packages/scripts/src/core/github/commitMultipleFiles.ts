@@ -29,8 +29,6 @@ export async function commitMultipleFiles(
         isNew = true;
         diff = change.content.length;
         isDifferent = true;
-
-        console.log('diff 404');
       } else if (
         response.headers.has('Content-Length') &&
         parseInt(response.headers.get('Content-Length')!) !==
@@ -42,7 +40,7 @@ export async function commitMultipleFiles(
           parseInt(response.headers.get('Content-Length')!);
         isDifferent = true;
 
-        console.log('diff header content length', diff);
+        console.log('diff header content length', 'content:', change.content.length, 'header:', response.headers.get('Content-Length'));
       } else if (response.status === 200) {
         isNew = false;
         const buffer = Buffer.from(await response.arrayBuffer());
