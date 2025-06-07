@@ -43,7 +43,7 @@ export async function commitMultipleFiles(
         isNew = false;
         const buffer = Buffer.from(await response.arrayBuffer());
 
-        if (buffer.equals(new Uint8Array(change.content))) {
+        if (buffer.equals(change.content)) {
           diff = 0;
           isDifferent = false;
         } else {
