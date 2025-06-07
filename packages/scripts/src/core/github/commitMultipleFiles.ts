@@ -29,6 +29,8 @@ export async function commitMultipleFiles(
         isNew = true;
         diff = change.content.length;
         isDifferent = true;
+
+        console.log('diff 404');
       } else if (
         response.headers.has('Content-Length') &&
         parseInt(response.headers.get('Content-Length')!) !==
@@ -39,6 +41,8 @@ export async function commitMultipleFiles(
           change.content.length -
           parseInt(response.headers.get('Content-Length')!);
         isDifferent = true;
+
+        console.log('diff header content length', diff);
       } else if (response.status === 200) {
         isNew = false;
         const buffer = Buffer.from(await response.arrayBuffer());
@@ -50,6 +54,8 @@ export async function commitMultipleFiles(
           diff = change.content.length - buffer.length;
           isDifferent = true;
         }
+
+        console.log('diff body buffer', diff);
       } else {
         throw new Error(
           `Unexpected status code ${response.status} for ${change.path}`,
