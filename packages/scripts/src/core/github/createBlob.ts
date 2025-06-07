@@ -20,7 +20,7 @@ export const createBlob = throttle(
           await octokit.git.createBlob({
             owner,
             repo,
-            content: change.content.toString('base64'),
+            content: Buffer.from(change.content).toString('base64'),
             encoding: 'base64',
           })
         ).data;

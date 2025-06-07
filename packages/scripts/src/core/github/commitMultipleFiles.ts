@@ -1,11 +1,18 @@
 import { asset } from '@blitzkit/core';
 import ProgressBar from 'progress';
+import { compareUint8Arrays } from './compareUint8Arrays';
 import { GithubChangeBlob, createBlob } from './createBlob';
 import { octokit } from './octokit';
 
 export interface FileChange {
   path: string;
-  content: Buffer;
+  content: Uint8Array;
+}
+
+enum DiffStatus {
+  New,
+  Changed,
+  Unchanged,
 }
 
 const heuristicFormats = ['glb', 'webp', 'jpg', 'png'];
@@ -20,73 +27,60 @@ export async function commitMultipleFiles(
 
   await Promise.all(
     changesRaw.map(async (change) => {
-      const response = await fetch(asset(change.path));
-      let isNew: boolean;
-      let isDifferent: boolean;
-      let diff: number;
+      const response = await fetch(asset(change.path), {
+        headers: { 'Accept-Encoding': 'identity' },
+      });
+      let diff: { change: number; status: DiffStatus };
 
       if (response.status === 404) {
-        isNew = true;
-        diff = change.content.length;
-        isDifferent = true;
+        diff = { change: change.content.length, status: DiffStatus.New };
       } else if (
         response.headers.has('Content-Length') &&
-        parseInt(response.headers.get('Content-Length')!) !==
-          change.content.length
+        Number(response.headers.get('Content-Length')) !== change.content.length
       ) {
-        isNew = false;
-        diff =
-          change.content.length -
-          parseInt(response.headers.get('Content-Length')!);
-        isDifferent = true;
-
-        console.log('diff header content length', 'content:', change.content.length, 'header:', response.headers.get('Content-Length'));
+        diff = {
+          change:
+            change.content.length -
+            Number(response.headers.get('Content-Length')),
+          status: DiffStatus.Changed,
+        };
       } else if (response.status === 200) {
-        isNew = false;
-        const buffer = Buffer.from(await response.arrayBuffer());
-
-        if (buffer.equals(change.content)) {
-          diff = 0;
-          isDifferent = false;
+        if (
+          heuristicFormats.some((format) => change.path.endsWith(`.${format}`))
+        ) {
+          /**
+           * Heuristic: if it's a large blob like a .glb, a diff = 0 might end
+           * up being a false positive with isDifferent = true. So, it's okay
+           * to assume it's unchanged.
+           */
+          diff = { change: 0, status: DiffStatus.Unchanged };
         } else {
-          diff = change.content.length - buffer.length;
-          isDifferent = true;
-        }
+          const buffer = new Uint8Array(await response.arrayBuffer());
 
-        console.log('diff body buffer', diff);
+          if (compareUint8Arrays(buffer, change.content)) {
+            diff = { change: 0, status: DiffStatus.Unchanged };
+          } else {
+            diff = {
+              change: change.content.length - buffer.length,
+              status: DiffStatus.Changed,
+            };
+          }
+        }
       } else {
         throw new Error(
           `Unexpected status code ${response.status} for ${change.path}`,
         );
       }
 
-      /**
-       * Heuristic: if it's a large blob like a .glb, a diff = 0 might end up
-       * being a false positive with isDifferent = true. So, it's okay to
-       * assume it's unchanged.
-       */
-      if (
-        diff === 0 &&
-        heuristicFormats.some((format) => change.path.endsWith(`.${format}`))
-      ) {
-        isDifferent = false;
-        isNew = false;
-      }
-
-      if (isNew) {
-        console.log(
-          `🟢 (+${change.content.length.toLocaleString()}B) ${change.path}`,
-        );
-        changes.push(change);
-      } else if (isDifferent) {
-        console.log(
-          `🟡 (${diff > 0 ? '+' : ''}${diff.toLocaleString()}B) ${change.path}`,
-        );
-        changes.push(change);
+      if (diff.status === DiffStatus.Unchanged) {
+        console.log(`🔵 (${diff.change.toLocaleString()}B) ${change.path}`);
       } else {
         console.log(
-          `🔵 (${change.content.length.toLocaleString()}B) ${change.path}`,
+          `${
+            diff.status === DiffStatus.New ? '🟢' : '🟡'
+          } (+${diff.change.toLocaleString()}B) ${change.path}`,
         );
+        changes.push(change);
       }
     }),
   );

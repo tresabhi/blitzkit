@@ -1,4 +1,4 @@
-import { Avatar, encodePBBuffer, fetchGlossary, Gallery } from '@blitzkit/core';
+import { Avatar, fetchGlossary, Gallery } from '@blitzkit/core';
 import locales from '@blitzkit/i18n/locales.json';
 import { extname } from 'path';
 import ProgressBar from 'progress';
@@ -68,13 +68,13 @@ export async function glossary() {
 
       gallery.avatars.push(avatar);
 
-      const content = await fetch(url).then((response) =>
-        response.arrayBuffer(),
-      );
+      const content = await fetch(url)
+        .then((response) => response.arrayBuffer())
+        .then((buffer) => new Uint8Array(buffer));
 
       changes.push({
         path: `gallery/avatars/${key}${avatar.extension}`,
-        content: Buffer.from(content),
+        content,
       });
 
       bar.tick();
@@ -83,7 +83,7 @@ export async function glossary() {
 
   changes.push({
     path: 'definitions/gallery.pb',
-    content: encodePBBuffer(Gallery, gallery),
+    content: Gallery.encode(gallery).finish(),
   });
 
   await commitAssets('glossary', changes);

@@ -29,10 +29,11 @@ export async function tankArmors() {
 
           const id = toUniqueId(nation, tank.id);
           const model = await extractArmor(DATA, `${nation}-${tankKey}`);
+          const content = await nodeIO.writeBinary(model);
 
           changes.push({
             path: `3d/tanks/armor/${id}.glb`,
-            content: Buffer.from(await nodeIO.writeBinary(model)),
+            content,
           });
         }),
       );

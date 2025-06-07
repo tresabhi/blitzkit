@@ -7,7 +7,6 @@ import {
   ConsumableTankCategoryFilterCategory,
   Crew,
   CrewType,
-  encodePBBuffer,
   EquipmentDefinitions,
   EquipmentSlot,
   GameDefinitions,
@@ -1772,39 +1771,39 @@ export async function definitions() {
 
   await commitAssets('definitions', [
     {
-      content: encodePBBuffer(GameDefinitions, gameDefinitions),
+      content: GameDefinitions.encode(gameDefinitions).finish(),
       path: 'definitions/game.pb',
     },
     {
-      content: encodePBBuffer(TankDefinitions, tankDefinitions),
+      content: TankDefinitions.encode(tankDefinitions).finish(),
       path: 'definitions/tanks.pb',
     },
     {
-      content: encodePBBuffer(ModelDefinitions, modelDefinitions),
+      content: ModelDefinitions.encode(modelDefinitions).finish(),
       path: 'definitions/models.pb',
     },
     {
-      content: encodePBBuffer(EquipmentDefinitions, equipmentDefinitions),
+      content: EquipmentDefinitions.encode(equipmentDefinitions).finish(),
       path: 'definitions/equipment.pb',
     },
     {
-      content: encodePBBuffer(ConsumableDefinitions, consumableDefinitions),
+      content: ConsumableDefinitions.encode(consumableDefinitions).finish(),
       path: 'definitions/consumables.pb',
     },
     {
-      content: encodePBBuffer(ProvisionDefinitions, provisionDefinitions),
+      content: ProvisionDefinitions.encode(provisionDefinitions).finish(),
       path: 'definitions/provisions.pb',
     },
     {
-      content: encodePBBuffer(SkillDefinitions, skillDefinitions),
+      content: SkillDefinitions.encode(skillDefinitions).finish(),
       path: 'definitions/skills.pb',
     },
     {
-      content: encodePBBuffer(MapDefinitions, mapDefinitions),
+      content: MapDefinitions.encode(mapDefinitions).finish(),
       path: 'definitions/maps.pb',
     },
     {
-      content: encodePBBuffer(CamouflageDefinitions, camouflageDefinitions),
+      content: CamouflageDefinitions.encode(camouflageDefinitions).finish(),
       path: 'definitions/camouflages.pb',
     },
   ]);
