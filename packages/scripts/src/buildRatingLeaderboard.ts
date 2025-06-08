@@ -164,7 +164,7 @@ const content = RatingLeaderboard.encode({
 const changes: FileChange[] = [
   {
     path: `regions/${normalizedServer}/rating/${info.current_season}.pb`,
-    content: Buffer.from(content),
+    content,
   },
 ];
 

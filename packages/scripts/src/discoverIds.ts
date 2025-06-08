@@ -134,13 +134,11 @@ function post() {
   const files = idsChunked.map((chunk, index) => {
     const didsWriteStream = new DidsWriteStream().dids(chunk);
     const buffer = didsWriteStream.uint8Array;
-    const compressed = compress(buffer);
+    const content = compress(buffer);
 
     console.log(
-      `Chunk ${index} with ${chunk.length} ids (compressed: ${compressed.length}; uncompressed: ${buffer.length})`,
+      `Chunk ${index} with ${chunk.length} ids (compressed: ${content.length}; uncompressed: ${buffer.length})`,
     );
-
-    const content = Buffer.from(compressed);
 
     return {
       content,
@@ -151,13 +149,12 @@ function post() {
   commitAssets('discovered ids', [
     ...files,
     {
-      content: Buffer.from(
+      content: new TextEncoder().encode(
         JSON.stringify({
           chunks: idsChunked.length,
           count: ids.length,
           time: Date.now(),
         } satisfies DiscoveredIdsDefinitions),
-        'utf-8',
       ),
       path: 'ids/manifest.json',
     },

@@ -1,7 +1,7 @@
 import { toUniqueId } from '@blitzkit/core';
 import { NodeIO } from '@gltf-transform/core';
 import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
-import { readdir } from 'fs/promises';
+import { readdir, writeFile } from 'fs/promises';
 import { extractModel } from '../core/blitz/extractModel';
 import { readXMLDVPL } from '../core/blitz/readXMLDVPL';
 import { readYAMLDVPL } from '../core/blitz/readYAMLDVPL';
@@ -33,6 +33,8 @@ export async function tankModels() {
 
       const id = toUniqueId(nation, tank.id);
 
+      if (id !== 21777) continue;
+
       const parameters = await readYAMLDVPL<TankParameters>(
         `${DATA}/3d/Tanks/Parameters/${nation}/${tankKey}.yaml`,
       );
@@ -40,6 +42,8 @@ export async function tankModels() {
         DATA,
         parameters.resourcesPath.blitzModelPath.replace(/\.sc2$/, ''),
       );
+
+      await writeFile('../../temp/model.glb', await nodeIO.writeBinary(model));
 
       changes.push({
         path: `3d/tanks/models/${id}.glb`,

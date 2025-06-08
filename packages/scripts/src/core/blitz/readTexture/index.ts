@@ -1,12 +1,15 @@
 import { DdsReadStream, PvrReadStream } from '@blitzkit/core';
 import { existsSync } from 'fs';
 import sharp from 'sharp';
+import { DATA_COMPRESSED } from '../../../buildAssets/constants';
 import { readDVPLFile } from '../readDVPLFile';
 import { TextureMutation } from './constants';
 
 export async function readTexture(path: string, mutation?: TextureMutation) {
   const ddsTexturePath = path.replace('.tex', '.dx11.dds');
-  const isDds = existsSync(`${ddsTexturePath}.dvpl`);
+  const isDds = existsSync(
+    `${ddsTexturePath}${DATA_COMPRESSED ? '.dvpl' : ''}`,
+  );
   const resolvedTexturePath = isDds
     ? ddsTexturePath
     : ddsTexturePath.replace('.dds', '.pvr');
@@ -75,5 +78,4 @@ export async function readTexture(path: string, mutation?: TextureMutation) {
     default:
       return await sharp(raw.data, { raw }).jpeg().toBuffer();
   }
-
 }

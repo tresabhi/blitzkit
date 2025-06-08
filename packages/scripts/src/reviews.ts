@@ -1,6 +1,5 @@
 import {
   asset,
-  encodePBBuffer,
   fetchTankDefinitions,
   Reviews,
   Video,
@@ -81,7 +80,7 @@ for (const tank of tanksSanitized) {
 }
 await commitAssets('reviews', [
   {
-    content: encodePBBuffer(Reviews, reviews),
+    content: Reviews.encode(reviews).finish(),
     path: 'definitions/reviews.pb',
   },
 ]);

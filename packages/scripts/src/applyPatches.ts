@@ -3,7 +3,7 @@ import { mkdir, writeFile } from 'fs/promises';
 import { parse as parsePath } from 'path';
 import ProgressBar from 'progress';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
-import { dvp } from '../../../submodules/blitzkit-closed/src/dvp';
+import { dvp } from '../../../submodules/blitzkit-closed/src/dava/dvp';
 import { readStringDVPL } from '../src/core/blitz/readStringDVPL';
 import { DATA } from './buildAssets/constants';
 import { readYAMLDVPL } from './core/blitz/readYAMLDVPL';

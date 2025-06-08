@@ -1,6 +1,5 @@
 import {
   assertSecret,
-  encodePBBuffer,
   fetchTankDefinitions,
   PopularTanks,
 } from '@blitzkit/core';
@@ -70,7 +69,7 @@ export async function popularTanks() {
   await commitAssets('popular tanks', [
     {
       path: 'definitions/popular-tanks.pb',
-      content: encodePBBuffer(PopularTanks, popularTanks),
+      content: PopularTanks.encode(popularTanks).finish(),
     },
   ]);
 }

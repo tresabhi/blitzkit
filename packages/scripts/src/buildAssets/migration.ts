@@ -32,7 +32,7 @@ export async function migration() {
   await commitAssets('migration', [
     {
       path: 'definitions/migration.json',
-      content: Buffer.from(JSON.stringify(map)),
+      content: new TextEncoder().encode(JSON.stringify(map)),
     },
   ]);
 }
