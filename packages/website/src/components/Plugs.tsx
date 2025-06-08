@@ -14,7 +14,7 @@ export function Plugs() {
 function Content() {
   const promoteOpentest =
     assertSecret(import.meta.env.PUBLIC_PROMOTE_OPENTEST) === 'true' &&
-    assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH) !== 'opentest';
+    assertSecret(import.meta.env.PUBLIC_BRANCH) !== 'opentest';
   const promotions = [promoteOpentest];
 
   if (promotions.every((promotion) => !promotion)) return null;

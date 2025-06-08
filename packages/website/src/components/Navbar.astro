@@ -139,7 +139,7 @@ const strings = getStrings(locale);
             toolsFiltered.map((tool) => {
               const unavailableOnBranch = tool.branches?.every(
                 (branch) =>
-                  branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
+                  branch !== assertSecret(import.meta.env.PUBLIC_BRANCH),
               );
               const selected = Astro.url.pathname.includes(`/${tool.id}`);
               const toolStrings =
@@ -211,7 +211,7 @@ const strings = getStrings(locale);
           toolsFiltered.map((tool) => {
             const unavailableOnBranch = tool.branches?.every(
               (branch) =>
-                branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
+                branch !== assertSecret(import.meta.env.PUBLIC_BRANCH),
             );
 
             if (unavailableOnBranch) return null;

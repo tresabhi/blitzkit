@@ -28,6 +28,7 @@ env:
   WOTB_GLOSSARY_PATH: ${{ secrets.WOTB_GLOSSARY_PATH }}
   PUBLIC_DISCORD_SERVER_ID: ${{ secrets.PUBLIC_DISCORD_SERVER_ID }}
   PUBLIC_ASSET_BASE: ${{ secrets.PUBLIC_ASSET_BASE }}
+  PUBLIC_BRANCH: ${{ secrets.PUBLIC_BRANCH }}
 
 jobs:
   build:
