@@ -63,6 +63,12 @@ export const ratingTool: Tool = {
   button: { color: 'orange' },
 };
 
+export const internalTool: Tool = {
+  id: 'internal',
+  enabled: true,
+  button: { color: 'amber' },
+};
+
 export const tools: Tool[] = [
   tanksTool,
   compareTool,
@@ -75,3 +81,5 @@ export const tools: Tool[] = [
   embedTool,
   ratingTool,
 ];
+
+if (import.meta.env.DEV) tools.push(internalTool);

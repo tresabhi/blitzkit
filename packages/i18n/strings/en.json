@@ -869,6 +869,13 @@
     },
 
     "tools": {
+      "internal": {
+        "name": "Internal",
+        "button": "Internal",
+        "description": "BlitzKit internal tools",
+        "seo_description": "BlitzKit internal tools"
+      },
+
       "guess": {
         "name": "Guess the tank",
         "button": "Guess away",

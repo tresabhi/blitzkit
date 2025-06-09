@@ -143,6 +143,7 @@ toolLoop: for (const tool of tools.filter((tool) => tool.enabled)) {
               {row.map((tool) => (
                 <ToolCard {locale} tool={tool} />
               ))}
+              {row.length === 1 && !row[0].significant && <Box flexGrow="1" />}
             </Flex>
           ))
         }

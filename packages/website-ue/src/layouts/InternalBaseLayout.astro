@@ -1,0 +1,18 @@
+---
+import locales from '@blitzkit/i18n/locales.json';
+import DeniedInternal from '../components/DeniedInternal.astro';
+import BaseLayout from './BaseLayout.astro';
+
+const locale = locales.default;
+const isInternal = import.meta.env.DEV;
+---
+
+{
+  isInternal ? (
+    <BaseLayout {locale}>
+      <slot />
+    </BaseLayout>
+  ) : (
+    <DeniedInternal />
+  )
+}

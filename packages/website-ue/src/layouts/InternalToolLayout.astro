@@ -1,0 +1,24 @@
+---
+import locales from '@blitzkit/i18n/locales.json';
+import DeniedInternal from '../components/DeniedInternal.astro';
+import type { Tool } from '../constants/tools';
+import ToolLayout from './ToolLayout.astro';
+
+interface Props {
+  tool: Tool;
+}
+
+const { tool } = Astro.props;
+const locale = locales.default;
+const isInternal = import.meta.env.DEV;
+---
+
+{
+  isInternal ? (
+    <ToolLayout {tool} {locale}>
+      <slot />
+    </ToolLayout>
+  ) : (
+    <DeniedInternal />
+  )
+}
