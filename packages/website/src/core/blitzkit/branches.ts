@@ -5,7 +5,7 @@ export function resolveBranchName(locale: string = DEFAULT_LOCALE) {
   if (!(locale in STRINGS)) throw new Error(`Unsupported locale: ${locale}`);
 
   const strings = STRINGS[locale as SupportedLocale];
-  const secret = assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH);
+  const secret = assertSecret(import.meta.env.PUBLIC_BRANCH);
 
   if (
     assertSecret(import.meta.env.MODE) === 'development' &&

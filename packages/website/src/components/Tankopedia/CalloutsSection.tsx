@@ -15,7 +15,7 @@ export function CalloutsSection() {
   const tank = Duel.use((state) => state.protagonist.tank);
   const mutateTankopediaPersistent = TankopediaPersistent.useMutation();
   const promoteAeson =
-    assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH) === 'preview';
+    assertSecret(import.meta.env.PUBLIC_BRANCH) === 'preview';
 
   useEffect(() => {
     mutateTankopediaPersistent((draft) => {

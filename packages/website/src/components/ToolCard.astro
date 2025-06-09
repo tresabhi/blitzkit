@@ -12,7 +12,7 @@ interface Props {
 
 const { tool } = Astro.props;
 const disabled = tool.branches?.every(
-  (branch) => branch !== assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH),
+  (branch) => branch !== assertSecret(import.meta.env.PUBLIC_BRANCH),
 );
 const { locale } = Astro.params;
 const strings = getStrings(locale);
@@ -108,7 +108,7 @@ const toolStrings =
             disabled ? (
               <>
                 Unavailable on{' '}
-                <Code>{assertSecret(import.meta.env.PUBLIC_ASSET_BRANCH)}</Code>
+                <Code>{assertSecret(import.meta.env.PUBLIC_BRANCH)}</Code>
               </>
             ) : (
               toolStrings.description
