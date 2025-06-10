@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F23F76D4-C350-4BBA-9DF1-E67C5CD391B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlitzKit.FFI", "src\BlitzKit.FFI\BlitzKit.FFI.csproj", "{8E798C66-C863-4A67-87EA-853109EEE037}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8E798C66-C863-4A67-87EA-853109EEE037}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E798C66-C863-4A67-87EA-853109EEE037}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E798C66-C863-4A67-87EA-853109EEE037}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E798C66-C863-4A67-87EA-853109EEE037}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8E798C66-C863-4A67-87EA-853109EEE037} = {F23F76D4-C350-4BBA-9DF1-E67C5CD391B1}
+	EndGlobalSection
+EndGlobal

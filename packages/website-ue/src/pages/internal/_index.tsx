@@ -24,6 +24,15 @@ export function Page() {
 
           <Table.Row>
             <Table.Cell>
+              <Link href="internal/ffi">Client</Link>
+            </Table.Cell>
+            <Table.Cell>
+              Location and information of the currently mounted client
+            </Table.Cell>
+          </Table.Row>
+
+          <Table.Row>
+            <Table.Cell>
               <Link href="/internal/bindings">Bindings</Link>
             </Table.Cell>
             <Table.Cell>

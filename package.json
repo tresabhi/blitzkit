@@ -37,7 +37,10 @@
     "preview:website": "cd packages/website && bun run preview",
     "build:reviews": "cd packages/scripts && bun build:reviews",
     "build:ids": "cd packages/scripts && bun build:ids",
-    "prunestrings": "cd packages/scripts && bun prunestrings"
+    "prunestrings": "cd packages/scripts && bun prunestrings",
+    "build:ffi": "bun build:windows:ffi",
+    "build:windows:ffi": "dotnet publish src/BlitzKit.FFI -r win-x64 /p:PublishAot=true",
+    "build:linux:ffi": "dotnet publish src/BlitzKit.FFI -r linux-x64 /p:PublishAot=true"
   },
   "license": "MIT",
   "dependencies": {

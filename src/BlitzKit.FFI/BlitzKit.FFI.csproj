@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <PublishAot>true</PublishAot>
+    <SelfContained>true</SelfContained>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+</Project>
