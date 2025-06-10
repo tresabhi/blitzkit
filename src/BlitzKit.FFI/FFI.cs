@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using BlitzKit.FFI.Models;
+using BlitzKit.FFI.Utils;
+using CUE4Parse.Compression;
 
 namespace BlitzKit.FFI;
 
@@ -20,6 +22,8 @@ public static class FFI
   public static void DebugGetGameMountPoint(IntPtr pointPtr)
   {
     var point = Marshal.PtrToStringAnsi(pointPtr);
+
+    AgnosticHelpers.Initialize().Wait();
     provider = new(point);
   }
 
