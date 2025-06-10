@@ -229,5 +229,6 @@
   "deno.unstable": false,
   "cSpell.enableFiletypes": ["glsl", "proto3"],
   "typescript.tsdk": "node_modules\\typescript\\lib",
-  "liveServer.settings.multiRootWorkspaceName": "blitzkit"
+  "liveServer.settings.multiRootWorkspaceName": "blitzkit",
+  "git.ignoreLimitWarning": true
 }

@@ -119,6 +119,8 @@ _ReSharper*/
 _TeamCity*
 *.dotCover
 .axoCover/*
+
+
 !.axoCover/settings.json
 coverage*.json
 coverage*.xml
@@ -137,6 +139,7 @@ DocProject/buildhelp/
 DocProject/Help/*.HxT
 DocProject/Help/*.HxC
 DocProject/Help/*.hhc
+
 DocProject/Help/*.hhk
 DocProject/Help/*.hhp
 DocProject/Help/Html2
@@ -147,13 +150,13 @@ publish/
 *.pubxml
 *.publishproj
 PublishScripts/
+
 *.nupkg
 *.snupkg
-**/[Pp]ackages/*
-!**/[Pp]ackages/build/
 *.nuget.props
 *.nuget.targets
 csx/
+
 *.build.csdef
 ecf/
 rcf/
