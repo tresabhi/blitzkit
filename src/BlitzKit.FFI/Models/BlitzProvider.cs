@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using System.Text;
+using BlitzKit.FFI.Utils;
 using CUE4Parse.FileProvider;
 using CUE4Parse.UE4.Versions;
 
@@ -18,24 +18,14 @@ namespace BlitzKit.FFI.Models
     {
       Initialize();
       Mount();
-
-      Console.WriteLine(DiscoveryURL());
     }
 
-    public string DiscoveryURL()
-    {
-      if (TryGetGameFile("Blitz/Config/DefaultEngine.ini", out var defaultEngine))
-      {
-        INIAccessor accessor = new(Encoding.UTF8.GetString(defaultEngine.Read()));
+    public INIAccessor GetDefaultEngine() => new(this["Blitz/Config/DefaultEngine.ini"]);
 
-        var url = (string)accessor.Get("DiscoveryURLDedicProduction");
+    public string GetBindingsURLProduction() =>
+      GetDefaultEngine()["/Script/MintSDK.MintSDKSettingsObject"]["DiscoveryBindingsURLProduction"];
 
-        return url;
-      }
-      else
-      {
-        throw new FileNotFoundException("Could not find DefaultEngine.ini");
-      }
-    }
+    public string GetBindingsURLDev() =>
+      GetDefaultEngine()["/Script/MintSDK.MintSDKSettingsObject"]["DiscoveryBindingsURLDev"];
   }
 }

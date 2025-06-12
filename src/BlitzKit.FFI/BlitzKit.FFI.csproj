@@ -7,8 +7,10 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="../../submodules/CUE4Parse/CUE4Parse/CUE4Parse.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="ini-parser" Version="2.5.2" />
   </ItemGroup>
 </Project>

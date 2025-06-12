@@ -1,0 +1,40 @@
+---
+import { ffi } from '../../../core/blitzkit/ffi';
+import InternalBaseLayout from '../../../layouts/InternalBaseLayout.astro';
+import { Bindings } from '../bindings/_index';
+import { Discovery, DiscoveryServer } from '../discovery/_index';
+import { Page } from './_index';
+
+const serversMap = new Map<string, DiscoveryServer>();
+
+await Promise.all(
+  [ffi.get_bindings_url_dev()!, ffi.get_bindings_url_production()!]
+    .map((raw) => JSON.parse(raw) as string)
+    .map(async (url) => {
+      const { bindings } = await fetch(url).then(
+        (response) => response.json() as Promise<Bindings>,
+      );
+
+      await Promise.all(
+        bindings.map(async (binding) => {
+          const discovery = await fetch(binding.discovery).then(
+            (response) => response.json() as Promise<Discovery>,
+          );
+
+          Object.values(discovery.servers).map((server) => {
+            if (serversMap.has(server.name)) return;
+            serversMap.set(server.name, server);
+          });
+        }),
+      );
+    }),
+);
+
+const servers = [...serversMap.values()].sort((a, b) =>
+  a.name.localeCompare(b.name),
+);
+---
+
+<InternalBaseLayout>
+  <Page {servers} client:load />
+</InternalBaseLayout>

@@ -8,6 +8,8 @@ export const ffi = Library(FFI_PATH, {
   debug_echo: [types.CString, [types.CString]],
   mount_game: ['void', [types.CString]],
   debug_get_file_count: [types.int, []],
+  get_bindings_url_production: [types.CString, []],
+  get_bindings_url_dev: [types.CString, []],
 });
 
 ffi.mount_game(assertSecret(import.meta.env.GAME_MOUNT_POINT));

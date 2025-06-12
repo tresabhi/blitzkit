@@ -118,4 +118,14 @@ export class MetadataAccessor {
 
     return filtered;
   }
+
+  toArray() {
+    return Object.values(this.items);
+  }
+
+  toSortedArray() {
+    return this.toArray().sort((a, b) =>
+      a.catalog_id.localeCompare(b.catalog_id),
+    );
+  }
 }

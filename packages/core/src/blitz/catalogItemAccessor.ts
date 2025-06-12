@@ -1,14 +1,17 @@
 import { CatalogItem } from '@protos/blitz_items';
 import { Any } from '@protos/google/protobuf/any';
 import { lowerFirst } from 'lodash-es';
+import { compareUint8Arrays } from '../../../scripts/src/core/github/compareUint8Arrays';
 import { MessageFns } from '../protos';
 
 export class CatalogItemAccessor {
   public id: string;
   components: Record<string, Any> = {};
+  count: number;
 
-  constructor(item: CatalogItem) {
+  constructor(private item: CatalogItem) {
     this.id = item.catalog_id;
+    this.count = item.components.length;
 
     for (const component of item.components) {
       if (
@@ -76,5 +79,21 @@ export class CatalogItemAccessor {
 
   encode() {
     return CatalogItem.encode(this.pack()).finish();
+  }
+
+  equals(other: CatalogItemAccessor) {
+    return (
+      this.count === other.count &&
+      this.item.components.every(
+        (component) =>
+          component.value === undefined ||
+          (component.key in other.components &&
+            (component.value.component === undefined ||
+              compareUint8Arrays(
+                other.components[component.key].value,
+                component.value.component.value,
+              ))),
+      )
+    );
   }
 }

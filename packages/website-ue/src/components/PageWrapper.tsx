@@ -1,13 +1,11 @@
 import { Flex, type FlexProps, Theme } from '@radix-ui/themes';
 import type { ComponentProps } from 'react';
-import type { RadixSize } from '../stores/embedState';
 import { BlitzKitTheme } from './BlitzKitTheme';
 
 type PageWrapperProps = FlexProps & {
   color?: ComponentProps<typeof Theme>['accentColor'];
   containerProps?: ComponentProps<typeof Theme>;
   noFlex1?: boolean;
-  padding?: RadixSize;
   noMinHeight?: boolean;
 };
 
@@ -18,7 +16,6 @@ export function PageWrapper({
   noFlex1 = false,
   containerProps,
   noMinHeight = false,
-  padding = '4',
   ...props
 }: PageWrapperProps) {
   return (
@@ -35,8 +32,9 @@ export function PageWrapper({
     >
       <Flex
         direction="column"
-        gap="4"
-        p={padding}
+        gap="8"
+        px="4"
+        py="8"
         width="100%"
         maxWidth="80rem"
         style={{
