@@ -1,7 +1,7 @@
 import type { MessageFns } from '@protos/blitz_static_profile_avatar_component';
 import type { Any } from '@protos/google/protobuf/any';
 import * as protos from '@protos/index';
-import { CommitIcon, ReaderIcon } from '@radix-ui/react-icons';
+import { ArrowBottomRightIcon, CommitIcon } from '@radix-ui/react-icons';
 import {
   Badge,
   Box,
@@ -12,6 +12,7 @@ import {
   Spinner,
   Text,
 } from '@radix-ui/themes';
+import { diffLines, type ChangeObject } from 'diff';
 import { MetadataAccessor } from 'packages/core/src';
 import type { CatalogItemAccessor } from 'packages/core/src/blitz/catalogItemAccessor';
 import { PageWrapper } from 'packages/website-ue/src/components/PageWrapper';
@@ -25,6 +26,7 @@ export function Page({ servers }: { servers: DiscoveryServer[] }) {
   const [serverB, setSeverB] = useState<DiscoveryServer | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [diff, setDiff] = useState<CatalogDiffEntry[] | null>(null);
+  const [isError, setIsError] = useState(false);
 
   return (
     <PageWrapper justify="center">
@@ -52,12 +54,18 @@ export function Page({ servers }: { servers: DiscoveryServer[] }) {
           size="3"
           disabled={!serverA || !serverB}
           onClick={async () => {
+            setDiff(null);
             setLoading(true);
 
-            const diff = await diffServers(serverA!.addr, serverB!.addr);
+            try {
+              const diff = await diffServers(serverA!.addr, serverB!.addr);
+              setDiff(diff);
+            } catch (error) {
+              console.error(error);
+              setIsError(true);
+            }
 
             setLoading(false);
-            setDiff(diff);
           }}
         >
           {loading ? <Spinner /> : <CommitIcon />}
@@ -83,12 +91,25 @@ export function Page({ servers }: { servers: DiscoveryServer[] }) {
         </Select.Root>
       </Flex>
 
+      {isError && (
+        <Text align="center" color="red">
+          There was an error generating the diff, check console
+        </Text>
+      )}
       {diff !== null && (
-        <DiffDisplay
-          diff={diff.filter(
-            (entry) => entry.type !== CatalogItemDiffType.Unmodified,
+        <>
+          {diff.length === 0 ? (
+            <Text align="center" color="gray">
+              Branches are identical
+            </Text>
+          ) : (
+            <DiffDisplay
+              diff={diff.filter(
+                (entry) => entry.type !== CatalogItemDiffType.Unmodified,
+              )}
+            />
           )}
-        />
+        </>
       )}
     </PageWrapper>
   );
@@ -97,43 +118,33 @@ export function Page({ servers }: { servers: DiscoveryServer[] }) {
 function DiffDisplay({ diff }: { diff: CatalogDiffEntry[] }) {
   return (
     <Flex direction="column" gap="4">
-      {diff.length === 0 && (
-        <Text align="center" color="gray">
-          Branches are identical
-        </Text>
-      )}
-
       {diff.map((entry) => (
         <Flex
+          key={entry.name}
           direction="column"
-          gap="2"
           style={{
             backgroundColor: Var('gray-3'),
-            boxShadow: Var('shadow-3'),
+            boxShadow: Var('shadow-2'),
             borderRadius: Var('radius-3'),
             overflow: 'hidden',
           }}
         >
           <Box p="3">
-            <Text>
+            <Code color="gray" variant="ghost" highContrast>
               {diffEmojis[entry.type]} {entry.name}
-            </Text>
+            </Code>
           </Box>
 
-          <Flex gap="1">
-            {(entry.type === CatalogItemDiffType.Removed ||
-              entry.type === CatalogItemDiffType.Unmodified) && (
-              <ItemDisplay item={entry.item} />
-            )}
-            {entry.type === CatalogItemDiffType.Modified && (
-              <ItemDisplay item={entry.a} />
-            )}
+          <Flex>
             {(entry.type === CatalogItemDiffType.Added ||
               entry.type === CatalogItemDiffType.Unmodified) && (
-              <ItemDisplay item={entry.item} />
+              <ItemDisplay full item={entry.item} />
             )}
             {entry.type === CatalogItemDiffType.Modified && (
-              <ItemDisplay item={entry.b} />
+              <>
+                <ItemDisplay item={entry.a} />
+                <ItemDisplay item={entry.b} diff={entry.a} />
+              </>
             )}
           </Flex>
         </Flex>
@@ -142,71 +153,132 @@ function DiffDisplay({ diff }: { diff: CatalogDiffEntry[] }) {
   );
 }
 
-function ItemDisplay({ item }: { item: CatalogItemAccessor }) {
+function ItemDisplay({
+  item,
+  full,
+  diff,
+}: {
+  item: CatalogItemAccessor;
+  full?: boolean;
+  diff?: CatalogItemAccessor;
+}) {
   const entries = Object.entries(item.components);
-
-  protos;
 
   return (
     <Flex
       direction="column"
       gap="4"
-      flexGrow="1"
       p="3"
       style={{
+        width: full ? '100%' : '50%',
         backgroundColor: Var('gray-2'),
       }}
     >
       {entries.length === 0 && <Text color="gray">No components</Text>}
 
       {entries.map(([key, value]) => (
-        <ComponentDisplay key={key} name={key} value={value} />
+        <ComponentDisplay
+          key={key}
+          name={key}
+          value={value}
+          diff={diff?.components[key]}
+        />
       ))}
     </Flex>
   );
 }
 
-function ComponentDisplay({ name, value }: { name: string; value: Any }) {
-  const [code, setCode] = useState<string | null>(null);
+function ComponentDisplay({
+  name,
+  value,
+  diff,
+}: {
+  name: string;
+  value: Any;
+  diff?: Any;
+}) {
+  const [code, setCode] = useState<string | ChangeObject<string>[] | null>(
+    null,
+  );
 
   return (
-    <Flex direction="column" gap="1">
-      <Flex gap="2" align="center">
+    <Flex direction="column" gap="2">
+      <Flex gap="2" align="center" maxWidth="100%" overflow="hidden">
         <IconButton
           size="1"
           variant="ghost"
           onClick={() => {
+            if (code !== null) return setCode(null);
+
             const messageName = value.type_url
               .slice(2)
               .split('.')
               .slice(1)
               .join('.');
-            const json = (
-              protos[messageName as keyof typeof protos] as MessageFns<any>
-            ).decode(value.value);
+            const Message = protos[
+              messageName as keyof typeof protos
+            ] as MessageFns<any>;
+            const json = Message.decode(value.value);
 
-            setCode(JSON.stringify(json, null, 2));
+            if (diff === undefined) {
+              setCode(JSON.stringify(json, null, 2));
+            } else {
+              const b = JSON.stringify(json, null, 2);
+              const a = JSON.stringify(Message.decode(diff.value), null, 2);
+
+              setCode(diffLines(a, b));
+            }
           }}
         >
-          <ReaderIcon />
+          <ArrowBottomRightIcon />
         </IconButton>
 
-        <Code color="gray" highContrast variant="ghost">
+        <Code color="gray" variant="ghost">
           {name}
         </Code>
-        <Badge>{value.value.length.toLocaleString()}B</Badge>
+        <Badge color="gray" variant="outline">
+          {value.value.length.toLocaleString()}B
+        </Badge>
       </Flex>
 
       {code !== null && (
-        <Code
-          ml="4"
-          size="1"
-          color="gray"
-          highContrast
-          style={{ whiteSpace: 'pre' }}
+        <Flex
+          direction="column"
+          ml="5"
+          p="2"
+          style={{
+            overflowX: 'auto',
+            backgroundColor: Var('gray-1'),
+            borderRadius: Var('radius-2'),
+          }}
         >
-          {code}
-        </Code>
+          {typeof code === 'string' ? (
+            <Code
+              size="1"
+              color="gray"
+              variant="ghost"
+              highContrast
+              style={{ borderRadius: 0, whiteSpace: 'pre' }}
+              children={code}
+            />
+          ) : (
+            code.map((line) => {
+              const modified = line.added || line.removed;
+
+              return (
+                <Code
+                  size="1"
+                  color={line.added ? 'green' : line.removed ? 'red' : 'gray'}
+                  variant={modified ? 'soft' : 'ghost'}
+                  highContrast={!modified}
+                  style={{ borderRadius: 0, whiteSpace: 'pre' }}
+                  key={line.value}
+                  children={line.value}
+                />
+              );
+            })
+          )}
+        </Flex>
       )}
     </Flex>
   );
