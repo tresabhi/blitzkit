@@ -1,7 +1,11 @@
 import type { MessageFns } from '@protos/blitz_static_profile_avatar_component';
 import type { Any } from '@protos/google/protobuf/any';
 import * as protos from '@protos/index';
-import { ArrowBottomRightIcon, CommitIcon } from '@radix-ui/react-icons';
+import {
+  ArrowBottomRightIcon,
+  CommitIcon,
+  DiscIcon,
+} from '@radix-ui/react-icons';
 import {
   Badge,
   Box,
@@ -60,6 +64,7 @@ export function Page({ servers }: { servers: DiscoveryServer[] }) {
             try {
               const diff = await diffServers(serverA!.addr, serverB!.addr);
               setDiff(diff);
+              setIsError(false);
             } catch (error) {
               console.error(error);
               setIsError(true);
@@ -239,6 +244,14 @@ function ComponentDisplay({
         <Badge color="gray" variant="outline">
           {value.value.length.toLocaleString()}B
         </Badge>
+
+        <IconButton
+          size="1"
+          variant="ghost"
+          onClick={() => console.log(value.value)}
+        >
+          <DiscIcon />
+        </IconButton>
       </Flex>
 
       {code !== null && (
