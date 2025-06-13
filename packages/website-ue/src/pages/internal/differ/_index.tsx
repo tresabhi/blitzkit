@@ -248,7 +248,11 @@ function ComponentDisplay({
         <IconButton
           size="1"
           variant="ghost"
-          onClick={() => console.log(value.value)}
+          onClick={() => {
+            navigator.clipboard.writeText(
+              btoa(String.fromCharCode(...value.value)),
+            );
+          }}
         >
           <DiscIcon />
         </IconButton>
