@@ -88,7 +88,7 @@ function Group({ group, characteristics }: GroupProps) {
         {group.order.map((item) => (
           <>
             {"toy" in item && <Toy {...item} />}
-            {"name" in item && characteristics.get(item.name) && (
+            {"name" in item && characteristics.has(item.name) && (
               <Item config={item} value={characteristics.get(item.name)!} />
             )}
           </>

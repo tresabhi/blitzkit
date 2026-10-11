@@ -140,6 +140,10 @@ export const characteristicsGroups: CharacteristicsGroup[] = [
     order: [
       { name: "gun_depression", decimals: 0, units: "deg" },
       { name: "gun_elevation", decimals: 0, units: "deg" },
+      { name: "gun_frontal_depression", decimals: 1, units: "deg" },
+      { name: "gun_frontal_elevation", decimals: 1, units: "deg" },
+      { name: "gun_rear_depression", decimals: 1, units: "deg" },
+      { name: "gun_rear_elevation", decimals: 1, units: "deg" },
       { name: "azimuth_left", decimals: 0, units: "deg" },
       { name: "azimuth_right", decimals: 0, units: "deg" },
 

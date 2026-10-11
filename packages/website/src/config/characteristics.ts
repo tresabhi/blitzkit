@@ -523,6 +523,50 @@ export const characteristics = {
     },
   },
 
+  gun_frontal_depression: {
+    type: CharacteristicType.Number,
+    should_render({ state, turret, gun }) {
+      return state.model.turrets[turret.id].guns[gun.id].pitch!.front !==
+        undefined;
+    },
+    compute({ state, turret, gun }) {
+      return state.model.turrets[turret.id].guns[gun.id].pitch!.front!.max;
+    },
+  },
+
+  gun_frontal_elevation: {
+    type: CharacteristicType.Number,
+    should_render({ state, turret, gun }) {
+      return state.model.turrets[turret.id].guns[gun.id].pitch!.front !==
+        undefined;
+    },
+    compute({ state, turret, gun }) {
+      return -state.model.turrets[turret.id].guns[gun.id].pitch!.front!.min;
+    },
+  },
+
+  gun_rear_depression: {
+    type: CharacteristicType.Number,
+    should_render({ state, turret, gun }) {
+      return state.model.turrets[turret.id].guns[gun.id].pitch!.back !==
+        undefined;
+    },
+    compute({ state, turret, gun }) {
+      return state.model.turrets[turret.id].guns[gun.id].pitch!.back!.max;
+    },
+  },
+
+  gun_rear_elevation: {
+    type: CharacteristicType.Number,
+    should_render({ state, turret, gun }) {
+      return state.model.turrets[turret.id].guns[gun.id].pitch!.back !==
+        undefined;
+    },
+    compute({ state, turret, gun }) {
+      return -state.model.turrets[turret.id].guns[gun.id].pitch!.back!.min;
+    },
+  },
+
   azimuth_left: {
     type: CharacteristicType.Number,
     should_render({ state, turret }) {
