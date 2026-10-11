@@ -173,7 +173,14 @@ interface ProvisionEntryProps {
 
 function ProvisionEntry({ id, provision }: ProvisionEntryProps) {
   const isSelected = useProvision("protagonist", id);
+  const tank = useDuel("protagonist", DuelModule.Tank);
+  const selectedCount = Tankopedia.use(
+    (state) => state.protagonist.provisions.length,
+  );
+
   const unwrap = useUnwrapper();
+
+  const disabled = !isSelected && selectedCount >= tank.max_provisions;
 
   return (
     <Tooltip tooltip={unwrap(provision.name)}>
@@ -183,11 +190,16 @@ function ProvisionEntry({ id, provision }: ProvisionEntryProps) {
         variant={isSelected ? "surface" : "soft"}
         color={isSelected ? undefined : "gray"}
         className={styles.consumable}
+        disabled={disabled}
         onClick={() => {
           Tankopedia.mutate((draft) => {
             const index = draft.protagonist.provisions.indexOf(id);
 
             if (index === -1) {
+              if (draft.protagonist.provisions.length === tank.max_provisions) {
+                return;
+              }
+
               draft.protagonist.provisions.push(id);
             } else {
               draft.protagonist.provisions.splice(index, 1);
@@ -252,10 +264,17 @@ interface ConsumableProps {
 }
 
 function ConsumableEntry({ id, consumable }: ConsumableProps) {
+  const tank = useDuel("protagonist", DuelModule.Tank);
   const isSelected = Tankopedia.use((state) =>
     state.protagonist.consumables.includes(id),
   );
+  const selectedCount = Tankopedia.use(
+    (state) => state.protagonist.consumables.length,
+  );
+
   const unwrap = useUnwrapper();
+
+  const disabled = !isSelected && selectedCount >= tank.max_consumables;
 
   return (
     <div className={styles["consumable-wrapper"]}>
@@ -265,11 +284,18 @@ function ConsumableEntry({ id, consumable }: ConsumableProps) {
           variant={isSelected ? "surface" : "soft"}
           color={isSelected ? undefined : "gray"}
           className={styles.consumable}
+          disabled={disabled}
           onClick={() => {
             Tankopedia.mutate((draft) => {
               const index = draft.protagonist.consumables.indexOf(id);
 
               if (index === -1) {
+                if (
+                  draft.protagonist.consumables.length === tank.max_consumables
+                ) {
+                  return;
+                }
+
                 draft.protagonist.consumables.push(id);
               } else {
                 draft.protagonist.consumables.splice(index, 1);

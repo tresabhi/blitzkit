@@ -39,6 +39,7 @@ export function Button({
 
   listChild,
   parentListChild,
+  disabled,
   ...props
 }: ButtonProps) {
   return (
@@ -51,6 +52,8 @@ export function Button({
       data-size={size}
       data-list-child={listChild}
       data-parent-list-child={parentListChild}
+      data-disabled={disabled}
+      disabled={disabled}
       {...props}
     />
   );
