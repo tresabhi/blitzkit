@@ -151,7 +151,7 @@ function Item({ config, value }: ItemProps) {
       </div>
 
       <div className={styles.ranking}>
-        <Bar value={0.5} />
+        <Bar value={Math.random()} />
 
         <Text lowContrast size="minor" className={styles.number}>
           1 / 132

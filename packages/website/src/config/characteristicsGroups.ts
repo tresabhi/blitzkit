@@ -162,7 +162,7 @@ export const characteristicsGroups: CharacteristicsGroup[] = [
       { name: "weight", decimals: 1, units: "t" },
       { name: "engine_power", units: "bhp" },
       { name: "power_to_weight", decimals: 1, units: "bhp_t" },
-      { name: "brake_force", decimals: 1, units: "kN" },
+      // { name: "brake_force", decimals: 1, units: "kN" },
 
       { label: "hull_traverse_speeds" },
       { name: "hull_traverse_speed_hard", units: "deg_s", indent: true },
@@ -195,10 +195,10 @@ export const characteristicsGroups: CharacteristicsGroup[] = [
     order: [
       { name: "health", units: "hp" },
       { name: "fire_chance", units: "percentage" },
-      { name: "fire_rate", units: "hp_s" },
-      { name: "ramming_resistance", units: "percentage" },
+      // { name: "fire_rate", units: "hp_s" },
+      // { name: "ramming_resistance", units: "percentage" },
 
-      { toy: "fire_health_burn" },
+      // { toy: "fire_health_burn" },
 
       // TODO: investigate ATTRIBUTE_NAME_MAX_FIRE_DURATION
     ],
