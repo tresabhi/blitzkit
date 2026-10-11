@@ -110,8 +110,16 @@ export const characteristicsGroups: CharacteristicsGroup[] = [
     // render: CharacteristicsGroupRender.Statistical,
     order: [
       { name: "penetration", units: "mm" },
-      { name: "penetration_loss_by_distance", units: "percentage" },
-      { name: "penetration_loss_after_ricochet" },
+      {
+        name: "penetration_loss_by_distance",
+        units: "percentage",
+        indent: true,
+      },
+      {
+        name: "penetration_loss_after_ricochet",
+        units: "percentage",
+        indent: true,
+      },
       { name: "shell_velocity", units: "m_s" },
       { name: "shell_range", units: "m" },
       { name: "shell_capacity" },

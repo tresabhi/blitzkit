@@ -316,7 +316,17 @@ export const characteristics = {
     },
   },
 
-  // penetration_loss_after_ricochet: unavailable,
+  penetration_loss_after_ricochet: {
+    type: CharacteristicType.Number,
+
+    should_render({ shell }) {
+      return !isExplosive(shell.type);
+    },
+
+    compute() {
+      return 25;
+    },
+  },
 
   shell_velocity: {
     type: CharacteristicType.Number,
@@ -458,11 +468,7 @@ export const characteristics = {
         coefficient *= effect.shotDispersionAngleFactor;
       });
 
-      return (
-        gun.dispersion_base *
-        degressive("gunner") *
-        coefficient
-      );
+      return gun.dispersion_base * degressive("gunner") * coefficient;
     },
   },
 
