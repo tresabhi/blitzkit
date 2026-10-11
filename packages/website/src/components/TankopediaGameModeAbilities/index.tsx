@@ -15,7 +15,7 @@ const [gameDefinitions, consumableDefinitions, provisionDefinitions, tanks] =
     api.tanks(),
   ]);
 
-export function GameModeSection() {
+export function TankopediaGameModeAbilities() {
   const unwrap = useUnwrapper();
   const strings = useStrings();
   const tank = useDuel("protagonist", DuelModule.Tank);
