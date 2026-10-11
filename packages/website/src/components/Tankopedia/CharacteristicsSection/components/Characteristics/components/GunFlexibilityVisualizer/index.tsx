@@ -296,7 +296,7 @@ export function GunFlexibilityVisualizer({
             height="100%"
             style={{
               opacity: 2 ** -3,
-              backgroundImage: `url(/assets/images/tankopedia/visualizers/ricochet/armor-hash.png)`,
+              backgroundImage: `url(/media/random/armor-hash.png)`,
               boxShadow: "inset 0 0 4rem 1rem black",
             }}
           />

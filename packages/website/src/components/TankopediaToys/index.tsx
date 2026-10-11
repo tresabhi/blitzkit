@@ -1,174 +1,108 @@
-import { isExplosive } from "@blitzkit/core";
-import { useRef, useState } from "react";
-import { degToRad } from "three/src/math/MathUtils.js";
+import { alias, isExplosive } from "@blitzkit/core";
+import { literals } from "@blitzkit/i18n";
+import {
+  useRef,
+  useState,
+  type CSSProperties,
+  type PointerEvent,
+} from "react";
+import { clamp, degToRad, radToDeg } from "three/src/math/MathUtils.js";
 import type { ToyProps } from "../../config/toys";
 import { DuelModule, useDuel } from "../../hooks/useDuel";
 import { useStrings } from "../../hooks/useStrings";
+import { Code } from "../Code";
+import styles from "./index.module.css";
 
 export function RicochetToy({ characteristics }: ToyProps) {
   const strings = useStrings();
-
   const shell = useDuel("protagonist", DuelModule.Shell);
-
   const container = useRef<HTMLDivElement>(null);
-
+  const normalizationValue = characteristics.get("normalization");
+  const ricochetValue = characteristics.get("ricochet");
   const normalization = degToRad(
-    (characteristics.get("normalization") as number) ?? 0,
+    typeof normalizationValue === "number" ? normalizationValue : 0,
   );
-  const ricochet = degToRad((characteristics.get("ricochet") as number) ?? 90);
+  const ricochet = degToRad(
+    typeof ricochetValue === "number" ? ricochetValue : 90,
+  );
   const explodes = isExplosive(shell.type);
-
   const [rawAngle, setAngle] = useState(degToRad(-25));
-
   const angle = explodes ? degToRad(-70) : rawAngle;
   const doesRicochet = Math.abs(angle) >= ricochet;
   const effectiveAngle = doesRicochet
     ? -angle + Math.PI
     : Math.sign(angle) * Math.max(0, Math.abs(angle) - normalization);
-
   const armorPercentage = Math.min(999, 100 / Math.cos(effectiveAngle));
 
+  function updateAngle(event: PointerEvent<HTMLDivElement>) {
+    event.preventDefault();
+
+    if (!container.current || explodes) return;
+
+    const rect = container.current.getBoundingClientRect();
+    const x = event.clientX - rect.left - rect.width / 3;
+    const y = event.clientY - rect.top - rect.height / 2;
+
+    setAngle(clamp(Math.atan2(-y, x), -Math.PI / 2, Math.PI / 2));
+  }
+
   return (
-    <Box
-      onPointerMove={(event) => {
-        event.preventDefault();
-
-        if (!container.current || explodes) return;
-
-        const rect = container.current.getBoundingClientRect();
-        const x = event.clientX - rect.left - rect.width / 3;
-        const y = event.clientY - rect.top - rect.height / 2;
-        const angle = clamp(Math.atan2(-y, x), -Math.PI / 2, Math.PI / 2);
-
-        setAngle(angle);
-      }}
+    <div
+      ref={container}
+      className={styles.visualizer}
+      onPointerMove={updateAngle}
     >
-      <Box
-        width="33%"
-        height="100%"
-        position="absolute"
-        top="0"
-        left="0"
-        style={{
-          background: `linear-gradient(to right, transparent, ${Var("gray-a4")})`,
-        }}
-      >
-        <Box
-          width="100%"
-          height="100%"
-          style={{
-            opacity: 2 ** -3,
-            backgroundImage: `url(/assets/images/tankopedia/visualizers/ricochet/armor-hash.png)`,
-          }}
-        />
-      </Box>
+      <div className={styles.armor}>
+        <div className={styles["armor-texture"]} />
+      </div>
 
-      <Box
-        left="33%"
-        top="0"
-        width="67%"
-        height="100%"
-        position="absolute"
-        style={{
-          background: `conic-gradient(
-              at 0 50%,
-
-              ${Var("ruby-a2")},
-              ${Var("ruby-a1")} ${Math.PI / 2 - ricochet}rad,
-
-              ${Var("jade-a2")} ${Math.PI / 2 - ricochet}rad,
-              ${Var("jade-a4")} ${Math.PI / 2 - normalization}rad,
-
-              ${Var("cyan-a5")} ${Math.PI / 2 - normalization}rad,
-              ${Var("cyan-a3")} ${Math.PI / 2 + normalization}rad,
-
-              ${Var("jade-a2")} ${Math.PI / 2 + normalization}rad,
-              ${Var("jade-a4")} ${Math.PI / 2 + ricochet}rad,
-
-              ${Var("ruby-a1")} ${Math.PI / 2 + ricochet}rad,
-              ${Var("ruby-a2")} 180deg
-            `,
-        }}
+      <div
+        className={styles.zones}
+        style={
+          {
+            "--normalization-angle": `${normalization}rad`,
+            "--ricochet-angle": `${ricochet}rad`,
+          } as CSSProperties
+        }
       />
 
-      <Box
-        position="absolute"
-        left="33%"
-        top="50%"
-        height="18rem"
-        style={{
-          transformOrigin: "top center",
-          transform: `translateX(-50%) rotate(${-Math.PI / 2 - angle}rad)`,
-        }}
+      <div
+        className={styles["shell-path"]}
+        style={
+          {
+            "--rotation-angle": `${-Math.PI / 2 - angle}rad`,
+          } as CSSProperties
+        }
       >
-        <Box
-          position="absolute"
-          width="1px"
-          height="100%"
-          bottom="100%"
-          style={{
-            transform: "translateX(-50%)",
-            backgroundColor: Var("gray-a8"),
-          }}
-        />
-        <Box
-          position="absolute"
-          width="3px"
-          height="100%"
-          style={{
-            transform: "translateX(-50%)",
-            background: `linear-gradient(${Var("gray-a11")}, ${Var("gray-a4")})`,
-          }}
-        />
-
+        <div className={styles["shell-path-extension"]} />
+        <div className={styles["shell-path-line"]} />
         <img
+          className={styles.shell}
+          alt=""
           src={alias("api", `/icons/shells/${shell.icon}.webp`)}
-          style={{
-            objectFit: "contain",
-            transform: "translate(-50%, -50%) rotate(-45deg)",
-            position: "absolute",
-            width: "2rem",
-            height: "2rem",
-            top: "6rem",
-            left: 0,
-            filter: "drop-shadow(0px 0px 0.25rem black)",
-          }}
         />
-      </Box>
+      </div>
 
-      <Box
-        position="absolute"
-        left="33%"
-        top="50%"
-        height="16rem"
-        style={{
-          transformOrigin: "top center",
-          transform: `translateX(-50%) rotate(${-Math.PI / 2 - effectiveAngle}rad)`,
-        }}
+      <div
+        className={styles["effective-path"]}
+        style={
+          {
+            "--rotation-angle": `${-Math.PI / 2 - effectiveAngle}rad`,
+          } as CSSProperties
+        }
       >
-        <Box
-          position="absolute"
-          width="3px"
-          height="100%"
-          top="-100%"
-          style={{
-            transform: "translateX(-50%)",
-            background: `linear-gradient(${Var("gray-a4")}, ${Var("gray-a11")})`,
-          }}
-        />
-      </Box>
+        <div className={styles["effective-path-line"]} />
+      </div>
 
-      <VisualizerCornerStat
-        label={strings.website.tools.tankopedia.visualizers.ricochet.angle}
+      <CornerStat
+        label={strings.tanks.characteristics.toys.ricochet.angle}
         value={literals(strings.common.units.deg, {
           value: radToDeg(Math.abs(angle)).toFixed(0),
         })}
-        side="top-left"
+        position={CornerStatPosition.TopLeft}
       />
-      <VisualizerCornerStat
-        label={
-          strings.website.tools.tankopedia.visualizers.ricochet.normalization
-        }
+      <CornerStat
+        label={strings.tanks.characteristics.toys.ricochet.normalization}
         value={
           doesRicochet
             ? "-"
@@ -178,12 +112,10 @@ export function RicochetToy({ characteristics }: ToyProps) {
                 ).toFixed(0),
               })
         }
-        side="top-right"
+        position={CornerStatPosition.TopRight}
       />
-      <VisualizerCornerStat
-        label={
-          strings.website.tools.tankopedia.visualizers.ricochet.effective_angle
-        }
+      <CornerStat
+        label={strings.tanks.characteristics.toys.ricochet.effective}
         value={
           doesRicochet
             ? "-"
@@ -191,10 +123,10 @@ export function RicochetToy({ characteristics }: ToyProps) {
                 value: radToDeg(Math.abs(effectiveAngle)).toFixed(0),
               })
         }
-        side="bottom-left"
+        position={CornerStatPosition.BottomLeft}
       />
-      <VisualizerCornerStat
-        label={strings.website.tools.tankopedia.visualizers.ricochet.armor}
+      <CornerStat
+        label={strings.tanks.characteristics.toys.ricochet.armor}
         value={
           doesRicochet
             ? "-"
@@ -202,28 +134,38 @@ export function RicochetToy({ characteristics }: ToyProps) {
                 value: armorPercentage.toFixed(0),
               })
         }
-        side="bottom-right"
+        position={CornerStatPosition.BottomRight}
       />
 
       {explodes && (
-        <Flex
-          p="3"
-          justify="center"
-          align="center"
-          height="100%"
-          width="100%"
-          position="absolute"
-          top="0"
-          left="0"
-          style={{
-            background: `radial-gradient(${Var("black-a7")}, ${Var("black-a11")})`,
-          }}
-        >
-          <Text color="gray" align="center">
-            {strings.website.tools.tankopedia.visualizers.ricochet.no_ricochet}
-          </Text>
-        </Flex>
+        <div className={styles["explosive-overlay"]}>
+          {strings.tanks.characteristics.toys.ricochet.no_ricochet}
+        </div>
       )}
-    </Box>
+    </div>
+  );
+}
+
+enum CornerStatPosition {
+  TopLeft = "top-left",
+  TopRight = "top-right",
+  BottomLeft = "bottom-left",
+  BottomRight = "bottom-right",
+}
+
+interface CornerStatProps {
+  label: string;
+  value: string;
+  position: CornerStatPosition;
+}
+
+function CornerStat({ label, value, position }: CornerStatProps) {
+  return (
+    <div className={styles["corner-stat"]} data-position={position}>
+      <span>{label}</span>
+      <Code className={styles["corner-stat-value"]} size="minor">
+        {value}
+      </Code>
+    </div>
   );
 }

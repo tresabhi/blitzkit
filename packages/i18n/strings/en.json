@@ -28,6 +28,16 @@
         "all": "All tanks"
       },
 
+      "toys": {
+        "ricochet": {
+          "angle": "Angle",
+          "normalization": "Normalization",
+          "effective": "Effective",
+          "armor": "Armor",
+          "no_ricochet": "Explosive shells don't ricochet"
+        }
+      },
+
       "titles": {
         "gun": "Gun",
         "clip": "Clip",
