@@ -10,7 +10,7 @@ import type {
   TurretDefinition,
 } from "@blitzkit/protos";
 import type { ReactNode } from "react";
-import { characteristics } from "../config/characteristics";
+import type { characteristics } from "../config/characteristics";
 import type { DuelSide } from "../hooks/useEquipment";
 import type { TankEnvironment } from "../stores/tankopedia";
 import type { TankState } from "../tankopedia/tankState";
@@ -64,6 +64,12 @@ export enum CharacteristicType {
   Number,
 }
 
+export enum CharacteristicRanking {
+  HigherIsBetter,
+  LowerIsBetter,
+  None,
+}
+
 export type CharacteristicName = keyof typeof characteristics;
 export type CharacteristicReturnType = ReturnType<Characteristic["compute"]>;
 
@@ -79,6 +85,7 @@ export interface CharacteristicRenderConfig {
   units?: keyof Strings["units"];
   localize?: boolean;
   indent?: boolean;
+  ranking?: CharacteristicRanking;
   strings?: string;
 
   render?: (data: {

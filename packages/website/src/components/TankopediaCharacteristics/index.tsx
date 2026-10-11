@@ -1,13 +1,22 @@
+import { TIER_ROMAN_NUMERALS } from "@blitzkit/core";
+import { literals } from "@blitzkit/i18n/src/literals";
+import { useRef } from "react";
 import { characteristicsGroups } from "../../config/characteristicsGroups";
 import { useCharacteristicRenderer } from "../../hooks/useCharacteristicRenderer";
+import { DuelModule, useDuel } from "../../hooks/useDuel";
+import { useRankings } from "../../hooks/useRankings";
 import { useStrings } from "../../hooks/useStrings";
+import { Tankopedia, TankopediaRelativeAgainst } from "../../stores/tankopedia";
+import type { CharacteristicRank } from "../../tankopedia/calculateRankings";
 import type {
+  CharacteristicName,
   CharacteristicRenderConfig,
   CharacteristicReturnType,
   CharacteristicsGroup,
   ComputedCharacteristics,
 } from "../../types/characteristics";
 import { Heading } from "../Heading";
+import { SegmentedControl } from "../SegmentedControl";
 import { Text } from "../Text";
 import styles from "./index.module.css";
 
@@ -18,8 +27,12 @@ interface TankopediaCharacteristicsProps {
 export function TankopediaCharacteristics({
   characteristics,
 }: TankopediaCharacteristicsProps) {
+  const rankings = useRankings(characteristics);
+
   return (
     <div className={styles["characteristics-wrapper"]}>
+      <CompareOptions />
+
       <div className={styles.characteristics}>
         {characteristicsGroups.map((group) => {
           const items = group.order.filter(
@@ -34,6 +47,7 @@ export function TankopediaCharacteristics({
               key={group.name}
               group={group}
               characteristics={characteristics}
+              rankings={rankings}
             />
           );
         })}
@@ -45,9 +59,10 @@ export function TankopediaCharacteristics({
 interface GroupProps {
   group: CharacteristicsGroup;
   characteristics: ComputedCharacteristics;
+  rankings: Map<CharacteristicName, CharacteristicRank>;
 }
 
-function Group({ group, characteristics }: GroupProps) {
+function Group({ group, characteristics, rankings }: GroupProps) {
   const strings = useStrings();
   const toys = group.order.filter((item) => "toy" in item).length;
   const characteristicsCount = group.order.filter(
@@ -95,7 +110,11 @@ function Group({ group, characteristics }: GroupProps) {
             {"toy" in item && <Toy {...item} />}
             {"label" in item && <Label {...item} />}
             {"name" in item && characteristics.has(item.name) && (
-              <Item config={item} value={characteristics.get(item.name)!} />
+              <Item
+                config={item}
+                value={characteristics.get(item.name)!}
+                ranking={rankings.get(item.name)}
+              />
             )}
           </>
         ))}
@@ -125,9 +144,10 @@ function Label({ label }: LabelProps) {
 interface ItemProps {
   config: CharacteristicRenderConfig;
   value: CharacteristicReturnType;
+  ranking?: CharacteristicRank;
 }
 
-function Item({ config, value }: ItemProps) {
+function Item({ config, value, ranking }: ItemProps) {
   const strings = useStrings();
   const renderCharacteristic = useCharacteristicRenderer();
   const hasUnits = config.units !== undefined;
@@ -150,14 +170,61 @@ function Item({ config, value }: ItemProps) {
         </Text>
       </div>
 
-      <div className={styles.ranking}>
-        <Bar value={Math.random()} />
+      {ranking && (
+        <div className={styles.ranking}>
+          <Bar value={ranking.score} />
 
-        <Text lowContrast size="minor" className={styles.number}>
-          1 / 132
-        </Text>
-      </div>
+          <Text lowContrast size="minor" className={styles.number}>
+            {literals(strings.units.fraction, {
+              numerator: ranking.rank,
+              denominator: ranking.total,
+            })}
+          </Text>
+        </div>
+      )}
     </span>
+  );
+}
+
+function CompareOptions() {
+  const tank = useDuel("protagonist", DuelModule.Tank);
+  const relativeAgainst = Tankopedia.use((state) => state.relative_against);
+
+  const strings = useStrings();
+
+  const options = useRef([
+    {
+      value: TankopediaRelativeAgainst.ClassAndTier,
+      label: literals(strings.tanks.characteristics.compare.class, {
+        tier: TIER_ROMAN_NUMERALS[tank.tier],
+        class: strings.common.tank_class_short_plural_lowercase[tank.class],
+      }),
+    },
+    {
+      value: TankopediaRelativeAgainst.Tier,
+      label: literals(strings.tanks.characteristics.compare.tier, {
+        tier: TIER_ROMAN_NUMERALS[tank.tier],
+      }),
+    },
+    {
+      value: TankopediaRelativeAgainst.All,
+      label: strings.tanks.characteristics.compare.all,
+    },
+  ]);
+
+  return (
+    <div className={styles["compare-options"]}>
+      <Text lowContrast>{strings.tanks.characteristics.compare.label}</Text>
+      <SegmentedControl
+        options={options.current}
+        value={relativeAgainst}
+        onValueChange={(value) => {
+          Tankopedia.mutate((draft) => {
+            draft.relative_against = value;
+          });
+        }}
+      />
+    </div>
   );
 }
 

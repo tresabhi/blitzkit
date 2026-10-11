@@ -71,7 +71,7 @@ export type ArmorPiercingLayer =
     };
 
 export enum TankopediaRelativeAgainst {
-  Class,
+  ClassAndTier,
   Tier,
   All,
 }
@@ -90,9 +90,10 @@ interface Tankopedia {
   antagonist: TankState;
   environment: TankEnvironment;
 
+  relative_against: TankopediaRelativeAgainst;
+
   modelRequested: boolean;
   shot?: Shot;
-  relativeAgainst: TankopediaRelativeAgainst;
   editStatic: boolean;
   highlightArmor?: {
     editingPlate: boolean;
@@ -133,9 +134,10 @@ export const Tankopedia = new Soapstone<Tankopedia, [TankDefinition]>(
       skills: createDefaultSkills(skills),
     },
 
+    relative_against: TankopediaRelativeAgainst.ClassAndTier,
+
     modelRequested: false,
 
-    relativeAgainst: TankopediaRelativeAgainst.Class,
     editStatic: false,
     xpMultiplier: 1,
     requestedDisplay: TankopediaDisplay.Model,

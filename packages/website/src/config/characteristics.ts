@@ -661,13 +661,6 @@ export const characteristics = {
     },
   },
 
-  hull_traverse_speed: {
-    type: CharacteristicType.Number,
-    compute({ track, progressive }) {
-      return track.traverse_speed * progressive("driver");
-    },
-  },
-
   hull_traverse_speed_hard: {
     type: CharacteristicType.Number,
     compute(context): number {

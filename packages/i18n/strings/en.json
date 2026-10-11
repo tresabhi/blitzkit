@@ -15,11 +15,19 @@
     "bhp_t": "{value}bhp/t",
     "kN": "{value}kN",
     "hp_s": "{value}hp/s",
-    "plus": "+{value}"
+    "plus": "+{value}",
+    "fraction": "{numerator} / {denominator}"
   },
 
   "tanks": {
     "characteristics": {
+      "compare": {
+        "label": "Compare against",
+        "class": "Tier {tier} {class}",
+        "tier": "All tier {tier}",
+        "all": "All tanks"
+      },
+
       "titles": {
         "gun": "Gun",
         "clip": "Clip",

@@ -1,15 +1,26 @@
 .characteristics-wrapper {
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--space-4);
   margin: var(--space-4);
 
   --base-cell-width: 20rem;
   --group-span: 7;
 
-  container-type: inline-size;
+  .compare-options {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+  }
 
   .characteristics {
     --N: round(down, 100cqw / var(--base-cell-width));
     --cell-width: calc(100cqw / var(--N));
     --cell-height: calc(var(--cell-width) / var(--group-span));
+
+    margin-bottom: calc(-1 * var(--cell-height));
 
     display: grid;
     grid-template-columns: repeat(

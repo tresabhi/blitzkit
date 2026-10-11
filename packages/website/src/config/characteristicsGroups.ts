@@ -1,5 +1,6 @@
 import type { CaseType } from "@blitzkit/core";
 import type { GunDefinition } from "@blitzkit/protos";
+import { CharacteristicRanking } from "../types/characteristics";
 import type { CharacteristicsGroup } from "../types/characteristics";
 
 export const characteristicsGroups: CharacteristicsGroup[] = [
@@ -80,7 +81,12 @@ export const characteristicsGroups: CharacteristicsGroup[] = [
       { name: "damage_range", decimals: 0, units: "hp", localize: true },
       { name: "module_damage", decimals: 0, units: "hp", localize: true },
       { name: "module_damage_range", decimals: 0, units: "hp", localize: true },
-      { name: "reload", decimals: 1, units: "s" },
+      {
+        name: "reload",
+        decimals: 1,
+        units: "s",
+        ranking: CharacteristicRanking.LowerIsBetter,
+      },
       { name: "reloads", decimals: 1, units: "s" },
 
       { toy: "reload" },
@@ -94,7 +100,12 @@ export const characteristicsGroups: CharacteristicsGroup[] = [
       { name: "clipping_potential", localize: true, units: "hp" },
       { name: "clip_size" },
       { name: "optimal_shell" },
-      { name: "intra_clip", decimals: 2, units: "s" },
+      {
+        name: "intra_clip",
+        decimals: 2,
+        units: "s",
+        ranking: CharacteristicRanking.LowerIsBetter,
+      },
       { name: "burst_size" },
       { name: "intra_burst", decimals: 2, units: "s" },
 
@@ -114,18 +125,28 @@ export const characteristicsGroups: CharacteristicsGroup[] = [
         name: "penetration_loss_by_distance",
         units: "percentage",
         indent: true,
+        ranking: CharacteristicRanking.LowerIsBetter,
       },
       {
         name: "penetration_loss_after_ricochet",
         units: "percentage",
         indent: true,
+        ranking: CharacteristicRanking.LowerIsBetter,
       },
       { name: "shell_velocity", units: "m_s" },
       { name: "shell_range", units: "m" },
       { name: "shell_capacity" },
       { name: "caliber", units: "mm" },
-      { name: "ricochet", units: "deg" },
-      { name: "normalization", units: "deg" },
+      {
+        name: "ricochet",
+        units: "deg",
+        ranking: CharacteristicRanking.None,
+      },
+      {
+        name: "normalization",
+        units: "deg",
+        ranking: CharacteristicRanking.None,
+      },
 
       { toy: "ricochet" },
     ],
@@ -135,8 +156,18 @@ export const characteristicsGroups: CharacteristicsGroup[] = [
     name: "accuracy",
     // render: CharacteristicsGroupRender.Statistical,
     order: [
-      { name: "aim_time", decimals: 2, units: "s" },
-      { name: "dispersion", decimals: 3, units: "m" },
+      {
+        name: "aim_time",
+        decimals: 2,
+        units: "s",
+        ranking: CharacteristicRanking.LowerIsBetter,
+      },
+      {
+        name: "dispersion",
+        decimals: 3,
+        units: "m",
+        ranking: CharacteristicRanking.LowerIsBetter,
+      },
       { name: "dispersion_angle", decimals: 3, units: "deg" },
       { toy: "aim_time" },
     ],
@@ -167,7 +198,12 @@ export const characteristicsGroups: CharacteristicsGroup[] = [
       { name: "speed_forward", units: "km_h", indent: true },
       { name: "speed_backward", units: "km_h", indent: true },
 
-      { name: "weight", decimals: 1, units: "t" },
+      {
+        name: "weight",
+        decimals: 1,
+        units: "t",
+        ranking: CharacteristicRanking.LowerIsBetter,
+      },
       { name: "engine_power", units: "bhp" },
       { name: "power_to_weight", decimals: 1, units: "bhp_t" },
       // { name: "brake_force", decimals: 1, units: "kN" },
@@ -185,9 +221,24 @@ export const characteristicsGroups: CharacteristicsGroup[] = [
       { name: "soft_terrain_coefficient", decimals: 0, indent: true },
 
       { label: "raw_terrain_coefficient" },
-      { name: "hard_terrain_coefficient_raw", decimals: 2, indent: true },
-      { name: "medium_terrain_coefficient_raw", decimals: 2, indent: true },
-      { name: "soft_terrain_coefficient_raw", decimals: 2, indent: true },
+      {
+        name: "hard_terrain_coefficient_raw",
+        decimals: 2,
+        indent: true,
+        ranking: CharacteristicRanking.LowerIsBetter,
+      },
+      {
+        name: "medium_terrain_coefficient_raw",
+        decimals: 2,
+        indent: true,
+        ranking: CharacteristicRanking.LowerIsBetter,
+      },
+      {
+        name: "soft_terrain_coefficient_raw",
+        decimals: 2,
+        indent: true,
+        ranking: CharacteristicRanking.LowerIsBetter,
+      },
 
       { toy: "traverse" },
 
@@ -202,7 +253,11 @@ export const characteristicsGroups: CharacteristicsGroup[] = [
     // render: CharacteristicsGroupRender.Statistical,
     order: [
       { name: "health", units: "hp" },
-      { name: "fire_chance", units: "percentage" },
+      {
+        name: "fire_chance",
+        units: "percentage",
+        ranking: CharacteristicRanking.LowerIsBetter,
+      },
       // { name: "fire_rate", units: "hp_s" },
       // { name: "ramming_resistance", units: "percentage" },
 
@@ -221,9 +276,21 @@ export const characteristicsGroups: CharacteristicsGroup[] = [
 
       { toy: "view_range" },
 
-      { name: "width", units: "m" },
-      { name: "height", units: "m" },
-      { name: "length", units: "m" },
+      {
+        name: "width",
+        units: "m",
+        ranking: CharacteristicRanking.LowerIsBetter,
+      },
+      {
+        name: "height",
+        units: "m",
+        ranking: CharacteristicRanking.LowerIsBetter,
+      },
+      {
+        name: "length",
+        units: "m",
+        ranking: CharacteristicRanking.LowerIsBetter,
+      },
     ],
   },
 ];
