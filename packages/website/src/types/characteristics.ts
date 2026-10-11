@@ -28,6 +28,12 @@ export type Characteristic = {
     }
 );
 
+export type CharacteristicScript = (
+  side: DuelSide,
+  name: string,
+  effect: (effect: BlitzEffectScript) => void,
+) => void;
+
 export interface CharacteristicContext {
   state: TankState;
   environment: TankEnvironment;
@@ -48,11 +54,7 @@ export interface CharacteristicContext {
     name: CharacteristicName,
   ): ReturnType<Characteristic["compute"]>;
 
-  script(
-    side: DuelSide,
-    name: string,
-    effect: (effect: BlitzEffectScript) => void,
-  ): void;
+  script: CharacteristicScript;
 }
 
 export type CrewStatRole = "commander" | "loader" | "gunner" | "driver";

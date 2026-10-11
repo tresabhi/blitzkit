@@ -10,6 +10,7 @@ import {
   type Characteristic,
   type CharacteristicContext,
 } from "../types/characteristics";
+import { rawTerrainCoefficient } from "../tankopedia/rawTerrainCoefficient";
 
 function intraClipCoefficient({
   script,
@@ -621,7 +622,66 @@ export const characteristics = {
   },
 
   // brake_force: unavailable,
-  // terrain_coefficient: unavailable,
+
+  hard_terrain_coefficient_raw: {
+    type: CharacteristicType.Number,
+    compute({ track, degressive, script }) {
+      return rawTerrainCoefficient(
+        track.resistance_hard,
+        "firmGroundPassabilityIncrease",
+        degressive("driver"),
+        script,
+      );
+    },
+  },
+
+  hard_terrain_coefficient: {
+    type: CharacteristicType.Number,
+    compute({ characteristic }) {
+      const raw = characteristic("hard_terrain_coefficient_raw") as number;
+      return 100 / raw;
+    },
+  },
+
+  medium_terrain_coefficient_raw: {
+    type: CharacteristicType.Number,
+    compute({ track, degressive, script }) {
+      return rawTerrainCoefficient(
+        track.resistance_medium,
+        "mediumGroundPassabilityIncrease",
+        degressive("driver"),
+        script,
+      );
+    },
+  },
+
+  medium_terrain_coefficient: {
+    type: CharacteristicType.Number,
+    compute({ characteristic }) {
+      const raw = characteristic("medium_terrain_coefficient_raw") as number;
+      return 100 / raw;
+    },
+  },
+
+  soft_terrain_coefficient_raw: {
+    type: CharacteristicType.Number,
+    compute({ track, degressive, script }) {
+      return rawTerrainCoefficient(
+        track.resistance_soft,
+        "softGroundPassabilityIncrease",
+        degressive("driver"),
+        script,
+      );
+    },
+  },
+
+  soft_terrain_coefficient: {
+    type: CharacteristicType.Number,
+    compute({ characteristic }) {
+      const raw = characteristic("soft_terrain_coefficient_raw") as number;
+      return 100 / raw;
+    },
+  },
 
   hull_traverse_speed: {
     type: CharacteristicType.Number,
