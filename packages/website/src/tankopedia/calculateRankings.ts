@@ -31,7 +31,7 @@ export function calculateRankings(
   const rankings = new Map<CharacteristicName, CharacteristicRank>();
 
   for (const [name, value] of characteristics) {
-    if (typeof value !== "number" || name[0] !== "_") continue;
+    if (typeof value !== "number" || name[0] === "_") continue;
 
     const config = characteristicConfigs.get(name)!;
 
