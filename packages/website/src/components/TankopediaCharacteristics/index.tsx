@@ -50,9 +50,14 @@ interface GroupProps {
 function Group({ group, characteristics }: GroupProps) {
   const strings = useStrings();
   const toys = group.order.filter((item) => "toy" in item).length;
-  const items = group.order.filter(
+  const characteristicsCount = group.order.filter(
     (item) => "name" in item && characteristics.has(item.name),
   ).length;
+  const labelsCount =
+    characteristicsCount > 0
+      ? group.order.filter((item) => "label" in item).length
+      : 0;
+  const items = characteristicsCount + labelsCount;
   const groupSpan = `calc(${toys} * var(--group-span) + ${items} + 2)`;
   const contentSpan = `calc(${toys} * var(--group-span) + ${items})`;
 
@@ -88,6 +93,7 @@ function Group({ group, characteristics }: GroupProps) {
         {group.order.map((item) => (
           <>
             {"toy" in item && <Toy {...item} />}
+            {"label" in item && <Label {...item} />}
             {"name" in item && characteristics.has(item.name) && (
               <Item config={item} value={characteristics.get(item.name)!} />
             )}
@@ -96,6 +102,22 @@ function Group({ group, characteristics }: GroupProps) {
 
         <div className={styles.dead} />
       </div>
+    </div>
+  );
+}
+
+interface LabelProps {
+  label: string;
+}
+
+function Label({ label }: LabelProps) {
+  const strings = useStrings();
+
+  return (
+    <div className={styles.label}>
+      <Text lowContrast>
+        {(strings.tanks.characteristics.items as Record<string, string>)[label]}
+      </Text>
     </div>
   );
 }
@@ -111,7 +133,7 @@ function Item({ config, value }: ItemProps) {
   const hasUnits = config.units !== undefined;
 
   return (
-    <span className={styles.item}>
+    <span className={styles.item} data-indent={config.indent}>
       <div className={styles.value}>
         <Text lowContrast>
           {

@@ -78,6 +78,7 @@ export interface CharacteristicRenderConfig {
   decimals?: number;
   units?: keyof Strings["units"];
   localize?: boolean;
+  indent?: boolean;
   strings?: string;
 
   render?: (data: {
@@ -90,7 +91,11 @@ export interface ToyRenderConfig {
   toy: string;
 }
 
+export interface LabelRenderConfig {
+  label: string;
+}
+
 export type CharacteristicsGroup = {
   name: string;
-  order: (CharacteristicRenderConfig | ToyRenderConfig)[];
+  order: (CharacteristicRenderConfig | LabelRenderConfig | ToyRenderConfig)[];
 };

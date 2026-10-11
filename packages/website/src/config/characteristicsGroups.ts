@@ -163,12 +163,15 @@ export const characteristicsGroups: CharacteristicsGroup[] = [
       { name: "power_to_weight", decimals: 1, units: "bhp_t" },
       { name: "brake_force", decimals: 1, units: "kN" },
 
-      { name: "hard_terrain_coefficient", decimals: 0 },
-      { name: "medium_terrain_coefficient", decimals: 0 },
-      { name: "soft_terrain_coefficient", decimals: 0 },
-      { name: "hard_terrain_coefficient_raw", decimals: 2 },
-      { name: "medium_terrain_coefficient_raw", decimals: 2 },
-      { name: "soft_terrain_coefficient_raw", decimals: 2 },
+      { label: "terrain_coefficient" },
+      { name: "hard_terrain_coefficient", decimals: 0, indent: true },
+      { name: "medium_terrain_coefficient", decimals: 0, indent: true },
+      { name: "soft_terrain_coefficient", decimals: 0, indent: true },
+
+      { label: "raw_terrain_coefficient" },
+      { name: "hard_terrain_coefficient_raw", decimals: 2, indent: true },
+      { name: "medium_terrain_coefficient_raw", decimals: 2, indent: true },
+      { name: "soft_terrain_coefficient_raw", decimals: 2, indent: true },
 
       { name: "hull_traverse_speed", units: "deg_s" },
       { name: "turret_traverse_speed", units: "deg_s" },
