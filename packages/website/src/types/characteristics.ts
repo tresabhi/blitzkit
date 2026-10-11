@@ -11,6 +11,7 @@ import type {
 } from "@blitzkit/protos";
 import type { ReactNode } from "react";
 import type { characteristics } from "../config/characteristics";
+import type { toys } from "../config/toys";
 import type { DuelSide } from "../hooks/useEquipment";
 import type { TankEnvironment } from "../stores/tankopedia";
 import type { TankState } from "../tankopedia/tankState";
@@ -99,8 +100,10 @@ export interface ToyRenderConfig {
 }
 
 export interface LabelRenderConfig {
-  label: string;
+  label: ToyName;
 }
+
+export type ToyName = keyof typeof toys;
 
 export type CharacteristicsGroup = {
   name: string;

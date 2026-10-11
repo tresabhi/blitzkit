@@ -2,6 +2,7 @@ import { TIER_ROMAN_NUMERALS } from "@blitzkit/core";
 import { literals } from "@blitzkit/i18n/src/literals";
 import { useRef } from "react";
 import { characteristicsGroups } from "../../config/characteristicsGroups";
+import { toys } from "../../config/toys";
 import { useCharacteristicRenderer } from "../../hooks/useCharacteristicRenderer";
 import { DuelModule, useDuel } from "../../hooks/useDuel";
 import { useRankings } from "../../hooks/useRankings";
@@ -14,6 +15,7 @@ import type {
   CharacteristicReturnType,
   CharacteristicsGroup,
   ComputedCharacteristics,
+  ToyName,
 } from "../../types/characteristics";
 import { Heading } from "../Heading";
 import { SegmentedControl } from "../SegmentedControl";
@@ -107,7 +109,9 @@ function Group({ group, characteristics, rankings }: GroupProps) {
       >
         {group.order.map((item) => (
           <>
-            {"toy" in item && <Toy {...item} />}
+            {"toy" in item && (
+              <ToyAssigner characteristics={characteristics} {...item} />
+            )}
             {"label" in item && <Label {...item} />}
             {"name" in item && characteristics.has(item.name) && (
               <Item
@@ -257,15 +261,22 @@ function Bar({ value }: BarProps) {
   );
 }
 
-interface ToyProps {
-  toy: string;
+interface ToyAssignerProps {
+  toy: ToyName;
+  characteristics: ComputedCharacteristics;
 }
 
-function Toy({ toy }: ToyProps) {
+function ToyAssigner({ toy, characteristics }: ToyAssignerProps) {
+  const Toy = toys[toy];
+
   return (
     <div className={styles.toy}>
       <div className={styles.sandbox}>
-        <Text lowContrast>{toy} toy</Text>
+        {Toy ? (
+          <Toy characteristics={characteristics} />
+        ) : (
+          <Text lowContrast>{toy}</Text>
+        )}
       </div>
     </div>
   );
