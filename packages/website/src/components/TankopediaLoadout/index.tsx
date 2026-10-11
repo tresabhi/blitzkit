@@ -11,7 +11,6 @@ import { useStrings } from "../../hooks/useStrings";
 import { useTankCompatibility } from "../../hooks/useTankCompatibility";
 import { useUnwrapper } from "../../hooks/useUnwrapper";
 import { Tankopedia } from "../../stores/tankopedia";
-import { hasUpgrades } from "../../tankopedia/hasUpgrades";
 import { vehicleStatusKeys } from "../../tankopedia/tankState";
 import type { ComputedCharacteristics } from "../../types/characteristics";
 import { Button } from "../Button";
@@ -31,11 +30,12 @@ interface TankopediaLoadoutProps {
 
 export function TankopediaLoadout({ characteristics }: TankopediaLoadoutProps) {
   const tank = useDuel("protagonist", DuelModule.Tank);
-  const showModules = hasUpgrades(tank);
+  // const showModules = hasUpgrades(tank);
 
   return (
     <>
       {/* {showModules && <Modules />} */}
+      <Shells />
       <Equipment />
       <Provisions />
       <Consumables characteristics={characteristics} />
@@ -105,7 +105,6 @@ function Status() {
                 key={key}
                 radius="1"
                 className={styles.state}
-                data-selected={status[key]}
                 color={status[key] ? "amber" : "gray"}
                 variant={status[key] ? "surface" : "soft"}
                 onClick={() => {
@@ -120,6 +119,52 @@ function Status() {
             ))}
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+function Shells() {
+  const strings = useStrings();
+  const unwrap = useUnwrapper();
+
+  const gun = useDuel("protagonist", DuelModule.Gun);
+  const shell = useDuel("protagonist", DuelModule.Shell);
+
+  return (
+    <div className={styles.section}>
+      <div className={styles.header}>
+        <Heading size="4">{strings.tanks.loadout.shells}</Heading>
+      </div>
+
+      <div className={styles.shells}>
+        {gun.shells.map((candidate) => {
+          const isSelected = candidate.id === shell.id;
+          const name = unwrap(candidate.name!);
+
+          return (
+            <Tooltip key={candidate.id} tooltip={name}>
+              <IconButton
+                aria-label={name}
+                size="major"
+                radius="1"
+                color={isSelected ? undefined : "gray"}
+                variant={isSelected ? "surface" : "soft"}
+                parentListChild
+                onClick={() => {
+                  Tankopedia.mutate((draft) => {
+                    draft.protagonist.shell = candidate.id;
+                  });
+                }}
+              >
+                <img
+                  alt={name}
+                  src={alias("api", `/icons/shells/${candidate.icon}.webp`)}
+                />
+              </IconButton>
+            </Tooltip>
+          );
+        })}
       </div>
     </div>
   );
@@ -447,7 +492,6 @@ function EquipmentOption({
         size="major"
         color={isSelected ? undefined : "gray"}
         variant={isSelected ? "surface" : "soft"}
-        data-selected={isSelected}
         radius="1"
         parentListChild
         className={styles.slot}
