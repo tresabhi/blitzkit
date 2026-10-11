@@ -91,19 +91,17 @@ export function computeCharacteristics(
     }
   }
 
-  const protagonist = states.protagonist;
-  const protagonistEquipmentPreset = equipment.presets[tank.equipment_preset];
-  const hasImprovedVentilation = Object.entries(protagonist.equipment).some(
-    ([index, choice]) =>
-      protagonistEquipmentPreset.slots[Number(index)]?.options[choice] === 102,
-  );
-  const provisionCrewBonus =
-    protagonist.provisions.reduce(
-      (total, id) =>
-        total +
-        (scripts.provisions[id]?.bonusValues?.crewLevelIncrease ?? 0) / 100,
-      0,
-    ) + (hasImprovedVentilation ? 0.08 : 0);
+  let provisionCrewBonus = 0;
+  script("protagonist", "Stimulator", (effect) => {
+    provisionCrewBonus += (effect.bonusValues?.crewLevelIncrease ?? 0) / 100;
+  });
+
+  script("protagonist", "StaticAdditiveDevice", (effect) => {
+    if (effect.attribute !== "miscAttrs/crewLevelIncrease") return;
+
+    provisionCrewBonus += (effect.bonusValues?.value ?? 0) / 100;
+  });
+
   const commanderMastery = 1 + provisionCrewBonus;
   const crewMastery = {
     commander: commanderMastery,

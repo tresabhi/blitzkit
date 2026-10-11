@@ -6,17 +6,17 @@ export function rawTerrainCoefficient(
   driverCoefficient: number,
   script: CharacteristicScript,
 ) {
-  let passabilityIncrease = 0;
+  let passabilityFactor = 1;
   let terrainResistanceFactor = 1;
 
   script("protagonist", "Grousers", (effect) => {
-    passabilityIncrease +=
-      (effect.bonusPercentage?.[passabilityAttribute] ?? 0) / 100;
+    passabilityFactor *=
+      1 - (effect.bonusPercentage?.[passabilityAttribute] ?? 0) / 100;
   });
 
   script("protagonist", "AttributesModifier", (effect) => {
-    passabilityIncrease +=
-      (effect.attributes?.[passabilityAttribute] ?? 0) / 100;
+    passabilityFactor *=
+      1 - (effect.attributes?.[passabilityAttribute] ?? 0) / 100;
   });
 
   script("protagonist", "AfterburnerAbility", (effect) => {
@@ -25,7 +25,7 @@ export function rawTerrainCoefficient(
 
   return (
     resistance *
-    (1 - passabilityIncrease) *
+    passabilityFactor *
     terrainResistanceFactor *
     driverCoefficient
   );

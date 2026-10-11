@@ -79,6 +79,7 @@ export enum TankopediaRelativeAgainst {
 export interface TankEnvironment {
   equalize: boolean;
   distance: number;
+  skills: Record<string, number>;
 }
 
 interface Tankopedia {
@@ -91,7 +92,6 @@ interface Tankopedia {
 
   modelRequested: boolean;
   shot?: Shot;
-  skills: Record<string, number>;
   relativeAgainst: TankopediaRelativeAgainst;
   editStatic: boolean;
   highlightArmor?: {
@@ -127,13 +127,16 @@ export const Tankopedia = new Soapstone<Tankopedia, [TankDefinition]>(
     antagonist: createTankState(tank),
     model: models.models[tank.id],
 
-    environment: { equalize: false, distance: 0 },
+    environment: {
+      equalize: false,
+      distance: 0,
+      skills: createDefaultSkills(skills),
+    },
 
     modelRequested: false,
 
     relativeAgainst: TankopediaRelativeAgainst.Class,
     editStatic: false,
-    skills: createDefaultSkills(skills),
     xpMultiplier: 1,
     requestedDisplay: TankopediaDisplay.Model,
     display: TankopediaDisplay.Model,

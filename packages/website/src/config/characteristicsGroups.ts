@@ -155,8 +155,9 @@ export const characteristicsGroups: CharacteristicsGroup[] = [
     name: "maneuverability",
     // render: CharacteristicsGroupRender.Statistical,
     order: [
-      { name: "speed_forward", units: "km_h" },
-      { name: "speed_backward", units: "km_h" },
+      { label: "speeds" },
+      { name: "speed_forward", units: "km_h", indent: true },
+      { name: "speed_backward", units: "km_h", indent: true },
 
       { name: "weight", decimals: 1, units: "t" },
       { name: "engine_power", units: "bhp" },
@@ -173,7 +174,10 @@ export const characteristicsGroups: CharacteristicsGroup[] = [
       { name: "medium_terrain_coefficient_raw", decimals: 2, indent: true },
       { name: "soft_terrain_coefficient_raw", decimals: 2, indent: true },
 
-      { name: "hull_traverse_speed", units: "deg_s" },
+      { label: "hull_traverse_speeds" },
+      { name: "hull_traverse_speed_hard", units: "deg_s", indent: true },
+      { name: "hull_traverse_speed_medium", units: "deg_s", indent: true },
+      { name: "hull_traverse_speed_soft", units: "deg_s", indent: true },
       { name: "turret_traverse_speed", units: "deg_s" },
       { name: "gun_traverse_speed", units: "deg_s" },
 

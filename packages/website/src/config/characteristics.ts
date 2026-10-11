@@ -5,54 +5,12 @@ import {
   unionBoundingBox,
 } from "@blitzkit/core";
 import { ShellType, TankClass } from "@blitzkit/protos";
+import { hullTraverseSpeed } from "../tankopedia/hullTraverseSpeed";
+import { rawTerrainCoefficient } from "../tankopedia/rawTerrainCoefficient";
 import {
   CharacteristicType,
   type Characteristic,
-  type CharacteristicContext,
 } from "../types/characteristics";
-import { rawTerrainCoefficient } from "../tankopedia/rawTerrainCoefficient";
-
-function intraClipCoefficient({
-  script,
-}: Pick<CharacteristicContext, "script">) {
-  let coefficient = 1;
-
-  script("protagonist", "NewAutoloader", (effect) => {
-    coefficient *= effect.clipReloadTimeFactor;
-  });
-
-  return coefficient;
-}
-
-function aimTimeCoefficient({ script }: Pick<CharacteristicContext, "script">) {
-  let coefficient = 1;
-
-  script("protagonist", "miscAttrs/gunAimingTimeFactor", (effect) => {
-    coefficient += effect.bonusValues!.percent / 100;
-  });
-
-  script("protagonist", "FireControlSystem", (effect) => {
-    coefficient *= effect.aimingTimeFactor;
-  });
-
-  return coefficient;
-}
-
-function dispersionCoefficient({
-  script,
-}: Pick<CharacteristicContext, "script">) {
-  let coefficient = 1;
-
-  script("protagonist", "miscAttrs/shotDispersionAngleFactor", (effect) => {
-    coefficient += effect.bonusValues!.percent / 100;
-  });
-
-  script("protagonist", "FireControlSystem", (effect) => {
-    coefficient *= effect.shotDispersionAngleFactor;
-  });
-
-  return coefficient;
-}
 
 export const characteristics = {
   gun_type: {
@@ -490,10 +448,20 @@ export const characteristics = {
   dispersion: {
     type: CharacteristicType.Number,
     compute({ gun, degressive, script }) {
+      let coefficient = 1;
+
+      script("protagonist", "miscAttrs/shotDispersionAngleFactor", (effect) => {
+        coefficient += effect.bonusValues!.percent / 100;
+      });
+
+      script("protagonist", "FireControlSystem", (effect) => {
+        coefficient *= effect.shotDispersionAngleFactor;
+      });
+
       return (
         gun.dispersion_base *
         degressive("gunner") *
-        dispersionCoefficient({ script })
+        coefficient
       );
     },
   },
@@ -527,8 +495,9 @@ export const characteristics = {
   gun_frontal_depression: {
     type: CharacteristicType.Number,
     should_render({ state, turret, gun }) {
-      return state.model.turrets[turret.id].guns[gun.id].pitch!.front !==
-        undefined;
+      return (
+        state.model.turrets[turret.id].guns[gun.id].pitch!.front !== undefined
+      );
     },
     compute({ state, turret, gun }) {
       return state.model.turrets[turret.id].guns[gun.id].pitch!.front!.max;
@@ -538,8 +507,9 @@ export const characteristics = {
   gun_frontal_elevation: {
     type: CharacteristicType.Number,
     should_render({ state, turret, gun }) {
-      return state.model.turrets[turret.id].guns[gun.id].pitch!.front !==
-        undefined;
+      return (
+        state.model.turrets[turret.id].guns[gun.id].pitch!.front !== undefined
+      );
     },
     compute({ state, turret, gun }) {
       return -state.model.turrets[turret.id].guns[gun.id].pitch!.front!.min;
@@ -549,8 +519,9 @@ export const characteristics = {
   gun_rear_depression: {
     type: CharacteristicType.Number,
     should_render({ state, turret, gun }) {
-      return state.model.turrets[turret.id].guns[gun.id].pitch!.back !==
-        undefined;
+      return (
+        state.model.turrets[turret.id].guns[gun.id].pitch!.back !== undefined
+      );
     },
     compute({ state, turret, gun }) {
       return state.model.turrets[turret.id].guns[gun.id].pitch!.back!.max;
@@ -560,8 +531,9 @@ export const characteristics = {
   gun_rear_elevation: {
     type: CharacteristicType.Number,
     should_render({ state, turret, gun }) {
-      return state.model.turrets[turret.id].guns[gun.id].pitch!.back !==
-        undefined;
+      return (
+        state.model.turrets[turret.id].guns[gun.id].pitch!.back !== undefined
+      );
     },
     compute({ state, turret, gun }) {
       return -state.model.turrets[turret.id].guns[gun.id].pitch!.back!.min;
@@ -687,6 +659,36 @@ export const characteristics = {
     type: CharacteristicType.Number,
     compute({ track, progressive }) {
       return track.traverse_speed * progressive("driver");
+    },
+  },
+
+  hull_traverse_speed_hard: {
+    type: CharacteristicType.Number,
+    compute(context): number {
+      return hullTraverseSpeed(
+        context.characteristic("hard_terrain_coefficient_raw") as number,
+        context,
+      );
+    },
+  },
+
+  hull_traverse_speed_medium: {
+    type: CharacteristicType.Number,
+    compute(context): number {
+      return hullTraverseSpeed(
+        context.characteristic("medium_terrain_coefficient_raw") as number,
+        context,
+      );
+    },
+  },
+
+  hull_traverse_speed_soft: {
+    type: CharacteristicType.Number,
+    compute(context): number {
+      return hullTraverseSpeed(
+        context.characteristic("soft_terrain_coefficient_raw") as number,
+        context,
+      );
     },
   },
 
