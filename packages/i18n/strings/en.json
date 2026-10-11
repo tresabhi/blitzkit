@@ -98,6 +98,10 @@
       }
     },
 
+    "game_modes": {
+      "title": "Game mode abilities"
+    },
+
     "navigation": {
       "tank": "Tank",
       "characteristics": "Characteristics"
