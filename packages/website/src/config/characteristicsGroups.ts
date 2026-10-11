@@ -164,6 +164,13 @@ export const characteristicsGroups: CharacteristicsGroup[] = [
       { name: "power_to_weight", decimals: 1, units: "bhp_t" },
       { name: "brake_force", decimals: 1, units: "kN" },
 
+      { label: "hull_traverse_speeds" },
+      { name: "hull_traverse_speed_hard", units: "deg_s", indent: true },
+      { name: "hull_traverse_speed_medium", units: "deg_s", indent: true },
+      { name: "hull_traverse_speed_soft", units: "deg_s", indent: true },
+      { name: "turret_traverse_speed", units: "deg_s" },
+      { name: "gun_traverse_speed", units: "deg_s" },
+
       { label: "terrain_coefficient" },
       { name: "hard_terrain_coefficient", decimals: 0, indent: true },
       { name: "medium_terrain_coefficient", decimals: 0, indent: true },
@@ -173,13 +180,6 @@ export const characteristicsGroups: CharacteristicsGroup[] = [
       { name: "hard_terrain_coefficient_raw", decimals: 2, indent: true },
       { name: "medium_terrain_coefficient_raw", decimals: 2, indent: true },
       { name: "soft_terrain_coefficient_raw", decimals: 2, indent: true },
-
-      { label: "hull_traverse_speeds" },
-      { name: "hull_traverse_speed_hard", units: "deg_s", indent: true },
-      { name: "hull_traverse_speed_medium", units: "deg_s", indent: true },
-      { name: "hull_traverse_speed_soft", units: "deg_s", indent: true },
-      { name: "turret_traverse_speed", units: "deg_s" },
-      { name: "gun_traverse_speed", units: "deg_s" },
 
       { toy: "traverse" },
 
