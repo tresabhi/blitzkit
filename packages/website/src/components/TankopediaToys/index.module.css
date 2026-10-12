@@ -6,219 +6,219 @@
   touch-action: none;
   border-radius: inherit;
   background-color: var(--gray-2);
+
+  .armor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 33%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, var(--gray-a4));
+
+    .texture {
+      width: 100%;
+      height: 100%;
+      opacity: 0.125;
+      background-image: url("/media/toys/armor-hash.png");
+    }
+  }
+
+  .zones {
+    position: absolute;
+    top: 0;
+    left: 33%;
+    width: 67%;
+    height: 100%;
+    background: conic-gradient(
+      at 0 50%,
+      var(--ruby-a2),
+      var(--ruby-a1) calc(90deg - var(--ricochet-angle)),
+      var(--jade-a2) calc(90deg - var(--ricochet-angle)),
+      var(--jade-a4) calc(90deg - var(--normalization-angle)),
+      var(--cyan-a5) calc(90deg - var(--normalization-angle)),
+      var(--cyan-a3) calc(90deg + var(--normalization-angle)),
+      var(--jade-a2) calc(90deg + var(--normalization-angle)),
+      var(--jade-a4) calc(90deg + var(--ricochet-angle)),
+      var(--ruby-a1) calc(90deg + var(--ricochet-angle)),
+      var(--ruby-a2) 180deg
+    );
+  }
+
+  .shell-path,
+  .effective-path {
+    position: absolute;
+    top: 50%;
+    left: 33%;
+    transform: translateX(-50%) rotate(var(--rotation-angle));
+    transform-origin: top center;
+  }
+
+  .shell-path {
+    width: 0;
+    height: 100%;
+
+    .extension {
+      position: absolute;
+      left: 50%;
+      bottom: 100%;
+      width: var(--space-0);
+      height: 100%;
+      transform: translateX(-50%);
+      background-color: var(--gray-a8);
+    }
+
+    .line {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: var(--space-2);
+      height: 100%;
+      transform: translateX(-50%);
+      background: linear-gradient(var(--gray-a11), var(--gray-a4));
+    }
+
+    .shell {
+      position: absolute;
+      top: 6rem;
+      left: 0;
+      width: var(--space-5);
+      height: var(--space-5);
+      object-fit: contain;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      filter: drop-shadow(0 0 var(--space-4) black);
+    }
+  }
+
+  .effective-path {
+    width: 0;
+    height: 100%;
+
+    .line {
+      position: absolute;
+      left: 50%;
+      top: -100%;
+      width: var(--space-2);
+      height: 100%;
+      transform: translateX(-50%);
+      background: linear-gradient(var(--gray-a4), var(--gray-a11));
+    }
+  }
+
+  .corner-stat {
+    position: absolute;
+    display: flex;
+    gap: var(--space-2);
+    color: var(--gray-11);
+    font-size: var(--font-size-minor);
+
+    .value {
+      color: var(--gray-12);
+      font-size: inherit;
+    }
+
+    &[data-position="top-left"] {
+      top: var(--space-3);
+      left: var(--space-3);
+    }
+
+    &[data-position="top-right"] {
+      top: var(--space-3);
+      right: var(--space-3);
+    }
+
+    &[data-position="bottom-left"] {
+      bottom: var(--space-3);
+      left: var(--space-3);
+    }
+
+    &[data-position="bottom-right"] {
+      right: var(--space-3);
+      bottom: var(--space-3);
+    }
+  }
+
+  .explosive-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3);
+    color: var(--gray-11);
+    text-align: center;
+    background: radial-gradient(var(--black-a7), var(--black-a11));
+  }
 }
 
-.armor {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 33%;
-  height: 100%;
-  background: linear-gradient(to right, transparent, var(--gray-a4));
-}
-
-.armor-texture {
-  width: 100%;
-  height: 100%;
-  opacity: 0.125;
-  background-image: url("/media/toys/armor-hash.png");
-}
-
-.zones {
-  position: absolute;
-  top: 0;
-  left: 33%;
-  width: 67%;
-  height: 100%;
-  background: conic-gradient(
-    at 0 50%,
-    var(--ruby-a2),
-    var(--ruby-a1) calc(90deg - var(--ricochet-angle)),
-    var(--jade-a2) calc(90deg - var(--ricochet-angle)),
-    var(--jade-a4) calc(90deg - var(--normalization-angle)),
-    var(--cyan-a5) calc(90deg - var(--normalization-angle)),
-    var(--cyan-a3) calc(90deg + var(--normalization-angle)),
-    var(--jade-a2) calc(90deg + var(--normalization-angle)),
-    var(--jade-a4) calc(90deg + var(--ricochet-angle)),
-    var(--ruby-a1) calc(90deg + var(--ricochet-angle)),
-    var(--ruby-a2) 180deg
-  );
-}
-
-.shell-path,
-.effective-path {
-  position: absolute;
-  top: 50%;
-  left: 33%;
-  transform: translateX(-50%) rotate(var(--rotation-angle));
-  transform-origin: top center;
-}
-
-.shell-path {
-  width: 0;
-  height: 100%;
-}
-
-.shell-path-extension {
-  position: absolute;
-  left: 50%;
-  bottom: 100%;
-  width: var(--space-0);
-  height: 100%;
-  transform: translateX(-50%);
-  background-color: var(--gray-a8);
-}
-
-.shell-path-line {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: var(--space-2);
-  height: 100%;
-  transform: translateX(-50%);
-  background: linear-gradient(var(--gray-a11), var(--gray-a4));
-}
-
-.shell {
-  position: absolute;
-  top: 6rem;
-  left: 0;
-  width: var(--space-5);
-  height: var(--space-5);
-  object-fit: contain;
-  transform: translate(-50%, -50%) rotate(-45deg);
-  filter: drop-shadow(0 0 var(--space-4) black);
-}
-
-.effective-path {
-  width: 0;
-  height: 100%;
-}
-
-.effective-path-line {
-  position: absolute;
-  left: 50%;
-  top: -100%;
-  width: var(--space-2);
-  height: 100%;
-  transform: translateX(-50%);
-  background: linear-gradient(var(--gray-a4), var(--gray-a11));
-}
-
-.corner-stat {
-  position: absolute;
-  display: flex;
-  gap: var(--space-2);
-  color: var(--gray-11);
-  font-size: var(--font-size-minor);
-}
-
-.corner-stat-value {
-  color: var(--gray-12);
-  font-size: inherit;
-}
-
-.corner-stat[data-position="top-left"] {
-  top: var(--space-3);
-  left: var(--space-3);
-}
-
-.corner-stat[data-position="top-right"] {
-  top: var(--space-3);
-  right: var(--space-3);
-}
-
-.corner-stat[data-position="bottom-left"] {
-  bottom: var(--space-3);
-  left: var(--space-3);
-}
-
-.corner-stat[data-position="bottom-right"] {
-  right: var(--space-3);
-  bottom: var(--space-3);
-}
-
-.explosive-overlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-3);
-  color: var(--gray-11);
-  text-align: center;
-  background: radial-gradient(var(--black-a7), var(--black-a11));
-}
-
-.traverse-visualizer {
+.traverse {
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
   border-radius: inherit;
   user-select: none;
-}
 
-.traverse-hull {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 12rem;
-  height: 12rem;
-  transform: translate(-50%, -50%);
+  .hull {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12rem;
+    height: 12rem;
+    transform: translate(-50%, -50%);
 
-  &[data-turretless="true"] {
-    width: 22rem;
-    height: 22rem;
+    &[data-turretless="true"] {
+      width: 22rem;
+      height: 22rem;
+    }
+
+    .image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 0 var(--space-4) var(--black-a7));
+    }
+
+    .turret {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 27rem;
+      height: 27rem;
+      object-fit: contain;
+      transform: translate(-50%, -50%);
+      filter: drop-shadow(0 0 var(--space-4) var(--black-a7));
+    }
   }
-}
 
-.traverse-hull-image {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0 0 var(--space-4) var(--black-a7));
-}
+  .toggles {
+    position: absolute;
+    top: var(--space-4);
+    left: 50%;
+    display: flex;
+    justify-content: center;
+    gap: var(--space-5);
+    width: 100%;
+    padding: 0 var(--space-5);
+    transform: translateX(-50%);
+  }
 
-.traverse-turret {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 27rem;
-  height: 27rem;
-  object-fit: contain;
-  transform: translate(-50%, -50%);
-  filter: drop-shadow(0 0 var(--space-4) var(--black-a7));
-}
+  .terrain {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 
-.traverse-toggles {
-  position: absolute;
-  top: var(--space-4);
-  left: 50%;
-  display: flex;
-  justify-content: center;
-  gap: var(--space-5);
-  width: 100%;
-  padding: 0 var(--space-5);
-  transform: translateX(-50%);
-}
-
-.traverse-terrain {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.traverse-effective {
-  position: absolute;
-  bottom: calc(var(--space-2) + 3rem);
-  left: 50%;
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  color: var(--gray-11);
-  font-size: var(--font-size-minor);
-  white-space: nowrap;
-  transform: translateX(-50%);
+  .effective {
+    position: absolute;
+    bottom: calc(var(--space-2) + 3rem);
+    left: 50%;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--gray-11);
+    font-size: var(--font-size-minor);
+    white-space: nowrap;
+    transform: translateX(-50%);
+  }
 }

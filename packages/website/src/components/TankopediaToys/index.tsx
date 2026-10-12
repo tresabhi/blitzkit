@@ -57,7 +57,7 @@ export function RicochetToy({ characteristics }: ToyProps) {
       onPointerMove={updateAngle}
     >
       <div className={styles.armor}>
-        <div className={styles["armor-texture"]} />
+        <div className={styles.texture} />
       </div>
 
       <div
@@ -78,8 +78,8 @@ export function RicochetToy({ characteristics }: ToyProps) {
           } as CSSProperties
         }
       >
-        <div className={styles["shell-path-extension"]} />
-        <div className={styles["shell-path-line"]} />
+        <div className={styles.extension} />
+        <div className={styles.line} />
         <img
           className={styles.shell}
           src={alias("api", `/icons/shells/${shell.icon}.webp`)}
@@ -94,7 +94,7 @@ export function RicochetToy({ characteristics }: ToyProps) {
           } as CSSProperties
         }
       >
-        <div className={styles["effective-path-line"]} />
+        <div className={styles.line} />
       </div>
 
       <CornerStat
@@ -166,7 +166,7 @@ function CornerStat({ label, value, position }: CornerStatProps) {
   return (
     <div className={styles["corner-stat"]} data-position={position}>
       <span>{label}</span>
-      <Code className={styles["corner-stat-value"]} size="minor">
+      <Code className={styles.value} size="minor">
         {value}
       </Code>
     </div>
@@ -246,15 +246,15 @@ export function TraverseToy({ characteristics }: TraverseToyProps) {
   }));
 
   return (
-    <div className={styles["traverse-visualizer"]}>
+    <div className={styles.traverse}>
       <div
         ref={hull}
-        className={styles["traverse-hull"]}
+        className={styles.hull}
         data-turretless={isTurretless}
       >
         <img
           draggable="false"
-          className={styles["traverse-hull-image"]}
+          className={styles.image}
           src={`/media/toys/hull${isTurretless ? "-only" : ""}.png`}
         />
 
@@ -262,13 +262,13 @@ export function TraverseToy({ characteristics }: TraverseToyProps) {
           <img
             draggable="false"
             ref={turret}
-            className={styles["traverse-turret"]}
+            className={styles.turret}
             src="/media/toys/turret.png"
           />
         )}
       </div>
 
-      <div className={styles["traverse-toggles"]}>
+      <div className={styles.toggles}>
         {!isTurretless && (
           <>
             <Checkbox checked={rotateHull} onCheckedChange={setRotateHull}>
@@ -281,7 +281,7 @@ export function TraverseToy({ characteristics }: TraverseToyProps) {
         )}
       </div>
 
-      <div className={styles["traverse-terrain"]}>
+      <div className={styles.terrain}>
         <SegmentedControl
           options={terrainOptions}
           value={terrain}
@@ -293,7 +293,7 @@ export function TraverseToy({ characteristics }: TraverseToyProps) {
         />
       </div>
 
-      <div className={styles["traverse-effective"]}>
+      <div className={styles.effective}>
         <span>{strings.tanks.toys.traverse.effective}</span>
         <Code size="minor">
           {literals(strings.units.deg_s, {
