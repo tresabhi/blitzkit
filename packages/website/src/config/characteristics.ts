@@ -101,6 +101,24 @@ export const characteristics = {
     },
   },
 
+  reloads: {
+    type: CharacteristicType.NumberList,
+
+    should_render({ gun }) {
+      return gun.gun_type!.$case === "auto_reloader";
+    },
+
+    compute({ gun, characteristic }) {
+      if (gun.gun_type!.$case !== "auto_reloader") return [];
+
+      const reloadCoefficient = characteristic("_reload_coefficient") as number;
+
+      return gun.gun_type!.value.shell_reloads.map(
+        (reload) => reload * reloadCoefficient,
+      );
+    },
+  },
+
   intra_clip: {
     type: CharacteristicType.Number,
 
@@ -194,8 +212,6 @@ export const characteristics = {
   },
 
   // module_damage_range: unavailable,
-
-  // reloads: unavailable,
 
   clip_size: {
     type: CharacteristicType.Number,

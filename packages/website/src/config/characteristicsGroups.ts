@@ -87,7 +87,12 @@ export const characteristicsGroups: CharacteristicsGroup[] = [
         units: "s",
         ranking: CharacteristicRanking.LowerIsBetter,
       },
-      { name: "reloads", decimals: 1, units: "s" },
+      {
+        name: "reloads",
+        decimals: 1,
+        units: "s",
+        ranking: CharacteristicRanking.LowerIsBetter,
+      },
 
       { toy: "reload" },
     ],

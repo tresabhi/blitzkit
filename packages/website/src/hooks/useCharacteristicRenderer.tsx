@@ -1,10 +1,12 @@
 import { literalsArray } from "@blitzkit/i18n/src/literals";
-import { type ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import { Text } from "../components/Text";
+import { characteristics } from "../config/characteristics";
 import type {
   CharacteristicRenderConfig,
   CharacteristicReturnType,
 } from "../types/characteristics";
+import { CharacteristicType } from "../types/characteristics";
 import { useLocale } from "./useLocale";
 import { useStrings } from "./useStrings";
 
@@ -21,39 +23,61 @@ export function useCharacteristicRenderer() {
     if (config.render)
       return config.render({ output: characteristic, strings });
 
-    if (typeof characteristic === "number") {
-      if (Number.isFinite(characteristic)) {
-        let value: ReactNode = characteristic;
+    function renderNumber(
+      value: number,
+      units: CharacteristicRenderConfig["units"],
+    ): ReactNode {
+      if (!Number.isFinite(value)) return `${value < 0 ? "-" : ""}∞`;
 
-        if (config.decimals !== undefined) {
-          value *= 10 ** config.decimals;
-          value = Math.round(value);
-          value /= 10 ** config.decimals;
-        }
+      let rendered: ReactNode = value;
 
-        if (config.localize) {
-          value = value.toLocaleString(locale);
-        } else {
-          value = value.toFixed(config.decimals);
-        }
-
-        if (config.units !== undefined) {
-          value = literalsArray(strings.units[config.units], {
-            value: <Text>{value}</Text>,
-          });
-        }
-
-        return value;
+      if (config.decimals !== undefined) {
+        rendered *= 10 ** config.decimals;
+        rendered = Math.round(rendered);
+        rendered /= 10 ** config.decimals;
       }
 
-      return `${characteristic < 0 ? "-" : ""}∞`;
+      if (config.localize) {
+        rendered = rendered.toLocaleString(locale);
+      } else {
+        rendered = rendered.toFixed(config.decimals);
+      }
+
+      if (units !== undefined) {
+        rendered = literalsArray(strings.units[units], {
+          value: <Text>{rendered}</Text>,
+        });
+      }
+
+      return rendered;
     }
 
-    if (typeof characteristic === "string") {
-      return characteristic;
-    }
+    switch (characteristics[config.name].type) {
+      case CharacteristicType.Enum:
+        return characteristic as string;
 
-    throw new Error("Unknown characteristic type");
+      case CharacteristicType.Number:
+        return renderNumber(characteristic as number, config.units);
+
+      case CharacteristicType.NumberList: {
+        const values = (characteristic as number[]).map((value, index) => (
+          <Fragment key={index}>
+            {index > 0 && ", "}
+            {renderNumber(value, undefined)}
+          </Fragment>
+        ));
+
+        if (config.units === undefined) return values;
+
+        return (
+          <>
+            {literalsArray(strings.units[config.units], {
+              value: <Text>{values}</Text>,
+            })}
+          </>
+        );
+      }
+    }
   }
 
   return renderCharacteristic;

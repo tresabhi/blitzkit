@@ -27,6 +27,10 @@ export type Characteristic = {
       type: CharacteristicType.Number;
       compute(context: CharacteristicContext): number;
     }
+  | {
+      type: CharacteristicType.NumberList;
+      compute(context: CharacteristicContext): number[];
+    }
 );
 
 export type CharacteristicScript = (
@@ -63,6 +67,7 @@ export type CrewStatRole = "commander" | "loader" | "gunner" | "driver";
 export enum CharacteristicType {
   Enum,
   Number,
+  NumberList,
 }
 
 export enum CharacteristicRanking {

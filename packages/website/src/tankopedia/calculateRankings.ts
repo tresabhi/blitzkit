@@ -1,8 +1,11 @@
+import { characteristics as characteristicDefinitions } from "../config/characteristics";
 import { characteristicsGroups } from "../config/characteristicsGroups";
 import {
   CharacteristicRanking as CharacteristicRankingDirection,
+  CharacteristicType,
   type CharacteristicName,
   type CharacteristicRenderConfig,
+  type CharacteristicReturnType,
   type ComputedCharacteristics,
 } from "../types/characteristics";
 
@@ -24,6 +27,35 @@ export interface CharacteristicRank {
   score: number;
 }
 
+function rankingValue(
+  name: CharacteristicName,
+  value?: CharacteristicReturnType,
+) {
+  if (value === undefined) return;
+
+  switch (characteristicDefinitions[name].type) {
+    case CharacteristicType.Enum:
+      return;
+
+    case CharacteristicType.Number:
+      return value as number;
+
+    case CharacteristicType.NumberList: {
+      const values = value as number[];
+
+      if (values.length === 0) return;
+
+      let total = 0;
+
+      for (const current of values) {
+        total += current;
+      }
+
+      return total / values.length;
+    }
+  }
+}
+
 export function calculateRankings(
   characteristics: ComputedCharacteristics,
   comparisons: ComputedCharacteristics[],
@@ -31,7 +63,9 @@ export function calculateRankings(
   const rankings = new Map<CharacteristicName, CharacteristicRank>();
 
   for (const [name, value] of characteristics) {
-    if (typeof value !== "number" || name[0] === "_") continue;
+    const currentValue = rankingValue(name, value);
+
+    if (currentValue === undefined || name[0] === "_") continue;
 
     const config = characteristicConfigs.get(name)!;
 
@@ -41,13 +75,13 @@ export function calculateRankings(
       config.ranking === CharacteristicRankingDirection.LowerIsBetter;
 
     const values = comparisons
-      .map((comparison) => comparison.get(name))
-      .filter((other) => typeof other === "number");
+      .map((comparison) => rankingValue(name, comparison.get(name)))
+      .filter((other) => other !== undefined);
 
     if (values.length === 0) continue;
 
     const betterCount = values.filter((other) =>
-      lowerIsBetter ? other < value : other > value,
+      lowerIsBetter ? other < currentValue : other > currentValue,
     ).length;
 
     rankings.set(name, {
