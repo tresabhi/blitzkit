@@ -222,3 +222,167 @@
     transform: translateX(-50%);
   }
 }
+
+.reload {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+
+  .backdrop,
+  .target {
+    position: absolute;
+    inset: 0;
+    background-image: url("/media/toys/background.jpg");
+    background-size: 25rem;
+    background-position: center;
+    filter: blur(var(--space-2)) contrast(1.2) brightness(0.5) saturate(0.8);
+  }
+
+  .vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(transparent 50%, var(--black-a8) 100%);
+  }
+
+  .glow,
+  .ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 65%;
+    height: 65%;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: var(--duration-brief);
+
+    &[data-shot="true"] {
+      width: 70%;
+      height: 70%;
+      transition: none;
+    }
+  }
+
+  .glow {
+    filter: blur(var(--space-4));
+  }
+
+  .ring {
+    padding: var(--space-2);
+    background: var(--orange-7);
+  }
+
+  .core {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 50%;
+    background: black;
+  }
+
+  .fill {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    mask-image: radial-gradient(transparent 25%, black 100%);
+  }
+
+  .caret {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10%;
+    height: 10%;
+    transform: translateX(-50%);
+  }
+
+  .remaining-time,
+  .total-time {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .remaining-time {
+    right: calc(50% + var(--space-6));
+    transform: translate(50%, -50%);
+  }
+
+  .total-time {
+    left: calc(50% + var(--space-6));
+    transform: translate(-50%, -50%);
+  }
+
+  .shells {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .shell-track {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .shell {
+    position: absolute;
+    top: 50%;
+    left: 90%;
+    width: 1.25rem;
+    height: 1.25rem;
+    transform: translate(-50%, -50%);
+  }
+
+  .border {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    color: var(--jade-8);
+  }
+
+  .mask {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: end;
+    overflow: hidden;
+    border-radius: var(--space-1);
+    mask-image: url("/media/toys/shell.png");
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+  }
+
+  .shell-fill {
+    width: 100%;
+    background: var(--jade-9);
+  }
+
+  .flash {
+    position: absolute;
+    inset: 0;
+    background: transparent;
+    transition: var(--duration-brief);
+
+    &[data-shot="true"] {
+      background: var(--white-a3);
+      transition: none;
+    }
+  }
+
+  .skip {
+    position: absolute;
+    top: 68%;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    transform: translate(-50%, -50%);
+  }
+}

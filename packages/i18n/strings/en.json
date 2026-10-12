@@ -33,6 +33,10 @@
         "effective": "Effective",
         "hull": "Hull",
         "turret": "Turret"
+      },
+
+      "reload": {
+        "skip": "Skip"
       }
     },
 

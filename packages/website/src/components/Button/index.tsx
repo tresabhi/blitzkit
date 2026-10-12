@@ -8,7 +8,7 @@ export interface ButtonProps extends ComponentProps<"button"> {
   radius?: `${1 | 2 | 3}` | "max";
   variant?: "solid" | "surface" | "soft" | "inverted" | "ghost" | "outline";
   size?: "regular" | "minor" | "major";
-  highContrast?: boolean; // TODO: add high contrast
+  highContrast?: boolean;
 
   listChild?: boolean;
   parentListChild?: boolean;
@@ -40,6 +40,7 @@ export function Button({
   listChild,
   parentListChild,
   disabled,
+  highContrast,
   ...props
 }: ButtonProps) {
   return (
@@ -52,6 +53,7 @@ export function Button({
       data-size={size}
       data-list-child={listChild}
       data-parent-list-child={parentListChild}
+      data-high-contrast={highContrast}
       data-disabled={disabled}
       disabled={disabled}
       {...props}
