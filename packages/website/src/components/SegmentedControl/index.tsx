@@ -1,22 +1,26 @@
 import { type ReactNode } from "react";
 import styles from "./index.module.css";
 
-export interface SegmentedControlOption<Value extends string | number> {
-  value: Value;
+export interface SegmentedControlOption {
+  value: string;
   label: ReactNode;
 }
 
-export interface SegmentedControlProps<Value extends string | number> {
-  options: readonly SegmentedControlOption<Value>[];
-  value: Value;
-  onValueChange(value: Value): void;
+export interface SegmentedControlProps {
+  options: readonly SegmentedControlOption[];
+  value: string;
+  onValueChange(value: string): void;
+  size?: "regular" | "minor";
+  variant?: "solid" | "underline";
 }
 
-export function SegmentedControl<Value extends string | number>({
+export function SegmentedControl({
   options,
   value,
   onValueChange,
-}: SegmentedControlProps<Value>) {
+  size = "regular",
+  variant = "solid",
+}: SegmentedControlProps) {
   const selectedIndex = options.findIndex((option) => option.value === value);
   const segmentWidth = 100 / options.length;
 
@@ -24,7 +28,11 @@ export function SegmentedControl<Value extends string | number>({
     <div
       className={styles.options}
       role="radiogroup"
-      style={{ gridTemplateColumns: `repeat(${options.length}, 1fr)` }}
+      data-size={size}
+      data-variant={variant}
+      style={{
+        gridTemplateColumns: `repeat(${options.length}, minmax(0, 1fr))`,
+      }}
     >
       <div
         className={styles.indicator}

@@ -20,22 +20,28 @@
   },
 
   "tanks": {
+    "toys": {
+      "ricochet": {
+        "angle": "Angle",
+        "normalization": "Normalization",
+        "effective": "Effective",
+        "armor": "Armor",
+        "no_ricochet": "Explosive shells don't ricochet"
+      },
+
+      "traverse": {
+        "effective": "Effective",
+        "hull": "Hull",
+        "turret": "Turret"
+      }
+    },
+
     "characteristics": {
       "compare": {
         "label": "Compare against",
         "class": "Tier {tier} {class}",
         "tier": "All tier {tier}",
         "all": "All tanks"
-      },
-
-      "toys": {
-        "ricochet": {
-          "angle": "Angle",
-          "normalization": "Normalization",
-          "effective": "Effective",
-          "armor": "Armor",
-          "no_ricochet": "Explosive shells don't ricochet"
-        }
       },
 
       "titles": {

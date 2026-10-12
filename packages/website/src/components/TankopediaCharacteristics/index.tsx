@@ -198,20 +198,23 @@ function CompareOptions() {
 
   const options = useRef([
     {
-      value: TankopediaRelativeAgainst.ClassAndTier,
+      value: `${TankopediaRelativeAgainst.ClassAndTier}`,
+      relativeAgainst: TankopediaRelativeAgainst.ClassAndTier,
       label: literals(strings.tanks.characteristics.compare.class, {
         tier: TIER_ROMAN_NUMERALS[tank.tier],
         class: strings.common.tank_class_short_plural_lowercase[tank.class],
       }),
     },
     {
-      value: TankopediaRelativeAgainst.Tier,
+      value: `${TankopediaRelativeAgainst.Tier}`,
+      relativeAgainst: TankopediaRelativeAgainst.Tier,
       label: literals(strings.tanks.characteristics.compare.tier, {
         tier: TIER_ROMAN_NUMERALS[tank.tier],
       }),
     },
     {
-      value: TankopediaRelativeAgainst.All,
+      value: `${TankopediaRelativeAgainst.All}`,
+      relativeAgainst: TankopediaRelativeAgainst.All,
       label: strings.tanks.characteristics.compare.all,
     },
   ]);
@@ -221,10 +224,10 @@ function CompareOptions() {
       <Text lowContrast>{strings.tanks.characteristics.compare.label}</Text>
       <SegmentedControl
         options={options.current}
-        value={relativeAgainst}
+        value={`${relativeAgainst}`}
         onValueChange={(value) => {
           Tankopedia.mutate((draft) => {
-            draft.relative_against = value;
+            draft.relative_against = Number(value);
           });
         }}
       />

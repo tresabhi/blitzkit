@@ -60,7 +60,7 @@ export function RicochetVisualizer({ stats }: StatsAcceptorProps) {
             height="100%"
             style={{
               opacity: 2 ** -3,
-              backgroundImage: `url(/media/random/armor-hash.png)`,
+              backgroundImage: `url(/media/toys/armor-hash.png)`,
             }}
           />
         </Box>
