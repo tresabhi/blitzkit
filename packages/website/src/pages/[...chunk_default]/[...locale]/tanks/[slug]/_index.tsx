@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { api } from "../../../../../api/dynamic";
+import { Scroller } from "../../../../../components/Scroller";
 import type { ThicknessRange } from "../../../../../components/StaticArmor";
 import { TankopediaCharacteristics } from "../../../../../components/TankopediaCharacteristics";
 import { TankopediaGameModeAbilities } from "../../../../../components/TankopediaGameModeAbilities";
@@ -52,9 +53,11 @@ export const Page = withErrorWrapper(
 
     return (
       <div className={styles.page}>
-        <div className={styles.loadout}>
-          <TankopediaLoadout characteristics={characteristics} />
-        </div>
+        <Scroller className={styles.loadout} orientation="vertical">
+          <div className={styles.content}>
+            <TankopediaLoadout characteristics={characteristics} />
+          </div>
+        </Scroller>
 
         <div className={styles.sandbox}>
           {/* {!skeleton && <TankopediaSandbox thicknessRange={thicknessRange} />} */}

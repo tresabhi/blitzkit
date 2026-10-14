@@ -1,6 +1,4 @@
 .section {
-  max-width: 21rem;
-
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -80,8 +78,8 @@
   }
 
   .consumables {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
     gap: var(--space-3);
 
     .consumable-wrapper {

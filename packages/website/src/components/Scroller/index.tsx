@@ -3,66 +3,76 @@ import { clamp } from "three/src/math/MathUtils.js";
 import { classNames } from "../../ui/classNames";
 import styles from "./index.module.css";
 
-interface ScrollerProps extends ComponentProps<"div"> {}
+interface ScrollerProps extends ComponentProps<"div"> {
+  orientation?: "horizontal" | "vertical";
+}
 
-export function Scroller({ children, className, ...props }: ScrollerProps) {
+export function Scroller({
+  children,
+  className,
+  orientation = "horizontal",
+  ...props
+}: ScrollerProps) {
   const content = useRef<HTMLDivElement>(null!);
-  const curtainLeft = useRef<HTMLDivElement>(null!);
-  const curtainRight = useRef<HTMLDivElement>(null!);
+  const curtainStart = useRef<HTMLDivElement>(null!);
+  const curtainEnd = useRef<HTMLDivElement>(null!);
+
+  const isHorizontal = orientation === "horizontal";
 
   useEffect(() => {
     function syncCurtains() {
-      const maxScroll =
-        content.current.scrollWidth - content.current.clientWidth;
+      const maxScroll = isHorizontal
+        ? content.current.scrollWidth - content.current.clientWidth
+        : content.current.scrollHeight - content.current.clientHeight;
+      const scrollPosition = isHorizontal
+        ? content.current.scrollLeft
+        : content.current.scrollTop;
+
       if (maxScroll <= 0) {
-        curtainLeft.current.style.opacity = "0";
-        curtainRight.current.style.opacity = "0";
+        curtainStart.current.style.opacity = "0";
+        curtainEnd.current.style.opacity = "0";
+
         return;
       }
 
-      const fadeDistance = Math.min(60, content.current.clientWidth * 0.15);
-      const leftOpacity = clamp(
-        content.current.scrollLeft / fadeDistance,
+      const dimension = isHorizontal
+        ? content.current.clientWidth
+        : content.current.clientHeight;
+      const fadeDistance = Math.min(60, dimension * 0.15);
+      const startOpacity = clamp(scrollPosition / fadeDistance, 0, 1);
+      const endOpacity = clamp(
+        (maxScroll - scrollPosition) / fadeDistance,
         0,
         1,
       );
-      const rightOpacity = clamp(
-        (maxScroll - content.current.scrollLeft) / fadeDistance,
-        0,
-        1,
-      );
 
-      curtainLeft.current.style.opacity = `${leftOpacity}`;
-      curtainRight.current.style.opacity = `${rightOpacity}`;
-    }
-
-    function handleScroll() {
-      syncCurtains();
-    }
-
-    function handleResize() {
-      syncCurtains();
+      curtainStart.current.style.opacity = `${startOpacity}`;
+      curtainEnd.current.style.opacity = `${endOpacity}`;
     }
 
     syncCurtains();
 
-    window.addEventListener("resize", handleResize);
-    content.current.addEventListener("scroll", handleScroll);
+    window.addEventListener("resize", syncCurtains);
+    content.current.addEventListener("scroll", syncCurtains);
 
     return () => {
-      window.removeEventListener("resize", handleResize);
-      content.current.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", syncCurtains);
+      content.current.removeEventListener("scroll", syncCurtains);
     };
-  }, []);
+  }, [orientation]);
 
   return (
-    <div className={classNames(styles.scroller, className)} {...props}>
+    <div
+      className={classNames(styles.scroller, className)}
+      {...props}
+      data-orientation={orientation}
+    >
       <div className={styles.content} ref={content}>
         {children}
       </div>
 
-      <div ref={curtainLeft} data-side="left" className={styles.curtain} />
-      <div ref={curtainRight} data-side="right" className={styles.curtain} />
+      <div ref={curtainStart} data-side="start" className={styles.curtain} />
+      <div ref={curtainEnd} data-side="end" className={styles.curtain} />
     </div>
   );
 }

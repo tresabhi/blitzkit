@@ -40,7 +40,7 @@ interface TankopediaLoadoutProps {
 }
 
 export function TankopediaLoadout({ characteristics }: TankopediaLoadoutProps) {
-  const tank = useDuel("protagonist", DuelModule.Tank);
+  // const tank = useDuel("protagonist", DuelModule.Tank);
   // const showModules = hasUpgrades(tank);
 
   return (
