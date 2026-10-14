@@ -1,4 +1,4 @@
-import { TIER_ROMAN_NUMERALS } from "@blitzkit/core";
+import { romanize } from "@blitzkit/core";
 import { literals } from "@blitzkit/i18n/src/literals";
 import { useRef } from "react";
 import { characteristicsGroups } from "../../config/characteristicsGroups";
@@ -201,7 +201,7 @@ function CompareOptions() {
       value: `${TankopediaRelativeAgainst.ClassAndTier}`,
       relativeAgainst: TankopediaRelativeAgainst.ClassAndTier,
       label: literals(strings.tanks.characteristics.compare.class, {
-        tier: TIER_ROMAN_NUMERALS[tank.tier],
+        tier: romanize(tank.tier),
         class: strings.common.tank_class_short_plural_lowercase[tank.class],
       }),
     },
@@ -209,7 +209,7 @@ function CompareOptions() {
       value: `${TankopediaRelativeAgainst.Tier}`,
       relativeAgainst: TankopediaRelativeAgainst.Tier,
       label: literals(strings.tanks.characteristics.compare.tier, {
-        tier: TIER_ROMAN_NUMERALS[tank.tier],
+        tier: romanize(tank.tier),
       }),
     },
     {

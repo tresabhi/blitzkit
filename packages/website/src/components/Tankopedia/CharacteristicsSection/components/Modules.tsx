@@ -2,7 +2,7 @@ import {
   alias,
   formatCompact,
   tankIcon,
-  TIER_ROMAN_NUMERALS,
+  romanize,
 } from "@blitzkit/core";
 import {
   EngineDefinition,
@@ -93,7 +93,7 @@ function ModuleButton({
           top: isTank ? 8 : 4,
         }}
       >
-        {TIER_ROMAN_NUMERALS[tier]}
+        {romanize(tier)}
       </Text>
 
       {unlock.cost!.value > 0 && (

@@ -1,4 +1,4 @@
-import { alias, SEARCH_KEYS, TIER_ROMAN_NUMERALS } from "@blitzkit/core";
+import { alias, romanize, SEARCH_KEYS } from "@blitzkit/core";
 import { literals } from "@blitzkit/i18n";
 import { TankDefinition } from "@blitzkit/protos";
 import {
@@ -163,7 +163,7 @@ export function Guesser() {
                           justify="center"
                         >
                           <Icon width="1em" height="1em" />
-                          {TIER_ROMAN_NUMERALS[result.tier]}
+                          {romanize(result.tier)}
                         </Flex>
                       }
                     />
@@ -215,7 +215,7 @@ export function Guesser() {
                   }}
                 >
                   {literals(strings.website.tools.guess.tier, {
-                    tier: TIER_ROMAN_NUMERALS[tier],
+                    tier: romanize(tier),
                   })}
                 </DropdownMenu.CheckboxItem>
               );

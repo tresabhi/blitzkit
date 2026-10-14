@@ -1,6 +1,16 @@
-import { alias } from "@blitzkit/core";
+import {
+  alias,
+  MAX_SKILL_LEVEL,
+  permanentSkills,
+  romanize,
+} from "@blitzkit/core";
 import type { Consumable, EquipmentSlot, Provision } from "@blitzkit/protos";
-import { ClockIcon, ResetIcon, TrashIcon } from "@radix-ui/react-icons";
+import {
+  ClockIcon,
+  DoubleArrowUpIcon,
+  ResetIcon,
+  TrashIcon,
+} from "@radix-ui/react-icons";
 import { chunk } from "lodash-es";
 import { api } from "../../api/dynamic";
 import { equipmentColumns } from "../../config/equipment";
@@ -23,6 +33,7 @@ import styles from "./index.module.css";
 const equipment = await api.equipment();
 const provisions = await api.provisions();
 const consumables = await api.consumables();
+const skills = await api.skills();
 
 interface TankopediaLoadoutProps {
   characteristics: ComputedCharacteristics;
@@ -39,9 +50,100 @@ export function TankopediaLoadout({ characteristics }: TankopediaLoadoutProps) {
       <Equipment />
       <Provisions />
       <Consumables characteristics={characteristics} />
+      <CrewSkills />
       <State />
       <Status />
     </>
+  );
+}
+
+function CrewSkills() {
+  const strings = useStrings();
+  const selectedSkills = Tankopedia.use((state) => state.environment.skills);
+
+  return (
+    <div className={styles.section}>
+      <div className={styles.header}>
+        <Heading size="4">{strings.tanks.loadout.skills}</Heading>
+
+        <div className={styles["upgrade-buttons"]}>
+          <IconButton
+            color="red"
+            aria-label={`${strings.tanks.loadout.clear} ${strings.tanks.loadout.skills}`}
+            onClick={() => {
+              Tankopedia.mutate((draft) => {
+                Object.keys(draft.environment.skills).forEach((skill) => {
+                  draft.environment.skills[skill] = 0;
+                });
+              });
+            }}
+          >
+            <TrashIcon />
+          </IconButton>
+
+          <IconButton
+            color="gray"
+            highContrast
+            aria-label={`${strings.tanks.loadout.maximize} ${strings.tanks.loadout.skills}`}
+            onClick={() => {
+              Tankopedia.mutate((draft) => {
+                Object.keys(draft.environment.skills).forEach((skill) => {
+                  draft.environment.skills[skill] = MAX_SKILL_LEVEL;
+                });
+              });
+            }}
+          >
+            <DoubleArrowUpIcon />
+          </IconButton>
+        </div>
+      </div>
+
+      <div className={styles["crew-skills"]}>
+        {Object.entries(skills.classes).map(([tankClass, group]) => (
+          <div key={tankClass} className={styles.row}>
+            {group.skills.map((skill) => (
+              <CrewSkillEntry
+                key={skill}
+                id={skill}
+                level={selectedSkills[skill]}
+                permanent={permanentSkills.includes(skill)}
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+interface CrewSkillEntryProps {
+  id: string;
+  level: number;
+  permanent: boolean;
+}
+
+function CrewSkillEntry({ id, level, permanent }: CrewSkillEntryProps) {
+  return (
+    <IconButton
+      size="major"
+      radius="1"
+      className={styles.skill}
+      color={level === 0 ? "gray" : permanent ? undefined : "amber"}
+      variant={level === 0 ? "soft" : "surface"}
+      onClick={(event) => {
+        Tankopedia.mutate((draft) => {
+          if (event.shiftKey) {
+            draft.environment.skills[id] = level === 0 ? MAX_SKILL_LEVEL : 0;
+          } else {
+            draft.environment.skills[id] =
+              level === 0 ? MAX_SKILL_LEVEL : level - 1;
+          }
+        });
+      }}
+    >
+      <img src={alias("api", `/icons/skills/${id}.webp`)} />
+      {level > 0 && <span className={styles.level}>{romanize(level)}</span>}
+    </IconButton>
   );
 }
 
@@ -58,6 +160,7 @@ function State() {
 
         <IconButton
           color="red"
+          aria-label={`${strings.tanks.loadout.clear} ${strings.tanks.loadout.consumables}`}
           onClick={() => {
             Tankopedia.mutate((draft) => {
               draft.protagonist.consumables = [];
@@ -87,6 +190,7 @@ function Status() {
 
         <IconButton
           color="red"
+          aria-label={`${strings.tanks.loadout.clear} ${strings.tanks.loadout.status}`}
           onClick={() => {
             Tankopedia.mutate((draft) => {
               draft.protagonist.consumables = [];
@@ -103,6 +207,8 @@ function Status() {
             {group.map((key) => (
               <IconButton
                 key={key}
+                aria-label={key.replaceAll("_", " ")}
+                aria-pressed={status[key]}
                 radius="1"
                 className={styles.state}
                 color={status[key] ? "amber" : "gray"}
@@ -183,6 +289,7 @@ function Provisions() {
 
         <IconButton
           color="red"
+          aria-label={`${strings.tanks.loadout.clear} ${strings.tanks.loadout.provisions}`}
           onClick={() => {
             Tankopedia.mutate((draft) => {
               draft.protagonist.provisions = [];
@@ -230,6 +337,7 @@ function ProvisionEntry({ id, provision }: ProvisionEntryProps) {
   return (
     <Tooltip tooltip={unwrap(provision.name)}>
       <IconButton
+        aria-label={unwrap(provision.name)}
         size="major"
         radius="1"
         variant={isSelected ? "surface" : "soft"}
@@ -275,6 +383,7 @@ function Consumables({ characteristics }: ConsumablesProps) {
 
         <IconButton
           color="red"
+          aria-label={`${strings.tanks.loadout.clear} ${strings.tanks.loadout.consumables}`}
           onClick={() => {
             Tankopedia.mutate((draft) => {
               draft.protagonist.consumables = [];
@@ -325,6 +434,7 @@ function ConsumableEntry({ id, consumable }: ConsumableProps) {
     <div className={styles["consumable-wrapper"]}>
       <Tooltip tooltip={unwrap(consumable.name)}>
         <Button
+          aria-label={unwrap(consumable.name)}
           radius="1"
           variant={isSelected ? "surface" : "soft"}
           color={isSelected ? undefined : "gray"}
@@ -384,6 +494,7 @@ function Equipment() {
 
         <IconButton
           color="red"
+          aria-label={`${strings.tanks.loadout.clear} ${strings.tanks.loadout.equipment}`}
           onClick={() => {
             Tankopedia.mutate((draft) => {
               for (const key in draft.protagonist.equipment) {
@@ -489,6 +600,7 @@ function EquipmentOption({
   return (
     <Tooltip tooltip={unwrap(specificEquipment.name)}>
       <IconButton
+        aria-label={unwrap(specificEquipment.name)}
         size="major"
         color={isSelected ? undefined : "gray"}
         variant={isSelected ? "surface" : "soft"}

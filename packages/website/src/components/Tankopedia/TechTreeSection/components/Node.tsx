@@ -1,4 +1,4 @@
-import { alias, formatCompact, TIER_ROMAN_NUMERALS } from "@blitzkit/core";
+import { alias, formatCompact, romanize } from "@blitzkit/core";
 import { literals } from "@blitzkit/i18n/src/literals";
 import { Box, Flex, Skeleton, Text } from "@radix-ui/themes";
 import { api } from "../../../../api/dynamic";
@@ -90,7 +90,7 @@ export function Node({ id, highlight, nextIds, skeleton }: NodeProps) {
           <Flex direction="column" align="center">
             <Flex gap="2" align="center">
               <Text color="gray" size="1">
-                {TIER_ROMAN_NUMERALS[tank.tier]}
+                {romanize(tank.tier)}
               </Text>
               <Text wrap="nowrap">{unwrap(tank.name!)}</Text>
             </Flex>

@@ -1,7 +1,7 @@
 import {
   alias,
   gunTypeOrder,
-  TIER_ROMAN_NUMERALS,
+  romanize,
   treeTypeOrder,
 } from "@blitzkit/core";
 import { tankClassOrder } from "@blitzkit/core/src/config/tankClassOrder";
@@ -203,7 +203,7 @@ function TiersFilter() {
           <Flex gap="1">
             {tiers.slice(0, MAX_ICONS).map((tier) => (
               <Text size="minor" key={tier}>
-                {TIER_ROMAN_NUMERALS[tier]}
+                {romanize(tier)}
               </Text>
             ))}
 
@@ -239,7 +239,7 @@ function TiersFilter() {
               key={tier}
             >
               {literals(strings.website.common.tank_search.tier, {
-                tier: TIER_ROMAN_NUMERALS[tier],
+                tier: romanize(tier),
               })}
             </DropdownMenu.CheckboxItem>
           );

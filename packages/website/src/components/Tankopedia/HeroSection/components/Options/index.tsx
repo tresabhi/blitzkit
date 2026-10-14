@@ -1,7 +1,7 @@
 import {
   alias,
   resolvePenetrationCoefficient,
-  TIER_ROMAN_NUMERALS,
+  romanize,
   uniqueGuns,
 } from "@blitzkit/core";
 import { literals } from "@blitzkit/i18n/src/literals";
@@ -137,7 +137,7 @@ export function Options({ thicknessRange, canvas, skeleton }: OptionsProps) {
                   mr="2"
                   mb="1"
                 >
-                  {TIER_ROMAN_NUMERALS[antagonistGun.tier]}
+                  {romanize(antagonistGun.tier)}
                 </Text>
 
                 <img
@@ -166,7 +166,7 @@ export function Options({ thicknessRange, canvas, skeleton }: OptionsProps) {
                       })
                     }
                     selected={gun.id === antagonistGun.id}
-                    discriminator={TIER_ROMAN_NUMERALS[gun.tier]}
+                    discriminator={romanize(gun.tier)}
                     secondaryDiscriminator={
                       <Text style={{ fontSize: "0.75em" }}>
                         {literals(strings.common.units.mm, {

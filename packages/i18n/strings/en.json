@@ -143,6 +143,9 @@
       "modules": "Modules",
       "equipment": "Equipment",
       "shells": "Shells",
+      "clear": "Clear",
+      "maximize": "Maximize",
+      "skills": "Crew skills",
       "alternative": "Alt"
     },
 

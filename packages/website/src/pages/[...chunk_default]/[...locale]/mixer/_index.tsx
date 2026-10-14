@@ -1,6 +1,6 @@
 import {
   alias,
-  TIER_ROMAN_NUMERALS,
+  romanize,
 } from "@blitzkit/core";
 import { literals } from "@blitzkit/i18n";
 import {
@@ -161,7 +161,7 @@ function ModuleChooser({
                       }
                       key={turret.id}
                       module="turret"
-                      discriminator={TIER_ROMAN_NUMERALS[turret.tier]}
+                      discriminator={romanize(turret.tier)}
                       onClick={() => {
                         onSelect?.(tankDefinition, turret);
                       }}
@@ -179,7 +179,7 @@ function ModuleChooser({
                       }
                       key={gun.id}
                       module="gun"
-                      discriminator={TIER_ROMAN_NUMERALS[gun.tier]}
+                      discriminator={romanize(gun.tier)}
                       secondaryDiscriminator={
                         <Text style={{ fontSize: "0.75em" }}>
                           {literals(strings.common.units.mm, {

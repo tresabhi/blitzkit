@@ -1,4 +1,9 @@
-import { alias, availableProvisions, permanentSkills } from "@blitzkit/core";
+import {
+  alias,
+  availableProvisions,
+  MAX_SKILL_LEVEL,
+  permanentSkills,
+} from "@blitzkit/core";
 import { checkConsumableProvisionInclusivity } from "@blitzkit/core/src/blitzkit/checkConsumableProvisionInclusivity";
 import { ComponentPlaceholderIcon } from "@radix-ui/react-icons";
 import {
@@ -153,7 +158,7 @@ export function CompareTable({ stats }: CompareTableProps) {
                       onClick={() => {
                         CompareEphemeral.mutate((draft) => {
                           Object.keys(draft.crewSkills).forEach((skill) => {
-                            draft.crewSkills[skill] = 7;
+                            draft.crewSkills[skill] = MAX_SKILL_LEVEL;
                           });
                         });
                       }}
