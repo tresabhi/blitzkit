@@ -1,7 +1,6 @@
 import {
   metaSortTank,
   normalizeBoundingBox,
-  resolveDpm,
   SEARCH_KEYS,
   unionBoundingBox,
 } from "@blitzkit/core";
@@ -43,6 +42,10 @@ export type TankSearchProps = MaybeSkeletonComponentProps & {
   onSelect?: (tank: TankDefinition) => void;
   onSelectAll?: (tanks: TankDefinition[]) => void;
 };
+
+function resolveDpm(a: any, b: any) {
+  return 0;
+}
 
 const [gameDefinitions, modelDefinitions, tankDefinitions, tankNames] =
   await Promise.all([

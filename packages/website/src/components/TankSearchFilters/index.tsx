@@ -1,9 +1,4 @@
-import {
-  alias,
-  gunTypeOrder,
-  romanize,
-  treeTypeOrder,
-} from "@blitzkit/core";
+import { alias, gunTypeOrder, romanize, treeTypeOrder } from "@blitzkit/core";
 import { tankClassOrder } from "@blitzkit/core/src/config/tankClassOrder";
 import { literals } from "@blitzkit/i18n";
 import locales from "@blitzkit/i18n/locales.json";
@@ -620,13 +615,7 @@ function IndividualShellFilter({
   return (
     <DropdownMenu.Root modal={false}>
       <DropdownMenu.Trigger asChild>
-        <IconButton
-          listChild
-          size="minor"
-          variant="surface"
-          color="gray"
-          highContrast
-        >
+        <IconButton listChild size="minor" variant="surface" color="gray">
           {shells[index] === null && (
             <Text lowContrast className={styles["shell-icon"]}>
               <MissingShellIcon width="1em" height="1em" />
@@ -739,10 +728,10 @@ function OwnershipFilterInternal() {
           borderTopRightRadius: 0,
           borderBottomRightRadius: 0,
         }}
+        listChild
         disabled={!wargaming}
         variant={showOwned ? "solid" : "surface"}
         color={showOwned ? undefined : "gray"}
-        highContrast
         onClick={() => {
           TankFilters.mutate((draft) => {
             draft.showOwned = !draft.showOwned;
@@ -759,10 +748,10 @@ function OwnershipFilterInternal() {
           borderBottomLeftRadius: 0,
           marginLeft: "-1px",
         }}
+        listChild
         disabled={!wargaming}
         variant={showUnowned ? "solid" : "surface"}
         color={showUnowned ? undefined : "gray"}
-        highContrast
         onClick={() => {
           TankFilters.mutate((draft) => {
             draft.showUnowned = !draft.showUnowned;
@@ -789,7 +778,7 @@ function TestFilter() {
         }}
         variant={showNonTesting ? "solid" : "surface"}
         color={showNonTesting ? undefined : "gray"}
-        highContrast
+        listChild
         onClick={() => {
           TankFilters.mutate((draft) => {
             draft.showNonTesting = !draft.showNonTesting;
@@ -810,7 +799,7 @@ function TestFilter() {
         }}
         variant={showTesting ? "solid" : "surface"}
         color={showTesting ? undefined : "gray"}
-        highContrast
+        listChild
         onClick={() => {
           TankFilters.mutate((draft) => {
             draft.showTesting = !draft.showTesting;
