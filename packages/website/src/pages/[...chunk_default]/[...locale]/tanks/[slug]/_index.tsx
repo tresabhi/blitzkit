@@ -5,6 +5,7 @@ import type { ThicknessRange } from "../../../../../components/StaticArmor";
 import { TankopediaCharacteristics } from "../../../../../components/TankopediaCharacteristics";
 import { TankopediaGameModeAbilities } from "../../../../../components/TankopediaGameModeAbilities";
 import { TankopediaLoadout } from "../../../../../components/TankopediaLoadout";
+import { TankopediaSandbox } from "../../../../../components/TankopediaSandbox";
 import { defaultEqualizer } from "../../../../../config/equalizer";
 import { withErrorWrapper } from "../../../../../hocs/withErrorWrapper";
 import { withLocale } from "../../../../../hocs/withLocale";
@@ -60,7 +61,10 @@ export const Page = withErrorWrapper(
         </Scroller>
 
         <div className={styles.sandbox}>
-          {/* {!skeleton && <TankopediaSandbox thicknessRange={thicknessRange} />} */}
+          <TankopediaSandbox
+            skeleton={skeleton}
+            thicknessRange={thicknessRange}
+          />
           <TankopediaCharacteristics characteristics={characteristics} />
           <TankopediaGameModeAbilities />
         </div>
