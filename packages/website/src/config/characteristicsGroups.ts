@@ -1,7 +1,11 @@
 import type { CaseType } from "@blitzkit/core";
 import type { GunDefinition } from "@blitzkit/protos";
-import { CharacteristicRanking } from "../types/characteristics";
-import type { CharacteristicsGroup } from "../types/characteristics";
+import {
+  CharacteristicRanking,
+  type CharacteristicName,
+  type CharacteristicRenderConfig,
+  type CharacteristicsGroup,
+} from "../types/characteristics";
 
 export const characteristicsGroups: CharacteristicsGroup[] = [
   // {
@@ -299,3 +303,15 @@ export const characteristicsGroups: CharacteristicsGroup[] = [
     ],
   },
 ];
+
+export const characteristicRenderConfigs = new Map<
+  CharacteristicName,
+  CharacteristicRenderConfig
+>();
+
+for (const group of characteristicsGroups) {
+  for (const config of group.order) {
+    if (!("name" in config)) continue;
+    characteristicRenderConfigs.set(config.name, config);
+  }
+}

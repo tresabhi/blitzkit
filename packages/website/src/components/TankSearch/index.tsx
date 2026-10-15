@@ -1,9 +1,4 @@
-import {
-  metaSortTank,
-  normalizeBoundingBox,
-  SEARCH_KEYS,
-  unionBoundingBox,
-} from "@blitzkit/core";
+import { metaSortTank, SEARCH_KEYS } from "@blitzkit/core";
 import { literals } from "@blitzkit/i18n/src/literals";
 import type { TankDefinition } from "@blitzkit/protos";
 import fuzzysort from "fuzzysort";
@@ -11,16 +6,26 @@ import { uniq } from "lodash-es";
 import { memo, useMemo } from "react";
 import usePromise from "react-promise-suspense";
 import { api } from "../../api/dynamic";
+import { characteristics } from "../../config/characteristics";
+import { characteristicRenderConfigs } from "../../config/characteristicsGroups";
 import { awaitableTankNames } from "../../core/awaitables/tankNames";
 import { filterTanks } from "../../core/blitzkit/filterTanks";
-import { resolveReload } from "../../core/blitzkit/resolveReload";
+import { useCharacteristicRenderer } from "../../hooks/useCharacteristicRenderer";
+import { computeDefaultCharacteristics } from "../../hooks/useCharacteristics";
 import { useLocale } from "../../hooks/useLocale";
 import { useStrings } from "../../hooks/useStrings";
 import { App } from "../../stores/app";
 import { TankFilters } from "../../stores/tankFilters";
-import { TankopediaPersistent } from "../../stores/tankopediaPersistent";
-import { SORT_UNITS } from "../../stores/tankopediaPersistent/constants";
+import {
+  TankopediaPersistent,
+  TankopediaSortDirection,
+} from "../../stores/tankopediaPersistent";
 import { TankSort } from "../../stores/tankopediaSort";
+import { sortableCharacteristics } from "../../tankopedia/sortableCharacteristics";
+import {
+  CharacteristicType,
+  type ComputedCharacteristics,
+} from "../../types/characteristics";
 import type { MaybeSkeletonComponentProps } from "../../types/maybeSkeletonComponentProps";
 import { Callout } from "../Callout";
 import { ExperimentIcon } from "../ExperimentIcon";
@@ -43,390 +48,170 @@ export type TankSearchProps = MaybeSkeletonComponentProps & {
   onSelectAll?: (tanks: TankDefinition[]) => void;
 };
 
-function resolveDpm(a: any, b: any) {
-  return 0;
-}
-
-const [gameDefinitions, modelDefinitions, tankDefinitions, tankNames] =
-  await Promise.all([
-    api.game(),
-    api.models(),
-    api.tanks(),
-    awaitableTankNames,
-  ]);
+const [gameDefinitions, tankDefinitions, tankNames] = await Promise.all([
+  api.game(),
+  api.tanks(),
+  awaitableTankNames,
+]);
+const tankDefinitionsArray = Object.values(tankDefinitions.tanks);
 
 export const TankSearch = memo<TankSearchProps>(
   ({ compact, onSelect, onSelectAll, skeleton }) => {
     const strings = useStrings();
     const locale = useLocale();
+
     const wargaming = App.use((state) => state.logins.wargaming);
-    const awaitedTanksDefinitionsArray = Object.values(tankDefinitions.tanks);
+
     const tankopediaSort = TankSort.use();
     const tankFilters = TankFilters.use();
 
+    const defaultCharacteristics = useMemo(() => {
+      const computed = new Map<number, ComputedCharacteristics>();
+
+      for (const tank of tankDefinitionsArray) {
+        computed.set(tank.id, computeDefaultCharacteristics(tank));
+      }
+
+      return computed;
+    }, []);
+
     const filtered = usePromise(
-      () => {
-        if (tankFilters.search === null) {
-          return filterTanks(
-            tankFilters,
-            awaitedTanksDefinitionsArray,
-            wargaming?.id,
+      async () => {
+        let filtered = tankDefinitionsArray;
+
+        console.log("A");
+
+        if (tankopediaSort.by !== null) {
+          console.log("B", filtered.length);
+
+          filtered = filtered.filter((tank) =>
+            defaultCharacteristics.get(tank.id)!.has(tankopediaSort.by!),
           );
-        } else {
-          return Promise.resolve(
-            fuzzysort
-              .go(tankFilters.search, tankNames, { keys: SEARCH_KEYS })
-              .map((result) => tankDefinitions.tanks[result.obj.id]),
-          );
+
+          console.log("C", filtered.length);
         }
+
+        if (tankFilters.search === null) {
+          filtered = await filterTanks(tankFilters, filtered, wargaming?.id);
+        } else {
+          filtered = fuzzysort
+            .go(tankFilters.search, tankNames, { keys: SEARCH_KEYS })
+            .map((result) => tankDefinitions.tanks[result.obj.id]);
+        }
+
+        return filtered;
       },
       // react-promise-suspense has awful type annotations
-      [tankFilters] as any,
+      [tankFilters, tankopediaSort.by] as any,
     );
+
     const sorted = useMemo(() => {
-      if (tankFilters.search === null) {
-        let sorted: TankDefinition[];
+      if (tankFilters.search !== null) return filtered;
 
-        switch (tankopediaSort.by) {
-          case "meta.none":
-            sorted = metaSortTank(filtered, gameDefinitions);
-            break;
+      if (
+        tankopediaSort.by === null ||
+        !sortableCharacteristics.has(tankopediaSort.by)
+      ) {
+        const byMeta = metaSortTank([...filtered], gameDefinitions);
 
-          case "survivability.health": {
-            sorted = filtered.sort((a, b) => {
-              const aHealth = a.health + a.turrets.at(-1)!.health;
-              const bHealth = b.health + b.turrets.at(-1)!.health;
+        return tankopediaSort.direction === TankopediaSortDirection.Ascending
+          ? byMeta
+          : byMeta.reverse();
+      }
 
-              return aHealth - bHealth;
-            });
+      const values = new Map<number, number | undefined>();
+      const by = tankopediaSort.by;
+      const characteristic = characteristics[by];
+
+      for (const tank of filtered) {
+        const computedCharacteristics = defaultCharacteristics.get(tank.id)!;
+        if (!computedCharacteristics.has(by)) {
+          values.set(tank.id, undefined);
+          continue;
+        }
+
+        const value = computedCharacteristics.get(by);
+
+        let sortValue: number | undefined;
+
+        switch (characteristic.type) {
+          case CharacteristicType.Number: {
+            sortValue = value as number;
+
             break;
           }
 
-          case "survivability.viewRange":
-            sorted = filtered.sort(
-              (a, b) =>
-                a.turrets.at(-1)!.view_range - b.turrets.at(-1)!.view_range,
+          case CharacteristicType.NumberList: {
+            const values = value as number[];
+            if (values.length === 0) {
+              sortValue = undefined;
+              break;
+            }
+
+            let sum = 0;
+
+            for (const item of values) {
+              sum += item;
+            }
+
+            sortValue = sum / values.length;
+
+            break;
+          }
+
+          default:
+            throw new Error(
+              `Unsortable characteristic type ${characteristic.type}`,
             );
-            break;
-
-          case "survivability.camouflageStill":
-            sorted = filtered.sort(
-              (a, b) => a.camouflage_still - b.camouflage_still,
-            );
-            break;
-
-          case "survivability.camouflageMoving":
-            sorted = filtered.sort(
-              (a, b) => a.camouflage_moving - b.camouflage_moving,
-            );
-            break;
-
-          case "survivability.camouflageShooting":
-            sorted = filtered.sort(
-              (a, b) =>
-                a.camouflage_still *
-                  a.turrets.at(-1)!.guns.at(-1)!.camouflage_loss -
-                b.camouflage_still *
-                  b.turrets.at(-1)!.guns.at(-1)!.camouflage_loss,
-            );
-            break;
-
-          case "survivability.volume":
-            sorted = filtered.sort((a, b) => {
-              const aTankModelDefinition = modelDefinitions.models[a.id];
-              const bTankModelDefinition = modelDefinitions.models[b.id];
-              const aTurretModelDefinition =
-                aTankModelDefinition.turrets[a.turrets.at(-1)!.id];
-              const bTurretModelDefinition =
-                bTankModelDefinition.turrets[b.turrets.at(-1)!.id];
-              const aSize = normalizeBoundingBox(
-                unionBoundingBox(
-                  aTankModelDefinition.bounding_box!,
-                  aTurretModelDefinition.bounding_box!,
-                ),
-              );
-              const bSize = normalizeBoundingBox(
-                unionBoundingBox(
-                  bTankModelDefinition.bounding_box!,
-                  bTurretModelDefinition.bounding_box!,
-                ),
-              );
-              const aVolume = aSize.x * aSize.y * aSize.z;
-              const bVolume = bSize.x * bSize.y * bSize.z;
-
-              return aVolume - bVolume;
-            });
-            break;
-
-          case "survivability.length":
-            sorted = filtered.sort((a, b) => {
-              const aTankModelDefinition = modelDefinitions.models[a.id];
-              const bTankModelDefinition = modelDefinitions.models[b.id];
-              const aTurretModelDefinition =
-                aTankModelDefinition.turrets[a.turrets.at(-1)!.id];
-              const bTurretModelDefinition =
-                bTankModelDefinition.turrets[b.turrets.at(-1)!.id];
-              const aSize = normalizeBoundingBox(
-                unionBoundingBox(
-                  aTankModelDefinition.bounding_box!,
-                  aTurretModelDefinition.bounding_box!,
-                ),
-              );
-              const bSize = normalizeBoundingBox(
-                unionBoundingBox(
-                  bTankModelDefinition.bounding_box!,
-                  bTurretModelDefinition.bounding_box!,
-                ),
-              );
-              const aLength = Math.max(aSize.x, aSize.y, aSize.z);
-              const bLength = Math.max(bSize.x, bSize.y, bSize.z);
-
-              return aLength - bLength;
-            });
-            break;
-
-          case "fire.dpm":
-            sorted = filtered.sort(
-              (a, b) =>
-                resolveDpm(
-                  a.turrets.at(-1)!.guns.at(-1)!,
-                  a.turrets.at(-1)!.guns.at(-1)!.shells[0],
-                ) -
-                resolveDpm(
-                  b.turrets.at(-1)!.guns.at(-1)!,
-                  b.turrets.at(-1)!.guns.at(-1)!.shells[0],
-                ),
-            );
-            break;
-
-          case "fire.dpmPremium":
-            sorted = filtered.sort(
-              (a, b) =>
-                (a.turrets.at(-1)!.guns.at(-1)!.shells[1]
-                  ? resolveDpm(
-                      a.turrets.at(-1)!.guns.at(-1)!,
-                      a.turrets.at(-1)!.guns.at(-1)!.shells[1],
-                    )
-                  : 0) -
-                (b.turrets.at(-1)!.guns.at(-1)!.shells[1]
-                  ? resolveDpm(
-                      b.turrets.at(-1)!.guns.at(-1)!,
-                      b.turrets.at(-1)!.guns.at(-1)!.shells[1],
-                    )
-                  : 0),
-            );
-            break;
-
-          case "fire.reload":
-            sorted = filtered.sort(
-              (a, b) =>
-                resolveReload(a.turrets.at(-1)!.guns.at(-1)!) -
-                resolveReload(b.turrets.at(-1)!.guns.at(-1)!),
-            );
-            break;
-
-          case "fire.caliber":
-            sorted = filtered.sort(
-              (a, b) =>
-                a.turrets.at(-1)!.guns.at(-1)!.shells[0].caliber -
-                b.turrets.at(-1)!.guns.at(-1)!.shells[0].caliber,
-            );
-            break;
-
-          case "fire.standardPenetration":
-            sorted = filtered.sort(
-              (a, b) =>
-                a.turrets.at(-1)!.guns.at(-1)!.shells[0].penetration!.near -
-                b.turrets.at(-1)!.guns.at(-1)!.shells[0].penetration!.near,
-            );
-            break;
-
-          case "fire.premiumPenetration":
-            sorted = filtered.sort(
-              (a, b) =>
-                (a.turrets.at(-1)!.guns.at(-1)!.shells[1]?.penetration!.near ??
-                  0) -
-                (b.turrets.at(-1)!.guns.at(-1)!.shells[1]?.penetration!.near ??
-                  0),
-            );
-            break;
-
-          case "fire.tertiaryPenetration":
-            sorted = filtered.sort(
-              (a, b) =>
-                (a.turrets.at(-1)!.guns.at(-1)!.shells[2]?.penetration!.near ??
-                  0) -
-                (b.turrets.at(-1)!.guns.at(-1)!.shells[2]?.penetration!.near ??
-                  0),
-            );
-            break;
-
-          case "fire.damage":
-            sorted = filtered.sort(
-              (a, b) =>
-                a.turrets.at(-1)!.guns.at(-1)!.shells[0].armor_damage -
-                b.turrets.at(-1)!.guns.at(-1)!.shells[0].armor_damage,
-            );
-            break;
-
-          case "fire.moduleDamage":
-            sorted = filtered.sort(
-              (a, b) =>
-                a.turrets.at(-1)!.guns.at(-1)!.shells[0].module_damage -
-                b.turrets.at(-1)!.guns.at(-1)!.shells[0].module_damage,
-            );
-            break;
-
-          case "fire.shellVelocity":
-            sorted = filtered.sort(
-              (a, b) =>
-                a.turrets.at(-1)!.guns.at(-1)!.shells[0].velocity -
-                b.turrets.at(-1)!.guns.at(-1)!.shells[0].velocity,
-            );
-            break;
-
-          case "fire.shellRange":
-            sorted = filtered.sort(
-              (a, b) =>
-                a.turrets.at(-1)!.guns.at(-1)!.shells[0].range -
-                b.turrets.at(-1)!.guns.at(-1)!.shells[0].range,
-            );
-            break;
-
-          case "fire.shellCapacity":
-            sorted = filtered.sort(
-              (a, b) =>
-                a.turrets.at(-1)!.guns.at(-1)!.shell_capacity -
-                b.turrets.at(-1)!.guns.at(-1)!.shell_capacity,
-            );
-            break;
-
-          case "fire.aimTime":
-            sorted = filtered.sort(
-              (a, b) =>
-                a.turrets.at(-1)!.guns.at(-1)!.aim_time -
-                b.turrets.at(-1)!.guns.at(-1)!.aim_time,
-            );
-            break;
-
-          case "fire.dispersionStill":
-            sorted = filtered.sort(
-              (a, b) =>
-                a.turrets.at(-1)!.guns.at(-1)!.dispersion_base -
-                b.turrets.at(-1)!.guns.at(-1)!.dispersion_base,
-            );
-            break;
-
-          case "fire.dispersionMoving":
-            sorted = filtered.sort(
-              (a, b) =>
-                a.tracks.at(-1)!.dispersion_move -
-                b.tracks.at(-1)!.dispersion_move,
-            );
-            break;
-
-          case "fire.gunDepression":
-            sorted = filtered.sort(
-              (a, b) =>
-                modelDefinitions.models[a.id].turrets[a.turrets.at(-1)!.id]
-                  .guns[a.turrets.at(-1)!.guns.at(-1)!.id].pitch!.max +
-                (modelDefinitions.models[a.id].initial_turret_rotation?.pitch ??
-                  0) -
-                modelDefinitions.models[b.id].turrets[b.turrets.at(-1)!.id]
-                  .guns[b.turrets.at(-1)!.guns.at(-1)!.id].pitch!.max -
-                (modelDefinitions.models[b.id].initial_turret_rotation?.pitch ??
-                  0),
-            );
-            break;
-
-          case "fire.gunElevation":
-            sorted = filtered.sort(
-              (a, b) =>
-                modelDefinitions.models[b.id].turrets[b.turrets.at(-1)!.id]
-                  .guns[b.turrets.at(-1)!.guns.at(-1)!.id].pitch!.min +
-                (modelDefinitions.models[b.id].initial_turret_rotation?.pitch ??
-                  0) -
-                modelDefinitions.models[a.id].turrets[a.turrets.at(-1)!.id]
-                  .guns[a.turrets.at(-1)!.guns.at(-1)!.id].pitch!.min -
-                (modelDefinitions.models[a.id].initial_turret_rotation?.pitch ??
-                  0),
-            );
-            break;
-
-          case "maneuverability.forwardsSpeed":
-            sorted = filtered.sort(
-              (a, b) => a.speed_forwards - b.speed_forwards,
-            );
-            break;
-
-          case "maneuverability.backwardsSpeed":
-            sorted = filtered.sort(
-              (a, b) => a.speed_backwards - b.speed_backwards,
-            );
-            break;
-
-          case "maneuverability.power":
-            sorted = filtered.sort(
-              (a, b) => a.engines.at(-1)!.power - b.engines.at(-1)!.power,
-            );
-            break;
-
-          case "maneuverability.powerToWeight":
-            sorted = filtered.sort(
-              (a, b) =>
-                a.engines.at(-1)!.power /
-                  (a.weight +
-                    a.engines.at(-1)!.weight +
-                    a.tracks.at(-1)!.weight +
-                    a.turrets.at(-1)!.weight +
-                    a.turrets.at(-1)!.guns.at(-1)!.weight) -
-                b.engines.at(-1)!.power /
-                  (b.weight +
-                    b.engines.at(-1)!.weight +
-                    b.tracks.at(-1)!.weight +
-                    b.turrets.at(-1)!.weight +
-                    b.turrets.at(-1)!.guns.at(-1)!.weight),
-            );
-            break;
-
-          case "maneuverability.weight":
-            sorted = filtered.sort(
-              (a, b) =>
-                a.weight +
-                a.engines.at(-1)!.weight +
-                a.tracks.at(-1)!.weight +
-                a.turrets.at(-1)!.weight +
-                a.turrets.at(-1)!.guns.at(-1)!.weight -
-                (b.weight +
-                  b.engines.at(-1)!.weight +
-                  b.tracks.at(-1)!.weight +
-                  b.turrets.at(-1)!.weight +
-                  b.turrets.at(-1)!.guns.at(-1)!.weight),
-            );
-            break;
-
-          case "maneuverability.traverseSpeed":
-            sorted = filtered.sort(
-              (a, b) =>
-                a.tracks.at(-1)!.traverse_speed -
-                b.tracks.at(-1)!.traverse_speed,
-            );
-            break;
         }
 
-        return tankopediaSort.direction === "ascending"
-          ? sorted
-          : sorted.reverse();
-      } else {
-        return filtered;
+        values.set(tank.id, sortValue);
       }
+
+      const direction =
+        tankopediaSort.direction === TankopediaSortDirection.Ascending ? 1 : -1;
+
+      return [...filtered].sort((a, b) => {
+        const aValue = values.get(a.id);
+        const bValue = values.get(b.id);
+
+        if (aValue === undefined) return bValue === undefined ? 0 : 1;
+        if (bValue === undefined) return -1;
+
+        if (aValue === bValue) return 0;
+
+        return (aValue < bValue ? -1 : 1) * direction;
+      });
     }, [tankFilters, tankopediaSort]);
 
-    const data = sorted.map((tank) => ({
-      key: `${tank.id}`,
-      tank,
-      onTankSelect: onSelect,
-    }));
+    console.log("V", sorted.length);
+
+    const sortConfig =
+      tankopediaSort.by !== null &&
+      sortableCharacteristics.has(tankopediaSort.by)
+        ? tankopediaSort.by
+        : undefined;
+
+    const renderCharacteristic = useCharacteristicRenderer();
+
+    const data = sorted.map((tank) => {
+      const tankDefaultCharacteristics = defaultCharacteristics.get(tank.id)!;
+      const shouldRenderDiscriminator =
+        tankopediaSort.by !== null &&
+        tankDefaultCharacteristics.has(tankopediaSort.by);
+
+      return {
+        key: `${tank.id}`,
+        tank,
+        discriminator: shouldRenderDiscriminator
+          ? renderCharacteristic(
+              tankDefaultCharacteristics.get(tankopediaSort.by!)!,
+              characteristicRenderConfigs.get(tankopediaSort.by!)!,
+            )
+          : null,
+        onTankSelect: onSelect,
+      };
+    });
 
     return (
       <Flex className={styles.container} column gap="4">
@@ -473,16 +258,16 @@ export const TankSearch = memo<TankSearchProps>(
               )}
             </div>
 
-            {tankopediaSort.by !== "meta.none" && (
+            {sortConfig && (
               <Text color="gray">
                 {literals(strings.website.common.tank_search.sorting_by, {
-                  name: strings.website.common.tank_search.sort[
-                    tankopediaSort.by
-                  ],
+                  name: (
+                    strings.tanks.characteristics.items as Record<
+                      string,
+                      string
+                    >
+                  )[sortConfig],
                 })}
-                {SORT_UNITS[tankopediaSort.by] === undefined
-                  ? ""
-                  : ` (${SORT_UNITS[tankopediaSort.by]})`}
                 , {tankopediaSort.direction}
               </Text>
             )}

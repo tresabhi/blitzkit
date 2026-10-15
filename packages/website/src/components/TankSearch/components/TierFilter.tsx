@@ -12,7 +12,9 @@ export const TierFilter = memo(() => {
   const search = TankFilters.use((state) => state.search);
   const tiers = TankFilters.use((state) => state.tiers);
 
-  if (by !== "meta.none" || search) return null;
+  if (by !== null || search) {
+    return null;
+  }
 
   return (
     <Flex justify="center">

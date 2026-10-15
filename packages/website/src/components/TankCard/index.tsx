@@ -82,7 +82,7 @@ export const TankCard = (props: MaybeSkeletonComponentProps<TankCardProps>) => {
 
       {props.discriminator && (
         <Text lowContrast align="center">
-          {props.discriminator}
+          <div className={styles.discriminator}>{props.discriminator}</div>
         </Text>
       )}
     </Flex>

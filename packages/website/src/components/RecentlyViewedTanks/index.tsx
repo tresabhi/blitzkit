@@ -33,7 +33,7 @@ export function RecentlyViewedTanks() {
   const strings = useStrings();
   const by = TankSort.use((state) => state.by);
 
-  if (recentlyViewed.length === 0 || by !== "meta.none" || hasFilters) {
+  if (recentlyViewed.length === 0 || by !== null || hasFilters) {
     return null;
   }
 

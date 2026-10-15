@@ -1,4 +1,4 @@
-import { createDefaultSkills } from "@blitzkit/core";
+import { createDefaultEnvironment, type TankEnvironment } from "@blitzkit/core";
 import type { ShellDefinition, TankDefinition } from "@blitzkit/protos";
 import { Soapstone } from "soapstone";
 import type { Vector3 } from "three";
@@ -76,12 +76,6 @@ export enum TankopediaRelativeAgainst {
   All,
 }
 
-export interface TankEnvironment {
-  equalize: boolean;
-  distance: number;
-  skills: Record<string, number>;
-}
-
 interface Tankopedia {
   disturbed: boolean;
   revealed: boolean;
@@ -128,11 +122,7 @@ export const Tankopedia = new Soapstone<Tankopedia, [TankDefinition]>(
     antagonist: createTankState(tank),
     model: models.models[tank.id],
 
-    environment: {
-      equalize: false,
-      distance: 0,
-      skills: createDefaultSkills(skills),
-    },
+    environment: createDefaultEnvironment(skills),
 
     relative_against: TankopediaRelativeAgainst.ClassAndTier,
 

@@ -1,10 +1,16 @@
-import { degressiveStat, progressiveStat } from "@blitzkit/core";
+import {
+  createDefaultEnvironment,
+  degressiveStat,
+  progressiveStat,
+  type TankEnvironment,
+} from "@blitzkit/core";
 import type { BlitzEffectScript } from "@blitzkit/core/src/types/blitzEffectScript";
-import { CrewType } from "@blitzkit/protos";
+import { CrewType, type TankDefinition } from "@blitzkit/protos";
 import { api } from "../api/dynamic";
 import { characteristics } from "../config/characteristics";
 import { defaultEqualizer } from "../config/equalizer";
-import { Tankopedia, type TankEnvironment } from "../stores/tankopedia";
+import { Tankopedia } from "../stores/tankopedia";
+import { createTankState } from "../tankopedia/createTankState";
 import type { TankState } from "../tankopedia/tankState";
 import type {
   CharacteristicContext,
@@ -16,14 +22,7 @@ import { duelSides, type DuelSide } from "./useEquipment";
 const tanks = await api.tanks();
 const scripts = await api.scripts();
 const equipment = await api.equipment();
-
-export function useCharacteristics() {
-  const protagonist = Tankopedia.use((state) => state.protagonist);
-  const antagonist = Tankopedia.use((state) => state.antagonist);
-  const environment = Tankopedia.use((state) => state.environment);
-
-  return computeCharacteristics({ protagonist, antagonist }, environment);
-}
+const skills = await api.skills();
 
 export function computeCharacteristics(
   states: Record<DuelSide, TankState>,
@@ -190,4 +189,21 @@ export function computeCharacteristics(
   }
 
   return computed;
+}
+
+export function useCharacteristics() {
+  const protagonist = Tankopedia.use((state) => state.protagonist);
+  const antagonist = Tankopedia.use((state) => state.antagonist);
+  const environment = Tankopedia.use((state) => state.environment);
+
+  return computeCharacteristics({ protagonist, antagonist }, environment);
+}
+
+export function computeDefaultCharacteristics(tank: TankDefinition) {
+  const state = createTankState(tank);
+
+  return computeCharacteristics(
+    { protagonist: state, antagonist: state },
+    createDefaultEnvironment(skills),
+  );
 }

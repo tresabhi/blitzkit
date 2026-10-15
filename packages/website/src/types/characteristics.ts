@@ -1,3 +1,4 @@
+import type { TankEnvironment } from "@blitzkit/core";
 import type { BlitzEffectScript } from "@blitzkit/core/src/types/blitzEffectScript";
 import type { Strings } from "@blitzkit/i18n";
 import type {
@@ -13,7 +14,6 @@ import type { ReactNode } from "react";
 import type { characteristics } from "../config/characteristics";
 import type { toys } from "../config/toys";
 import type { DuelSide } from "../hooks/useEquipment";
-import type { TankEnvironment } from "../stores/tankopedia";
 import type { TankState } from "../tankopedia/tankState";
 
 export type Characteristic = {
