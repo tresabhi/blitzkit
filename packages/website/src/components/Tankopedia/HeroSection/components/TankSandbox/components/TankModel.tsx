@@ -1,6 +1,19 @@
-import { invalidate, useThree, type ThreeEvent } from "@react-three/fiber";
+import {
+  invalidate,
+  useThree,
+  type ObjectMap,
+  type ThreeEvent,
+} from "@react-three/fiber";
 import { useRef } from "react";
-import { Group, Mesh, MeshStandardMaterial, Vector2 } from "three";
+import {
+  BatchedMesh,
+  Group,
+  Mesh,
+  MeshStandardMaterial,
+  Object3D,
+  Vector2,
+} from "three";
+import type { GLTF } from "three-stdlib";
 import { applyPitchYawLimits } from "../../../../../../core/blitz/applyPitchYawLimits";
 import { hasEquipment } from "../../../../../../core/blitzkit/hasEquipment";
 import { jsxTree } from "../../../../../../core/blitzkit/jsxTree";
@@ -14,7 +27,88 @@ import { Tankopedia } from "../../../../../../stores/tankopedia";
 import { TankopediaDisplay } from "../../../../../../stores/tankopediaPersistent/constants";
 import { ModelTankWrapper } from "../../../../../Armor/components/ModelTankWrapper";
 
+function useBatched(gltf: GLTF & ObjectMap) {
+  function batched(
+    slicer: (node: Object3D) => boolean,
+    mutator: (mesh: Mesh) => void,
+  ) {
+    const groups = new Map<MeshStandardMaterial, Mesh[]>();
+
+    for (const node of Object.values(gltf.nodes)) {
+      if (!slicer(node)) continue;
+
+      node.traverse((object) => {
+        if (!(object instanceof Mesh)) return;
+
+        let material = object.material;
+
+        if (!(material instanceof MeshStandardMaterial)) return;
+
+        if (!groups.has(object.material)) {
+          material = object.material.clone();
+          groups.set(material, []);
+        }
+
+        groups.get(material)!.push(object.clone());
+      });
+    }
+
+    const wrapper = new Group();
+
+    for (const [material, meshes] of groups) {
+      let vertices = 0;
+
+      for (const mesh of meshes) {
+        vertices += mesh.geometry.attributes.position.count;
+      }
+
+      const batched = new BatchedMesh(
+        meshes.length,
+        vertices,
+        undefined,
+        material,
+      );
+
+      for (const mesh of meshes) {
+        mutator(mesh);
+        batched.add(mesh);
+      }
+
+      wrapper.add(batched);
+    }
+
+    return <primitive object={wrapper} />;
+  }
+
+  return { batched };
+}
+
 export function TankModel() {
+  const tank = Duel.use((draft) => draft.protagonist.tank);
+
+  const { gltf } = useModel(tank.id);
+  const { batched } = useBatched(gltf);
+
+  return (
+    <group rotation={[-Math.PI / 2, 0, 0]}>
+      {batched(
+        (node) => {
+          const isHull = node.name === "hull";
+          const isWheel = node.name.startsWith("chassis_wheel_");
+          const isTrack = node.name.startsWith("chassis_track_");
+
+          return isHull || isWheel || isTrack;
+        },
+        (mesh) => {
+          mesh.castShadow = true;
+          mesh.receiveShadow = true;
+        },
+      )}
+    </group>
+  );
+}
+
+function _TankModel() {
   const protagonist = Duel.use((draft) => draft.protagonist);
   const track = Duel.use((state) => state.protagonist.track);
   const turret = Duel.use((state) => state.protagonist.turret);
