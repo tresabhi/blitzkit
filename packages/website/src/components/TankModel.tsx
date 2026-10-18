@@ -4,20 +4,14 @@ import {
   type ObjectMap,
   type ThreeEvent,
 } from "@react-three/fiber";
-import { useRef, type ComponentProps } from "react";
+import { useRef } from "react";
 import type { Texture } from "three";
-import {
-  BatchedMesh,
-  Group,
-  Mesh,
-  MeshStandardMaterial,
-  Object3D,
-  Vector2,
-} from "three";
+import { Group, Mesh, MeshStandardMaterial, Vector2 } from "three";
 import { applyPitchYawLimits } from "../core/blitz/applyPitchYawLimits";
 import { hasEquipment } from "../core/blitzkit/hasEquipment";
 import { modelTransformEvent } from "../core/blitzkit/modelTransform";
 import { controlsEnabledEvent } from "../core/controlsEnabled";
+import { useBatched } from "../hooks/useBatched";
 import { useModel } from "../hooks/useModel";
 import { useTankModelDefinition } from "../hooks/useTankModelDefinition";
 import { useTankTransform } from "../hooks/useTankTransform";
@@ -25,86 +19,6 @@ import { Duel } from "../stores/duel";
 import { Tankopedia } from "../stores/tankopedia";
 import { TankopediaDisplay } from "../stores/tankopediaPersistent/constants";
 import { ModelTankWrapper } from "./Armor/components/ModelTankWrapper";
-
-interface BatchedProps extends ComponentProps<"group"> {
-  slicer: (node: Object3D) => boolean;
-  mutator?: (mesh: Mesh) => void;
-}
-
-function useBatched(map: ObjectMap, shadows = false) {
-  return function Batched({ slicer, mutator, ...props }: BatchedProps) {
-    const groups = new Map<
-      MeshStandardMaterial,
-      { clonedMaterial: MeshStandardMaterial; meshes: Mesh[] }
-    >();
-
-    for (const node of Object.values(map.nodes)) {
-      if (!slicer(node)) continue;
-
-      node.traverse((object) => {
-        if (!(object instanceof Mesh)) return;
-
-        const originalMaterial = object.material;
-
-        if (!(originalMaterial instanceof MeshStandardMaterial)) return;
-
-        let group = groups.get(originalMaterial);
-
-        if (!group) {
-          group = {
-            clonedMaterial: originalMaterial.clone(),
-            meshes: [],
-          };
-          groups.set(originalMaterial, group);
-        }
-
-        group.meshes.push(object);
-      });
-    }
-
-    const wrapper = new Group();
-
-    for (const { clonedMaterial: material, meshes } of groups.values()) {
-      let vertices = 0;
-      let indices = 0;
-
-      for (const mesh of meshes) {
-        vertices += mesh.geometry.attributes.position.count;
-        indices += mesh.geometry.index!.count;
-      }
-
-      const batched = new BatchedMesh(
-        meshes.length,
-        vertices,
-        indices,
-        material,
-      );
-
-      for (const mesh of meshes) {
-        const geometryId = batched.addGeometry(mesh.geometry);
-        const instanceId = batched.addInstance(geometryId);
-
-        mesh.updateWorldMatrix(true, false);
-        batched.setMatrixAt(instanceId, mesh.matrixWorld);
-
-        if (shadows) {
-          batched.castShadow = true;
-          batched.receiveShadow = true;
-        }
-
-        mutator?.(mesh);
-      }
-
-      wrapper.add(batched);
-    }
-
-    return (
-      <group {...props}>
-        <primitive object={wrapper} />
-      </group>
-    );
-  };
-}
 
 interface SectionProps {
   map: ObjectMap;
@@ -354,15 +268,13 @@ function Gun({ map }: SectionProps) {
 
 export function TankModel() {
   const protagonist = Duel.use((draft) => draft.protagonist);
+
   const track = Duel.use((state) => state.protagonist.track);
   const turret = Duel.use((state) => state.protagonist.turret);
-  const canvas = useThree((state) => state.gl.domElement);
+
   const hullContainer = useRef<Group>(null);
   const turretContainer = useRef<Group>(null!);
   const gunContainer = useRef<Group>(null!);
-  const tankModelDefinition = useTankModelDefinition();
-  const turretModelDefinition =
-    tankModelDefinition.turrets[protagonist.turret.id];
 
   const { gltf } = useModel(protagonist.tank.id);
 
