@@ -33,7 +33,10 @@ interface BatchedProps extends ComponentProps<"group"> {
 
 function useBatched(map: ObjectMap, shadows = false) {
   return function Batched({ slicer, mutator, ...props }: BatchedProps) {
-    const groups = new Map<MeshStandardMaterial, Mesh[]>();
+    const groups = new Map<
+      MeshStandardMaterial,
+      { clonedMaterial: MeshStandardMaterial; meshes: Mesh[] }
+    >();
 
     for (const node of Object.values(map.nodes)) {
       if (!slicer(node)) continue;
@@ -41,44 +44,55 @@ function useBatched(map: ObjectMap, shadows = false) {
       node.traverse((object) => {
         if (!(object instanceof Mesh)) return;
 
-        let material = object.material;
+        const originalMaterial = object.material;
 
-        if (!(material instanceof MeshStandardMaterial)) return;
+        if (!(originalMaterial instanceof MeshStandardMaterial)) return;
 
-        if (!groups.has(object.material)) {
-          material = object.material.clone();
-          groups.set(material, []);
+        let group = groups.get(originalMaterial);
+
+        if (!group) {
+          group = {
+            clonedMaterial: originalMaterial.clone(),
+            meshes: [],
+          };
+          groups.set(originalMaterial, group);
         }
 
-        groups.get(material)!.push(object.clone());
+        group.meshes.push(object);
       });
     }
 
     const wrapper = new Group();
 
-    for (const [material, meshes] of groups) {
+    for (const { clonedMaterial: material, meshes } of groups.values()) {
       let vertices = 0;
+      let indices = 0;
 
       for (const mesh of meshes) {
         vertices += mesh.geometry.attributes.position.count;
+        indices += mesh.geometry.index!.count;
       }
 
       const batched = new BatchedMesh(
         meshes.length,
         vertices,
-        undefined,
+        indices,
         material,
       );
 
       for (const mesh of meshes) {
+        const geometryId = batched.addGeometry(mesh.geometry);
+        const instanceId = batched.addInstance(geometryId);
+
+        mesh.updateWorldMatrix(true, false);
+        batched.setMatrixAt(instanceId, mesh.matrixWorld);
+
         if (shadows) {
-          mesh.castShadow = true;
-          mesh.receiveShadow = true;
+          batched.castShadow = true;
+          batched.receiveShadow = true;
         }
 
         mutator?.(mesh);
-
-        batched.add(mesh);
       }
 
       wrapper.add(batched);
