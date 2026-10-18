@@ -293,6 +293,7 @@ export interface TankDefinition {
   dev_name: string;
   equalizer?: Equalizer | undefined;
   name_full?: I18nString | undefined;
+  mechanics: string[];
 }
 
 export interface TankDefinition_RolesEntry {
@@ -654,6 +655,7 @@ function createBaseTankDefinition(): TankDefinition {
     dev_name: "",
     equalizer: undefined,
     name_full: undefined,
+    mechanics: [],
   };
 }
 
@@ -757,6 +759,9 @@ export const TankDefinition: MessageFns<TankDefinition> = {
     }
     if (message.name_full !== undefined) {
       I18nString.encode(message.name_full, writer.uint32(274).fork()).join();
+    }
+    for (const v of message.mechanics) {
+      writer.uint32(282).string(v!);
     }
     return writer;
   },
@@ -1065,6 +1070,14 @@ export const TankDefinition: MessageFns<TankDefinition> = {
           message.name_full = I18nString.decode(reader, reader.uint32());
           continue;
         }
+        case 35: {
+          if (tag !== 282) {
+            break;
+          }
+
+          message.mechanics.push(reader.string());
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -1126,6 +1139,7 @@ export const TankDefinition: MessageFns<TankDefinition> = {
       dev_name: isSet(object.dev_name) ? globalThis.String(object.dev_name) : "",
       equalizer: isSet(object.equalizer) ? Equalizer.fromJSON(object.equalizer) : undefined,
       name_full: isSet(object.name_full) ? I18nString.fromJSON(object.name_full) : undefined,
+      mechanics: globalThis.Array.isArray(object?.mechanics) ? object.mechanics.map((e: any) => globalThis.String(e)) : [],
     };
   },
 
@@ -1236,6 +1250,9 @@ export const TankDefinition: MessageFns<TankDefinition> = {
     if (message.name_full !== undefined) {
       obj.name_full = I18nString.toJSON(message.name_full);
     }
+    if (message.mechanics?.length) {
+      obj.mechanics = message.mechanics;
+    }
     return obj;
   },
 
@@ -1292,6 +1309,7 @@ export const TankDefinition: MessageFns<TankDefinition> = {
     message.name_full = (object.name_full !== undefined && object.name_full !== null)
       ? I18nString.fromPartial(object.name_full)
       : undefined;
+    message.mechanics = object.mechanics?.map((e) => e) || [];
     return message;
   },
 };

@@ -34,6 +34,7 @@ export interface VehicleDefinitions {
       };
       level: number;
       hullPosition: string;
+      internalTrack?: unknown;
       hysteresisHealth: number;
       healthRegenPerSec: number;
       armor: {
@@ -108,7 +109,9 @@ export interface VehicleDefinitions {
           clip?: { count: number; rate: number };
           burst?: { count: number; rate: number };
           models: { undamaged: string };
+          reloadingSounds?: Record<string, unknown>;
           extras?: {
+            improvedDetection?: unknown;
             trayShell?: {
               kinds: string;
               sectors: Record<
@@ -122,6 +125,9 @@ export interface VehicleDefinitions {
     };
   };
   extras?: {
+    desertPower?: unknown;
+    alteredSpotDuration?: unknown;
+    shotDispersionStabilizator?: unknown;
     armorsStatesController?: {
       state: [
         {
