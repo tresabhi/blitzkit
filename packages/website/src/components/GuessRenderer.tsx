@@ -1,9 +1,9 @@
 import { useModel } from "../hooks/useModel";
 import { Guess, GuessState } from "../stores/guess";
 import { SmartCanvas } from "./SmartCanvas";
+import { TankModel } from "./TankModel";
 import { Controls } from "./Tankopedia/HeroSection/components/TankSandbox/components/Control";
 import { Lighting } from "./Tankopedia/HeroSection/components/TankSandbox/components/Lighting";
-import { TankModel } from "./Tankopedia/HeroSection/components/TankSandbox/components/TankModel";
 
 const BRIGHTNESS = 2 ** -5.5;
 const CONTRAST = 2 ** 2;

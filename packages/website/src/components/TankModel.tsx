@@ -4,7 +4,8 @@ import {
   type ObjectMap,
   type ThreeEvent,
 } from "@react-three/fiber";
-import { useRef } from "react";
+import { useRef, type ComponentProps } from "react";
+import type { Texture } from "three";
 import {
   BatchedMesh,
   Group,
@@ -13,28 +14,25 @@ import {
   Object3D,
   Vector2,
 } from "three";
-import type { GLTF } from "three-stdlib";
-import { applyPitchYawLimits } from "../../../../../../core/blitz/applyPitchYawLimits";
-import { hasEquipment } from "../../../../../../core/blitzkit/hasEquipment";
-import { jsxTree } from "../../../../../../core/blitzkit/jsxTree";
-import { modelTransformEvent } from "../../../../../../core/blitzkit/modelTransform";
-import { controlsEnabledEvent } from "../../../../../../core/controlsEnabled";
-import { useModel } from "../../../../../../hooks/useModel";
-import { useTankModelDefinition } from "../../../../../../hooks/useTankModelDefinition";
-import { useTankTransform } from "../../../../../../hooks/useTankTransform";
-import { Duel } from "../../../../../../stores/duel";
-import { Tankopedia } from "../../../../../../stores/tankopedia";
-import { TankopediaDisplay } from "../../../../../../stores/tankopediaPersistent/constants";
-import { ModelTankWrapper } from "../../../../../Armor/components/ModelTankWrapper";
+import { controlsEnabledEvent } from "../core/controlsEnabled";
+import { useModel } from "../hooks/useModel";
+import { useTankModelDefinition } from "../hooks/useTankModelDefinition";
+import { useTankTransform } from "../hooks/useTankTransform";
+import { Duel } from "../stores/duel";
+import { Tankopedia } from "../stores/tankopedia";
+import { TankopediaDisplay } from "../stores/tankopediaPersistent/constants";
+import { ModelTankWrapper } from "./Armor/components/ModelTankWrapper";
 
-function useBatched(gltf: GLTF & ObjectMap) {
-  function batched(
-    slicer: (node: Object3D) => boolean,
-    mutator: (mesh: Mesh) => void,
-  ) {
+interface BatchedProps extends ComponentProps<"group"> {
+  slicer: (node: Object3D) => boolean;
+  mutator: (mesh: Mesh) => void;
+}
+
+function useBatched(map: ObjectMap) {
+  return function Batched({ slicer, mutator, ...props }: BatchedProps) {
     const groups = new Map<MeshStandardMaterial, Mesh[]>();
 
-    for (const node of Object.values(gltf.nodes)) {
+    for (const node of Object.values(map.nodes)) {
       if (!slicer(node)) continue;
 
       node.traverse((object) => {
@@ -77,38 +75,116 @@ function useBatched(gltf: GLTF & ObjectMap) {
       wrapper.add(batched);
     }
 
-    return <primitive object={wrapper} />;
-  }
-
-  return { batched };
+    return (
+      <group {...props}>
+        <primitive object={wrapper} />
+      </group>
+    );
+  };
 }
 
-export function TankModel() {
-  const tank = Duel.use((draft) => draft.protagonist.tank);
+interface SectionProps {
+  map: ObjectMap;
+}
 
-  const { gltf } = useModel(tank.id);
-  const { batched } = useBatched(gltf);
+function Hull({ map }: SectionProps) {
+  const Batched = useBatched(map);
+
+  function handlePointerDown(event: ThreeEvent<PointerEvent>) {
+    // event.stopPropagation();
+  }
 
   return (
-    <group rotation={[-Math.PI / 2, 0, 0]}>
-      {batched(
-        (node) => {
-          const isHull = node.name === "hull";
-          const isWheel = node.name.startsWith("chassis_wheel_");
-          const isTrack = node.name.startsWith("chassis_track_");
+    <Batched
+      onPointerDown={handlePointerDown}
+      slicer={(node) => {
+        const isHull = node.name === "hull";
+        const isWheel = node.name.startsWith("chassis_wheel_");
+        const isTrack = node.name.startsWith("chassis_track_");
 
-          return isHull || isWheel || isTrack;
-        },
-        (mesh) => {
-          mesh.castShadow = true;
-          mesh.receiveShadow = true;
-        },
-      )}
-    </group>
+        return isHull || isWheel || isTrack;
+      }}
+      mutator={(mesh) => {
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+      }}
+    />
   );
 }
 
-function _TankModel() {
+function Tracks({ map }: SectionProps) {
+  const Batched = useBatched(map);
+
+  const position = useRef(new Vector2());
+  const delta = useRef(new Vector2());
+
+  const textures = useRef(new Set<Texture | null>());
+
+  function handlePointerDown(event: ThreeEvent<PointerEvent>) {
+    if (Tankopedia.state.display !== TankopediaDisplay.Model) {
+      return;
+    }
+
+    const material = (event.object as Mesh).material as MeshStandardMaterial;
+
+    textures.current = new Set([
+      material.map,
+      material.aoMap,
+      material.normalMap,
+      material.roughnessMap,
+      material.metalnessMap,
+    ]);
+
+    position.current.set(event.clientX, event.clientY);
+    event.stopPropagation();
+
+    controlsEnabledEvent.dispatch(false);
+
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", handlePointerUp);
+  }
+  function handlePointerMove(event: PointerEvent) {
+    delta.current.set(event.clientX, event.clientY).sub(position.current);
+    position.current.set(event.clientX, event.clientY);
+
+    const deltaX = delta.current.x / window.innerWidth;
+    const deltaY = delta.current.y / window.innerHeight;
+
+    const offset = deltaX + deltaY;
+
+    for (const texture of textures.current) {
+      if (!texture) continue;
+      texture.offset.y += offset;
+    }
+
+    invalidate();
+  }
+  function handlePointerUp() {
+    controlsEnabledEvent.dispatch(true);
+
+    window.removeEventListener("pointermove", handlePointerMove);
+    window.removeEventListener("pointerup", handlePointerUp);
+  }
+
+  return (
+    <Batched
+      onPointerDown={handlePointerDown}
+      slicer={(node) => {
+        const isHull = node.name === "hull";
+        const isWheel = node.name.startsWith("chassis_wheel_");
+        const isTrack = node.name.startsWith("chassis_track_");
+
+        return isHull || isWheel || isTrack;
+      }}
+      mutator={(mesh) => {
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+      }}
+    />
+  );
+}
+
+export function TankModel() {
   const protagonist = Duel.use((draft) => draft.protagonist);
   const track = Duel.use((state) => state.protagonist.track);
   const turret = Duel.use((state) => state.protagonist.turret);
@@ -120,14 +196,17 @@ function _TankModel() {
   const turretModelDefinition =
     tankModelDefinition.turrets[protagonist.turret.id];
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
+
   const { gltf } = useModel(protagonist.tank.id);
-  const nodes = Object.values(gltf.nodes);
 
   useTankTransform(track, turret, turretContainer, gunContainer);
 
   return (
     <ModelTankWrapper ref={hullContainer}>
-      {nodes.map((node) => {
+      <Hull map={gltf} />
+      <Tracks map={gltf} />
+
+      {/* {nodes.map((node) => {
         const isHull = node.name === "hull";
         const isWheel = node.name.startsWith("chassis_wheel_");
         const isTrack = node.name.startsWith("chassis_track_");
@@ -156,34 +235,6 @@ function _TankModel() {
           for (const texture of textures) {
             if (texture) texture.offset.y += offset;
           }
-        }
-
-        function onPointerDown(event: ThreeEvent<PointerEvent>) {
-          if (isTrack && Tankopedia.state.display === TankopediaDisplay.Model) {
-            position.set(event.clientX, event.clientY);
-            event.stopPropagation();
-
-            controlsEnabledEvent.dispatch(false);
-
-            window.addEventListener("pointermove", handlePointerMove);
-            window.addEventListener("pointerup", handlePointerUp);
-          } else {
-            event.stopPropagation();
-          }
-        }
-        function handlePointerMove(event: PointerEvent) {
-          delta.set(event.clientX, event.clientY).sub(position);
-          position.set(event.clientX, event.clientY);
-          const deltaX = delta.x / window.innerWidth;
-          const deltaY = delta.y / window.innerHeight;
-
-          translateTexture(deltaX + deltaY);
-        }
-        function handlePointerUp() {
-          controlsEnabledEvent.dispatch(true);
-
-          window.removeEventListener("pointermove", handlePointerMove);
-          window.removeEventListener("pointerup", handlePointerUp);
         }
 
         return jsxTree(node, {
@@ -359,7 +410,7 @@ function _TankModel() {
             });
           })}
         </group>
-      </group>
+      </group> */}
     </ModelTankWrapper>
   );
 }
