@@ -1,4 +1,3 @@
-import { blueDark, orangeDark } from "@radix-ui/colors";
 import { ContactShadows } from "@react-three/drei";
 import { invalidate, useFrame } from "@react-three/fiber";
 import { clamp, times } from "lodash-es";
@@ -98,11 +97,7 @@ export function Lighting({ hasPbr }: Props) {
       )}
 
       <group ref={wrapper}>
-        <hemisphereLight
-          intensity={0}
-          color={blueDark.blue12}
-          groundColor={orangeDark.orange8}
-        />
+        <hemisphereLight intensity={0} color={"white"} groundColor={"black"} />
 
         {times(LIGHTS_COUNT, (index) => {
           const x = index / (LIGHTS_COUNT - 1);
@@ -125,7 +120,7 @@ export function Lighting({ hasPbr }: Props) {
               position={position}
               intensity={intensity}
               penumbra={1}
-              castShadow={highGraphics}
+              castShadow={highGraphics && index === 0}
               decay={1}
               color="#ffffff"
               angle={0}
