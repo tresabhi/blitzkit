@@ -35,6 +35,8 @@ export interface VehicleDefinitions {
       level: number;
       hullPosition: string;
       internalTrack?: unknown;
+      hysteresisHealth: number;
+      healthRegenPerSec: number;
       armor: {
         leftTrack:
           | number
