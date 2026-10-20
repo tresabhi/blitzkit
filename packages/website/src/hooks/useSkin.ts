@@ -1,6 +1,13 @@
 import { alias } from "@blitzkit/core";
 import { useEffect, useRef, useState } from "react";
-import type { Group, Material } from "three";
+import {
+  Mesh,
+  SkinnedMesh,
+  type AnimationClip,
+  type Group,
+  type Material,
+  type Object3D,
+} from "three";
 import { GLTFLoader } from "three-stdlib";
 import { TRANSITION_ANIMATION_TIME } from "../components/Tankopedia/HeroSection/components/TankSandbox/components/Lighting";
 import { Tankopedia } from "../stores/tankopedia";
@@ -8,6 +15,9 @@ import { Tankopedia } from "../stores/tankopedia";
 export interface Skin {
   scene: Group;
   materials: Map<string, Material>;
+  animations: AnimationClip[];
+  /** customization parts by the tank node they attach to */
+  parts: Map<string, Object3D[]>;
 }
 
 const skins = new Map<string, Promise<Skin>>();
@@ -19,7 +29,25 @@ async function loadSkin(path: string) {
   const skin = {
     scene: gltf.scene,
     materials: new Map(materials.map((material) => [material.name, material])),
+    animations: gltf.animations,
+    // captured now because rendering moves the parts out of the scene
+    parts: new Map(
+      gltf.scene.children.map((target) => [target.name, [...target.children]]),
+    ),
   };
+
+  for (const parts of skin.parts.values()) {
+    for (const part of parts) {
+      part.traverse((child) => {
+        if (!(child instanceof Mesh)) return;
+
+        child.castShadow = true;
+        child.receiveShadow = true;
+        // bounds are from the bind pose
+        if (child instanceof SkinnedMesh) child.frustumCulled = false;
+      });
+    }
+  }
 
   loadedSkins.set(path, skin);
 

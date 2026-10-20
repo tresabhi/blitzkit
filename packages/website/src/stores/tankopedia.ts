@@ -104,6 +104,10 @@ interface Tankopedia {
   xpMultiplier: (typeof XP_MULTIPLIERS)[number];
   customShell?: ShellDefinition;
   skin?: number;
+  /** events the selected camo's animations can be triggered with */
+  skinEvents: string[];
+  /** a triggered camo animation is still playing */
+  skinAnimating: boolean;
   requestedDisplay: TankopediaDisplay;
   display: TankopediaDisplay;
   statSearch?: string;
@@ -120,6 +124,8 @@ export const Tankopedia = new Varuna<Tankopedia, ModelDefinition>((model) => ({
   skills: createDefaultSkills(skillDefinitions),
   model,
   xpMultiplier: 1,
+  skinEvents: [],
+  skinAnimating: false,
   requestedDisplay: TankopediaDisplay.Model,
   display: TankopediaDisplay.Model,
 }));

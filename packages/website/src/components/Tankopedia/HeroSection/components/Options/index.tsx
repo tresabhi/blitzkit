@@ -50,6 +50,7 @@ import {
   SidebarIconButton,
   SidebarIconGroup,
 } from "./components/SidebarIconButton";
+import { SkinAnimationSwitcher } from "./components/SkinAnimationSwitcher";
 import { SkinSwitcher } from "./components/SkinSwitcher";
 import { SpallLinerSwitcher } from "./components/SpallLinerSwitcher";
 import { Thicknesses } from "./components/Thicknesses";
@@ -93,6 +94,7 @@ export function Options({ thicknessRange, canvas, skeleton }: OptionsProps) {
       <Thicknesses skeleton={skeleton} thicknessRange={thicknessRange} />
 
       <SkinSwitcher />
+      <SkinAnimationSwitcher />
 
       <Flex
         gap="2"

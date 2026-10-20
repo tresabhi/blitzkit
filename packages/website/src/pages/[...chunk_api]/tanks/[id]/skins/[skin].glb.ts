@@ -6,6 +6,7 @@ import {
   type TankParameters,
 } from "@blitzkit/core";
 import {
+  Animation,
   Document,
   Node,
   NodeIO,
@@ -19,6 +20,7 @@ import type { Vector3Tuple, Vector4Tuple } from "three";
 import { SKIN_NUMBER } from "../../../../../constants/skinNumber";
 import { api } from "../../../../../core/blitzkit/api";
 import { mixStaticPaths } from "../../../../../core/blitzkit/mixStaticPaths";
+import type { SkinMotion } from "../../../../../core/blitzkit/skinAnimations/skeleton";
 import { vfs } from "../../../../../core/blitzkit/vfs";
 import { getStaticPaths as _getStaticPaths } from "../../../_index";
 import { extractMaterials, extractModel } from "../model.glb";
@@ -166,7 +168,26 @@ export async function GET({ props }: APIContext<{ skin: number }>) {
       .createNode(name)
       .setTranslation(slot.position)
       .setRotation(slot.rotation)
-      .setScale(slot.scale);
+      .setScale(slot.scale)
+      .setExtras(partScene.getExtras());
+
+    // clip names repeat across parts
+    for (const animation of part.getRoot().listAnimations()) {
+      (map.get(animation) as Animation).setName(
+        `${name}:${animation.getName()}`,
+      );
+    }
+
+    partScene.traverse((child) => {
+      const { motion } = child.getExtras() as { motion?: SkinMotion };
+
+      if (motion) {
+        child.setExtras({
+          ...child.getExtras(),
+          motion: { ...motion, clip: `${name}:${motion.clip}` },
+        });
+      }
+    });
     let target = targets.get(slot.target);
 
     if (!target) {

@@ -8,6 +8,7 @@ import { skinTree } from "../../../../../../core/blitzkit/skinTree";
 import { controlsEnabledEvent } from "../../../../../../core/controlsEnabled";
 import { useModel } from "../../../../../../hooks/useModel";
 import { useSkin } from "../../../../../../hooks/useSkin";
+import { useSkinAnimation } from "../../../../../../hooks/useSkinAnimation";
 import { useTankModelDefinition } from "../../../../../../hooks/useTankModelDefinition";
 import { useTankTransform } from "../../../../../../hooks/useTankTransform";
 import { Duel } from "../../../../../../stores/duel";
@@ -33,6 +34,7 @@ export function TankModel() {
   const skinGltf = useSkin(protagonist.tank.id, skin);
 
   useTankTransform(track, turret, turretContainer, gunContainer);
+  useSkinAnimation(skinGltf);
 
   return (
     <ModelTankWrapper ref={hullContainer}>
@@ -104,6 +106,15 @@ export function TankModel() {
                 onPointerDown={onPointerDown}
                 castShadow
                 receiveShadow
+              />
+            );
+          },
+          primitive(object, key) {
+            return (
+              <primitive
+                key={key}
+                object={object}
+                onPointerDown={onPointerDown}
               />
             );
           },
@@ -181,6 +192,15 @@ export function TankModel() {
                   onPointerDown={onPointerDown}
                   castShadow
                   receiveShadow
+                />
+              );
+            },
+            primitive(object, key) {
+              return (
+                <primitive
+                  key={key}
+                  object={object}
+                  onPointerDown={onPointerDown}
                 />
               );
             },
@@ -262,6 +282,15 @@ export function TankModel() {
                     onPointerDown={onPointerDown}
                     castShadow
                     receiveShadow
+                  />
+                );
+              },
+              primitive(object, key) {
+                return (
+                  <primitive
+                    key={key}
+                    object={object}
+                    onPointerDown={onPointerDown}
                   />
                 );
               },

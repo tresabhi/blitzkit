@@ -8,18 +8,38 @@ import {
   toUniqueId,
   VertexAttribute,
   type ConfigArchive,
+  type Hierarchy,
   type TankParameters,
   type Textures,
   type VehicleDefinitionList,
 } from "@blitzkit/core";
 import type { AbstractVFS } from "@blitzkit/core/src/blitzkit/vfs/abstract";
-import { Document, Material, Node, NodeIO, Scene } from "@gltf-transform/core";
+import {
+  Document,
+  Material,
+  Node,
+  NodeIO,
+  Scene,
+  type Skin,
+} from "@gltf-transform/core";
 import { ALL_EXTENSIONS } from "@gltf-transform/extensions";
 import { dedup, prune } from "@gltf-transform/functions";
 import type { APIContext } from "astro";
 import { isEqual, times } from "lodash-es";
 import { dirname } from "path";
 import sharp from "sharp";
+import {
+  addExtras,
+  toExtras,
+} from "../../../../core/blitzkit/skinAnimations/extras";
+import type { Motion } from "../../../../core/blitzkit/skinAnimations/motion";
+import {
+  bindSocket,
+  createMotionClip,
+  createSkeleton,
+  loadMotion,
+  skinPrimitive,
+} from "../../../../core/blitzkit/skinAnimations/skeleton";
 import { vfs } from "../../../../core/blitzkit/vfs";
 import {
   vertexAttributeGLTFName,
@@ -86,6 +106,42 @@ export async function extractModel(
   const scene = document.createScene();
   const buffer = document.createBuffer();
   const materials = await extractMaterials(document, sc2, path);
+  const skeletons = new Map<Hierarchy, ReturnType<typeof createSkeleton>>();
+  const jointBindings: [
+    owner: Node,
+    entity: string,
+    joint: Node,
+    skin: Skin,
+  ][] = [];
+  const motions = new Map<Hierarchy, Motion>();
+
+  if (isPart) {
+    const loading: Promise<void>[] = [];
+
+    parseHierarchies(sc2["#hierarchy"], null, (hierarchy, components) => {
+      for (const component of components) {
+        if (component["comp.typename"] !== "MotionComponent") continue;
+
+        loading.push(
+          loadMotion(vfs, path, component).then((motion) => {
+            if (motion) motions.set(hierarchy, motion);
+          }),
+        );
+      }
+
+      return null;
+    });
+
+    await Promise.all(loading);
+
+    for (const component of Object.values(
+      (sc2["#sceneComponents"] ?? {}) as Record<string, Record<string, any>>,
+    )) {
+      if (component["comp.typename"] === "ScenarioSingletonComponent") {
+        scene.setExtras({ scripts: toExtras(component["ssc.scripts"]) });
+      }
+    }
+  }
 
   parseHierarchies<Scene | Node>(
     sc2["#hierarchy"],
@@ -98,6 +154,41 @@ export async function extractModel(
         return;
 
       const node = document.createNode(hierarchy.name);
+
+      if (isPart) {
+        const skeleton = components.find(
+          (component) => component["comp.typename"] === "SkeletonComponent",
+        );
+        const motionComponent = components.find(
+          (component) => component["comp.typename"] === "MotionComponent",
+        );
+        const motion = motionComponent ? motions.get(hierarchy) : undefined;
+
+        if (skeleton) {
+          const created = createSkeleton(
+            document,
+            buffer,
+            node,
+            skeleton,
+            motion,
+          );
+
+          skeletons.set(hierarchy, created);
+
+          if (motion && motionComponent) {
+            addExtras(node, {
+              motion: createMotionClip(
+                document,
+                buffer,
+                `motion${document.getRoot().listAnimations().length}`,
+                created.joints,
+                motion,
+                motionComponent,
+              ),
+            });
+          }
+        }
+      }
 
       components.forEach((component) => {
         switch (component["comp.typename"]) {
@@ -121,10 +212,61 @@ export async function extractModel(
           }
 
           case "StateSwitcherComponent":
-            node.setExtras({
+            addExtras(node, {
               state: component[`ssc.state${component["ssc.activeState"]}`],
             });
+
+            if (isPart) {
+              addExtras(node, {
+                stateNames: times(
+                  component["ssc.statesCount"],
+                  (index) => component[`ssc.state${index}`],
+                ),
+              });
+            }
             break;
+
+          case "ActionComponent":
+            if (!isPart) break;
+
+            addExtras(node, {
+              actions: toExtras(
+                times(
+                  component["ac.actionCount"],
+                  (index) => component[index.toString().padStart(4, "0")],
+                ),
+              ),
+            });
+            break;
+
+          case "ScenarioComponent":
+            if (!isPart) break;
+
+            addExtras(node, { scenario: component["scenario.scriptId"] });
+            break;
+
+          case "SkeletonJointBindingComponent": {
+            const skeleton = skeletons.get(hierarchy);
+
+            if (!skeleton) break;
+
+            times(component.count, (index) => {
+              const binding = component.map[
+                index.toString().padStart(4, "0")
+              ] as unknown as { entityUid: string; jointUid: string };
+              const joint = skeleton.joints.get(binding.jointUid);
+
+              if (joint) {
+                jointBindings.push([
+                  node,
+                  binding.entityUid,
+                  joint,
+                  skeleton.skin,
+                ]);
+              }
+            });
+            break;
+          }
 
           case "RenderComponent": {
             const renderObject = component["rc.renderObj"];
@@ -132,7 +274,8 @@ export async function extractModel(
             times(renderObject["ro.batchCount"], (batchIndex): void => {
               const lodIndex = renderObject[`rb${batchIndex}.lodIndex`];
 
-              if (lodIndex !== 0) return;
+              // -1 means the batch has no lods and is always drawn
+              if (lodIndex !== 0 && !(isPart && lodIndex === -1)) return;
 
               const batchKey = batchIndex.toString().padStart(4, "0");
               const batch = renderObject["ro.batches"][batchKey];
@@ -193,10 +336,24 @@ export async function extractModel(
                 primitive.setAttribute(name, attributeAccessor);
               });
 
+              const skeleton = skeletons.get(hierarchy);
               const mesh = document
                 .createMesh(batch["##name"])
                 .addPrimitive(primitive);
               lodNode.setMesh(mesh);
+
+              if (
+                skeleton &&
+                skinPrimitive(
+                  document,
+                  buffer,
+                  primitive,
+                  attributes,
+                  renderObject[`skinnedObject.batch${batchIndex}.targetsData`],
+                )
+              ) {
+                lodNode.setSkin(skeleton.skin);
+              }
               node.addChild(lodNode);
             });
 
@@ -219,11 +376,27 @@ export async function extractModel(
     },
   );
 
+  for (const [owner, entity, joint, skin] of jointBindings) {
+    const socket = findNode(owner, entity);
+
+    if (socket) bindSocket(socket, joint, skin);
+  }
+
   scene.addChild(document.createNode("test"));
 
   await document.transform(prune({ keepAttributes: true }), dedup());
 
   return document;
+}
+
+function findNode(node: Node, name: string): Node | undefined {
+  for (const child of node.listChildren()) {
+    if (child.getName() === name) return child;
+
+    const found = findNode(child, name);
+
+    if (found) return found;
+  }
 }
 
 export async function extractMaterials(

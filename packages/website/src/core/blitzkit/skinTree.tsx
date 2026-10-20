@@ -1,17 +1,18 @@
+import type { ReactNode } from "react";
 import type { Material, Object3D } from "three";
 import type { Skin } from "../../hooks/useSkin";
 import { jsxTree } from "./jsxTree";
 
-type Mergers = Parameters<typeof jsxTree>[1];
+type Mergers = NonNullable<Parameters<typeof jsxTree>[1]> & {
+  /** renders a customization part as is so its animations play */
+  primitive?: (object: Object3D, key: string) => ReactNode;
+};
 
 export function skinTree(
   node: Object3D,
   skin: Skin | undefined,
   mergers: Mergers,
 ) {
-  const skinNodes = new Map(
-    skin?.scene.children.map((node) => [node.name, node]),
-  );
   const skinMergers: Mergers = {
     mesh(mesh, props, key) {
       const material = skin?.materials.get((mesh.material as Material).name);
@@ -23,7 +24,7 @@ export function skinTree(
       );
     },
     group(object3d, props, key) {
-      const skinNode = skinNodes.get(object3d.name);
+      const parts = skin?.parts.get(object3d.name);
       const isSwitch = object3d.userData.state !== undefined;
       const state = skin
         ? skin.scene.userData.states[object3d.name]
@@ -36,7 +37,13 @@ export function skinTree(
                 .filter((child) => child.name === state)
                 .map((child) => jsxTree(child, skinMergers))
             : props.children}
-          {skinNode?.children.map((child) => jsxTree(child, mergers))}
+          {parts?.map((part) =>
+            mergers.primitive ? (
+              mergers.primitive(part, part.uuid)
+            ) : (
+              <primitive key={part.uuid} object={part} />
+            ),
+          )}
         </group>
       );
     },
