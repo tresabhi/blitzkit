@@ -1,18 +1,26 @@
 import { UpdateIcon } from "@radix-ui/react-icons";
-import { Button, Flex, Heading } from "@radix-ui/themes";
+import { Box, Button, Flex, Heading } from "@radix-ui/themes";
 import { useLocale } from "../../../../../../hooks/useLocale";
 import { Duel } from "../../../../../../stores/duel";
 import { Tankopedia } from "../../../../../../stores/tankopedia";
+import { TankopediaDisplay } from "../../../../../../stores/tankopediaPersistent/constants";
 import type { MaybeSkeletonComponentProps } from "../../../../../../types/maybeSkeletonComponentProps";
+import { ChangeButton } from "./components/ChangeButton";
+import { SwapButton } from "./components/SwapButton";
 import { Tracker } from "./components/Tracker";
 
 export function Title({ skeleton }: MaybeSkeletonComponentProps) {
   const { unwrap, strings } = useLocale();
   const modelRequested = Tankopedia.use((state) => state.modelRequested);
   const protagonist = Duel.use((state) => state.protagonist.tank);
+  const antagonist = Duel.use((state) => state.antagonist.tank);
   const revealed = Tankopedia.use((state) => state.revealed);
   const disturbed = Tankopedia.use((state) => state.disturbed);
+  const requestedDisplay = Tankopedia.use((state) => state.requestedDisplay);
   const name = unwrap(protagonist.name!);
+  const showSwap =
+    requestedDisplay === TankopediaDisplay.DynamicArmor &&
+    protagonist.id !== antagonist.id;
   const fontSize = revealed
     ? disturbed
       ? "1.5rem"
@@ -44,26 +52,42 @@ export function Title({ skeleton }: MaybeSkeletonComponentProps) {
         transform: "translate(-50%, -50%)",
       }}
     >
-      <Heading
-        style={{
-          fontWeight: 900,
-          userSelect: "none",
-          pointerEvents: "none",
-          fontSize,
-          whiteSpace: "nowrap",
-          opacity: revealed ? 1 : 0.5,
-          letterSpacing: revealed || !revealed ? 0 : "-0.03em",
-          transition: `
-            letter-spacing 1.5s ${revealed ? "" : "cubic-bezier(0.81, -2, 0.68, 1)"},
-            font-size 1s,
-            -webkit-text-stroke 2s,
-            opacity 1s
-          `,
-        }}
-        wrap="nowrap"
-      >
-        {name}
-      </Heading>
+      <Box position="relative">
+        <Heading
+          style={{
+            fontWeight: 900,
+            userSelect: "none",
+            pointerEvents: "none",
+            fontSize,
+            whiteSpace: "nowrap",
+            opacity: revealed ? 1 : 0.5,
+            letterSpacing: revealed || !revealed ? 0 : "-0.03em",
+            transition: `
+              letter-spacing 1.5s ${revealed ? "" : "cubic-bezier(0.81, -2, 0.68, 1)"},
+              font-size 1s,
+              -webkit-text-stroke 2s,
+              opacity 1s
+            `,
+          }}
+          wrap="nowrap"
+        >
+          {name}
+        </Heading>
+
+        {!skeleton && revealed && (
+          <Flex
+            gap="2"
+            position="absolute"
+            top="100%"
+            left="50%"
+            mt="2"
+            style={{ transform: "translateX(-50%)" }}
+          >
+            <ChangeButton />
+            {showSwap && <SwapButton />}
+          </Flex>
+        )}
+      </Box>
 
       {!skeleton && !revealed && modelRequested && (
         <Tracker fontSize={fontSize} />

@@ -36,18 +36,21 @@ export function Page({ id, skeleton, locale, guide }: PageProps) {
   Tankopedia.useInitialization(model);
   Duel.useInitialization({ tank, model });
 
+  const protagonist = Duel.use((state) => state.protagonist.tank);
+
   return (
     <LocaleProvider locale={locale}>
       <PageWrapper p="0" maxWidth="unset" color="purple" gap="9" pb="9">
         <HeroSection skeleton={skeleton} />
         <MetaSection />
         <CalloutsSection />
-        {tank.type === TankType.TANK_TYPE_RESEARCHABLE && !tank.deprecated && (
-          <TechTreeSection skeleton={skeleton} />
-        )}
-        <CharacteristicsSection skeleton={skeleton} />
+        {protagonist.type === TankType.TANK_TYPE_RESEARCHABLE &&
+          !protagonist.deprecated && (
+            <TechTreeSection key={protagonist.id} skeleton={skeleton} />
+          )}
+        <CharacteristicsSection key={protagonist.id} skeleton={skeleton} />
         <GameModeSection />
-        {guide && <GuideSection guide={guide} />}
+        {guide && protagonist.id === id && <GuideSection guide={guide} />}
         <VideoSection skeleton={skeleton} />
       </PageWrapper>
     </LocaleProvider>
