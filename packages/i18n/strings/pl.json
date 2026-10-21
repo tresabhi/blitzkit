@@ -1,7 +1,7 @@
 {
   "test": {
     "default": "test",
-    "long": "This is a long test string. You MUST NEVER see this in the UI. My favorite fruit is {fruit} because it has the color of {color}. I like it so much that I will say its name 3 times! {fruit}! {fruit}! {fruit}! Once again, it's {color}, not {not_color}.",
+    "long": "To jest długi ciąg testowy. NIGDY NIE ZOBACZYSZ tego w interfejsie użytkownika. Mój ulubiony owoc to {fruit}, ponieważ ma kolor {color}. Tak bardzo go lubię, że powiem jego nazwę 3 razy! {fruit}! {fruit}! {fruit}! Po raz kolejny to {color}, a nie {not_color}.",
     "fox": "Szybki brązowy lis przeskoczył nad leniwym psem."
   },
   "common": {
