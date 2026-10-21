@@ -536,6 +536,10 @@
         "meta": {
           "back": "Back",
           "compare": "Compare",
+          "change": {
+            "button": "Change",
+            "title": "Change tank"
+          },
           "swap": {
             "button": "Swap",
             "title": "Swap tanks"
