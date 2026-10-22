@@ -433,6 +433,9 @@
           "model": {
             "name": "Модель"
           },
+          "skins": {
+            "unreleased": "Unreleased"
+          },
           "dynamic": {
             "name": "Динамическая броня",
             "custom_shell": {
