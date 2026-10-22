@@ -2,12 +2,35 @@
   padding: 0 var(--space-4);
   margin-top: var(--space-3);
 
-  .center {
-    background-color: var(--blue-3);
+  img {
+    width: 1.25em;
+    height: 1.25em;
 
-    max-width: 80rem;
+    border-radius: 50%;
+  }
+
+  .center {
+    position: relative;
+
+    background-color: var(--gray-3);
+    box-shadow: var(--shadow-3);
+
+    max-width: 40rem;
 
     padding: var(--space-5);
     border-radius: var(--radius-4);
+
+    .important {
+      position: absolute;
+
+      top: 0;
+      left: 50%;
+
+      transform: translate(-50%, -50%);
+
+      background-color: inherit;
+
+      padding: var(--space-3);
+    }
   }
 }
