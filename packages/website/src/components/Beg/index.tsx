@@ -1,4 +1,6 @@
+import { HeartFilledIcon } from "@radix-ui/react-icons";
 import { Button, Em, Flex, Strong, Text } from "@radix-ui/themes";
+import { donationTiers } from "../../config/donations";
 import styles from "./index.module.css";
 
 export function Beg() {
@@ -24,26 +26,21 @@ export function Beg() {
           </Text>
 
           <Text>
-            But paying out of pocket makes than impossible.{" "}
-            <Strong>We are a non-profit and don't run ads</Strong>, so consider
-            donating to make the above possible. 100% of your money goes back
-            into BlitzKit.
+            But paying out of pocket makes that impossible. We are an earnest
+            non-profit, so consider donating to make the above possible. 100% of
+            your money goes back into BlitzKit.
           </Text>
         </Flex>
 
         <Flex gap="3">
-          <Button size="3" color="crimson">
-            $5
-          </Button>
-          <Button size="3" color="crimson">
-            $10
-          </Button>
-          <Button size="3" color="crimson">
-            $25
-          </Button>
-          <Button size="3" color="crimson">
-            Custom
-          </Button>
+          {donationTiers.map(({ name, value, link }) => (
+            <a target="_blank" key={name} href={link}>
+              <Button size="3" color="crimson">
+                {value === null && <HeartFilledIcon />}
+                {value === null ? "Custom" : `$${value}`}
+              </Button>
+            </a>
+          ))}
         </Flex>
       </Flex>
     </Flex>
