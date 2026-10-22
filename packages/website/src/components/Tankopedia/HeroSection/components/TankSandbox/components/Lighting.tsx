@@ -125,7 +125,7 @@ export function Lighting({ hasPbr }: Props) {
               position={position}
               intensity={intensity}
               penumbra={1}
-              castShadow={highGraphics}
+              castShadow={highGraphics && index === 0}
               decay={1}
               color="#ffffff"
               angle={0}

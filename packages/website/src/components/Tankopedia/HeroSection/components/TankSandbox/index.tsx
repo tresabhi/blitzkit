@@ -23,12 +23,12 @@ import {
   type ThicknessRange,
 } from "../../../../Armor/components/StaticArmor";
 import { SmartCanvas } from "../../../../SmartCanvas";
+import { TankModel } from "../../../../TankModel";
 import { AutoClear } from "./components/AutoClear";
 import { Controls } from "./components/Control";
 import { InitialAligner } from "./components/InitialAligner";
 import { Lighting } from "./components/Lighting";
 import { SceneProps } from "./components/SceneProps";
-import { TankModel } from "./components/TankModel";
 
 interface TankSandboxProps {
   thicknessRange: ThicknessRange;
