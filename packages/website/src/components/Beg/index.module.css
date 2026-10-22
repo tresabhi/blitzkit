@@ -1,0 +1,13 @@
+.outer {
+  padding: 0 var(--space-4);
+  margin-top: var(--space-3);
+
+  .center {
+    background-color: var(--blue-3);
+
+    max-width: 80rem;
+
+    padding: var(--space-5);
+    border-radius: var(--radius-4);
+  }
+}
