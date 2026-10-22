@@ -16,6 +16,7 @@ import {
   TrashIcon,
 } from "@radix-ui/react-icons";
 import {
+  Badge,
   Box,
   Button,
   DropdownMenu,
@@ -200,6 +201,16 @@ export function FilterControl() {
   );
 }
 
+function ActiveCount({ count }: { count: number }) {
+  if (count === 0) return null;
+
+  return (
+    <Badge size="1" radius="full" variant="solid" highContrast>
+      {count}
+    </Badge>
+  );
+}
+
 function ResetButton() {
   return (
     <IconButton
@@ -238,6 +249,7 @@ function TiersFilter() {
               </Text>
             )}
           </Flex>
+          <ActiveCount count={tiersRaw.length} />
         </Button>
       </DropdownMenu.Trigger>
 
@@ -312,6 +324,7 @@ function NationsFilter() {
               />
             ))}
           </Flex>
+          <ActiveCount count={rawNations.length} />
         </Button>
       </DropdownMenu.Trigger>
 
@@ -418,6 +431,7 @@ function ClassFilter() {
               );
             })}
           </Flex>
+          <ActiveCount count={rawClasses.length} />
         </Button>
       </DropdownMenu.Trigger>
 
@@ -498,6 +512,7 @@ function GunTypeFilter() {
               );
             })}
           </Flex>
+          <ActiveCount count={rawGunTypes.length} />
         </Button>
       </DropdownMenu.Trigger>
 
@@ -576,6 +591,7 @@ function TypeFilter() {
               );
             })}
           </Flex>
+          <ActiveCount count={rawTypes.length} />
         </Button>
       </DropdownMenu.Trigger>
 
@@ -902,6 +918,7 @@ function ConsumablesFilter() {
               </Text>
             )}
           </Flex>
+          <ActiveCount count={rawConsumables.length} />
         </Button>
       </DropdownMenu.Trigger>
 
@@ -996,6 +1013,7 @@ function ProvisionsFilter() {
               </Text>
             )}
           </Flex>
+          <ActiveCount count={rawProvisions.length} />
         </Button>
       </DropdownMenu.Trigger>
 
@@ -1105,6 +1123,7 @@ function GameModeAbilitiesFilter() {
               </Text>
             )}
           </Flex>
+          <ActiveCount count={rawAbilities.length + rawPowers.length} />
         </Button>
       </DropdownMenu.Trigger>
 
