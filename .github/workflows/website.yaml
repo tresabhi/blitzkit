@@ -139,13 +139,15 @@ jobs:
 
       - name: Trigger deployment
 
-        # Deploy if:
-        # 1. Running cron from main using content from production to target production
-        # 2. Running manually and targeting non-production
+        # workflow should trigger if:
+        # - is by cron and is on main: triggering to production
+        # - is by push and is on production: triggering to production
+        # - is by manual and is on anything: triggering to anything
         if: >-
           ${{
-            github.ref == 'refs/heads/production' ||
-            (inputs.environment != '' && inputs.environment != 'production')
+            (github.event_name == 'schedule' && github.ref == 'refs/heads/main')
+            || (github.event_name == 'push' && github.ref == 'refs/heads/production')
+            || (github.event_name == 'workflow_dispatch')
           }}
 
         env:
