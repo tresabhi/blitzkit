@@ -12,7 +12,7 @@
   .center {
     position: relative;
 
-    background-color: var(--gray-3);
+    background: linear-gradient(var(--pink-3), var(--purple-2));
     box-shadow: var(--shadow-3);
 
     max-width: 40rem;

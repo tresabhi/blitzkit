@@ -25,16 +25,25 @@ export function Beg() {
 
           <Text>
             But paying out of pocket makes than impossible.{" "}
-            <Strong>We are a non-profit</Strong>, so consider donating to make
-            the above possible. 100% of your money goes back into BlitzKit.
+            <Strong>We are a non-profit and don't run ads</Strong>, so consider
+            donating to make the above possible. 100% of your money goes back
+            into BlitzKit.
           </Text>
         </Flex>
 
         <Flex gap="3">
-          <Button size="3">$5</Button>
-          <Button size="3">$10</Button>
-          <Button size="3">$25</Button>
-          <Button size="3">Custom</Button>
+          <Button size="3" color="crimson">
+            $5
+          </Button>
+          <Button size="3" color="crimson">
+            $10
+          </Button>
+          <Button size="3" color="crimson">
+            $25
+          </Button>
+          <Button size="3" color="crimson">
+            Custom
+          </Button>
         </Flex>
       </Flex>
     </Flex>
