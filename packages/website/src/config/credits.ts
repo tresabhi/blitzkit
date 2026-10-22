@@ -15,7 +15,7 @@ export const credits: CreditPeople[] = [
   {
     name: "HitJack",
     description: "Developer on website",
-    url: "https://github.com/Hitjack007",
+    url: "https://marksstuff.com",
     image: "https://github.com/Hitjack007.png",
   },
   {

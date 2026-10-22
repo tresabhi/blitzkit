@@ -36,27 +36,45 @@ const strings = getStrings(locale);
           .person {
             --profile-size: 5rem;
 
+            position: relative;
+
             display: flex;
             flex-direction: column;
-
-            background-color: var(--gray-3);
 
             padding: var(--space-4);
             padding-top: 0;
             margin-top: calc(var(--profile-size) / 2);
             gap: var(--space-1);
 
-            box-shadow: var(--shadow-2);
+            box-shadow: var(--shadow-3);
             border-radius: var(--radius-3);
 
-            .link:first-child & {
-              background-color: var(--gray-5);
-              box-shadow: 0 0 2rem var(--gray-a4);
-              outline: 1px solid var(--gray-7);
+            .contain {
+              border-radius: inherit;
 
-              /* background-color: var(--blue-3);
-              outline: 1px solid var(--blue-5);
-              box-shadow: 0 0 3rem var(--blue-a3); */
+              position: absolute;
+
+              top: 0;
+              right: 0;
+
+              width: 100%;
+              height: 100%;
+
+              overflow: hidden;
+
+              .hint {
+                width: 100%;
+                height: 100%;
+
+                background-size: cover;
+                background-position: center;
+
+                filter: saturate(20) brightness(0.125) blur(4rem);
+              }
+            }
+
+            .text {
+              position: relative;
             }
 
             img {
@@ -93,6 +111,13 @@ const strings = getStrings(locale);
         credits.map((person) => (
           <a target="_blank" href={person.url} class="link">
             <div class="person">
+              <div class="contain">
+                <div
+                  class="hint"
+                  style={`background-image: url(${person.image})`}
+                />
+              </div>
+
               <img src={person.image} />
 
               <Text weight="medium" className="text" color="gray" highContrast>
