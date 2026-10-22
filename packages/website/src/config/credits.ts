@@ -65,11 +65,6 @@ export const credits: CreditPeople[] = [
     image: "/media/users/s0ap.webp",
   },
   {
-    name: "xkdkw",
-    description: "Former advisor on bot and website",
-    image: "/media/users/xkdkw.webp",
-  },
-  {
     name: "Synx",
     description: "Former advisor on bot and website",
     url: "https://www.youtube.com/@Synx_Blitz",
@@ -86,12 +81,6 @@ export const credits: CreditPeople[] = [
     description: "Former advisor on website",
     url: "https://www.youtube.com/@hisroyalfatness",
     image: "/media/users/hisroyalfatness.jpg",
-  },
-  {
-    name: "Droodles Blitz",
-    description: "Former advisor on website",
-    url: "https://www.youtube.com/@DroodlesBlitz",
-    image: "/media/users/droodles-blitz.jpg",
   },
   {
     name: "Minitelrose",
