@@ -433,9 +433,6 @@
           "model": {
             "name": "Modelo"
           },
-          "skins": {
-            "unreleased": "Unreleased"
-          },
           "dynamic": {
             "name": "Blindaje dinámico",
             "custom_shell": {
