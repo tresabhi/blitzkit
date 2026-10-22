@@ -8,18 +8,38 @@ import {
   toUniqueId,
   VertexAttribute,
   type ConfigArchive,
+  type Hierarchy,
   type TankParameters,
   type Textures,
   type VehicleDefinitionList,
 } from "@blitzkit/core";
 import type { AbstractVFS } from "@blitzkit/core/src/blitzkit/vfs/abstract";
-import { Document, Material, Node, NodeIO, Scene } from "@gltf-transform/core";
+import {
+  Document,
+  Material,
+  Node,
+  NodeIO,
+  Scene,
+  type Skin,
+} from "@gltf-transform/core";
 import { ALL_EXTENSIONS } from "@gltf-transform/extensions";
 import { dedup, prune } from "@gltf-transform/functions";
 import type { APIContext } from "astro";
-import { times } from "lodash-es";
+import { isEqual, times } from "lodash-es";
 import { dirname } from "path";
 import sharp from "sharp";
+import {
+  addExtras,
+  toExtras,
+} from "../../../../core/blitzkit/skinAnimations/extras";
+import type { Motion } from "../../../../core/blitzkit/skinAnimations/motion";
+import {
+  bindSocket,
+  createMotionClip,
+  createSkeleton,
+  loadMotion,
+  skinPrimitive,
+} from "../../../../core/blitzkit/skinAnimations/skeleton";
 import { vfs } from "../../../../core/blitzkit/vfs";
 import {
   vertexAttributeGLTFName,
@@ -69,7 +89,11 @@ const omitMeshNames = {
   end: ["_POINT"],
 };
 
-async function extractModel(vfs: AbstractVFS, path: string) {
+export async function extractModel(
+  vfs: AbstractVFS,
+  path: string,
+  isPart = false,
+) {
   const sc2Path = `Data/3d/${path}.sc2`;
   const scgPath = `Data/3d/${path}.scg`;
   const sc2 = new Sc2ReadStream(
@@ -81,6 +105,306 @@ async function extractModel(vfs: AbstractVFS, path: string) {
   const document = new Document();
   const scene = document.createScene();
   const buffer = document.createBuffer();
+  const materials = await extractMaterials(document, sc2, path);
+  const skeletons = new Map<Hierarchy, ReturnType<typeof createSkeleton>>();
+  const jointBindings: [
+    owner: Node,
+    entity: string,
+    joint: Node,
+    skin: Skin,
+  ][] = [];
+  const motions = new Map<Hierarchy, Motion>();
+
+  if (isPart) {
+    const loading: Promise<void>[] = [];
+
+    parseHierarchies(sc2["#hierarchy"], null, (hierarchy, components) => {
+      for (const component of components) {
+        if (component["comp.typename"] !== "MotionComponent") continue;
+
+        loading.push(
+          loadMotion(vfs, path, component).then((motion) => {
+            if (motion) motions.set(hierarchy, motion);
+          }),
+        );
+      }
+
+      return null;
+    });
+
+    await Promise.all(loading);
+
+    for (const component of Object.values(
+      (sc2["#sceneComponents"] ?? {}) as Record<string, Record<string, any>>,
+    )) {
+      if (component["comp.typename"] === "ScenarioSingletonComponent") {
+        scene.setExtras({ scripts: toExtras(component["ssc.scripts"]) });
+      }
+    }
+  }
+
+  parseHierarchies<Scene | Node>(
+    sc2["#hierarchy"],
+    scene,
+    (hierarchy, components, parent) => {
+      if (
+        omitMeshNames.start.some((omit) => hierarchy.name.startsWith(omit)) ||
+        omitMeshNames.end.some((omit) => hierarchy.name.endsWith(omit))
+      )
+        return;
+
+      const node = document.createNode(hierarchy.name);
+
+      if (isPart) {
+        const skeleton = components.find(
+          (component) => component["comp.typename"] === "SkeletonComponent",
+        );
+        const motionComponent = components.find(
+          (component) => component["comp.typename"] === "MotionComponent",
+        );
+        const motion = motionComponent ? motions.get(hierarchy) : undefined;
+
+        if (skeleton) {
+          const created = createSkeleton(
+            document,
+            buffer,
+            node,
+            skeleton,
+            motion,
+          );
+
+          skeletons.set(hierarchy, created);
+
+          if (motion && motionComponent) {
+            addExtras(node, {
+              motion: createMotionClip(
+                document,
+                buffer,
+                `motion${document.getRoot().listAnimations().length}`,
+                created.joints,
+                motion,
+                motionComponent,
+              ),
+            });
+          }
+        }
+      }
+
+      components.forEach((component) => {
+        switch (component["comp.typename"]) {
+          case "LodComponent":
+            // found and used later by transform component
+            // TODO: lod component always shows up before transform component; cache it before parsing transform
+            break;
+
+          case "TransformComponent": {
+            const localTranslation = component["tc.localTranslation"];
+            // The game resets top-level node translation to [0, 0, 0] on load.
+            // Child nodes and customization parts must keep their authored
+            // local offsets.
+            node.setTranslation(
+              parent instanceof Scene && !isPart ? [0, 0, 0] : localTranslation,
+            );
+            node.setRotation(component["tc.localRotation"]);
+            node.setScale(component["tc.localScale"]);
+
+            break;
+          }
+
+          case "StateSwitcherComponent":
+            addExtras(node, {
+              state: component[`ssc.state${component["ssc.activeState"]}`],
+            });
+
+            if (isPart) {
+              addExtras(node, {
+                stateNames: times(
+                  component["ssc.statesCount"],
+                  (index) => component[`ssc.state${index}`],
+                ),
+              });
+            }
+            break;
+
+          case "ActionComponent":
+            if (!isPart) break;
+
+            addExtras(node, {
+              actions: toExtras(
+                times(
+                  component["ac.actionCount"],
+                  (index) => component[index.toString().padStart(4, "0")],
+                ),
+              ),
+            });
+            break;
+
+          case "ScenarioComponent":
+            if (!isPart) break;
+
+            addExtras(node, { scenario: component["scenario.scriptId"] });
+            break;
+
+          case "SkeletonJointBindingComponent": {
+            const skeleton = skeletons.get(hierarchy);
+
+            if (!skeleton) break;
+
+            times(component.count, (index) => {
+              const binding = component.map[
+                index.toString().padStart(4, "0")
+              ] as unknown as { entityUid: string; jointUid: string };
+              const joint = skeleton.joints.get(binding.jointUid);
+
+              if (joint) {
+                jointBindings.push([
+                  node,
+                  binding.entityUid,
+                  joint,
+                  skeleton.skin,
+                ]);
+              }
+            });
+            break;
+          }
+
+          case "RenderComponent": {
+            const renderObject = component["rc.renderObj"];
+
+            times(renderObject["ro.batchCount"], (batchIndex): void => {
+              const lodIndex = renderObject[`rb${batchIndex}.lodIndex`];
+
+              // -1 means the batch has no lods and is always drawn
+              if (lodIndex !== 0 && !(isPart && lodIndex === -1)) return;
+
+              const batchKey = batchIndex.toString().padStart(4, "0");
+              const batch = renderObject["ro.batches"][batchKey];
+              const material = materials.get(batch["rb.nmatname"]);
+              const polygonGroup = scg.get(batch["rb.datasource"]);
+
+              if (!(material instanceof Material)) {
+                // probably shadow material
+                return;
+              }
+              if (polygonGroup === undefined) {
+                throw new Error(
+                  `Missing polygon group ${batch["rb.datasource"]}`,
+                );
+              }
+
+              const lodNode = document.createNode(batchKey);
+              const indicesAccessor = document
+                .createAccessor()
+                .setType("SCALAR")
+                .setArray(new Uint16Array(polygonGroup.indices))
+                .setBuffer(buffer);
+              const primitive = document
+                .createPrimitive()
+                .setIndices(indicesAccessor)
+                .setMaterial(material)
+                .setName(batchKey);
+
+              const attributes = new Map<VertexAttribute, number[][]>();
+
+              polygonGroup.vertices.forEach((vertex) => {
+                vertex.forEach(({ attribute, value }) => {
+                  if (!attributes.has(attribute)) {
+                    attributes.set(attribute, []);
+                  }
+
+                  attributes.get(attribute)!.push(value);
+                });
+              });
+
+              attributes.forEach((value, attribute) => {
+                const name = vertexAttributeGLTFName[attribute];
+
+                if (
+                  name === undefined ||
+                  primitive.getAttribute(name) !== null
+                ) {
+                  return;
+                }
+
+                const vertexSize = vertexAttributeGltfVectorSizes[attribute];
+                const attributeAccessor = document
+                  .createAccessor(name)
+                  .setType(vertexSize === 1 ? "SCALAR" : `VEC${vertexSize}`)
+                  .setArray(new Float32Array(value.flat()))
+                  .setBuffer(buffer);
+
+                primitive.setAttribute(name, attributeAccessor);
+              });
+
+              const skeleton = skeletons.get(hierarchy);
+              const mesh = document
+                .createMesh(batch["##name"])
+                .addPrimitive(primitive);
+              lodNode.setMesh(mesh);
+
+              if (
+                skeleton &&
+                skinPrimitive(
+                  document,
+                  buffer,
+                  primitive,
+                  attributes,
+                  renderObject[`skinnedObject.batch${batchIndex}.targetsData`],
+                )
+              ) {
+                lodNode.setSkin(skeleton.skin);
+              }
+              node.addChild(lodNode);
+            });
+
+            break;
+          }
+
+          default: {
+            if (ERROR_ON_UNKNOWN_COMPONENT) {
+              throw new Error(
+                `Unhandled component type: ${component["comp.typename"]}`,
+              );
+            }
+          }
+        }
+      });
+
+      parent.addChild(node);
+
+      return node;
+    },
+  );
+
+  for (const [owner, entity, joint, skin] of jointBindings) {
+    const socket = findNode(owner, entity);
+
+    if (socket) bindSocket(socket, joint, skin);
+  }
+
+  scene.addChild(document.createNode("test"));
+
+  await document.transform(prune({ keepAttributes: true }), dedup());
+
+  return document;
+}
+
+function findNode(node: Node, name: string): Node | undefined {
+  for (const child of node.listChildren()) {
+    if (child.getName() === name) return child;
+
+    const found = findNode(child, name);
+
+    if (found) return found;
+  }
+}
+
+export async function extractMaterials(
+  document: Document,
+  sc2: ReturnType<Sc2ReadStream["sc2"]>,
+  path: string,
+  config?: string,
+) {
   const materials = new Map<bigint, Material | bigint | undefined>();
 
   for (const node of sc2["#dataNodes"]) {
@@ -95,14 +419,31 @@ async function extractModel(vfs: AbstractVFS, path: string) {
       continue;
     }
 
-    const material = document.createMaterial(node.materialName);
     let textures: Textures | undefined = undefined;
 
-    if (node.textures) {
+    if (config !== undefined) {
+      if (typeof node.configCount !== "number") continue;
+
+      const archive = times(
+        node.configCount,
+        (index) => node[`configArchive_${index}`],
+      ).find((archive) => archive.configName === config);
+
+      if (
+        !archive ||
+        isEqual(archive.textures, node.configArchive_0.textures)
+      ) {
+        continue;
+      }
+
+      textures = archive.textures;
+    } else if (node.textures) {
       textures = node.textures;
     } else if (typeof node.configCount === "number") {
       textures = node.configArchive_0.textures;
     }
+
+    const material = document.createMaterial(node.materialName);
 
     if (textures) {
       const baseColor = await readBaseColor(
@@ -240,136 +581,7 @@ async function extractModel(vfs: AbstractVFS, path: string) {
     materials.set(id, resolvedMaterial);
   });
 
-  parseHierarchies<Scene | Node>(
-    sc2["#hierarchy"],
-    scene,
-    (hierarchy, components, parent) => {
-      if (
-        omitMeshNames.start.some((omit) => hierarchy.name.startsWith(omit)) ||
-        omitMeshNames.end.some((omit) => hierarchy.name.endsWith(omit))
-      )
-        return;
-
-      const node = document.createNode(hierarchy.name);
-
-      components.forEach((component) => {
-        switch (component["comp.typename"]) {
-          case "LodComponent":
-            // found and used later by transform component
-            // TODO: lod component always shows up before transform component; cache it before parsing transform
-            break;
-
-          case "TransformComponent": {
-            const localTranslation = component["tc.localTranslation"];
-            // The game resets top-level node translation to [0, 0, 0] on load.
-            // Child nodes must keep their authored local offsets.
-            node.setTranslation(
-              parent instanceof Scene ? [0, 0, 0] : localTranslation,
-            );
-            node.setRotation(component["tc.localRotation"]);
-            node.setScale(component["tc.localScale"]);
-
-            break;
-          }
-
-          case "RenderComponent": {
-            const renderObject = component["rc.renderObj"];
-
-            times(renderObject["ro.batchCount"], (batchIndex): void => {
-              const lodIndex = renderObject[`rb${batchIndex}.lodIndex`];
-
-              if (lodIndex !== 0) return;
-
-              const batchKey = batchIndex.toString().padStart(4, "0");
-              const batch = renderObject["ro.batches"][batchKey];
-              const material = materials.get(batch["rb.nmatname"]);
-              const polygonGroup = scg.get(batch["rb.datasource"]);
-
-              if (!(material instanceof Material)) {
-                // probably shadow material
-                return;
-              }
-              if (polygonGroup === undefined) {
-                throw new Error(
-                  `Missing polygon group ${batch["rb.datasource"]}`,
-                );
-              }
-
-              const lodNode = document.createNode(batchKey);
-              const indicesAccessor = document
-                .createAccessor()
-                .setType("SCALAR")
-                .setArray(new Uint16Array(polygonGroup.indices))
-                .setBuffer(buffer);
-              const primitive = document
-                .createPrimitive()
-                .setIndices(indicesAccessor)
-                .setMaterial(material)
-                .setName(batchKey);
-
-              const attributes = new Map<VertexAttribute, number[][]>();
-
-              polygonGroup.vertices.forEach((vertex) => {
-                vertex.forEach(({ attribute, value }) => {
-                  if (!attributes.has(attribute)) {
-                    attributes.set(attribute, []);
-                  }
-
-                  attributes.get(attribute)!.push(value);
-                });
-              });
-
-              attributes.forEach((value, attribute) => {
-                const name = vertexAttributeGLTFName[attribute];
-
-                if (
-                  name === undefined ||
-                  primitive.getAttribute(name) !== null
-                ) {
-                  return;
-                }
-
-                const vertexSize = vertexAttributeGltfVectorSizes[attribute];
-                const attributeAccessor = document
-                  .createAccessor(name)
-                  .setType(vertexSize === 1 ? "SCALAR" : `VEC${vertexSize}`)
-                  .setArray(new Float32Array(value.flat()))
-                  .setBuffer(buffer);
-
-                primitive.setAttribute(name, attributeAccessor);
-              });
-
-              const mesh = document
-                .createMesh(batch["##name"])
-                .addPrimitive(primitive);
-              lodNode.setMesh(mesh);
-              node.addChild(lodNode);
-            });
-
-            break;
-          }
-
-          default: {
-            if (ERROR_ON_UNKNOWN_COMPONENT) {
-              throw new Error(
-                `Unhandled component type: ${component["comp.typename"]}`,
-              );
-            }
-          }
-        }
-      });
-
-      parent.addChild(node);
-
-      return node;
-    },
-  );
-
-  scene.addChild(document.createNode("test"));
-
-  await document.transform(prune({ keepAttributes: true }), dedup());
-
-  return document;
+  return materials;
 }
 
 async function readBaseColor(path: string) {

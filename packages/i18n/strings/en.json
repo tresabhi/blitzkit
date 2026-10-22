@@ -461,6 +461,18 @@
         "sandbox": {
           "load_model": "Load model",
 
+          "skin_events": {
+            "garage": "Idle",
+            "shoot": "Shoot",
+            "kill": "Kill",
+            "damage": "Take damage",
+            "damage_enemy": "Damage enemy",
+            "no_pierce": "Ricochet / No penetration",
+            "move": "Start moving",
+            "consumable": "Consumable",
+            "reload": "Reload"
+          },
+
           "poses": {
             "hull_down": "Hull down",
             "face_hug": "Face hug",

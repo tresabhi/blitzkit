@@ -3,10 +3,12 @@ import { useRef } from "react";
 import { Group, Mesh, MeshStandardMaterial, Vector2 } from "three";
 import { applyPitchYawLimits } from "../../../../../../core/blitz/applyPitchYawLimits";
 import { hasEquipment } from "../../../../../../core/blitzkit/hasEquipment";
-import { jsxTree } from "../../../../../../core/blitzkit/jsxTree";
 import { modelTransformEvent } from "../../../../../../core/blitzkit/modelTransform";
+import { skinTree } from "../../../../../../core/blitzkit/skinTree";
 import { controlsEnabledEvent } from "../../../../../../core/controlsEnabled";
 import { useModel } from "../../../../../../hooks/useModel";
+import { useSkin } from "../../../../../../hooks/useSkin";
+import { useSkinAnimation } from "../../../../../../hooks/useSkinAnimation";
 import { useTankModelDefinition } from "../../../../../../hooks/useTankModelDefinition";
 import { useTankTransform } from "../../../../../../hooks/useTankTransform";
 import { Duel } from "../../../../../../stores/duel";
@@ -28,8 +30,11 @@ export function TankModel() {
   const gunModelDefinition = turretModelDefinition.guns[protagonist.gun.id];
   const { gltf } = useModel(protagonist.tank.id);
   const nodes = Object.values(gltf.nodes);
+  const skin = Tankopedia.use((state) => state.skin);
+  const skinGltf = useSkin(protagonist.tank.id, skin);
 
   useTankTransform(track, turret, turretContainer, gunContainer);
+  useSkinAnimation(skinGltf);
 
   return (
     <ModelTankWrapper ref={hullContainer}>
@@ -92,7 +97,7 @@ export function TankModel() {
           window.removeEventListener("pointerup", handlePointerUp);
         }
 
-        return jsxTree(node, {
+        return skinTree(node, skinGltf, {
           mesh(_, props, key) {
             return (
               <mesh
@@ -101,6 +106,15 @@ export function TankModel() {
                 onPointerDown={onPointerDown}
                 castShadow
                 receiveShadow
+              />
+            );
+          },
+          primitive(object, key) {
+            return (
+              <primitive
+                key={key}
+                object={object}
+                onPointerDown={onPointerDown}
               />
             );
           },
@@ -169,7 +183,7 @@ export function TankModel() {
             window.removeEventListener("pointerup", handlePointerUp);
           }
 
-          return jsxTree(node, {
+          return skinTree(node, skinGltf, {
             mesh(_, props, key) {
               return (
                 <mesh
@@ -178,6 +192,15 @@ export function TankModel() {
                   onPointerDown={onPointerDown}
                   castShadow
                   receiveShadow
+                />
+              );
+            },
+            primitive(object, key) {
+              return (
+                <primitive
+                  key={key}
+                  object={object}
+                  onPointerDown={onPointerDown}
                 />
               );
             },
@@ -250,7 +273,7 @@ export function TankModel() {
               window.removeEventListener("pointerup", handlePointerUp);
             }
 
-            return jsxTree(node, {
+            return skinTree(node, skinGltf, {
               mesh(_, props, key) {
                 return (
                   <mesh
@@ -259,6 +282,15 @@ export function TankModel() {
                     onPointerDown={onPointerDown}
                     castShadow
                     receiveShadow
+                  />
+                );
+              },
+              primitive(object, key) {
+                return (
+                  <primitive
+                    key={key}
+                    object={object}
+                    onPointerDown={onPointerDown}
                   />
                 );
               },
