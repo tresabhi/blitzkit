@@ -433,9 +433,6 @@
           "model": {
             "name": "モデル"
           },
-          "skins": {
-            "unreleased": "Unreleased"
-          },
           "dynamic": {
             "name": "貫通テスト",
             "custom_shell": {
