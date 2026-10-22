@@ -16,11 +16,11 @@ import { ALL_EXTENSIONS } from "@gltf-transform/extensions";
 import { dedup, mergeDocuments, unpartition } from "@gltf-transform/functions";
 import type { APIContext } from "astro";
 import type { Vector3Tuple, Vector4Tuple } from "three";
-import { SKIN_NUMBER } from "../../../../../constants/skinNumber";
-import { api } from "../../../../../core/blitzkit/api";
-import { mixStaticPaths } from "../../../../../core/blitzkit/mixStaticPaths";
-import { vfs } from "../../../../../core/blitzkit/vfs";
-import { getStaticPaths as _getStaticPaths } from "../../../_index";
+import { SKIN_NUMBER } from "../../../../constants/skinNumber";
+import { api } from "../../../../core/blitzkit/api";
+import { mixStaticPaths } from "../../../../core/blitzkit/mixStaticPaths";
+import { vfs } from "../../../../core/blitzkit/vfs";
+import { getStaticPaths as _getStaticPaths } from "../../../[...chunk_api]/_index";
 import { extractMaterials, extractModel } from "../model.glb";
 
 const SKIN_NUMBER_SLOTS = 5;

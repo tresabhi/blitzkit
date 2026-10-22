@@ -27,7 +27,7 @@ async function loadSkin(path: string) {
 }
 
 function skinPath(id: number, skin: number) {
-  return alias("api", `/tanks/${id}/skins/${skin}.glb`);
+  return alias("models_legendary", `/${id}/skins/${skin}.glb`);
 }
 
 export function useSkin(id: number) {
