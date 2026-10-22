@@ -1,5 +1,5 @@
 ---
-import { Grid, Heading, Text } from "@radix-ui/themes";
+import { Grid, Text } from "@radix-ui/themes";
 import { credits } from "../config/credits";
 import { getStrings } from "../core/i18n/getStrings";
 
@@ -18,7 +18,6 @@ const strings = getStrings(locale);
     justify-content: center;
 
     padding: var(--space-4);
-    margin-top: var(--space-4);
 
     .inner {
       display: flex;
@@ -82,8 +81,6 @@ const strings = getStrings(locale);
 
 <div class="credits">
   <div class="inner">
-    <Heading align="center">{strings.credits.title}</Heading>
-
     <Grid
       className="list"
       py="4"
@@ -107,7 +104,7 @@ const strings = getStrings(locale);
             </div>
           </a>
         ))
-      }</Grid
-    >
+      }
+    </Grid>
   </div>
 </div>

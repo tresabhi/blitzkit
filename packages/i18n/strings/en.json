@@ -1,8 +1,4 @@
 {
-  "credits": {
-    "title": "BlitzKit is the work of many"
-  },
-
   "common": {
     "name": "BlitzKit",
 
@@ -336,6 +332,13 @@
     },
 
     "tools": {
+      "credits": {
+        "name": "Credits",
+        "button": "To the docs",
+        "description": "Contributors of BlitzKit",
+        "seo_description": "BlitzKit is the work of many"
+      },
+
       "playlist": {
         "reset": "Reset",
         "shuffle": "Shuffle",
