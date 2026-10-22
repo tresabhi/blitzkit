@@ -1,5 +1,5 @@
 import { alias } from "@blitzkit/core";
-import { Flex, Tooltip } from "@radix-ui/themes";
+import { Flex, Text, Tooltip } from "@radix-ui/themes";
 import { uniqBy } from "lodash-es";
 import { SKIN_NUMBER } from "../../../../../../constants/skinNumber";
 import { api } from "../../../../../../core/blitzkit/api";
@@ -16,12 +16,13 @@ export function SkinSwitcher() {
   const skin = Tankopedia.use((state) => state.requestedSkin);
   const requestedDisplay = Tankopedia.use((state) => state.requestedDisplay);
   const disturbed = Tankopedia.use((state) => state.disturbed);
-  const { unwrap } = useLocale();
+  const { unwrap, strings } = useLocale();
   const skins = uniqBy(
     Object.values(camouflageDefinitions.camouflages).filter(
       (camouflage) => camouflage.tank_id === tank.id,
     ),
-    (camouflage) => unwrap(camouflage.name!),
+    (camouflage) =>
+      (camouflage.name && unwrap(camouflage.name)) || camouflage.id,
   );
 
   if (skins.length === 0) return null;
@@ -43,15 +44,25 @@ export function SkinSwitcher() {
       }}
     >
       {skins.map((camouflage, index) => {
-        const name = unwrap(camouflage.name!).replace(
-          "%(camo_num)",
-          SKIN_NUMBER,
-        );
+        const rawName = camouflage.name && unwrap(camouflage.name);
+        const name = rawName
+          ? rawName.replace("%(camo_num)", SKIN_NUMBER)
+          : strings.website.tools.tankopedia.sandbox.skins.unreleased;
         const top = index === 0 ? "var(--radius-full)" : "0";
         const bottom = index === skins.length - 1 ? "var(--radius-full)" : "0";
 
         return (
-          <Tooltip key={camouflage.id} content={name} side="left">
+          <Tooltip
+            key={camouflage.id}
+            content={
+              rawName ? (
+                name
+              ) : (
+                <Text style={{ color: "var(--orange-9)" }}>{name}</Text>
+              )
+            }
+            side="left"
+          >
             <SidebarIconButton
               selected={skin === camouflage.id}
               alt={name}
