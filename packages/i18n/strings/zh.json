@@ -433,9 +433,6 @@
           "model": {
             "name": "模型"
           },
-          "skins": {
-            "unreleased": "Unreleased"
-          },
           "dynamic": {
             "name": "动态装甲",
             "custom_shell": {
