@@ -3,6 +3,8 @@ name: Website
 on:
   push:
 
+  pull_request:
+
   schedule:
     - cron: "0 4 * * *"
 
@@ -102,7 +104,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          ref: ${{ inputs.branch || 'production' }}
+          # the PR's ref, or the manual input, or production (selected when cron)
+          ref: ${{ github.event.pull_request.head.sha || inputs.branch || 'production' }}
           submodules: recursive
           token: ${{ secrets.GH_TOKEN }}
 
