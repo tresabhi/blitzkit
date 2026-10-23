@@ -483,6 +483,9 @@
           "model": {
             "name": "Model"
           },
+          "skins": {
+            "unreleased": "Unreleased"
+          },
           "dynamic": {
             "name": "Dynamic armor",
 
