@@ -38,10 +38,10 @@
     },
     "branches": {
       "beta": "Бета",
-      "development": "Development",
+      "development": "Разработка",
       "opentest": "Открытый тест",
-      "preview": "Preview",
-      "production": "Production"
+      "preview": "Предпросмотр",
+      "production": "Производство"
     },
     "locales": {
       "en": "Английский",
@@ -194,7 +194,7 @@
       "title": "Настройки",
       "description": "Изменить настройки BlitzKit",
       "dev_mode": "Режим разработчика",
-      "auto_load_models": "Auto-load models",
+      "auto_load_models": "Автозагрузка моделей",
       "language": "Язык"
     },
     "common": {
@@ -413,7 +413,7 @@
           }
         },
         "sandbox": {
-          "load_model": "Load model",
+          "load_model": "Загрузить модель",
           "poses": {
             "hull_down": "За холмом",
             "face_hug": "В упор",
@@ -574,7 +574,7 @@
             "dpm": "ДПМ",
             "dpmEffective": "Эффективность за 60с",
             "peekabooDpm": "Peekaboo DPM",
-            "peekabooDpmInfo": "Damage per minute assuming you only fire after resetting camouflage (or the reload finishes, if it's slower) — at least 10 seconds between shots.",
+            "peekabooDpmInfo": "Урон в минуту при условии, если вы сбросите камуфляж(или перезарядка окончена, если она медленнее) - не менее 10 секунд между выстрелами.",
             "shells": "Снарядов в барабане",
             "mostOptimalShellIndex": "Самый эффективный снаряд",
             "shellReloads": "Перезарядка",
