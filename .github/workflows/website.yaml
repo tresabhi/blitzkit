@@ -90,13 +90,42 @@ env:
   PUBLIC_WARGAMING_APPLICATION_ID: ${{ secrets.PUBLIC_WARGAMING_APPLICATION_ID }}
 
 jobs:
+  should-trigger:
+    runs-on: ubuntu-latest
+
+    outputs:
+      value: ${{ steps.check.outputs.value }}
+
+    steps:
+      - id: check
+
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REF: ${{ github.ref }}
+
+        # workflow should trigger if:
+        # - is by cron and is on main: triggering to production
+        # - is by push and is on production: triggering to production
+        # - is by manual and is on anything: triggering to anything
+        run: |
+          if [[ \
+            ("$EVENT_NAME" == "schedule" && "$REF" == "refs/heads/main") || \
+            ("$EVENT_NAME" == "push" && "$REF" == "refs/heads/production") || \
+            "$EVENT_NAME" == "workflow_dispatch" \
+          ]]; then
+            echo "value=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=false" >> "$GITHUB_OUTPUT"
+          fi
+
   build:
     name: Build website
 
+    needs: should-trigger
     runs-on: ubuntu-latest
 
     strategy:
-      fail-fast: true
+      fail-fast: ${{ needs.should-trigger.outputs.value == 'true' }}
       matrix:
         chunk: [default, api, models_tanks, models_legendary, models_maps]
 
@@ -145,16 +174,7 @@ jobs:
 
       - name: Trigger deployment
 
-        # workflow should trigger if:
-        # - is by cron and is on main: triggering to production
-        # - is by push and is on production: triggering to production
-        # - is by manual and is on anything: triggering to anything
-        if: >-
-          ${{
-            (github.event_name == 'schedule' && github.ref == 'refs/heads/main')
-            || (github.event_name == 'push' && github.ref == 'refs/heads/production')
-            || (github.event_name == 'workflow_dispatch')
-          }}
+        if: needs.should-trigger.outputs.value == 'true'
 
         env:
           TOKEN: ${{ secrets.GH_NODE_DEPLOY_TOKEN }}
